@@ -70,7 +70,7 @@ Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply Bijection.ComposeIsBijection; assumption.
   - apply Class.EquivTran with (domain F). 2: assumption.
-    apply ComposeDomainIsSame. apply InclEquivCompatR with B. 2: assumption.
+    apply ComposeDomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
     apply Class.EquivSym. assumption.
 Qed.
 
@@ -161,7 +161,7 @@ Proposition InvImageOfImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
 Proof.
   intros F A B [H1 H2] H3. apply Bijection.InvImageOfImage. 1: assumption.
-  apply InclEquivCompatR with A. 2: assumption. apply Class.EquivSym. assumption.
+  apply Incl.EquivCompatR with A. 2: assumption. apply Class.EquivSym. assumption.
 Qed.
 
 Proposition ImageOfInvImage : forall (F A B:Class),

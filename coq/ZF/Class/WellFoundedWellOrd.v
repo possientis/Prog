@@ -105,7 +105,7 @@ Proof.
 
   (* So c is a non-empty subset of the class B. *)
     assert (toClass c :<=: B) as H10. {
-      apply InclEquivCompatL with C.
+      apply Incl.EquivCompatL with C.
       - apply Class.EquivSym. assumption.
       - rewrite EC. apply InitSegmentIncl.
    }

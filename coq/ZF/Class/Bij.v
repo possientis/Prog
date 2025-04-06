@@ -143,7 +143,7 @@ Proposition ImageOfInvImage : forall (F A B C:Class),
   Bij F A B -> C :<=: B -> F:[ F^:-1::[C]: ]: :~: C.
 Proof.
   intros F A B C [H1 H2] H3. apply BijectionOn.ImageOfInvImage with A.
-  1: assumption. apply InclEquivCompatR with B. 2: assumption.
+  1: assumption. apply Incl.EquivCompatR with B. 2: assumption.
   apply Class.EquivSym. assumption.
 Qed.
 

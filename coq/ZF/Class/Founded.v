@@ -53,11 +53,11 @@ Proof.
       - rewrite <- EC. apply Class.EquivRefl. }
     clear EC Ea H5 C.
     assert (toClass a :<=: A) as H7. {
-      apply InclEquivCompatL with (F^:-1::[toClass b]:).
+      apply Incl.EquivCompatL with (F^:-1::[toClass b]:).
       - apply Class.EquivSym. assumption.
       - apply InclTran with F^:-1::[B]:.
         + apply ImageInclCompatR. assumption.
-        + apply InclEquivCompatL with A. 2: apply InclRefl.
+        + apply Incl.EquivCompatL with A. 2: apply InclRefl.
           apply Class.EquivSym, Bij.InvImageOfRangeIsDomain.
           apply Isom.IsBij with R S. assumption. }
     assert (a <> :0:) as H8. { apply NotEmptyHasElement in H4.

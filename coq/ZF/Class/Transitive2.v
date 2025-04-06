@@ -19,6 +19,6 @@ Qed.
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> Transitive A -> Transitive B.
 Proof.
-  intros A B H1 H2 x H3. apply InclEquivCompatR with A. 1: assumption.
+  intros A B H1 H2 x H3. apply Incl.EquivCompatR with A. 1: assumption.
   apply H2, H1. assumption.
 Qed.

@@ -51,9 +51,9 @@ Proposition ConverseIsInj : forall (F A B:Class),
 Proof.
   intros F A B [H1 _] H2. split.
   - apply ConverseIsBijectionOn with A; assumption.
-  - apply InclEquivCompatL with (domain F).
+  - apply Incl.EquivCompatL with (domain F).
     + apply Class.EquivSym, ConverseRange.
-    + destruct H1 as [_ H1]. apply InclEquivCompatR with (domain F). 1: assumption.
+    + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
       apply InclRefl.
 Qed.
 

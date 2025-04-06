@@ -41,7 +41,7 @@ Proposition WhenStrictIncl : forall (P Q:Class),
   P :<: Q -> Q :\: P :<>: :0:.
 Proof.
   intros P Q H1. apply NotEmptyHasElem.
-  apply InclStrictExists in H1. destruct H1 as [_ H1]. assumption.
+  apply StrictInclExists in H1. destruct H1 as [_ H1]. assumption.
 Qed.
 
 Proposition UnionInter : forall (P Q R:Class),

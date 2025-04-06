@@ -195,6 +195,7 @@ Proof.
   intros x y H4 H5. apply H1; apply H3; assumption.
 Qed.
 
+(* The intersection of two ordinal classes is an ordinal class.                 *)
 Proposition InterIsOrdinal : forall (A B:Class),
   Ordinal A -> Ordinal B -> Ordinal (A :/\: B).
 Proof.
@@ -204,4 +205,19 @@ Proof.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
+
+(* Two ordinal classes are equal or strictly ordered by inclusion,              *)
+Proposition OrdinalTotal : forall (A B:Class),
+  Ordinal A ->
+  Ordinal B ->
+  A :~: B \/ A :<: B \/ B :<: A.
+Proof.
+  intros A B H1 H2. assert (~(A:/\:B :<: A /\ A:/\:B :<: B)) as H3. {
+    intros [H3 H4]. assert (Small (A:/\:B)) as H5. {
+      apply TransitiveStrictSubclassIsSmall with A; try assumption.
+      apply InterIsOrdinal; assumption. }
+    apply (proj1 (SmallIsSomeSet _)) in H5. destruct H5 as [a H5].
+Admitted.
+
+
 

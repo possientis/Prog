@@ -50,7 +50,7 @@ Proof.
 Qed.
 
 (* A more convenient characterisation of strict inclusion between classes.      *)
-Proposition InclStrictExists : forall (P Q:Class),
+Proposition StrictInclExists : forall (P Q:Class),
   P :<: Q <-> P :<=: Q /\ exists x, Q x /\ ~ P x.
 Proof.
   intros P Q. split; intros H1.
@@ -64,24 +64,24 @@ Proof.
     + intros H4. apply H3, H4, H2.
 Qed.
 
-Proposition InclEquivCompat : forall (P Q R S:Class),
+Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :<=: R -> Q :<=: S.
 Proof.
   intros P Q R S H1 H2 H3 x H4. apply H2, H3, H1, H4.
 Qed.
 
-Proposition InclEquivCompatL : forall (P Q R:Class),
+Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :<=: R -> Q :<=: R.
 Proof.
-  intros P Q R H1. apply InclEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - assumption.
   - apply Class.EquivRefl.
 Qed.
 
-Proposition InclEquivCompatR : forall (P Q R:Class),
+Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<=: P -> R :<=: Q.
 Proof.
-  intros P Q R H1. apply InclEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - apply Class.EquivRefl.
   - assumption.
 Qed.

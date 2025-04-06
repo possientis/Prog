@@ -90,7 +90,7 @@ Qed.
 (* V^2 is a strict subclass of V.                                               *)
 Proposition V2InclStrictV : V :x: V :<: V.
 Proof.
-  apply InclStrictExists. split.
+  apply StrictInclExists. split.
   - intros x H1. apply I.
   - exists :0:. split.
     + apply I.
