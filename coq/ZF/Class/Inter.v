@@ -126,3 +126,10 @@ Proof.
   - apply IsSmallL. assumption.
 Qed.
 
+Proposition InclInter : forall (P Q R:Class),
+  R :<=: P -> R :<=: Q -> R :<=: P :/\: Q.
+Proof.
+  intros P Q R H1 H2 x H3. split.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.

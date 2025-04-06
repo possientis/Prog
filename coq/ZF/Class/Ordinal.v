@@ -200,5 +200,8 @@ Proposition InterIsOrdinal : forall (A B:Class),
 Proof.
   intros A B H1 H2. apply TransitiveSubclassIsOrdinal with A. 1: assumption.
   2: apply Inter.InclL. intros a [H3 H4].
-Admitted.
+  destruct H1 as [H1 _]. destruct H2 as [H2 _]. apply InclInter.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
 
