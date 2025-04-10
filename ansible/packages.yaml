@@ -1,6 +1,6 @@
 ---
 - hosts: x86
-  remote_user: noel
+  remote_user: john
   become: true
   tasks:
 
