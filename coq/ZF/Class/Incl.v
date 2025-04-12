@@ -13,7 +13,7 @@ Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.
 Global Instance ClassLeq : Leq Class := { leq := Incl }.
 
 (* Strict inclusion predicate.                                                  *)
-Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ ~P :~: Q.
+Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ P :<>: Q.
 
 (* Notation "P :<: Q" := (InclStrict P Q)                                       *)
 Global Instance ClassLt : Lt Class := { lt := InclStrict }.

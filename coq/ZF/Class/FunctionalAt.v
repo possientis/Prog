@@ -15,7 +15,7 @@ Proof.
 Qed.
 
 Proposition WhenNotFunctionalAt : forall (F:Class) (a:U),
-  ~ FunctionalAt F a <-> exists y z, ~ y = z /\ F :(a,y): /\ F :(a,z):.
+  ~ FunctionalAt F a <-> exists y z, y <> z /\ F :(a,y): /\ F :(a,z):.
 Proof.
   intros F a. split; intros H1.
   - apply NotForAll in H1. destruct H1 as [y H1].
