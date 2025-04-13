@@ -21,7 +21,7 @@ CORE_OBJ 	:= $(shell for f in ${CORE}/*.v; 	do printf "${CORE}/%s.vo " 	$$(basen
 SET_OBJ 	:= $(shell for f in ${SET}/*.v; 	do printf "${SET}/%s.vo " 	$$(basename $$f .v); done)
 
 # Overall target
-all : \
+all : deps \
 	${AXIOM_OBJ} \
 	${CLASS_OBJ} \
 	${CORE_OBJ} \
