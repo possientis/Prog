@@ -154,9 +154,12 @@ ${SET}/%.vo : ${SET}/%.v
 	coqc $< ${SET_LIB}
 
 deps :
-	./deps.sh
+	@echo "Generating dependencies..."
+	@coqdep -vos -R . ZF $(shell find . -name "*.v") > deps 
 
 include deps
 
 clean :
-	bash rm.sh
+	@echo "Cleaning up artefacts..."
+	@bash rm.sh
+
