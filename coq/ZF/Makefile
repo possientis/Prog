@@ -1,5 +1,8 @@
 .PHONY : all clean
 
+VFILES := $(shell find . -name "*.v")
+VOFILES := $(VFILES:.v=.vo)
+
 # Folder names
 AXIOM  = Axiom
 CLASS  = Class
@@ -14,19 +17,8 @@ CLASS_LIB  		= -Q ${CLASS}  ZF.${CLASS} -Q . ZF
 CORE_LIB   		= -Q ${CORE}   ZF.${CORE}  -Q . ZF
 SET_LIB    		= -Q ${SET}    ZF.${SET}   -Q . ZF
 
-TOP_OBJ 	:= $(shell for f in ${TOP}/*.v;   do printf "${TOP}/%s.vo " 	$$(basename $$f .v); done)
-AXIOM_OBJ := $(shell for f in ${AXIOM}/*.v; do printf "${AXIOM}/%s.vo " $$(basename $$f .v); done)
-CLASS_OBJ := $(shell for f in ${CLASS}/*.v; do printf "${CLASS}/%s.vo " $$(basename $$f .v); done)
-CORE_OBJ 	:= $(shell for f in ${CORE}/*.v; 	do printf "${CORE}/%s.vo " 	$$(basename $$f .v); done)
-SET_OBJ 	:= $(shell for f in ${SET}/*.v; 	do printf "${SET}/%s.vo " 	$$(basename $$f .v); done)
-
 # Overall target
-all : deps \
-	${AXIOM_OBJ} \
-	${CLASS_OBJ} \
-	${CORE_OBJ} \
-	${SET_OBJ} \
-	${TOP_OBJ}
+all : deps $(VOFILES)
 
 # General rules
 %.vo : %.v
@@ -44,9 +36,9 @@ ${CORE}/%.vo : ${CORE}/%.v
 ${SET}/%.vo : ${SET}/%.v
 	coqc $< ${SET_LIB}
 
-deps :
+deps : $(VFILES)
 	@echo "Generating dependencies..."
-	@coqdep -vos -R . ZF $(shell find . -name "*.v") > deps 
+	@coqdep -vos -R . ZF $(VFILES) > deps 
 
 include deps
 
