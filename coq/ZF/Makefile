@@ -1,7 +1,7 @@
 .PHONY : all clean
 
-VFILES  	= $(shell find . -name "*.v")
-VOFILES   = $(VFILES:.v=.vo)
+VFILES  	:= $(shell find . -name "*.v")
+VOFILES   := $(VFILES:.v=.vo)
 
 VOKFILES  = $(shell find . -name "*.vok")
 VOSFILES  = $(shell find . -name "*.vos")
