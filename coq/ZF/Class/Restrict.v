@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Diff.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Function.
 Require Import ZF.Class.Functional.
@@ -231,3 +232,14 @@ Proof.
     rewrite H6. apply EvalWhenNotInDomain. assumption.
 Qed.
 
+Proposition LesserThanRangeOfRestrict : forall (F A:Class),
+  Functional F ->
+  (exists a, A :\: range (F:|:toClass a) :~: :0:) ->
+  Small A.
+Proof.
+  intros F A H1 [a H2]. apply Diff.WhenEmpty in H2.
+  apply LesserThanRangeOfRestrictIsSmall with F (toClass a).
+  - assumption.
+  - apply SetIsSmall.
+  - assumption.
+Qed.

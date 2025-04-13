@@ -88,7 +88,6 @@ CLASS_OBJ = \
 	${CLASS}/Union.vo \
 	${CLASS}/UnionGen.vo \
 	${CLASS}/Union2.vo \
-	${CLASS}/Utils.vo \
 	${CLASS}/V.vo \
 	${CLASS}/WellFounded.vo \
 	${CLASS}/WellFoundedWellOrd.vo \
