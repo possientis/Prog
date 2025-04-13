@@ -57,4 +57,9 @@ include deps
 
 clean :
 	@echo "Cleaning up artefacts..."
-	@bash rm.sh
+	@bash -c '\
+		rm -f {*,*/*,*/*/*}.{glob,vo,vok,vos,aux} ; \
+	  rm -f	{.*,*/.*,*/*/.*}.aux ; \
+		rm -f deps ; \
+		'
+
