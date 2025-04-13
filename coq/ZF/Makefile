@@ -1,12 +1,17 @@
 .PHONY : all clean
 
-VFILES  := $(shell find . -name "*.v")
-VOFILES := $(VFILES:.v=.vo)
+VFILES  	= $(shell find . -name "*.v")
+VOFILES   = $(VFILES:.v=.vo)
 
-# Overall target
+VOKFILES  = $(shell find . -name "*.vok")
+VOSFILES  = $(shell find . -name "*.vos")
+AUXFILES  = $(shell find . -name "*.aux")
+GLOBFILES = $(shell find . -name "*.glob")
+
+ARTIFACTS = $(VOFILES) $(VOKFILES) $(VOSFILES) $(AUXFILES) $(GLOBFILES)
+
 all : deps $(VOFILES)
 
-# General rules
 %.vo : %.v
 	@echo "Compiling $<"
 	@coqc -R . ZF $<
@@ -18,10 +23,6 @@ deps : $(VFILES)
 include deps
 
 clean :
-	@echo "Cleaning up artefacts..."
-	@bash -c '\
-		rm -f {*,*/*,*/*/*}.{glob,vo,vok,vos,aux} ; \
-	  rm -f	{.*,*/.*,*/*/.*}.aux ; \
-		rm -f deps ; \
-		'
+	@echo "Cleaning up artifacts..."
+	@rm -f $(ARTIFACTS) deps
 
