@@ -8,7 +8,8 @@ all : deps $(VOFILES)
 
 # General rules
 %.vo : %.v
-	coqc -q -R . ZF $<
+	@echo "Compiling $<"
+	@coqc -R . ZF $<
 
 deps : $(VFILES)
 	@echo "Generating dependencies..."
