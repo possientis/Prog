@@ -14,16 +14,11 @@ CLASS_LIB  		= -Q ${CLASS}  ZF.${CLASS} -Q . ZF
 CORE_LIB   		= -Q ${CORE}   ZF.${CORE}  -Q . ZF
 SET_LIB    		= -Q ${SET}    ZF.${SET}   -Q . ZF
 
-TOP_OBJ   := $(patsubst %.v,%.vo,$(notdir $(wildcard ${TOP}/*.v)))
-TOP_OBJ   := $(addprefix ${TOP}/,${TOP_OBJ})
-AXIOM_OBJ := $(patsubst %.v,%.vo,$(notdir $(wildcard ${AXIOM}/*.v)))
-AXIOM_OBJ := $(addprefix ${AXIOM}/,${AXIOM_OBJ})
-CLASS_OBJ := $(patsubst %.v,%.vo,$(notdir $(wildcard ${CLASS}/*.v)))
-CLASS_OBJ := $(addprefix ${CLASS}/,${CLASS_OBJ})
-CORE_OBJ  := $(patsubst %.v,%.vo,$(notdir $(wildcard ${CORE}/*.v)))
-CORE_OBJ  := $(addprefix ${CORE}/,${CORE_OBJ})
-SET_OBJ  := $(patsubst %.v,%.vo,$(notdir $(wildcard ${SET}/*.v)))
-SET_OBJ  := $(addprefix ${SET}/,${SET_OBJ})
+TOP_OBJ 	:= $(shell for f in ${TOP}/*.v;   do printf "${TOP}/%s.vo " 	$$(basename $$f .v); done)
+AXIOM_OBJ := $(shell for f in ${AXIOM}/*.v; do printf "${AXIOM}/%s.vo " $$(basename $$f .v); done)
+CLASS_OBJ := $(shell for f in ${CLASS}/*.v; do printf "${CLASS}/%s.vo " $$(basename $$f .v); done)
+CORE_OBJ 	:= $(shell for f in ${CORE}/*.v; 	do printf "${CORE}/%s.vo " 	$$(basename $$f .v); done)
+SET_OBJ 	:= $(shell for f in ${SET}/*.v; 	do printf "${SET}/%s.vo " 	$$(basename $$f .v); done)
 
 # Overall target
 all : \
