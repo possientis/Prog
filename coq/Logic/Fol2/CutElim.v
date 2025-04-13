@@ -9,6 +9,7 @@ Require Import Logic.Fol.Syntax.
 Require Import Logic.Fol2.Context.
 Require Import Logic.Fol2.Proof.
 
+(*
 Definition strengtenV (v:Type) (e:Eq v) (G:Ctx v) (x:v) (p:P v)
   : ~ x :: Fr p -> G,x :- p -> G :- p.
 Proof.
@@ -31,9 +32,7 @@ Proof.
   - inversion HEq. subst. apply HSeq.
   - inversion HEq.
   - inversion HEq. subst. clear HEq.
-
-
- Show.
+*)
 
 (*
 Definition cutElim (v:Type) (e:Eq v) (G:Ctx v) (r:P v) (pr:G :- r):

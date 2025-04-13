@@ -26,6 +26,7 @@ Notation "G #- p" := (Seq' G p)
 
 Open Scope Prop_CutElim_scope.
 
+(*
 Definition cutElim (v:Type) (G:Ctx v) (p q:P v) (e:G #- p) (e':G;p #- q) : G #- q.
 Proof.
   remember (G;p) as H eqn:E. revert E.
@@ -43,3 +44,4 @@ Proof.
 
 
 Show.
+*)
