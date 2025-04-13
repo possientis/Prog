@@ -1,40 +1,14 @@
 .PHONY : all clean
 
-VFILES := $(shell find . -name "*.v")
+VFILES  := $(shell find . -name "*.v")
 VOFILES := $(VFILES:.v=.vo)
-
-# Folder names
-AXIOM  = Axiom
-CLASS  = Class
-CORE   = Core
-SET    = Set
-TOP    = .
-
-# coqc command line option
-TOP_LIB    		= -Q . ZF
-AXIOM_LIB  		= -Q ${AXIOM}  ZF.${AXIOM} -Q . ZF
-CLASS_LIB  		= -Q ${CLASS}  ZF.${CLASS} -Q . ZF
-CORE_LIB   		= -Q ${CORE}   ZF.${CORE}  -Q . ZF
-SET_LIB    		= -Q ${SET}    ZF.${SET}   -Q . ZF
 
 # Overall target
 all : deps $(VOFILES)
 
 # General rules
 %.vo : %.v
-	coqc $< ${TOP_LIB}
-
-${AXIOM}/%.vo : ${AXIOM}/%.v
-	coqc $< ${AXIOM_LIB}
-
-${CLASS}/%.vo : ${CLASS}/%.v
-	coqc $< ${CLASS_LIB}
-
-${CORE}/%.vo : ${CORE}/%.v
-	coqc $< ${CORE_LIB}
-
-${SET}/%.vo : ${SET}/%.v
-	coqc $< ${SET_LIB}
+	coqc -q -R . ZF $<
 
 deps : $(VFILES)
 	@echo "Generating dependencies..."
