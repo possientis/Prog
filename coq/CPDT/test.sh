@@ -1,10 +1,10 @@
 #!/bin/sh
 
 set -e 
-DIR=${HOME}/Prog/coq/cpdt
+DIR=${HOME}/Prog/coq/CPDT
 cd ${DIR}
 echo
-echo "testing cpdt..."
+echo "testing CPDT..."
 
 ghc Main.hs
 ./Main

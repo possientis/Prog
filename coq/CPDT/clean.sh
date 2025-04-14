@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=${HOME}/Prog/coq/cpdt
+DIR=${HOME}/Prog/coq/CPDT
 cd ${DIR}
 
 rm -f Main

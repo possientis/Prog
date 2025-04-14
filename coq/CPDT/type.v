@@ -25,15 +25,15 @@ Fixpoint typeDenote (t:type) : Set :=
     | Nat           => nat
     | Bool          => bool
     | Prod t1 t2    => typeDenote t1 * typeDenote t2
-    end. 
+    end.
 
 
 Fixpoint expDenote (t :type) (e:exp t) : typeDenote t :=
     match e with
     | NConst n      => n
     | Plus e1 e2    => expDenote Nat e1 + expDenote Nat e2
-    | Eq e1 e2      => 
-        match nat_dec (expDenote Nat e1) (expDenote Nat e2) with 
+    | Eq e1 e2      =>
+        match nat_dec (expDenote Nat e1) (expDenote Nat e2) with
         | left  _   => true
         | right _   => false
         end
@@ -41,9 +41,9 @@ Fixpoint expDenote (t :type) (e:exp t) : typeDenote t :=
     | And b1 b2     => if (expDenote Bool b1)
         then (expDenote Bool b2)
         else false
-    | If _ b e1 e2    => if (expDenote Bool b) 
-        then expDenote _ e1 
-        else expDenote _ e2 
+    | If _ b e1 e2    => if (expDenote Bool b)
+        then expDenote _ e1
+        else expDenote _ e2
     | Pair _ _ e1 e2  => (expDenote _ e1, expDenote _ e2)
     | Fst _ _ e       => fst (expDenote _ e)
     | Snd _ _ e       => snd (expDenote _ e)
@@ -83,7 +83,7 @@ Fixpoint cfold (t:type) (e:exp t) : exp t :=
             match nat_dec n1 n2 with
             | left  _   => true
             | right _   => false
-            end 
+            end
         | _        , _          => Eq e1' e2'
         end
     | BConst b      => BConst b
@@ -100,15 +100,15 @@ Fixpoint cfold (t:type) (e:exp t) : exp t :=
         | BConst true   => cfold _ e1
         | BConst false  => cfold _ e2
         | _             => If _ e' (cfold _ e1) (cfold _ e2)
-        end 
+        end
     | Pair _ _ e1 e2 => Pair _ _ (cfold _ e1) (cfold _ e2)
-    | Fst _ _ e     => 
+    | Fst _ _ e     =>
         let e' := cfold _ e in
         match pairOut e' with
         | Some p        => fst p
         | None          => Fst _ _ e'
         end
-    | Snd _ _ e     => 
+    | Snd _ _ e     =>
         let e' := cfold _ e in
         match pairOut e' with
         | Some p        => snd p

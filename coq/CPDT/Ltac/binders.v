@@ -72,9 +72,9 @@ Ltac refl :=
             change (termDenote (E1' tt) = termDenote (E2' tt));
                 cbv beta iota  delta [fst snd]
     end.
-
+(*
 (* bollocks !                                                                   *)
 Goal (fun (x y:nat) => x + y + 13) = (fun (_ z : nat) => z).
     refl.
 Show.
-
+*)

@@ -3,12 +3,13 @@ Proof.
     intros a b H. rewrite H. reflexivity.
 Qed.
 
-Set Printing All.   
+Set Printing All.
+(*
 Lemma silly : unit = unit.
 Proof.
-    
+
     apply symmetry.
 Abort.
-
+*)
 Unset Printing All.
 
