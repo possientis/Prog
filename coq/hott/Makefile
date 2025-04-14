@@ -1,26 +1,28 @@
-all: 	set.vo \
-		equal.vo \
-		empty.vo \
-		singleton.vo \
-		belong.vo \
-		subset.vo
+.PHONY : all clean
 
+VFILES  	:= $(shell find . -name "*.v")
+VOFILES   := $(VFILES:.v=.vo)
 
-set.vo : set.v
-	coqc set.v
+VOKFILES  = $(shell find . -name "*.vok")
+VOSFILES  = $(shell find . -name "*.vos")
+AUXFILES  = $(shell find . -name "*.aux")
+GLOBFILES = $(shell find . -name "*.glob")
 
-equal.vo : equal.v set.vo
-	coqc equal.v
+ARTIFACTS = $(VOFILES) $(VOKFILES) $(VOSFILES) $(AUXFILES) $(GLOBFILES)
 
-empty.vo : empty.v set.vo
-	coqc empty.v
+all : deps $(VOFILES)
 
-singleton.vo : singleton.v set.vo empty.vo
-	coqc singleton.v
+%.vo : %.v
+	@echo "Compiling $<"
+	@coqc $<
 
-belong.vo : belong.v set.vo equal.vo
-	coqc belong.v
+deps : $(VFILES)
+	@echo "Generating dependencies..."
+	@coqdep -vos $(VFILES) > deps 
 
-subset.vo : subset.v set.vo equal.vo belong.vo	
-	coqc subset.v
+include deps
+
+clean :
+	@echo "Cleaning up artifacts..."
+	@rm -f $(ARTIFACTS) deps
 
