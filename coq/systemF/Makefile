@@ -1,17 +1,28 @@
-all : 	type.vo \
-		term.vo \
-		value.vo \
-		context.vo
+.PHONY : all clean
 
-type.vo: type.v
-	coqc type.v
+VFILES  	:= $(shell find . -name "*.v")
+VOFILES   := $(VFILES:.v=.vo)
 
-term.vo : term.v type.vo
-	coqc term.v
+VOKFILES  = $(shell find . -name "*.vok")
+VOSFILES  = $(shell find . -name "*.vos")
+AUXFILES  = $(shell find . -name "*.aux")
+GLOBFILES = $(shell find . -name "*.glob")
 
-value.vo : value.v term.vo
-	coqc value.v
+ARTIFACTS = $(VOFILES) $(VOKFILES) $(VOSFILES) $(AUXFILES) $(GLOBFILES)
 
-context.vo : context.v type.vo term.vo
-	coqc context.v
-		
+all : deps $(VOFILES)
+
+%.vo : %.v
+	@echo "Compiling $<"
+	@coqc $<
+
+deps : $(VFILES)
+	@echo "Generating dependencies..."
+	@coqdep -vos $(VFILES) > deps 
+
+include deps
+
+clean :
+	@echo "Cleaning up artifacts..."
+	@rm -f $(ARTIFACTS) deps
+
