@@ -48,17 +48,17 @@ Example test_minus1: minus 10 3 = 7.
 Proof. simpl. reflexivity. Qed.
 
 
-Example test_exp1: exp 3 4 = 81.
+Example test_exp1: exp 3 2 = 9.
 Proof. simpl. reflexivity. Qed.
 
-Example test_fact1: fact 5 = 120.
+Example test_fact1: fact 4 = 24.
 Proof. simpl. reflexivity. Qed.
 
 (*
 Compute 5 + 3 + 2 + 15.
 *)
 
-(* 
+(*
 Compute 10 - 2 - 4.
 *)
 
@@ -91,7 +91,7 @@ Proof.
 Qed.
 
 
-Lemma plus_id_example: forall n m:nat, 
+Lemma plus_id_example: forall n m:nat,
     n = m -> n + n = m + m.
 Proof.
     intros n m H. rewrite H. reflexivity.
@@ -104,7 +104,7 @@ Proof.
 Qed.
 
 (*
-Theorem plus_comm : forall n m:nat, 
+Theorem plus_comm : forall n m:nat,
     n + m = m + n.
 Proof.
 Admitted.  (* useful when writing bigger proofs *)
@@ -123,7 +123,7 @@ Qed.
 Lemma plus_1_neq_0'' : forall n:nat,
     eqb (n + 1) 0 = false.
 Proof.
-    intros [|n].           (* shortcut for intros n. destruct n as [|n]. *) 
+    intros [|n].           (* shortcut for intros n. destruct n as [|n]. *)
     - reflexivity.
     - reflexivity.
 Qed.
