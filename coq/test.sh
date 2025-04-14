@@ -17,7 +17,7 @@ echo
 ./hott/test.sh
 ./systemF/test.sh
 ./lam/test.sh
-./cpdt/test.sh
+./CPDT/test.sh
 
 echo
 echo 'All coq tests completed successfully'

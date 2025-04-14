@@ -20,7 +20,7 @@ rm -f lib/*.vo
 ./hott/clean.sh
 ./systemF/clean.sh
 ./lam/clean.sh
-./cpdt/clean.sh
+./CPDT/clean.sh
 ./grin/clean.sh
 ./ref/clean.sh
 ./cttwc/clean.sh
