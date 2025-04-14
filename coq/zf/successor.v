@@ -20,7 +20,7 @@ Qed.
 Proposition belong_succ_O: forall a:set,
   a:(succ O) <-> a = O.
 Proof.
-  intros a. split. intros Ha. unfold succ in Ha. 
+  intros a. split. intros Ha. unfold succ in Ha.
   apply union_elim2 in Ha. elim Ha.
   clear Ha. intro Ha. apply False_ind. apply (empty_O a). exact Ha.
   clear Ha. intro Ha. apply singleton_belong. exact Ha.
@@ -30,8 +30,9 @@ Qed.
 Proposition succ_O : succ O = singleton O.
 Proof.
   unfold succ. rewrite union_O_a. reflexivity.
-Qed. 
+Qed.
 
+(*
 Proposition subset_succ_O: forall a:set,
   subset a (succ O) <-> a = O \/ a = succ O.
 Proof.
@@ -39,3 +40,4 @@ Proof.
   intros Ha.
 
 Show.
+*)
