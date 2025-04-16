@@ -3,7 +3,9 @@ Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.
+
 Export ZF.Core.Leq.
+Export ZF.Core.Lt.
 
 (* Inclusion predicate between two sets.                                        *)
 Definition Incl (a b:U) : Prop := Class.Incl.Incl (toClass a) (toClass b).
@@ -12,10 +14,10 @@ Definition Incl (a b:U) : Prop := Class.Incl.Incl (toClass a) (toClass b).
 Global Instance SetLeq : Leq U := { leq := Incl }.
 
 (* Strict inclusion predicate.                                                  *)
-Definition InclStrict (a b:U) : Prop := a :<=: b /\ ~a = b.
+Definition StrictIncl (a b:U) : Prop := a :<=: b /\ a <> b.
 
 (* Notation "a :<: b" := (InclStrict a b)                                       *)
-Global Instance SetLt : Lt U := { lt := InclStrict }.
+Global Instance SetLt : Lt U := { lt := StrictIncl }.
 
 (* Two sets are equal if and only if they are subsets of each other.            *)
 Proposition DoubleInclusion : forall (a b:U),
@@ -50,16 +52,23 @@ Proof.
   intros a b c H1 H2 x H3. apply H2, H1, H3.
 Qed.
 
-Proposition InclStrictExists : forall (a b:U),
+Proposition StrictInclExists : forall (a b:U),
   a :<: b <-> a :<=: b /\ exists x, x :< b /\ ~ x :< a.
 Proof.
   intros a b. split; intros H1.
-  - unfold InclStrict in H1. destruct H1 as [H1 H2]. split.
+  - unfold StrictIncl in H1. destruct H1 as [H1 H2]. split.
     + apply H1.
     + apply NotForAllNot. intros H3. apply H2. apply DoubleInclusion. split.
       * apply H1.
       * intros x H4. apply DoubleNegation. intros H5. apply (H3 x). split; assumption.
-  - destruct H1 as [H1 [x [H2 H3]]]. unfold InclStrict. split.
+  - destruct H1 as [H1 [x [H2 H3]]]. unfold StrictIncl. split.
     + apply H1.
     + intros H4. subst. contradiction.
+Qed.
+
+Proposition StrictInclFromClass : forall (a b:U),
+  a :<: b <-> toClass a :<: toClass b.
+Proof.
+  intros a b. split; intros [H1 H2]; split; try assumption;
+  apply NotEquivSetNotEqual; assumption.
 Qed.

@@ -13,10 +13,10 @@ Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.
 Global Instance ClassLeq : Leq Class := { leq := Incl }.
 
 (* Strict inclusion predicate.                                                  *)
-Definition InclStrict (P Q:Class) : Prop := P :<=: Q /\ P :<>: Q.
+Definition StrictIncl (P Q:Class) : Prop := P :<=: Q /\ P :<>: Q.
 
 (* Notation "P :<: Q" := (InclStrict P Q)                                       *)
-Global Instance ClassLt : Lt Class := { lt := InclStrict }.
+Global Instance ClassLt : Lt Class := { lt := StrictIncl }.
 
 (* Two classes are equivalent if and only if they are included in each other.   *)
 Proposition DoubleInclusion : forall (P Q:Class),
@@ -54,12 +54,12 @@ Proposition StrictInclExists : forall (P Q:Class),
   P :<: Q <-> P :<=: Q /\ exists x, Q x /\ ~ P x.
 Proof.
   intros P Q. split; intros H1.
-  - unfold InclStrict in H1. destruct H1 as [H1 H2]. split.
+  - unfold StrictIncl in H1. destruct H1 as [H1 H2]. split.
     + apply H1.
     + apply NotForAllNot. intros H3. apply H2. apply DoubleInclusion. split.
       * apply H1.
       * intros x H4. apply DoubleNegation. intros H5. apply (H3 x). split; assumption.
-  - destruct H1 as [H1 [x [H2 H3]]]. unfold InclStrict. split.
+  - destruct H1 as [H1 [x [H2 H3]]]. unfold StrictIncl. split.
     + apply H1.
     + intros H4. apply H3, H4, H2.
 Qed.

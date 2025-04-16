@@ -37,6 +37,11 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
+Proposition NotEquivSym : forall (P Q:Class), P :<>: Q -> Q :<>: P.
+Proof.
+  intros P Q H1 H2. apply H1, EquivSym. assumption.
+Qed.
+
 Proposition EquivSetEqual : forall (a b:U),
   toClass a :~: toClass b <-> a = b.
 Proof.
@@ -45,7 +50,8 @@ Proof.
   - intros H1. subst. apply EquivRefl.
 Qed.
 
-Proposition NotEquivSym : forall (P Q:Class), P :<>: Q -> Q :<>: P.
+Proposition NotEquivSetNotEqual : forall (a b:U),
+  toClass a :<>: toClass b <-> a <> b.
 Proof.
-  intros P Q H1 H2. apply H1, EquivSym. assumption.
+  intros a b. split; intros H1 H2; apply H1, EquivSetEqual; assumption.
 Qed.
