@@ -72,3 +72,17 @@ Proof.
   intros a b. split; intros [H1 H2]; split; try assumption;
   apply NotEquivSetNotEqual; assumption.
 Qed.
+
+Proposition StrictInclOrEqual : forall (a b:U),
+  a :<=: b <-> a = b \/ a :<: b.
+Proof.
+  intros a b. split; intros H1.
+  - apply StrictInclOrEquiv in H1. destruct H1 as [H1|H1].
+    + left. apply EquivSetEqual. assumption.
+    + right. apply StrictInclFromClass. assumption.
+  - destruct H1 as [H1|H1].
+    + subst. apply InclRefl.
+    + apply H1.
+Qed.
+
+

@@ -6,6 +6,7 @@ Require Import ZF.Set.Incl.
 (* The class of all ordinals.                                                   *)
 Definition Ordinal : Class := On.
 
+(* Strict inclusion and set membership coincide on ordinals.                    *)
 Proposition StrictInclIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<: b <-> a :< b.
 Proof.

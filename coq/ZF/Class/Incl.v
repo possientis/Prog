@@ -110,3 +110,18 @@ Proof.
   - apply Class.EquivRefl.
   - assumption.
 Qed.
+
+Proposition StrictInclOrEquiv : forall (P Q:Class),
+  P :<=: Q <-> P :~: Q \/ P :<: Q.
+Proof.
+  intros P Q. split; intros H1.
+  - assert (P :~: Q \/ P :<>: Q) as H2. { apply LawExcludedMiddle. }
+    destruct H2 as [H2|H2].
+    + left. assumption.
+    + right. split; assumption.
+  - destruct H1 as [H1|H1].
+    + apply EquivCompatR with P. 1: assumption. apply InclRefl.
+    + apply H1.
+Qed.
+
+
