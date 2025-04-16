@@ -273,3 +273,19 @@ Proof.
   - apply OnIsOrdinalClass.
 Qed.
 
+(* Every ordinal class is a subclass of the class of ordinals.                  *)
+Proposition IsStrictSubclassOfOn : forall (A:Class),
+  Ordinal A -> A :~: On \/ A :<: On.
+Proof.
+  intros A H1. assert (A :~: On \/ A :<: On \/ On :<: A) as H2. {
+    apply OrdinalTotal. 1: assumption. apply OnIsOrdinalClass. }
+  destruct H2 as [H2|[H2|H2]].
+  - left. assumption.
+  - right. assumption.
+  - exfalso. apply OnIsProperClass.
+    apply TransitiveStrictSubclassIsSmall with A; try assumption.
+    apply OnIsOrdinalClass.
+Qed.
+
+
+
