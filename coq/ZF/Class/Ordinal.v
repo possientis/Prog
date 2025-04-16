@@ -273,7 +273,7 @@ Proof.
   - apply OnIsOrdinalClass.
 Qed.
 
-(* Every ordinal class is a subclass of the class of ordinals.                  *)
+(* Every ordinal class is the class of ordinals or a strict subclass thereof.   *)
 Proposition IsStrictSubclassOfOn : forall (A:Class),
   Ordinal A -> A :~: On \/ A :<: On.
 Proof.
@@ -287,5 +287,16 @@ Proof.
     apply OnIsOrdinalClass.
 Qed.
 
+(* Every ordinal class is a subclass of the class of ordinals.                  *)
+Proposition IsSubclassOfOn : forall (A:Class),
+  Ordinal A -> A :<=: On.
+Proof.
+  intros A H1. assert (A :~: On \/ A :<: On) as H2. {
+    apply IsStrictSubclassOfOn. assumption. }
+  destruct H2 as [H2|H2].
+  - apply Incl.EquivCompatL with On. apply EquivSym. 1: assumption.
+    apply Class.Incl.InclRefl.
+  - apply H2.
+Qed.
 
 
