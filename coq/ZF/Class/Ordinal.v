@@ -7,6 +7,7 @@ Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Minimal.
+Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Total.
 Require Import ZF.Class.Transitive2.
@@ -262,3 +263,13 @@ Proof.
     + right. left. apply (StrictInclIsElem (toClass b)); assumption.
     + right. right. apply (StrictInclIsElem (toClass a)); assumption.
 Qed.
+
+(* The class of ordinals is a proper class.                                     *)
+Proposition OnIsProperClass : Proper On.
+Proof.
+  intros H1. apply (proj1 (SmallIsSomeSet _)) in H1. destruct H1 as [a H1].
+  apply NoElemLoop1 with a. apply H1. apply EquivCompat with On.
+  - apply EquivSym. assumption.
+  - apply OnIsOrdinalClass.
+Qed.
+
