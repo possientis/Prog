@@ -48,16 +48,16 @@ Proposition UnionInter : forall (P Q R:Class),
   P :\: (Q:\/:R) :~: (P:\:Q) :/\: P:\:R.
 Proof.
   intros P Q R x. split; intros H1.
-  - destruct H1 as [H1 H2]. apply (proj1 (ComplementCharac _ _)) in H2.
+  - destruct H1 as [H1 H2]. apply (proj1 (Complement.Charac _ _)) in H2.
     split; split.
     + assumption.
     + intros H3. apply H2. apply Union2Charac. left. assumption.
     + assumption.
     + intros H3. apply H2. apply Union2Charac. right. assumption.
   - destruct H1 as [H1 H2]. destruct H1 as [H1 H3].
-    apply (proj1 (ComplementCharac _ _)) in H3.
+    apply (proj1 (Complement.Charac _ _)) in H3.
     destruct H2 as [_ H2].
-    apply (proj1 (ComplementCharac _ _)) in H2.
+    apply (proj1 (Complement.Charac _ _)) in H2.
     split.
     + assumption.
     + intros H4. apply (proj1 (Union2Charac _ _ _)) in H4.

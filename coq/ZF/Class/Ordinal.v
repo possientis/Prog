@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.E.
 Require Import ZF.Class.Empty.
@@ -299,4 +300,36 @@ Proof.
   - apply H2.
 Qed.
 
+(* Every ordinal class is small, unless it is the class of ordinals.            *)
+Proposition IsSmall : forall (A:Class),
+  Ordinal A -> A :~: On \/ Small A.
+Proof.
+  intros A H1. assert (A :~: On \/ A :<: On) as H2. {
+    apply IsStrictSubclassOfOn. assumption. }
+  destruct H2 as [H2|H2].
+  - left. assumption.
+  - right. apply TransitiveStrictSubclassIsSmall with On. 3: assumption.
+    + apply OnIsOrdinalClass.
+    + apply H1.
+Qed.
+
+Proposition TransfiniteInduction : forall (A:Class),
+  A :<=: On                                   ->
+  (forall a, On a -> toClass a :<=: A -> A a) ->
+  A :~: On.
+Proof.
+  intros A H1 H2. apply DoubleNegation. intros H3.
+  assert (On :\: A :<>: :0:) as H4. { apply WhenStrictIncl. split; assumption. }
+  assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
+    apply HasEMinimal with On. 3: assumption.
+    - apply OnIsOrdinalClass.
+    - apply Inter.InclL. }
+  destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
+    apply StrictInclIsElem; try assumption. apply OnIsOrdinalClass. }
+  assert (toClass a :<=: A) as H9. { intros x H10. apply DoubleNegation.
+    intros H11. apply Empty.Charac with x. apply H7. split. 2: assumption. split.
+    - apply ElemIsOrdinal with (toClass a); assumption.
+    - apply Complement.Charac. assumption. }
+  apply H6, H2; assumption.
+Qed.
 
