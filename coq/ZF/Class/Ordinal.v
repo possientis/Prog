@@ -23,6 +23,9 @@ Require Import ZF.Set.OrdPair.
 Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
   A x -> A y -> x = y \/ x :< y \/ y :< x.
 
+(* The class of all sets which are ordinals.                                    *)
+Definition On : Class := fun x => Ordinal (toClass x).
+
 (* Being an ordinal class is compatible with class equivalence.                 *)
 Definition EquivCompat : forall (A B:Class),
   A :~: B -> Ordinal A -> Ordinal B.
@@ -243,4 +246,19 @@ Proof.
     + right. split.
       * apply IsInterInclR, EquivSym. assumption.
       * apply NotEquivSym. assumption.
+Qed.
+
+(* The class of ordinals is an ordinal class.                                   *)
+Proposition OnIsOrdinalClass : Ordinal On.
+Proof.
+  split.
+  - intros a H1 x H2. apply ElemIsOrdinal with (toClass a); assumption.
+  - intros a b H1 H2. assert (
+      toClass a :~: toClass b \/
+      toClass a :<: toClass b \/
+      toClass b :<: toClass a) as H3. { apply OrdinalTotal; assumption. }
+    destruct H3 as [H3|[H3|H3]].
+    + left. apply EquivSetEqual. assumption.
+    + right. left. apply (StrictInclIsElem (toClass b)); assumption.
+    + right. right. apply (StrictInclIsElem (toClass a)); assumption.
 Qed.
