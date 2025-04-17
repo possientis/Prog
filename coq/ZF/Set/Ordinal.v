@@ -93,6 +93,7 @@ Proof.
     + destruct H1 as [_ H1]. apply H1; assumption.
     + apply SingleCharac in H3. subst. right. left. assumption.
     + apply SingleCharac in H2. subst. right. right. assumption.
-    + apply SingleCharac in H2. apply SingleCharac in H3. subst. left. apply eq_refl.
+    + apply SingleCharac in H2. apply SingleCharac in H3. 
+      subst. left. apply eq_refl.
 Qed.
 

@@ -22,3 +22,12 @@ Proof.
   intros A B H1 H2 x H3. apply Incl.EquivCompatR with A. 1: assumption.
   apply H2, H1. assumption.
 Qed.
+
+Proposition Charac : forall (A:Class),
+  Transitive A <-> forall x y, x :< y -> A y -> A x.
+Proof.
+  intros A. split; intros H1.
+  - intros x y H2 H3. unfold Transitive in H1.
+    specialize (H1 y H3 x). apply H1. assumption.
+  - intros y H2 x H3. apply H1 with y; assumption.
+Qed.
