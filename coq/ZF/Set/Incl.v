@@ -73,11 +73,11 @@ Proof.
   apply NotEquivSetNotEqual; assumption.
 Qed.
 
-Proposition StrictInclOrEqual : forall (a b:U),
+Proposition EqualOrStrictIncl : forall (a b:U),
   a :<=: b <-> a = b \/ a :<: b.
 Proof.
   intros a b. split; intros H1.
-  - apply StrictInclOrEquiv in H1. destruct H1 as [H1|H1].
+  - apply EquivOrStrictIncl in H1. destruct H1 as [H1|H1].
     + left. apply EquivSetEqual. assumption.
     + right. apply StrictInclFromClass. assumption.
   - destruct H1 as [H1|H1].
@@ -85,4 +85,18 @@ Proof.
     + apply H1.
 Qed.
 
+Proposition InclStrictInclTran : forall (a b c:U),
+  a :<=: b -> b :<: c -> a :<: c.
+Proof.
+  intros a b c H1 H2. apply StrictInclFromClass.
+  apply Class.Incl.InclStrictInclTran with (toClass b). 1: assumption.
+  apply StrictInclFromClass. assumption.
+Qed.
 
+Proposition StrictInclInclTran : forall (a b c:U),
+  a :<: b -> b :<=: c -> a :<: c.
+Proof.
+  intros a b c H1 H2. apply StrictInclFromClass.
+  apply Class.Incl.StrictInclInclTran with (toClass b). 2: assumption.
+  apply StrictInclFromClass. assumption.
+Qed.

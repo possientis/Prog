@@ -111,7 +111,7 @@ Proof.
   - assumption.
 Qed.
 
-Proposition StrictInclOrEquiv : forall (P Q:Class),
+Proposition EquivOrStrictIncl : forall (P Q:Class),
   P :<=: Q <-> P :~: Q \/ P :<: Q.
 Proof.
   intros P Q. split; intros H1.
@@ -122,6 +122,24 @@ Proof.
   - destruct H1 as [H1|H1].
     + apply EquivCompatR with P. 1: assumption. apply InclRefl.
     + apply H1.
+Qed.
+
+Proposition InclStrictInclTran : forall (P Q R:Class),
+  P :<=: Q -> Q :<: R -> P :<: R.
+Proof.
+  intros P Q R H1 [H2 H3]. split.
+  - apply InclTran with Q; assumption.
+  - intros H4. apply H3, DoubleInclusion. split. 1: assumption.
+    apply EquivCompatL with P; assumption.
+Qed.
+
+Proposition StrictInclInclTran : forall (P Q R:Class),
+  P :<: Q -> Q :<=: R -> P :<: R.
+Proof.
+  intros P Q R [H1 H2] H3. split.
+  - apply InclTran with Q; assumption.
+  - intros H4. apply H2, DoubleInclusion. split. 1: assumption.
+    apply EquivCompatR with R. 2: assumption. apply EquivSym. assumption.
 Qed.
 
 
