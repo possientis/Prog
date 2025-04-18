@@ -1,6 +1,9 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.
 Require Import ZF.Class.Transitive2.
+Require Import ZF.Class.Union.
+Require Import ZF.Class.Empty.
 Require Import ZF.Set.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Singleton.
@@ -54,6 +57,17 @@ Proof.
     + apply StrictInclIsElem in H3; try assumption. apply H3.
 Qed.
 
+Proposition InclOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b \/ b :<=: a.
+Proof.
+  intros a b H1 H2. assert (a = b \/ a :< b \/ b :< a) as H3. {
+    apply OrdinalTotal; assumption. }
+  destruct H3 as [H3|[H3|H3]].
+  - subst. left. apply InclRefl.
+  - left. apply StrictInclIsElem in H3; try assumption. apply H3.
+  - right. apply StrictInclIsElem in H3; try assumption. apply H3.
+Qed.
+
 Proposition InclStricInclTran : forall (a b c:U),
   Ordinal a ->
   Ordinal b ->
@@ -96,4 +110,54 @@ Proof.
     + apply SingleCharac in H2. apply SingleCharac in H3. 
       subst. left. apply eq_refl.
 Qed.
+
+Proposition HasMinimal : forall (A:Class),
+  A :<=: On   ->
+  A :<>: :0:  ->
+  exists a, 
+    Ordinal a /\ 
+    A a       /\
+    forall b, Ordinal b -> A b -> a :<=: b.
+Proof.
+  intros A H1 H2.
+  assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
+    apply HasEMinimal with On; try assumption. apply OnIsOrdinalClass. }
+  destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
+    apply ElemIsOrdinal with On. apply OnIsOrdinalClass. apply H1. assumption. }
+  split. 1: assumption. split. 1: assumption. intros b H6 H7.
+  assert (a = b \/ a :< b \/ b :< a) as H8. { 
+    apply OrdinalTotal; assumption. }
+  apply EqualOrStrictIncl; try assumption. destruct H8 as [H8|[H8|H8]].
+  - left. assumption.
+  - right. assumption.
+  - exfalso. apply Empty.Charac with b. apply H4. split; assumption.
+Qed.
+
+Proposition UnionOfOn : :U(On) :~: On.
+Proof.
+  apply Class.Incl.DoubleInclusion. split.
+  - apply Transitive2.UnionIncl, OnIsOrdinalClass.
+  - intros a H1. exists (a :\/: :{a}:). split.
+    + apply Union2Charac. right. apply SingleIn.
+    + apply SuccIsOrdinal. assumption.
+Qed.
+
+Proposition MaxIsLeftOrRight : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :\/: b = a \/ a :\/: b = b.
+Proof.
+  intros a b H1 H2. assert (a :<=: b \/ b :<=: a) as H3. {
+    apply InclOrIncl; assumption. }
+  destruct H3 as [H3|H3].
+  - apply Union2EqualIncl in H3. right. symmetry. assumption.
+  - apply Union2EqualIncl in H3. left. symmetry. rewrite Union2Comm. assumption. 
+Qed.
+
+Proposition MaxIsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
+  Ordinal (a :\/: b).
+Proof.
+  intros a b H1 H2. assert (a :\/: b = a \/ a :\/: b = b) as H3. {
+    apply MaxIsLeftOrRight; assumption. }
+  destruct H3 as [H3|H3]; rewrite H3; assumption.
+Qed.
+
 

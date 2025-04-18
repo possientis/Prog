@@ -12,6 +12,7 @@ Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Total.
 Require Import ZF.Class.Transitive2.
+Require Import ZF.Class.Union.
 Require Import ZF.Class.V.
 Require Import ZF.Class.WellFounded.
 Require Import ZF.Class.WellFoundedWellOrd.

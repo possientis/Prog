@@ -1,5 +1,6 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Union.
 Require Import ZF.Set.
 Require Import ZF.Set.Foundation.
 
@@ -30,4 +31,11 @@ Proof.
   - intros x y H2 H3. unfold Transitive in H1.
     specialize (H1 y H3 x). apply H1. assumption.
   - intros y H2 x H3. apply H1 with y; assumption.
+Qed.
+
+Proposition UnionIncl : forall (A:Class),
+  Transitive A -> :U(A) :<=: A.
+Proof.
+  intros A H1 x H2. destruct H2 as [y [H2 H3]]. specialize (H1 y H3 x).
+  apply H1. assumption.
 Qed.
