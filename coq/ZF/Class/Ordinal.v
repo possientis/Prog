@@ -333,3 +333,11 @@ Proof.
   apply H6, H2; assumption.
 Qed.
 
+Proposition ElemIsInter : forall (A:Class) (a:U),
+  Ordinal A -> A a -> toClass a :~: toClass a :/\: A.
+Proof.
+  intros A a H1 H2. apply Class.Incl.DoubleInclusion. split. 2: apply Inter.InclL.
+  intros x H3. split. 1: assumption. destruct H1 as [H1 _].
+  specialize (H1 a H2 x). apply H1. assumption.
+Qed.
+
