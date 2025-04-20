@@ -22,13 +22,15 @@ Proof.
   - apply StrictInclFromClass, (StrictInclIsElem (toClass b)); assumption.
 Qed.
 
+(* An ordinal is a strict subclass of the class of ordinals.                    *)
 Proposition OrdinalIsStrictSubclass : forall (a:U), Ordinal a ->
-  toClass a :<: Ordinal.
+  toClass a :<: On.
 Proof.
   intros a H1. apply (Class.Ordinal.StrictInclIsElem On); try assumption.
   apply OnIsOrdinalClass.
 Qed.
 
+(* Ordinals are totally ordered by set membership.                              *)
 Proposition OrdinalTotal : forall (a b:U), Ordinal a -> Ordinal b ->
   a = b \/ a :< b \/ b :< a.
 Proof.
@@ -68,7 +70,7 @@ Proof.
   - right. apply StrictInclIsElem in H3; try assumption. apply H3.
 Qed.
 
-Proposition InclStricInclTran : forall (a b c:U),
+Proposition InclStrictInclTran : forall (a b c:U),
   Ordinal a ->
   Ordinal b ->
   Ordinal c ->
@@ -81,7 +83,7 @@ Proof.
   apply StrictInclIsElem; assumption.
 Qed.
 
-Proposition StricInclInclTran : forall (a b c:U),
+Proposition StrictInclInclTran : forall (a b c:U),
   Ordinal a ->
   Ordinal b ->
   Ordinal c ->
@@ -94,6 +96,7 @@ Proof.
   apply StrictInclIsElem; assumption.
 Qed.
 
+(* The successor of an ordinal is an ordinal.                                   *)
 Proposition SuccIsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (a :\/: :{a}:).
 Proof.
@@ -111,20 +114,22 @@ Proof.
       subst. left. apply eq_refl.
 Qed.
 
+(* An non-empty class of ordinals has a minimal ordinal.                        *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: On   ->
   A :<>: :0:  ->
   exists a, 
     Ordinal a /\ 
     A a       /\
-    forall b, Ordinal b -> A b -> a :<=: b.
+    forall b, A b -> a :<=: b.
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
     apply HasEMinimal with On; try assumption. apply OnIsOrdinalClass. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
     apply ElemIsOrdinal with On. apply OnIsOrdinalClass. apply H1. assumption. }
-  split. 1: assumption. split. 1: assumption. intros b H6 H7.
+  split. 1: assumption. split. 1: assumption. intros b H6.
+  assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. { 
     apply OrdinalTotal; assumption. }
   apply EqualOrStrictIncl; try assumption. destruct H8 as [H8|[H8|H8]].
@@ -133,6 +138,7 @@ Proof.
   - exfalso. apply Empty.Charac with b. apply H4. split; assumption.
 Qed.
 
+(* The union of the class of ordinals is the class of ordinals.                 *)
 Proposition UnionOfOn : :U(On) :~: On.
 Proof.
   apply Class.Incl.DoubleInclusion. split.
@@ -142,6 +148,7 @@ Proof.
     + apply SuccIsOrdinal. assumption.
 Qed.
 
+(* The max of two ordinals is equal to one of them.                             *)
 Proposition MaxIsLeftOrRight : forall (a b:U), Ordinal a -> Ordinal b ->
   a :\/: b = a \/ a :\/: b = b.
 Proof.
@@ -152,6 +159,7 @@ Proof.
   - apply Union2EqualIncl in H3. left. symmetry. rewrite Union2Comm. assumption. 
 Qed.
 
+(* The max of two ordinals is an ordinal.                                       *)
 Proposition MaxIsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
   Ordinal (a :\/: b).
 Proof.
@@ -160,4 +168,25 @@ Proof.
   destruct H3 as [H3|H3]; rewrite H3; assumption.
 Qed.
 
+(* The union of a class of ordinals is an 'upper-bound' of that class.          *)
+Proposition UnionIsUpperBound : forall (A:Class) (a:U),
+  A :<=: On -> A a -> toClass a :<=: :U(A).
+Proof.
+  intros A a H1 H2. assert (Class.Ordinal.Ordinal :U(A)) as H3. {
+    apply UnionIsOrdinal. assumption. }
+    intros x H4. exists a. split; assumption.
+Qed.
 
+(* The union of a class of ordinals is its smallest 'upper-bound'.              *)
+Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U), Ordinal a ->
+  A :<=: On                                ->
+  (forall b, Ordinal b -> A b -> b :<=: a) -> 
+  :U(A) :<=: toClass a.
+Proof.
+  intros A a H1 H2 H3 b H4. assert (Ordinal b) as H5. {
+    apply ElemIsOrdinal with :U(A). 2: assumption.
+    apply UnionIsOrdinal. assumption. }
+    destruct H4 as [c [H4 H6]]. assert (Ordinal c) as H7. {
+      apply H2. assumption. }
+  apply StrictInclInclTran with c; try assumption. apply H3; assumption.
+Qed.

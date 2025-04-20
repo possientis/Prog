@@ -314,6 +314,7 @@ Proof.
     + apply H1.
 Qed.
 
+(* Principle of transfinite induction.                                          *)
 Proposition TransfiniteInduction : forall (A:Class),
   A :<=: On                                   ->
   (forall a, On a -> toClass a :<=: A -> A a) ->
@@ -334,6 +335,7 @@ Proof.
   apply H6, H2; assumption.
 Qed.
 
+(* An element of an ordinal class is equal to its intersection with the class.  *)
 Proposition ElemIsInter : forall (A:Class) (a:U),
   Ordinal A -> A a -> toClass a :~: toClass a :/\: A.
 Proof.
@@ -342,6 +344,7 @@ Proof.
   destruct H1 as [H1 _]. specialize (H1 a H2 x). apply H1. assumption.
 Qed.
 
+(* The union of a class of ordinals is an ordinal class.                        *)
 Proposition UnionIsOrdinal : forall (A:Class),
   A :<=: On -> Ordinal :U(A).
 Proof.
