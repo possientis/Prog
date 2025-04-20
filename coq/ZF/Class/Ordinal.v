@@ -372,7 +372,7 @@ Qed.
 Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U), 
   A :<=: On                           ->
   On a                                ->
-  (forall b, On b -> A b -> b :<=: a) -> 
+  (forall b, A b -> b :<=: a) -> 
   :U(A) :<=: toClass a.
 Proof.
   intros A a H1 H2 H3 b H4. assert (On b) as H5. {
@@ -382,3 +382,4 @@ Proof.
       apply H1. assumption. }
     apply (H3 c); assumption. 
 Qed.
+

@@ -18,3 +18,13 @@ Proposition UnionCharac : forall (a:U),
 Proof.
   intros a. apply FromClassCharac.
 Qed.
+
+Proposition UnionOfToClass : forall (a:U),
+  :U(toClass a) :~: toClass :U(a).
+Proof.
+  intros a x. split; intros H1.
+  - destruct H1 as [y [H1 H2]]. apply UnionCharac. exists y. 
+    split; assumption.
+  - apply UnionCharac in H1. destruct H1 as [y [H1 H2]]. exists y. 
+    split; assumption.
+Qed.
