@@ -252,7 +252,7 @@ Proof.
 Qed.
 
 (* The class of ordinals is an ordinal class.                                   *)
-Proposition OnIsOrdinalClass : Ordinal On.
+Proposition OnIsOrdinal : Ordinal On.
 Proof.
   split.
   - intros a H1 x H2. apply ElemIsOrdinal with (toClass a); assumption.
@@ -267,12 +267,12 @@ Proof.
 Qed.
 
 (* The class of ordinals is a proper class.                                     *)
-Proposition OnIsProperClass : Proper On.
+Proposition OnIsProper : Proper On.
 Proof.
   intros H1. apply (proj1 (SmallIsSomeSet _)) in H1. destruct H1 as [a H1].
   apply NoElemLoop1 with a. apply H1. apply EquivCompat with On.
   - apply EquivSym. assumption.
-  - apply OnIsOrdinalClass.
+  - apply OnIsOrdinal.
 Qed.
 
 (* Every ordinal class is the class of ordinals or a strict subclass thereof.   *)
@@ -280,13 +280,13 @@ Proposition IsStrictSubclassOfOn : forall (A:Class),
   Ordinal A -> A :~: On \/ A :<: On.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On \/ On :<: A) as H2. {
-    apply OrdinalTotal. 1: assumption. apply OnIsOrdinalClass. }
+    apply OrdinalTotal. 1: assumption. apply OnIsOrdinal. }
   destruct H2 as [H2|[H2|H2]].
   - left. assumption.
   - right. assumption.
-  - exfalso. apply OnIsProperClass.
+  - exfalso. apply OnIsProper.
     apply TransitiveStrictSubclassIsSmall with A; try assumption.
-    apply OnIsOrdinalClass.
+    apply OnIsOrdinal.
 Qed.
 
 (* Every ordinal class is a subclass of the class of ordinals.                  *)
@@ -310,7 +310,7 @@ Proof.
   destruct H2 as [H2|H2].
   - left. assumption.
   - right. apply TransitiveStrictSubclassIsSmall with On. 3: assumption.
-    + apply OnIsOrdinalClass.
+    + apply OnIsOrdinal.
     + apply H1.
 Qed.
 
@@ -324,10 +324,10 @@ Proof.
   assert (On :\: A :<>: :0:) as H4. { apply WhenStrictIncl. split; assumption. }
   assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
     apply HasEMinimal with On. 3: assumption.
-    - apply OnIsOrdinalClass.
+    - apply OnIsOrdinal.
     - apply Inter.InclL. }
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
-    apply StrictInclIsElem; try assumption. apply OnIsOrdinalClass. }
+    apply StrictInclIsElem; try assumption. apply OnIsOrdinal. }
   assert (toClass a :<=: A) as H9. { intros x H10. apply DoubleNegation.
     intros H11. apply Empty.Charac with x. apply H7. split. 2: assumption. split.
     - apply ElemIsOrdinal with (toClass a); assumption.
@@ -352,7 +352,7 @@ Proof.
     destruct H2 as [b [H2 H3]]. apply ElemIsOrdinal with (toClass b).
     2: assumption. apply H1. assumption. }
   apply TransitiveSubclassIsOrdinal with On; try assumption.
-  1: apply OnIsOrdinalClass. intros a H3. destruct H3 as [b [H3 H4]].
+  1: apply OnIsOrdinal. intros a H3. destruct H3 as [b [H3 H4]].
   assert (Ordinal (toClass b)) as H5. { apply H1. assumption. }
   assert (Transitive (toClass b)) as H6. { apply H5. }
   assert (a :<=: b) as H7. { apply H6. assumption. }

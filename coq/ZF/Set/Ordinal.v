@@ -27,7 +27,7 @@ Proposition OrdinalIsStrictSubclass : forall (a:U), Ordinal a ->
   toClass a :<: On.
 Proof.
   intros a H1. apply (Class.Ordinal.StrictInclIsElem On); try assumption.
-  apply OnIsOrdinalClass.
+  apply OnIsOrdinal.
 Qed.
 
 (* Ordinals are totally ordered by set membership.                              *)
@@ -125,9 +125,9 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
-    apply HasEMinimal with On; try assumption. apply OnIsOrdinalClass. }
+    apply HasEMinimal with On; try assumption. apply OnIsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
-    apply ElemIsOrdinal with On. apply OnIsOrdinalClass. apply H1. assumption. }
+    apply ElemIsOrdinal with On. apply OnIsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. { 
@@ -142,7 +142,7 @@ Qed.
 Proposition UnionOfOn : :U(On) :~: On.
 Proof.
   apply Class.Incl.DoubleInclusion. split.
-  - apply Transitive2.UnionIncl, OnIsOrdinalClass.
+  - apply Transitive2.UnionIncl, OnIsOrdinal.
   - intros a H1. exists (a :\/: :{a}:). split.
     + apply Union2Charac. right. apply SingleIn.
     + apply SuccIsOrdinal. assumption.
