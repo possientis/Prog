@@ -167,26 +167,3 @@ Proof.
     apply MaxIsLeftOrRight; assumption. }
   destruct H3 as [H3|H3]; rewrite H3; assumption.
 Qed.
-
-(* The union of a class of ordinals is an 'upper-bound' of that class.          *)
-Proposition UnionIsUpperBound : forall (A:Class) (a:U),
-  A :<=: On -> A a -> toClass a :<=: :U(A).
-Proof.
-  intros A a H1 H2. assert (Class.Ordinal.Ordinal :U(A)) as H3. {
-    apply UnionIsOrdinal. assumption. }
-    intros x H4. exists a. split; assumption.
-Qed.
-
-(* The union of a class of ordinals is its smallest 'upper-bound'.              *)
-Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U), Ordinal a ->
-  A :<=: On                                ->
-  (forall b, Ordinal b -> A b -> b :<=: a) -> 
-  :U(A) :<=: toClass a.
-Proof.
-  intros A a H1 H2 H3 b H4. assert (Ordinal b) as H5. {
-    apply ElemIsOrdinal with :U(A). 2: assumption.
-    apply UnionIsOrdinal. assumption. }
-    destruct H4 as [c [H4 H6]]. assert (Ordinal c) as H7. {
-      apply H2. assumption. }
-  apply StrictInclInclTran with c; try assumption. apply H3; assumption.
-Qed.
