@@ -26,6 +26,18 @@ Export ZF.Notation.Four.
 Require Import ZF.Notation.Five.
 Export ZF.Notation.Five.
 
+Require Import ZF.Notation.Six.
+Export ZF.Notation.Six.
+
+Require Import ZF.Notation.Seven.
+Export ZF.Notation.Seven.
+
+Require Import ZF.Notation.Eight.
+Export ZF.Notation.Eight.
+
+Require Import ZF.Notation.Nine.
+Export ZF.Notation.Nine.
+
 Definition zero : U := :0:.
 
 Definition one  : U := succ :0:.
@@ -52,6 +64,26 @@ Definition five  : U := succ :4:.
 
 (* Notation ":5:" := five                                                       *)
 Global Instance SetFive : Five U := { five := five }.
+
+Definition six : U := succ :5:.
+
+(* Notation ":6:" := six                                                        *)
+Global Instance SetSix : Six U := { six := six }.
+
+Definition seven : U := succ :6:.
+
+(* Notation ":7:" := seven                                                      *)
+Global Instance SetSeven : Seven U := { seven := seven }.
+
+Definition eight : U := succ :7:.
+
+(* Notation ":8:" := eight                                                      *)
+Global Instance SetEight : Eight U := { eight := eight }.
+
+Definition nine : U := succ :8:.
+
+(* Notation ":9:" := nine                                                      *)
+Global Instance SetNine : Nine U := { nine := nine }.
 
 Proposition ZeroIsOrdinal : Ordinal :0:.
 Proof.
@@ -84,16 +116,44 @@ Proof.
   apply SuccIsOrdinal, FourIsOrdinal.
 Qed.
 
+Proposition SixIsOrdinal : Ordinal :6:.
+Proof.
+  apply SuccIsOrdinal, FiveIsOrdinal.
+Qed.
+
+Proposition SevenIsOrdinal : Ordinal :7:.
+Proof.
+  apply SuccIsOrdinal, SixIsOrdinal.
+Qed.
+
+Proposition EightIsOrdinal : Ordinal :8:.
+Proof.
+  apply SuccIsOrdinal, SevenIsOrdinal.
+Qed.
+
+Proposition NineIsOrdinal : Ordinal :9:.
+Proof.
+  apply SuccIsOrdinal, EightIsOrdinal.
+Qed.
+
+Proposition OneExtension : :1: = :{ :0: }:.
+Proof.
+  assert (:0: :\/: :{ :0: }: = :{ :0: }:) as H1. { apply Union2IdentityL. }
+  rewrite <- H1. reflexivity.
+Qed.
+
 Proposition TwoExtension : :2: = :{ :0:, :1: }:.
 Proof.
-Admitted.
+  rewrite PairAsUnion2, <- OneExtension. reflexivity.
+Qed.
 
-Proposition TreeExtension : :3: = :{ :0:, :1:, :2: }:.
+Proposition ThreeExtension : :3: = :{ :0:, :1:, :2: }:.
 Proof.
-  apply DoubleInclusion. split; intros x H1; apply Union2Charac;
-  apply Union2Charac in H1; destruct H1 as [H1|H1].
-  - left. rewrite TwoExtension in H1. assumption.
-  - right.  assumption.
-  - left. rewrite TwoExtension. assumption.
-  - right. assumption.
- Qed. 
+  unfold tuple3. rewrite <- TwoExtension. reflexivity.
+Qed.
+
+Proposition FourExtension : :4: = :{ :0:, :1:, :2:, :3: }:.
+Proof.
+  unfold tuple4. rewrite <- ThreeExtension. reflexivity.
+Qed.
+

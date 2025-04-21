@@ -3,8 +3,11 @@ Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Pair.
+Require Import ZF.Set.Singleton.
 Export ZF.Notation.Or.
 
 (* The union of two sets.                                                       *)
@@ -95,4 +98,31 @@ Qed.
 Proposition Union2InclR : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Union2Charac. right. apply H1.
+Qed.
+
+Proposition PairAsUnion2 : forall (a b:U),
+  :{a,b}: = :{a}: :\/: :{b}:.
+Proof.
+  intros a b. apply DoubleInclusion. split; intros x H1.
+  - apply PairCharac in H1. destruct H1 as [H1|H1]; apply Union2Charac.
+    + left. apply SingleCharac. assumption.
+    + right. apply SingleCharac. assumption.
+  - apply Union2Charac in H1. destruct H1 as [H1|H1]; apply SingleCharac in H1.
+    + subst. apply PairInL.
+    + subst. apply PairInR.
+Qed.
+
+Proposition Union2IdentityL : forall (a:U),
+  :0: :\/: a = a.
+Proof.
+  intros a. apply DoubleInclusion. split; intros x H1.
+  - apply Union2Charac in H1. destruct H1 as [H1|H1]. 2: assumption.
+    apply EmptyCharac in H1. contradiction.
+  - apply Union2Charac. right. assumption.
+Qed.
+
+Proposition Union2IdentityR : forall (a:U),
+  a :\/: :0: = a.
+Proof.
+  intros a. rewrite Union2Comm. apply Union2IdentityL.
 Qed.
