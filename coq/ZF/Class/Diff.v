@@ -12,8 +12,8 @@ Require Import ZF.Class.Union2.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-Require Import ZF.Core.Diff.
-Export ZF.Core.Diff.
+Require Import ZF.Notation.Diff.
+Export ZF.Notation.Diff.
 
 Definition diff (P Q:Class) : Class := P :/\: :¬:Q.
 

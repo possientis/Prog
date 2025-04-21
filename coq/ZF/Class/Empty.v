@@ -6,8 +6,8 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.Specify.
 
-Require Import ZF.Core.Zero.
-Export ZF.Core.Zero.
+Require Import ZF.Notation.Zero.
+Export ZF.Notation.Zero.
 
 (* The class which is satisfied by no set.                                      *)
 Definition empty : Class := fun _ => False.

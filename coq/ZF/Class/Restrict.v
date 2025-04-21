@@ -17,8 +17,8 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
-Require Import ZF.Core.Pipe.
-Export ZF.Core.Pipe.
+Require Import ZF.Notation.Pipe.
+Export ZF.Notation.Pipe.
 
 (* Restricting a class F to a class A.                                          *)
 Definition restrict (F A:Class) : Class := fun x =>

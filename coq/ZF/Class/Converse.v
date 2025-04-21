@@ -13,8 +13,8 @@ Require Import ZF.Class.V.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-Require Import ZF.Core.Inverse.
-Export ZF.Core.Inverse.
+Require Import ZF.Notation.Inverse.
+Export ZF.Notation.Inverse.
 
 (* The converse of a class is the relation of the converse of its binary class. *)
 Definition converse (F:Class) : Class := fun x =>

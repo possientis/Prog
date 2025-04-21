@@ -8,8 +8,8 @@ Require Import ZF.Class.Range.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
-Export ZF.Core.Image.
-Export ZF.Core.Inverse.
+Export ZF.Notation.Image.
+Export ZF.Notation.Inverse.
 
 (* Inverse image of P by F is the direct image of P by F^(-1).                  *)
 Proposition InvImageCharac : forall (F P:Class) (x:U),

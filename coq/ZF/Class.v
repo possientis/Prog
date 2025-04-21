@@ -1,8 +1,8 @@
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Set.
 
-Require Import ZF.Core.Equiv.
-Export ZF.Core.Equiv.
+Require Import ZF.Notation.Equiv.
+Export ZF.Notation.Equiv.
 
 (* A class is simply a predicate on sets.                                       *)
 Definition Class : Type := U -> Prop.

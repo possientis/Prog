@@ -3,8 +3,8 @@ Require Import ZF.Class.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.
 
-Require Import ZF.Core.Union.
-Export ZF.Core.Union.
+Require Import ZF.Notation.Union.
+Export ZF.Notation.Union.
 
 (* The class of all sets x which belongs to some element of P.                  *)
 Definition union (P:Class) : Class := fun x =>
@@ -16,7 +16,7 @@ Global Instance ClassUnion : Union Class := { union := union }.
 Proposition UnionCharac : forall (P:Class) (x:U),
   :U(P) x <-> exists y, x :< y /\ P y.
 Proof.
-  intros P a. unfold Core.Union.union, ClassUnion, union. split; auto.
+  intros P a. unfold Notation.Union.union, ClassUnion, union. split; auto.
 Qed.
 
 (* The union is compatible with class equivalence.                              *)

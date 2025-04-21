@@ -6,8 +6,8 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 
-Require Import ZF.Core.Image.
-Export ZF.Core.Image.
+Require Import ZF.Notation.Image.
+Export ZF.Notation.Image.
 
 (* Direct image of a class Q by a class P.                                      *)
 Definition image (F A:Class) : Class := fun y =>

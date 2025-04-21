@@ -5,7 +5,7 @@ Require Import ZF.Class.Union2.
 Require Import ZF.Set.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Export ZF.Core.Or.
+Export ZF.Notation.Or.
 
 (* The union of two sets.                                                       *)
 Definition union2 (a b:U) : U := fromClass (toClass a :\/: toClass b)

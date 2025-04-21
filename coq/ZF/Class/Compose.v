@@ -11,8 +11,8 @@ Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
-Require Import ZF.Core.Dot.
-Export ZF.Core.Dot.
+Require Import ZF.Notation.Dot.
+Export ZF.Notation.Dot.
 
 (* Composition of two classes.                                                  *)
 Definition compose (G F:Class) : Class := fun u =>

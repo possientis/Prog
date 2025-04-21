@@ -6,7 +6,7 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
-Export ZF.Core.Prod.
+Export ZF.Notation.Prod.
 
 (* We consider the set defined by the product predicate of the sets a and b     *)
 Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
@@ -19,7 +19,7 @@ Global Instance SetProd : Prod U := { prod := prod }.
 Proposition ProdCharac : forall (a b:U),
   forall x, x :< a :x: b <-> exists y, exists z, x = :(y,z): /\ y :< a /\ z :< b.
 Proof.
-  intros a b x. unfold Core.Prod.prod, SetProd, prod. split; intros H1.
+  intros a b x. unfold Notation.Prod.prod, SetProd, prod. split; intros H1.
   - apply FromClassCharac in H1. assumption.
   - apply FromClassCharac. assumption.
 Qed.

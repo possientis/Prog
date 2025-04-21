@@ -8,7 +8,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
-Export ZF.Core.Zero.
+Export ZF.Notation.Zero.
 
 (* We consider the set defined by the small class Empty                         *)
 Definition empty : U := fromClass :0: Empty.IsSmall.

@@ -16,8 +16,8 @@ Require Import ZF.Set.Power.
 Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Union2.
 
-Require Import ZF.Core.Prod.
-Export ZF.Core.Prod.
+Require Import ZF.Notation.Prod.
+Export ZF.Notation.Prod.
 
 (* The class of all ordered pairs (y,z) where y lies in P and z lies in Q.      *)
 Definition prod (P Q:Class) : Class := fun x =>
@@ -41,7 +41,7 @@ Qed.
 Proposition ProdEquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :x: R :~: Q :x: S.
 Proof.
-  intros P Q R S H1 H2 x. unfold Core.Prod.prod, ClassProd, prod.
+  intros P Q R S H1 H2 x. unfold Notation.Prod.prod, ClassProd, prod.
   split; intros H3; destruct H3 as [y [z [H3 [H4 H5]]]]; exists y; exists z; split.
   - assumption.
   - split. { apply H1. assumption. } { apply H2. assumption. }

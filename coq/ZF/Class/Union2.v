@@ -5,8 +5,8 @@ Require Import ZF.Set.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Union.
 
-Require Import ZF.Core.Or.
-Export ZF.Core.Or.
+Require Import ZF.Notation.Or.
+Export ZF.Notation.Or.
 
 (* The class of all sets x which belong to P or belong to Q.                    *)
 Definition union2 (P Q:Class) : Class := fun x => P x \/ Q x.

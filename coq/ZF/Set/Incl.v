@@ -4,8 +4,8 @@ Require Import ZF.Class.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.
 
-Export ZF.Core.Leq.
-Export ZF.Core.Lt.
+Export ZF.Notation.Leq.
+Export ZF.Notation.Lt.
 
 (* Inclusion predicate between two sets.                                        *)
 Definition Incl (a b:U) : Prop := Class.Incl.Incl (toClass a) (toClass b).

@@ -9,7 +9,7 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Union2.
-Export ZF.Core.Diff.
+Export ZF.Notation.Diff.
 
 Definition diff (a b:U) : U := fromClass (toClass a :\: toClass b)
   (Diff.IsSmall (toClass a) (toClass b) (SetIsSmall a)).
