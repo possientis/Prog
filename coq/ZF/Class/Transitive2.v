@@ -1,4 +1,5 @@
 Require Import ZF.Class.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.
@@ -38,4 +39,9 @@ Proposition UnionIncl : forall (A:Class),
 Proof.
   intros A H1 x H2. destruct H2 as [y [H2 H3]]. specialize (H1 y H3 x).
   apply H1. assumption.
+Qed.
+
+Proposition ZeroIsTransitive : Transitive :0:.
+Proof.
+  intros x H1. apply Empty.Charac in H1. contradiction.  
 Qed.

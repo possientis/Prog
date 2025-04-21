@@ -29,6 +29,13 @@ Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
 (* The class of all sets which are ordinals.                                    *)
 Definition On : Class := fun x => Ordinal (toClass x).
 
+Proposition ZeroIsOrdinal : Ordinal :0:.
+Proof.
+  split.
+  - apply ZeroIsTransitive.
+  - intros x y H1.  apply Empty.Charac in H1. contradiction.
+Qed.
+
 (* Being an ordinal class is compatible with class equivalence.                 *)
 Definition EquivCompat : forall (A B:Class),
   A :~: B -> Ordinal A -> Ordinal B.
