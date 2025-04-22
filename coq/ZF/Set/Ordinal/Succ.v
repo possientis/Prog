@@ -5,6 +5,7 @@ Require Import ZF.Set.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Singleton.
 Require Import ZF.Set.Union2.
 
@@ -59,4 +60,27 @@ Proof.
   - apply SingleCharac in H2. subst. apply NoElemLoop1 with a. assumption.
 Qed.
 
+(* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
+Proposition SuccOfUnionIsStrictUpperBound : forall (a b:U), 
+  toClass a :<=: On ->
+  b :< a            ->
+  b :< succ :U(a).
+Proof.
+  intros a b H1 H2. apply InclElemTran with :U(a).
+  - apply H1. assumption.
+  - apply UnionIsOrdinal. assumption.
+  - apply SuccIsOrdinal, UnionIsOrdinal. assumption.
+  - apply UnionIsUpperBound; assumption.
+  - apply ElemSucc.
+Qed.
+
+(* The successor of the union of an ordinal is a strict upper-bound.            *)
+Proposition SuccOfUnionOfOrdinalIsStrictUpperBound : forall (a b:U),
+  Ordinal a         ->
+  b :< a            ->
+  b :< succ :U(a).
+Proof.
+  intros a b H1. apply SuccOfUnionIsStrictUpperBound.
+  apply OrdinalIsStrictSubclass. assumption.
+Qed.
 
