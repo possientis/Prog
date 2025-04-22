@@ -169,13 +169,21 @@ Proof.
   destruct H3 as [H3|H3]; rewrite H3; assumption.
 Qed.
 
+(* The union of a set of ordinals is an ordinal.                                *)
+Proposition UnionOfSetOfOrdinals : forall (a:U),
+  toClass a :<=: On -> Ordinal :U(a).
+Proof.
+  intros a H1. apply Class.Ordinal.EquivCompat with :U(toClass a).
+  - apply UnionOfToClass.
+  - apply Class.Ordinal.UnionIsOrdinal. assumption.
+Qed.
+
 (* The union of an ordinal is an ordinal.                                       *)
 Proposition UnionIsOrdinal : forall (a:U), Ordinal a ->
   Ordinal :U(a).
 Proof.
-  intros a H1. apply Class.Ordinal.EquivCompat with :U(toClass a).
-  - apply UnionOfToClass.
-  - apply Class.Ordinal.UnionIsOrdinal, OrdinalIsStrictSubclass. assumption.
+  intros a H1. apply UnionOfSetOfOrdinals.
+  apply OrdinalIsStrictSubclass. assumption.
 Qed.
 
 (* The union of an ordinal is an upper-bound ot its elements.                   *)
