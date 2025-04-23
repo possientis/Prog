@@ -87,7 +87,8 @@ Global Instance SetNine : Nine U := { nine := nine }.
 
 Proposition ZeroIsOrdinal : Ordinal :0:.
 Proof.
-  apply Ordinal.EquivCompat with :0:. 2: apply Class.Ordinal.ZeroIsOrdinal.
+  apply Class.Ordinal.Core.EquivCompat with :0:.
+  2: apply Class.Ordinal.Core.ZeroIsOrdinal.
   apply EquivSym, ToClassOfEmptySet.
 Qed.
 

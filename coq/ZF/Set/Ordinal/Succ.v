@@ -1,5 +1,6 @@
 Require Import ZF.Class.
-Require Import ZF.Class.Ordinal.
+Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.
 Require Import ZF.Set.Foundation.
@@ -25,7 +26,7 @@ Proof.
     + destruct H1 as [_ H1]. apply H1; assumption.
     + apply SingleCharac in H3. subst. right. left. assumption.
     + apply SingleCharac in H2. subst. right. right. assumption.
-    + apply SingleCharac in H2. apply SingleCharac in H3. 
+    + apply SingleCharac in H2. apply SingleCharac in H3.
       subst. left. apply eq_refl.
 Qed.
 
@@ -33,7 +34,7 @@ Qed.
 Proposition UnionOfOn : :U(On) :~: On.
 Proof.
   apply Class.Incl.DoubleInclusion. split.
-  - apply Transitive2.UnionIncl, OnIsOrdinal.
+  - apply Class.Ordinal.Transitive.UnionIncl, OnIsOrdinal.
   - intros a H1. exists (a :\/: :{a}:). split.
     + apply Union2Charac. right. apply SingleIn.
     + apply SuccIsOrdinal. assumption.
@@ -61,7 +62,7 @@ Proof.
 Qed.
 
 (* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
-Proposition SuccOfUnionIsStrictUpperBound : forall (a b:U), 
+Proposition SuccOfUnionIsStrictUpperBound : forall (a b:U),
   toClass a :<=: On ->
   b :< a            ->
   b :< succ :U(a).

@@ -1,7 +1,7 @@
 Require Import ZF.Class.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Ordinal.
-Require Import ZF.Class.Transitive2.
+Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.Empty.
 Require Import ZF.Set.
@@ -17,7 +17,7 @@ Definition Ordinal : Class := On.
 Proposition ElemIsOrdinal : forall (a b:U), Ordinal a ->
   b :< a -> Ordinal b.
 Proof.
-  intros a b H1 H2. apply Class.Ordinal.ElemIsOrdinal with (toClass a);
+  intros a b H1 H2. apply Class.Ordinal.Core.ElemIsOrdinal with (toClass a);
   assumption.
 Qed.
 
@@ -42,7 +42,7 @@ Qed.
 Proposition OrdinalIsStrictSubclass : forall (a:U), Ordinal a ->
   toClass a :<: On.
 Proof.
-  intros a H1. apply (Class.Ordinal.StrictInclIsElem On); try assumption.
+  intros a H1. apply (Class.Ordinal.Core.StrictInclIsElem On); try assumption.
   apply OnIsOrdinal.
 Qed.
 
@@ -54,7 +54,7 @@ Proof.
     toClass a :~: toClass b \/
     toClass a :<: toClass b \/
     toClass b :<: toClass a) as H3. {
-      apply Class.Ordinal.OrdinalTotal; assumption. }
+      apply Class.Ordinal.Core.OrdinalTotal; assumption. }
     destruct H3 as [H3|[H3|H3]].
     - left. apply EquivSetEqual. assumption.
     - right. left. apply StrictInclIsElem; try assumption.
@@ -127,8 +127,8 @@ Qed.
 Proposition HasMinimal : forall (A:Class),
   A :<=: On   ->
   A :<>: :0:  ->
-  exists a, 
-    Ordinal a /\ 
+  exists a,
+    Ordinal a /\
     A a       /\
     forall b, A b -> a :<=: b.
 Proof.
@@ -136,11 +136,11 @@ Proof.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
     apply HasEMinimal with On; try assumption. apply OnIsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
-    apply Class.Ordinal.ElemIsOrdinal with On. 
+    apply Class.Ordinal.Core.ElemIsOrdinal with On.
     apply OnIsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
-  assert (a = b \/ a :< b \/ b :< a) as H8. { 
+  assert (a = b \/ a :< b \/ b :< a) as H8. {
     apply OrdinalTotal; assumption. }
   apply EqualOrStrictIncl; try assumption. destruct H8 as [H8|[H8|H8]].
   - left. assumption.

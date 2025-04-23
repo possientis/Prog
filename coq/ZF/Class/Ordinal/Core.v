@@ -8,11 +8,10 @@ Require Import ZF.Class.Founded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Minimal.
+Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Total.
-Require Import ZF.Class.Transitive2.
-Require Import ZF.Class.Union.
 Require Import ZF.Class.V.
 Require Import ZF.Class.WellFounded.
 Require Import ZF.Class.WellFoundedWellOrd.
@@ -41,7 +40,7 @@ Definition EquivCompat : forall (A B:Class),
   A :~: B -> Ordinal A -> Ordinal B.
 Proof.
   intros A B H1 [H2 H3]. split.
-  - apply Transitive2.EquivCompat with A; assumption.
+  - apply Transitive.EquivCompat with A; assumption.
   - intros x y H4 H5. apply H3; apply H1; assumption.
 Qed.
 
@@ -232,7 +231,7 @@ Proof.
       apply InterIsOrdinal; assumption. }
     apply (proj1 (SmallIsSomeSet _)) in H5. destruct H5 as [a H5].
     assert (Transitive (toClass a)) as H6. {
-      apply Transitive2.EquivCompat with (A:/\:B).
+      apply Transitive.EquivCompat with (A:/\:B).
       - apply EquivSym. assumption.
       - apply InterIsOrdinal; assumption. }
     assert (A a) as H7. {
@@ -346,47 +345,7 @@ Qed.
 Proposition ElemIsInter : forall (A:Class) (a:U),
   Ordinal A -> A a -> toClass a :~: toClass a :/\: A.
 Proof.
-  intros A a H1 H2. apply Class.Incl.DoubleInclusion. split. 
-  2: apply Inter.InclL. intros x H3. split. 1: assumption. 
+  intros A a H1 H2. apply Class.Incl.DoubleInclusion. split.
+  2: apply Inter.InclL. intros x H3. split. 1: assumption.
   destruct H1 as [H1 _]. specialize (H1 a H2 x). apply H1. assumption.
 Qed.
-
-(* The union of a class of ordinals is an ordinal class.                        *)
-Proposition UnionIsOrdinal : forall (A:Class),
-  A :<=: On -> Ordinal :U(A).
-Proof.
-  intros A H1. assert (:U(A) :<=: On) as H2. { intros a H2.
-    destruct H2 as [b [H2 H3]]. apply ElemIsOrdinal with (toClass b).
-    2: assumption. apply H1. assumption. }
-  apply TransitiveSubclassIsOrdinal with On; try assumption.
-  1: apply OnIsOrdinal. intros a H3. destruct H3 as [b [H3 H4]].
-  assert (Ordinal (toClass b)) as H5. { apply H1. assumption. }
-  assert (Transitive (toClass b)) as H6. { apply H5. }
-  assert (a :<=: b) as H7. { apply H6. assumption. }
-  intros x H8. exists b. split. 2: assumption. apply H7. assumption.
-Qed.
-
-(* The union of a class of ordinals is an 'upper-bound' of that class.          *)
-Proposition UnionIsUpperBound : forall (A:Class) (a:U),
-  A :<=: On -> A a -> toClass a :<=: :U(A).
-Proof.
-  intros A a H1 H2. assert (Ordinal :U(A)) as H3. {
-    apply UnionIsOrdinal. assumption. }
-    intros x H4. exists a. split; assumption.
-Qed.
-
-(* The union of a class of ordinals is its smallest 'upper-bound'.              *)
-Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U), 
-  A :<=: On                           ->
-  On a                                ->
-  (forall b, A b -> b :<=: a) -> 
-  :U(A) :<=: toClass a.
-Proof.
-  intros A a H1 H2 H3 b H4. assert (On b) as H5. {
-    apply ElemIsOrdinal with :U(A). 2: assumption.
-    apply UnionIsOrdinal. assumption. }
-    destruct H4 as [c [H4 H6]]. assert (On c) as H7. {
-      apply H1. assumption. }
-    apply (H3 c); assumption. 
-Qed.
-
