@@ -1,6 +1,6 @@
 Require Import ZF.Class.
-Require Import ZF.Class.Irreflexive.
-Require Import ZF.Class.Transitive.
+Require Import ZF.Class.Order.Irreflexive.
+Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

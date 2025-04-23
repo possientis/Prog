@@ -3,13 +3,13 @@ Require Import ZF.Class.
 Require Import ZF.Class.Bij.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Converse.
-Require Import ZF.Class.Founded.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.InitSegment.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Isom.
-Require Import ZF.Class.Minimal.
+Require Import ZF.Class.Order.Founded.
+Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Singleton.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.

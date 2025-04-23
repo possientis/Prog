@@ -10,7 +10,7 @@ Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.I.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Isom.
+Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.

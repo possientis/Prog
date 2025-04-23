@@ -6,7 +6,7 @@ Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.InvImage.
-Require Import ZF.Class.Isom.
+Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.

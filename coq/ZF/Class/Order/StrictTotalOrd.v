@@ -1,9 +1,9 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.
-Require Import ZF.Class.Irreflexive.
-Require Import ZF.Class.StrictOrd.
-Require Import ZF.Class.Transitive.
-Require Import ZF.Class.Total.
+Require Import ZF.Class.Order.Irreflexive.
+Require Import ZF.Class.Order.StrictOrd.
+Require Import ZF.Class.Order.Transitive.
+Require Import ZF.Class.Order.Total.
 Require Import ZF.Set.
 Require Import ZF.Set.OrdPair.
 

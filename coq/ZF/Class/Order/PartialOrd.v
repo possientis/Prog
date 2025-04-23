@@ -1,7 +1,7 @@
 Require Import ZF.Class.
-Require Import ZF.Class.AntiSymmetric.
-Require Import ZF.Class.Reflexive.
-Require Import ZF.Class.Transitive.
+Require Import ZF.Class.Order.AntiSymmetric.
+Require Import ZF.Class.Order.Reflexive.
+Require Import ZF.Class.Order.Transitive.
 
 (* Predicate expressing the fact that R is a partial order class on A.          *)
 Definition PartialOrd (R A:Class) : Prop
