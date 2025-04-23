@@ -1,11 +1,11 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Range.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 Export ZF.Notation.Image.
@@ -36,7 +36,7 @@ Proposition InvImageEquivCompatL : forall (F G P:Class),
 Proof.
   intros F G P H1. apply InvImageEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 (* The inverse image is right-compatible with equivalences.                     *)
@@ -44,7 +44,7 @@ Proposition InvImageEquivCompatR : forall (F P Q:Class),
   P :~: Q -> F^:-1: :[P]: :~: F^:-1: :[Q]:.
 Proof.
   intros F P Q H1. apply InvImageEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 
@@ -77,9 +77,9 @@ Qed.
 Proposition InvImageOfRangeIsDomain : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
-  intros F. apply Class.EquivTran with F^:-1::[domain F^:-1:]:.
-  - apply ImageEquivCompatR, Class.EquivSym, ConverseDomain.
-  - apply Class.EquivTran with (range F^:-1:).
+  intros F. apply EquivTran with F^:-1::[domain F^:-1:]:.
+  - apply ImageEquivCompatR, EquivSym, ConverseDomain.
+  - apply EquivTran with (range F^:-1:).
     + apply Range.ImageOfDomainIsRange.
     + apply ConverseRange.
 Qed.

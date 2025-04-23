@@ -1,7 +1,7 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Transitive.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that R is a strict order class on A.           *)

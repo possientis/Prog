@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
@@ -10,7 +10,7 @@ Require Import ZF.Class.OneToOne.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 

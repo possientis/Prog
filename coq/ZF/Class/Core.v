@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 Require Import ZF.Notation.Equiv.
 Export ZF.Notation.Equiv.

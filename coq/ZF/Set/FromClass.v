@@ -1,8 +1,8 @@
 Require Import ZF.Axiom.Define.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 (* Let us consider the predicate of the set potentially defined by a class P.   *)
 Definition FromClassPred (P:Class) : U -> Prop := fun a =>
@@ -19,9 +19,9 @@ Qed.
 Proposition FromClassUnique : forall (P:Class), Unique (FromClassPred P).
 Proof.
   intros P. unfold Unique, FromClassPred. intros a b Ha Hb.
-  apply EquivSetEqual. apply Class.EquivTran with P.
+  apply EquivSetEqual. apply EquivTran with P.
   - intros x. apply Ha.
-  - apply Class.EquivSym. intros x. apply Hb.
+  - apply EquivSym. intros x. apply Hb.
 Qed.
 
 (* If a class is small, we can define the set to which it corresponds .         *)

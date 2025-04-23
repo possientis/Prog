@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Replacement.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Functional.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* A version of the replacement axiom which does not make use of binary class.  *)

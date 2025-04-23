@@ -1,7 +1,7 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Union.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* A set is a relation iff its associated class is.                             *)

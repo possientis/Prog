@@ -1,9 +1,9 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Replacement.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 Require Import ZF.Notation.Image.
@@ -34,7 +34,7 @@ Proposition ImageEquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply ImageEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 (* The direct image is right-compatible with equivalences.                      *)
@@ -42,7 +42,7 @@ Proposition ImageEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R:[P]: :~: R:[Q]:.
 Proof.
   intros P Q R H1. apply ImageEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 

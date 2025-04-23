@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 
 Require Import ZF.Notation.Leq.
 Require Import ZF.Notation.Lt.
@@ -75,14 +75,14 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<=: P -> R :<=: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 
@@ -100,14 +100,14 @@ Proposition StrictEquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply StrictEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 Proposition StrictEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<: P -> R :<: Q.
 Proof.
   intros P Q R H1. apply StrictEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 

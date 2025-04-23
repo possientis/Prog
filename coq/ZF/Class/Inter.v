@@ -1,8 +1,8 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Specification.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 Require Import ZF.Notation.And.
 Export ZF.Notation.And.
@@ -28,14 +28,14 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :/\: P :~: R :/\: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 

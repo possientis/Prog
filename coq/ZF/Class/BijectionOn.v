@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bijection.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
@@ -10,7 +10,7 @@ Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
@@ -35,7 +35,7 @@ Qed.
 Proposition BijectionIsBijectionOn : forall (F:Class),
   Bijection F -> BijectionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply Class.EquivRefl. }
+  intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
 
 (* A bijection defined on A is a function defined on A.                         *)
@@ -58,7 +58,7 @@ Proposition ConverseIsBijectionOn : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2] H3. split.
   - apply Bijection.ConverseIsBijection. assumption.
-  - apply Class.EquivTran with (range F). 2: assumption. apply ConverseDomain.
+  - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
 Qed.
 
 Proposition ComposeIsBijectionOn : forall (F A G B:Class),
@@ -69,9 +69,9 @@ Proposition ComposeIsBijectionOn : forall (F A G B:Class),
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply Bijection.ComposeIsBijection; assumption.
-  - apply Class.EquivTran with (domain F). 2: assumption.
+  - apply EquivTran with (domain F). 2: assumption.
     apply ComposeDomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
-    apply Class.EquivSym. assumption.
+    apply EquivSym. assumption.
 Qed.
 
 Proposition IsRestrict : forall (F A:Class),
@@ -161,7 +161,7 @@ Proposition InvImageOfImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
 Proof.
   intros F A B [H1 H2] H3. apply Bijection.InvImageOfImage. 1: assumption.
-  apply Incl.EquivCompatR with A. 2: assumption. apply Class.EquivSym. assumption.
+  apply Incl.EquivCompatR with A. 2: assumption. apply EquivSym. assumption.
 Qed.
 
 Proposition ImageOfInvImage : forall (F A B:Class),

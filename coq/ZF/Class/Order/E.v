@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Foundation.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.InvImage.
@@ -9,7 +9,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
@@ -41,7 +41,7 @@ Qed.
 Lemma InitSegmentEV : forall (a:U),
   initSegment E V a :~: toClass a.
 Proof.
-  intros a. apply Class.EquivTran with (V :/\: toClass a).
+  intros a. apply EquivTran with (V :/\: toClass a).
   - apply InitSegmentEA.
   - apply InterVL.
 Qed.
@@ -50,9 +50,9 @@ Proposition MinimalEA : forall (A:Class) (a:U),
   Minimal E A a <-> A a /\ A :/\: toClass a :~: :0:.
 Proof.
   intros A a. split; intros [H1 H2].
-  - split. 1: assumption. apply Class.EquivTran with (initSegment E A a).
-    2: assumption. apply Class.EquivSym, InitSegmentEA.
-  - split. 1: assumption. apply Class.EquivTran with (A :/\: toClass a).
+  - split. 1: assumption. apply EquivTran with (initSegment E A a).
+    2: assumption. apply EquivSym, InitSegmentEA.
+  - split. 1: assumption. apply EquivTran with (A :/\: toClass a).
     2: assumption. apply InitSegmentEA.
 Qed.
 
@@ -116,7 +116,7 @@ Proposition EIsWellFoundedOnV : WellFounded E V.
 Proof.
   split. 1: apply EIsFoundedOnV. intros a _.
   apply SmallEquivCompat with (toClass a).
-  - apply Class.EquivSym, InitSegmentEV.
+  - apply EquivSym, InitSegmentEV.
   - apply SetIsSmall.
 Qed.
 

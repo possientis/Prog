@@ -2,7 +2,7 @@ Declare Scope ZF_Set_Eval_scope.
 Open    Scope ZF_Set_Eval_scope.
 
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Eval.
 Require Import ZF.Class.Functional.
@@ -10,7 +10,7 @@ Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Image.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
@@ -28,11 +28,11 @@ Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
 Proof.
   intros F a y H1. split; intros H2.
   - unfold eval. apply EquivSetEqual.
-    apply Class.EquivTran with (Class.Eval.eval F a).
+    apply EquivTran with (Class.Eval.eval F a).
     + apply ToFromClass.
     + apply Class.Eval.EvalWhenHasValueAt; assumption.
   - apply Class.Eval.EvalWhenHasValueAt. 1: assumption.
-    unfold eval in H2. rewrite <- H2. apply Class.EquivSym, ToFromClass.
+    unfold eval in H2. rewrite <- H2. apply EquivSym, ToFromClass.
 Qed.
 
 (* If F has a value at a, then (a,F!a) satisfies the class F.                   *)
@@ -67,10 +67,10 @@ Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
 Proof.
   intros F a H1. apply EquivSetEqual. unfold eval, zero, SetZero, empty.
-  apply Class.EquivTran with (Class.Eval.eval F a). 1: apply ToFromClass.
-  apply Class.EquivTran with :0:.
+  apply EquivTran with (Class.Eval.eval F a). 1: apply ToFromClass.
+  apply EquivTran with :0:.
   - apply Class.Eval.EvalWhenNotHasValueAt. assumption.
-  - apply Class.EquivSym, ToFromClass.
+  - apply EquivSym, ToFromClass.
 Qed.
 
 (* If F is not functional at a then F!a is the empty set.                       *)

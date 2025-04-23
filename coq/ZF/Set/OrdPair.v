@@ -1,7 +1,7 @@
 Declare Scope ZF_Set_OrdPair_scope.
 Open    Scope ZF_Set_OrdPair_scope.
 
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Singleton.
 

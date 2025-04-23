@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bij.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Empty.
@@ -7,7 +7,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.InvImage.
 Require Import ZF.Class.Order.Isom.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Singleton.
@@ -41,7 +41,7 @@ Proposition InitSegmentEquivCompatL : forall (R S A:Class) (a:U),
 Proof.
   intros R S A a H1. apply InitSegmentEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 (* Initial segments are right-compatible with equivalences.                     *)
@@ -49,7 +49,7 @@ Proposition InitSegmentEquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> initSegment R A a :~: initSegment R B a.
 Proof.
   intros R A B a H1. apply InitSegmentEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 
@@ -150,7 +150,7 @@ Proposition InitSegmentIsomFullImage : forall (F R S A B:Class) (a:U),
   F:[initSegment R A a]: :~: initSegment S B (F!a).
 Proof.
   intros F R S A B a H1 H2.
-  apply Class.EquivTran with (initSegment S F:[A]: F!a).
+  apply EquivTran with (initSegment S F:[A]: F!a).
   - apply InitSegmentIsomImage with A B; try assumption. apply InclRefl.
   - apply InitSegmentEquivCompatR, Bij.ImageOfDomainIsRange, Isom.IsBij with R S.
     assumption.
@@ -164,7 +164,7 @@ Proposition InitSegmentIsomWhenEmpty : forall (F R S A B C:Class) (a:U),
   initSegment S F:[C]: F!a :~: :0:.
 Proof.
   intros F R S A B C a H1 H2 H3 H4.
-  apply Class.EquivTran with F:[initSegment R C a]:.
-  - apply Class.EquivSym, InitSegmentIsomImage with A B; assumption.
+  apply EquivTran with F:[initSegment R C a]:.
+  - apply EquivSym, InitSegmentIsomImage with A B; assumption.
   - apply EmptyImage. assumption.
 Qed.

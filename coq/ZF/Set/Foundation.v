@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Foundation.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Pair.

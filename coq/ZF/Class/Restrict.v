@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Domain.
@@ -12,7 +12,7 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
@@ -54,14 +54,14 @@ Proposition RestrictEquivCompatL : forall (F G A:Class),
 Proof.
   intros F G A H1. apply RestrictEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 Proposition RestrictEquivCompatR : forall (F A B:Class),
   A :~: B -> F:|:A :~: F:|:B.
 Proof.
   intros F A B H1. apply RestrictEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 
@@ -132,7 +132,7 @@ Proof.
 
   (* However, the domain of F|A is A /\ domain F. *)
     apply SmallEquivCompat with (A:/\:domain F).
-      1: { apply Class.EquivSym, DomainOfRestrict. }
+      1: { apply EquivSym, DomainOfRestrict. }
 
   (* So we need to show that A/\domain F is small. *)
     assert (Small (A:/\:domain F)) as A'. 2: apply A'.
@@ -179,7 +179,7 @@ Qed.
 Proposition FunctionOnIsRestrict : forall (F A:Class),
   FunctionOn F A -> F :~: F:|:A.
 Proof.
-  intros F A [[H1 H2] H3]. apply Class.EquivTran with (F:|:domain F).
+  intros F A [[H1 H2] H3]. apply EquivTran with (F:|:domain F).
   - apply RelationIsRestrict. assumption.
   - apply RestrictEquivCompatR. assumption.
 Qed.

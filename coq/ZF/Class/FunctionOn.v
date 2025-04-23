@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
@@ -13,7 +13,7 @@ Require Import ZF.Class.Prod.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
@@ -30,7 +30,7 @@ Qed.
 Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply Class.EquivRefl. }
+  intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
 
 (* If F is a function defined on A, then it is a subclass of A x F[A].          *)
@@ -101,13 +101,13 @@ Proof.
     { apply Function.EquivCharac; assumption. }
   split; intros H6.
   - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
-    + apply Class.EquivTran with (domain F). 1: { apply Class.EquivSym. assumption. }
-      apply Class.EquivTran with (domain G); assumption.
+    + apply EquivTran with (domain F). 1: { apply EquivSym. assumption. }
+      apply EquivTran with (domain G); assumption.
     + intros x H8. apply H7, H2. assumption.
   - destruct H6 as [H6 H7]. apply H5. split.
-    + apply Class.EquivTran with A. 1: assumption.
-      apply Class.EquivTran with B. 1: assumption.
-      apply Class.EquivSym. assumption.
+    + apply EquivTran with A. 1: assumption.
+      apply EquivTran with B. 1: assumption.
+      apply EquivSym. assumption.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
@@ -119,9 +119,9 @@ Proposition ComposeIsFunctionOn : forall (F A G B:Class),
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply ComposeIsFunction; assumption.
-  - apply Class.EquivTran with (domain F). 2: assumption.
+  - apply EquivTran with (domain F). 2: assumption.
     apply ComposeDomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
-    apply Class.EquivSym. assumption.
+    apply EquivSym. assumption.
 Qed.
 
 Proposition EvalCharac : forall (F A:Class) (a y:U),
@@ -176,14 +176,14 @@ Qed.
 Proposition ImageOfDomainIsRange : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
-  intros F A [H1 H2]. apply Class.EquivTran with F:[domain F]:.
-  - apply ImageEquivCompatR, Class.EquivSym. assumption.
+  intros F A [H1 H2]. apply EquivTran with F:[domain F]:.
+  - apply ImageEquivCompatR, EquivSym. assumption.
   - apply Range.ImageOfDomainIsRange.
 Qed.
 
 Proposition InvImageOfRangeIsDomain : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
-  intros F A [H1 H2]. apply Class.EquivTran with (domain F).
+  intros F A [H1 H2]. apply EquivTran with (domain F).
   2: assumption. apply InvImageOfRangeIsDomain.
 Qed.

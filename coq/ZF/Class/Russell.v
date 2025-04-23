@@ -1,7 +1,7 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Proper.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Specify.
 
 (* Let us the define the class of all sets which do not belong to themselves.   *)

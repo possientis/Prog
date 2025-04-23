@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bij.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Image.
@@ -8,7 +8,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.FromClass.
@@ -48,17 +48,17 @@ Proof.
       - apply SetIsSmall. }
     remember (fromClass C H5) as a eqn:Ea. specialize (H2 a).
     assert (toClass a :~: F^:-1::[toClass b]:) as H6. {
-      apply Class.EquivTran with C.
+      apply EquivTran with C.
       - rewrite Ea. apply ToFromClass.
-      - rewrite <- EC. apply Class.EquivRefl. }
+      - rewrite <- EC. apply EquivRefl. }
     clear EC Ea H5 C.
     assert (toClass a :<=: A) as H7. {
       apply Incl.EquivCompatL with (F^:-1::[toClass b]:).
-      - apply Class.EquivSym. assumption.
+      - apply EquivSym. assumption.
       - apply InclTran with F^:-1::[B]:.
         + apply ImageInclCompatR. assumption.
         + apply Incl.EquivCompatL with A. 2: apply InclRefl.
-          apply Class.EquivSym, Bij.InvImageOfRangeIsDomain.
+          apply EquivSym, Bij.InvImageOfRangeIsDomain.
           apply Isom.IsBij with R S. assumption. }
     assert (a <> :0:) as H8. { apply NotEmptyHasElement in H4.
       destruct H4 as [y H4]. apply NotEmptyHasElement.
@@ -68,7 +68,7 @@ Proof.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
     assert (F:[toClass a]: :~: toClass b) as H9. {
-      apply Class.EquivTran with F:[F^:-1::[toClass b]:]:.
+      apply EquivTran with F:[F^:-1::[toClass b]:]:.
       - apply ImageEquivCompatR. assumption.
       - apply Bij.ImageOfInvImage with A B. 2: assumption.
         apply Isom.IsBij with R S. assumption. }

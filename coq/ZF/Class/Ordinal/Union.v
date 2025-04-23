@@ -1,9 +1,9 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 
 

@@ -1,8 +1,8 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Union.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 
 (* Predicate defining a transitive class. Informally: y :< x :< A -> y:< A.     *)

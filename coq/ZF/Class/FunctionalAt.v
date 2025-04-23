@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
-Require Import ZF.Set.
+Require Import ZF.Class.Core.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* Local property of being functional at point a.                               *)

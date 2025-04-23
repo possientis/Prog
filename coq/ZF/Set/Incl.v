@@ -1,8 +1,8 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 Export ZF.Notation.Leq.
 Export ZF.Notation.Lt.

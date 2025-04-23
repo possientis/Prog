@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Set.OrdPair.
 
 (* A relation class is a class whose elements are ordered pairs.                *)

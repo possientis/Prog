@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.Image.
@@ -10,7 +10,7 @@ Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
 Require Import ZF.Class.V.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 Require Import ZF.Notation.Inverse.
@@ -75,7 +75,7 @@ Proof.
 
   (* Using the equivalence converse(F) ~ Switch[F] ... *)
   apply SmallEquivCompat with Switch:[F]:.
-    1: { apply Class.EquivSym, ConverseIsImageBySwitch. }
+    1: { apply EquivSym, ConverseIsImageBySwitch. }
 
   (* It is sufficient to show that Switch[F] is small. *)
   assert (Small (Switch:[F]:)) as A. 2: apply A.

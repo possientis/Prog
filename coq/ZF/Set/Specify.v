@@ -1,10 +1,10 @@
 Declare Scope ZF_Axiom_Specify_scope.
 Open    Scope ZF_Axiom_Specify_scope.
 
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 
 (* Set comprehension (specification)  {x :< a | P x }.                          *)

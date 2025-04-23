@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.BijectionOn.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
@@ -10,7 +10,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
@@ -52,7 +52,7 @@ Proof.
   intros F A B [H1 _] H2. split.
   - apply ConverseIsBijectionOn with A; assumption.
   - apply Incl.EquivCompatL with (domain F).
-    + apply Class.EquivSym, ConverseRange.
+    + apply EquivSym, ConverseRange.
     + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
       apply InclRefl.
 Qed.

@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -10,7 +10,7 @@ Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
@@ -98,15 +98,15 @@ Proof.
 
   (* Furthermore, the set c is not empty. *)
     assert (c <> :0:) as H9. {
-      intros H9. apply H5. apply Class.EquivTran with (toClass c).
-      - apply Class.EquivSym. assumption.
+      intros H9. apply H5. apply EquivTran with (toClass c).
+      - apply EquivSym. assumption.
       - apply ToClassWhenEmpty. assumption.
     }
 
   (* So c is a non-empty subset of the class B. *)
     assert (toClass c :<=: B) as H10. {
       apply Incl.EquivCompatL with C.
-      - apply Class.EquivSym. assumption.
+      - apply EquivSym. assumption.
       - rewrite EC. apply InitSegmentIncl.
    }
 

@@ -1,5 +1,5 @@
-Require Import ZF.Class.
-Require Import ZF.Set.
+Require Import ZF.Class.Core.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.

@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Empty.
@@ -9,7 +9,7 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Switch.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Power.
@@ -57,7 +57,7 @@ Proposition ProdEquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply ProdEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 (* The product of two classes is right-compatible with class equivalence.       *)
@@ -65,7 +65,7 @@ Proposition ProdEquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :x: P :~: R :x: Q.
 Proof.
   intros P Q R H1. apply ProdEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 
@@ -335,7 +335,7 @@ Proof.
   apply H1. assert (Small P) as A. 2: apply A.
 
   (* From the equivalence P ~ 0 *)
-  apply SmallEquivCompat with :0:. 1: { apply Class.EquivSym, H2. }
+  apply SmallEquivCompat with :0:. 1: { apply EquivSym, H2. }
 
   (* We need to show that 0 is small *)
   assert (Small :0:) as A. 2: apply A.

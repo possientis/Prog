@@ -1,6 +1,6 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 (* Predicate on classes, stating that a class is actually a set.                *)
 Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.

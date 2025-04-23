@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.FunctionOn.
 Require Import ZF.Class.Range.
 

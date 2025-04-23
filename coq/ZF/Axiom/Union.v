@@ -1,4 +1,4 @@
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 (* Given a set a, there exists a set b whose elements are the elements of all   *)
 (* the elements of a. More formally:                                            *)

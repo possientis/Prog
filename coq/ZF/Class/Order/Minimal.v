@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bij.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Image.
@@ -6,7 +6,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
@@ -19,8 +19,8 @@ Proposition MinimalEquivCompat : forall (R S A B:Class) (a:U),
 Proof.
   intros R S A B a H1 H2 [H3 H4]; split.
   - apply H2. assumption.
-  - apply Class.EquivTran with (initSegment R A a). 2: assumption.
-    apply Class.EquivSym, InitSegmentEquivCompat; assumption.
+  - apply EquivTran with (initSegment R A a). 2: assumption.
+    apply EquivSym, InitSegmentEquivCompat; assumption.
 Qed.
 
 Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
@@ -28,14 +28,14 @@ Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
 Proof.
   intros R S A a H1. apply MinimalEquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 Proposition MinimalEquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Minimal R A a -> Minimal R B a.
 Proof.
   intros R A B a H1. apply MinimalEquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 

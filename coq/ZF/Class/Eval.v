@@ -1,12 +1,12 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Domain.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Functional.
 Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that y is the value of F at a.                 *)
@@ -76,8 +76,8 @@ Proof.
       unfold eval. exists y. split. 1: assumption. unfold IsValueAt.
       split; assumption.
   - destruct H1 as [y' [H1 H3]]. assert (y = y') as H4. 2: { subst. assumption. }
-    apply EquivSetEqual. apply Class.EquivTran with (eval F a).
-    + apply Class.EquivSym. assumption.
+    apply EquivSetEqual. apply EquivTran with (eval F a).
+    + apply EquivSym. assumption.
     + clear H2 y. intros x. split; intros H4.
       * unfold eval in H4. destruct H4 as [y [H4 H5]]. unfold IsValueAt in H5.
         destruct H5 as [H5 H6]. assert (y' = y) as H7. { apply H6; assumption. }
@@ -158,7 +158,7 @@ Proof.
        { apply EvalWhenHasValueAt; assumption. }
 
   (* Using this equivalence ... *)
-    apply SmallEquivCompat with (toClass y). 1: { apply Class.EquivSym, H3. }
+    apply SmallEquivCompat with (toClass y). 1: { apply EquivSym, H3. }
 
   (* We simply need to show that the set y is small *)
     assert (Small (toClass y)) as A. 2: apply A.
@@ -173,7 +173,7 @@ Proof.
     assert (eval F a :~: :0:) as H2. { apply EvalWhenNotHasValueAt, H1. }
 
   (* Using this equivalence ... *)
-    apply SmallEquivCompat with :0:. 1: { apply Class.EquivSym, H2. }
+    apply SmallEquivCompat with :0:. 1: { apply EquivSym, H2. }
 
   (* We simply need to show that the empty class is small. *)
     assert (Small :0:) as A. 2: apply A.

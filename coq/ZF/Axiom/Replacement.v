@@ -1,4 +1,4 @@
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 (* A binary class is simply a binary predicate on sets.                         *)
 Definition Binary : Type := U -> U -> Prop.

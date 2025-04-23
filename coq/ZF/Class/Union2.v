@@ -1,7 +1,7 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Union.
 
@@ -39,7 +39,7 @@ Proposition Union2EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply Union2EquivCompat.
   - assumption.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
 Qed.
 
 (* Pairwise union is right-compatible with class equivalence.                   *)
@@ -47,7 +47,7 @@ Proposition Union2EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :\/: P :~: R :\/: Q.
 Proof.
   intros P Q R H1. apply Union2EquivCompat.
-  - apply Class.EquivRefl.
+  - apply EquivRefl.
   - assumption.
 Qed.
 

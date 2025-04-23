@@ -1,10 +1,10 @@
 Declare Scope ZF_Set_Pair_scope.
 Open    Scope ZF_Set_Pair_scope.
 
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Pair.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 
 (* We consider the set corresponding by the small class 'pair a b'.             *)

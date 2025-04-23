@@ -1,4 +1,4 @@
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 
 (* Predicate over classes: a class has at least one element.                    *)
 Definition Exists (P:U -> Prop) : Prop := exists x, P x.

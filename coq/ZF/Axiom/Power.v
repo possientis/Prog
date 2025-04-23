@@ -1,4 +1,4 @@
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 
 (* Given a set a, there exists a set b whose elements are the subsets of a.     *)

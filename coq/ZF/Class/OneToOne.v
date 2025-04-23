@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Compose.
 Require Import ZF.Class.Converse.
 Require Import ZF.Class.Domain.
@@ -8,7 +8,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.InvImage.
 Require Import ZF.Class.Range.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
@@ -92,7 +92,7 @@ Proof.
   intros F G [H1 H2] [H3 H4]. split.
   - apply ComposeIsFunctional; assumption.
   - apply Functional.EquivCompat with (converse F :.: converse G).
-    + apply Class.EquivSym, ComposeConverse.
+    + apply EquivSym, ComposeConverse.
     + apply ComposeIsFunctional; assumption.
 Qed.
 

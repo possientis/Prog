@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
@@ -16,7 +16,7 @@ Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.

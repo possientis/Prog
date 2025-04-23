@@ -1,6 +1,6 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Union.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 
 (* Defining the generalized union \/_{x in P} Q(x).                             *)

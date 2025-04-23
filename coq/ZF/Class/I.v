@@ -1,4 +1,4 @@
-Require Import ZF.Class.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Bij.
 Require Import ZF.Class.Bijection.
 Require Import ZF.Class.BijectionOn.
@@ -15,7 +15,7 @@ Require Import ZF.Class.Range.
 Require Import ZF.Class.Relation.
 Require Import ZF.Class.Restrict.
 Require Import ZF.Class.V.
-Require Import ZF.Set.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
@@ -67,7 +67,7 @@ Proof.
   split.
   - apply IIsFunctional.
   - apply Functional.EquivCompat with I. 2: apply IIsFunctional.
-    apply Class.EquivSym, IConverse.
+    apply EquivSym, IConverse.
 Qed.
 
 (* I is a bijection class.                                                      *)
