@@ -1,6 +1,6 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Bij.
-Require Import ZF.Class.Image.
+Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.

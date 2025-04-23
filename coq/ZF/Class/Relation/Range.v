@@ -1,9 +1,9 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Domain.
-Require Import ZF.Class.Image.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
-Require Import ZF.Class.Snd.
+Require Import ZF.Class.Relation.Snd.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 

@@ -1,10 +1,10 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Converse.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Empty.
-Require Import ZF.Class.Functional.
-Require Import ZF.Class.Image.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Small.

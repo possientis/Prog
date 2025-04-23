@@ -2,13 +2,13 @@ Declare Scope ZF_Class_Fun_scope.
 Open    Scope ZF_Class_Fun_scope.
 
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Compose.
-Require Import ZF.Class.Converse.
-Require Import ZF.Class.Domain.
-Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.FunctionOn.
-Require Import ZF.Class.Range.
+Require Import ZF.Class.Relation.Compose.
+Require Import ZF.Class.Relation.Converse.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.FunctionOn.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.

@@ -1,10 +1,10 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Converse.
-Require Import ZF.Class.Domain.
-Require Import ZF.Class.Functional.
-Require Import ZF.Class.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Range.
+Require Import ZF.Class.Relation.Converse.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.

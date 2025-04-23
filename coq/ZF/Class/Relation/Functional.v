@@ -1,6 +1,6 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.FunctionalAt.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Relation.FunctionalAt.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 

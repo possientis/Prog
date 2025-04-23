@@ -1,9 +1,9 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Bij.
-Require Import ZF.Class.Compose.
-Require Import ZF.Class.Converse.
+Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Compose.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Empty.
-Require Import ZF.Class.Image.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.

@@ -2,7 +2,7 @@ Require Import ZF.Axiom.Foundation.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.InvImage.
+Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.

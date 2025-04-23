@@ -3,20 +3,20 @@ Open    Scope ZF_Set_Eval_scope.
 
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Domain.
-Require Import ZF.Class.Eval.
-Require Import ZF.Class.Functional.
-Require Import ZF.Class.FunctionalAt.
-Require Import ZF.Class.Image.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Eval.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.FunctionalAt.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Range.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
 (* Evaluate the class F at a, returning a set.                                  *)
-Definition eval (F:Class) (a:U) : U := fromClass (Class.Eval.eval F a)
+Definition eval (F:Class) (a:U) : U := fromClass (Relation.Eval.eval F a)
   (EvalIsSmall F a).
 
 Notation "F ! a" := (eval F a)
@@ -28,10 +28,10 @@ Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
 Proof.
   intros F a y H1. split; intros H2.
   - unfold eval. apply EquivSetEqual.
-    apply EquivTran with (Class.Eval.eval F a).
+    apply EquivTran with (Relation.Eval.eval F a).
     + apply ToFromClass.
-    + apply Class.Eval.EvalWhenHasValueAt; assumption.
-  - apply Class.Eval.EvalWhenHasValueAt. 1: assumption.
+    + apply Relation.Eval.EvalWhenHasValueAt; assumption.
+  - apply Relation.Eval.EvalWhenHasValueAt. 1: assumption.
     unfold eval in H2. rewrite <- H2. apply EquivSym, ToFromClass.
 Qed.
 
@@ -67,9 +67,9 @@ Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
 Proof.
   intros F a H1. apply EquivSetEqual. unfold eval, zero, SetZero, empty.
-  apply EquivTran with (Class.Eval.eval F a). 1: apply ToFromClass.
+  apply EquivTran with (Relation.Eval.eval F a). 1: apply ToFromClass.
   apply EquivTran with :0:.
-  - apply Class.Eval.EvalWhenNotHasValueAt. assumption.
+  - apply Relation.Eval.EvalWhenNotHasValueAt. assumption.
   - apply EquivSym, ToFromClass.
 Qed.
 

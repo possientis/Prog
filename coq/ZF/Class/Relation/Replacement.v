@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Functional.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
