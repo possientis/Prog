@@ -16,25 +16,25 @@ Require Import ZF.Set.Union.
 Definition Limit : Class := On :\: NonLimit.
 
 (* Limit is a class of ordinals.                                                *)
-Proposition LimitIsOrdinal : Limit :<=: On.
+Proposition IsOrdinal : Limit :<=: On.
 Proof.
   apply Inter.InclL.
 Qed.
 
 (* An ordinal is a limit ordinal iff it is not empty and is equal to its union. *)
-Proposition NonEmptyAndUnion : forall (a:U), Ordinal a ->
+Proposition Charac : forall (a:U), Ordinal a ->
   Limit a <-> a <> :0: /\ a = :U(a).
 Proof.
-  intros a H1. assert (a = :U(a) \/ a = succ :U(a)) as H2. {
-    apply UnionOrSuccOfUnion. assumption. }
-  split; intros H3.
+  intros a H1. split; intros H2.
   - split.
-    + intros H4. apply H3. left. assumption.
-    + destruct H2 as [H2|H2]. 1: assumption. exfalso. apply H3. right.
+    + intros H3. apply H2. left. assumption.
+    + assert (a = :U(a) \/ a = succ :U(a)) as H3. {
+        apply UnionOrSuccOfUnion. assumption. }
+      destruct H3 as [H3|H3]. 1: assumption. exfalso. apply H2. right.
       exists :U(a). split. 2: assumption. apply UnionOfOrdinalIsOrdinal.
       assumption.
-  - split. 1: assumption. intros H4. destruct H4 as [H4|H4].
-    + destruct H3 as [H3 _]. contradiction.
-    +
-Admitted.
+  - destruct H2 as [H2 H3]. split. 1: assumption. intros [H4|H4].
+    + contradiction.
+    + destruct H4 as [b [H4 H5]]. apply IfUnionThenNotSucc with a b; assumption.
+Qed.
 
