@@ -41,7 +41,7 @@ Proof.
     }
 
   (* This is our desired contradiction *)
-  apply EmptyCharac in H4. contradiction.
+  apply Empty.Charac in H4. contradiction.
 Qed.
 
 Proposition NoElemLoop2 : forall a b, ~ (a :< b /\ b :< a).
@@ -76,7 +76,7 @@ Proof.
         - apply Hba.
         - apply Pair.InR.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 
   (* When x = b, we have b /\ {a,b} = 0. But a belongs to both set, contradiction. *)
   - subst. assert (a :< :0:) as H5.
@@ -84,7 +84,7 @@ Proof.
         - apply Hab.
         - apply Pair.InL.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 Qed.
 
 Proposition NoElemLoop3 : forall a1 a2 a3, ~ (a1 :< a2 /\ a2 :< a3 /\ a3 :< a1).
@@ -120,7 +120,7 @@ Proof.
         - apply H31.
         - apply Tuple3In3.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 
   (* When x = a2, we have a2 /\ {a1,a2,a3} = 0. But a1 belongs to both set *)
   - subst. assert (a1 :< :0:) as H5.
@@ -128,7 +128,7 @@ Proof.
         - apply H12.
         - apply Tuple3In1.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 
   (* When x = a3, we have a3 /\ {a1,a2,a3} = 0. But a2 belongs to both set *)
   - subst. assert (a2 :< :0:) as H5.
@@ -136,7 +136,7 @@ Proof.
         - apply H23.
         - apply Tuple3In2.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 Qed.
 
 Proposition NoElemLoop4 : forall a1 a2 a3 a4,
@@ -173,7 +173,7 @@ Proof.
         - apply H41.
         - apply Tuple4In4.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 
   (* When x = a2, we have a2 /\ {a1,a2,a3,a4} = 0. But a1 belongs to both set *)
   - subst. assert (a1 :< :0:) as H5.
@@ -181,7 +181,7 @@ Proof.
         - apply H12.
         - apply Tuple4In1.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 
   (* When x = a3, we have a3 /\ {a1,a2,a3,a4} = 0. But a2 belongs to both set *)
   - subst. assert (a2 :< :0:) as H5.
@@ -189,7 +189,7 @@ Proof.
         - apply H23.
         - apply Tuple4In2.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 
   (* When x = a4, we have a4 /\ {a1,a2,a3,a4} = 0. But a3 belongs to both set *)
   - subst. assert (a3 :< :0:) as H5.
@@ -197,5 +197,5 @@ Proof.
         - apply H34.
         - apply Tuple4In3.
       }
-    apply EmptyCharac in H5. contradiction.
+    apply Empty.Charac in H5. contradiction.
 Qed.

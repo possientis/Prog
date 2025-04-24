@@ -96,12 +96,12 @@ Proposition InitSegmentWhenEmpty : forall (R A:Class) (a:U),
   initSegment R A a :~: :0: <-> forall x, A x -> ~ R :(x,a):.
 Proof.
   intros R A a. split; intros H1.
-  - intros x H2 H3. apply Empty.Charac with x. apply H1.
+  - intros x H2 H3. apply Class.Empty.Charac with x. apply H1.
     apply InitSegmentCharac. split; assumption.
   - intros x. split; intros H2.
     + apply InitSegmentCharac in H2. destruct H2 as [H2 H3].
-      apply Empty.Charac. assert (H4 := H1 x H2). contradiction.
-    + apply Empty.Charac in H2. contradiction.
+      apply Class.Empty.Charac. assert (H4 := H1 x H2). contradiction.
+    + apply Class.Empty.Charac in H2. contradiction.
 Qed.
 
 (* If x lies in A and the initial segment is empty, then it is not less than a. *)

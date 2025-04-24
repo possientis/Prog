@@ -30,11 +30,11 @@ Proposition WhenEmpty : forall (P Q:Class),
 Proof.
   intros P Q. split; intros H1.
   - intros x H2. apply DoubleNegation. intros H3.
-    apply (proj1 (Empty.Charac x)), H1. split; assumption.
+    apply Class.Empty.Charac with x, H1. split; assumption.
   - intros x. split; intros H2.
     + destruct H2 as [H2 H3].
       apply H1 in H2. contradiction.
-    + apply Empty.Charac in H2. contradiction.
+    + apply Class.Empty.Charac in H2. contradiction.
 Qed.
 
 Proposition WhenStrictIncl : forall (P Q:Class),

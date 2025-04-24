@@ -145,5 +145,5 @@ Proof.
   apply EqualOrStrictIncl; try assumption. destruct H8 as [H8|[H8|H8]].
   - left. assumption.
   - right. assumption.
-  - exfalso. apply Empty.Charac with b. apply H4. split; assumption.
+  - exfalso. apply Class.Empty.Charac with b. apply H4. split; assumption.
 Qed.

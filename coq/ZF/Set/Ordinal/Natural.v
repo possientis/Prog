@@ -89,7 +89,7 @@ Proposition ZeroIsOrdinal : Ordinal :0:.
 Proof.
   apply Class.Ordinal.Core.EquivCompat with :0:.
   2: apply Class.Ordinal.Core.ZeroIsOrdinal.
-  apply EquivSym, ToClassOfEmptySet.
+  apply EquivSym, ToClassOfEmpty.
 Qed.
 
 Proposition OneIsOrdinal : Ordinal :1:.

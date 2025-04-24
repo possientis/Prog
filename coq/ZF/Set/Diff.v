@@ -110,11 +110,11 @@ Proof.
   - intros x Ha. apply DoubleNegation. intros Hb.
     assert (x :< :0:) as H2.
       { rewrite <- H1. apply Diff.Charac. split; assumption. }
-    apply EmptyCharac in H2. contradiction.
+    apply Empty.Charac in H2. contradiction.
   - apply Extensionality. intros x. split; intros H2.
     + apply Diff.Charac in H2. destruct H2 as [H2 H3].
       apply H1 in H2. contradiction.
-    + apply EmptyCharac in H2. contradiction.
+    + apply Empty.Charac in H2. contradiction.
 Qed.
 
 Proposition IsIncl : forall (a b:U),

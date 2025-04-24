@@ -43,5 +43,5 @@ Qed.
 
 Proposition ZeroIsTransitive : Transitive :0:.
 Proof.
-  intros x H1. apply Empty.Charac in H1. contradiction.  
+  intros x H1. apply Class.Empty.Charac in H1. contradiction.
 Qed.

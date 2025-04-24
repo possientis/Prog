@@ -60,8 +60,8 @@ Proof.
         + apply Incl.EquivCompatL with A. 2: apply InclRefl.
           apply EquivSym, Bij.InvImageOfRangeIsDomain.
           apply Isom.IsBij with R S. assumption. }
-    assert (a <> :0:) as H8. { apply NotEmptyHasElement in H4.
-      destruct H4 as [y H4]. apply NotEmptyHasElement.
+    assert (a <> :0:) as H8. { apply NotEmptyHasElem in H4.
+      destruct H4 as [y H4]. apply NotEmptyHasElem.
       exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
       apply Bij.EvalSatisfies with B A.
       - apply ConverseIsBij, Isom.IsBij with R S. assumption.

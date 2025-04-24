@@ -32,7 +32,7 @@ Proposition ZeroIsOrdinal : Ordinal :0:.
 Proof.
   split.
   - apply ZeroIsTransitive.
-  - intros x y H1.  apply Empty.Charac in H1. contradiction.
+  - intros x y H1.  apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
 (* Being an ordinal class is compatible with class equivalence.                 *)
@@ -146,7 +146,7 @@ Proof.
   assert (x :< b <-> B x) as X. 2: apply X. split; intros H6.
 
   (* Proof of ->. *)
-  - apply DoubleNegation. intros H7. apply (proj1 (Empty.Charac x)), H5.
+  - apply DoubleNegation. intros H7. apply Class.Empty.Charac with x, H5.
     split. 2: assumption. split. 2: assumption. destruct H1 as [H1 H8].
     apply (H1 b). 2: assumption. apply H4.
 
@@ -176,7 +176,7 @@ Proof.
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
     assert (x = a) as H7. 2: { subst. assumption. }
     apply ZF.Set.Incl.DoubleInclusion. destruct H1 as [H1 H9]. split; intros u H7.
-    + apply DoubleNegation. intros H8. apply (proj1 (Empty.Charac u)), H5.
+    + apply DoubleNegation. intros H8. apply Class.Empty.Charac with u, H5.
       split. 2: assumption. split. 2: assumption.
       apply (H1 x); assumption.
     + assert (A u) as H8. { apply H3. assumption. }
@@ -335,7 +335,7 @@ Proof.
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
     apply StrictInclIsElem; try assumption. apply OnIsOrdinal. }
   assert (toClass a :<=: A) as H9. { intros x H10. apply DoubleNegation.
-    intros H11. apply Empty.Charac with x. apply H7. split. 2: assumption. split.
+    intros H11. apply Class.Empty.Charac with x, H7. split. 2: assumption. split.
     - apply ElemIsOrdinal with (toClass a); assumption.
     - apply Complement.Charac. assumption. }
   apply H6, H2; assumption.

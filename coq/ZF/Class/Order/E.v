@@ -105,7 +105,7 @@ Proof.
     intros H4. assert (E :(y,x):) as A. apply H4. clear A.
 
   (* and we obtain a contradiction buy showing that y lies in x /\ a. *)
-    apply EmptyCharac with y. rewrite <- H2.
+    apply Empty.Charac with y. rewrite <- H2.
     assert (y :< x :/\: a) as A. 2: apply A.
 
   (* Which follows easily. *)

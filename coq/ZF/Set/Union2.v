@@ -117,7 +117,7 @@ Proposition Union2IdentityL : forall (a:U),
 Proof.
   intros a. apply DoubleInclusion. split; intros x H1.
   - apply Union2Charac in H1. destruct H1 as [H1|H1]. 2: assumption.
-    apply EmptyCharac in H1. contradiction.
+    apply Empty.Charac in H1. contradiction.
   - apply Union2Charac. right. assumption.
 Qed.
 
