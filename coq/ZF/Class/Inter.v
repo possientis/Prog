@@ -1,7 +1,7 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
-Require Import ZF.Class.Specification.
+Require Import ZF.Axiom.Specification.
 Require Import ZF.Set.Core.
 
 Require Import ZF.Notation.And.
