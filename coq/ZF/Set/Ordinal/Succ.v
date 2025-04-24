@@ -9,6 +9,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 
 Definition succ (a:U) : U := a :\/: :{a}:.
@@ -68,6 +69,21 @@ Proof.
   rewrite H1 in H2. assumption.
 Qed.
 
+(* The successor operation is injective.                                        *)
+Proposition SuccInjective : forall (a b:U),
+  succ a = succ b -> a = b.
+Proof.
+  intros a b H1.
+  assert (a :< succ b) as H2. { rewrite <- H1. apply ElemSucc. }
+  assert (b :< succ a) as H3. { rewrite    H1. apply ElemSucc. }
+  apply Union2Charac in H2. apply Union2Charac in H3.
+  destruct H2 as [H2|H2]; destruct H3 as [H3|H3].
+  - exfalso. apply NoElemLoop2 with a b. split; assumption.
+  - apply SingleCharac in H3. subst. reflexivity.
+  - apply SingleCharac in H2. assumption.
+  - apply SingleCharac in H2. assumption.
+Qed.
+
 (* The sets a and b need not be ordinals.                                       *)
 Proposition NothingInBetween : forall (a b:U),
   ~ (a :< b /\ b :< succ a).
@@ -124,4 +140,27 @@ Proof.
     + split.
       * apply SuccOfUnionIsMore. assumption.
       * intros H3. apply H2. right. assumption.
+Qed.
+
+(* The union of the successor of an ordinal is the ordinal.                     *)
+Proposition UnionOfSucc : forall (a:U), Ordinal a ->
+  :U(succ a) = a.
+Proof.
+  intros a H1. apply DoubleInclusion. split; intros x H2.
+  - apply UnionCharac in H2. destruct H2 as [y [H2 H3]].
+    apply Union2Charac in H3. destruct H3 as [H3|H3].
+    + destruct H1 as [H1 _]. specialize (H1 y H3). apply H1. assumption.
+    + apply SingleCharac in H3. subst. assumption.
+  - apply UnionCharac. exists a. split. 1: assumption.
+    apply Union2Charac. right. apply SingleIn.
+Qed.
+
+(* If an ordinal is equal to its union, it cannot be a successor ordinal.       *)
+Proposition IfUnionThenNotSucc : forall (a b:U), Ordinal a -> Ordinal b ->
+  a = :U(a) -> a <> succ b.
+Proof.
+  intros a b H1 H2 H3 H4. apply SuccNotEqual with a.
+  assert (:U(succ b) = b) as H5. { apply UnionOfSucc. assumption. }
+  rewrite <- H4 in H5. assert (a = b) as H6. { rewrite <- H5. assumption. }
+  rewrite <- H6 in H4. symmetry. assumption.
 Qed.
