@@ -91,10 +91,10 @@ Proof.
     apply ComposeCharac2 in H2. destruct H2 as [y [H2 H3]].
     exists z. exists y. exists x. split.
     + assumption.
-    + split; apply ConverseCharac2; assumption.
+    + split; apply Converse.Charac2; assumption.
   - destruct H1 as [z [y [x [H1 [H2 H3]]]]].
-    apply (proj1 (ConverseCharac2 _ _ _)) in H2.
-    apply (proj1 (ConverseCharac2 _ _ _)) in H3.
+    apply (proj1 (Converse.Charac2 _ _ _)) in H2.
+    apply (proj1 (Converse.Charac2 _ _ _)) in H3.
     exists x. exists z. split. 1: assumption.
     apply ComposeCharac2. exists y. split; assumption.
 Qed.
@@ -162,7 +162,7 @@ Proof.
     assert (range (G :.: F) z) as H4. { apply H2. exists y. assumption. }
     destruct H4 as [x H4]. apply ComposeCharac2 in H4.
     destruct H4 as [y' [H4 H5]]. assert (y' = y) as H6. {
-      apply H1 with z; apply ConverseCharac2; assumption. }
+      apply H1 with z; apply Converse.Charac2; assumption. }
     subst. exists x. assumption.
 Qed.
 

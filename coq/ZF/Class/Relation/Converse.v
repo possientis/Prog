@@ -23,7 +23,7 @@ Definition converse (F:Class) : Class := fun x =>
 (* Notation "F ^:-1:" := (converse F)                                           *)
 Global Instance ClassInverse : Inverse Class := { inverse := converse }.
 
-Proposition ConverseCharac2 : forall (F:Class) (y z:U),
+Proposition Charac2 : forall (F:Class) (y z:U),
   F^:-1: :(y,z): <-> F :(z,y):.
 Proof.
   intros F y z. split; intros H1.
@@ -32,15 +32,14 @@ Proof.
   - exists z. exists y. split. 1: reflexivity. apply H1.
 Qed.
 
-
-Proposition ConverseEquivCompat : forall (F G:Class),
+Proposition EquivCompat : forall (F G:Class),
   F :~: G -> F^:-1: :~: G^:-1:.
 Proof.
   intros F G H1 x. split; intros H2; destruct H2 as [y [z [H2 H3]]];
   exists y; exists z; split; try assumption; apply H1; assumption.
 Qed.
 
-Proposition ConverseInclCompat : forall (F G:Class),
+Proposition InclCompat : forall (F G:Class),
   F :<=: G -> F^:-1: :<=: G^:-1:.
 Proof.
   intros F G H1 x H2. destruct H2 as [y [z [H2 H3]]]. subst.
@@ -48,7 +47,7 @@ Proof.
 Qed.
 
 (* The converse is the direct image by Switch.                                  *)
-Lemma ConverseIsImageBySwitch : forall (F:Class),
+Lemma IsImageBySwitch : forall (F:Class),
  F^:-1: :~: Switch :[F]:.
 Proof.
   intros F x. split; intros H1.
@@ -61,7 +60,7 @@ Proof.
     + assumption.
 Qed.
 
-Proposition ConverseIsSmall : forall (F:Class),
+Proposition IsSmall : forall (F:Class),
   Small F -> Small F^:-1:.
 Proof.
   (* Let F be an arbitrary class. *)
@@ -75,7 +74,7 @@ Proof.
 
   (* Using the equivalence converse(F) ~ Switch[F] ... *)
   apply SmallEquivCompat with Switch:[F]:.
-    1: { apply EquivSym, ConverseIsImageBySwitch. }
+    1: { apply EquivSym, IsImageBySwitch. }
 
   (* It is sufficient to show that Switch[F] is small. *)
   assert (Small (Switch:[F]:)) as A. 2: apply A.
@@ -89,7 +88,7 @@ Proof.
 Qed.
 
 (* The converse of a class is always a relation, even if the class is not.      *)
-Proposition ConverseIsRelation : forall (F:Class), Relation F^:-1:.
+Proposition IsRelation : forall (F:Class), Relation F^:-1:.
 Proof.
   intros F x H1.
   destruct H1 as [y [z [H1 _]]]. exists z. exists y. apply H1.
@@ -106,7 +105,7 @@ Qed.
 
 
 (* A class is a relation iff the converse acting on it is idempotent.           *)
-Proposition ConverseIsIdempotent : forall (F:Class),
+Proposition IsIdempotent : forall (F:Class),
   Relation F <-> (F^:-1:)^:-1: :~: F.
 Proof.
   intros F. split; intros H1.
@@ -138,23 +137,23 @@ Proposition ConverseDomain : forall (F:Class),
   domain F^:-1: :~: range F.
 Proof.
   intros F y. split; intros H1.
-  - destruct H1 as [x H1]. apply (proj1 (ConverseCharac2 _ _ _)) in H1.
+  - destruct H1 as [x H1]. apply (proj1 (Charac2 _ _ _)) in H1.
     exists x. assumption.
-  - destruct H1 as [x H1]. exists x. apply ConverseCharac2. assumption.
+  - destruct H1 as [x H1]. exists x. apply Charac2. assumption.
 Qed.
 
 Proposition ConverseRange : forall (F:Class),
   range F^:-1: :~: domain F.
 Proof.
   intros F x. split; intros H1.
-  - destruct H1 as [y H1]. apply (proj1 (ConverseCharac2 _ _ _)) in H1.
+  - destruct H1 as [y H1]. apply (proj1 (Charac2 _ _ _)) in H1.
     exists y. assumption.
-  - destruct H1 as [y H1]. exists y. apply ConverseCharac2. assumption.
+  - destruct H1 as [y H1]. exists y. apply Charac2. assumption.
 Qed.
 
 Proposition ConverseWhenFunctional : forall (F:Class) (x y z:U),
   Functional F^:-1: -> F :(x,z): -> F :(y,z): -> x = y.
 Proof.
   intros F x y z H1 H2 H3. unfold Functional in H1. apply H1 with z;
-  apply ConverseCharac2; assumption.
+  apply Charac2; assumption.
 Qed.

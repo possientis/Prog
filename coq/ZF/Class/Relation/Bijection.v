@@ -39,14 +39,14 @@ Qed.
 Proposition ConverseIsFunction : forall (F:Class),
   Bijection F -> Function F^:-1:.
 Proof.
-  intros F [H1 [_ H2]]. split. 2: assumption. apply ConverseIsRelation.
+  intros F [H1 [_ H2]]. split. 2: assumption. apply Converse.IsRelation.
 Qed.
 
 Proposition ConverseIsBijection : forall (F:Class),
   Bijection F -> Bijection F^:-1:.
 Proof.
   intros F [H1 H2]. split.
-  - apply ConverseIsRelation.
+  - apply Converse.IsRelation.
   - apply ConverseIsOneToOne. assumption.
 Qed.
 

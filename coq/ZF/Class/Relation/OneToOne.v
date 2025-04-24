@@ -19,8 +19,8 @@ Proposition CharacL : forall (F:Class), OneToOne F ->
   forall x y z, F :(y,x): -> F :(z,x): -> y = z.
 Proof.
   intros F [_ H1] x y z H2 H3. apply H1 with x.
-  - apply ConverseCharac2. assumption.
-  - apply ConverseCharac2. assumption.
+  - apply Converse.Charac2. assumption.
+  - apply Converse.Charac2. assumption.
 Qed.
 
 (* Uniqueness of right coordinate when one-to-one.                              *)
@@ -101,7 +101,7 @@ Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
 Proof.
   intros F x [H1 H2] H3. apply Eval.Charac. 1: assumption.
   - apply ConverseDomain. exists x. apply Eval.Satisfies; assumption.
-  - apply ConverseCharac2. apply Eval.Satisfies; assumption.
+  - apply Converse.Charac2. apply Eval.Satisfies; assumption.
 Qed.
 
 Proposition EvalOfConverseEval : forall (F:Class) (y:U),
@@ -111,7 +111,7 @@ Proof.
   assert (F^:-1:!y = x) as H5. { apply Eval.Charac.
     - assumption.
     - apply ConverseDomain. assumption.
-    - apply ConverseCharac2. assumption. }
+    - apply Converse.Charac2. assumption. }
   rewrite H5. apply Eval.Charac; try assumption. exists y. assumption.
 Qed.
 
