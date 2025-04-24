@@ -7,7 +7,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 
 (* The class of all ordinals.                                                   *)

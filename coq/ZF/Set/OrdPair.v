@@ -3,7 +3,7 @@ Open    Scope ZF_Set_OrdPair_scope.
 
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Pair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 
 (* The ordered pair (a,b) is defined as the pair { {a} , {a,b} }.               *)
 Definition ordPair (a b:U) : U := :{ :{a}: , :{a,b}: }:.
@@ -22,8 +22,8 @@ Qed.
 Lemma ABC : forall a b c, :{a}: = :{b,c}: -> a = b /\ a = c.
 Proof.
   intros a b c Habc. split.
-  - symmetry. apply SingleCharac. rewrite Habc. apply Pair.InL.
-  - symmetry. apply SingleCharac. rewrite Habc. apply Pair.InR.
+  - symmetry. apply Single.Charac. rewrite Habc. apply Pair.InL.
+  - symmetry. apply Single.Charac. rewrite Habc. apply Pair.InR.
 Qed.
 
 (* If two ordered pairs are equal, then their components are equal.             *)
@@ -35,7 +35,7 @@ Proof.
     { assert (:{a}: :< :(c,d):) as H2.
         { rewrite <- H. apply Charac. left. reflexivity. }
       apply Charac in H2. destruct H2 as [H2|H2].
-      + apply SingleEqualSingle, H2.
+      + apply Single.WhenEqual, H2.
       + apply ABC in H2. destruct H2 as [H2 H3]. apply H2. }
   split.
   - apply H1.
@@ -44,13 +44,13 @@ Proof.
       { rewrite <- H. apply Charac. right. reflexivity. }
     apply Charac in H1. destruct H1 as [H1|H1].
     + assert (b = a) as H2.
-        { apply SingleCharac. rewrite <- H1. apply Pair.InR. }
+        { apply Single.Charac. rewrite <- H1. apply Pair.InR. }
       subst. clear H1.
       assert (:{a,d}: :< :(a,a):) as H1.
         { rewrite H. unfold ordPair. apply Pair.InR. }
       unfold ordPair in H1. apply Pair.Charac in H1.
       fold singleton in H1. destruct H1 as [H1|H1].
-      * symmetry. apply SingleCharac. rewrite <- H1. apply Pair.InR.
+      * symmetry. apply Single.Charac. rewrite <- H1. apply Pair.InR.
       * symmetry in H1. apply ABC in H1. destruct H1 as [H1 H2]. apply H2.
     + assert (b :< :{a,d}:) as H2.
         { rewrite <- H1. apply Pair.InR. }

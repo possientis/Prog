@@ -3,7 +3,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Pair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 
 (* No set belongs to itself.                                                    *)
@@ -28,7 +28,7 @@ Proof.
   assert (x :/\: b = :0:) as A. { apply H3. } clear A.
 
   (* Since x belongs to b = {a} we have x = a *)
-  assert (x = a) as H4. { rewrite Hb in H2. apply SingleCharac in H2. apply H2. }
+  assert (x = a) as H4. { rewrite Hb in H2. apply Single.Charac in H2. apply H2. }
 
   (* Hence we have a /\ {a} = 0 *)
   subst. assert (a :/\: :{a}: = :0:) as A. { apply H3. } clear A.
@@ -37,7 +37,7 @@ Proof.
   assert (a :< :0:) as H4.
     { rewrite <- H3. apply InterCharac. split.
       - apply Ha.
-      - apply SingleIn.
+      - apply Single.In.
     }
 
   (* This is our desired contradiction *)

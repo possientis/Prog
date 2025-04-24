@@ -6,7 +6,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 
 (* The class of all singletons.                                                 *)
 Definition Singleton : Class := fun x => exists y, x = :{y}:.
@@ -26,9 +26,9 @@ Proof.
   assert (Functional F) as H2. {
     intros x y z H2 H3. rewrite EF in H2. rewrite EF in H3.
     destruct H2 as [u H2]. destruct H3 as [v H3].
-    apply WhenEqual in H2. destruct H2 as [H2 H4].
-    apply WhenEqual in H3. destruct H3 as [H3 H5].
-    subst. apply SingleCharac. rewrite <- H3. apply SingleIn.
+    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
+    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+    subst. apply Single.Charac. rewrite <- H3. apply Single.In.
   }
 
   (* We claim that F[Singleton] = V. *)

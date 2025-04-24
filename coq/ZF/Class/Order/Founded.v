@@ -14,7 +14,7 @@ Require Import ZF.Set.Eval.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 
 (* Predicate expressing the fact that R is a founded class on A.                *)
@@ -88,11 +88,11 @@ Proof.
   intros R A H1 a H2 H3.
   assert (exists x, Minimal R (toClass :{a}:) x) as H4. {
     apply H1.
-    - apply SingleToClassIncl. assumption.
+    - apply ToClassIncl. assumption.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x [H4 H5]].
-  apply SingleCharac in H4. subst.
-  apply (InitSegmentWhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply SingleIn.
+  apply Single.Charac in H4. subst.
+  apply (InitSegmentWhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply Single.In.
 Qed.
 
 Proposition FoundedNoLoop2 : forall (R A:Class), Founded R A ->
@@ -101,7 +101,7 @@ Proof.
   intros R A H1 a b H2 H3 [H4 H5].
   assert (exists x, Minimal R (toClass :{a,b}:) x) as H6. {
     apply H1.
-    - apply ToClassIncl. split; assumption.
+    - apply Pair.ToClassIncl. split; assumption.
     - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
   apply Pair.Charac in H6. destruct H6 as [H6|H6]; subst.

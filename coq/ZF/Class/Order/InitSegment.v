@@ -10,7 +10,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 
 (* Inital segment of R on A at a.                                               *)
 Definition initSegment (R A:Class) (a:U) : Class
@@ -22,9 +22,9 @@ Proposition InitSegmentCharac : forall (R A:Class) (a x:U),
 Proof.
   intros R A a x. split; intros [H1 H2].
   - split. 1: assumption. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
-    apply SingleCharac in H2. subst. assumption.
+    apply Single.Charac in H2. subst. assumption.
   - split. 1: assumption. apply InvImageCharac. exists a. split. 2: assumption.
-    apply SingleIn.
+    apply Single.In.
 Qed.
 
 (* Initial segments are compatible with equivalences.                           *)

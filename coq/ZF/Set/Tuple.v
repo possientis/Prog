@@ -6,7 +6,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Pair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Definition tuple3 (a1 a2 a3:U) : U := :{a1,a2}: :\/: :{a3}:.
@@ -25,11 +25,11 @@ Proof.
   intros a1 a2 a3 x. unfold tuple3. split.
   - intros H1. apply Union2Charac in H1. destruct H1 as [H1|H1].
     + apply Pair.Charac in H1. destruct H1 as [H1|H1]; auto.
-    + apply SingleCharac in H1. auto.
+    + apply Single.Charac in H1. auto.
   - intros [H1|[H1|H1]]; apply Union2Charac; subst.
     + left. apply Pair.InL.
     + left. apply Pair.InR.
-    + right. apply SingleIn.
+    + right. apply Single.In.
 Qed.
 
 Proposition Tuple3EqualIn1 : forall (a1 a2 a3:U),
@@ -71,12 +71,12 @@ Proof.
   intros a1 a2 a3 a4 x. unfold tuple4. split.
   - intros H1. apply Union2Charac in H1. destruct H1 as [H1|H1].
     + apply Tuple3Charac in H1. destruct H1 as [H1|[H1|H1]]; auto.
-    + apply SingleCharac in H1. auto.
+    + apply Single.Charac in H1. auto.
   - intros [H1|[H1|[H1|H1]]]; apply Union2Charac.
     + left. apply Tuple3EqualIn1, H1.
     + left. apply Tuple3EqualIn2, H1.
     + left. apply Tuple3EqualIn3, H1.
-    + right. apply SingleCharac, H1.
+    + right. apply Single.Charac, H1.
 Qed.
 
 Proposition Tuple4EqualIn1 : forall (a1 a2 a3 a4:U),

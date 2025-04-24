@@ -13,7 +13,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 
 (* The class satisfied by all ordered pairs (x,y) with x :< y.                  *)
 Definition E : Class := fun x => exists y z, x = :(y,z): /\ y :< z.
@@ -22,7 +22,7 @@ Proposition ECharac2 : forall (y z:U), E :(y,z): <-> y :< z.
 Proof.
   intros y z. split; intros H1.
   - unfold E in H1. destruct H1 as [y' [z' [H1 H2]]].
-    apply WhenEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
+    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
   - exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
@@ -31,10 +31,10 @@ Lemma InitSegmentEA : forall (A:Class) (a:U),
 Proof.
   intros A a. split; intros [H1 H2].
   - apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
-    apply SingleCharac in H2. apply ECharac2 in H3.
+    apply Single.Charac in H2. apply ECharac2 in H3.
     subst. split; assumption.
   - split. 1: assumption. apply InvImageCharac. exists a. split.
-    + apply SingleIn.
+    + apply Single.In.
     + apply ECharac2. assumption.
 Qed.
 

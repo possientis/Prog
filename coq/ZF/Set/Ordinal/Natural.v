@@ -4,7 +4,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Pair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 Require Import ZF.Set.Union2.
 

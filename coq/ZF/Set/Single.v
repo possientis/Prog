@@ -13,7 +13,7 @@ Notation ":{ a }:" := (singleton a)
   (at level 1, no associativity) : ZF_Set_Singleton_scope.
 
 (* Characterisation of the elements of {a}.                                     *)
-Proposition SingleCharac : forall (a:U),
+Proposition Charac : forall (a:U),
   forall x, x :< :{a}: <-> x = a.
 Proof.
   intros a x. split.
@@ -22,30 +22,30 @@ Proof.
 Qed.
 
 (* The set a is an element of the singleton set [a].                            *)
-Proposition SingleIn : forall a, a :< :{a}:.
+Proposition In : forall a, a :< :{a}:.
 Proof.
-  intros a. apply SingleCharac. reflexivity.
+  intros a. apply Charac. reflexivity.
 Qed.
 
-Proposition SingleEqualSingle : forall a b, :{a}: = :{b}: -> a = b.
+Proposition WhenEqual : forall a b, :{a}: = :{b}: -> a = b.
 Proof.
-  intros a b Hab. apply SingleCharac. rewrite <- Hab.
-  apply SingleCharac. reflexivity.
+  intros a b Hab. apply Charac. rewrite <- Hab.
+  apply Charac. reflexivity.
 Qed.
 
-Proposition SingleToClassIncl : forall (A:Class) (a:U),
+Proposition ToClassIncl : forall (A:Class) (a:U),
   A a <-> toClass :{a}: :<=: A.
 Proof.
   intros A a. split; intros H1.
-  - intros x H2. apply SingleCharac in H2. subst. assumption.
-  - apply H1. apply SingleIn.
+  - intros x H2. apply Charac in H2. subst. assumption.
+  - apply H1. apply In.
 Qed.
 
-Proposition SingleIsNotPair : forall (a b c:U),
+Proposition IsNotPair : forall (a b c:U),
   b <> c -> :{a}: <> :{b,c}:.
 Proof.
   intros a b c H1 H2.
-  assert (b = a) as H3. { apply SingleCharac. rewrite H2. apply Pair.InL. }
-  assert (c = a) as H4. { apply SingleCharac. rewrite H2. apply Pair.InR. }
+  assert (b = a) as H3. { apply Charac. rewrite H2. apply Pair.InL. }
+  assert (c = a) as H4. { apply Charac. rewrite H2. apply Pair.InR. }
   subst. contradiction.
 Qed.

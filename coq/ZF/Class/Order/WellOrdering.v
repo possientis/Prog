@@ -15,7 +15,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 
 (* Predicate expressing the fact that R is a well-ordering class on A.          *)
@@ -36,11 +36,11 @@ Proof.
   intros R A [H1 H2] a H3.
   assert (exists x, Minimal R (toClass :{a}:) x) as H4. {
     apply H1.
-    - apply SingleToClassIncl. assumption.
+    - apply ToClassIncl. assumption.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x H4]. assert (H5 := H4). apply MinimalIn in H5.
-  apply SingleCharac in H5. subst.
-  apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply SingleIn.
+  apply Single.Charac in H5. subst.
+  apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply Single.In.
 Qed.
 
 Proposition IsTransitive : forall (R A:Class),

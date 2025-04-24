@@ -7,7 +7,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Pair.
-Require Import ZF.Set.Singleton.
+Require Import ZF.Set.Single.
 Export ZF.Notation.Or.
 
 (* The union of two sets.                                                       *)
@@ -105,9 +105,9 @@ Proposition PairAsUnion2 : forall (a b:U),
 Proof.
   intros a b. apply DoubleInclusion. split; intros x H1.
   - apply Pair.Charac in H1. destruct H1 as [H1|H1]; apply Union2Charac.
-    + left. apply SingleCharac. assumption.
-    + right. apply SingleCharac. assumption.
-  - apply Union2Charac in H1. destruct H1 as [H1|H1]; apply SingleCharac in H1.
+    + left. apply Single.Charac. assumption.
+    + right. apply Single.Charac. assumption.
+  - apply Union2Charac in H1. destruct H1 as [H1|H1]; apply Single.Charac in H1.
     + subst. apply Pair.InL.
     + subst. apply Pair.InR.
 Qed.
