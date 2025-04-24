@@ -130,7 +130,7 @@ Proof.
     + assumption.
     + split.
       * assumption.
-      * apply ProdCharac2. split; apply I.
+      * apply Prod.Charac2. split; apply I.
   - destruct H1 as [y [z [H1 [H2 _]]]]. exists y. exists z. split; assumption.
 Qed.
 

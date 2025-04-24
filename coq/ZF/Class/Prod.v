@@ -26,7 +26,7 @@ Definition prod (P Q:Class) : Class := fun x =>
 (* Notation "P :x: Q" := (prod P Q)                                             *)
 Global Instance ClassProd : Prod Class := { prod := prod }.
 
-Proposition ProdCharac2 : forall (P Q:Class) (y z:U),
+Proposition Charac2 : forall (P Q:Class) (y z:U),
   (P :x: Q) :(y,z): <-> P y /\ Q z.
 Proof.
   intros P Q y z. split; intros H1.
@@ -39,7 +39,7 @@ Proof.
 Qed.
 
 (* The product of two classes is compatible with class equivalence.             *)
-Proposition ProdEquivCompat : forall (P Q R S:Class),
+Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :x: R :~: Q :x: S.
 Proof.
   intros P Q R S H1 H2 x. unfold Notation.Prod.prod, ClassProd, prod.
@@ -53,25 +53,25 @@ Proof.
 Qed.
 
 (* The product of two classes is left-compatible with class equivalence.        *)
-Proposition ProdEquivCompatL : forall (P Q R:Class),
+Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :x: R :~: Q :x: R.
 Proof.
-  intros P Q R H1. apply ProdEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - assumption.
   - apply EquivRefl.
 Qed.
 
 (* The product of two classes is right-compatible with class equivalence.       *)
-Proposition ProdEquivCompatR : forall (P Q R:Class),
+Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :x: P :~: R :x: Q.
 Proof.
-  intros P Q R H1. apply ProdEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - apply EquivRefl.
   - assumption.
 Qed.
 
 (* The product of two small classes is a small class.                           *)
-Proposition ProdIsSmall : forall (P Q:Class),
+Proposition IsSmall : forall (P Q:Class),
   Small P -> Small Q -> Small (P :x: Q).
 Proof.
   (* Let P and Q be arbitrary classes *)
@@ -105,7 +105,7 @@ Proof.
   - assert (toClass a :x: toClass b :~: P :x: Q) as A. 2: apply A.
 
   (* Which follows from the equivalences of a and P and  of b and Q. *)
-    apply ProdEquivCompat; assumption.
+    apply EquivCompat; assumption.
 
   (* We next need to show that a x b is small. *)
   - assert (Small (toClass a :x: toClass b)) as A. 2: apply A.
@@ -194,14 +194,14 @@ Proof.
     apply OrdPair.WhenEqual in H6. destruct H6 as [H6 H8]. subst.
     exists z'. exists y'. split. 1: reflexivity. split; assumption.
   - destruct H1 as [z [y [H1 [H2 H3]]]]. exists :(y,z):. split.
-    + apply ProdCharac2. split; assumption.
+    + apply Charac2. split; assumption.
     + apply SwitchCharac2. exists y. exists z. split.
       * reflexivity.
       * assumption.
 Qed.
 
 (* If P x Q is a small class, then so is Q x P.                                 *)
-Proposition ProdIsSmallComm : forall (P Q:Class),
+Proposition IsSmallComm : forall (P Q:Class),
   Small (P :x: Q) -> Small (Q :x: P).
 Proof.
 
@@ -229,7 +229,7 @@ Proof.
 Qed.
 
 (* If P is a proper class and Q is not empty, then P x Q is a proper class.     *)
-Proposition ProdIsProper : forall (P Q:Class),
+Proposition IsProper : forall (P Q:Class),
   Proper P -> ~ Q :~: :0: -> Proper (P :x: Q).
 Proof.
 
@@ -278,7 +278,7 @@ Proof.
     intros x T1.
     destruct T1 as [y' T1]. rewrite Er in T1.
     destruct T1 as [x' [T1 T2]]. apply OrdPair.WhenEqual in T1.
-    destruct T1 as [T1 _]. subst. apply ProdCharac2. split; assumption.
+    destruct T1 as [T1 _]. subst. apply Charac2. split; assumption.
   }
 
   (* Having assumed that P x Q is small, it follows that domain R is small. *)
@@ -324,7 +324,7 @@ Proof.
   assert (Proper (P :x: P)) as A. 2: apply A.
 
   (* This follows immediately from the fact that P is proper. *)
-  apply ProdIsProper. 1: apply H1.
+  apply IsProper. 1: apply H1.
 
   (* Provided we show P is not the empty class. *)
   assert (~ P :~: :0:) as A. 2: apply A.
@@ -354,7 +354,7 @@ Proof.
     destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     destruct H2 as [y2 [z2 [G2 [H2 H2']]]].
     subst. apply OrdPair.WhenEqual in G2. destruct G2 as [G1 G2]. subst.
-    apply ProdCharac2. split; split; assumption.
+    apply Charac2. split; split; assumption.
   - unfold prod in H1. destruct H1 as [y [z [H1 [[H2 H2'] [H3 H3']]]]].
     split; exists y; exists z; split.
     + apply H1.

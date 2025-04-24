@@ -76,7 +76,7 @@ Proof.
   assert (Small (A :x: F:[A]:)) as A'. 2: apply A'.
 
   (* To show that this product class is small ... *)
-  apply ProdIsSmall.
+  apply Prod.IsSmall.
 
   (* We need to argue that A is small, which is true by assumption. *)
   - assert (Small A) as A'. 2: apply A'. assumption.
