@@ -22,8 +22,8 @@ Proposition DiffCharac : forall (a b:U),
   forall x, x :< a:\:b <-> x :< a /\ ~ x :< b.
 Proof.
   intros a b x. split; intros H1.
-  - apply FromClassCharac in H1. apply H1.
-  - apply FromClassCharac, H1.
+  - apply FromClass.Charac in H1. apply H1.
+  - apply FromClass.Charac, H1.
 Qed.
 
 Proposition DiffUnionInter : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.

@@ -17,7 +17,7 @@ Notation ":{ a , b }:" := (pair a b)
 Proposition Charac : forall (a b:U),
   forall x, x :< :{a,b}: <-> x = a \/ x = b.
 Proof.
-  intros a b. apply FromClassCharac.
+  intros a b. apply FromClass.Charac.
 Qed.
 
 (* The set a is an element of the set {a,b}.                                    *)

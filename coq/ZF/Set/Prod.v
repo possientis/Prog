@@ -20,8 +20,8 @@ Proposition ProdCharac : forall (a b:U),
   forall x, x :< a :x: b <-> exists y, exists z, x = :(y,z): /\ y :< a /\ z :< b.
 Proof.
   intros a b x. unfold Notation.Prod.prod, SetProd, prod. split; intros H1.
-  - apply FromClassCharac in H1. assumption.
-  - apply FromClassCharac. assumption.
+  - apply FromClass.Charac in H1. assumption.
+  - apply FromClass.Charac. assumption.
 Qed.
 
 Proposition ProdCharac2 : forall (a b:U),

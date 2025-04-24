@@ -16,5 +16,5 @@ Notation ":P( a )" := (power a)
 Proposition PowerCharac : forall (a:U),
   forall x, x :< :P(a) <-> x :<=: a.
 Proof.
-  intros a. apply FromClassCharac.
+  intros a. apply FromClass.Charac.
 Qed.

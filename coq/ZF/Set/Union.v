@@ -16,7 +16,7 @@ Global Instance SetUnion : Union U := { union := union }.
 Proposition UnionCharac : forall (a:U),
   forall x, x :< :U(a) <-> exists y, x :< y /\ y :< a.
 Proof.
-  intros a. apply FromClassCharac.
+  intros a. apply FromClass.Charac.
 Qed.
 
 Proposition UnionOfToClass : forall (a:U),

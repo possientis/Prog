@@ -19,7 +19,7 @@ Global Instance SetZero : Zero U := { zero := empty }.
 (* Characterisation of the elements of the empty set.                           *)
 Proposition EmptyCharac : forall x, x :< :0: <-> False.
 Proof.
-  apply FromClassCharac.
+  apply FromClass.Charac.
 Qed.
 
 (* The empty set has no element.                                                *)

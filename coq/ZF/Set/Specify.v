@@ -18,7 +18,7 @@ Notation ":{ a | P }:" := (specify P a)
 Proposition SpecifyCharac : forall (P:Class) (a:U),
   forall x, x :< :{a | P}: <-> x :< a /\ P x.
 Proof.
-  intros P a. apply FromClassCharac.
+  intros P a. apply FromClass.Charac.
 Qed.
 
 (* Every element of the specification set of P and a is an element of a.        *)

@@ -22,9 +22,9 @@ Proposition Union2Charac : forall (a b:U),
   forall x, x :< a:\/:b <-> x :< a \/ x :< b.
 Proof.
   intros a b x. unfold or, SetOr, union2. split; intros H1.
-  - apply FromClassCharac in H1.
+  - apply FromClass.Charac in H1.
     apply (proj1 (Class.Union2.Union2Charac _ _ _)) in H1. apply H1.
-  - apply FromClassCharac, Class.Union2.Union2Charac, H1.
+  - apply FromClass.Charac, Class.Union2.Union2Charac, H1.
 Qed.
 
 (* The union of two sets is commutative.                                        *)

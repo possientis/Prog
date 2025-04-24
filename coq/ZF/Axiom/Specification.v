@@ -32,8 +32,8 @@ Proof.
 
   (* Which is true *)
   intros x. rewrite Eb. split; intros H1.
-  - apply FromClassCharac in H1. rewrite Eq in H1. assumption.
-  - apply FromClassCharac. rewrite Eq. assumption.
+  - apply FromClass.Charac in H1. rewrite Eq in H1. assumption.
+  - apply FromClass.Charac. rewrite Eq. assumption.
   }
 
   (* So it remains to show that Q is small. *)

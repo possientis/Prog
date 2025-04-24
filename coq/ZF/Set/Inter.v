@@ -21,8 +21,8 @@ Proposition InterCharac : forall (a b:U),
  forall x, x :< a:/\:b <-> x :< a /\ x :< b.
 Proof.
   intros a b x. split; intros H1.
-  - apply FromClassCharac in H1. apply H1.
-  - apply FromClassCharac, H1.
+  - apply FromClass.Charac in H1. apply H1.
+  - apply FromClass.Charac, H1.
 Qed.
 
 (* The intersection of two sets is commutative.                                 *)
