@@ -101,12 +101,12 @@ Proof.
   intros R A H1 a b H2 H3 [H4 H5].
   assert (exists x, Minimal R (toClass :{a,b}:) x) as H6. {
     apply H1.
-    - apply PairToClassIncl. split; assumption.
+    - apply ToClassIncl. split; assumption.
     - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
-  apply PairCharac in H6. destruct H6 as [H6|H6]; subst.
-  - apply (InitSegmentWhenEmpty1 _ _ _ b) in H7. 1: contradiction. apply PairInR.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a) in H7. 1: contradiction. apply PairInL.
+  apply Pair.Charac in H6. destruct H6 as [H6|H6]; subst.
+  - apply (InitSegmentWhenEmpty1 _ _ _ b) in H7. 1: contradiction. apply Pair.InR.
+  - apply (InitSegmentWhenEmpty1 _ _ _ a) in H7. 1: contradiction. apply Pair.InL.
 Qed.
 
 Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,

@@ -16,14 +16,14 @@ Notation ":( a , b ):" := (ordPair a b)
 Lemma OrdPairCharac : forall (a b:U),
   forall x, x :< :(a,b): <-> x = :{a}: \/ x = :{a,b}:.
 Proof.
-  intros a b. unfold ordPair. apply PairCharac.
+  intros a b. unfold ordPair. apply Pair.Charac.
 Qed.
 
 Lemma OrdPairABC : forall a b c, :{a}: = :{b,c}: -> a = b /\ a = c.
 Proof.
   intros a b c Habc. split.
-  - symmetry. apply SingleCharac. rewrite Habc. apply PairInL.
-  - symmetry. apply SingleCharac. rewrite Habc. apply PairInR.
+  - symmetry. apply SingleCharac. rewrite Habc. apply Pair.InL.
+  - symmetry. apply SingleCharac. rewrite Habc. apply Pair.InR.
 Qed.
 
 (* If two ordered pairs are equal, then their components are equal.             *)
@@ -44,17 +44,17 @@ Proof.
       { rewrite <- H. apply OrdPairCharac. right. reflexivity. }
     apply OrdPairCharac in H1. destruct H1 as [H1|H1].
     + assert (b = a) as H2.
-        { apply SingleCharac. rewrite <- H1. apply PairInR. }
+        { apply SingleCharac. rewrite <- H1. apply Pair.InR. }
       subst. clear H1.
       assert (:{a,d}: :< :(a,a):) as H1.
-        { rewrite H. unfold ordPair. apply PairInR. }
-      unfold ordPair in H1. apply PairCharac in H1.
+        { rewrite H. unfold ordPair. apply Pair.InR. }
+      unfold ordPair in H1. apply Pair.Charac in H1.
       fold singleton in H1. destruct H1 as [H1|H1].
-      * symmetry. apply SingleCharac. rewrite <- H1. apply PairInR.
+      * symmetry. apply SingleCharac. rewrite <- H1. apply Pair.InR.
       * symmetry in H1. apply OrdPairABC in H1. destruct H1 as [H1 H2]. apply H2.
     + assert (b :< :{a,d}:) as H2.
-        { rewrite <- H1. apply PairInR. }
-      apply PairCharac in H2. destruct H2 as [H2|H2].
+        { rewrite <- H1. apply Pair.InR. }
+      apply Pair.Charac in H2. destruct H2 as [H2|H2].
       * subst. apply OrdPairABC in H1. destruct H1 as [H1 H2]. apply H2.
       * apply H2.
 Qed.

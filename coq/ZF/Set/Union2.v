@@ -104,12 +104,12 @@ Proposition PairAsUnion2 : forall (a b:U),
   :{a,b}: = :{a}: :\/: :{b}:.
 Proof.
   intros a b. apply DoubleInclusion. split; intros x H1.
-  - apply PairCharac in H1. destruct H1 as [H1|H1]; apply Union2Charac.
+  - apply Pair.Charac in H1. destruct H1 as [H1|H1]; apply Union2Charac.
     + left. apply SingleCharac. assumption.
     + right. apply SingleCharac. assumption.
   - apply Union2Charac in H1. destruct H1 as [H1|H1]; apply SingleCharac in H1.
-    + subst. apply PairInL.
-    + subst. apply PairInR.
+    + subst. apply Pair.InL.
+    + subst. apply Pair.InR.
 Qed.
 
 Proposition Union2IdentityL : forall (a:U),

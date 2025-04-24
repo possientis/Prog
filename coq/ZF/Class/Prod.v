@@ -177,7 +177,7 @@ Proof.
 
  (* case u = {y,z} : we need to show that {y,z} <= a\/b with y :< a and z :< b *)
     + assert (:{y,z}: :<=: a:\/:b) as A. 2: apply A.
-      intros v H9. apply PairCharac in H9. apply Union2Charac.
+      intros v H9. apply Pair.Charac in H9. apply Union2Charac.
       destruct H9 as [H9|H9]; subst.
       * left.  apply H6.
       * right. apply H7.

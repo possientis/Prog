@@ -24,11 +24,11 @@ Proposition Tuple3Charac : forall (a1 a2 a3:U),
 Proof.
   intros a1 a2 a3 x. unfold tuple3. split.
   - intros H1. apply Union2Charac in H1. destruct H1 as [H1|H1].
-    + apply PairCharac in H1. destruct H1 as [H1|H1]; auto.
+    + apply Pair.Charac in H1. destruct H1 as [H1|H1]; auto.
     + apply SingleCharac in H1. auto.
   - intros [H1|[H1|H1]]; apply Union2Charac; subst.
-    + left. apply PairInL.
-    + left. apply PairInR.
+    + left. apply Pair.InL.
+    + left. apply Pair.InR.
     + right. apply SingleIn.
 Qed.
 

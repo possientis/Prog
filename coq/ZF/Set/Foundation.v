@@ -65,7 +65,7 @@ Proof.
   assert (x :/\: c = :0:) as A. { apply H3. } clear A.
 
   (* Since x belongs to c = {a,b} we have x = a or x = b *)
-  assert (x = a \/ x = b) as H4. { rewrite Hc in H2. apply PairCharac in H2. apply H2. }
+  assert (x = a \/ x = b) as H4. { rewrite Hc in H2. apply Pair.Charac in H2. apply H2. }
 
   (* We consider the case x = a and x = b separately *)
   destruct H4 as [H4|H4].
@@ -74,7 +74,7 @@ Proof.
   - subst. assert (b :< :0:) as H5.
       { rewrite <- H3. apply InterCharac. split.
         - apply Hba.
-        - apply PairInR.
+        - apply Pair.InR.
       }
     apply EmptyCharac in H5. contradiction.
 
@@ -82,7 +82,7 @@ Proof.
   - subst. assert (a :< :0:) as H5.
       { rewrite <- H3. apply InterCharac. split.
         - apply Hab.
-        - apply PairInL.
+        - apply Pair.InL.
       }
     apply EmptyCharac in H5. contradiction.
 Qed.

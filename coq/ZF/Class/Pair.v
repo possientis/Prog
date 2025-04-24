@@ -7,7 +7,7 @@ Require Import ZF.Set.Core.
 Definition pair (a b:U) : Class := fun x => x = a \/ x = b.
 
 (* The Pairing axiom ensures this is a small class.                             *)
-Proposition PairIsSmall : forall (a b:U),
+Proposition IsSmall : forall (a b:U),
   Small (pair a b).
 Proof.
   apply Pairing.

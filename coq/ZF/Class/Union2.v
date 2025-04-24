@@ -109,12 +109,12 @@ Proof.
 
     split; intros H5.
     + rewrite Ec in H5. apply UnionCharac in H5. destruct H5 as [y [H5 H6]].
-      apply PairCharac in H6. destruct H6 as [H6|H6]; subst.
+      apply Pair.Charac in H6. destruct H6 as [H6|H6]; subst.
       * left.  assumption.
       * right. assumption.
     + rewrite Ec. apply UnionCharac. destruct H5 as [H5|H5].
-      * exists a. split. { assumption. } { apply PairInL. }
-      * exists b. split. { assumption. } { apply PairInR. }
+      * exists a. split. { assumption. } { apply Pair.InL. }
+      * exists b. split. { assumption. } { apply Pair.InR. }
 Qed.
 
 (* The pairwise union of two relation classes is a relation class.              *)
