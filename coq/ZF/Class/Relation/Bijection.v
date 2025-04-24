@@ -21,13 +21,13 @@ Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
 Proposition ImageIsSmall : forall (F A:Class),
   Bijection F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [_ H1]. apply OneToOne.ImageIsSmall. assumption.
+  intros F A [_ H1]. apply ImageIsSmall. assumption.
 Qed.
 
 Proposition InvImageIsSmall : forall (F B:Class),
   Bijection F -> Small B -> Small F^:-1::[B]:.
 Proof.
-  intros F B [_ H1]. apply OneToOne.InvImageIsSmall. assumption.
+  intros F B [_ H1]. apply InvImageIsSmall. assumption.
 Qed.
 
 Proposition IsFunction : forall (F:Class),

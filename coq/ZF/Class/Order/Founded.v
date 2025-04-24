@@ -56,7 +56,7 @@ Proof.
       apply Incl.EquivCompatL with (F^:-1::[toClass b]:).
       - apply EquivSym. assumption.
       - apply InclTran with F^:-1::[B]:.
-        + apply ImageInclCompatR. assumption.
+        + apply Image.InclCompatR. assumption.
         + apply Incl.EquivCompatL with A. 2: apply InclRefl.
           apply EquivSym, Bij.InvImageOfRangeIsDomain.
           apply Isom.IsBij with R S. assumption. }
@@ -69,7 +69,7 @@ Proof.
     specialize (H2 H7 H8). destruct H2 as [x H2].
     assert (F:[toClass a]: :~: toClass b) as H9. {
       apply EquivTran with F:[F^:-1::[toClass b]:]:.
-      - apply ImageEquivCompatR. assumption.
+      - apply Image.EquivCompatR. assumption.
       - apply Bij.ImageOfInvImage with A B. 2: assumption.
         apply Isom.IsBij with R S. assumption. }
         exists (F!x). apply MinimalEquivCompatR with F:[toClass a]:.

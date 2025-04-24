@@ -23,7 +23,7 @@ Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 Proposition ImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
 Proof.
-  intros F A B [H1 _]. apply Function.ImageIsSmall. assumption.
+  intros F A B [H1 _]. apply ImageIsSmall. assumption.
 Qed.
 
 (* A function is always a function defined on its domain.                       *)
@@ -85,7 +85,7 @@ Proof.
   - assert (Small F:[A]:) as A'. 2: apply A'.
 
   (* Which follows from the fact that F is functional and A is small. *)
-    apply Image.ImageIsSmall. { apply H2. } { apply H3. }
+    apply Image.IsSmall. { apply H2. } { apply H3. }
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
@@ -177,7 +177,7 @@ Proposition ImageOfDomainIsRange : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
   intros F A [H1 H2]. apply EquivTran with F:[domain F]:.
-  - apply ImageEquivCompatR, EquivSym. assumption.
+  - apply Image.EquivCompatR, EquivSym. assumption.
   - apply Range.ImageOfDomainIsRange.
 Qed.
 

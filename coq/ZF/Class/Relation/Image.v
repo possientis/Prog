@@ -17,7 +17,7 @@ Definition image (F A:Class) : Class := fun y =>
 Global Instance ClassImage : Image Class Class := { image := image }.
 
 (* The direct image is compatible with equivalences.                            *)
-Proposition ImageEquivCompat : forall (P Q R S:Class),
+Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P:[R]: :~: Q:[S]:.
 Proof.
   intros P Q R S H1 H2 y. split; intros H3;
@@ -29,25 +29,25 @@ Proof.
 Qed.
 
 (* The direct image is left-compatible with equivalences.                       *)
-Proposition ImageEquivCompatL : forall (P Q R:Class),
+Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P:[R]: :~: Q:[R]:.
 Proof.
-  intros P Q R H1. apply ImageEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - assumption.
   - apply EquivRefl.
 Qed.
 
 (* The direct image is right-compatible with equivalences.                      *)
-Proposition ImageEquivCompatR : forall (P Q R:Class),
+Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R:[P]: :~: R:[Q]:.
 Proof.
-  intros P Q R H1. apply ImageEquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - apply EquivRefl.
   - assumption.
 Qed.
 
 (* The direct image is compatible with inclusion.                               *)
-Proposition ImageInclCompat : forall (P Q R S:Class),
+Proposition InclCompat : forall (P Q R S:Class),
   P :<=: Q -> R :<=: S -> P:[R]: :<=: Q:[S]:.
 Proof.
   intros P Q R S H1 H2 y H3. unfold image in H3. destruct H3 as [x [H3 H4]].
@@ -57,25 +57,25 @@ Proof.
 Qed.
 
 (* The direct image is left-compatible with inclusion.                          *)
-Proposition ImageInclCompatL : forall (P Q R:Class),
+Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P:[R]: :<=: Q:[R]:.
 Proof.
-  intros P Q R H1. apply ImageInclCompat.
+  intros P Q R H1. apply InclCompat.
   - assumption.
   - apply InclRefl.
 Qed.
 
 (* The direct image is right-compatible with inclusion.                         *)
-Proposition ImageInclCompatR : forall (P Q R:Class),
+Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R:[P]: :<=: R:[Q]:.
 Proof.
-  intros P Q R H1. apply ImageInclCompat.
+  intros P Q R H1. apply InclCompat.
   - apply InclRefl.
   - assumption.
 Qed.
 
 (* If F is functional and P is small, then F:[P]: is small.                     *)
-Proposition ImageIsSmall : forall (F P:Class),
+Proposition IsSmall : forall (F P:Class),
   Functional F -> Small P -> Small F :[P]:.
 Proof.
 
@@ -104,7 +104,7 @@ Proof.
   - assert (F:[toClass a]: :~: F:[P]:) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-    apply ImageEquivCompatR, H3.
+    apply EquivCompatR, H3.
 
   (* We next need to show that F[a] is small. *)
   - assert (Small F:[toClass a]:) as A. 2: apply A.

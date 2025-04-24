@@ -16,7 +16,7 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
 (* Evaluate the class F at a, returning a set.                                  *)
-Definition eval (F:Class) (a:U) : U := fromClass (eval F a) (IsSmall F a).
+Definition eval (F:Class) (a:U) : U := fromClass (eval F a) (Eval.IsSmall F a).
 
 Notation "F ! a" := (eval F a)
   (at level 0, no associativity) : ZF_Set_Eval_scope.

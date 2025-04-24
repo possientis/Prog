@@ -16,7 +16,7 @@ Definition Function (F:Class) : Prop := Relation F /\ Functional F.
 Proposition ImageIsSmall : forall (F A:Class),
   Function F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [_ H1]. apply ImageIsSmall. assumption.
+  intros F A [_ H1]. apply Image.IsSmall. assumption.
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)

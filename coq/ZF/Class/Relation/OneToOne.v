@@ -33,13 +33,13 @@ Qed.
 Proposition ImageIsSmall : forall (F A:Class),
   OneToOne F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [H1 _]. apply Image.ImageIsSmall. assumption.
+  intros F A [H1 _]. apply Image.IsSmall. assumption.
 Qed.
 
 Proposition InvImageIsSmall : forall (F B:Class),
   OneToOne F -> Small B -> Small F^:-1::[B]:.
 Proof.
-  intros F B [_ H1]. apply Image.ImageIsSmall. assumption.
+  intros F B [_ H1]. apply Image.IsSmall. assumption.
 Qed.
 
 (* When two ordered pairs belong to a one-to-one class, equality between the    *)

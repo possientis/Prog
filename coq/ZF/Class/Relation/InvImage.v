@@ -26,7 +26,7 @@ Qed.
 Proposition InvImageEquivCompat : forall (F G P Q:Class),
   F :~: G -> P :~: Q -> F^:-1: :[P]: :~: G^:-1: :[Q]:.
 Proof.
-  intros F G P Q H1 H2. apply ImageEquivCompat. 2: assumption.
+  intros F G P Q H1 H2. apply Image.EquivCompat. 2: assumption.
   apply ConverseEquivCompat. assumption.
 Qed.
 
@@ -52,7 +52,7 @@ Qed.
 Proposition InvImageInclCompat : forall (F G P Q:Class),
   F :<=: G -> P :<=: Q -> F^:-1: :[P]: :<=: G^:-1: :[Q]:.
 Proof.
-  intros F G P Q H1 H2. apply ImageInclCompat. 2: assumption.
+  intros F G P Q H1 H2. apply Image.InclCompat. 2: assumption.
   apply ConverseInclCompat. assumption.
 Qed.
 
@@ -78,7 +78,7 @@ Proposition InvImageOfRangeIsDomain : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
   intros F. apply EquivTran with F^:-1::[domain F^:-1:]:.
-  - apply ImageEquivCompatR, EquivSym, ConverseDomain.
+  - apply Image.EquivCompatR, EquivSym, ConverseDomain.
   - apply EquivTran with (range F^:-1:).
     + apply Range.ImageOfDomainIsRange.
     + apply ConverseRange.
