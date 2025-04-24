@@ -28,12 +28,12 @@ Lemma ImageBySnd : forall (F:Class),
   Snd :[F]: :~: range F.
 Proof.
   intros F x. split; intros H1.
-  - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply SndCharac2 in H2.
+  - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply Snd.Charac2 in H2.
     destruct H2 as [y [z [H2 H3]]]. exists y.
     subst. assumption.
   - destruct H1 as [z H1]. unfold image. exists :(z,x):. split.
     + assumption.
-    + apply SndCharac2. exists z. exists x. split; reflexivity.
+    + apply Snd.Charac2. exists z. exists x. split; reflexivity.
 Qed.
 
 Proposition RangeIsSmall : forall (F:Class),
@@ -57,7 +57,7 @@ Proof.
   (* This follows from the fact that Snd is functional and F is small. *)
   apply Image.IsSmall.
 
-  - apply SndIsFunctional.
+  - apply Snd.IsFunctional.
 
   - apply H1.
 Qed.
