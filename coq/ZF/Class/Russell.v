@@ -70,11 +70,11 @@ Proof.
 
   (* Proof of -> *)
   - assert (x :< b -> Ru x) as A. 2: apply A.
-    intros H1. rewrite Eb in H1. apply SpecifyInP with a. apply H1.
+    intros H1. rewrite Eb in H1. apply Specify.InP with a. apply H1.
 
   (* Proof of <- *)
   - assert (Ru x -> x :< b) as A. 2: apply A.
-    intros H1. rewrite Eb. apply SpecifyCharac. split.
+    intros H1. rewrite Eb. apply Specify.Charac. split.
     + apply Ha.
     + apply H1.
 Qed.

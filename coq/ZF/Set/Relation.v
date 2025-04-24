@@ -8,7 +8,7 @@ Require Import ZF.Set.OrdPair.
 Definition Relation (a:U) : Prop := Relation (toClass a).
 
 (* A relation is a set of ordered pairs.                                        *)
-Proposition RelCharac : forall (a:U),
+Proposition Charac : forall (a:U),
   Relation a <-> forall x, x :< a -> exists y z, x = :(y,z):.
 Proof.
   intro a. split; auto.

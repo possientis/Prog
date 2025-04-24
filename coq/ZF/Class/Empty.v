@@ -45,7 +45,7 @@ Proof.
   intros x.
 
   split.
-  - intros H3. rewrite H2 in H3. apply SpecifyCharac in H3.
+  - intros H3. rewrite H2 in H3. apply Specify.Charac in H3.
     destruct H3 as [H3 H4]. contradiction.
   - intros H3. contradiction.
 Qed.

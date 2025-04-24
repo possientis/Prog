@@ -50,10 +50,10 @@ Proof.
   intros x. split; intros H5.
 
   (* Proof of -> *)
-  - rewrite Eb in H5. apply SpecifyCharac in H5. destruct H5 as [_ H5]. apply H5.
+  - rewrite Eb in H5. apply Specify.Charac in H5. destruct H5 as [_ H5]. apply H5.
 
   (* Proof of <- *)
-  - rewrite Eb. apply SpecifyCharac. split.
+  - rewrite Eb. apply Specify.Charac. split.
     + apply H4. assumption.
     + assumption.
 Qed.
