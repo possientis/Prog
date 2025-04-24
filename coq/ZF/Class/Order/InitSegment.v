@@ -21,9 +21,9 @@ Proposition Charac : forall (R A:Class) (a x:U),
   initSegment R A a x <-> A x /\ R :(x,a):.
 Proof.
   intros R A a x. split; intros [H1 H2].
-  - split. 1: assumption. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
+  - split. 1: assumption. apply InvImage.Charac in H2. destruct H2 as [y [H2 H3]].
     apply Single.Charac in H2. subst. assumption.
-  - split. 1: assumption. apply InvImageCharac. exists a. split. 2: assumption.
+  - split. 1: assumption. apply InvImage.Charac. exists a. split. 2: assumption.
     apply Single.In.
 Qed.
 
@@ -32,7 +32,7 @@ Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> initSegment R A a :~: initSegment S B a.
 Proof.
   intros R S A B a H1 H2. apply Inter.EquivCompat. 1: assumption.
-  apply InvImageEquivCompatL. assumption.
+  apply InvImage.EquivCompatL. assumption.
 Qed.
 
 (* Initial segments are left-compatible with equivalences.                      *)
@@ -58,7 +58,7 @@ Proposition InclCompat : forall (R S A B:Class) (a:U),
   R :<=: S -> A :<=: B -> initSegment R A a :<=: initSegment S B a.
 Proof.
   intros R S A B a H1 H2. apply Inter.InclCompat. 1: assumption.
-  apply InvImageInclCompatL. assumption.
+  apply InvImage.InclCompatL. assumption.
 Qed.
 
 (* Initial segments are left-compatible with inclusion.                         *)

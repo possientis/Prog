@@ -30,10 +30,10 @@ Lemma InitSegmentEA : forall (A:Class) (a:U),
   initSegment E A a :~: A :/\: toClass a.
 Proof.
   intros A a. split; intros [H1 H2].
-  - apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
+  - apply InvImage.Charac in H2. destruct H2 as [y [H2 H3]].
     apply Single.Charac in H2. apply ECharac2 in H3.
     subst. split; assumption.
-  - split. 1: assumption. apply InvImageCharac. exists a. split.
+  - split. 1: assumption. apply InvImage.Charac. exists a. split.
     + apply Single.In.
     + apply ECharac2. assumption.
 Qed.

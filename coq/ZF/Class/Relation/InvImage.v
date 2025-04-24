@@ -12,7 +12,7 @@ Export ZF.Notation.Image.
 Export ZF.Notation.Inverse.
 
 (* Inverse image of P by F is the direct image of P by F^(-1).                  *)
-Proposition InvImageCharac : forall (F P:Class) (x:U),
+Proposition Charac : forall (F P:Class) (x:U),
   F^:-1: :[P]: x <-> exists y, P y /\ F :(x,y):.
 Proof.
   intros F P x. split; intros H1.
@@ -23,7 +23,7 @@ Proof.
 Qed.
 
 (* The inverse image is compatible with equivalences.                           *)
-Proposition InvImageEquivCompat : forall (F G P Q:Class),
+Proposition EquivCompat : forall (F G P Q:Class),
   F :~: G -> P :~: Q -> F^:-1: :[P]: :~: G^:-1: :[Q]:.
 Proof.
   intros F G P Q H1 H2. apply Image.EquivCompat. 2: assumption.
@@ -31,25 +31,25 @@ Proof.
 Qed.
 
 (* The inverse image is left-compatible with equivalences.                      *)
-Proposition InvImageEquivCompatL : forall (F G P:Class),
+Proposition EquivCompatL : forall (F G P:Class),
   F :~: G -> F^:-1: :[P]: :~: G^:-1: :[P]:.
 Proof.
-  intros F G P H1. apply InvImageEquivCompat.
+  intros F G P H1. apply EquivCompat.
   - assumption.
   - apply EquivRefl.
 Qed.
 
 (* The inverse image is right-compatible with equivalences.                     *)
-Proposition InvImageEquivCompatR : forall (F P Q:Class),
+Proposition EquivCompatR : forall (F P Q:Class),
   P :~: Q -> F^:-1: :[P]: :~: F^:-1: :[Q]:.
 Proof.
-  intros F P Q H1. apply InvImageEquivCompat.
+  intros F P Q H1. apply EquivCompat.
   - apply EquivRefl.
   - assumption.
 Qed.
 
 (* The inverse image is compatible with inclusion.                              *)
-Proposition InvImageInclCompat : forall (F G P Q:Class),
+Proposition InclCompat : forall (F G P Q:Class),
   F :<=: G -> P :<=: Q -> F^:-1: :[P]: :<=: G^:-1: :[Q]:.
 Proof.
   intros F G P Q H1 H2. apply Image.InclCompat. 2: assumption.
@@ -57,19 +57,19 @@ Proof.
 Qed.
 
 (* The inverse image is left-compatible with inclusion.                         *)
-Proposition InvImageInclCompatL : forall (F G P:Class),
+Proposition InclCompatL : forall (F G P:Class),
   F :<=: G -> F^:-1: :[P]: :<=: G^:-1: :[P]:.
 Proof.
-  intros F G P H1. apply InvImageInclCompat.
+  intros F G P H1. apply InclCompat.
   - assumption.
   - apply InclRefl.
 Qed.
 
 (* The inverse image is right-compatible with inclusion.                        *)
-Proposition InvImageInclCompatR : forall (F P Q:Class),
+Proposition InclCompatR : forall (F P Q:Class),
   P :<=: Q -> F^:-1: :[P]: :<=: F^:-1: :[Q]:.
 Proof.
-  intros F P Q H1. apply InvImageInclCompat.
+  intros F P Q H1. apply InclCompat.
   - apply InclRefl.
   - assumption.
 Qed.
@@ -85,7 +85,7 @@ Proof.
 Qed.
 
 (* Characterisation of the inverse image F^(-1)[A] in terms of evaluations of F.*)
-Proposition InvImageEvalCharac : forall (F B:Class), Functional F ->
+Proposition EvalCharac : forall (F B:Class), Functional F ->
   forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
 Proof.
   intros F B H1 x. split; intros H2.
@@ -101,7 +101,7 @@ Qed.
 Proposition InvImageOfImageIsLess : forall (F A:Class),
   Functional F^:-1: -> F^:-1::[ F:[A]: ]: :<=: A.
 Proof.
-  intros F A H1 x H2. apply InvImageCharac in H2. destruct H2 as [y [H2 H3]].
+  intros F A H1 x H2. apply Charac in H2. destruct H2 as [y [H2 H3]].
   destruct H2 as [x' [H2 H4]]. assert (x' = x) as H5. { apply H1 with y.
     - apply ConverseCharac2. assumption.
     - apply ConverseCharac2. assumption. }
@@ -112,7 +112,7 @@ Proposition InvImageOfImageIsMore : forall (F A:Class),
   A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
 Proof.
   intros F A H1 x H2. specialize (H1 x H2).
-  destruct H1 as [y H1]. apply InvImageCharac. exists y.
+  destruct H1 as [y H1]. apply Charac. exists y.
   split. 2: assumption. exists x. split; assumption.
 Qed.
 
@@ -121,7 +121,7 @@ Proposition ImageOfInvImageIsLess : forall (F B:Class),
 Proof.
   intros F B H1 y H2.
   destruct H2 as [x [H2 H3]].
-  apply InvImageCharac in H2. destruct H2 as [y' [H2 H4]].
+  apply Charac in H2. destruct H2 as [y' [H2 H4]].
   assert (y' = y) as H6. { apply H1 with x; assumption. }
   subst. assumption.
 Qed.
@@ -131,6 +131,6 @@ Proposition ImageOfInvImageIsMore : forall (F B:Class),
 Proof.
   intros F B H1 y H2. specialize (H1 y H2).
   destruct H1 as [x H1]. exists x. split. 2: assumption.
-  apply InvImageCharac. exists y. split; assumption.
+  apply Charac. exists y. split; assumption.
 Qed.
 
