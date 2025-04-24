@@ -152,7 +152,7 @@ Proof.
     assert (x :< :P(:P(a:\/:b))) as A. 2: apply A.
 
   (* That is, we need to show that (y,z) <= P(a\/b) *)
-    apply PowerCharac. rewrite H5.
+    apply Power.Charac. rewrite H5.
     assert (:(y,z): :<=: :P(a:\/:b)) as A. 2: apply A.
 
   (* So let u be an element of (y,z) *)
@@ -165,7 +165,7 @@ Proof.
     assert (u :< :P(a:\/:b)) as A. 2: apply A.
 
  (* That is, we need to show that u <= a\/b *)
-    apply PowerCharac.
+    apply Power.Charac.
     assert (u :<=: a:\/:b) as A. 2: apply A.
 
  (* We consider the cases u = {y} and u = {y,z} separately *)
