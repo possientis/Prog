@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
@@ -79,4 +80,16 @@ Proof.
         apply UnionOfOrdinalIsOrdinal. assumption. }
       destruct H3 as [H3|H3]. 1: contradiction. assumption.
   - intros H3. rewrite H2 in H3. apply NoElemLoop1 with a. assumption.
+Qed.
+
+Proposition UnionIsLess : forall (a:U), Ordinal a ->
+  :U(a) :<=: a.
+Proof.
+  intros a H1. assert (:U(a) :< a \/ ~ :U(a) :< a) as H2. {
+    apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - apply ElemIsIncl; try assumption. apply UnionOfOrdinalIsOrdinal.
+    assumption.
+  - apply UnionNotElemIsUnionEqual in H2. 2: assumption.
+    rewrite H2. apply InclRefl.
 Qed.

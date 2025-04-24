@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -30,6 +31,13 @@ Proof.
       subst. left. apply eq_refl.
 Qed.
 
+(* The successor of the union of an ordinal is an ordinal.                      *)
+Proposition SuccOfUnionIsOrdinal : forall (a:U), Ordinal a ->
+  Ordinal (succ :U(a)).
+Proof.
+  intros a H1. apply SuccIsOrdinal, UnionOfOrdinalIsOrdinal. assumption.
+Qed.
+
 (* The union of the class of ordinals is the class of ordinals.                 *)
 Proposition UnionOfOn : :U(On) :~: On.
 Proof.
@@ -50,6 +58,14 @@ Qed.
 Proposition InclSucc : forall (a:U), a :<=: succ a.
 Proof.
   intros a.  apply Union2InclL.
+Qed.
+
+(* The successor of a set is not equal to the set in question.                  *)
+Proposition SuccNotEqual : forall (a:U), succ a <> a.
+Proof.
+  intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
+    apply ElemSucc. }
+  rewrite H1 in H2. assumption.
 Qed.
 
 (* The sets a and b need not be ordinals.                                       *)
@@ -85,3 +101,27 @@ Proof.
   apply OrdinalIsStrictSubclass. assumption.
 Qed.
 
+(* An ordinal is a subset of the successor ot its union.                        *)
+Proposition SuccOfUnionIsMore : forall (a:U), Ordinal a ->
+  a :<=: succ :U(a).
+Proof.
+  intros a H1 b. apply SuccOfUnionOfOrdinalIsStrictUpperBound. assumption.
+Qed.
+
+(* An ordinal is either equal to its union, or to the successor thereof.        *)
+Proposition UnionOrSuccOfUnion : forall (a:U), Ordinal a ->
+  a = :U(a) \/ a = succ :U(a).
+Proof.
+  intros a H1. apply DoubleNegation. intros H2.
+  apply NothingInBetween with :U(a) a. split.
+  - apply StrictInclIsElem. 2: assumption.
+    + apply UnionOfOrdinalIsOrdinal. assumption.
+    + split.
+      * apply UnionIsLess. assumption.
+      * intros H3. apply H2. left. symmetry. assumption.
+  - apply StrictInclIsElem. 1: assumption.
+    + apply SuccOfUnionIsOrdinal. assumption.
+    + split.
+      * apply SuccOfUnionIsMore. assumption.
+      * intros H3. apply H2. right. assumption.
+Qed.
