@@ -190,12 +190,12 @@ Lemma ImageBySwitch : forall (P Q:Class),
 Proof.
   intros P Q x'. split; intros H1.
   - destruct H1 as [x [H1 H2]]. destruct H1 as [y [z [H3 [H4 H5]]]].
-    apply SwitchCharac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
+    apply Switch.Charac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
     apply OrdPair.WhenEqual in H6. destruct H6 as [H6 H8]. subst.
     exists z'. exists y'. split. 1: reflexivity. split; assumption.
   - destruct H1 as [z [y [H1 [H2 H3]]]]. exists :(y,z):. split.
     + apply Charac2. split; assumption.
-    + apply SwitchCharac2. exists y. exists z. split.
+    + apply Switch.Charac2. exists y. exists z. split.
       * reflexivity.
       * assumption.
 Qed.
@@ -223,7 +223,7 @@ Proof.
   (* This follows from the fact that Switch is functional and P x Q is small. *)
   apply Image.IsSmall.
 
-  - apply SwitchIsFunctional.
+  - apply Switch.IsFunctional.
 
   - apply H1.
 Qed.

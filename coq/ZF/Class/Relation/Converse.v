@@ -53,8 +53,8 @@ Proof.
   intros F x. split; intros H1.
   - destruct H1 as [y [z [H1 H2]]]. subst. exists :(y,z):. split.
     + assumption.
-    + apply SwitchCharac2. exists y. exists z. split; reflexivity.
-  - destruct H1 as [x' [H1 H2]]. apply SwitchCharac2 in H2.
+    + apply Switch.Charac2. exists y. exists z. split; reflexivity.
+  - destruct H1 as [x' [H1 H2]]. apply Switch.Charac2 in H2.
     destruct H2 as [y [z [H2 H3]]]. exists y. exists z. subst. split.
     + reflexivity.
     + assumption.
@@ -82,7 +82,7 @@ Proof.
   (* This follows from the fact that Switch is functional and F is small. *)
   apply Image.IsSmall.
 
-  - apply SwitchIsFunctional.
+  - apply Switch.IsFunctional.
 
   - apply H1.
 Qed.
