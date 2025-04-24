@@ -219,17 +219,17 @@ Proof.
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. {
       apply DomainOfRestrict. split; assumption. }
-    apply FunctionalEvalCharac.
+    apply Eval.Charac.
     + assumption.
     + assumption.
     + apply RestrictCharac2. split. 1: assumption. rewrite E.
-      apply FunctionalEvalSatisfies; assumption.
+      apply Eval.Satisfies; assumption.
   - assert (~ domain (F:|:A) x) as H5. { intros H5.
       destruct H5 as [z H5].
       apply RestrictCharac2 in H5. destruct H5 as [H5 H6]. apply H4.
       exists z. assumption. }
-    assert (y = :0:) as H6. { rewrite E. apply EvalWhenNotInDomain. assumption. }
-    rewrite H6. apply EvalWhenNotInDomain. assumption.
+    assert (y = :0:) as H6. { rewrite E. apply Eval.WhenNotInDomain. assumption. }
+    rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
 
 Proposition LesserThanRangeOfRestrict : forall (F A:Class),

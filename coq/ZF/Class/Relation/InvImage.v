@@ -92,10 +92,10 @@ Proof.
   - destruct H2 as [y [H2 H3]]. apply (proj1 (ConverseCharac2 _ _ _)) in H3.
     assert (domain F x) as H4. { exists y. assumption. }
     split. 1: assumption.
-    assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
+    assert (F!x = y) as H5. { apply Eval.Charac; assumption. }
     rewrite H5. assumption.
   - destruct H2 as [H2 H3]. exists (F!x). split. 1: assumption.
-    apply ConverseCharac2. apply FunctionalEvalSatisfies; assumption.
+    apply ConverseCharac2. apply Eval.Satisfies; assumption.
 Qed.
 
 Proposition InvImageOfImageIsLess : forall (F A:Class),

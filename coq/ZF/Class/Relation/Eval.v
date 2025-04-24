@@ -64,7 +64,7 @@ Definition eval (F:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ IsValueAt F a y.
 
 (* If F has a value at a, then y corresponds to a iff eval F a = y.             *)
-Proposition EvalWhenHasValueAt : forall (F:Class) (a y:U),
+Proposition WhenHasValueAt : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.
   intros F a y H1. split; intros H2.
@@ -86,23 +86,23 @@ Proof.
 Qed.
 
 (* If F is functional at a and a lies in domain then F (a,y) iff eval F a = y.  *)
-Proposition EvalWhenFunctionalAt : forall (F:Class) (a y:U),
+Proposition WhenFunctionalAt : forall (F:Class) (a y:U),
   FunctionalAt F a -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.
   intros F a y H1 H2.
-  apply EvalWhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
+  apply WhenHasValueAt, HasValueAtWhenFunctionalAt; assumption.
 Qed.
 
 (* If F is functional and a lies in domain of F then F (a,y) iff eval F a = y.  *)
-Proposition EvalWhenFunctional : forall (F:Class) (a y:U),
+Proposition WhenFunctional : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> eval F a :~: toClass y.
 Proof.
   intros F a y H1 H2.
-  apply EvalWhenHasValueAt, HasValueAtWhenFunctional; assumption.
+  apply WhenHasValueAt, HasValueAtWhenFunctional; assumption.
 Qed.
 
 (* If F has no value at a then eval F a is the empty class.                     *)
-Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
+Proposition WhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> eval F a :~: :0:.
 Proof.
   intros F a H1 x. split; intros H2.
@@ -112,23 +112,23 @@ Proof.
 Qed.
 
 (* If F is not functional at a then eval F a is the empty class.                *)
-Proposition EvalWhenNotFunctionalAt : forall (F:Class) (a:U),
+Proposition WhenNotFunctionalAt : forall (F:Class) (a:U),
   ~ FunctionalAt F a -> eval F a :~: :0:.
 Proof.
-  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  intros F a H1. apply WhenNotHasValueAt. intros H2. apply H1.
   apply HasValueAtAsInter. assumption.
 Qed.
 
 (* If a is not in domain of F then eval F a is the empty class.                 *)
-Proposition EvalWhenNotInDomain : forall (F:Class) (a:U),
+Proposition WhenNotInDomain : forall (F:Class) (a:U),
   ~ domain F a -> eval F a :~: :0:.
 Proof.
-  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  intros F a H1. apply WhenNotHasValueAt. intros H2. apply H1.
   apply HasValueAtAsInter. assumption.
 Qed.
 
 (* The value of F at a is a always a small class.                               *)
-Proposition EvalIsSmall : forall (F:Class) (a:U), Small (eval F a).
+Proposition IsSmall : forall (F:Class) (a:U), Small (eval F a).
 Proof.
   (* Let F be an arbitrary class. *)
   intros F.
@@ -155,7 +155,7 @@ Proof.
 
   (* And it follows that eval F a = y. *)
     assert (eval F a :~: toClass y) as H3.
-       { apply EvalWhenHasValueAt; assumption. }
+       { apply WhenHasValueAt; assumption. }
 
   (* Using this equivalence ... *)
     apply SmallEquivCompat with (toClass y). 1: { apply EquivSym, H3. }
@@ -170,7 +170,7 @@ Proof.
   - assert (~ HasValueAt F a) as A. { apply H1. } clear A.
 
   (* Then eval F a is the empty class. *)
-    assert (eval F a :~: :0:) as H2. { apply EvalWhenNotHasValueAt, H1. }
+    assert (eval F a :~: :0:) as H2. { apply WhenNotHasValueAt, H1. }
 
   (* Using this equivalence ... *)
     apply SmallEquivCompat with :0:. 1: { apply EquivSym, H2. }

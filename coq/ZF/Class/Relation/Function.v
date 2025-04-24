@@ -36,21 +36,21 @@ Proof.
       - apply H1. assumption.
       - assumption. }
     subst.
-    assert (F!x = y) as H8. { apply FunctionalEvalCharac; assumption. }
-    assert (G!x = y) as H9. { apply FunctionalEvalCharac; assumption. }
+    assert (F!x = y) as H8. { apply Eval.Charac; assumption. }
+    assert (G!x = y) as H9. { apply Eval.Charac; assumption. }
     subst. symmetry. assumption.
   - destruct H1 as [H1 H2]. intros u. split; intros H3; assert (H4 := H3).
     + apply Hf in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain F x) as H4. { exists y. assumption. }
-      assert (F!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
+      assert (F!x = y) as H5. { apply Eval.Charac; assumption. }
       assert (domain G x) as H6. { apply H1. assumption. }
-      apply FunctionalEvalCharac. { assumption. } { assumption. }
+      apply Eval.Charac. { assumption. } { assumption. }
       symmetry. rewrite <- H5. apply H2. assumption.
     + apply Hg in H4. destruct H4 as [x [y H4]]. subst.
       assert (domain G x) as H4. { exists y. assumption. }
-      assert (G!x = y) as H5. { apply FunctionalEvalCharac; assumption. }
+      assert (G!x = y) as H5. { apply Eval.Charac; assumption. }
       assert (domain F x) as H6. { apply H1. assumption. }
-      apply FunctionalEvalCharac. { assumption. } { assumption. }
+      apply Eval.Charac. { assumption. } { assumption. }
       rewrite <- H5. apply H2. assumption.
 Qed.
 
@@ -73,19 +73,19 @@ Qed.
 Proposition EvalCharac : forall (F:Class) (a y:U),
   Function F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [_ H1]. apply FunctionalEvalCharac. assumption.
+  intros F a y [_ H1]. apply Eval.Charac. assumption.
 Qed.
 
 Proposition EvalSatisfies : forall (F:Class) (a:U),
   Function F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a [_ H1]. apply FunctionalEvalSatisfies. assumption.
+  intros F a [_ H1]. apply Eval.Satisfies. assumption.
 Qed.
 
 Proposition EvalIsInRange : forall (F:Class) (a:U),
   Function F -> domain F a -> range F (F!a).
 Proof.
-  intros F a [_ H1]. apply FunctionalEvalIsInRange. assumption.
+  intros F a [_ H1]. apply Eval.IsInRange. assumption.
 Qed.
 
 Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),

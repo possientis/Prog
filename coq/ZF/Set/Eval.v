@@ -16,8 +16,7 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
 (* Evaluate the class F at a, returning a set.                                  *)
-Definition eval (F:Class) (a:U) : U := fromClass (Relation.Eval.eval F a)
-  (EvalIsSmall F a).
+Definition eval (F:Class) (a:U) : U := fromClass (eval F a) (IsSmall F a).
 
 Notation "F ! a" := (eval F a)
   (at level 0, no associativity) : ZF_Set_Eval_scope.
@@ -30,8 +29,8 @@ Proof.
   - unfold eval. apply EquivSetEqual.
     apply EquivTran with (Relation.Eval.eval F a).
     + apply ToFromClass.
-    + apply Relation.Eval.EvalWhenHasValueAt; assumption.
-  - apply Relation.Eval.EvalWhenHasValueAt. 1: assumption.
+    + apply Relation.Eval.WhenHasValueAt; assumption.
+  - apply Relation.Eval.WhenHasValueAt. 1: assumption.
     unfold eval in H2. rewrite <- H2. apply EquivSym, ToFromClass.
 Qed.
 
@@ -63,34 +62,34 @@ Proof.
 Qed.
 
 (* If F has no value at a then F!a is the empty set.                            *)
-Proposition EvalWhenNotHasValueAt : forall (F:Class) (a:U),
+Proposition WhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
 Proof.
   intros F a H1. apply EquivSetEqual. unfold eval, zero, SetZero, empty.
   apply EquivTran with (Relation.Eval.eval F a). 1: apply ToFromClass.
   apply EquivTran with :0:.
-  - apply Relation.Eval.EvalWhenNotHasValueAt. assumption.
+  - apply Relation.Eval.WhenNotHasValueAt. assumption.
   - apply EquivSym, ToFromClass.
 Qed.
 
 (* If F is not functional at a then F!a is the empty set.                       *)
-Proposition EvalWhenNotFunctionalAt : forall (F:Class) (a:U),
+Proposition WhenNotFunctionalAt : forall (F:Class) (a:U),
   ~ FunctionalAt F a -> F!a = :0:.
 Proof.
-  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  intros F a H1. apply WhenNotHasValueAt. intros H2. apply H1.
   apply HasValueAtAsInter. assumption.
 Qed.
 
 (* If a is not in domain of F then F!a is the empty set.                        *)
-Proposition EvalWhenNotInDomain : forall (F:Class) (a:U),
+Proposition WhenNotInDomain : forall (F:Class) (a:U),
   ~ domain F a -> F!a = :0:.
 Proof.
-  intros F a H1. apply EvalWhenNotHasValueAt. intros H2. apply H1.
+  intros F a H1. apply WhenNotHasValueAt. intros H2. apply H1.
   apply HasValueAtAsInter. assumption.
 Qed.
 
 (* If F is functional and a lies in domain of F then F (a,y) iff F!a = y.       *)
-Proposition FunctionalEvalCharac : forall (F:Class) (a y:U),
+Proposition Charac : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1 H2.
@@ -98,31 +97,31 @@ Proof.
 Qed.
 
 (* If F is functional and a lies in domain of F then (a,F!a) satisfies F.       *)
-Proposition FunctionalEvalSatisfies : forall (F:Class) (a:U),
+Proposition Satisfies : forall (F:Class) (a:U),
   Functional F -> domain F a -> F :(a,F!a):.
 Proof.
   intros F a H1 H2. apply FunctionalAtEvalSatisfies. 2: assumption.
   apply IsFunctionalAt. assumption.
 Qed.
 
-Proposition FunctionalEvalIsInRange : forall (F:Class) (a:U),
+Proposition IsInRange : forall (F:Class) (a:U),
   Functional F -> domain F a -> range F (F!a).
 Proof.
   intros F a H1 H2. exists a.
-  apply FunctionalEvalSatisfies; assumption.
+  apply Satisfies; assumption.
 
 Qed.
 
 (* Characterisation of the direct image F[A] in terms of evaluations of F.      *)
-Proposition EvalImageCharac : forall (F A: Class), Functional F ->
+Proposition ImageCharac : forall (F A: Class), Functional F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
   intros F A H1 y. split; intros H2.
   - destruct H2 as [x [H2 H3]]. exists x. split. 1: assumption.
     assert (domain F x) as H4. { exists y. assumption. } split.
     + assumption.
-    + apply FunctionalEvalCharac; assumption.
+    + apply Charac; assumption.
   - destruct H2 as [x [H2 [H3 H4]]]. exists x. split. 1: assumption.
-    apply FunctionalEvalCharac; assumption.
+    apply Charac; assumption.
 Qed.
 
