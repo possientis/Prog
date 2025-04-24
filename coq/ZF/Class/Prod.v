@@ -31,7 +31,7 @@ Proposition ProdCharac2 : forall (P Q:Class) (y z:U),
 Proof.
   intros P Q y z. split; intros H1.
   - unfold prod in H1. destruct H1 as [y' [z' [H1 [H2 H3]]]].
-    apply OrdPairEqual in H1. destruct H1 as [H1 H1']. subst. split; assumption.
+    apply WhenEqual in H1. destruct H1 as [H1 H1']. subst. split; assumption.
   - destruct H1 as [H1 H2]. exists y. exists z. split.
     + reflexivity.
     + split; assumption.
@@ -155,7 +155,7 @@ Proof.
     assert (:(y,z): :<=: :P(a:\/:b)) as A. 2: apply A.
 
   (* So let u be an element of (y,z) *)
-    intros u H8. apply OrdPairCharac in H8.
+    intros u H8. apply OrdPair.Charac in H8.
 
   (* Since (y,z) = {{y},{y,z}} we have u = {y} or u = {y,z} *)
     assert (u = :{y}: \/ u = :{y,z}: ) as A. { apply H8. } clear A.
@@ -190,7 +190,7 @@ Proof.
   intros P Q x'. split; intros H1.
   - destruct H1 as [x [H1 H2]]. destruct H1 as [y [z [H3 [H4 H5]]]].
     apply SwitchCharac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
-    apply OrdPairEqual in H6. destruct H6 as [H6 H8]. subst.
+    apply WhenEqual in H6. destruct H6 as [H6 H8]. subst.
     exists z'. exists y'. split. 1: reflexivity. split; assumption.
   - destruct H1 as [z [y [H1 [H2 H3]]]]. exists :(y,z):. split.
     + apply ProdCharac2. split; assumption.
@@ -266,9 +266,9 @@ Proof.
   assert (Functional R) as H5. {
     intros x y1 y2. rewrite Er.
     intros [x1 [T1 T2]] [x2 [T3 T4]].
-    apply OrdPairEqual in T1. destruct T1 as [T1 T1'].
-    apply OrdPairEqual in T3. destruct T3 as [T3 T3'].
-    subst. apply OrdPairEqual in T3. destruct T3 as [T3 _].
+    apply WhenEqual in T1. destruct T1 as [T1 T1'].
+    apply WhenEqual in T3. destruct T3 as [T3 T3'].
+    subst. apply WhenEqual in T3. destruct T3 as [T3 _].
     assumption.
   }
 
@@ -276,7 +276,7 @@ Proof.
   assert (domain R :<=: P :x: Q) as H6. {
     intros x T1.
     destruct T1 as [y' T1]. rewrite Er in T1.
-    destruct T1 as [x' [T1 T2]]. apply OrdPairEqual in T1.
+    destruct T1 as [x' [T1 T2]]. apply WhenEqual in T1.
     destruct T1 as [T1 _]. subst. apply ProdCharac2. split; assumption.
   }
 
@@ -290,7 +290,7 @@ Proof.
     intros x. split; intros T1.
     - destruct T1 as [x' [_ T1]].
       rewrite Er in T1. destruct T1 as [x1 [T1 T2]].
-      apply OrdPairEqual in T1. destruct T1 as [_ T1]. subst. assumption.
+      apply WhenEqual in T1. destruct T1 as [_ T1]. subst. assumption.
     - exists :(x,y):. rewrite Er. split.
       + exists x. exists x. split. 1: reflexivity. assumption.
       + exists x. split. 1: reflexivity. assumption.
@@ -352,7 +352,7 @@ Proof.
   - destruct H1 as [H1 H2].
     destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     destruct H2 as [y2 [z2 [G2 [H2 H2']]]].
-    subst. apply OrdPairEqual in G2. destruct G2 as [G1 G2]. subst.
+    subst. apply WhenEqual in G2. destruct G2 as [G1 G2]. subst.
     apply ProdCharac2. split; split; assumption.
   - unfold prod in H1. destruct H1 as [y [z [H1 [[H2 H2'] [H3 H3']]]]].
     split; exists y; exists z; split.

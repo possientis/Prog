@@ -47,7 +47,7 @@ Proof.
     intros y. split; intros H3.
     - destruct H3 as [x [H3 H4]].
       rewrite Ef in H4. destruct H4 as [x' [y' [H4 [H5 H6]]]].
-      apply OrdPairEqual in H4. destruct H4 as [H4 H7]. subst. split; assumption.
+      apply WhenEqual in H4. destruct H4 as [H4 H7]. subst. split; assumption.
     - rewrite Eq in H3. destruct H3 as [H3 H4]. exists y. rewrite Ef.
       split. 1: assumption. exists y. exists y. split. 1: reflexivity.
       split. { assumption. } { reflexivity. }
@@ -68,8 +68,8 @@ Proof.
   assert (Functional F) as Hf. {
     intros x y z H3 H4. rewrite Ef in H3. rewrite Ef in H4.
     destruct H3 as [x1 [y1 [H3 [H5 H6]]]]. destruct H4 as [x2 [y2 [H4 [H7 H8]]]].
-    apply OrdPairEqual in H3. destruct H3 as [H3 H9].
-    apply OrdPairEqual in H4. destruct H4 as [H4 H10].
+    apply WhenEqual in H3. destruct H3 as [H3 H9].
+    apply WhenEqual in H4. destruct H4 as [H4 H10].
     subst. reflexivity.
   }
 

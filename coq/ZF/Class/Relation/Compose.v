@@ -27,7 +27,7 @@ Proposition ComposeCharac2 : forall (F G:Class) (x z:U),
 Proof.
   intros F G x z. split; intros H1.
   - destruct H1 as [x' [y [z' [H1 [H2 H3]]]]].
-    apply OrdPairEqual in H1. destruct H1 as [H1 G1]. subst. exists y.
+    apply WhenEqual in H1. destruct H1 as [H1 G1]. subst. exists y.
     split; assumption.
   - destruct H1 as [y [H1 H2]]. exists x. exists y. exists z. split.
     + reflexivity.

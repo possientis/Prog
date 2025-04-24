@@ -27,7 +27,7 @@ Proposition ConverseCharac2 : forall (F:Class) (y z:U),
   F^:-1: :(y,z): <-> F :(z,y):.
 Proof.
   intros F y z. split; intros H1.
-  - destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
+  - destruct H1 as [y' [z' [H1 H2]]]. apply WhenEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
   - exists z. exists y. split. 1: reflexivity. apply H1.
 Qed.
@@ -101,7 +101,7 @@ Proposition ConverseOfConverseIncl : forall (F:Class),
 Proof.
   intros F x H1.
   destruct H1 as [y [z [H1 H2]]]. destruct H2 as [z' [y' [H2 H3]]].
-  apply OrdPairEqual in H2. destruct H2 as [H2 H2']. subst. apply H3.
+  apply WhenEqual in H2. destruct H2 as [H2 H2']. subst. apply H3.
 Qed.
 
 
@@ -112,7 +112,7 @@ Proof.
   intros F. split; intros H1.
   - intros x. split; intros H2.
     + specialize (H1 x). destruct H2 as [z [y [H2 H3]]]. subst.
-      destruct H3 as [y' [z' [H3 H4]]]. apply OrdPairEqual in H3.
+      destruct H3 as [y' [z' [H3 H4]]]. apply WhenEqual in H3.
       destruct H3 as [H3 H5]. subst. assumption.
     + specialize (H1 x H2). destruct H1 as [y [z H1]].
       exists z. exists y. split. 1: assumption. exists y. exists z.

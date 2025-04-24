@@ -17,8 +17,8 @@ Notation ":( a , b , c , d ):" := (ordTuple4 a b c d)
 Proposition OrdTuple3Equal : forall (a1 a2 a3 b1 b2 b3:U),
   :(a1,a2,a3): = :(b1,b2,b3): -> a1 = b1 /\ a2 = b2 /\ a3 = b3.
 Proof.
-  intros a1 a2 a3 b1 b2 b3 H. apply OrdPairEqual in H.
-  destruct H as [H H3]. apply OrdPairEqual in H. destruct H as [H1 H2].
+  intros a1 a2 a3 b1 b2 b3 H. apply WhenEqual in H.
+  destruct H as [H H3]. apply WhenEqual in H. destruct H as [H1 H2].
   auto.
 Qed.
 
@@ -46,7 +46,7 @@ Qed.
 Proposition OrdTuple4Equal : forall (a1 a2 a3 a4 b1 b2 b3 b4:U),
   :(a1,a2,a3,a4): = :(b1,b2,b3,b4): -> a1 = b1 /\ a2 = b2 /\ a3 = b3 /\ a4 = b4.
 Proof.
-  intros a1 a2 a3 a4 b1 b2 b3 b4 H. apply OrdPairEqual in H. destruct H as [H H4].
+  intros a1 a2 a3 a4 b1 b2 b3 b4 H. apply WhenEqual in H. destruct H as [H H4].
   apply OrdTuple3Equal in H. destruct H as [H1 [H2 H3]].
   auto.
 Qed.

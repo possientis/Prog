@@ -31,7 +31,7 @@ Proposition RestrictCharac2 : forall (F A:Class) (y z:U),
   (F:|:A) :(y,z): <-> A y /\ F :(y,z):.
 Proof.
   intros F A y z. split; intros H1.
-  - destruct H1 as [y' [z' [H1 H2]]]. apply OrdPairEqual in H1.
+  - destruct H1 as [y' [z' [H1 H2]]]. apply WhenEqual in H1.
     destruct H1 as [H1 H1']. subst. apply H2.
   - exists y. exists z. split.
     + reflexivity.

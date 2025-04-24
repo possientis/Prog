@@ -29,7 +29,7 @@ Proposition ProdCharac2 : forall (a b:U),
 Proof.
   intros a b y z. split; intros H1.
   - apply ProdCharac in H1. destruct H1 as [y' [z' [H1 [Hya Hzb]]]].
-    apply OrdPairEqual in H1. destruct H1 as [H1 H2]. subst. split; assumption.
+    apply WhenEqual in H1. destruct H1 as [H1 H2]. subst. split; assumption.
   - destruct H1 as [Hya Hzb]. apply ProdCharac. exists y. exists z. split.
     + reflexivity.
     + split; assumption.
@@ -42,7 +42,7 @@ Proof.
   - apply InterCharac in H1. destruct H1 as [H1 H2].
     apply ProdCharac in H1. destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     apply ProdCharac in H2. destruct H2 as [y2 [z2 [G2 [H2 H2']]]].
-    subst. apply OrdPairEqual in G2. destruct G2 as [G1 G2]. subst.
+    subst. apply WhenEqual in G2. destruct G2 as [G1 G2]. subst.
     apply ProdCharac2. split; apply InterCharac; split; assumption.
   - apply ProdCharac in H1. destruct H1 as [y [z [H1 [Ha Hb]]]].
     apply InterCharac in Ha. destruct Ha as [Ha Ha'].

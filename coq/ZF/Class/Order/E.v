@@ -22,7 +22,7 @@ Proposition ECharac2 : forall (y z:U), E :(y,z): <-> y :< z.
 Proof.
   intros y z. split; intros H1.
   - unfold E in H1. destruct H1 as [y' [z' [H1 H2]]].
-    apply OrdPairEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
+    apply WhenEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
   - exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
