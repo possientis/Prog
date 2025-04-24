@@ -17,7 +17,7 @@ Definition inter (a b:U) : U := fromClass (toClass a :/\: toClass b)
 Global Instance SetAnd : And U := { and := inter }.
 
 (* Characterisation of the elements of the intersection of two sets.            *)
-Proposition InterCharac : forall (a b:U),
+Proposition Charac : forall (a b:U),
  forall x, x :< a:/\:b <-> x :< a /\ x :< b.
 Proof.
   intros a b x. split; intros H1.
@@ -26,22 +26,22 @@ Proof.
 Qed.
 
 (* The intersection of two sets is commutative.                                 *)
-Proposition InterComm : forall (a b:U), a:/\:b = b:/\:a.
+Proposition Comm : forall (a b:U), a:/\:b = b:/\:a.
 Proof.
   intros a b. apply Extensionality. intros x. split;
-  intros H1; apply InterCharac; apply InterCharac in H1;
+  intros H1; apply Charac; apply Charac in H1;
   destruct H1 as [H1 H2]; auto.
 Qed.
 
 (* The intersection of two sets is associative.                                 *)
-Proposition InterAssoc : forall (a b c:U), (a:/\:b):/\:c = a:/\:(b:/\:c).
+Proposition Assoc : forall (a b c:U), (a:/\:b):/\:c = a:/\:(b:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1;
-  apply InterCharac in H1; apply InterCharac; destruct H1 as [H1 H2]; split.
-  - apply InterCharac in H1. destruct H1 as [H1 _]. apply H1.
-  - apply InterCharac in H1. destruct H1 as [_ H1]. apply InterCharac. auto.
-  - apply InterCharac in H2. destruct H2 as [H2 _]. apply InterCharac. auto.
-  - apply InterCharac in H2. destruct H2 as [_ H2]. apply H2.
+  apply Charac in H1; apply Charac; destruct H1 as [H1 H2]; split.
+  - apply Charac in H1. destruct H1 as [H1 _]. apply H1.
+  - apply Charac in H1. destruct H1 as [_ H1]. apply Charac. auto.
+  - apply Charac in H2. destruct H2 as [H2 _]. apply Charac. auto.
+  - apply Charac in H2. destruct H2 as [_ H2]. apply H2.
 Qed.
 
 (* The intersection is distributive over the union.                             *)
@@ -49,12 +49,12 @@ Proposition InterDistOverUnion : forall (a b c:U),
   a:/\:(b:\/:c) = (a:/\:b):\/:(a:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply InterCharac in H1. destruct H1 as [H1 H2].
+  - apply Charac in H1. destruct H1 as [H1 H2].
     apply Union2Charac in H2. destruct H2 as [H2|H2]; apply Union2Charac.
-    + left.  apply InterCharac. auto.
-    + right. apply InterCharac. auto.
+    + left.  apply Charac. auto.
+    + right. apply Charac. auto.
   - apply Union2Charac in H1. destruct H1 as [H1|H1];
-    apply InterCharac; split; apply InterCharac in H1.
+    apply Charac; split; apply Charac in H1.
     + destruct H1 as [H1 _]. apply H1.
     + destruct H1 as [_ H1]. apply Union2Charac. left. apply H1.
     + destruct H1 as [H1 _]. apply H1.
@@ -67,78 +67,78 @@ Proposition UnionDistOverInter : forall (a b c:U),
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Union2Charac in H1. destruct H1 as [H1|H1];
-    apply InterCharac; split; apply Union2Charac.
+    apply Charac; split; apply Union2Charac.
     + left. apply H1.
     + left. apply H1.
-    + right. apply InterCharac in H1. destruct H1 as [H1 _]. apply H1.
-    + right. apply InterCharac in H1. destruct H1 as [_ H1]. apply H1.
-  - apply InterCharac in H1. destruct H1 as [H1 H2]. apply Union2Charac.
+    + right. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
+    + right. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
+  - apply Charac in H1. destruct H1 as [H1 H2]. apply Union2Charac.
     apply Union2Charac in H1. apply Union2Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2].
     + left. apply H1.
     + left. apply H1.
     + left. apply H2.
-    + right. apply InterCharac. auto.
+    + right. apply Charac. auto.
 Qed.
 
-Proposition NotInInter : forall (a b:U),
+Proposition WhenNotIn : forall (a b:U),
   forall x, ~ x :< a:/\:b -> ~ x :< a \/ ~ x :< b.
 Proof.
   intros a b x H1.
   assert (x :< a \/ ~ x :< a) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  - right. intros H3. apply H1. apply InterCharac. split; assumption.
+  - right. intros H3. apply H1. apply Charac. split; assumption.
   - left. apply H2.
 Qed.
 
 (* Intersection is compatible with inclusion.                                   *)
-Proposition InterInclCompat : forall (a b c d:U),
+Proposition InclCompat : forall (a b c d:U),
   a :<=: b -> c :<=: d -> a:/\:c :<=: b:/\:d.
 Proof.
-  intros a b c d H1 H2 x H3. apply InterCharac in H3.
-  destruct H3 as [H3 H4]. apply InterCharac. split.
+  intros a b c d H1 H2 x H3. apply Charac in H3.
+  destruct H3 as [H3 H4]. apply Charac. split.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
 
 (* Intersection is left-compatible with inclusion.                              *)
-Proposition InterInclCompatL : forall (a b c:U),
+Proposition InclCompatL : forall (a b c:U),
   a :<=: b -> a:/\:c :<=: b:/\:c.
 Proof.
-  intros a b c H1. apply InterInclCompat.
+  intros a b c H1. apply InclCompat.
   - assumption.
   - apply InclRefl.
 Qed.
 
 (* Intersection is right-compatible with inclusion.                             *)
-Proposition InterInclCompatR : forall (a b c:U),
+Proposition InclCompatR : forall (a b c:U),
   a :<=: b -> c:/\:a :<=: c:/\:b.
 Proof.
-  intros a b c H1. apply InterInclCompat.
+  intros a b c H1. apply InclCompat.
   - apply InclRefl.
   - assumption.
 Qed.
 
-Proposition InterInclL : forall (a b:U), a:/\:b :<=: a.
+Proposition InclL : forall (a b:U), a:/\:b :<=: a.
 Proof.
-  intros a b x H1. apply InterCharac in H1. destruct H1 as [H1 _]. apply H1.
+  intros a b x H1. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
 Qed.
 
-Proposition InterInclR : forall (a b:U), a:/\:b :<=: b.
+Proposition InclR : forall (a b:U), a:/\:b :<=: b.
 Proof.
-  intros a b x H1. apply InterCharac in H1. destruct H1 as [_ H1]. apply H1.
+  intros a b x H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
 Qed.
 
-Proposition InterEqualIncl : forall (a b:U),
+Proposition WhenEqualL : forall (a b:U),
   a = a :/\: b <-> a :<=: b.
 Proof.
   intros a b. split; intros H1.
-  - intros x H2. rewrite H1 in H2. apply InterCharac in H2.
+  - intros x H2. rewrite H1 in H2. apply Charac in H2.
     destruct H2 as [_ H2]. apply H2.
   - apply Extensionality. intros x. split; intros H2.
-    + apply InterCharac. split.
+    + apply Charac. split.
       * apply H2.
       * apply H1, H2.
-    + apply InterCharac in H2. destruct H2 as [H2 _]. apply H2.
+    + apply Charac in H2. destruct H2 as [H2 _]. apply H2.
 Qed.
 

@@ -109,7 +109,7 @@ Proof.
     assert (y :< x :/\: a) as A. 2: apply A.
 
   (* Which follows easily. *)
-    apply InterCharac. split. 2: assumption. apply ECharac2. assumption.
+    apply Inter.Charac. split. 2: assumption. apply ECharac2. assumption.
 Qed.
 
 Proposition EIsWellFoundedOnV : WellFounded E V.

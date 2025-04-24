@@ -18,7 +18,7 @@ Definition Limit : Class := On :\: NonLimit.
 (* Limit is a class of ordinals.                                                *)
 Proposition IsOrdinal : Limit :<=: On.
 Proof.
-  apply Inter.InclL.
+  apply Class.Inter.InclL.
 Qed.
 
 (* An ordinal is a limit ordinal iff it is not empty and is equal to its union. *)
