@@ -105,9 +105,9 @@ Qed.
 Proposition BoundIsNotInSegment : forall (R A:Class) (a:U),
   WellOrdering R A -> ~ initSegment R A a a.
 Proof.
-  intros R A a H1 H2. assert (H3 := H2). apply InitSegmentLess in H2.
+  intros R A a H1 H2. assert (H3 := H2). apply InitSegment.IsLess in H2.
   apply IsIrreflexive in H1. specialize (H1 a).
-  apply InitSegmentIn in H3. apply H1; assumption.
+  apply InitSegment.WhenIn in H3. apply H1; assumption.
 Qed.
 
 Proposition WhenIsom : forall (F R S A B:Class),

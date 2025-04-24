@@ -29,7 +29,7 @@ Proposition WellFoundedWhenFoundedOnSmall : forall (R A:Class),
   Founded R A -> Small A -> WellFounded R A.
 Proof.
   intros R A H1 H2. split. 1: assumption. intros a H3.
-  apply LesserThanSmallIsSmall with A. 2: assumption. apply InitSegmentIncl.
+  apply LesserThanSmallIsSmall with A. 2: assumption. apply InitSegment.IsIncl.
 Qed.
 
 (* If R is founded on a set a, then it is well-founded on a.                    *)
@@ -47,7 +47,7 @@ Proof.
   intros R A B [H1 H2] H3. split.
   - apply FoundedIncl with A; assumption.
   - intros a H4. apply LesserThanSmallIsSmall with (initSegment R A a).
-    + apply InitSegmentInclCompatR. assumption.
+    + apply InitSegment.InclCompatR. assumption.
     + apply H2, H3. assumption.
 Qed.
 
@@ -64,7 +64,7 @@ Proof.
         apply Bij.EvalOfConverseEval with A B; assumption. }
       assert (A a) as H8. { rewrite H6. apply Bij.ConverseEvalIsInDomain with B; assumption. }
       rewrite H7. apply SmallEquivCompat with F:[initSegment R A a]:.
-      + apply InitSegmentIsomFullImage; assumption.
+      + apply InitSegment.IsomFullImage; assumption.
       + apply Bij.ImageIsSmall with A B. 1: assumption. apply H3. assumption. }
 
   (* The proof of the equivalence follows. *)
@@ -175,10 +175,10 @@ Proof.
 
     (* And the initial segment of R in A at a is the class of all singletons. *)
     assert (initSegment R A a :~: Singleton) as H3. { intros x. split; intros H3.
-      - apply InitSegmentCharac in H3. destruct H3 as [_ H3]. rewrite ER in H3.
+      - apply InitSegment.Charac in H3. destruct H3 as [_ H3]. rewrite ER in H3.
         destruct H3 as [y [z [H3 [[u H4] _]]]]. apply OrdPair.WhenEqual in H3.
         destruct H3 as [H3 _]. subst. exists u. reflexivity.
-      - destruct H3 as [u H3]. apply InitSegmentCharac. split.
+      - destruct H3 as [u H3]. apply InitSegment.Charac. split.
         + rewrite H3, EA. left. exists u. reflexivity.
         + rewrite ER. exists :{u}:. exists a. split.
           * rewrite H3. reflexivity.

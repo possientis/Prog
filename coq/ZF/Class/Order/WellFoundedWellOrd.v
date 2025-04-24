@@ -107,7 +107,7 @@ Proof.
     assert (toClass c :<=: B) as H10. {
       apply Incl.EquivCompatL with C.
       - apply EquivSym. assumption.
-      - rewrite EC. apply InitSegmentIncl.
+      - rewrite EC. apply InitSegment.IsIncl.
    }
 
   (* R being well-founded on B, it follows that c has an R-minimal element. *)
@@ -145,14 +145,14 @@ Proof.
         - apply H3, H10, MinimalIn with R. assumption.
         - apply H3. assumption.
         - assumption.
-        - apply InitSegmentLess with B.
+        - apply InitSegment.IsLess with B.
           assert (initSegment R B b x) as X. 2: apply X.
           rewrite <- EC. apply H8, MinimalIn with R. assumption.
       }
 
   (* So y is actually part of the initial segment of R in B at b which is C. *)
       assert (C y) as H15. {
-        rewrite EC. apply InitSegmentCharac. split; assumption.
+        rewrite EC. apply InitSegment.Charac. split; assumption.
       }
 
   (* This contradicts the R-minimality of x in c. *)
@@ -205,7 +205,7 @@ Proof.
 
   (* So the initial segment in A at a must be inside B. *)
   assert (initSegment R A a :<=: B) as H7. {
-    intros x H7. apply InitSegmentCharac in H7. destruct H7 as [H7 H8].
+    intros x H7. apply InitSegment.Charac in H7. destruct H7 as [H7 H8].
     apply DoubleNegation. intros H9. revert H8.
     apply (MinimalHasNoLesser R (A:\:B)). 2: assumption.
     split; assumption.

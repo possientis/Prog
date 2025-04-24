@@ -92,7 +92,7 @@ Proof.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x [H4 H5]].
   apply Single.Charac in H4. subst.
-  apply (InitSegmentWhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply Single.In.
+  apply (InitSegment.WhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply Single.In.
 Qed.
 
 Proposition FoundedNoLoop2 : forall (R A:Class), Founded R A ->
@@ -105,8 +105,8 @@ Proof.
     - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
   apply Pair.Charac in H6. destruct H6 as [H6|H6]; subst.
-  - apply (InitSegmentWhenEmpty1 _ _ _ b) in H7. 1: contradiction. apply Pair.InR.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a) in H7. 1: contradiction. apply Pair.InL.
+  - apply (InitSegment.WhenEmpty1 _ _ _ b) in H7. 1: contradiction. apply Pair.InR.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a) in H7. 1: contradiction. apply Pair.InL.
 Qed.
 
 Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
@@ -122,9 +122,9 @@ Proof.
   - apply Tuple3IsNotEmpty.
   } destruct H8 as [x [H8 H9]].
   apply Tuple3Charac in H8. destruct H8 as [H8|[H8|H8]]; subst.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a3) in H9. 1: contradiction. apply Tuple3In3.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a1) in H9. 1: contradiction. apply Tuple3In1.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a2) in H9. 1: contradiction. apply Tuple3In2.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a3) in H9. 1: contradiction. apply Tuple3In3.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a1) in H9. 1: contradiction. apply Tuple3In1.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a2) in H9. 1: contradiction. apply Tuple3In2.
 Qed.
 
 Proposition FoundedNoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 a4,
@@ -144,9 +144,9 @@ Proof.
   - apply Tuple4IsNotEmpty.
   } destruct H10 as [x [H10 H11]].
   apply Tuple4Charac in H10. destruct H10 as [H10|[H10|[H10|H10]]]; subst.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a4) in H11. 1: contradiction. apply Tuple4In4.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a1) in H11. 1: contradiction. apply Tuple4In1.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
-  - apply (InitSegmentWhenEmpty1 _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a4) in H11. 1: contradiction. apply Tuple4In4.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a1) in H11. 1: contradiction. apply Tuple4In1.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
+  - apply (InitSegment.WhenEmpty1 _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
 Qed.
 

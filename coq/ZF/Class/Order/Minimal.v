@@ -20,7 +20,7 @@ Proof.
   intros R S A B a H1 H2 [H3 H4]; split.
   - apply H2. assumption.
   - apply EquivTran with (initSegment R A a). 2: assumption.
-    apply EquivSym, InitSegmentEquivCompat; assumption.
+    apply EquivSym, InitSegment.EquivCompat; assumption.
 Qed.
 
 Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
@@ -43,7 +43,7 @@ Proposition MinimalSuffice : forall (R A:Class) (a:U),
   A a -> (forall x, A x -> ~ R :(x,a):) -> Minimal R A a.
 Proof.
   intros R A a H1 H2. split. 1: assumption.
-  apply InitSegmentWhenEmpty. assumption.
+  apply InitSegment.WhenEmpty. assumption.
 Qed.
 
 Proposition MinimalIn : forall (R A:Class) (a:U),
@@ -61,7 +61,7 @@ Qed.
 Proposition MinimalHasNoLesser : forall (R A:Class) (a x:U),
   A x -> Minimal R A a -> ~ R :(x,a):.
 Proof.
-  intros R A a x H1 H2. apply (InitSegmentWhenEmpty1 R A). 1: assumption.
+  intros R A a x H1 H2. apply (InitSegment.WhenEmpty1 R A). 1: assumption.
   apply MinimalInitSegment. assumption.
 Qed.
 
@@ -75,6 +75,6 @@ Proof.
   intros F R S A B C a H1 H2 H3 [H4 H5]. split.
   - exists a. split. 1: assumption. apply Bij.EvalSatisfies with A B.
     2: assumption. apply Isom.IsBij with R S. assumption.
-  - apply InitSegmentIsomWhenEmpty with R A B; assumption.
+  - apply InitSegment.IsomWhenEmpty with R A B; assumption.
 Qed.
 
