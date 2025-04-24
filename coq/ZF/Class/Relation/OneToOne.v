@@ -90,10 +90,10 @@ Proposition ComposeIsOneToOne : forall (F G:Class),
   OneToOne F -> OneToOne G -> OneToOne (G :.: F).
 Proof.
   intros F G [H1 H2] [H3 H4]. split.
-  - apply ComposeIsFunctional; assumption.
+  - apply Compose.IsFunctional; assumption.
   - apply Functional.EquivCompat with (converse F :.: converse G).
     + apply EquivSym, ComposeConverse.
-    + apply ComposeIsFunctional; assumption.
+    + apply Compose.IsFunctional; assumption.
 Qed.
 
 Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
@@ -118,7 +118,7 @@ Qed.
 Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
   OneToOne F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
-  intros F G a [H1 _]. apply FunctionalComposeDomainCharac. assumption.
+  intros F G a [H1 _]. apply Compose.FunctionalDomainCharac. assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G:Class) (a:U),
@@ -128,7 +128,7 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   domain G (F!a)  ->
   (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G a [H1 _] [H2 _]. apply FunctionalComposeEval; assumption.
+  intros F G a [H1 _] [H2 _]. apply Compose.Eval; assumption.
 Qed.
 
 Proposition InvImageOfImage : forall (F A:Class),

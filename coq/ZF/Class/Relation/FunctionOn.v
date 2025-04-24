@@ -120,7 +120,7 @@ Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply ComposeIsFunction; assumption.
   - apply EquivTran with (domain F). 2: assumption.
-    apply ComposeDomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
+    apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
     apply EquivSym. assumption.
 Qed.
 

@@ -59,8 +59,8 @@ Proposition FunctionalComposeIsFunction : forall (F G:Class),
   Functional F -> Functional G -> Function (G :.: F).
 Proof.
   intros F G Hf Hg. split.
-  - apply ComposeIsRelation.
-  - apply ComposeIsFunctional; assumption.
+  - apply Compose.IsRelation.
+  - apply Compose.IsFunctional; assumption.
 Qed.
 
 (* The composition of two function classes is a function class.                 *)
@@ -91,7 +91,7 @@ Qed.
 Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
-  intros F G a [_ H1]. apply FunctionalComposeDomainCharac. assumption.
+  intros F G a [_ H1]. apply Compose.FunctionalDomainCharac. assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G:Class) (a:U),
@@ -101,6 +101,6 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   domain G (F!a) ->
   (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G a [H1 H2] [H3 H4]. apply FunctionalComposeEval; assumption.
+  intros F G a [H1 H2] [H3 H4]. apply Compose.Eval; assumption.
 Qed.
 

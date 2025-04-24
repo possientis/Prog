@@ -55,7 +55,7 @@ Proposition OneToOneComposeIsBijection : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).
 Proof.
   intros F G Hf Hg. split.
-  - apply ComposeIsRelation.
+  - apply Compose.IsRelation.
   - apply ComposeIsOneToOne; assumption.
 Qed.
 

@@ -170,7 +170,7 @@ Proof.
     subst. apply IACharac2. split. 2: reflexivity. apply H3.
     exists y. assumption.
   - apply IACharac in H5. destruct H5 as [x [H5 H6]]. subst.
-    apply ComposeCharac2. apply H3 in H5.
+    apply Compose.Charac2. apply H3 in H5.
     destruct H5 as [y H5].
     exists y. split. 1: assumption. apply Converse.Charac2. assumption.
 Qed.
@@ -180,6 +180,6 @@ Proposition IBisFConverseF : forall (F A B:Class), Bij F A B ->
 Proof.
   intros F A B H1. assert (H2 := H1). destruct H2 as [[[H2 _] _] _].
   apply EquivTran with ((F^:-1:)^:-1: :.: F^:-1:).
-  - apply ComposeEquivCompatL, EquivSym, Converse.IsIdempotent. assumption.
+  - apply Compose.EquivCompatL, EquivSym, Converse.IsIdempotent. assumption.
   - apply IAIsConverseFF with A. apply ConverseIsBij. assumption.
 Qed.

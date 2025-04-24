@@ -52,7 +52,7 @@ Proposition ComposeIsFun : forall (F G A B C: Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply ComposeIsFunctionOn with B; assumption.
-  - apply InclTran with (range G). 2: assumption. apply ComposeRangeIsSmaller.
+  - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
 Qed.
 
 Proposition DomainOfComposeCharac : forall (F G A B C:Class) (a:U),

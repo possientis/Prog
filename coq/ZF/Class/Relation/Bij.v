@@ -81,7 +81,7 @@ Proof.
   - apply ComposeIsBijectionOn with B; try assumption.
     apply DoubleInclusion, EquivSym. assumption.
   - apply EquivTran with (range G). 2: assumption.
-    apply ComposeRangeIsSame. destruct H3 as [H3 H5].
+    apply Compose.RangeIsSame. destruct H3 as [H3 H5].
     apply InclTran with B.
     + apply DoubleInclusion, EquivSym. assumption.
     + apply DoubleInclusion. assumption.
