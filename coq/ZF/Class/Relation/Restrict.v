@@ -27,7 +27,7 @@ Definition restrict (F A:Class) : Class := fun x =>
 (* Notation "F :|: A" := (restrict F A)                                         *)
 Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
 
-Proposition RestrictCharac2 : forall (F A:Class) (y z:U),
+Proposition Charac2 : forall (F A:Class) (y z:U),
   (F:|:A) :(y,z): <-> A y /\ F :(y,z):.
 Proof.
   intros F A y z. split; intros H1.
@@ -38,47 +38,47 @@ Proof.
     + apply H1.
 Qed.
 
-Proposition RestrictEquivCompat : forall (F G A B:Class),
+Proposition EquivCompat : forall (F G A B:Class),
   F :~: G -> A :~: B -> F:|:A :~: G:|:B.
 Proof.
   intros F G A B H1 H2 x. split; intros H3;
-  destruct H3 as [y [z [H3 [H4 H5]]]]; subst; apply RestrictCharac2; split.
+  destruct H3 as [y [z [H3 [H4 H5]]]]; subst; apply Charac2; split.
   - apply H2. assumption.
   - apply H1. assumption.
   - apply H2. assumption.
   - apply H1. assumption.
 Qed.
 
-Proposition RestrictEquivCompatL : forall (F G A:Class),
+Proposition EquivCompatL : forall (F G A:Class),
   F :~: G -> F:|:A :~: G:|:A.
 Proof.
-  intros F G A H1. apply RestrictEquivCompat.
+  intros F G A H1. apply EquivCompat.
   - assumption.
   - apply EquivRefl.
 Qed.
 
-Proposition RestrictEquivCompatR : forall (F A B:Class),
+Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> F:|:A :~: F:|:B.
 Proof.
-  intros F A B H1. apply RestrictEquivCompat.
+  intros F A B H1. apply EquivCompat.
   - apply EquivRefl.
   - assumption.
 Qed.
 
 (* The restriction is always a relation.                                        *)
-Proposition RestrictIsRelation : forall (F A:Class), Relation (F:|:A).
+Proposition IsRelation : forall (F A:Class), Relation (F:|:A).
 Proof.
   intros F A x H1. destruct H1 as [y [z [H1 [H2 H3]]]].
   exists y. exists z. assumption.
 Qed.
 
 (* The restriction of a functional class is always functional.                  *)
-Proposition RestrictIsFunctional : forall (F A:Class),
+Proposition IsFunctional : forall (F A:Class),
   Functional F -> Functional (F:|:A).
 Proof.
   intros F A H1 x y z H2 H3. apply H1 with x.
-  - apply RestrictCharac2 in H2. destruct H2 as [_ H2]. assumption.
-  - apply RestrictCharac2 in H3. destruct H3 as [_ H3]. assumption.
+  - apply Charac2 in H2. destruct H2 as [_ H2]. assumption.
+  - apply Charac2 in H3. destruct H3 as [_ H3]. assumption.
 Qed.
 
 (* The domain of the restriction F|A is the intersection A/\domain F.           *)
@@ -86,14 +86,14 @@ Proposition DomainOfRestrict : forall (F A:Class),
   domain (F:|:A) :~: A :/\: domain F.
 Proof.
   intros F A x. split; intros H1.
-  - destruct H1 as [y H1]. apply RestrictCharac2 in H1.
+  - destruct H1 as [y H1]. apply Charac2 in H1.
     destruct H1 as [H1 H2]. split. 1: assumption. exists y. apply H2.
   - destruct H1 as [H1 H2]. destruct H2 as [y H2]. exists y.
-    apply RestrictCharac2. split; assumption.
+    apply Charac2. split; assumption.
 Qed.
 
 (* The restriction of a functional class to a small class is small.             *)
-Proposition RestrictIsSmall : forall (F A:Class),
+Proposition IsSmall : forall (F A:Class),
   Functional F -> Small A -> Small (F:|:A).
 Proof.
 
@@ -122,10 +122,10 @@ Proof.
     assert (Function (F:|:A)) as A'. 2: apply A'. split.
 
   (* Which follows from the fact that F|A is always a relation. *)
-    + apply RestrictIsRelation.
+    + apply IsRelation.
 
   (* And the fact that F|A is functional since F is. *)
-    + apply RestrictIsFunctional, H1.
+    + apply IsFunctional, H1.
 
   (* It remains to prove that the domain of F|A is small. *)
   - assert (Small (domain (F:|:A))) as A'. 2: apply A'.
@@ -148,13 +148,13 @@ Proposition ImageIsRangeOfRestrict : forall (F A:Class),
 Proof.
   intros F A y. split; intros H1.
   - unfold image in H1. destruct H1 as [x [H1 H2]].
-    exists x. apply RestrictCharac2. split; assumption.
-  - destruct H1 as [x H1]. apply RestrictCharac2 in H1.
+    exists x. apply Charac2. split; assumption.
+  - destruct H1 as [x H1]. apply Charac2 in H1.
     destruct H1 as [H1 H2]. exists x. split; assumption.
 Qed.
 
 (* A restriction is always a subclass of the original class.                    *)
-Proposition RestrictIsSubclass : forall (F A:Class),
+Proposition IsSubclass : forall (F A:Class),
   F:|:A :<=: F.
 Proof.
   intros F A x [y [z [H1 [_ H2]]]]. rewrite H1. apply H2.
@@ -181,14 +181,14 @@ Proposition FunctionOnIsRestrict : forall (F A:Class),
 Proof.
   intros F A [[H1 H2] H3]. apply EquivTran with (F:|:domain F).
   - apply RelationIsRestrict. assumption.
-  - apply RestrictEquivCompatR. assumption.
+  - apply EquivCompatR. assumption.
 Qed.
 
-Proposition RestrictTowerProperty : forall (F A B:Class),
+Proposition TowerProperty : forall (F A B:Class),
   A :<=: B -> (F:|:B) :|: A :~: F:|:A.
 Proof.
   intros F A B H1 x. split; intros H2.
-  - destruct H2 as [y [z [H2 [H3 H4]]]]. apply RestrictCharac2 in H4.
+  - destruct H2 as [y [z [H2 [H3 H4]]]]. apply Charac2 in H4.
     destruct H4 as [H4 H5]. exists y. exists z. split.
     + assumption.
     + split; assumption.
@@ -196,7 +196,7 @@ Proof.
     + assumption.
     + split.
       * assumption.
-      * apply RestrictCharac2. split.
+      * apply Restrict.Charac2. split.
         { apply H1. assumption. }
         { assumption. }
 Qed.
@@ -210,11 +210,11 @@ Proof.
   apply Image.IsSmall; assumption.
 Qed.
 
-Proposition RestrictEval : forall (F A:Class) (x:U), Functional F -> A x ->
+Proposition Eval : forall (F A:Class) (x:U), Functional F -> A x ->
   (F:|:A)!x = F!x.
 Proof.
   intros F A x H1 H2.
-  assert (Functional (F:|:A)) as H3. { apply RestrictIsFunctional. assumption. }
+  assert (Functional (F:|:A)) as H3. { apply IsFunctional. assumption. }
   assert (domain F x \/ ~ domain F x) as H4. { apply LawExcludedMiddle. }
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. {
@@ -222,11 +222,11 @@ Proof.
     apply Eval.Charac.
     + assumption.
     + assumption.
-    + apply RestrictCharac2. split. 1: assumption. rewrite E.
+    + apply Charac2. split. 1: assumption. rewrite E.
       apply Eval.Satisfies; assumption.
   - assert (~ domain (F:|:A) x) as H5. { intros H5.
       destruct H5 as [z H5].
-      apply RestrictCharac2 in H5. destruct H5 as [H5 H6]. apply H4.
+      apply Charac2 in H5. destruct H5 as [H5 H6]. apply H4.
       exists z. assumption. }
     assert (y = :0:) as H6. { rewrite E. apply Eval.WhenNotInDomain. assumption. }
     rewrite H6. apply Eval.WhenNotInDomain. assumption.

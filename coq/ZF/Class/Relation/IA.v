@@ -35,22 +35,22 @@ Proposition IACharac2 : forall (A:Class) (y z:U),
   (I:|:A) :(y,z): <-> A y /\ y = z.
 Proof.
   intros A y z. split; intros H1.
-  - apply RestrictCharac2 in H1. destruct H1 as [H1 H2].
+  - apply Restrict.Charac2 in H1. destruct H1 as [H1 H2].
     apply ICharac2 in H2. subst. split. 1: assumption. reflexivity.
-  - destruct H1 as [H1 H2]. subst. apply RestrictCharac2.
+  - destruct H1 as [H1 H2]. subst. apply Restrict.Charac2.
     split. 1: assumption. apply ICharac2. reflexivity.
 Qed.
 
 (* I|A is a functional class.                                                   *)
 Proposition IAIsFunctional : forall (A:Class), Functional (I:|:A).
 Proof.
-  intros A. apply RestrictIsFunctional, IIsFunctional.
+  intros A. apply Restrict.IsFunctional, IIsFunctional.
 Qed.
 
 (* I|A is a relation class.                                                     *)
 Proposition IAIsRelation : forall (A:Class), Relation (I:|:A).
 Proof.
-  intros A. apply RestrictIsRelation.
+  intros A. apply Restrict.IsRelation.
 Qed.
 
 (* I|A is a function class.                                                     *)
@@ -87,7 +87,7 @@ Qed.
 Proposition IAIsBijection : forall (A:Class), Bijection (I:|:A).
 Proof.
   intros A. split.
-  - apply RestrictIsRelation.
+  - apply Restrict.IsRelation.
   - apply IAIsOneToOne.
 Qed.
 
@@ -142,7 +142,7 @@ Proposition IAEval : forall (A:Class) (x:U),
   A x -> (I:|:A)!x = x.
 Proof.
   intros A x H1. apply eq_trans with I!x.
-  - apply RestrictEval. 2: assumption. apply IIsFunctional.
+  - apply Restrict.Eval. 2: assumption. apply IIsFunctional.
   - apply IEval.
 Qed.
 
