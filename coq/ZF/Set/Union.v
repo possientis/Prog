@@ -7,13 +7,13 @@ Export ZF.Notation.Union.
 
 (* We consider the set defined by the union predicate of the set a.             *)
 Definition union (a:U) : U := fromClass :U(toClass a)
-  (UnionIsSmall (toClass a) (SetIsSmall a)).
+  (IsSmall (toClass a) (SetIsSmall a)).
 
 (* Notation ":U( a )" := (union a)                                              *)
 Global Instance SetUnion : Union U := { union := union }.
 
 (* Characterisation of the elements of the union set of a.                      *)
-Proposition UnionCharac : forall (a:U),
+Proposition Charac : forall (a:U),
   forall x, x :< :U(a) <-> exists y, x :< y /\ y :< a.
 Proof.
   intros a. apply FromClass.Charac.
@@ -23,8 +23,8 @@ Proposition UnionOfToClass : forall (a:U),
   :U(toClass a) :~: toClass :U(a).
 Proof.
   intros a x. split; intros H1.
-  - destruct H1 as [y [H1 H2]]. apply UnionCharac. exists y. 
+  - destruct H1 as [y [H1 H2]]. apply Charac. exists y.
     split; assumption.
-  - apply UnionCharac in H1. destruct H1 as [y [H1 H2]]. exists y. 
+  - apply Charac in H1. destruct H1 as [y [H1 H2]]. exists y.
     split; assumption.
 Qed.

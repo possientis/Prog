@@ -147,11 +147,11 @@ Proposition UnionOfSucc : forall (a:U), Ordinal a ->
   :U(succ a) = a.
 Proof.
   intros a H1. apply DoubleInclusion. split; intros x H2.
-  - apply UnionCharac in H2. destruct H2 as [y [H2 H3]].
+  - apply Union.Charac in H2. destruct H2 as [y [H2 H3]].
     apply Union2Charac in H3. destruct H3 as [H3|H3].
     + destruct H1 as [H1 _]. specialize (H1 y H3). apply H1. assumption.
     + apply Single.Charac in H3. subst. assumption.
-  - apply UnionCharac. exists a. split. 1: assumption.
+  - apply Union.Charac. exists a. split. 1: assumption.
     apply Union2Charac. right. apply Single.In.
 Qed.
 

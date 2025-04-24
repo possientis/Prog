@@ -11,11 +11,9 @@ Proposition UnionGenCharac : forall (P Q:Class) (y:U),
   unionGen P Q y <-> exists x, P x /\ y :< Q!x.
 Proof.
   intros P Q y. split; intros H1.
-  - unfold unionGen in H1. apply (proj1 (UnionCharac _ _)) in H1.
-    destruct H1 as [q [H1 H2]]. destruct H2 as [x [H2 H3]].
+  - destruct H1 as [q [H1 H2]]. destruct H2 as [x [H2 H3]].
     rewrite H3 in H1. exists x. split; assumption.
-  - destruct H1 as [x [H1 H2]]. apply UnionCharac.
-    exists (eval Q x). split.
+  - destruct H1 as [x [H1 H2]]. exists (eval Q x). split.
     + assumption.
     + exists x. split. { assumption. } { reflexivity. }
 Qed.

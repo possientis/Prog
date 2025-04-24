@@ -13,19 +13,12 @@ Definition union (P:Class) : Class := fun x =>
 (* Notation ":U( P )" := (union P)                                              *)
 Global Instance ClassUnion : Union Class := { union := union }.
 
-Proposition UnionCharac : forall (P:Class) (x:U),
-  :U(P) x <-> exists y, x :< y /\ P y.
-Proof.
-  intros P a. unfold Notation.Union.union, ClassUnion, union. split; auto.
-Qed.
-
 (* The union is compatible with class equivalence.                              *)
-Proposition UnionEquivCompat : forall (P Q:Class),
+Proposition EquivCompat : forall (P Q:Class),
   P :~: Q -> :U(P) :~: :U(Q).
 Proof.
-  intros P Q H1 x. split; intros H2;
-  apply (proj1 (UnionCharac _ _)) in H2; destruct H2 as [y [H2 H3]];
-  apply UnionCharac; exists y; split.
+  intros P Q H1 x. split; intros H2; destruct H2 as [y [H2 H3]];
+  exists y; split.
   - assumption.
   - apply H1. assumption.
   - assumption.
@@ -33,7 +26,7 @@ Proof.
 Qed.
 
 (* If P is small then U(P) is small.                                            *)
-Proposition UnionIsSmall : forall (P:Class),
+Proposition IsSmall : forall (P:Class),
   Small P -> Small :U(P).
 Proof.
 
@@ -59,7 +52,7 @@ Proof.
   - assert (:U(toClass a):~: :U(P)) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-    apply UnionEquivCompat, H2.
+    apply EquivCompat, H2.
 
   (* We next need to show that U(a) is small. *)
   - assert (Small :U(toClass a)) as A. 2: apply A.
