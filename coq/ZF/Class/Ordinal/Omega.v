@@ -89,4 +89,7 @@ Proof.
       apply Core.IsOrdinal with (succ b). 2: assumption.
       apply Succ.IsOrdinal. assumption. }
     apply H2. apply InclElemTran with b; try assumption.
-Admitted.
+    apply InclCompatRev; try assumption.
+    apply ElemIsSuccIncl; try assumption.
+    apply IsOrdinal. assumption.
+Qed.
