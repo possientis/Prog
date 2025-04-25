@@ -77,3 +77,16 @@ Proof.
     destruct H5 as [H5|H5]. 2: assumption.
     exfalso. apply NothingInBetween with a b. split; assumption.
 Qed.
+
+Proposition IsSubClass : forall (a:U), Ordinal a ->
+  toClass a :<=: NonLimit -> toClass a :<=: :N.
+Proof.
+  intros a H1 H2 b H3. split.
+  - apply ElemIsOrdinal with a; assumption.
+  - intros c H4. assert (Ordinal b) as H5. {
+      apply ElemIsOrdinal with a; assumption. }
+    assert (Ordinal c) as H6. {
+      apply ElemIsOrdinal with (succ b). 2: assumption.
+      apply SuccIsOrdinal. assumption. }
+    apply H2. apply InclElemTran with b; try assumption.
+Admitted.
