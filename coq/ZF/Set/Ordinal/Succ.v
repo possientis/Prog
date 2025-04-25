@@ -72,13 +72,26 @@ Qed.
 Proposition InclCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> succ a :<=: succ b.
 Proof.
-  intros a b H1 H2 H3 c H4. apply Union2.Charac in H4. apply Union2.Charac.
-  destruct H4 as [H4|H4].
-  - left. apply H3. assumption.
-  - apply Single.Charac in H4. subst.
-    apply EqualOrStrictIncl in H3; try assumption. destruct H3 as [H3|H3].
-   + subst. right. apply Single.In.
-   + left. assumption.
+  intros a b H1 H2 H3 c H4.
+  - apply Union2.Charac in H4. apply Union2.Charac.
+    destruct H4 as [H4|H4].
+    + left. apply H3. assumption.
+    + apply Single.Charac in H4. subst.
+      apply EqualOrStrictIncl in H3; try assumption. destruct H3 as [H3|H3].
+      * subst. right. apply Single.In.
+      * left. assumption.
+Qed.
+
+Proposition IfSuccInclThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+  succ a :<=: succ b -> a :<=: b.
+Proof.
+  intros a b H1 H2 H3 c H4. assert (Ordinal c) as H5. {
+    apply ElemIsOrdinal with a; assumption. }
+  assert (c :< b \/ b :<=: c) as H6. { apply ElemOrIncl; assumption. }
+  destruct H6 as [H6|H6]. 1: assumption.
+  exfalso. apply NothingInBetween with b a. split.
+  + apply InclElemTran with c; assumption.
+  + apply H3, ElemSucc.
 Qed.
 
 Proposition IfElemThenSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -110,6 +123,7 @@ Proof.
     + destruct H3 as [H3 H4]. intros H5. apply H4.
       apply SuccInjective. assumption.
 Qed.
+
 
 (* The successor of the union of an ordinal is an ordinal.                      *)
 Proposition SuccOfUnionIsOrdinal : forall (a:U), Ordinal a ->
@@ -199,3 +213,4 @@ Proof.
     + apply Union2.Charac. right. apply Single.In.
     + apply SuccIsOrdinal. assumption.
 Qed.
+
