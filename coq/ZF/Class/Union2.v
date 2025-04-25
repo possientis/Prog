@@ -14,19 +14,12 @@ Definition union2 (P Q:Class) : Class := fun x => P x \/ Q x.
 (* Notation "P :\/: Q" := (union P Q)                                           *)
 Global Instance ClassOr : Or Class := { or := union2 }.
 
-Proposition Union2Charac : forall (P Q:Class) (x:U),
-  (P :\/: Q) x <-> P x \/ Q x.
-Proof.
-  intros P Q x. unfold or, ClassOr, union2. split; auto.
-Qed.
-
 (* Pairwise union is compatible with class equivalence.                         *)
-Proposition Union2EquivCompat : forall (P Q R S:Class),
+Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :\/: R :~: Q :\/: S.
 Proof.
   intros P Q R S H1 H2 x. split; intros H3;
-  apply (proj1 (Union2Charac _ _ _)) in H3;
-  destruct H3 as [H3|H3];apply Union2Charac.
+  destruct H3 as [H3|H3].
   - left. apply H1. assumption.
   - right. apply H2. assumption.
   - left. apply H1. assumption.
@@ -34,25 +27,25 @@ Proof.
 Qed.
 
 (* Pairwise union is left-compatible with class equivalence.                    *)
-Proposition Union2EquivCompatL : forall (P Q R:Class),
+Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :\/: R :~: Q :\/: R.
 Proof.
-  intros P Q R H1. apply Union2EquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - assumption.
   - apply EquivRefl.
 Qed.
 
 (* Pairwise union is right-compatible with class equivalence.                   *)
-Proposition Union2EquivCompatR : forall (P Q R:Class),
+Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :\/: P :~: R :\/: Q.
 Proof.
-  intros P Q R H1. apply Union2EquivCompat.
+  intros P Q R H1. apply EquivCompat.
   - apply EquivRefl.
   - assumption.
 Qed.
 
 (* Thw pairwise union of two small classes is a small class.                    *)
-Proposition Union2IsSmall : forall (P Q:Class),
+Proposition IsSmall : forall (P Q:Class),
   Small P -> Small Q -> Small (P :\/: Q).
 Proof.
 
@@ -87,7 +80,7 @@ Proof.
   - assert (toClass a :\/: toClass b :~: P :\/: Q) as A. 2: apply A.
 
   (* Which follows from the equivalences of a and P and  of b and Q. *)
-    apply Union2EquivCompat; assumption.
+    apply EquivCompat; assumption.
 
   (* We next need to show that a \/ b is small. *)
   - assert (Small (toClass a :\/: toClass b)) as A. 2: apply A.
@@ -118,7 +111,7 @@ Proof.
 Qed.
 
 (* The pairwise union of two relation classes is a relation class.              *)
-Proposition UnionOfRelsIsRelation : forall (P Q:Class),
+Proposition IsRelation : forall (P Q:Class),
   Relation P -> Relation Q -> Relation (P:\/:Q).
 Proof.
   intros P Q Hp Hq x H1. destruct H1 as [H1|H1].

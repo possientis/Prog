@@ -32,15 +32,15 @@ intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter.Charac.
     split; apply Charac; split.
     + apply H1.
-    + intros H3. apply H2. apply Union2Charac. left. apply H3.
+    + intros H3. apply H2. apply Union2.Charac. left. apply H3.
     + apply H1.
-    + intros H3. apply H2. apply Union2Charac. right. apply H3.
+    + intros H3. apply H2. apply Union2.Charac. right. apply H3.
   - apply Inter.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [H1 H3].
     apply Charac in H2. destruct H2 as [_  H2].
     apply Charac. split.
     + apply H1.
-    + intros H4. apply Union2Charac in H4. destruct H4 as [H4|H4]; contradiction.
+    + intros H4. apply Union2.Charac in H4. destruct H4 as [H4|H4]; contradiction.
 Qed.
 
 Proposition DiffOfInter : forall (a b c:U),
@@ -48,10 +48,10 @@ Proposition DiffOfInter : forall (a b c:U),
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Union2Charac. apply Inter.WhenNotIn in H2. destruct H2 as [H2|H2].
+    apply Union2.Charac. apply Inter.WhenNotIn in H2. destruct H2 as [H2|H2].
     + left.  apply Charac. split; assumption.
     + right. apply Charac. split; assumption.
-  - apply Union2Charac in H1. destruct H1 as [H1|H1];
+  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
     apply Charac; split; apply Charac in H1; destruct H1 as [H1 H2].
     + apply H1.
     + intros H3. apply Inter.Charac in H3. destruct H3 as [H3 _]. contradiction.

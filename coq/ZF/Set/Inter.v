@@ -50,15 +50,15 @@ Proposition InterDistOverUnion : forall (a b c:U),
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Union2Charac in H2. destruct H2 as [H2|H2]; apply Union2Charac.
+    apply Union2.Charac in H2. destruct H2 as [H2|H2]; apply Union2.Charac.
     + left.  apply Charac. auto.
     + right. apply Charac. auto.
-  - apply Union2Charac in H1. destruct H1 as [H1|H1];
+  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
     apply Charac; split; apply Charac in H1.
     + destruct H1 as [H1 _]. apply H1.
-    + destruct H1 as [_ H1]. apply Union2Charac. left. apply H1.
+    + destruct H1 as [_ H1]. apply Union2.Charac. left. apply H1.
     + destruct H1 as [H1 _]. apply H1.
-    + destruct H1 as [_ H1]. apply Union2Charac. right. apply H1.
+    + destruct H1 as [_ H1]. apply Union2.Charac. right. apply H1.
 Qed.
 
 (* The union is distributive over the intersection                              *)
@@ -66,14 +66,14 @@ Proposition UnionDistOverInter : forall (a b c:U),
   a:\/:(b:/\:c) = (a:\/:b):/\:(a:\/:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Union2Charac in H1. destruct H1 as [H1|H1];
-    apply Charac; split; apply Union2Charac.
+  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
+    apply Charac; split; apply Union2.Charac.
     + left. apply H1.
     + left. apply H1.
     + right. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
     + right. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
-  - apply Charac in H1. destruct H1 as [H1 H2]. apply Union2Charac.
-    apply Union2Charac in H1. apply Union2Charac in H2.
+  - apply Charac in H1. destruct H1 as [H1 H2]. apply Union2.Charac.
+    apply Union2.Charac in H1. apply Union2.Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2].
     + left. apply H1.
     + left. apply H1.

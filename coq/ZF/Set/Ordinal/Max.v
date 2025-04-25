@@ -10,8 +10,8 @@ Proof.
   intros a b H1 H2. assert (a :<=: b \/ b :<=: a) as H3. {
     apply InclOrIncl; assumption. }
   destruct H3 as [H3|H3].
-  - apply Union2EqualIncl in H3. right. symmetry. assumption.
-  - apply Union2EqualIncl in H3. left. symmetry. rewrite Union2Comm. assumption. 
+  - apply Union2.WhenEqualR in H3. right. symmetry. assumption.
+  - apply Union2.WhenEqualR in H3. left. symmetry. rewrite Union2.Comm. assumption. 
 Qed.
 
 (* The max of two ordinals is an ordinal.                                       *)

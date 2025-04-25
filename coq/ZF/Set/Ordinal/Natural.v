@@ -139,7 +139,7 @@ Qed.
 
 Proposition OneExtension : :1: = :{ :0: }:.
 Proof.
-  assert (:0: :\/: :{ :0: }: = :{ :0: }:) as H1. { apply Union2IdentityL. }
+  assert (:0: :\/: :{ :0: }: = :{ :0: }:) as H1. { apply Union2.IdentityL. }
   rewrite <- H1. reflexivity.
 Qed.
 
