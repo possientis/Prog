@@ -82,7 +82,7 @@ Proof.
 Qed.
 
 (* An element of an ordinal class defines an ordinal class.                     *)
-Proposition ElemIsOrdinal : forall (A:Class) (a:U),
+Proposition IsOrdinal : forall (A:Class) (a:U),
   Ordinal A -> A a -> Ordinal (toClass a).
 Proof.
   intros A a [H1 H2] H3. split.
@@ -263,7 +263,7 @@ Qed.
 Proposition OnIsOrdinal : Ordinal On.
 Proof.
   split.
-  - intros a H1 x H2. apply ElemIsOrdinal with (toClass a); assumption.
+  - intros a H1 x H2. apply IsOrdinal with (toClass a); assumption.
   - intros a b H1 H2. assert (
       toClass a :~: toClass b \/
       toClass a :<: toClass b \/
@@ -338,7 +338,7 @@ Proof.
     apply StrictInclIsElem; try assumption. apply OnIsOrdinal. }
   assert (toClass a :<=: A) as H9. { intros x H10. apply DoubleNegation.
     intros H11. apply Class.Empty.Charac with x, H7. split. 2: assumption. split.
-    - apply ElemIsOrdinal with (toClass a); assumption.
+    - apply IsOrdinal with (toClass a); assumption.
     - apply Complement.Charac. assumption. }
   apply H6, H2; assumption.
 Qed.

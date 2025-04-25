@@ -16,7 +16,7 @@ Proposition IsClassOfOrdinals : NonLimit :<=: On.
 Proof.
   intros a [H1|H1].
   - subst. apply ZeroIsOrdinal.
-  - destruct H1 as [b [H1 H2]]. rewrite H2. apply SuccIsOrdinal. assumption.
+  - destruct H1 as [b [H1 H2]]. rewrite H2. apply Succ.IsOrdinal. assumption.
 Qed.
 
 Proposition HasSucc : forall (a:U), Ordinal a ->

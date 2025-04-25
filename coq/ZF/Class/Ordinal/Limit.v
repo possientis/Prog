@@ -47,11 +47,11 @@ Proof.
   destruct H1 as [_ H1]. assert (H4 := H2). rewrite H1 in H4.
   apply Union.Charac in H4. destruct H4 as [c [H4 H5]].
   assert (Ordinal b) as H6. {
-    apply ElemIsOrdinal with a; assumption. }
+    apply Core.IsOrdinal with a; assumption. }
   assert (Ordinal c) as H7. {
-    apply ElemIsOrdinal with a; assumption. }
+    apply Core.IsOrdinal with a; assumption. }
   apply InclElemTran with c; try assumption.
-  - apply SuccIsOrdinal. assumption.
+  - apply Succ.IsOrdinal. assumption.
   - apply IfElemThenSuccIncl; assumption.
 Qed.
 
@@ -59,7 +59,7 @@ Proposition InBetween : forall (a b:U),
   Limit a -> b :< a -> exists c, b :< c /\ c :< a.
 Proof.
   intros a b H1 H2. exists (succ b). split.
-  - apply ElemSucc.
+  - apply Succ.In.
   - apply HasSucc; assumption.
 Qed.
 

@@ -94,47 +94,47 @@ Qed.
 
 Proposition OneIsOrdinal : Ordinal :1:.
 Proof.
-  apply SuccIsOrdinal, ZeroIsOrdinal.
+  apply Succ.IsOrdinal, ZeroIsOrdinal.
 Qed.
 
 Proposition TwoIsOrdinal : Ordinal :2:.
 Proof.
-  apply SuccIsOrdinal, OneIsOrdinal.
+  apply Succ.IsOrdinal, OneIsOrdinal.
 Qed.
 
 Proposition ThreeIsOrdinal : Ordinal :3:.
 Proof.
-  apply SuccIsOrdinal, TwoIsOrdinal.
+  apply Succ.IsOrdinal, TwoIsOrdinal.
 Qed.
 
 Proposition FourIsOrdinal : Ordinal :4:.
 Proof.
-  apply SuccIsOrdinal, ThreeIsOrdinal.
+  apply Succ.IsOrdinal, ThreeIsOrdinal.
 Qed.
 
 Proposition FiveIsOrdinal : Ordinal :5:.
 Proof.
-  apply SuccIsOrdinal, FourIsOrdinal.
+  apply Succ.IsOrdinal, FourIsOrdinal.
 Qed.
 
 Proposition SixIsOrdinal : Ordinal :6:.
 Proof.
-  apply SuccIsOrdinal, FiveIsOrdinal.
+  apply Succ.IsOrdinal, FiveIsOrdinal.
 Qed.
 
 Proposition SevenIsOrdinal : Ordinal :7:.
 Proof.
-  apply SuccIsOrdinal, SixIsOrdinal.
+  apply Succ.IsOrdinal, SixIsOrdinal.
 Qed.
 
 Proposition EightIsOrdinal : Ordinal :8:.
 Proof.
-  apply SuccIsOrdinal, SevenIsOrdinal.
+  apply Succ.IsOrdinal, SevenIsOrdinal.
 Qed.
 
 Proposition NineIsOrdinal : Ordinal :9:.
 Proof.
-  apply SuccIsOrdinal, EightIsOrdinal.
+  apply Succ.IsOrdinal, EightIsOrdinal.
 Qed.
 
 Proposition OneExtension : :1: = :{ :0: }:.

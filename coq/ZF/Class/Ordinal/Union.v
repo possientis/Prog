@@ -12,7 +12,7 @@ Proposition UnionIsOrdinal : forall (A:Class),
   A :<=: On -> Ordinal :U(A).
 Proof.
   intros A H1. assert (:U(A) :<=: On) as H2. { intros a H2.
-    destruct H2 as [b [H2 H3]]. apply ElemIsOrdinal with (toClass b).
+    destruct H2 as [b [H2 H3]]. apply Core.IsOrdinal with (toClass b).
     2: assumption. apply H1. assumption. }
   apply TransitiveSubclassIsOrdinal with On; try assumption.
   1: apply OnIsOrdinal. intros a H3. destruct H3 as [b [H3 H4]].
@@ -39,7 +39,7 @@ Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U),
   :U(A) :<=: toClass a.
 Proof.
   intros A a H1 H2 H3 b H4. assert (On b) as H5. {
-    apply ElemIsOrdinal with :U(A). 2: assumption.
+    apply Core.IsOrdinal with :U(A). 2: assumption.
     apply UnionIsOrdinal. assumption. }
     destruct H4 as [c [H4 H6]]. assert (On c) as H7. {
       apply H1. assumption. }

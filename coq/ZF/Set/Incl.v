@@ -73,7 +73,7 @@ Proof.
   apply NotEquivSetNotEqual; assumption.
 Qed.
 
-Proposition EqualOrStrictIncl : forall (a b:U),
+Proposition InclIsEqualOrStrictIncl : forall (a b:U),
   a :<=: b <-> a = b \/ a :<: b.
 Proof.
   intros a b. split; intros H1.

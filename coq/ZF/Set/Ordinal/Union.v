@@ -73,8 +73,8 @@ Proof.
   intros a H1. split; intros H2.
   - apply DoubleInclusion. split.
     + apply UnionOfOrdinalIsSmallestUpperBound; try assumption.
-      intros c H3. apply ElemIsIncl; try assumption.
-      apply ElemIsOrdinal with a; assumption.
+      intros c H3. apply IfElemThenIncl; try assumption.
+      apply Core.IsOrdinal with a; assumption.
     + assert (:U(a) :< a \/ a :<=: :U(a)) as H3. {
         apply ElemOrIncl. 2: assumption.
         apply UnionOfOrdinalIsOrdinal. assumption. }
@@ -88,7 +88,7 @@ Proof.
   intros a H1. assert (:U(a) :< a \/ ~ :U(a) :< a) as H2. {
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  - apply ElemIsIncl; try assumption. apply UnionOfOrdinalIsOrdinal.
+  - apply IfElemThenIncl; try assumption. apply UnionOfOrdinalIsOrdinal.
     assumption.
   - apply UnionNotElemIsUnionEqual in H2. 2: assumption.
     rewrite H2. apply InclRefl.

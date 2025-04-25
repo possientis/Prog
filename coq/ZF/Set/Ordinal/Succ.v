@@ -15,24 +15,24 @@ Require Import ZF.Set.Union2.
 Definition succ (a:U) : U := a :\/: :{a}:.
 
 (* A set (ordinal or not) belongs to its successor.                             *)
-Proposition ElemSucc : forall (a:U), a :< succ a.
+Proposition In : forall (a:U), a :< succ a.
 Proof.
   intros a. apply Union2.Charac. right. apply Single.In.
 Qed.
 
 (* A set (ordinal or not) is a subset of its successor.                         *)
-Proposition InclSucc : forall (a:U), a :<=: succ a.
+Proposition IsIncl : forall (a:U), a :<=: succ a.
 Proof.
   intros a.  apply Union2.InclL.
 Qed.
 
 (* The successor operation is injective.                                        *)
-Proposition SuccInjective : forall (a b:U),
+Proposition Injective : forall (a b:U),
   succ a = succ b -> a = b.
 Proof.
   intros a b H1.
-  assert (a :< succ b) as H2. { rewrite <- H1. apply ElemSucc. }
-  assert (b :< succ a) as H3. { rewrite    H1. apply ElemSucc. }
+  assert (a :< succ b) as H2. { rewrite <- H1. apply In. }
+  assert (b :< succ a) as H3. { rewrite    H1. apply In. }
   apply Union2.Charac in H2. apply Union2.Charac in H3.
   destruct H2 as [H2|H2]; destruct H3 as [H3|H3].
   - exfalso. apply NoElemLoop2 with a b. split; assumption.
@@ -42,7 +42,7 @@ Proof.
 Qed.
 
 (* The sets a and b need not be ordinals.                                       *)
-Proposition NothingInBetween : forall (a b:U),
+Proposition NoInBetween : forall (a b:U),
   ~ (a :< b /\ b :< succ a).
 Proof.
   intros a b [H1 H2]. apply Union2.Charac in H2. destruct H2 as [H2|H2].
@@ -51,7 +51,7 @@ Proof.
 Qed.
 
 (* The successor of an ordinal is an ordinal.                                   *)
-Proposition SuccIsOrdinal : forall (a:U), Ordinal a ->
+Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ a).
 Proof.
   intros a H1. split.
@@ -77,7 +77,7 @@ Proof.
     destruct H4 as [H4|H4].
     + left. apply H3. assumption.
     + apply Single.Charac in H4. subst.
-      apply EqualOrStrictIncl in H3; try assumption. destruct H3 as [H3|H3].
+      apply InclIsEqualOrElem in H3; try assumption. destruct H3 as [H3|H3].
       * subst. right. apply Single.In.
       * left. assumption.
 Qed.
@@ -86,12 +86,12 @@ Proposition IfSuccInclThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   succ a :<=: succ b -> a :<=: b.
 Proof.
   intros a b H1 H2 H3 c H4. assert (Ordinal c) as H5. {
-    apply ElemIsOrdinal with a; assumption. }
+    apply Core.IsOrdinal with a; assumption. }
   assert (c :< b \/ b :<=: c) as H6. { apply ElemOrIncl; assumption. }
   destruct H6 as [H6|H6]. 1: assumption.
-  exfalso. apply NothingInBetween with b a. split.
+  exfalso. apply NoInBetween with b a. split.
   + apply InclElemTran with c; assumption.
-  + apply H3, ElemSucc.
+  + apply H3, In.
 Qed.
 
 Proposition IfElemThenSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -99,7 +99,7 @@ Proposition IfElemThenSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2 H3 c H4. apply Union2.Charac in H4. destruct H4 as [H4|H4].
   - apply ElemInclTran with a; try assumption.
-    + apply ElemIsOrdinal with a; assumption.
+    + apply Core.IsOrdinal with a; assumption.
     + apply StrictInclIsElem in H3; try assumption. apply H3.
   - apply Single.Charac in H4. subst. assumption.
 Qed.
@@ -108,7 +108,7 @@ Qed.
 Proposition SuccNotEqual : forall (a:U), succ a <> a.
 Proof.
   intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
-    apply ElemSucc. }
+    apply In. }
   rewrite H1 in H2. assumption.
 Qed.
 
@@ -116,12 +116,12 @@ Proposition ElemCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b -> succ a :< succ b.
 Proof.
   intros a b H1 H2 H3. apply StrictInclIsElem.
-  - apply SuccIsOrdinal. assumption.
-  - apply SuccIsOrdinal. assumption.
+  - apply IsOrdinal. assumption.
+  - apply IsOrdinal. assumption.
   - apply StrictInclIsElem in H3; try assumption. split.
     + apply InclCompat; try assumption. apply H3.
     + destruct H3 as [H3 H4]. intros H5. apply H4.
-      apply SuccInjective. assumption.
+      apply Injective. assumption.
 Qed.
 
 
@@ -129,7 +129,7 @@ Qed.
 Proposition SuccOfUnionIsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ :U(a)).
 Proof.
-  intros a H1. apply SuccIsOrdinal, UnionOfOrdinalIsOrdinal. assumption.
+  intros a H1. apply IsOrdinal, UnionOfOrdinalIsOrdinal. assumption.
 Qed.
 
 (* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
@@ -141,9 +141,9 @@ Proof.
   intros a b H1 H2. apply InclElemTran with :U(a).
   - apply H1. assumption.
   - apply UnionIsOrdinal. assumption.
-  - apply SuccIsOrdinal, UnionIsOrdinal. assumption.
+  - apply IsOrdinal, UnionIsOrdinal. assumption.
   - apply UnionIsUpperBound; assumption.
-  - apply ElemSucc.
+  - apply In.
 Qed.
 
 (* The successor of the union of an ordinal is a strict upper-bound.            *)
@@ -168,7 +168,7 @@ Proposition UnionOrSuccOfUnion : forall (a:U), Ordinal a ->
   a = :U(a) \/ a = succ :U(a).
 Proof.
   intros a H1. apply DoubleNegation. intros H2.
-  apply NothingInBetween with :U(a) a. split.
+  apply NoInBetween with :U(a) a. split.
   - apply StrictInclIsElem. 2: assumption.
     + apply UnionOfOrdinalIsOrdinal. assumption.
     + split.
@@ -211,6 +211,6 @@ Proof.
   - apply Class.Ordinal.Transitive.UnionIncl, OnIsOrdinal.
   - intros a H1. exists (a :\/: :{a}:). split.
     + apply Union2.Charac. right. apply Single.In.
-    + apply SuccIsOrdinal. assumption.
+    + apply IsOrdinal. assumption.
 Qed.
 

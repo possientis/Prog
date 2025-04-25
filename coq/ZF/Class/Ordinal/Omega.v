@@ -29,7 +29,7 @@ Qed.
 (* N is a class of non-limit ordinals.                                          *)
 Proposition IsClassOfNonLimits : :N :<=: NonLimit.
 Proof.
-  intros a [H1 H2]. apply H2. apply ElemSucc.
+  intros a [H1 H2]. apply H2. apply Succ.In.
 Qed.
 
 (* 0 belongs to N. The type annotation is needed here for instance resolution.  *)
@@ -46,7 +46,7 @@ Qed.
 Proposition HasSucc : forall (a:U), (:N : Class) a -> (:N : Class) (succ a).
 Proof.
   intros a [H1 H2]. split.
-  - apply SuccIsOrdinal. assumption.
+  - apply Succ.IsOrdinal. assumption.
   - intros b H3. apply Union2.Charac in H3. destruct H3 as [H3|H3].
     + apply H2. assumption.
     + apply Single.Charac in H3. subst. right. exists a. split.
@@ -67,26 +67,26 @@ Proof.
   intros a H1. split; intros H2.
   - destruct H2 as [H2 H3]. intros b H4 H5. apply H3.
     apply InclElemTran with a; try assumption.
-    + apply SuccIsOrdinal. assumption.
-    + apply ElemSucc.
+    + apply Succ.IsOrdinal. assumption.
+    + apply Succ.In.
   - split. 1: assumption. intros b H3. assert (Ordinal b) as H4. {
-      apply ElemIsOrdinal with (succ a). 2: assumption.
-      apply SuccIsOrdinal. assumption. }
+      apply Core.IsOrdinal with (succ a). 2: assumption.
+      apply Succ.IsOrdinal. assumption. }
     apply H2. 1: assumption.
     assert (a :< b \/ b :<=: a) as H5. { apply ElemOrIncl; assumption. }
     destruct H5 as [H5|H5]. 2: assumption.
-    exfalso. apply NothingInBetween with a b. split; assumption.
+    exfalso. apply NoInBetween with a b. split; assumption.
 Qed.
 
 Proposition IsSubClass : forall (a:U), Ordinal a ->
   toClass a :<=: NonLimit -> toClass a :<=: :N.
 Proof.
   intros a H1 H2 b H3. split.
-  - apply ElemIsOrdinal with a; assumption.
+  - apply Core.IsOrdinal with a; assumption.
   - intros c H4. assert (Ordinal b) as H5. {
-      apply ElemIsOrdinal with a; assumption. }
+      apply Core.IsOrdinal with a; assumption. }
     assert (Ordinal c) as H6. {
-      apply ElemIsOrdinal with (succ b). 2: assumption.
-      apply SuccIsOrdinal. assumption. }
+      apply Core.IsOrdinal with (succ b). 2: assumption.
+      apply Succ.IsOrdinal. assumption. }
     apply H2. apply InclElemTran with b; try assumption.
 Admitted.

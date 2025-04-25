@@ -14,10 +14,10 @@ Require Import ZF.Set.Union.
 Definition Ordinal : Class := On.
 
 (* An element of an ordinal is an ordinal.                                      *)
-Proposition ElemIsOrdinal : forall (a b:U), Ordinal a ->
+Proposition IsOrdinal : forall (a b:U), Ordinal a ->
   b :< a -> Ordinal b.
 Proof.
-  intros a b H1 H2. apply Class.Ordinal.Core.ElemIsOrdinal with (toClass a);
+  intros a b H1 H2. apply Class.Ordinal.Core.IsOrdinal with (toClass a);
   assumption.
 Qed.
 
@@ -31,7 +31,7 @@ Proof.
   - apply StrictInclFromClass, (StrictInclIsElem (toClass b)); assumption.
 Qed.
 
-Proposition ElemIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition IfElemThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b -> a :<=: b.
 Proof.
   intros a b H1 H2 H3. apply StrictInclIsElem in H3;
@@ -63,11 +63,13 @@ Proof.
       apply StrictInclFromClass. assumption.
 Qed.
 
-Proposition EqualOrStrictIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition InclIsEqualOrElem : forall (a b:U),
+  Ordinal a ->
+  Ordinal b ->
   a :<=: b <-> a = b \/ a :< b.
 Proof.
   intros a b H1 H2. split; intros H3.
-  - apply Incl.EqualOrStrictIncl in H3. destruct H3 as [H3|H3].
+  - apply Incl.InclIsEqualOrStrictIncl in H3. destruct H3 as [H3|H3].
     + left. assumption.
     + right. apply StrictInclIsElem; assumption.
   - destruct H3 as [H3|H3].
@@ -94,7 +96,7 @@ Proof.
   destruct H3 as [H3|[H3|H3]].
   - subst. right. apply InclRefl.
   - left. assumption.
-  - right. apply ElemIsIncl; assumption.
+  - right. apply IfElemThenIncl; assumption.
 Qed.
 
 Proposition InclElemTran : forall (a b c:U),
@@ -136,13 +138,13 @@ Proof.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
     apply HasEMinimal with On; try assumption. apply OnIsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
-    apply Class.Ordinal.Core.ElemIsOrdinal with On.
+    apply Class.Ordinal.Core.IsOrdinal with On.
     apply OnIsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. {
     apply OrdinalTotal; assumption. }
-  apply EqualOrStrictIncl; try assumption. destruct H8 as [H8|[H8|H8]].
+  apply InclIsEqualOrElem; try assumption. destruct H8 as [H8|[H8|H8]].
   - left. assumption.
   - right. assumption.
   - exfalso. apply Class.Empty.Charac with b. apply H4. split; assumption.
