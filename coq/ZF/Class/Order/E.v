@@ -34,7 +34,7 @@ Proof.
     apply Single.Charac in H2. apply ECharac2 in H3.
     subst. split; assumption.
   - split. 1: assumption. apply InvImage.Charac. exists a. split.
-    + apply Single.In.
+    + apply Single.IsIn.
     + apply ECharac2. assumption.
 Qed.
 

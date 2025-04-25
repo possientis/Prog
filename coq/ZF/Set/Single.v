@@ -22,7 +22,7 @@ Proof.
 Qed.
 
 (* The set a is an element of the singleton set [a].                            *)
-Proposition In : forall a, a :< :{a}:.
+Proposition IsIn : forall a, a :< :{a}:.
 Proof.
   intros a. apply Charac. reflexivity.
 Qed.
@@ -38,7 +38,7 @@ Proposition ToClassIncl : forall (A:Class) (a:U),
 Proof.
   intros A a. split; intros H1.
   - intros x H2. apply Charac in H2. subst. assumption.
-  - apply H1. apply In.
+  - apply H1. apply IsIn.
 Qed.
 
 Proposition IsNotPair : forall (a b c:U),

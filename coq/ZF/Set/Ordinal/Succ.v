@@ -15,9 +15,9 @@ Require Import ZF.Set.Union2.
 Definition succ (a:U) : U := a :\/: :{a}:.
 
 (* A set (ordinal or not) belongs to its successor.                             *)
-Proposition In : forall (a:U), a :< succ a.
+Proposition IsIn : forall (a:U), a :< succ a.
 Proof.
-  intros a. apply Union2.Charac. right. apply Single.In.
+  intros a. apply Union2.Charac. right. apply Single.IsIn.
 Qed.
 
 (* A set (ordinal or not) is a subset of its successor.                         *)
@@ -31,8 +31,8 @@ Proposition Injective : forall (a b:U),
   succ a = succ b -> a = b.
 Proof.
   intros a b H1.
-  assert (a :< succ b) as H2. { rewrite <- H1. apply In. }
-  assert (b :< succ a) as H3. { rewrite    H1. apply In. }
+  assert (a :< succ b) as H2. { rewrite <- H1. apply IsIn. }
+  assert (b :< succ a) as H3. { rewrite    H1. apply IsIn. }
   apply Union2.Charac in H2. apply Union2.Charac in H3.
   destruct H2 as [H2|H2]; destruct H3 as [H3|H3].
   - exfalso. apply NoElemLoop2 with a b. split; assumption.
@@ -78,7 +78,7 @@ Proof.
     + left. apply H3. assumption.
     + apply Single.Charac in H4. subst.
       apply InclIsEqualOrElem in H3; try assumption. destruct H3 as [H3|H3].
-      * subst. right. apply Single.In.
+      * subst. right. apply Single.IsIn.
       * left. assumption.
 Qed.
 
@@ -91,7 +91,7 @@ Proof.
   destruct H6 as [H6|H6]. 1: assumption.
   exfalso. apply NoInBetween with b a. split.
   + apply InclElemTran with c; assumption.
-  + apply H3, In.
+  + apply H3, IsIn.
 Qed.
 
 Proposition IfElemThenSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -108,7 +108,7 @@ Qed.
 Proposition SuccNotEqual : forall (a:U), succ a <> a.
 Proof.
   intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
-    apply In. }
+    apply IsIn. }
   rewrite H1 in H2. assumption.
 Qed.
 
@@ -143,7 +143,7 @@ Proof.
   - apply UnionIsOrdinal. assumption.
   - apply IsOrdinal, UnionIsOrdinal. assumption.
   - apply UnionIsUpperBound; assumption.
-  - apply In.
+  - apply IsIn.
 Qed.
 
 (* The successor of the union of an ordinal is a strict upper-bound.            *)
@@ -191,7 +191,7 @@ Proof.
     + destruct H1 as [H1 _]. specialize (H1 y H3). apply H1. assumption.
     + apply Single.Charac in H3. subst. assumption.
   - apply Union.Charac. exists a. split. 1: assumption.
-    apply Union2.Charac. right. apply Single.In.
+    apply Union2.Charac. right. apply Single.IsIn.
 Qed.
 
 (* If an ordinal is equal to its union, it cannot be a successor ordinal.       *)
@@ -210,7 +210,7 @@ Proof.
   apply Class.Incl.DoubleInclusion. split.
   - apply Class.Ordinal.Transitive.UnionIncl, OnIsOrdinal.
   - intros a H1. exists (a :\/: :{a}:). split.
-    + apply Union2.Charac. right. apply Single.In.
+    + apply Union2.Charac. right. apply Single.IsIn.
     + apply IsOrdinal. assumption.
 Qed.
 

@@ -28,7 +28,7 @@ Proof.
     destruct H2 as [u H2]. destruct H3 as [v H3].
     apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
     apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
-    subst. apply Single.Charac. rewrite <- H3. apply Single.In.
+    subst. apply Single.Charac. rewrite <- H3. apply Single.IsIn.
   }
 
   (* We claim that F[Singleton] = V. *)

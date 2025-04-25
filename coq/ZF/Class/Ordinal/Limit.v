@@ -59,7 +59,7 @@ Proposition InBetween : forall (a b:U),
   Limit a -> b :< a -> exists c, b :< c /\ c :< a.
 Proof.
   intros a b H1 H2. exists (succ b). split.
-  - apply Succ.In.
+  - apply Succ.IsIn.
   - apply HasSucc; assumption.
 Qed.
 

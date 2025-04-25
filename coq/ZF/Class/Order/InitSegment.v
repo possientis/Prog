@@ -24,7 +24,7 @@ Proof.
   - split. 1: assumption. apply InvImage.Charac in H2. destruct H2 as [y [H2 H3]].
     apply Single.Charac in H2. subst. assumption.
   - split. 1: assumption. apply InvImage.Charac. exists a. split. 2: assumption.
-    apply Single.In.
+    apply Single.IsIn.
 Qed.
 
 (* Initial segments are compatible with equivalences.                           *)

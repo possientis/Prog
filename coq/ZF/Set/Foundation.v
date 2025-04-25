@@ -37,7 +37,7 @@ Proof.
   assert (a :< :0:) as H4.
     { rewrite <- H3. apply Inter.Charac. split.
       - apply Ha.
-      - apply Single.In.
+      - apply Single.IsIn.
     }
 
   (* This is our desired contradiction *)

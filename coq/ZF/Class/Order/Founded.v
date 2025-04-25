@@ -92,7 +92,7 @@ Proof.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x [H4 H5]].
   apply Single.Charac in H4. subst.
-  apply (InitSegment.WhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply Single.In.
+  apply (InitSegment.WhenEmpty1 _ _ _ a) in H5. 1: contradiction. apply Single.IsIn.
 Qed.
 
 Proposition FoundedNoLoop2 : forall (R A:Class), Founded R A ->

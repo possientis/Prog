@@ -29,7 +29,7 @@ Proof.
   - intros [H1|[H1|H1]]; apply Union2.Charac; subst.
     + left. apply Pair.InL.
     + left. apply Pair.InR.
-    + right. apply Single.In.
+    + right. apply Single.IsIn.
 Qed.
 
 Proposition Tuple3EqualIn1 : forall (a1 a2 a3:U),

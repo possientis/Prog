@@ -40,7 +40,7 @@ Proof.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x H4]. assert (H5 := H4). apply MinimalIn in H5.
   apply Single.Charac in H5. subst.
-  apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply Single.In.
+  apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply Single.IsIn.
 Qed.
 
 Proposition IsTransitive : forall (R A:Class),

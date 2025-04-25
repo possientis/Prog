@@ -29,7 +29,7 @@ Qed.
 (* N is a class of non-limit ordinals.                                          *)
 Proposition IsClassOfNonLimits : :N :<=: NonLimit.
 Proof.
-  intros a [H1 H2]. apply H2. apply Succ.In.
+  intros a [H1 H2]. apply H2. apply Succ.IsIn.
 Qed.
 
 (* 0 belongs to N. The type annotation is needed here for instance resolution.  *)
@@ -68,7 +68,7 @@ Proof.
   - destruct H2 as [H2 H3]. intros b H4 H5. apply H3.
     apply InclElemTran with a; try assumption.
     + apply Succ.IsOrdinal. assumption.
-    + apply Succ.In.
+    + apply Succ.IsIn.
   - split. 1: assumption. intros b H3. assert (Ordinal b) as H4. {
       apply Core.IsOrdinal with (succ a). 2: assumption.
       apply Succ.IsOrdinal. assumption. }
