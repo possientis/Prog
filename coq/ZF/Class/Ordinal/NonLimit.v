@@ -18,3 +18,11 @@ Proof.
   - subst. apply ZeroIsOrdinal.
   - destruct H1 as [b [H1 H2]]. rewrite H2. apply SuccIsOrdinal. assumption.
 Qed.
+
+Proposition HasSucc : forall (a:U), Ordinal a ->
+  NonLimit (succ a).
+Proof.
+  intros a H1. right. exists a. split.
+  - assumption.
+  - reflexivity.
+Qed.
