@@ -19,8 +19,13 @@ Definition omega : Class := fun a =>
 (* Notation ":N" := omega                                                       *)
 Global Instance ClassN : N Class := { omega := omega }.
 
-(* 0 belongs to the class omega. The notation ':N' can't be used here.          *)
-Proposition HasZero : omega :0:.
+Proposition IsClassOfOrdinals : :N :<=: On.
+Proof.
+  intros a [H1 _]. assumption.
+Qed.
+
+(* 0 belongs to N. The type annotation is needed here for instance resolution.  *)
+Proposition HasZero : (:N : Class) :0:.
 Proof.
   split.
   - apply ZeroIsOrdinal.
@@ -29,13 +34,18 @@ Proof.
     + apply Single.Charac in H1. subst. left. reflexivity.
 Qed.
 
+Proposition HasSucc : forall (a:U), (:N : Class) a -> (:N : Class) (succ a).
+Proof.
+  intros a [H1 H2]. split.
+  - apply SuccIsOrdinal. assumption.
+  - intros b H3. apply Union2.Charac in H3. destruct H3 as [H3|H3].
+    + apply H2. assumption.
+    + apply Single.Charac in H3. subst. right. exists a. split.
+      * assumption.
+      * reflexivity.
+Qed.
 
-(*
 Proposition NotEmpty : :N :<>: :0:.
 Proof.
-  intros H1. apply Class.Empty.Charac with :0:. apply H1. split.
-  - apply ZeroIsOrdinal.
-  - intros a H2. apply Union2.Charac in H2.
-
-Show.
-*)
+  intros H1. apply Class.Empty.Charac with :0:. apply H1, HasZero.
+Qed.

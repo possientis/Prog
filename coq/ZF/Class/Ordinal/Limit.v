@@ -16,7 +16,7 @@ Require Import ZF.Set.Union.
 Definition Limit : Class := On :\: NonLimit.
 
 (* Limit is a class of ordinals.                                                *)
-Proposition IsOrdinal : Limit :<=: On.
+Proposition IsClassOfOrdinals : Limit :<=: On.
 Proof.
   apply Class.Inter.InclL.
 Qed.
