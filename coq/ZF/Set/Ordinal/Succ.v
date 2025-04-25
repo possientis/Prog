@@ -82,7 +82,7 @@ Proof.
       * left. assumption.
 Qed.
 
-Proposition IfSuccInclThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition InclCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
   succ a :<=: succ b -> a :<=: b.
 Proof.
   intros a b H1 H2 H3 c H4. assert (Ordinal c) as H5. {
@@ -92,24 +92,6 @@ Proof.
   exfalso. apply NoInBetween with b a. split.
   + apply InclElemTran with c; assumption.
   + apply H3, IsIn.
-Qed.
-
-Proposition IfElemThenSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
-  a :< b -> succ a :<=: b.
-Proof.
-  intros a b H1 H2 H3 c H4. apply Union2.Charac in H4. destruct H4 as [H4|H4].
-  - apply ElemInclTran with a; try assumption.
-    + apply Core.IsOrdinal with a; assumption.
-    + apply StrictInclIsElem in H3; try assumption. apply H3.
-  - apply Single.Charac in H4. subst. assumption.
-Qed.
-
-(* The successor of a set is not equal to the set in question.                  *)
-Proposition SuccNotEqual : forall (a:U), succ a <> a.
-Proof.
-  intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
-    apply IsIn. }
-  rewrite H1 in H2. assumption.
 Qed.
 
 Proposition ElemCompat : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -122,6 +104,44 @@ Proof.
     + apply InclCompat; try assumption. apply H3.
     + destruct H3 as [H3 H4]. intros H5. apply H4.
       apply Injective. assumption.
+Qed.
+
+Proposition ElemCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
+  succ a :< succ b -> a :< b.
+Proof.
+  intros a b H1 H2 H3. assert (a :< b \/ b :<=: a) as H4. {
+    apply ElemOrIncl; assumption. }
+  destruct H4 as [H4|H4]. 1: assumption.
+  exfalso. apply NoElemLoop1 with (succ a).
+  apply ElemInclTran with (succ b); try assumption.
+  - apply IsOrdinal. assumption.
+  - apply IsOrdinal. assumption.
+  - apply IsOrdinal. assumption.
+  - apply InclCompat; assumption.
+Qed.
+
+Proposition ElemIsSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :< b <-> succ a :<=: b.
+Proof.
+  intros a b H1 H2. split.
+  - intros H3 c H4. apply Union2.Charac in H4. destruct H4 as [H4|H4].
+    + apply ElemInclTran with a; try assumption.
+      * apply Core.IsOrdinal with a; assumption.
+      * apply StrictInclIsElem in H3; try assumption. apply H3.
+    + apply Single.Charac in H4. subst. assumption.
+  - intros H3. assert (a :< b \/ b :<=: a) as H4. {
+      apply ElemOrIncl; assumption. }
+    destruct H4 as [H4|H4]. 1: assumption.
+    exfalso. apply NoElemLoop1 with a.
+    apply H4, H3, IsIn.
+Qed.
+
+(* The successor of a set is not equal to the set in question.                  *)
+Proposition NotEqual : forall (a:U), succ a <> a.
+Proof.
+  intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
+    apply IsIn. }
+  rewrite H1 in H2. assumption.
 Qed.
 
 
@@ -198,7 +218,7 @@ Qed.
 Proposition IfUnionThenNotSucc : forall (a b:U), Ordinal a -> Ordinal b ->
   a = :U(a) -> a <> succ b.
 Proof.
-  intros a b H1 H2 H3 H4. apply SuccNotEqual with a.
+  intros a b H1 H2 H3 H4. apply NotEqual with a.
   assert (:U(succ b) = b) as H5. { apply UnionOfSucc. assumption. }
   rewrite <- H4 in H5. assert (a = b) as H6. { rewrite <- H5. assumption. }
   rewrite <- H6 in H4. symmetry. assumption.

@@ -52,7 +52,7 @@ Proof.
     apply Core.IsOrdinal with a; assumption. }
   apply InclElemTran with c; try assumption.
   - apply Succ.IsOrdinal. assumption.
-  - apply IfElemThenSuccIncl; assumption.
+  - apply ElemIsSuccIncl; assumption.
 Qed.
 
 Proposition InBetween : forall (a b:U),
