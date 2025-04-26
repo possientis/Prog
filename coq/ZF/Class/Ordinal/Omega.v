@@ -1,4 +1,6 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Axiom.Infinity.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
@@ -8,6 +10,7 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.NonLimit.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
@@ -161,3 +164,49 @@ Proof.
   apply OrdinalTotal; assumption.
 Qed.
 
+(* The class N is in fact small, thanks to the axiom of infinity.               *)
+Proposition IsSmall : Small :N.
+Proof.
+  (* We need to show that N is small. *)
+  assert (Small :N) as X. 2: apply X.
+
+  (* There is a set containing 0 and the successor of all its elements. *)
+  assert (exists a,
+    :0: :< a /\ forall x, x :< a -> succ x :< a) as H1. {apply Infinity. }
+
+  (* So let a be such a set. *)
+  destruct H1 as [a [H1 H2]].
+
+  (* Then 0 :< a. *)
+  assert (:0: :< a) as X. apply H1. clear X.
+
+  (* And succ x :< a when x :< a. *)
+  assert (forall x, x :< a -> succ x :< a) as X. apply H2. clear X.
+
+  (* We prove N is small by showing it is bounded. *)
+  apply BoundedIsSmall.
+
+  (* So we need to show the existence of a set a such that N <= a. *)
+  assert (exists a, :N :<=: toClass a) as X. 2: apply X.
+
+  (* We claim our set a is such a set. *)
+  exists a.
+
+  (* So we need to show that N <= a. *)
+  assert (:N :<=: toClass a) as X. 2: apply X.
+
+  (* We proceed by induction. *)
+  apply Induction.
+
+  (* We first need to show that :0: :< a. *)
+  - assert (:0: :< a) as X. 2: apply X.
+
+  (* Which is true. *)
+    apply H1.
+
+  (* And we need to show that for all i in N, i :< a -> succ i :< a. *)
+  - assert (forall i, (:N : Class) i -> i :< a -> succ i :< a) as X. 2: apply X.
+
+  (* Which is also true. *)
+    intros i _. apply H2.
+Qed.
