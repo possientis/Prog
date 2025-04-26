@@ -7,6 +7,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.NonLimit.
+Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
@@ -83,6 +84,7 @@ Proof.
     exfalso. apply NoInBetween with a b. split; assumption.
 Qed.
 
+(* An ordinal with non-limit ordinals as element is a subclass of N.            *)
 Proposition IsSubClass : forall (a:U), Ordinal a ->
   toClass a :<=: NonLimit -> toClass a :<=: :N.
 Proof.
@@ -96,9 +98,10 @@ Proof.
     apply H2. apply InclElemTran with b; try assumption.
     apply InclCompatRev; try assumption.
     apply ElemIsSuccIncl; try assumption.
-    apply IsOrdinal. assumption.
+    apply Succ.IsOrdinal. assumption.
 Qed.
 
+(* Principle of induction over the natural numbers.                             *)
 Proposition Induction : forall (A:Class),
   A :0:                                           ->
   (forall i, (:N : Class) i -> A i -> A (succ i)) ->
@@ -128,6 +131,7 @@ Proof.
   intros H15. apply H14. split; assumption.
 Qed.
 
+(* Principle of induction over the natural numbers.                             *)
 Proposition FiniteInduction : forall (A:Class),
   A :<=: :N                     ->
   A :0:                         ->
@@ -137,3 +141,23 @@ Proof.
   intros A H1 H2 H3. apply DoubleInclusion. split. 1: assumption.
   apply Induction. 1: assumption. intros i _. apply H3.
 Qed.
+
+(* N is a transitive class.                                                     *)
+Proposition IsTransitive : Transitive :N.
+Proof.
+  intros b H1 a H2. assert (H3 := H1). destruct H3 as [H3 H4].
+  assert (Ordinal a) as H5. { apply Core.IsOrdinal with b; assumption. }
+  assert (toClass (succ a) :<=: NonLimit) as H6. {
+    intros x H7. apply Union2.Charac in H7. destruct H7 as [H7|H7].
+    - apply H4, Succ.IsIncl. apply (IfElemThenIncl a b); assumption.
+    - apply Single.Charac in H7. subst. apply H4, Succ.IsIncl. assumption. }
+  split; assumption.
+Qed.
+
+(* N is an ordinal class.                                                       *)
+Proposition IsOrdinal : Class.Ordinal.Core.Ordinal :N.
+Proof.
+  split. 1: apply IsTransitive. intros a b [H1 _] [H2 _].
+  apply OrdinalTotal; assumption.
+Qed.
+
