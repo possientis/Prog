@@ -54,7 +54,7 @@ Proof.
   }
 
   (* Using this equivalence... *)
-  apply SmallEquivCompat with F:[toClass a]:. 1: apply H2.
+  apply Small.EquivCompat with F:[toClass a]:. 1: apply H2.
 
   (* It is sufficient to show that F[a] is small *)
   assert (Small F:[toClass a]:) as A. 2: apply A.

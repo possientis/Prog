@@ -98,7 +98,7 @@ Proof.
   assert (Small F:[P]:) as A. 2: apply A.
 
   (* The property of being small being compatible with equivalences... *)
-  apply SmallEquivCompat with F:[toClass a]:.
+  apply Small.EquivCompat with F:[toClass a]:.
 
   (* We first need to show the equivalence between F[a] and F[P]. *)
   - assert (F:[toClass a]: :~: F:[P]:) as A. 2: apply A.

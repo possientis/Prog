@@ -115,7 +115,7 @@ Qed.
 Proposition EIsWellFoundedOnV : WellFounded E V.
 Proof.
   split. 1: apply EIsFoundedOnV. intros a _.
-  apply SmallEquivCompat with (toClass a).
+  apply Small.EquivCompat with (toClass a).
   - apply EquivSym, InitSegmentEV.
   - apply SetIsSmall.
 Qed.

@@ -131,7 +131,7 @@ Proof.
   - assert (Small (domain (F:|:A))) as A'. 2: apply A'.
 
   (* However, the domain of F|A is A /\ domain F. *)
-    apply SmallEquivCompat with (A:/\:domain F).
+    apply Small.EquivCompat with (A:/\:domain F).
       1: { apply EquivSym, DomainOfRestrict. }
 
   (* So we need to show that A/\domain F is small. *)
@@ -206,7 +206,7 @@ Proposition LesserThanRangeOfRestrictIsSmall : forall (F A B:Class),
 Proof.
   intros F A B H1 H2 H3.
   apply LesserThanSmallIsSmall with (range (F:|:B)). 1: assumption.
-  apply SmallEquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
+  apply Small.EquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
   apply Image.IsSmall; assumption.
 Qed.
 

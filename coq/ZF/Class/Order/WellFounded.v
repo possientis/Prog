@@ -63,7 +63,7 @@ Proof.
       assert (b = F!a) as H7. { rewrite H6. symmetry.
         apply Bij.EvalOfConverseEval with A B; assumption. }
       assert (A a) as H8. { rewrite H6. apply Bij.ConverseEvalIsInDomain with B; assumption. }
-      rewrite H7. apply SmallEquivCompat with F:[initSegment R A a]:.
+      rewrite H7. apply Small.EquivCompat with F:[initSegment R A a]:.
       + apply InitSegment.IsomFullImage; assumption.
       + apply Bij.ImageIsSmall with A B. 1: assumption. apply H3. assumption. }
 
@@ -195,7 +195,7 @@ Proof.
     assert (Small Singleton) as X. 2: apply X.
 
     (* Given that this class coincide with the initial segment at a...          *)
-    apply SmallEquivCompat with (initSegment R A a). 1: assumption.
+    apply Small.EquivCompat with (initSegment R A a). 1: assumption.
 
     (* We simply need to show the initial segment at a is small.                *)
     assert (Small (initSegment R A a)) as X. 2: apply X.

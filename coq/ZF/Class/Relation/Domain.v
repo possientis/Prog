@@ -50,7 +50,7 @@ Proof.
   assert (Small (domain F)) as A. 2: apply A.
 
   (* Using the equivalence Fst[F] ~ domain(F) ... *)
-  apply SmallEquivCompat with Fst:[F]:. 1: apply ImageByFst.
+  apply Small.EquivCompat with Fst:[F]:. 1: apply ImageByFst.
 
   (* It is sufficient to show that Fst[F] is small. *)
   assert (Small (Fst:[F]:)) as A. 2: apply A.

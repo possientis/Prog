@@ -229,7 +229,7 @@ Proof.
     intros [H3 H4]. assert (Small (A:/\:B)) as H5. {
       apply TransitiveStrictSubclassIsSmall with A; try assumption.
       apply InterIsOrdinal; assumption. }
-    apply (proj1 (SmallIsSomeSet _)) in H5. destruct H5 as [a H5].
+    apply (proj1 (Small.IsSomeSet _)) in H5. destruct H5 as [a H5].
     assert (Transitive (toClass a)) as H6. {
       apply Transitive.EquivCompat with (A:/\:B).
       - apply EquivSym. assumption.
@@ -277,7 +277,7 @@ Qed.
 (* The class of ordinals is a proper class.                                     *)
 Proposition OnIsProper : Proper On.
 Proof.
-  intros H1. apply (proj1 (SmallIsSomeSet _)) in H1. destruct H1 as [a H1].
+  intros H1. apply (proj1 (Small.IsSomeSet _)) in H1. destruct H1 as [a H1].
   apply NoElemLoop1 with a. apply H1. apply EquivCompat with On.
   - apply EquivSym. assumption.
   - apply OnIsOrdinal.

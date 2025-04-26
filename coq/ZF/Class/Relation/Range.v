@@ -49,7 +49,7 @@ Proof.
   assert (Small (range F)) as A. 2: apply A.
 
   (* Using the equivalence Snd[F] ~ range(F) ... *)
-  apply SmallEquivCompat with Snd:[F]:. 1: apply ImageBySnd.
+  apply Small.EquivCompat with Snd:[F]:. 1: apply ImageBySnd.
 
   (* It is sufficient to show that Snd[F] is small. *)
   assert (Small (Snd:[F]:)) as A. 2: apply A.

@@ -158,7 +158,7 @@ Proof.
        { apply WhenHasValueAt; assumption. }
 
   (* Using this equivalence ... *)
-    apply SmallEquivCompat with (toClass y). 1: { apply EquivSym, H3. }
+    apply Small.EquivCompat with (toClass y). 1: { apply EquivSym, H3. }
 
   (* We simply need to show that the set y is small *)
     assert (Small (toClass y)) as A. 2: apply A.
@@ -173,7 +173,7 @@ Proof.
     assert (eval F a :~: :0:) as H2. { apply WhenNotHasValueAt, H1. }
 
   (* Using this equivalence ... *)
-    apply SmallEquivCompat with :0:. 1: { apply EquivSym, H2. }
+    apply Small.EquivCompat with :0:. 1: { apply EquivSym, H2. }
 
   (* We simply need to show that the empty class is small. *)
     assert (Small :0:) as A. 2: apply A.

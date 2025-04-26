@@ -94,7 +94,7 @@ Proof.
   intros H1. assert (Small P) as A. { apply H1. } clear A.
 
   (* In particular P is equivalent to some set a. *)
-  assert (exists a, toClass a :~: P) as H2. { apply (proj1 (SmallIsSomeSet _)), H1. }
+  assert (exists a, toClass a :~: P) as H2. { apply (proj1 (Small.IsSomeSet _)), H1. }
 
   (* So let a be a set equivalent to the class P. *)
   destruct H2 as [a H2].
@@ -103,7 +103,7 @@ Proof.
   assert (Small (P :/\: Q)) as A. 2: apply A.
 
   (* The property of being small being compatible with equivalences... *)
-  apply SmallEquivCompat with (toClass a :/\: Q).
+  apply Small.EquivCompat with (toClass a :/\: Q).
 
   (* We first need to show the equivalence between a /\ Q and P /\ Q. *)
   - assert (toClass a :/\: Q :~: P :/\: Q) as A. 2: apply A.
@@ -121,7 +121,7 @@ Qed.
 Proposition IsSmallR : forall (P Q:Class),
   Small Q -> Small (P:/\:Q).
 Proof.
-  intros P Q H1. apply SmallEquivCompat with (Q :/\: P).
+  intros P Q H1. apply Small.EquivCompat with (Q :/\: P).
   - apply Comm.
   - apply IsSmallL. assumption.
 Qed.

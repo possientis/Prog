@@ -84,10 +84,10 @@ Proof.
   intros H2. assert (Small Q) as A. { apply H2. } clear A.
 
   (* P is equivalent to some set a. *)
-  assert (exists a, toClass a :~: P) as H3. { apply (proj1 (SmallIsSomeSet _)), H1. }
+  assert (exists a, toClass a :~: P) as H3. { apply (proj1 (Small.IsSomeSet _)), H1. }
 
   (* Q is equivalent to some set b. *)
-  assert (exists b, toClass b :~: Q) as H4. { apply (proj1 (SmallIsSomeSet _)), H2. }
+  assert (exists b, toClass b :~: Q) as H4. { apply (proj1 (Small.IsSomeSet _)), H2. }
 
   (* So let a be a set equivalent to the class P. *)
   destruct H3 as [a H3].
@@ -99,7 +99,7 @@ Proof.
   assert (Small (P :x: Q)) as A. 2: apply A.
 
   (* The property of being small being compatible with equivalences... *)
-  apply SmallEquivCompat with (toClass a :x: toClass b).
+  apply Small.EquivCompat with (toClass a :x: toClass b).
 
   (* We first need to show the equivalence between P \/ Q and a \/ b. *)
   - assert (toClass a :x: toClass b :~: P :x: Q) as A. 2: apply A.
@@ -215,7 +215,7 @@ Proof.
   assert (Small (Q :x: P)) as A. 2: apply A.
 
   (* Using the equivalence Switch[P x Q] ~ Q x P ... *)
-  apply SmallEquivCompat with Switch:[P :x: Q]:. 1: apply ImageBySwitch.
+  apply Small.EquivCompat with Switch:[P :x: Q]:. 1: apply ImageBySwitch.
 
   (* It is sufficient to show that Switch[P x Q] is small. *)
   assert (Small (Switch:[P :x: Q]:)) as A. 2: apply A.
@@ -298,7 +298,7 @@ Proof.
   }
 
   (* Using this equivalence ... *)
-  apply SmallEquivCompat with R:[domain R]:. 1: apply H8.
+  apply Small.EquivCompat with R:[domain R]:. 1: apply H8.
 
   (* It is sufficient to show that R[domain R] is small. *)
   assert (Small R:[domain R]:) as A. 2: apply A.
@@ -336,7 +336,7 @@ Proof.
   apply H1. assert (Small P) as A. 2: apply A.
 
   (* From the equivalence P ~ 0 *)
-  apply SmallEquivCompat with :0:. 1: { apply EquivSym, H2. }
+  apply Small.EquivCompat with :0:. 1: { apply EquivSym, H2. }
 
   (* We need to show that 0 is small *)
   assert (Small :0:) as A. 2: apply A.

@@ -45,7 +45,7 @@ Proof.
   assert (Small V) as A. 2: apply A.
 
   (* Given the equality F[Singleton] = V. *)
-  apply SmallEquivCompat with F:[Singleton]:. 1: assumption.
+  apply Small.EquivCompat with F:[Singleton]:. 1: assumption.
 
   (* We need to prove that F[Singleton] is small. *)
   assert (Small F:[Singleton]:) as A. 2: apply A.
