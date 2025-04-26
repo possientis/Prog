@@ -3,20 +3,19 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
-Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.NonLimit.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Union.
 
 (* The class of limit ordinals.                                                 *)
-Definition Limit : Class := On :\: NonLimit.
+Definition Limit : Class := Ordinal :\: NonLimit.
 
 (* Limit is a class of ordinals.                                                *)
-Proposition IsClassOfOrdinals : Limit :<=: On.
+Proposition IsClassOfOrdinals : Limit :<=: Ordinal.
 Proof.
   apply Class.Inter.InclL.
 Qed.
@@ -62,4 +61,3 @@ Proof.
   - apply Succ.IsIn.
   - apply HasSucc; assumption.
 Qed.
-
