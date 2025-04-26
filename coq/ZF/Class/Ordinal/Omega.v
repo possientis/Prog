@@ -87,8 +87,8 @@ Proof.
     exfalso. apply NoInBetween with a b. split; assumption.
 Qed.
 
-(* An ordinal with non-limit ordinals as element is a subclass of N.            *)
-Proposition IsSubClass : forall (a:U), Ordinal a ->
+(* An ordinal with non-limit ordinals as elements is a subclass of N.           *)
+Proposition IsSubclass : forall (a:U), Ordinal a ->
   toClass a :<=: NonLimit -> toClass a :<=: :N.
 Proof.
   intros a H1 H2 b H3. split.
@@ -107,7 +107,7 @@ Qed.
 (* Principle of induction over the natural numbers.                             *)
 Proposition Induction : forall (A:Class),
   A :0:                                           ->
-  (forall i, (:N : Class) i -> A i -> A (succ i)) ->
+  (forall n, (:N : Class) n -> A n -> A (succ n)) ->
   :N :<=: A.
 Proof.
   intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
@@ -115,18 +115,18 @@ Proof.
     apply InclTran with :N.
     - apply Class.Inter.InclL.
     - apply IsClassOfOrdinals. }
-  assert (exists i,
-    Ordinal i                       /\
-    (:N :\: A) i                    /\
-    forall j, (:N :\: A) j -> i :<=: j ) as H5. {
+  assert (exists n,
+    Ordinal n                       /\
+    (:N :\: A) n                    /\
+    forall m, (:N :\: A) m -> n :<=: m ) as H5. {
       apply HasMinimal; assumption. }
-  destruct H5 as [i [H5 [[H6 H7] H8]]].
-  assert (i <> :0:) as H9. { intros H9. subst. contradiction. }
-  assert (NonLimit i) as H10. { apply IsClassOfNonLimits. assumption. }
+  destruct H5 as [n [H5 [[H6 H7] H8]]].
+  assert (n <> :0:) as H9. { intros H9. subst. contradiction. }
+  assert (NonLimit n) as H10. { apply IsClassOfNonLimits. assumption. }
   destruct H10 as [H10|H10]. 1: contradiction.
   destruct H10 as [b [H10 H11]]. assert (H12 := H6). destruct H12 as [_ H12].
   assert ((:N : Class) b) as H13. { split. 1: assumption.
-    apply InclTran with (toClass (succ i)). 2: assumption.
+    apply InclTran with (toClass (succ n)). 2: assumption.
       rewrite <- H11. apply Succ.IsIncl. }
   assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
     apply NoElemLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
@@ -138,11 +138,11 @@ Qed.
 Proposition FiniteInduction : forall (A:Class),
   A :<=: :N                     ->
   A :0:                         ->
-  (forall i, A i -> A (succ i)) ->
+  (forall n, A n -> A (succ n)) ->
   A :~: :N.
 Proof.
   intros A H1 H2 H3. apply DoubleInclusion. split. 1: assumption.
-  apply Induction. 1: assumption. intros i _. apply H3.
+  apply Induction. 1: assumption. intros n _. apply H3.
 Qed.
 
 (* N is a transitive class.                                                     *)
