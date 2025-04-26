@@ -1,3 +1,5 @@
+Require Import ZF.Class.Core.
+Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Natural.
@@ -30,12 +32,11 @@ Proof.
   intros n m _ _. apply Succ.Injective.
 Qed.
 
-(*
 Proposition Peano5 : forall (A:Class),
-  A :0:                                           ->
-  (forall i, (:N : Class) i -> A i -> A (succ i)) ->
-  :N :<=: A.
+  A :0:                                    ->
+  (forall n, n :< :N -> A n -> A (succ n)) ->
+  toClass :N :<=: A.
 Proof.
   apply Induction.
 Qed.
-*)
+

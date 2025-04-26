@@ -1,12 +1,14 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Omega.
+Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Transitive.
 Export ZF.Notation.N.
 
 (* The set defined by the small class N. The set of natural numbers 0,1,2,...   *)
@@ -28,6 +30,15 @@ Proof.
   intros n. split; intros H1.
   - apply FromClass.Charac in H1. assumption.
   - apply FromClass.Charac. assumption.
+Qed.
+
+(* An ordinal is a natural number iff every lesser ordinal is a non-limit ord   *)
+Proposition Charac2 : forall (n:U), Ordinal n ->
+  n :< :N <-> forall (a:U), Ordinal a -> a :<=: n -> NonLimit a.
+Proof.
+  intros n H1. split; intros H2.
+  - apply FromClass.Charac in H2. apply Class.Ordinal.Omega.Charac; assumption.
+  - apply FromClass.Charac. apply Class.Ordinal.Omega.Charac; assumption.
 Qed.
 
 (* Every element of N is an ordinal.                                            *)
@@ -74,3 +85,42 @@ Proof.
   - apply Class.Ordinal.Omega.IsSubclass; assumption.
 Qed.
 
+(* Principle of induction over the natural numbers.                             *)
+Proposition Induction : forall (A:Class),
+  A :0:                                     ->
+  (forall n, n :< :N -> A n -> A (succ n))  ->
+  toClass :N :<=: A.
+Proof.
+  intros A H1 H2. apply Incl.EquivCompatL with :N.
+  - apply EquivSym, ToClass.
+  - apply Class.Ordinal.Omega.Induction. 1: assumption.
+    intros n H3. apply H2. apply FromClass.Charac. assumption.
+Qed.
+
+(* Principle of induction over the natural numbers.                             *)
+Proposition FiniteInduction : forall (A:Class),
+  A :<=: toClass :N             ->
+  A :0:                         ->
+  (forall n, A n -> A (succ n)) ->
+  A :~: toClass :N.
+Proof.
+  intros A H1 H2 H3. apply EquivTran with :N. 2: { apply EquivSym, ToClass. }
+  apply Class.Ordinal.Omega.FiniteInduction; try assumption.
+  apply Incl.EquivCompatR with (toClass :N). 2: assumption. apply ToClass.
+Qed.
+
+(* N is a transitive set.                                                       *)
+Proposition IsTransitive : Transitive :N.
+Proof.
+  apply Transitive.EquivCompat with :N.
+  - apply EquivSym, ToClass.
+  - apply Class.Ordinal.Omega.IsTransitive.
+Qed.
+
+(* The set N is an ordinal.                                                     *)
+Proposition NIsOrdinal : Ordinal :N.
+Proof.
+  apply Core.EquivCompat with :N.
+  - apply EquivSym, ToClass.
+  - apply Class.Ordinal.Omega.IsOrdinal.
+Qed.
