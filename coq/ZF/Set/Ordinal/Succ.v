@@ -4,6 +4,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
@@ -18,6 +19,12 @@ Definition succ (a:U) : U := a :\/: :{a}:.
 Proposition IsIn : forall (a:U), a :< succ a.
 Proof.
   intros a. apply Union2.Charac. right. apply Single.IsIn.
+Qed.
+
+(* A successor is not the empty set.                                            *)
+Proposition NotEmpty : forall (a:U), succ a <> :0:.
+Proof.
+  intros a H1. apply Empty.Charac with a. rewrite <- H1. apply IsIn.
 Qed.
 
 (* A set (ordinal or not) is a subset of its successor.                         *)

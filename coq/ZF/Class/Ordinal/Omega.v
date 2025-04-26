@@ -1,9 +1,14 @@
+Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.NonLimit.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
@@ -92,4 +97,43 @@ Proof.
     apply InclCompatRev; try assumption.
     apply ElemIsSuccIncl; try assumption.
     apply IsOrdinal. assumption.
+Qed.
+
+Proposition Induction : forall (A:Class),
+  A :0:                                           ->
+  (forall i, (:N : Class) i -> A i -> A (succ i)) ->
+  :N :<=: A.
+Proof.
+  intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
+  assert (:N :\: A :<=: On) as H4. {
+    apply InclTran with :N.
+    - apply Class.Inter.InclL.
+    - apply IsClassOfOrdinals. }
+  assert (exists i,
+    Ordinal i                       /\
+    (:N :\: A) i                    /\
+    forall j, (:N :\: A) j -> i :<=: j ) as H5. {
+      apply HasMinimal; assumption. }
+  destruct H5 as [i [H5 [[H6 H7] H8]]].
+  assert (i <> :0:) as H9. { intros H9. subst. contradiction. }
+  assert (NonLimit i) as H10. { apply IsClassOfNonLimits. assumption. }
+  destruct H10 as [H10|H10]. 1: contradiction.
+  destruct H10 as [b [H10 H11]]. assert (H12 := H6). destruct H12 as [_ H12].
+  assert ((:N : Class) b) as H13. { split. 1: assumption.
+    apply InclTran with (toClass (succ i)). 2: assumption.
+      rewrite <- H11. apply Succ.IsIncl. }
+  assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
+    apply NoElemLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
+  apply H7. rewrite H11. apply H2. 1: assumption. apply DoubleNegation.
+  intros H15. apply H14. split; assumption.
+Qed.
+
+Proposition FiniteInduction : forall (A:Class),
+  A :<=: :N                     ->
+  A :0:                         ->
+  (forall i, A i -> A (succ i)) ->
+  A :~: :N.
+Proof.
+  intros A H1 H2 H3. apply DoubleInclusion. split. 1: assumption.
+  apply Induction. 1: assumption. intros i _. apply H3.
 Qed.
