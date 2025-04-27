@@ -336,10 +336,10 @@ Proof.
     - apply Class.Inter.InclL. }
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
     apply StrictInclIsElem; try assumption. apply OnIsOrdinal. }
-  assert (toClass a :<=: A) as H9. { intros x H10. apply DoubleNegation.
-    intros H11. apply Class.Empty.Charac with x, H7. split. 2: assumption. split.
-    - apply IsOrdinal with (toClass a); assumption.
-    - apply Complement.Charac. assumption. }
+  assert (toClass a :<=: A) as H9. {
+    intros x H10. apply DoubleNegation. intros H11.
+    apply Class.Empty.Charac with x, H7. split. 2: assumption. split. 2: assumption.
+    apply IsOrdinal with (toClass a); assumption. }
   apply H6, H2; assumption.
 Qed.
 
