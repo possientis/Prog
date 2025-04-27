@@ -26,6 +26,20 @@ Definition Founded (R A:Class) : Prop := forall a,
   a <> :0:         ->
   exists x, Minimal R (toClass a) x.
 
+Proposition WhenSmall : forall (R A B:Class),
+  Founded R A ->
+  Small B     ->
+  B :<=: A    ->
+  B :<>: :0:  ->
+  exists x, Minimal R B x.
+Proof.
+  intros R A B H1 H2 H3 H4. destruct H2 as [b H2].
+  assert (exists x, Minimal R (toClass b) x) as H5. {
+    apply H1.
+    - intros u H5. apply H3, H2. assumption.
+    - apply ToClassWhenNotEmpty.
+Admitted.
+
 (* If R is founded on A superclass of B, then it is founded on B.               *)
 Proposition FoundedIncl : forall (R A B:Class),
   Founded R A -> B :<=: A -> Founded R B.

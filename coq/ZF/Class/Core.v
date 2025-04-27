@@ -55,3 +55,29 @@ Proposition NotEquivSetNotEqual : forall (a b:U),
 Proof.
   intros a b. split; intros H1 H2; apply H1, EquivSetEqual; assumption.
 Qed.
+
+Proposition NotEquivCompat : forall (P Q R S:Class),
+  P :~: Q -> R :~: S -> P :<>: R -> Q :<>: S.
+Proof.
+  intros P Q R S H1 H2 H3 H4. apply H3.
+  apply EquivTran with Q. 1: assumption.
+  apply EquivTran with S. 1: assumption.
+  apply EquivSym. assumption.
+Qed.
+
+Proposition NotEquivCompatL : forall (P Q R:Class),
+  P :~: Q -> P :<>: R -> Q :<>: R.
+Proof.
+  intros P Q R H1. apply NotEquivCompat.
+  - assumption.
+  - apply EquivRefl.
+Qed.
+
+Proposition NotEquivCompatR : forall (P Q R:Class),
+  P :~: Q -> R :<>: P -> R :<>: Q.
+Proof.
+  intros P Q R H1. apply NotEquivCompat.
+  - apply EquivRefl.
+  - assumption.
+Qed.
+

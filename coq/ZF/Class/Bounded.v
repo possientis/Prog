@@ -21,7 +21,7 @@ Proof.
   intros H2. assert (Small Q) as A. { apply H2. } clear A.
 
   (* In particular Q is equivalent to some set a. *)
-  assert (exists a, toClass a :~: Q) as H3. { apply (proj1 (Small.IsSomeSet _)), H2. }
+  assert (exists a, toClass a :~: Q) as H3. { apply Small.IsSomeSet, H2. }
 
   (* So let a be a set equivalent to the class Q. *)
   destruct H3 as [a H3].

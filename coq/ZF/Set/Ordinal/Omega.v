@@ -4,8 +4,10 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Foundation.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Ordinal.Omega.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Relation.Fun.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Small.
@@ -135,28 +137,6 @@ Proof.
   - apply Class.Ordinal.Omega.IsOrdinal.
 Qed.
 
-(* There is no infinite descending :<-chain.                                    *)
-Proposition NoInfiniteDescent : forall (F:Class),
-  FunctionOn F (toClass :N) -> exists n, ~ F!(succ n) :< F!n.
-Proof.
-  intros F H1.
-  assert (exists a, range F a /\ toClass a :/\: range F :~: :0: ) as H2. {
-    apply Foundation.
-    - apply FunctionOn.RangeIsNotEmpty with (toClass :N). 1: assumption.
-      apply ToClassWhenNotEmpty, NotEmpty.
-    - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
-      apply Small.EquivCompat with :N.
-      + apply EquivSym, ToClass.
-      + apply Omega.IsSmall. }
-  destruct H2 as [a [H2 H3]].
-  apply (FunctionOn.RangeCharac F (toClass :N)) in H2. 2: assumption.
-  destruct H2 as [n [H2 H4]]. exists n. intros H5.
-  apply Class.Empty.Charac with (F!(succ n)). apply H3. split.
-  - rewrite H4. assumption.
-  - apply EvalIsInRange with (toClass :N). 1: assumption.
-    apply HasSucc. assumption.
-Qed.
-
 (* A non-empty subclass of N has a minimal element.                             *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: toClass :N   ->
@@ -181,4 +161,35 @@ Proof.
   intros a H1 H2. apply HasMinimal. 1: assumption.
   apply ToClassWhenNotEmpty. assumption.
 Qed.
+
+(* There is no infinite descending :<-chain.                                    *)
+Proposition NoInfiniteDescent : forall (F:Class),
+  FunctionOn F (toClass :N) -> exists n, n :< :N /\ ~ F!(succ n) :< F!n.
+Proof.
+  intros F H1.
+  assert (exists a, range F a /\ toClass a :/\: range F :~: :0: ) as H2. {
+    apply Foundation.
+    - apply FunctionOn.RangeIsNotEmpty with (toClass :N). 1: assumption.
+      apply ToClassWhenNotEmpty, NotEmpty.
+    - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
+      apply Small.EquivCompat with :N.
+      + apply EquivSym, ToClass.
+      + apply Omega.IsSmall. }
+  destruct H2 as [a [H2 H3]].
+  apply (FunctionOn.RangeCharac F (toClass :N)) in H2. 2: assumption.
+  destruct H2 as [n [H2 H4]]. exists n. split. 1: assumption. intros H5.
+  apply Class.Empty.Charac with (F!(succ n)). apply H3. split.
+  - rewrite H4. assumption.
+  - apply EvalIsInRange with (toClass :N). 1: assumption.
+    apply HasSucc. assumption.
+Qed.
+
+Proposition NoInfiniteDescentGen : forall (F R A:Class),
+  Fun F (toClass :N) A        ->
+  Founded R A                 ->
+  exists n, n :< :N /\
+    ~ R :(F!(succ n),F!n):.
+Proof.
+  intros F R A H1 H2.
+Admitted.
 

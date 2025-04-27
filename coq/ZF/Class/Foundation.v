@@ -14,10 +14,10 @@ Proposition Foundation : forall (A:Class),
   Small A     ->
   exists a, A a /\ toClass a :/\: A :~: :0:.
 Proof.
-  intros A H1 H2. destruct H2 as [b H2].
-  assert (b <> :0:) as H3. { apply ZF.Set.Empty.NotEmptyHasElem.
-    apply Class.Empty.NotEmptyHasElem in H1. destruct H1 as [x H1].
-    exists x. apply H2. assumption. }
+  intros A H1 H2. apply Small.IsSomeSet in H2. destruct H2 as [b H2].
+  assert (b <> :0:) as H3. {
+    apply ToClassWhenNotEmpty, NotEquivCompatL with A. 2: assumption.
+    apply EquivSym. assumption. }
   assert (exists a, a :< b /\ a :/\: b = :0:) as H4. {
     apply Foundation. assumption. }
   destruct H4 as [a [H4 H5]]. exists a. split.
