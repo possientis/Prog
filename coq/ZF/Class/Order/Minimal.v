@@ -43,7 +43,7 @@ Proposition MinimalSuffice : forall (R A:Class) (a:U),
   A a -> (forall x, A x -> ~ R :(x,a):) -> Minimal R A a.
 Proof.
   intros R A a H1 H2. split. 1: assumption.
-  apply InitSegment.WhenEmpty. assumption.
+  apply InitSegment.WhenEmptyRev. assumption.
 Qed.
 
 Proposition MinimalIn : forall (R A:Class) (a:U),
@@ -61,8 +61,8 @@ Qed.
 Proposition MinimalHasNoLesser : forall (R A:Class) (a x:U),
   A x -> Minimal R A a -> ~ R :(x,a):.
 Proof.
-  intros R A a x H1 H2. apply (InitSegment.WhenEmpty1 R A). 1: assumption.
-  apply MinimalInitSegment. assumption.
+  intros R A a x H1 H2. apply InitSegment.WhenEmpty with A.
+  2: assumption. apply MinimalInitSegment. assumption.
 Qed.
 
 Proposition MinimalIsomImage : forall (F R S A B C:Class) (a:U),

@@ -92,25 +92,22 @@ Proof.
 Qed.
 
 (* The initial segment is empty iff there is no x in A which is less than a.    *)
-Proposition WhenEmpty : forall (R A:Class) (a:U),
-  initSegment R A a :~: :0: <-> forall x, A x -> ~ R :(x,a):.
+Proposition WhenEmpty : forall (R A:Class) (a x:U),
+  initSegment R A a :~: :0: -> A x -> ~ R :(x,a):.
 Proof.
-  intros R A a. split; intros H1.
-  - intros x H2 H3. apply Class.Empty.Charac with x. apply H1.
-    apply Charac. split; assumption.
-  - intros x. split; intros H2.
-    + apply Charac in H2. destruct H2 as [H2 H3].
-      apply Class.Empty.Charac. assert (H4 := H1 x H2). contradiction.
-    + apply Class.Empty.Charac in H2. contradiction.
+  intros R A a x H1 H2 H3. apply Class.Empty.Charac with x. apply H1.
+  apply Charac. split; assumption.
 Qed.
 
-(* If x lies in A and the initial segment is empty, then it is not less than a. *)
-Proposition WhenEmpty1 : forall (R A:Class) (a x:U),
-  A x -> initSegment R A a :~: :0: -> ~ R :(x,a):.
+Proposition WhenEmptyRev : forall (R A:Class) (a:U),
+  (forall x, A x -> ~ R :(x,a):) -> initSegment R A a :~: :0:.
 Proof.
-  intros R A a x H1 H2.
-  assert (H3 := proj1 (WhenEmpty R A a) H2 x H1). assumption.
+  intros R A a H1 x. split; intros H2.
+  + apply Charac in H2. destruct H2 as [H2 H3].
+    apply Class.Empty.Charac. assert (H4 := H1 x H2). contradiction.
+  + apply Class.Empty.Charac in H2. contradiction.
 Qed.
+
 
 (* Initial segments of R in A are subclasses of A.                              *)
 Proposition IsIncl : forall (R A:Class) (a:U),
