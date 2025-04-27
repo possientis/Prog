@@ -87,7 +87,7 @@ Proof.
 Qed.
 
 Proposition ToClassWhenNotEmpty : forall (a:U),
-  ~ toClass a :~: :0: <-> a <> :0:.
+  toClass a :<>: :0: <-> a <> :0:.
 Proof.
   intros a. split; intros H1 H2; apply H1, ToClassWhenEmpty; assumption.
 Qed.

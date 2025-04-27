@@ -65,7 +65,7 @@ Proof.
 Qed.
 
 (* The set N is a limit ordinal.                                                *)
-Proposition IsLimit : Limit :N.
+Proposition NIsLimit : Limit :N.
 Proof.
   split.
   - apply NIsOrdinal.
@@ -74,4 +74,15 @@ Proof.
     + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
       * apply IsNonLimit. assumption.
       * apply Single.Charac in H2. subst. assumption.
+Qed.
+
+(* A limit ordinal is no less than N.                                           *)
+Proposition NoLessThanN : forall (a:U), Limit a -> :N :<=: a.
+Proof.
+  intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
+    apply ElemOrIncl.
+    - apply IsClassOfOrdinals. assumption.
+    - apply NIsOrdinal. }
+  destruct H2 as [H2|H2]. 2: assumption. exfalso.
+  apply H1. apply Omega.Charac in H2. apply H2, Succ.IsIn.
 Qed.

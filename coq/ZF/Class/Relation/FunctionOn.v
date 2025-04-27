@@ -1,5 +1,6 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Bounded.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
@@ -205,4 +206,11 @@ Proof.
     split. 1: assumption. symmetry. apply (EvalCharac F A); assumption.
   - destruct H2 as [H2 H3]. symmetry in H3.
     apply (EvalCharac F A); assumption.
+Qed.
+
+Proposition RangeIsNotEmpty : forall (F A:Class),
+  FunctionOn F A -> A :<>: :0: -> range F :<>: :0:.
+Proof.
+  intros F A H1 H2. apply NotEmptyHasElem in H2. destruct H2 as [x H2].
+  apply NotEmptyHasElem. exists F!x. apply EvalIsInRange with A; assumption.
 Qed.

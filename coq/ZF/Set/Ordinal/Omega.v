@@ -142,9 +142,8 @@ Proof.
   intros F H1.
   assert (exists a, range F a /\ toClass a :/\: range F :~: :0: ) as H2. {
     apply Foundation.
-    - apply Class.Empty.NotEmptyHasElem. exists F!:0:.
-      apply EvalIsInRange with (toClass :N). 1: assumption.
-      apply HasZero.
+    - apply FunctionOn.RangeIsNotEmpty with (toClass :N). 1: assumption.
+      apply ToClassWhenNotEmpty, NotEmpty.
     - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
       apply Small.EquivCompat with :N.
       + apply EquivSym, ToClass.
