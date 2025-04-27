@@ -1,9 +1,16 @@
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
+Require Import ZF.Class.Foundation.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Omega.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Relation.FunctionOn.
+Require Import ZF.Class.Relation.Range.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Eval.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Core.
@@ -12,11 +19,12 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Transitive.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 Export ZF.Notation.N.
 
 (* The set defined by the small class N. The set of natural numbers 0,1,2,...   *)
-Definition omega : U := fromClass :N IsSmall.
+Definition omega : U := fromClass :N Omega.IsSmall.
 
 (* Notation ":N" := omega                                                       *)
 Global Instance SetN : N U := { omega := omega }.
@@ -139,4 +147,27 @@ Proof.
     + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
       * apply IsNonLimit. assumption.
       * apply Single.Charac in H2. subst. assumption.
+Qed.
+
+(* There is no infinite descending :<-chain.                                    *)
+Proposition NoInfiniteDescent : forall (F:Class),
+  FunctionOn F (toClass :N) -> exists n, ~ F!(succ n) :< F!n.
+Proof.
+  intros F H1.
+  assert (exists a, range F a /\ toClass a :/\: range F :~: :0: ) as H2. {
+    apply Foundation.
+    - apply Class.Empty.NotEmptyHasElem. exists F!:0:.
+      apply EvalIsInRange with (toClass :N). 1: assumption.
+      apply HasZero.
+    - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
+      apply Small.EquivCompat with :N.
+      + apply EquivSym, ToClass.
+      + apply Omega.IsSmall. }
+  destruct H2 as [a [H2 H3]].
+  apply (FunctionOn.RangeCharac F (toClass :N)) in H2. 2: assumption.
+  destruct H2 as [n [H2 H4]]. exists n. intros H5.
+  apply Class.Empty.Charac with (F!(succ n)). apply H3. split.
+  - rewrite H4. assumption.
+  - apply EvalIsInRange with (toClass :N). 1: assumption.
+    apply HasSucc. assumption.
 Qed.

@@ -187,3 +187,22 @@ Proof.
   intros F A [H1 H2]. apply EquivTran with (domain F).
   2: assumption. apply InvImageOfRangeIsDomain.
 Qed.
+
+Proposition RangeIsSmall : forall (F A:Class),
+  FunctionOn F A -> Small A -> Small (range F).
+Proof.
+  intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
+  - apply ImageOfDomainIsRange. assumption.
+  - apply ImageIsSmall with A; assumption.
+Qed.
+
+Proposition RangeCharac : forall (F A:Class) (y:U),
+  FunctionOn F A -> range F y <-> exists x, A x /\ y = F!x.
+Proof.
+  intros F A y H1. split; intros [x H2]; exists x.
+  - assert (A x) as H3. {
+      destruct H1 as [_ H1]. apply H1. exists y. assumption. }
+    split. 1: assumption. symmetry. apply (EvalCharac F A); assumption.
+  - destruct H2 as [H2 H3]. symmetry in H3.
+    apply (EvalCharac F A); assumption.
+Qed.
