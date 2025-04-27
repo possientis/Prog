@@ -16,10 +16,10 @@ Proposition Charac : forall (F P:Class) (x:U),
   F^:-1: :[P]: x <-> exists y, P y /\ F :(x,y):.
 Proof.
   intros F P x. split; intros H1.
-  - destruct H1 as [y [H1 H2]]. apply (proj1 (Converse.Charac2 _ _ _)) in H2.
+  - destruct H1 as [y [H1 H2]]. apply Converse.Charac2 in H2.
     exists y. split; assumption.
   - destruct H1 as [y [H1 H2]]. exists y. split. 1: assumption.
-    apply Converse.Charac2. assumption.
+    apply Converse.Charac2Rev. assumption.
 Qed.
 
 (* The inverse image is compatible with equivalences.                           *)
@@ -89,13 +89,13 @@ Proposition EvalCharac : forall (F B:Class), Functional F ->
   forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
 Proof.
   intros F B H1 x. split; intros H2.
-  - destruct H2 as [y [H2 H3]]. apply (proj1 (Converse.Charac2 _ _ _)) in H3.
+  - destruct H2 as [y [H2 H3]]. apply Converse.Charac2 in H3.
     assert (domain F x) as H4. { exists y. assumption. }
     split. 1: assumption.
     assert (F!x = y) as H5. { apply Eval.Charac; assumption. }
     rewrite H5. assumption.
   - destruct H2 as [H2 H3]. exists (F!x). split. 1: assumption.
-    apply Converse.Charac2. apply Eval.Satisfies; assumption.
+    apply Converse.Charac2Rev. apply Eval.Satisfies; assumption.
 Qed.
 
 Proposition InvImageOfImageIsLess : forall (F A:Class),
@@ -103,8 +103,8 @@ Proposition InvImageOfImageIsLess : forall (F A:Class),
 Proof.
   intros F A H1 x H2. apply Charac in H2. destruct H2 as [y [H2 H3]].
   destruct H2 as [x' [H2 H4]]. assert (x' = x) as H5. { apply H1 with y.
-    - apply Converse.Charac2. assumption.
-    - apply Converse.Charac2. assumption. }
+    - apply Converse.Charac2Rev. assumption.
+    - apply Converse.Charac2Rev. assumption. }
   subst. assumption.
 Qed.
 

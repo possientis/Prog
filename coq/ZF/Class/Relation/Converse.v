@@ -24,12 +24,16 @@ Definition converse (F:Class) : Class := fun x =>
 Global Instance ClassInverse : Inverse Class := { inverse := converse }.
 
 Proposition Charac2 : forall (F:Class) (y z:U),
-  F^:-1: :(y,z): <-> F :(z,y):.
+  F^:-1: :(y,z): -> F :(z,y):.
 Proof.
-  intros F y z. split; intros H1.
-  - destruct H1 as [y' [z' [H1 H2]]]. apply WhenEqual in H1.
-    destruct H1 as [H1 H1']. subst. apply H2.
-  - exists z. exists y. split. 1: reflexivity. apply H1.
+  intros F y z [y' [z' [H1 H2]]]. apply WhenEqual in H1.
+  destruct H1 as [H1 H1']. subst. apply H2.
+Qed.
+
+Proposition Charac2Rev : forall (F:Class) (y z:U),
+  F :(z,y): -> F^:-1: :(y,z):.
+Proof.
+  intros F y z H1. exists z. exists y. split. 1: reflexivity. assumption.
 Qed.
 
 Proposition EquivCompat : forall (F G:Class),
@@ -137,23 +141,23 @@ Proposition ConverseDomain : forall (F:Class),
   domain F^:-1: :~: range F.
 Proof.
   intros F y. split; intros H1.
-  - destruct H1 as [x H1]. apply (proj1 (Charac2 _ _ _)) in H1.
+  - destruct H1 as [x H1]. apply Charac2 in H1.
     exists x. assumption.
-  - destruct H1 as [x H1]. exists x. apply Charac2. assumption.
+  - destruct H1 as [x H1]. exists x. apply Charac2Rev. assumption.
 Qed.
 
 Proposition ConverseRange : forall (F:Class),
   range F^:-1: :~: domain F.
 Proof.
   intros F x. split; intros H1.
-  - destruct H1 as [y H1]. apply (proj1 (Charac2 _ _ _)) in H1.
+  - destruct H1 as [y H1]. apply Charac2 in H1.
     exists y. assumption.
-  - destruct H1 as [y H1]. exists y. apply Charac2. assumption.
+  - destruct H1 as [y H1]. exists y. apply Charac2Rev. assumption.
 Qed.
 
 Proposition ConverseWhenFunctional : forall (F:Class) (x y z:U),
   Functional F^:-1: -> F :(x,z): -> F :(y,z): -> x = y.
 Proof.
   intros F x y z H1 H2 H3. unfold Functional in H1. apply H1 with z;
-  apply Charac2; assumption.
+  apply Charac2Rev; assumption.
 Qed.
