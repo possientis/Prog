@@ -156,3 +156,29 @@ Proof.
   - apply EvalIsInRange with (toClass :N). 1: assumption.
     apply HasSucc. assumption.
 Qed.
+
+(* A non-empty subclass of N has a minimal element.                             *)
+Proposition HasMinimal : forall (A:Class),
+  A :<=: toClass :N   ->
+  A :<>: :0:          ->
+  exists m, A m /\
+    forall n, A n -> m :<=: n.
+Proof.
+  intros A H1 H2.
+  assert (exists m, Ordinal m /\ A m /\forall n, A n -> m :<=: n) as H3. {
+    apply Core.HasMinimal. 2: assumption.
+    intros x H3. apply IsOrdinal, H1. assumption. }
+  destruct H3 as [m [H3 [H4 H5]]]. exists m. split; assumption.
+Qed.
+
+(* A non-empty subset of N has a minimal element.                               *)
+Proposition HasMinimal2 : forall (a:U),
+  a :<=: :N             ->
+  a <> :0:              ->
+  exists m, m :< a /\
+    forall n, n :< a -> m :<=: n.
+Proof.
+  intros a H1 H2. apply HasMinimal. 1: assumption.
+  apply ToClassWhenNotEmpty. assumption.
+Qed.
+
