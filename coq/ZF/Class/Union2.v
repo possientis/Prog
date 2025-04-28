@@ -59,10 +59,10 @@ Proof.
   intros H2. assert (Small Q) as A. { apply H2. } clear A.
 
   (* P is equivalent to some set a. *)
-  assert (exists a, toClass a :~: P) as H3. { apply Small.IsSomeSet, H1. }
+  assert (exists a, P :~: toClass a) as H3. { apply Small.IsSomeSet, H1. }
 
   (* Q is equivalent to some set b. *)
-  assert (exists b, toClass b :~: Q) as H4. { apply Small.IsSomeSet, H2. }
+  assert (exists b, Q :~: toClass b) as H4. { apply Small.IsSomeSet, H2. }
 
   (* So let a be a set equivalent to the class P. *)
   destruct H3 as [a H3].
@@ -80,7 +80,7 @@ Proof.
   - assert (toClass a :\/: toClass b :~: P :\/: Q) as A. 2: apply A.
 
   (* Which follows from the equivalences of a and P and  of b and Q. *)
-    apply EquivCompat; assumption.
+    apply EquivCompat; apply EquivSym; assumption.
 
   (* We next need to show that a \/ b is small. *)
   - assert (Small (toClass a :\/: toClass b)) as A. 2: apply A.

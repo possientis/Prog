@@ -37,7 +37,7 @@ Proof.
   intros H1. assert (Small P) as A. { apply H1. } clear A.
 
   (* In particular P is equivalent to some set a. *)
-  assert (exists a, toClass a :~: P) as H2. { apply Small.IsSomeSet, H1. }
+  assert (exists a, P :~: toClass a) as H2. { apply Small.IsSomeSet, H1. }
 
   (* So let a be a set equivalent to the class P. *)
   destruct H2 as [a H2].
@@ -52,7 +52,7 @@ Proof.
   - assert (:U(toClass a):~: :U(P)) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-    apply EquivCompat, H2.
+    apply EquivCompat, EquivSym, H2.
 
   (* We next need to show that U(a) is small. *)
   - assert (Small :U(toClass a)) as A. 2: apply A.

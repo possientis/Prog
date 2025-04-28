@@ -231,17 +231,14 @@ Proof.
       apply InterIsOrdinal; assumption. }
     apply Small.IsSomeSet in H5. destruct H5 as [a H5].
     assert (Transitive (toClass a)) as H6. {
-      apply Transitive.EquivCompat with (A:/\:B).
-      - apply EquivSym. assumption.
-      - apply InterIsOrdinal; assumption. }
+      apply Transitive.EquivCompat with (A:/\:B). 1: assumption.
+      apply InterIsOrdinal; assumption. }
     assert (A a) as H7. {
       apply WhenTransitiveStrictInclIsElem; try assumption.
-      apply StrictEquivCompatL with (A:/\:B). 2: assumption.
-      apply EquivSym. assumption. }
+      apply StrictEquivCompatL with (A:/\:B); assumption. }
     assert (B a) as H8. {
       apply WhenTransitiveStrictInclIsElem; try assumption.
-      apply StrictEquivCompatL with (A:/\:B). 2: assumption.
-      apply EquivSym. assumption. }
+      apply StrictEquivCompatL with (A:/\:B); assumption. }
     apply NoElemLoop1 with a. apply H5. split; assumption. }
   assert (A:/\:B :~: A \/ A:/\:B :~: B) as H4. {
     apply DoubleNegation. intros H4. apply H3. split.
@@ -279,8 +276,7 @@ Proposition OnIsProper : Proper On.
 Proof.
   intros H1. apply Small.IsSomeSet in H1. destruct H1 as [a H1].
   apply NoElemLoop1 with a. apply H1. apply EquivCompat with On.
-  - apply EquivSym. assumption.
-  - apply OnIsOrdinal.
+  1: assumption. apply OnIsOrdinal.
 Qed.
 
 (* Every ordinal class is the class of ordinals or a strict subclass thereof.   *)

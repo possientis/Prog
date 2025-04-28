@@ -36,16 +36,10 @@ Proof.
   intros R A B H1 H2 H3 H4.
   apply Small.IsSomeSet in H2. destruct H2 as [b H2].
   assert (exists x, Minimal R (toClass b) x) as H5. {
-  apply H1.
-  - apply Incl.EquivCompatL with B.
-Admitted.
- (*
     apply H1.
-    - intros u H5. apply H3, H2. assumption.
-    - apply ToClassWhenNotEmpty.
-*)
-
-
+    - apply Incl.EquivCompatL with B; assumption.
+    - apply ToClassWhenNotEmpty. apply NotEquivCompatL with B; assumption. }
+Admitted.
 
 (* If R is founded on A superclass of B, then it is founded on B.               *)
 Proposition FoundedIncl : forall (R A B:Class),
@@ -171,4 +165,3 @@ Proof.
   - apply (InitSegment.WhenEmpty _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
   - apply (InitSegment.WhenEmpty _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
 Qed.
-
