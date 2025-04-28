@@ -4,7 +4,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Inter.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Export ZF.Notation.Prod.
 
@@ -39,15 +39,15 @@ Proposition InterProdIsProdInter: forall (a1 a2 b1 b2:U),
   (a1:x:b1) :/\: (a2:x:b2) = (a1:/\:a2) :x: (b1:/\:b2).
 Proof.
   intros a1 a2 b1 b2. apply DoubleInclusion. split; intros x H1.
-  - apply Inter.Charac in H1. destruct H1 as [H1 H2].
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     apply Charac in H2. destruct H2 as [y2 [z2 [G2 [H2 H2']]]].
     subst. apply WhenEqual in G2. destruct G2 as [G1 G2]. subst.
-    apply Charac2. split; apply Inter.Charac; split; assumption.
+    apply Charac2. split; apply Inter2.Charac; split; assumption.
   - apply Charac in H1. destruct H1 as [y [z [H1 [Ha Hb]]]].
-    apply Inter.Charac in Ha. destruct Ha as [Ha Ha'].
-    apply Inter.Charac in Hb. destruct Hb as [Hb Hb'].
-    apply Inter.Charac. split; apply Charac; exists y; exists z; split.
+    apply Inter2.Charac in Ha. destruct Ha as [Ha Ha'].
+    apply Inter2.Charac in Hb. destruct Hb as [Hb Hb'].
+    apply Inter2.Charac. split; apply Charac; exists y; exists z; split.
     + assumption.
     + split; assumption.
     + assumption.

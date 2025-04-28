@@ -3,7 +3,7 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
@@ -138,7 +138,7 @@ Proof.
     assert (Small (A:/\:domain F)) as A'. 2: apply A'.
 
   (* which follows from the assumption that A is small. *)
-  apply Inter.IsSmallL, H2.
+  apply Inter2.IsSmallL, H2.
 
 Qed.
 

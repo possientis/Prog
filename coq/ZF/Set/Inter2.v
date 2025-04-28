@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -10,11 +10,11 @@ Require Import ZF.Set.Union2.
 Export ZF.Notation.And.
 
 (* The intersection of two sets a and b.                                        *)
-Definition inter (a b:U) : U := fromClass (toClass a :/\: toClass b)
-  (Inter.IsSmallL (toClass a) (toClass b) (SetIsSmall a)).
+Definition inter2 (a b:U) : U := fromClass (toClass a :/\: toClass b)
+  (Inter2.IsSmallL (toClass a) (toClass b) (SetIsSmall a)).
 
 (* Notation "a :/\: b" := (inter a b)                                           *)
-Global Instance SetAnd : And U := { and := inter }.
+Global Instance SetAnd : And U := { and := inter2 }.
 
 (* Characterisation of the elements of the intersection of two sets.            *)
 Proposition Charac : forall (a b:U),
@@ -23,72 +23,6 @@ Proof.
   intros a b x. split; intros H1.
   - apply FromClass.Charac in H1. apply H1.
   - apply FromClass.Charac, H1.
-Qed.
-
-(* The intersection of two sets is commutative.                                 *)
-Proposition Comm : forall (a b:U), a:/\:b = b:/\:a.
-Proof.
-  intros a b. apply Extensionality. intros x. split;
-  intros H1; apply Charac; apply Charac in H1;
-  destruct H1 as [H1 H2]; auto.
-Qed.
-
-(* The intersection of two sets is associative.                                 *)
-Proposition Assoc : forall (a b c:U), (a:/\:b):/\:c = a:/\:(b:/\:c).
-Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1;
-  apply Charac in H1; apply Charac; destruct H1 as [H1 H2]; split.
-  - apply Charac in H1. destruct H1 as [H1 _]. apply H1.
-  - apply Charac in H1. destruct H1 as [_ H1]. apply Charac. auto.
-  - apply Charac in H2. destruct H2 as [H2 _]. apply Charac. auto.
-  - apply Charac in H2. destruct H2 as [_ H2]. apply H2.
-Qed.
-
-(* The intersection is distributive over the union.                             *)
-Proposition InterDistOverUnion : forall (a b c:U),
-  a:/\:(b:\/:c) = (a:/\:b):\/:(a:/\:c).
-Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Union2.Charac in H2. destruct H2 as [H2|H2]; apply Union2.Charac.
-    + left.  apply Charac. auto.
-    + right. apply Charac. auto.
-  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
-    apply Charac; split; apply Charac in H1.
-    + destruct H1 as [H1 _]. apply H1.
-    + destruct H1 as [_ H1]. apply Union2.Charac. left. apply H1.
-    + destruct H1 as [H1 _]. apply H1.
-    + destruct H1 as [_ H1]. apply Union2.Charac. right. apply H1.
-Qed.
-
-(* The union is distributive over the intersection                              *)
-Proposition UnionDistOverInter : forall (a b c:U),
-  a:\/:(b:/\:c) = (a:\/:b):/\:(a:\/:c).
-Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
-    apply Charac; split; apply Union2.Charac.
-    + left. apply H1.
-    + left. apply H1.
-    + right. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
-    + right. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
-  - apply Charac in H1. destruct H1 as [H1 H2]. apply Union2.Charac.
-    apply Union2.Charac in H1. apply Union2.Charac in H2.
-    destruct H1 as [H1|H1]; destruct H2 as [H2|H2].
-    + left. apply H1.
-    + left. apply H1.
-    + left. apply H2.
-    + right. apply Charac. auto.
-Qed.
-
-Proposition WhenNotIn : forall (a b:U),
-  forall x, ~ x :< a:/\:b -> ~ x :< a \/ ~ x :< b.
-Proof.
-  intros a b x H1.
-  assert (x :< a \/ ~ x :< a) as H2. { apply LawExcludedMiddle. }
-  destruct H2 as [H2|H2].
-  - right. intros H3. apply H1. apply Charac. split; assumption.
-  - left. apply H2.
 Qed.
 
 (* Intersection is compatible with inclusion.                                   *)
@@ -117,6 +51,72 @@ Proof.
   intros a b c H1. apply InclCompat.
   - apply InclRefl.
   - assumption.
+Qed.
+
+(* The intersection of two sets is commutative.                                 *)
+Proposition Comm : forall (a b:U), a:/\:b = b:/\:a.
+Proof.
+  intros a b. apply Extensionality. intros x. split;
+  intros H1; apply Charac; apply Charac in H1;
+  destruct H1 as [H1 H2]; auto.
+Qed.
+
+(* The intersection of two sets is associative.                                 *)
+Proposition Assoc : forall (a b c:U), (a:/\:b):/\:c = a:/\:(b:/\:c).
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1;
+  apply Charac in H1; apply Charac; destruct H1 as [H1 H2]; split.
+  - apply Charac in H1. destruct H1 as [H1 _]. apply H1.
+  - apply Charac in H1. destruct H1 as [_ H1]. apply Charac. auto.
+  - apply Charac in H2. destruct H2 as [H2 _]. apply Charac. auto.
+  - apply Charac in H2. destruct H2 as [_ H2]. apply H2.
+Qed.
+
+(* The intersection is distributive over the union.                             *)
+Proposition Inter2DistOverUnion2 : forall (a b c:U),
+  a:/\:(b:\/:c) = (a:/\:b):\/:(a:/\:c).
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1.
+  - apply Charac in H1. destruct H1 as [H1 H2].
+    apply Union2.Charac in H2. destruct H2 as [H2|H2]; apply Union2.Charac.
+    + left.  apply Charac. auto.
+    + right. apply Charac. auto.
+  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
+    apply Charac; split; apply Charac in H1.
+    + destruct H1 as [H1 _]. apply H1.
+    + destruct H1 as [_ H1]. apply Union2.Charac. left. apply H1.
+    + destruct H1 as [H1 _]. apply H1.
+    + destruct H1 as [_ H1]. apply Union2.Charac. right. apply H1.
+Qed.
+
+(* The union is distributive over the intersection                              *)
+Proposition Union2DistOverInter2 : forall (a b c:U),
+  a:\/:(b:/\:c) = (a:\/:b):/\:(a:\/:c).
+Proof.
+  intros a b c. apply Extensionality. intros x. split; intros H1.
+  - apply Union2.Charac in H1. destruct H1 as [H1|H1];
+    apply Charac; split; apply Union2.Charac.
+    + left. apply H1.
+    + left. apply H1.
+    + right. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
+    + right. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
+  - apply Charac in H1. destruct H1 as [H1 H2]. apply Union2.Charac.
+    apply Union2.Charac in H1. apply Union2.Charac in H2.
+    destruct H1 as [H1|H1]; destruct H2 as [H2|H2].
+    + left. apply H1.
+    + left. apply H1.
+    + left. apply H2.
+    + right. apply Charac. auto.
+Qed.
+
+Proposition WhenNotIn : forall (a b:U),
+  forall x, ~ x :< a:/\:b -> ~ x :< a \/ ~ x :< b.
+Proof.
+  intros a b x H1.
+  assert (x :< a \/ ~ x :< a) as H2. { apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - right. intros H3. apply H1. apply Charac. split; assumption.
+  - left. apply H2.
 Qed.
 
 Proposition InclL : forall (a b:U), a:/\:b :<=: a.

@@ -6,7 +6,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.Core.
@@ -22,7 +22,7 @@ Global Instance ClassDiff : Diff Class := { diff := diff }.
 
 Proposition IsSmall : forall (P Q:Class), Small P -> Small (P :\: Q).
 Proof.
-  intros P Q. apply Inter.IsSmallL.
+  intros P Q. apply Inter2.IsSmallL.
 Qed.
 
 Proposition WhenEmpty : forall (P Q:Class),

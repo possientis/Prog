@@ -2,11 +2,11 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Foundation.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Inter.
+Require Import ZF.Set.Inter2.
 
 (* A non-empty small class A has an element with empty intersection with A.     *)
 Proposition Foundation : forall (A:Class),
@@ -23,6 +23,6 @@ Proof.
   - apply H2. assumption.
   - apply DoubleNegation. intros H6. apply Class.Empty.NotEmptyHasElem in H6.
     destruct H6 as [x [H6 H7]]. apply ZF.Set.Empty.Charac with x.
-    rewrite <- H5. apply ZF.Set.Inter.Charac. split. 1: assumption.
+    rewrite <- H5. apply ZF.Set.Inter2.Charac. split. 1: assumption.
     apply H2. assumption.
 Qed.

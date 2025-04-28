@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Foundation.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
@@ -11,7 +11,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Inter.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
@@ -109,7 +109,7 @@ Proof.
     assert (y :< x :/\: a) as A. 2: apply A.
 
   (* Which follows easily. *)
-    apply Inter.Charac. split. 2: assumption. apply ECharac2. assumption.
+    apply Inter2.Charac. split. 2: assumption. apply ECharac2. assumption.
 Qed.
 
 Proposition EIsWellFoundedOnV : WellFounded E V.

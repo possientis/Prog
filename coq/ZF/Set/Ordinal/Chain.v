@@ -1,7 +1,7 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Foundation.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Relation.Fun.

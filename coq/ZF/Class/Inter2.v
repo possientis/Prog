@@ -8,10 +8,10 @@ Require Import ZF.Notation.And.
 Export ZF.Notation.And.
 
 (* The intersection of two classes P and Q.                                     *)
-Definition inter (P Q:Class) : Class := fun x => P x /\ Q x.
+Definition inter2 (P Q:Class) : Class := fun x => P x /\ Q x.
 
 (* Notation "P :/\: Q" := (inter P Q)                                           *)
-Global Instance ClassAnd : And Class := { and := inter }.
+Global Instance ClassAnd : And Class := { and := inter2 }.
 
 Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :/\: R :~: Q :/\: S.
@@ -126,7 +126,7 @@ Proof.
   - apply IsSmallL. assumption.
 Qed.
 
-Proposition InclInter : forall (P Q R:Class),
+Proposition InclInter2 : forall (P Q R:Class),
   R :<=: P -> R :<=: Q -> R :<=: P :/\: Q.
 Proof.
   intros P Q R H1 H2 x H3. split.
@@ -134,22 +134,22 @@ Proof.
   - apply H2. assumption.
 Qed.
 
-Proposition IsInterInclL : forall (P Q:Class),
+Proposition IsInter2InclL : forall (P Q:Class),
   P :~: P :/\: Q <-> P :<=: Q.
 Proof.
   intros P Q. split; intros H1.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply InclR. apply EquivSym. assumption.
   - apply DoubleInclusion. split.
-    + apply InclInter. 2: assumption. apply InclRefl.
+    + apply InclInter2. 2: assumption. apply InclRefl.
     + apply InclL.
 Qed.
 
-Proposition IsInterInclR : forall (P Q:Class),
+Proposition IsInter2InclR : forall (P Q:Class),
   Q :~: P :/\: Q <-> Q :<=: P.
 Proof.
   intros P Q. split; intros H1.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply InclL. apply EquivSym. assumption.
   - apply DoubleInclusion. split.
-    + apply InclInter. 1: assumption. apply InclRefl.
+    + apply InclInter2. 1: assumption. apply InclRefl.
     + apply InclR.
 Qed.

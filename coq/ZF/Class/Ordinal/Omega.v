@@ -6,7 +6,7 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Small.
@@ -113,7 +113,7 @@ Proof.
   intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
   assert (:N :\: A :<=: On) as H4. {
     apply InclTran with :N.
-    - apply Class.Inter.InclL.
+    - apply Class.Inter2.InclL.
     - apply IsClassOfOrdinals. }
   assert (exists n,
     Ordinal n                       /\

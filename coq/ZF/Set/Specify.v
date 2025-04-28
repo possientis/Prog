@@ -2,14 +2,14 @@ Declare Scope ZF_Axiom_Specify_scope.
 Open    Scope ZF_Axiom_Specify_scope.
 
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 
 (* Set comprehension (specification)  {x :< a | P x }.                          *)
 Definition specify (P:Class) (a:U) : U := fromClass (toClass a :/\: P)
-  (Inter.IsSmallL (toClass a) P (SetIsSmall a)).
+  (Inter2.IsSmallL (toClass a) P (SetIsSmall a)).
 
 Notation ":{ a | P }:" := (specify P a)
   (at level 1, no associativity) : ZF_Axiom_Specify_scope.

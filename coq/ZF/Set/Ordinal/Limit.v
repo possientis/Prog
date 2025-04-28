@@ -2,7 +2,7 @@ Require Import ZF.Class.Complement.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
@@ -19,7 +19,7 @@ Definition Limit : Class := Ordinal :\: NonLimit.
 (* Limit is a class of ordinals.                                                *)
 Proposition IsClassOfOrdinals : Limit :<=: Ordinal.
 Proof.
-  apply Class.Inter.InclL.
+  apply Class.Inter2.InclL.
 Qed.
 
 (* An ordinal is a limit ordinal iff it is not empty and is equal to its union. *)

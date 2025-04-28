@@ -8,7 +8,7 @@ Require Import ZF.Class.Relation.Eval.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.FunctionalAt.
 Require Import ZF.Class.Relation.Image.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.

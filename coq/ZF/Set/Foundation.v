@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Foundation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Inter.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
@@ -35,7 +35,7 @@ Proof.
 
   (* And since a :< a we see that a belongs to a /\ {a}, and so it belongs to 0 *)
   assert (a :< :0:) as H4.
-    { rewrite <- H3. apply Inter.Charac. split.
+    { rewrite <- H3. apply Inter2.Charac. split.
       - apply Ha.
       - apply Single.IsIn.
     }
@@ -72,7 +72,7 @@ Proof.
 
   (* When x = a, we have a /\ {a,b} = 0. But b belongs to both set, contradiction. *)
   - subst. assert (b :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply Hba.
         - apply Pair.InR.
       }
@@ -80,7 +80,7 @@ Proof.
 
   (* When x = b, we have b /\ {a,b} = 0. But a belongs to both set, contradiction. *)
   - subst. assert (a :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply Hab.
         - apply Pair.InL.
       }
@@ -116,7 +116,7 @@ Proof.
 
   (* When x = a1, we have a1 /\ {a1,a2,a3} = 0. But a3 belongs to both set *)
   - subst. assert (a3 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H31.
         - apply Tuple3In3.
       }
@@ -124,7 +124,7 @@ Proof.
 
   (* When x = a2, we have a2 /\ {a1,a2,a3} = 0. But a1 belongs to both set *)
   - subst. assert (a1 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H12.
         - apply Tuple3In1.
       }
@@ -132,7 +132,7 @@ Proof.
 
   (* When x = a3, we have a3 /\ {a1,a2,a3} = 0. But a2 belongs to both set *)
   - subst. assert (a2 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H23.
         - apply Tuple3In2.
       }
@@ -169,7 +169,7 @@ Proof.
 
   (* When x = a1, we have a1 /\ {a1,a2,a3,a4} = 0. But a4 belongs to both set *)
   - subst. assert (a4 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H41.
         - apply Tuple4In4.
       }
@@ -177,7 +177,7 @@ Proof.
 
   (* When x = a2, we have a2 /\ {a1,a2,a3,a4} = 0. But a1 belongs to both set *)
   - subst. assert (a1 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H12.
         - apply Tuple4In1.
       }
@@ -185,7 +185,7 @@ Proof.
 
   (* When x = a3, we have a3 /\ {a1,a2,a3,a4} = 0. But a2 belongs to both set *)
   - subst. assert (a2 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H23.
         - apply Tuple4In2.
       }
@@ -193,7 +193,7 @@ Proof.
 
   (* When x = a4, we have a4 /\ {a1,a2,a3,a4} = 0. But a3 belongs to both set *)
   - subst. assert (a3 :< :0:) as H5.
-      { rewrite <- H3. apply Inter.Charac. split.
+      { rewrite <- H3. apply Inter2.Charac. split.
         - apply H34.
         - apply Tuple4In3.
       }

@@ -1,5 +1,5 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.

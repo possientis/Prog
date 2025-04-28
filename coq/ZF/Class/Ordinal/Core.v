@@ -4,7 +4,7 @@ Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.Minimal.
@@ -124,7 +124,7 @@ Proof.
   (* We claim that the non-empty class A\B has an :<-minimal element. *)
   assert (exists b, (A :\: B) b /\ (A :\: B) :/\: toClass b :~: :0:) as H4. {
     apply HasEMinimal with A. 1: assumption.
-    - apply Class.Inter.InclL.
+    - apply Class.Inter2.InclL.
     - apply Diff.WhenStrictIncl. assumption. }
 
   (* So let b be such a set.  *)
@@ -171,7 +171,7 @@ Proof.
      (A :\: toClass a) x /\
      (A :\: toClass a)  :/\: toClass x :~: :0:) as H4. {
      apply HasEMinimal with A. 1: assumption.
-     - apply Class.Inter.InclL.
+     - apply Class.Inter2.InclL.
      - apply Diff.WhenStrictIncl. assumption. }
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
     assert (x = a) as H7. 2: { subst. assumption. }
@@ -212,8 +212,8 @@ Proposition InterIsOrdinal : forall (A B:Class),
   Ordinal A -> Ordinal B -> Ordinal (A :/\: B).
 Proof.
   intros A B H1 H2. apply TransitiveSubclassIsOrdinal with A. 1: assumption.
-  2: apply Class.Inter.InclL. intros a [H3 H4].
-  destruct H1 as [H1 _]. destruct H2 as [H2 _]. apply InclInter.
+  2: apply Class.Inter2.InclL. intros a [H3 H4].
+  destruct H1 as [H1 _]. destruct H2 as [H2 _]. apply InclInter2.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
@@ -242,17 +242,17 @@ Proof.
     apply NoElemLoop1 with a. apply H5. split; assumption. }
   assert (A:/\:B :~: A \/ A:/\:B :~: B) as H4. {
     apply DoubleNegation. intros H4. apply H3. split.
-    - split. 1: apply Class.Inter.InclL. intros H5. apply H4.
+    - split. 1: apply Class.Inter2.InclL. intros H5. apply H4.
       left. assumption.
-    - split. 1: apply Class.Inter.InclR. intros H5. apply H4.
+    - split. 1: apply Class.Inter2.InclR. intros H5. apply H4.
       right. assumption. }
   assert (A :~: B \/ A :<>: B) as H5. { apply LawExcludedMiddle. }
   destruct H5 as [H5|H5].
   - left. assumption.
   - right. destruct H4 as [H4|H4].
-    + left. split. 2: assumption. apply IsInterInclL, EquivSym. assumption.
+    + left. split. 2: assumption. apply IsInter2InclL, EquivSym. assumption.
     + right. split.
-      * apply IsInterInclR, EquivSym. assumption.
+      * apply IsInter2InclR, EquivSym. assumption.
       * apply NotEquivSym. assumption.
 Qed.
 
@@ -329,7 +329,7 @@ Proof.
   assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
     apply HasEMinimal with On. 3: assumption.
     - apply OnIsOrdinal.
-    - apply Class.Inter.InclL. }
+    - apply Class.Inter2.InclL. }
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
     apply StrictInclIsElem; try assumption. apply OnIsOrdinal. }
   assert (toClass a :<=: A) as H9. {
@@ -344,6 +344,6 @@ Proposition ElemIsInter : forall (A:Class) (a:U),
   Ordinal A -> A a -> toClass a :~: toClass a :/\: A.
 Proof.
   intros A a H1 H2. apply Class.Incl.DoubleInclusion. split.
-  2: apply Class.Inter.InclL. intros x H3. split. 1: assumption.
+  2: apply Class.Inter2.InclL. intros x H3. split. 1: assumption.
   destruct H1 as [H1 _]. specialize (H1 a H2 x). apply H1. assumption.
 Qed.

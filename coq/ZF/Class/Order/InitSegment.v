@@ -4,7 +4,7 @@ Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.Core.
@@ -31,7 +31,7 @@ Qed.
 Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> initSegment R A a :~: initSegment S B a.
 Proof.
-  intros R S A B a H1 H2. apply Inter.EquivCompat. 1: assumption.
+  intros R S A B a H1 H2. apply Inter2.EquivCompat. 1: assumption.
   apply InvImage.EquivCompatL. assumption.
 Qed.
 
@@ -57,7 +57,7 @@ Qed.
 Proposition InclCompat : forall (R S A B:Class) (a:U),
   R :<=: S -> A :<=: B -> initSegment R A a :<=: initSegment S B a.
 Proof.
-  intros R S A B a H1 H2. apply Inter.InclCompat. 1: assumption.
+  intros R S A B a H1 H2. apply Inter2.InclCompat. 1: assumption.
   apply InvImage.InclCompatL. assumption.
 Qed.
 
@@ -113,7 +113,7 @@ Qed.
 Proposition IsIncl : forall (R A:Class) (a:U),
   initSegment R A a :<=: A.
 Proof.
-  intros R A a. apply Inter.InclL.
+  intros R A a. apply Inter2.InclL.
 Qed.
 
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)

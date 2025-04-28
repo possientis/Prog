@@ -7,7 +7,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Inter.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Union2.
 Export ZF.Notation.Diff.
 
@@ -29,13 +29,13 @@ Qed.
 Proposition DiffOfUnion : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
 intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter.Charac.
+  - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter2.Charac.
     split; apply Charac; split.
     + apply H1.
     + intros H3. apply H2. apply Union2.Charac. left. apply H3.
     + apply H1.
     + intros H3. apply H2. apply Union2.Charac. right. apply H3.
-  - apply Inter.Charac in H1. destruct H1 as [H1 H2].
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [H1 H3].
     apply Charac in H2. destruct H2 as [_  H2].
     apply Charac. split.
@@ -48,15 +48,15 @@ Proposition DiffOfInter : forall (a b c:U),
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Union2.Charac. apply Inter.WhenNotIn in H2. destruct H2 as [H2|H2].
+    apply Union2.Charac. apply Inter2.WhenNotIn in H2. destruct H2 as [H2|H2].
     + left.  apply Charac. split; assumption.
     + right. apply Charac. split; assumption.
   - apply Union2.Charac in H1. destruct H1 as [H1|H1];
     apply Charac; split; apply Charac in H1; destruct H1 as [H1 H2].
     + apply H1.
-    + intros H3. apply Inter.Charac in H3. destruct H3 as [H3 _]. contradiction.
+    + intros H3. apply Inter2.Charac in H3. destruct H3 as [H3 _]. contradiction.
     + apply H1.
-    + intros H3. apply Inter.Charac in H3. destruct H3 as [_ H3]. contradiction.
+    + intros H3. apply Inter2.Charac in H3. destruct H3 as [_ H3]. contradiction.
 Qed.
 
 Proposition DiffOfDiff : forall (a b:U),
@@ -73,14 +73,14 @@ Proposition InterDistOverDiff : forall (a b c:U),
   a :/\: (b :\: c) = (a:/\:b) :\: (a:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Inter.Charac in H1. destruct H1 as [H1 H2].
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H2. destruct H2 as [H2 H3].
     apply Charac. split.
-    + apply Inter.Charac. split; assumption.
-    + intros H4. apply Inter.Charac in H4. destruct H4 as [_ H4]. contradiction.
+    + apply Inter2.Charac. split; assumption.
+    + intros H4. apply Inter2.Charac in H4. destruct H4 as [_ H4]. contradiction.
   - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Inter.Charac in H1. destruct H1 as [H1 H3].
-    apply Inter.WhenNotIn in H2. destruct H2 as [H2|H2]; apply Inter.Charac; split.
+    apply Inter2.Charac in H1. destruct H1 as [H1 H3].
+    apply Inter2.WhenNotIn in H2. destruct H2 as [H2|H2]; apply Inter2.Charac; split.
     + apply H1.
     + contradiction.
     + apply H1.
@@ -91,14 +91,14 @@ Proposition InterDiffAssoc : forall (a b c:U),
   a :/\: (b :\: c) = (a :/\: b) :\: c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Inter.Charac in H1. destruct H1 as [H1 H2].
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H2. destruct H2 as [H2 H3].
     apply Charac. split.
-    + apply Inter.Charac. split; assumption.
+    + apply Inter2.Charac. split; assumption.
     + apply H3.
   - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Inter.Charac in H1. destruct H1 as [H1 H3].
-    apply Inter.Charac. split.
+    apply Inter2.Charac in H1. destruct H1 as [H1 H3].
+    apply Inter2.Charac. split.
     + apply H1.
     + apply Charac. split; assumption.
 Qed.

@@ -3,7 +3,7 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Transitive.
@@ -196,7 +196,7 @@ Proof.
   assert (exists a, Minimal R (A:\:B) a) as H6. {
     apply HasMinimal with A.
     - assumption.
-    - apply Inter.InclL.
+    - apply Inter2.InclL.
     - assumption.
   }
 
