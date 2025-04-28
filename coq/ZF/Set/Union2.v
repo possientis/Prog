@@ -107,8 +107,8 @@ Proof.
     + left. apply Single.Charac. assumption.
     + right. apply Single.Charac. assumption.
   - apply Charac in H1. destruct H1 as [H1|H1]; apply Single.Charac in H1.
-    + subst. apply Pair.InL.
-    + subst. apply Pair.InR.
+    + subst. apply Pair.IsInL.
+    + subst. apply Pair.IsInR.
 Qed.
 
 Proposition IdentityL : forall (a:U),

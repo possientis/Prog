@@ -27,8 +27,8 @@ Proof.
     + apply Pair.Charac in H1. destruct H1 as [H1|H1]; auto.
     + apply Single.Charac in H1. auto.
   - intros [H1|[H1|H1]]; apply Union2.Charac; subst.
-    + left. apply Pair.InL.
-    + left. apply Pair.InR.
+    + left. apply Pair.IsInL.
+    + left. apply Pair.IsInR.
     + right. apply Single.IsIn.
 Qed.
 

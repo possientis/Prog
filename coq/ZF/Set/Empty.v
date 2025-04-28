@@ -53,7 +53,7 @@ Qed.
 (* A pair is not empty.                                                         *)
 Proposition PairIsNotEmpty : forall (a b:U), :{a,b}: <> :0:.
 Proof.
-  intros a b H1. assert (a :< :0:) as H2. { rewrite <- H1. apply Pair.InL. }
+  intros a b H1. assert (a :< :0:) as H2. { rewrite <- H1. apply Pair.IsInL. }
   apply Charac in H2. contradiction.
 Qed.
 
@@ -61,7 +61,7 @@ Qed.
 Proposition OrdPairIsNotEmpty : forall (x y:U), :(x,y): <> :0:.
 Proof.
   intros x y H1. apply DoubleInclusion in H1. destruct H1 as [H1 _].
-  apply NoElem with :{x}:. apply H1, Pair.InL.
+  apply NoElem with :{x}:. apply H1, Pair.IsInL.
 Qed.
 
 (* A singleton is not empty.                                                    *)

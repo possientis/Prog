@@ -22,8 +22,8 @@ Qed.
 Lemma ABC : forall a b c, :{a}: = :{b,c}: -> a = b /\ a = c.
 Proof.
   intros a b c Habc. split.
-  - symmetry. apply Single.Charac. rewrite Habc. apply Pair.InL.
-  - symmetry. apply Single.Charac. rewrite Habc. apply Pair.InR.
+  - symmetry. apply Single.Charac. rewrite Habc. apply Pair.IsInL.
+  - symmetry. apply Single.Charac. rewrite Habc. apply Pair.IsInR.
 Qed.
 
 (* If two ordered pairs are equal, then their components are equal.             *)
@@ -44,16 +44,16 @@ Proof.
       { rewrite <- H. apply Charac. right. reflexivity. }
     apply Charac in H1. destruct H1 as [H1|H1].
     + assert (b = a) as H2.
-        { apply Single.Charac. rewrite <- H1. apply Pair.InR. }
+        { apply Single.Charac. rewrite <- H1. apply Pair.IsInR. }
       subst. clear H1.
       assert (:{a,d}: :< :(a,a):) as H1.
-        { rewrite H. unfold ordPair. apply Pair.InR. }
+        { rewrite H. unfold ordPair. apply Pair.IsInR. }
       unfold ordPair in H1. apply Pair.Charac in H1.
       fold singleton in H1. destruct H1 as [H1|H1].
-      * symmetry. apply Single.Charac. rewrite <- H1. apply Pair.InR.
+      * symmetry. apply Single.Charac. rewrite <- H1. apply Pair.IsInR.
       * symmetry in H1. apply ABC in H1. destruct H1 as [H1 H2]. apply H2.
     + assert (b :< :{a,d}:) as H2.
-        { rewrite <- H1. apply Pair.InR. }
+        { rewrite <- H1. apply Pair.IsInR. }
       apply Pair.Charac in H2. destruct H2 as [H2|H2].
       * subst. apply ABC in H1. destruct H1 as [H1 H2]. apply H2.
       * apply H2.

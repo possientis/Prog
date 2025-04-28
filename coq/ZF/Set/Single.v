@@ -45,7 +45,7 @@ Proposition IsNotPair : forall (a b c:U),
   b <> c -> :{a}: <> :{b,c}:.
 Proof.
   intros a b c H1 H2.
-  assert (b = a) as H3. { apply Charac. rewrite H2. apply Pair.InL. }
-  assert (c = a) as H4. { apply Charac. rewrite H2. apply Pair.InR. }
+  assert (b = a) as H3. { apply Charac. rewrite H2. apply Pair.IsInL. }
+  assert (c = a) as H4. { apply Charac. rewrite H2. apply Pair.IsInR. }
   subst. contradiction.
 Qed.

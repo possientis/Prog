@@ -106,8 +106,8 @@ Proof.
       * left.  assumption.
       * right. assumption.
     + rewrite Ec. apply Union.Charac. destruct H5 as [H5|H5].
-      * exists a. split. { assumption. } { apply Pair.InL. }
-      * exists b. split. { assumption. } { apply Pair.InR. }
+      * exists a. split. { assumption. } { apply Pair.IsInL. }
+      * exists b. split. { assumption. } { apply Pair.IsInR. }
 Qed.
 
 (* The pairwise union of two relation classes is a relation class.              *)

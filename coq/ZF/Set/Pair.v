@@ -21,13 +21,13 @@ Proof.
 Qed.
 
 (* The set a is an element of the set {a,b}.                                    *)
-Proposition InL : forall (a b:U), a :< :{a,b}:.
+Proposition IsInL : forall (a b:U), a :< :{a,b}:.
 Proof.
   intros a b. apply Charac. left. reflexivity.
 Qed.
 
 (* The set b is an element of the set {a,b}.                                    *)
-Proposition InR : forall (a b:U), b :< :{a,b}:.
+Proposition IsInR : forall (a b:U), b :< :{a,b}:.
 Proof.
   intros a b. apply Charac. right. reflexivity.
 Qed.
@@ -39,6 +39,6 @@ Proof.
   - destruct H1 as [H1 H2]. intros x H3. apply Charac in H3.
     destruct H3 as [H3|H3]; subst; assumption.
   - split; apply H1.
-    + apply InL.
-    + apply InR.
+    + apply IsInL.
+    + apply IsInR.
 Qed.

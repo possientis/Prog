@@ -74,7 +74,7 @@ Proof.
   - subst. assert (b :< :0:) as H5.
       { rewrite <- H3. apply Inter2.Charac. split.
         - apply Hba.
-        - apply Pair.InR.
+        - apply Pair.IsInR.
       }
     apply Empty.Charac in H5. contradiction.
 
@@ -82,7 +82,7 @@ Proof.
   - subst. assert (a :< :0:) as H5.
       { rewrite <- H3. apply Inter2.Charac. split.
         - apply Hab.
-        - apply Pair.InL.
+        - apply Pair.IsInL.
       }
     apply Empty.Charac in H5. contradiction.
 Qed.

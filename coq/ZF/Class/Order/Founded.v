@@ -125,8 +125,8 @@ Proof.
     - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
   apply Pair.Charac in H6. destruct H6 as [H6|H6]; subst.
-  - apply (InitSegment.WhenEmpty _ _ _ b) in H7. 1: contradiction. apply Pair.InR.
-  - apply (InitSegment.WhenEmpty _ _ _ a) in H7. 1: contradiction. apply Pair.InL.
+  - apply (InitSegment.WhenEmpty _ _ _ b) in H7. 1: contradiction. apply Pair.IsInR.
+  - apply (InitSegment.WhenEmpty _ _ _ a) in H7. 1: contradiction. apply Pair.IsInL.
 Qed.
 
 Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
