@@ -184,11 +184,11 @@ Proof.
     apply HasSucc. assumption.
 Qed.
 
-Proposition NoInfiniteDescentGen : forall (F R A:Class),
+(* There is no infinite descending R-chain when R is founded.                   *)
+Proposition NoInfiniteDescentFounded : forall (F R A:Class),
   Fun F (toClass :N) A        ->
   Founded R A                 ->
-  exists n, n :< :N /\
-    ~ R :(F!(succ n),F!n):.
+  exists n, n :< :N /\ ~ R :(F!(succ n),F!n):.
 Proof.
   intros F R A H1 H2.
 Admitted.

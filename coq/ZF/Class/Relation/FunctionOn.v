@@ -18,9 +18,10 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.OrdPair.
 
-(* Binary predicate on classes: F is a function defined on A.                   *)
+(* F is a function defined on A.                                                *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
+(* The direct image of a small class by a function (defined on A) is small.     *)
 Proposition ImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
 Proof.
@@ -112,6 +113,7 @@ Proof.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
+(* If F defined on A, G defined on B and range F <= B, then G.F defined on A.   *)
 Proposition ComposeIsFunctionOn : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -125,6 +127,7 @@ Proof.
     apply EquivSym. assumption.
 Qed.
 
+(* Characterization of the value at a of a function defined on A when a in A.   *)
 Proposition EvalCharac : forall (F A:Class) (a y:U),
   FunctionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
@@ -132,6 +135,7 @@ Proof.
   apply H2. assumption.
 Qed.
 
+(* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
 Proposition EvalSatisfies : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> F :(a,F!a):.
 Proof.
@@ -139,6 +143,7 @@ Proof.
   apply H2. assumption.
 Qed.
 
+(* The value at a of a function defined on A lies in the range when a im A.     *)
 Proposition EvalIsInRange : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> range F (F!a).
 Proof.
@@ -146,6 +151,7 @@ Proof.
   apply H2. assumption.
 Qed.
 
+(* Characterization of the domain of G.F.                                       *)
 Proposition DomainOfComposeCharac : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -156,11 +162,13 @@ Proof.
     + apply H2. assumption.
     + apply H4. assumption.
     + assumption.
-  - destruct H5 as [H5 H6]. apply Function.DomainOfComposeCharac. 1: assumption. split.
+  - destruct H5 as [H5 H6].
+    apply Function.DomainOfComposeCharac. 1: assumption. split.
     + apply H2. assumption.
     + apply H4. assumption.
 Qed.
 
+(* The value at a of G.F is the value at F!a of G when a in A.                  *)
 Proposition ComposeEval : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -174,6 +182,7 @@ Proof.
   - apply H4. assumption.
 Qed.
 
+(* The direct image of the domain is the range.                                 *)
 Proposition ImageOfDomainIsRange : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
@@ -182,6 +191,7 @@ Proof.
   - apply Range.ImageOfDomainIsRange.
 Qed.
 
+(* The inverse image of the range is the domain.                                *)
 Proposition InvImageOfRangeIsDomain : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
@@ -189,6 +199,7 @@ Proof.
   2: assumption. apply InvImageOfRangeIsDomain.
 Qed.
 
+(* If F is defined on a small class A, then its range is small.                 *)
 Proposition RangeIsSmall : forall (F A:Class),
   FunctionOn F A -> Small A -> Small (range F).
 Proof.
@@ -197,6 +208,7 @@ Proof.
   - apply ImageIsSmall with A; assumption.
 Qed.
 
+(* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A:Class) (y:U),
   FunctionOn F A -> range F y <-> exists x, A x /\ y = F!x.
 Proof.
@@ -208,6 +220,7 @@ Proof.
     apply (EvalCharac F A); assumption.
 Qed.
 
+(* If the domain of F is not empty, then neither is the range.                  *)
 Proposition RangeIsNotEmpty : forall (F A:Class),
   FunctionOn F A -> A :<>: :0: -> range F :<>: :0:.
 Proof.

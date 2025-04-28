@@ -42,11 +42,10 @@ Qed.
 Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :x: R :~: Q :x: S.
 Proof.
-  intros P Q R S H1 H2 x. unfold Notation.Prod.prod, ClassProd, prod.
-  split; intros H3; destruct H3 as [y [z [H3 [H4 H5]]]]; exists y; exists z; split.
-  - assumption.
+  intros P Q R S H1 H2 x. split; intros H3;
+  destruct H3 as [y [z [H3 [H4 H5]]]]; exists y; exists z;
+  split; try assumption.
   - split. { apply H1. assumption. } { apply H2. assumption. }
-  - assumption.
   - split.
     + apply H1. assumption.
     + apply H2. assumption.
@@ -67,6 +66,34 @@ Proposition EquivCompatR : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - apply EquivRefl.
+  - assumption.
+Qed.
+
+(* The product of two classes is compatible with class inclusion.               *)
+Proposition InclCompat : forall (P Q R S:Class),
+  P :<=: Q -> R :<=: S -> P :x: R :<=: Q :x: S.
+Proof.
+  intros P Q R S H1 H2 x [y [z [H3 [H4 H5]]]].
+  exists y. exists z. split. 1: assumption. split.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
+
+(* The product of two classes is left-compatible with class inclusion.          *)
+Proposition InclCompatL : forall (P Q R:Class),
+  P :<=: Q -> P :x: R :<=: Q :x: R.
+Proof.
+  intros P Q R H1. apply InclCompat.
+  - assumption.
+  - apply InclRefl.
+Qed.
+
+(* The product of two classes is right-compatible with class inclusion.         *)
+Proposition InclCompatR : forall (P Q R:Class),
+  P :<=: Q -> R :x: P :<=: R :x: Q.
+Proof.
+  intros P Q R H1. apply InclCompat.
+  - apply InclRefl.
   - assumption.
 Qed.
 
