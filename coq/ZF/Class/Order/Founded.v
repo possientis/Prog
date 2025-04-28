@@ -26,6 +26,7 @@ Definition Founded (R A:Class) : Prop := forall a,
   a <> :0:         ->
   exists x, Minimal R (toClass a) x.
 
+(* Convenient restating of the founded property in a small class context.       *)
 Proposition WhenSmall : forall (R A B:Class),
   Founded R A ->
   Small B     ->
@@ -39,7 +40,10 @@ Proof.
     apply H1.
     - apply Incl.EquivCompatL with B; assumption.
     - apply ToClassWhenNotEmpty. apply NotEquivCompatL with B; assumption. }
-Admitted.
+  destruct H5 as [x H5]. exists x.
+  apply Minimal.EquivCompatR with (toClass b). 2: assumption.
+  apply EquivSym. assumption.
+Qed.
 
 (* If R is founded on A superclass of B, then it is founded on B.               *)
 Proposition FoundedIncl : forall (R A B:Class),
