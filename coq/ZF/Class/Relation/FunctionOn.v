@@ -25,7 +25,7 @@ Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 Proposition ImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
 Proof.
-  intros F A B [H1 _]. apply ImageIsSmall. assumption.
+  intros F A B H1. apply Function.ImageIsSmall, H1.
 Qed.
 
 (* A function is always a function defined on its domain.                       *)

@@ -26,36 +26,36 @@ Notation "F :: A :-> B" := (Fun F A B)
 Proposition ImageIsSmall : forall (F A B C:Class),
   F :: A :-> B -> Small C -> Small F:[C]:.
 Proof.
-  intros F A B C [H1 _]. apply FunctionOn.ImageIsSmall with A. assumption.
+  intros F A B C H1. apply FunctionOn.ImageIsSmall with A, H1.
 Qed.
 
 (* A function defined on a small class is small.                                *)
 Proposition IsSmall : forall (F A B:Class),
   F :: A :-> B -> Small A -> Small F.
 Proof.
-  intros F a B [H1 _]. apply FunctionOn.IsSmall. assumption.
+  intros F a B H1. apply FunctionOn.IsSmall, H1.
 Qed.
 
 (* Characterization of the value at a of a function defined on A when a in A.   *)
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
   F :: A :-> B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B a y [H1 _]. apply FunctionOn.EvalCharac. assumption.
+  intros F A B a y H1. apply FunctionOn.EvalCharac, H1.
 Qed.
 
 (* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
 Proposition EvalSatisfies : forall (F A B:Class) (a:U),
   F :: A :-> B -> A a -> F :(a,F!a):.
 Proof.
-  intros F A B a [H1 _]. apply FunctionOn.EvalSatisfies. assumption.
+  intros F A B a H1. apply FunctionOn.EvalSatisfies, H1.
 Qed.
 
 (* The value at a of a function defined on A lies in B  when a im A.            *)
 Proposition EvalIsInRange : forall (F A B:Class) (a:U),
   (F :: A :-> B) -> A a -> B (F!a).
 Proof.
-  intros F A B a [H1 H2] H3. apply H2.
-  apply FunctionOn.EvalIsInRange with A; assumption.
+  intros F A B a H1 H2. apply H1.
+  apply FunctionOn.EvalIsInRange with A. 2: assumption. apply H1.
 Qed.
 
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
@@ -102,7 +102,7 @@ Qed.
 Proposition ImageOfDomainIsRange : forall (F A B:Class),
   F :: A :-> B -> F:[A]: :~: range F.
 Proof.
-  intros F A B [H1 _]. apply FunctionOn.ImageOfDomainIsRange. assumption.
+  intros F A B H1. apply FunctionOn.ImageOfDomainIsRange, H1.
 Qed.
 
 (* A function F:A -> B is a subclass of AxB.                                    *)
@@ -121,27 +121,26 @@ Qed.
 Proposition InvImageOfRangeIsDomain : forall (F A B:Class),
   F :: A :-> B -> F^:-1::[range F]: :~: A.
 Proof.
-  intros F A B [H1 _]. apply FunctionOn.InvImageOfRangeIsDomain. assumption.
+  intros F A B H1. apply FunctionOn.InvImageOfRangeIsDomain, H1.
 Qed.
 
 (* If F is defined on a small class A, then its range is small.                 *)
 Proposition RangeIsSmall : forall (F A B:Class),
   F :: A :-> B -> Small A -> Small (range F).
 Proof.
-  intros F A B [H1 _]. apply FunctionOn.RangeIsSmall. assumption.
+  intros F A B H1. apply FunctionOn.RangeIsSmall, H1.
 Qed.
 
 (* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
   F :: A :-> B -> range F y <-> exists x, A x /\ y = F!x.
 Proof.
-  intros F A B y [H1 _]. apply FunctionOn.RangeCharac. assumption.
+  intros F A B y H1. apply FunctionOn.RangeCharac, H1.
 Qed.
 
 (* If the domain of F is not empty, then neither is the range.                  *)
 Proposition RangeIsNotEmpty : forall (F A B:Class),
   F :: A :-> B -> A :<>: :0: -> range F :<>: :0:.
 Proof.
-  intros F A B [H1 _]. apply FunctionOn.RangeIsNotEmpty. assumption.
+  intros F A B H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
-

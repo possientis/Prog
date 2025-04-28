@@ -64,7 +64,7 @@ Proof.
 Qed.
 
 (* N is not an empty class.                                                     *)
-Proposition NotEmpty : :N :<>: :0:.
+Proposition IsNotEmpty : :N :<>: :0:.
 Proof.
   intros H1. apply Class.Empty.Charac with :0:. apply H1, HasZero.
 Qed.

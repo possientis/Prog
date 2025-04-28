@@ -22,7 +22,7 @@ Qed.
 (* 0 is a not a successor.                                                      *)
 Proposition Peano3 : forall (n:U), n :< :N -> succ n <> :0:.
 Proof.
-  intros n _. apply Succ.NotEmpty.
+  intros n _. apply Succ.IsNotEmpty.
 Qed.
 
 (* The successor function is injective.                                         *)

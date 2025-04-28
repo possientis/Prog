@@ -22,7 +22,7 @@ Proof.
 Qed.
 
 (* A successor is not the empty set.                                            *)
-Proposition NotEmpty : forall (a:U), succ a <> :0:.
+Proposition IsNotEmpty : forall (a:U), succ a <> :0:.
 Proof.
   intros a H1. apply Empty.Charac with a. rewrite <- H1. apply IsIn.
 Qed.
