@@ -6,7 +6,7 @@ Require Import ZF.Set.Pair.
 Require Import ZF.Notation.Inter.
 Export ZF.Notation.Inter.
 
-(* The class of all sets x which belongs to all elements of P.                  *)
+(* The class of sets x which belong to all elements of P.                       *)
 Definition inter (P:Class) : Class := fun x =>
   forall y, P y -> x :< y.
 

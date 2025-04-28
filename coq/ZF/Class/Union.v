@@ -6,7 +6,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Notation.Union.
 Export ZF.Notation.Union.
 
-(* The class of all sets x which belongs to some element of P.                  *)
+(* The class of sets x which belong to some element of P.                       *)
 Definition union (P:Class) : Class := fun x =>
   exists y, x :< y /\ P y.
 
