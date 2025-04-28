@@ -123,11 +123,11 @@ Proof.
     exists x.
 
   (* So we need to prove that x is an R-minimal element in B. *)
-    assert (Minimal R B x) as X. 2: apply X. apply MinimalSuffice.
+    assert (Minimal R B x) as X. 2: apply X. apply Minimal.Suffice.
 
   (* We first need to show that x lies in B. *)
     + assert (B x) as X. 2: apply X.
-      apply H10. apply MinimalIn with R. assumption.
+      apply H10. apply Minimal.IsIn with R. assumption.
 
   (* And furthermore than no y in B is 'less' than x. *)
     + assert (forall y, B y -> ~ R :(y,x):) as X. 2: apply X.
@@ -142,12 +142,12 @@ Proof.
       intros H13. assert (R :(y,b):) as H14. {
         apply WellOrdering.IsTransitive in H2. apply H2 with x.
         - apply H3. assumption.
-        - apply H3, H10, MinimalIn with R. assumption.
+        - apply H3, H10, Minimal.IsIn with R. assumption.
         - apply H3. assumption.
         - assumption.
         - apply InitSegment.IsLess with B.
           assert (initSegment R B b x) as X. 2: apply X.
-          rewrite <- EC. apply H8, MinimalIn with R. assumption.
+          rewrite <- EC. apply H8, Minimal.IsIn with R. assumption.
       }
 
   (* So y is actually part of the initial segment of R in B at b which is C. *)
@@ -157,7 +157,7 @@ Proof.
 
   (* This contradicts the R-minimality of x in c. *)
       assert (~ R :(y,x):) as H16. 2: contradiction.
-      apply MinimalHasNoLesser with (toClass c). 2: assumption.
+      apply Minimal.HasNoLesser with (toClass c). 2: assumption.
       apply H8. assumption.
 Qed.
 
@@ -207,7 +207,7 @@ Proof.
   assert (initSegment R A a :<=: B) as H7. {
     intros x H7. apply InitSegment.Charac in H7. destruct H7 as [H7 H8].
     apply DoubleNegation. intros H9. revert H8.
-    apply (MinimalHasNoLesser R (A:\:B)). 2: assumption.
+    apply (Minimal.HasNoLesser R (A:\:B)). 2: assumption.
     split; assumption.
   }
 
@@ -215,5 +215,5 @@ Proof.
   assert (B a) as H8. { apply H3. assumption. }
 
   (* This contradicts the fact that a lies in A\B. *)
-  apply MinimalIn in H6. destruct H6 as [_ H6]. contradiction.
+  apply Minimal.IsIn in H6. destruct H6 as [_ H6]. contradiction.
 Qed.

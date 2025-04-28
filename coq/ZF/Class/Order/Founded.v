@@ -87,9 +87,9 @@ Proof.
       - apply Image.EquivCompatR. assumption.
       - apply Bij.ImageOfInvImage with A B. 2: assumption.
         apply Isom.IsBij with R S. assumption. }
-        exists (F!x). apply MinimalEquivCompatR with F:[toClass a]:.
-        1: assumption. apply MinimalIsomImage with R A B; try assumption.
-        apply H7, MinimalIn with R. assumption. }
+        exists (F!x). apply Minimal.EquivCompatR with F:[toClass a]:.
+        1: assumption. apply Minimal.IsomImage with R A B; try assumption.
+        apply H7, Minimal.IsIn with R. assumption. }
 
   (* The proof of the equivalence follows. *)
   intros F R S A B H1. split.

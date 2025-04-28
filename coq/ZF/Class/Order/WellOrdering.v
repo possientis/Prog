@@ -38,9 +38,9 @@ Proof.
     apply H1.
     - apply ToClassIncl. assumption.
     - apply SingletonIsNotEmpty.
-  } destruct H4 as [x H4]. assert (H5 := H4). apply MinimalIn in H5.
+  } destruct H4 as [x H4]. assert (H5 := H4). apply Minimal.IsIn in H5.
   apply Single.Charac in H5. subst.
-  apply MinimalHasNoLesser with (toClass :{a}:). 2: assumption. apply Single.IsIn.
+  apply Minimal.HasNoLesser with (toClass :{a}:). 2: assumption. apply Single.IsIn.
 Qed.
 
 Proposition IsTransitive : forall (R A:Class),
@@ -55,20 +55,20 @@ Proof.
       apply H1.
       - apply Tuple3ToClassIncl. split. 1: assumption. split; assumption.
       - apply Tuple3IsNotEmpty.
-    } destruct H8 as [u H8]. assert (H9 := H8). apply MinimalIn in H9.
+    } destruct H8 as [u H8]. assert (H9 := H8). apply Minimal.IsIn in H9.
     apply Tuple3Charac in H9. destruct H9 as [H9|[H9|H9]]; subst.
     + assert (~R :(z,x):) as H9. {
-        apply MinimalHasNoLesser with (toClass :{x,y,z}:).
+        apply Minimal.HasNoLesser with (toClass :{x,y,z}:).
         2: assumption. apply Tuple3In3.
       } contradiction.
 
     + assert (~R :(x,y):) as H9. {
-        apply MinimalHasNoLesser with (toClass :{x,y,z}:).
+        apply Minimal.HasNoLesser with (toClass :{x,y,z}:).
         2: assumption. apply Tuple3In1.
       } contradiction.
 
     + assert (~R :(y,z):) as H9. {
-        apply MinimalHasNoLesser with (toClass :{x,y,z}:).
+        apply Minimal.HasNoLesser with (toClass :{x,y,z}:).
         2: assumption. apply Tuple3In2.
       } contradiction.
 Qed.
@@ -163,10 +163,10 @@ Proof.
   assert (Total R A) as H6. apply H1.
 
   (* x is also an element of A. *)
-  assert (A x) as H7. { apply H2. apply MinimalIn with R. assumption. }
+  assert (A x) as H7. { apply H2. apply Minimal.IsIn with R. assumption. }
 
   (* And y is an element of A. *)
-  assert (A y) as H8. { apply H2. apply MinimalIn with R. assumption. }
+  assert (A y) as H8. { apply H2. apply Minimal.IsIn with R. assumption. }
 
   (* From the totality of R on A we see that x = y \/  x R y \/ y R x. *)
   specialize (H6 x y H7 H8).
@@ -186,8 +186,8 @@ Proof.
 
   (* This contradicts the minimality of y. *)
     assert (~R :(x,y):) as H9. {
-      apply (MinimalHasNoLesser _ (toClass a)). 2: assumption.
-      apply (MinimalIn R). assumption.
+      apply (Minimal.HasNoLesser _ (toClass a)). 2: assumption.
+      apply (Minimal.IsIn R). assumption.
     } contradiction.
 
   (* We finally consider the case y R x. *)
@@ -195,8 +195,8 @@ Proof.
 
   (* This contradicts the minimality of x. *)
     assert (~R :(y,x):) as H9. {
-      apply (MinimalHasNoLesser _ (toClass a)). 2: assumption.
-      apply (MinimalIn R). assumption.
+      apply (Minimal.HasNoLesser _ (toClass a)). 2: assumption.
+      apply (Minimal.IsIn R). assumption.
     } contradiction.
 Qed.
 

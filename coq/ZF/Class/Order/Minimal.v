@@ -14,7 +14,7 @@ Require Import ZF.Set.OrdPair.
 Definition Minimal (R A:Class) (a:U) : Prop
   := A a /\ initSegment R A a :~: :0:.
 
-Proposition MinimalEquivCompat : forall (R S A B:Class) (a:U),
+Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> Minimal R A a -> Minimal S B a.
 Proof.
   intros R S A B a H1 H2 [H3 H4]; split.
@@ -23,49 +23,49 @@ Proof.
     apply EquivSym, InitSegment.EquivCompat; assumption.
 Qed.
 
-Proposition MinimalEquivCompatL : forall (R S A:Class) (a:U),
+Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> Minimal R A a -> Minimal S A a.
 Proof.
-  intros R S A a H1. apply MinimalEquivCompat.
+  intros R S A a H1. apply EquivCompat.
   - assumption.
   - apply EquivRefl.
 Qed.
 
-Proposition MinimalEquivCompatR : forall (R A B:Class) (a:U),
+Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Minimal R A a -> Minimal R B a.
 Proof.
-  intros R A B a H1. apply MinimalEquivCompat.
+  intros R A B a H1. apply EquivCompat.
   - apply EquivRefl.
   - assumption.
 Qed.
 
-Proposition MinimalSuffice : forall (R A:Class) (a:U),
+Proposition Suffice : forall (R A:Class) (a:U),
   A a -> (forall x, A x -> ~ R :(x,a):) -> Minimal R A a.
 Proof.
   intros R A a H1 H2. split. 1: assumption.
   apply InitSegment.WhenEmptyRev. assumption.
 Qed.
 
-Proposition MinimalIn : forall (R A:Class) (a:U),
+Proposition IsIn : forall (R A:Class) (a:U),
   Minimal R A a -> A a.
 Proof.
   intros R A a [H1 _]. assumption.
 Qed.
 
-Proposition MinimalInitSegment : forall (R A:Class) (a:U),
+Proposition InitSegmentIsEmpty : forall (R A:Class) (a:U),
   Minimal R A a -> initSegment R A a :~: :0:.
 Proof.
   intros R A a [_ H1]. assumption.
 Qed.
 
-Proposition MinimalHasNoLesser : forall (R A:Class) (a x:U),
+Proposition HasNoLesser : forall (R A:Class) (a x:U),
   A x -> Minimal R A a -> ~ R :(x,a):.
 Proof.
   intros R A a x H1 H2. apply InitSegment.WhenEmpty with A.
-  2: assumption. apply MinimalInitSegment. assumption.
+  2: assumption. apply InitSegmentIsEmpty. assumption.
 Qed.
 
-Proposition MinimalIsomImage : forall (F R S A B C:Class) (a:U),
+Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B          ->
   C :<=: A                ->
   A a                     ->

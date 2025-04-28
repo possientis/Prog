@@ -90,7 +90,7 @@ Proof.
   assert (Minimal E (toClass a) x) as A. 2: apply A.
 
   (* In other words... *)
-  apply MinimalSuffice.
+  apply Minimal.Suffice.
 
   (* We need to show that x :< a, which is true by assumption. *)
   - assert (x :< a) as A. 2: apply A. assumption.
