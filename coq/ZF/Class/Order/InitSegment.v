@@ -57,7 +57,7 @@ Qed.
 Proposition InclCompat : forall (R S A B:Class) (a:U),
   R :<=: S -> A :<=: B -> initSegment R A a :<=: initSegment S B a.
 Proof.
-  intros R S A B a H1 H2. apply Inter2.InclCompat. 1: assumption.
+  intros R S A B a H1 H2. apply Class.Inter2.InclCompat. 1: assumption.
   apply InvImage.InclCompatL. assumption.
 Qed.
 
@@ -113,7 +113,7 @@ Qed.
 Proposition IsIncl : forall (R A:Class) (a:U),
   initSegment R A a :<=: A.
 Proof.
-  intros R A a. apply Inter2.InclL.
+  intros R A a. apply Class.Inter2.InclL.
 Qed.
 
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)

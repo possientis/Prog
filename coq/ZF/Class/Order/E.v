@@ -43,7 +43,7 @@ Lemma InitSegmentEV : forall (a:U),
 Proof.
   intros a. apply EquivTran with (V :/\: toClass a).
   - apply InitSegmentEA.
-  - apply InterVL.
+  - apply Inter2VL.
 Qed.
 
 Proposition MinimalEA : forall (A:Class) (a:U),

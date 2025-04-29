@@ -99,7 +99,7 @@ Proof.
   apply EquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
   apply EquivTran with (A :/\: V).
   - apply Inter2.EquivCompatR, IDomain.
-  - apply InterVR.
+  - apply Inter2VR.
 Qed.
 
 (* The range of I|A is A.                                                       *)

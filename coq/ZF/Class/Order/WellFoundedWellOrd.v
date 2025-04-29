@@ -196,7 +196,7 @@ Proof.
   assert (exists a, Minimal R (A:\:B) a) as H6. {
     apply HasMinimal with A.
     - assumption.
-    - apply Inter2.InclL.
+    - apply Class.Inter2.InclL.
     - assumption.
   }
 

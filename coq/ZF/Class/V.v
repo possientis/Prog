@@ -1,5 +1,7 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Proper.
@@ -17,7 +19,7 @@ Proof.
   intros A x _. apply I.
 Qed.
 
-Proposition InterVL : forall (P:Class),
+Proposition Inter2VL : forall (P:Class),
   V :/\: P :~: P.
 Proof.
   intros P x. split; intros H1.
@@ -27,7 +29,7 @@ Proof.
     + assumption.
 Qed.
 
-Proposition InterVR : forall (P:Class),
+Proposition Inter2VR : forall (P:Class),
   P :/\: V :~: P.
 Proof.
   intros P x. split; intros H1.
@@ -98,4 +100,9 @@ Proof.
       symmetry. assumption.
 Qed.
 
-
+Proposition InterOfEmptyIsV : :I(:0:) :~: V.
+Proof.
+  intros x. split; intros H1.
+  - apply I.
+  - intros y H2. contradiction.
+Qed.
