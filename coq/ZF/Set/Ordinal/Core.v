@@ -22,27 +22,27 @@ Proof.
 Qed.
 
 (* Strict inclusion and set membership coincide on ordinals.                    *)
-Proposition StrictInclIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition LessIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<: b <-> a :< b.
 Proof.
   intros a b H1 H2. split; intros H3.
-  - apply (StrictInclIsElem (toClass b)); try assumption.
+  - apply (LessIsElem (toClass b)); try assumption.
     apply StrictInclFromClass. assumption.
-  - apply StrictInclFromClass, (StrictInclIsElem (toClass b)); assumption.
+  - apply StrictInclFromClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
 Proposition IfElemThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b -> a :<=: b.
 Proof.
-  intros a b H1 H2 H3. apply StrictInclIsElem in H3;
+  intros a b H1 H2 H3. apply LessIsElem in H3;
   try assumption. apply H3.
 Qed.
 
 (* An ordinal is a strict subclass of the class of ordinals.                    *)
-Proposition OrdinalIsStrictSubclass : forall (a:U), Ordinal a ->
+Proposition IsLess : forall (a:U), Ordinal a ->
   toClass a :<: On.
 Proof.
-  intros a H1. apply (Class.Ordinal.Core.StrictInclIsElem On); try assumption.
+  intros a H1. apply (Class.Ordinal.Core.LessIsElem On); try assumption.
   apply OnIsOrdinal.
 Qed.
 
@@ -57,9 +57,9 @@ Proof.
       apply Class.Ordinal.Core.OrdinalTotal; assumption. }
     destruct H3 as [H3|[H3|H3]].
     - left. apply EquivSetEqual. assumption.
-    - right. left. apply StrictInclIsElem; try assumption.
+    - right. left. apply LessIsElem; try assumption.
       apply StrictInclFromClass. assumption.
-    - right. right. apply StrictInclIsElem; try assumption.
+    - right. right. apply LessIsElem; try assumption.
       apply StrictInclFromClass. assumption.
 Qed.
 
@@ -71,10 +71,10 @@ Proof.
   intros a b H1 H2. split; intros H3.
   - apply Incl.InclIsEqualOrStrictIncl in H3. destruct H3 as [H3|H3].
     + left. assumption.
-    + right. apply StrictInclIsElem; assumption.
+    + right. apply LessIsElem; assumption.
   - destruct H3 as [H3|H3].
     + subst. apply InclRefl.
-    + apply StrictInclIsElem in H3; try assumption. apply H3.
+    + apply LessIsElem in H3; try assumption. apply H3.
 Qed.
 
 Proposition InclOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -84,8 +84,8 @@ Proof.
     apply OrdinalTotal; assumption. }
   destruct H3 as [H3|[H3|H3]].
   - subst. left. apply InclRefl.
-  - left. apply StrictInclIsElem in H3; try assumption. apply H3.
-  - right. apply StrictInclIsElem in H3; try assumption. apply H3.
+  - left. apply LessIsElem in H3; try assumption. apply H3.
+  - right. apply LessIsElem in H3; try assumption. apply H3.
 Qed.
 
 Proposition ElemOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -107,9 +107,9 @@ Proposition InclElemTran : forall (a b c:U),
   b :<   c  ->
   a :<   c.
 Proof.
-  intros a b c H1 H2 H3 H4 H5. apply StrictInclIsElem; try assumption.
+  intros a b c H1 H2 H3 H4 H5. apply LessIsElem; try assumption.
   apply Incl.InclStrictInclTran with b. 1: assumption.
-  apply StrictInclIsElem; assumption.
+  apply LessIsElem; assumption.
 Qed.
 
 Proposition ElemInclTran : forall (a b c:U),
@@ -120,9 +120,9 @@ Proposition ElemInclTran : forall (a b c:U),
   b :<=: c  ->
   a :<   c.
 Proof.
-  intros a b c H1 H2 H3 H4 H5. apply StrictInclIsElem; try assumption.
+  intros a b c H1 H2 H3 H4 H5. apply LessIsElem; try assumption.
   apply Incl.StrictInclInclTran with b. 2: assumption.
-  apply StrictInclIsElem; assumption.
+  apply LessIsElem; assumption.
 Qed.
 
 (* An non-empty class of ordinals has a minimal ordinal.                        *)

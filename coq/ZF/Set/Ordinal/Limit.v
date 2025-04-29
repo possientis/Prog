@@ -32,7 +32,7 @@ Proof.
     + assert (a = :U(a) \/ a = succ :U(a)) as H3. {
         apply UnionOrSuccOfUnion. assumption. }
       destruct H3 as [H3|H3]. 1: assumption. exfalso. apply H2. right.
-      exists :U(a). split. 2: assumption. apply UnionOfIsOrdinal.
+      exists :U(a). split. 2: assumption. apply UnionOf.IsOrdinal.
       assumption.
   - destruct H2 as [H2 H3]. split. 1: assumption. intros [H4|H4].
     + contradiction.

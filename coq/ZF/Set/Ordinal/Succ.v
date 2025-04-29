@@ -8,7 +8,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
-Require Import ZF.Set.Ordinal.Union.
+Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
@@ -104,10 +104,10 @@ Qed.
 Proposition ElemCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b -> succ a :< succ b.
 Proof.
-  intros a b H1 H2 H3. apply StrictInclIsElem.
+  intros a b H1 H2 H3. apply LessIsElem.
   - apply IsOrdinal. assumption.
   - apply IsOrdinal. assumption.
-  - apply StrictInclIsElem in H3; try assumption. split.
+  - apply LessIsElem in H3; try assumption. split.
     + apply InclCompat; try assumption. apply H3.
     + destruct H3 as [H3 H4]. intros H5. apply H4.
       apply Injective. assumption.
@@ -134,7 +134,7 @@ Proof.
   - intros H3 c H4. apply Union2.Charac in H4. destruct H4 as [H4|H4].
     + apply ElemInclTran with a; try assumption.
       * apply Core.IsOrdinal with a; assumption.
-      * apply StrictInclIsElem in H3; try assumption. apply H3.
+      * apply LessIsElem in H3; try assumption. apply H3.
     + apply Single.Charac in H4. subst. assumption.
   - intros H3. assert (a :< b \/ b :<=: a) as H4. {
       apply ElemOrIncl; assumption. }
@@ -156,7 +156,7 @@ Qed.
 Proposition SuccOfUnionIsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ :U(a)).
 Proof.
-  intros a H1. apply IsOrdinal, UnionOfIsOrdinal. assumption.
+  intros a H1. apply IsOrdinal, UnionOf.IsOrdinal. assumption.
 Qed.
 
 (* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
@@ -180,7 +180,7 @@ Proposition SuccOfUnionOfOrdinalIsStrictUpperBound : forall (a b:U),
   b :< succ :U(a).
 Proof.
   intros a b H1. apply SuccOfUnionIsStrictUpperBound.
-  apply OrdinalIsStrictSubclass. assumption.
+  apply Core.IsLess. assumption.
 Qed.
 
 (* An ordinal is a subset of the successor ot its union.                        *)
@@ -196,12 +196,12 @@ Proposition UnionOrSuccOfUnion : forall (a:U), Ordinal a ->
 Proof.
   intros a H1. apply DoubleNegation. intros H2.
   apply NoInBetween with :U(a) a. split.
-  - apply StrictInclIsElem. 2: assumption.
-    + apply UnionOfIsOrdinal. assumption.
+  - apply LessIsElem. 2: assumption.
+    + apply UnionOf.IsOrdinal. assumption.
     + split.
-      * apply Union.IsLess. assumption.
+      * apply UnionOf.IsIncl. assumption.
       * intros H3. apply H2. left. symmetry. assumption.
-  - apply StrictInclIsElem. 1: assumption.
+  - apply LessIsElem. 1: assumption.
     + apply SuccOfUnionIsOrdinal. assumption.
     + split.
       * apply SuccOfUnionIsMore. assumption.

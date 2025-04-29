@@ -88,7 +88,7 @@ Proof.
 Qed.
 
 (* An ordinal with non-limit ordinals as elements is a subclass of N.           *)
-Proposition IsSubclass : forall (a:U), Ordinal a ->
+Proposition IsIncl : forall (a:U), Ordinal a ->
   toClass a :<=: NonLimit -> toClass a :<=: :N.
 Proof.
   intros a H1 H2 b H3. split.

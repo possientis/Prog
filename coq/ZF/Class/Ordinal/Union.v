@@ -12,7 +12,7 @@ Proof.
   intros A H1. assert (:U(A) :<=: On) as H2. { intros a H2.
     destruct H2 as [b [H2 H3]]. apply Core.IsOrdinal with (toClass b).
     2: assumption. apply H1. assumption. }
-  apply TransitiveSubclassIsOrdinal with On; try assumption.
+  apply TransitiveInclIsOrdinal with On; try assumption.
   1: apply OnIsOrdinal. intros a H3. destruct H3 as [b [H3 H4]].
   assert (Ordinal (toClass b)) as H5. { apply H1. assumption. }
   assert (Transitive (toClass b)) as H6. { apply H5. }

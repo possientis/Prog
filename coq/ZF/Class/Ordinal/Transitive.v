@@ -10,7 +10,7 @@ Require Import ZF.Set.Foundation.
 Definition Transitive (A:Class) : Prop := forall x, A x -> toClass x :<=: A.
 
 (* An element of a transitive class defines a strict subclass of that class.    *)
-Proposition ElemIsStrictSubclass : forall (A:Class) (a:U),
+Proposition IsLess : forall (A:Class) (a:U),
   Transitive A -> A a -> toClass a :<: A.
 Proof.
   intros A a H1 H2. split.
@@ -47,7 +47,7 @@ Proof.
   intros x H1. apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
-Proposition InterIsSubclass: forall (A:Class),
+Proposition InterIsIncl: forall (A:Class),
   Transitive A -> A :<>: :0: -> :I(A) :<=: A.
 Proof.
   intros A H1 H2 x H3. apply HasElem in H2. destruct H2 as [y H2].

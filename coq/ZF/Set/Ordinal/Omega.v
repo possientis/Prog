@@ -81,14 +81,14 @@ Proof.
 Qed.
 
 (* An ordinal with non-limit ordinals as elements is a subset of N.             *)
-Proposition IsSubset : forall (a:U),
+Proposition IsIncl : forall (a:U),
   Ordinal a               ->
   toClass a :<=: NonLimit ->
   a :<=: :N.
 Proof.
   intros a H1 H2. apply Incl.EquivCompatR with :N.
   - apply EquivSym, ToClass.
-  - apply Class.Ordinal.Omega.IsSubclass; assumption.
+  - apply Class.Ordinal.Omega.IsIncl; assumption.
 Qed.
 
 (* Principle of induction over the natural numbers.                             *)

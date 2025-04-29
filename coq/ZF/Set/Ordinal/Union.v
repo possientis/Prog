@@ -1,9 +1,7 @@
-Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Union.
@@ -17,14 +15,6 @@ Proof.
   - apply Class.Ordinal.Union.IsOrdinal. assumption.
 Qed.
 
-(* The union of an ordinal is an ordinal.                                       *)
-Proposition UnionOfIsOrdinal : forall (a:U), Ordinal a ->
-  Ordinal :U(a).
-Proof.
-  intros a H1. apply IsOrdinal.
-  apply OrdinalIsStrictSubclass. assumption.
-Qed.
-
 (* The union of a set of ordinals is an 'upper-bound' of the set.               *)
 Proposition IsUpperBound : forall (a b:U),
   toClass a :<=: On ->
@@ -34,14 +24,6 @@ Proof.
   intros a b H1 H2. apply Incl.EquivCompatR with :U(toClass a).
   - apply UnionOfToClass.
   - apply Class.Ordinal.Union.IsUpperBound; assumption.
-Qed.
-
-(* The union of an ordinal is an upper-bound ot its elements.                   *)
-Proposition UnionOfIsUpperBound : forall (a b:U), Ordinal a ->
-  b :< a -> b :<=: :U(a).
-Proof.
-  intros a b H1 H2. apply IsUpperBound. 2: assumption.
-  apply OrdinalIsStrictSubclass. assumption.
 Qed.
 
 (* The union of a set of ordinals is the smallest 'upper-bound'.                *)
@@ -54,42 +36,4 @@ Proof.
   intros a b H1 H2 H3. apply Incl.EquivCompatL with :U(toClass a).
   - apply UnionOfToClass.
   - apply Class.Ordinal.Union.IsSmallest; assumption.
-Qed.
-
-(* The union of an ordinal is the smallest upper-bound.                         *)
-Proposition UnionOfIsSmallest : forall (a b:U),
-  Ordinal a                      ->
-  Ordinal b                      ->
-  (forall c, c :< a -> c :<=: b) ->
-  :U(a) :<=: b.
-Proof.
-  intros a b H1 H2 H3. apply IsSmallest; try assumption.
-  apply OrdinalIsStrictSubclass. assumption.
-Qed.
-
-Proposition NotElemIsEqual : forall (a:U), Ordinal a ->
-  ~ :U(a) :< a <-> :U(a) = a.
-Proof.
-  intros a H1. split; intros H2.
-  - apply DoubleInclusion. split.
-    + apply UnionOfIsSmallest; try assumption.
-      intros c H3. apply IfElemThenIncl; try assumption.
-      apply Core.IsOrdinal with a; assumption.
-    + assert (:U(a) :< a \/ a :<=: :U(a)) as H3. {
-        apply ElemOrIncl. 2: assumption.
-        apply UnionOfIsOrdinal. assumption. }
-      destruct H3 as [H3|H3]. 1: contradiction. assumption.
-  - intros H3. rewrite H2 in H3. apply NoElemLoop1 with a. assumption.
-Qed.
-
-Proposition IsLess : forall (a:U), Ordinal a ->
-  :U(a) :<=: a.
-Proof.
-  intros a H1. assert (:U(a) :< a \/ ~ :U(a) :< a) as H2. {
-    apply LawExcludedMiddle. }
-  destruct H2 as [H2|H2].
-  - apply IfElemThenIncl; try assumption. apply UnionOfIsOrdinal.
-    assumption.
-  - apply NotElemIsEqual in H2. 2: assumption.
-    rewrite H2. apply InclRefl.
 Qed.

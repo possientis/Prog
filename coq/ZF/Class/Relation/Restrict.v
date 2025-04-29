@@ -154,7 +154,7 @@ Proof.
 Qed.
 
 (* A restriction is always a subclass of the original class.                    *)
-Proposition IsSubclass : forall (F A:Class),
+Proposition IsIncl : forall (F A:Class),
   F:|:A :<=: F.
 Proof.
   intros F A x [y [z [H1 [_ H2]]]]. rewrite H1. apply H2.
