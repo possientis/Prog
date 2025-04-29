@@ -54,5 +54,3 @@ Proof.
   intros A H1 H2 x H3. apply HasElem in H2. destruct H2 as [y H2].
   specialize (H1 y H2). apply H1. apply H3. assumption.
 Qed.
-
-

@@ -126,6 +126,18 @@ Proof.
   apply LessIsElem; assumption.
 Qed.
 
+Proposition ElemElemTran : forall (a b c:U),
+  Ordinal a ->
+  Ordinal b ->
+  Ordinal c ->
+  a :< b  ->
+  b :< c  ->
+  a :< c.
+Proof.
+  intros a b c H1 H2 H3 H4 H5. apply InclElemTran with b; try assumption.
+  apply IfElemThenIncl; assumption.
+Qed.
+
 (* An non-empty class of ordinals has a minimal ordinal.                        *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: On   ->
