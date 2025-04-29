@@ -9,43 +9,43 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Union.
 
 (* The union of a set of ordinals is an ordinal.                                *)
-Proposition UnionIsOrdinal : forall (a:U),
+Proposition IsOrdinal : forall (a:U),
   toClass a :<=: On -> Ordinal :U(a).
 Proof.
   intros a H1. apply Class.Ordinal.Core.EquivCompat with :U(toClass a).
   - apply UnionOfToClass.
-  - apply Class.Ordinal.Union.UnionIsOrdinal. assumption.
+  - apply Class.Ordinal.Union.IsOrdinal. assumption.
 Qed.
 
 (* The union of an ordinal is an ordinal.                                       *)
-Proposition UnionOfOrdinalIsOrdinal : forall (a:U), Ordinal a ->
+Proposition UnionOfIsOrdinal : forall (a:U), Ordinal a ->
   Ordinal :U(a).
 Proof.
-  intros a H1. apply UnionIsOrdinal.
+  intros a H1. apply IsOrdinal.
   apply OrdinalIsStrictSubclass. assumption.
 Qed.
 
 (* The union of a set of ordinals is an 'upper-bound' of the set.               *)
-Proposition UnionIsUpperBound : forall (a b:U),
+Proposition IsUpperBound : forall (a b:U),
   toClass a :<=: On ->
   b :< a            ->
   b :<=: :U(a).
 Proof.
   intros a b H1 H2. apply Incl.EquivCompatR with :U(toClass a).
   - apply UnionOfToClass.
-  - apply Class.Ordinal.Union.UnionIsUpperBound; assumption.
+  - apply Class.Ordinal.Union.IsUpperBound; assumption.
 Qed.
 
 (* The union of an ordinal is an upper-bound ot its elements.                   *)
-Proposition UnionOfOrdinalIsUpperBound : forall (a b:U), Ordinal a ->
+Proposition UnionOfIsUpperBound : forall (a b:U), Ordinal a ->
   b :< a -> b :<=: :U(a).
 Proof.
-  intros a b H1 H2. apply UnionIsUpperBound. 2: assumption.
+  intros a b H1 H2. apply IsUpperBound. 2: assumption.
   apply OrdinalIsStrictSubclass. assumption.
 Qed.
 
 (* The union of a set of ordinals is the smallest 'upper-bound'.                *)
-Proposition UnionIsSmallestUpperBound : forall (a b:U),
+Proposition IsSmallest : forall (a b:U),
   toClass a :<=: On               ->
   Ordinal b                       ->
   (forall c, c :< a -> c :<=: b)  ->
@@ -53,43 +53,43 @@ Proposition UnionIsSmallestUpperBound : forall (a b:U),
 Proof.
   intros a b H1 H2 H3. apply Incl.EquivCompatL with :U(toClass a).
   - apply UnionOfToClass.
-  - apply Class.Ordinal.Union.UnionIsSmallestUpperBound; assumption.
+  - apply Class.Ordinal.Union.IsSmallest; assumption.
 Qed.
 
 (* The union of an ordinal is the smallest upper-bound.                         *)
-Proposition UnionOfOrdinalIsSmallestUpperBound : forall (a b:U),
+Proposition UnionOfIsSmallest : forall (a b:U),
   Ordinal a                      ->
   Ordinal b                      ->
   (forall c, c :< a -> c :<=: b) ->
   :U(a) :<=: b.
 Proof.
-  intros a b H1 H2 H3. apply UnionIsSmallestUpperBound; try assumption.
+  intros a b H1 H2 H3. apply IsSmallest; try assumption.
   apply OrdinalIsStrictSubclass. assumption.
 Qed.
 
-Proposition UnionNotElemIsUnionEqual : forall (a:U), Ordinal a ->
+Proposition NotElemIsEqual : forall (a:U), Ordinal a ->
   ~ :U(a) :< a <-> :U(a) = a.
 Proof.
   intros a H1. split; intros H2.
   - apply DoubleInclusion. split.
-    + apply UnionOfOrdinalIsSmallestUpperBound; try assumption.
+    + apply UnionOfIsSmallest; try assumption.
       intros c H3. apply IfElemThenIncl; try assumption.
       apply Core.IsOrdinal with a; assumption.
     + assert (:U(a) :< a \/ a :<=: :U(a)) as H3. {
         apply ElemOrIncl. 2: assumption.
-        apply UnionOfOrdinalIsOrdinal. assumption. }
+        apply UnionOfIsOrdinal. assumption. }
       destruct H3 as [H3|H3]. 1: contradiction. assumption.
   - intros H3. rewrite H2 in H3. apply NoElemLoop1 with a. assumption.
 Qed.
 
-Proposition UnionIsLess : forall (a:U), Ordinal a ->
+Proposition IsLess : forall (a:U), Ordinal a ->
   :U(a) :<=: a.
 Proof.
   intros a H1. assert (:U(a) :< a \/ ~ :U(a) :< a) as H2. {
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  - apply IfElemThenIncl; try assumption. apply UnionOfOrdinalIsOrdinal.
+  - apply IfElemThenIncl; try assumption. apply UnionOfIsOrdinal.
     assumption.
-  - apply UnionNotElemIsUnionEqual in H2. 2: assumption.
+  - apply NotElemIsEqual in H2. 2: assumption.
     rewrite H2. apply InclRefl.
 Qed.

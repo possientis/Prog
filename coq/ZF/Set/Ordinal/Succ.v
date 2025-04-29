@@ -156,7 +156,7 @@ Qed.
 Proposition SuccOfUnionIsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ :U(a)).
 Proof.
-  intros a H1. apply IsOrdinal, UnionOfOrdinalIsOrdinal. assumption.
+  intros a H1. apply IsOrdinal, UnionOfIsOrdinal. assumption.
 Qed.
 
 (* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
@@ -167,9 +167,9 @@ Proposition SuccOfUnionIsStrictUpperBound : forall (a b:U),
 Proof.
   intros a b H1 H2. apply InclElemTran with :U(a).
   - apply H1. assumption.
-  - apply UnionIsOrdinal. assumption.
-  - apply IsOrdinal, UnionIsOrdinal. assumption.
-  - apply UnionIsUpperBound; assumption.
+  - apply Union.IsOrdinal. assumption.
+  - apply IsOrdinal, Union.IsOrdinal. assumption.
+  - apply Union.IsUpperBound; assumption.
   - apply IsIn.
 Qed.
 
@@ -197,9 +197,9 @@ Proof.
   intros a H1. apply DoubleNegation. intros H2.
   apply NoInBetween with :U(a) a. split.
   - apply StrictInclIsElem. 2: assumption.
-    + apply UnionOfOrdinalIsOrdinal. assumption.
+    + apply UnionOfIsOrdinal. assumption.
     + split.
-      * apply UnionIsLess. assumption.
+      * apply Union.IsLess. assumption.
       * intros H3. apply H2. left. symmetry. assumption.
   - apply StrictInclIsElem. 1: assumption.
     + apply SuccOfUnionIsOrdinal. assumption.

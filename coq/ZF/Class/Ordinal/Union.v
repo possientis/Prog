@@ -5,10 +5,8 @@ Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 
-
-
 (* The union of a class of ordinals is an ordinal class.                        *)
-Proposition UnionIsOrdinal : forall (A:Class),
+Proposition IsOrdinal : forall (A:Class),
   A :<=: On -> Ordinal :U(A).
 Proof.
   intros A H1. assert (:U(A) :<=: On) as H2. { intros a H2.
@@ -23,16 +21,16 @@ Proof.
 Qed.
 
 (* The union of a class of ordinals is an 'upper-bound' of that class.          *)
-Proposition UnionIsUpperBound : forall (A:Class) (a:U),
+Proposition IsUpperBound : forall (A:Class) (a:U),
   A :<=: On -> A a -> toClass a :<=: :U(A).
 Proof.
   intros A a H1 H2. assert (Ordinal :U(A)) as H3. {
-    apply UnionIsOrdinal. assumption. }
+    apply IsOrdinal. assumption. }
     intros x H4. exists a. split; assumption.
 Qed.
 
 (* The union of a class of ordinals is its smallest 'upper-bound'.              *)
-Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U),
+Proposition IsSmallest : forall (A:Class) (a:U),
   A :<=: On                           ->
   On a                                ->
   (forall b, A b -> b :<=: a) ->
@@ -40,9 +38,8 @@ Proposition UnionIsSmallestUpperBound : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2 H3 b H4. assert (On b) as H5. {
     apply Core.IsOrdinal with :U(A). 2: assumption.
-    apply UnionIsOrdinal. assumption. }
+    apply IsOrdinal. assumption. }
     destruct H4 as [c [H4 H6]]. assert (On c) as H7. {
       apply H1. assumption. }
     apply (H3 c); assumption.
 Qed.
-
