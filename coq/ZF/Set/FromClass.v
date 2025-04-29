@@ -9,16 +9,16 @@ Definition IsSetFromClass (P:Class) : U -> Prop := fun a =>
   forall x, x :< a <-> P x.
 
 (* If a class is a small, its set predicate is satisfied by at least one set.   *)
-Proposition FromClassExists : forall (P:Class),
-  Small P -> Exists (IsSetFromClass P).
+Proposition Exists : forall (P:Class),
+  Small P -> Define.Exists (IsSetFromClass P).
 Proof.
   intros P H. apply H.
 Qed.
 
 (* The set predicate of a class is always satisfied by at most one set.         *)
-Proposition FromClassUnique : forall (P:Class), Unique (IsSetFromClass P).
+Proposition Unique : forall (P:Class), Define.Unique (IsSetFromClass P).
 Proof.
-  intros P. unfold Unique, IsSetFromClass. intros a b Ha Hb.
+  intros P a b Ha Hb.
   apply EquivSetEqual. apply EquivTran with P.
   - intros x. apply Ha.
   - apply EquivSym. intros x. apply Hb.
@@ -26,7 +26,7 @@ Qed.
 
 (* If a class is small, we can define the set to which it corresponds .         *)
 Definition fromClass (P :Class) (q:Small P) : U
-  := define (IsSetFromClass P) (FromClassExists P q) (FromClassUnique P).
+  := define (IsSetFromClass P) (Exists P q) (Unique P).
 
 (* The set associated with a small class satisfies its set predicate.           *)
 Proposition Satisfy : forall (P:Class) (q:Small P),
