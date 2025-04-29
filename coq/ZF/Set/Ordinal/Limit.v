@@ -10,6 +10,7 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.SuccOf.
 Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Union.
 
@@ -53,7 +54,7 @@ Proof.
     apply Core.IsOrdinal with a; assumption. }
   apply InclElemTran with c; try assumption.
   - apply Succ.IsOrdinal. assumption.
-  - apply ElemIsSuccIncl; assumption.
+  - apply Succ.ElemIsIncl; assumption.
 Qed.
 
 Proposition InBetween : forall (a b:U),

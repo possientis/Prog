@@ -1,4 +1,3 @@
-Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -127,7 +126,7 @@ Proof.
   - apply InclCompat; assumption.
 Qed.
 
-Proposition ElemIsSuccIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition ElemIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b <-> succ a :<=: b.
 Proof.
   intros a b H1 H2. split.
@@ -149,63 +148,6 @@ Proof.
   intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
     apply IsIn. }
   rewrite H1 in H2. assumption.
-Qed.
-
-
-(* The successor of the union of an ordinal is an ordinal.                      *)
-Proposition SuccOfUnionIsOrdinal : forall (a:U), Ordinal a ->
-  Ordinal (succ :U(a)).
-Proof.
-  intros a H1. apply IsOrdinal, UnionOf.IsOrdinal. assumption.
-Qed.
-
-(* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
-Proposition SuccOfUnionIsStrictUpperBound : forall (a b:U),
-  toClass a :<=: On ->
-  b :< a            ->
-  b :< succ :U(a).
-Proof.
-  intros a b H1 H2. apply InclElemTran with :U(a).
-  - apply H1. assumption.
-  - apply Union.IsOrdinal. assumption.
-  - apply IsOrdinal, Union.IsOrdinal. assumption.
-  - apply Union.IsUpperBound; assumption.
-  - apply IsIn.
-Qed.
-
-(* The successor of the union of an ordinal is a strict upper-bound.            *)
-Proposition SuccOfUnionOfOrdinalIsStrictUpperBound : forall (a b:U),
-  Ordinal a         ->
-  b :< a            ->
-  b :< succ :U(a).
-Proof.
-  intros a b H1. apply SuccOfUnionIsStrictUpperBound.
-  apply Core.IsLess. assumption.
-Qed.
-
-(* An ordinal is a subset of the successor ot its union.                        *)
-Proposition SuccOfUnionIsMore : forall (a:U), Ordinal a ->
-  a :<=: succ :U(a).
-Proof.
-  intros a H1 b. apply SuccOfUnionOfOrdinalIsStrictUpperBound. assumption.
-Qed.
-
-(* An ordinal is either equal to its union, or to the successor thereof.        *)
-Proposition UnionOrSuccOfUnion : forall (a:U), Ordinal a ->
-  a = :U(a) \/ a = succ :U(a).
-Proof.
-  intros a H1. apply DoubleNegation. intros H2.
-  apply NoInBetween with :U(a) a. split.
-  - apply LessIsElem. 2: assumption.
-    + apply UnionOf.IsOrdinal. assumption.
-    + split.
-      * apply UnionOf.IsIncl. assumption.
-      * intros H3. apply H2. left. symmetry. assumption.
-  - apply LessIsElem. 1: assumption.
-    + apply SuccOfUnionIsOrdinal. assumption.
-    + split.
-      * apply SuccOfUnionIsMore. assumption.
-      * intros H3. apply H2. right. assumption.
 Qed.
 
 (* The union of the successor of an ordinal is the ordinal.                     *)
@@ -231,7 +173,7 @@ Proof.
   rewrite <- H6 in H4. symmetry. assumption.
 Qed.
 
-(* The union of the class of ordinals is the class of ordinals.                 *)
+(* TODO; move: The union of the class of ordinals is the class of ordinals.     *)
 Proposition UnionOfOn : :U(On) :~: On.
 Proof.
   apply Class.Incl.DoubleInclusion. split.
@@ -240,4 +182,3 @@ Proof.
     + apply Union2.Charac. right. apply Single.IsIn.
     + apply IsOrdinal. assumption.
 Qed.
-

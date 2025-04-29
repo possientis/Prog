@@ -100,7 +100,7 @@ Proof.
       apply Succ.IsOrdinal. assumption. }
     apply H2. apply InclElemTran with b; try assumption.
     apply InclCompatRev; try assumption.
-    apply ElemIsSuccIncl; try assumption.
+    apply Succ.ElemIsIncl; try assumption.
     apply Succ.IsOrdinal. assumption.
 Qed.
 
