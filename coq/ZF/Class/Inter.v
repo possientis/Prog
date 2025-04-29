@@ -1,4 +1,8 @@
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
+Require Import ZF.Class.Incl.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Pair.
@@ -20,6 +24,18 @@ Proof.
   intros P Q H1 x. split; intros H2 y H3; apply H2, H1; assumption.
 Qed.
 
+Proposition IsIncl : forall (P:Class) (a:U),
+  P a -> :I(P) :<=: toClass a.
+Proof.
+  intros P a H1 x H2. apply H2. assumption.
+Qed.
+
+Proposition IsSmall : forall (P:Class), P :<>: :0: -> Small :I(P).
+Proof.
+  intros P H1. apply Class.Empty.HasElem in H1. destruct H1 as [a H1].
+  apply Bounded.IsSmall. exists a. apply IsIncl. assumption.
+Qed.
+
 Proposition InterOfPair : forall (a b:U),
   :I(toClass :{a,b}:) :~: toClass (a :/\: b).
 Proof.
@@ -30,3 +46,4 @@ Proof.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2]. intros y H3.
     apply Pair.Charac in H3. destruct H3 as [H3|H3]; subst; assumption.
 Qed.
+

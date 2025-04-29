@@ -138,7 +138,7 @@ Proof.
   - assert (Small (toClass a :x: toClass b)) as A. 2: apply A.
 
   (* It is sufficient to show that a x b is a bounded class. *)
-    apply BoundedIsSmall.
+    apply Bounded.IsSmall.
 
   (* So we need to show that a x b is bounded. *)
     assert (Bounded (toClass a :x: toClass b)) as A. 2: apply A.
@@ -310,7 +310,7 @@ Proof.
 
   (* Having assumed that P x Q is small, it follows that domain R is small. *)
   assert (Small (domain R)) as H7. {
-    apply LesserThanSmallIsSmall with (P :x: Q); assumption.
+    apply LessThanSmallIsSmall with (P :x: Q); assumption.
   }
 
   (* However, we claim that P is the direct image of domain R by R. *)

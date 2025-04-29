@@ -184,7 +184,7 @@ Proof.
   assert (forall x, x :< a -> succ x :< a) as X. apply H2. clear X.
 
   (* We prove N is small by showing it is bounded. *)
-  apply BoundedIsSmall.
+  apply Bounded.IsSmall.
 
   (* So we need to show the existence of a set a such that N <= a. *)
   assert (exists a, :N :<=: toClass a) as X. 2: apply X.

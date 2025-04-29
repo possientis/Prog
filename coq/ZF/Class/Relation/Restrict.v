@@ -205,7 +205,7 @@ Proposition LesserThanRangeOfRestrictIsSmall : forall (F A B:Class),
   Functional F -> Small B -> A :<=: range (F:|:B) -> Small A.
 Proof.
   intros F A B H1 H2 H3.
-  apply LesserThanSmallIsSmall with (range (F:|:B)). 1: assumption.
+  apply LessThanSmallIsSmall with (range (F:|:B)). 1: assumption.
   apply Small.EquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
   apply Image.IsSmall; assumption.
 Qed.

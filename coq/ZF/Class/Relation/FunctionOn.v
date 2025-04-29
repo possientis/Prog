@@ -72,7 +72,7 @@ Proof.
     { apply H1. } clear A'.
 
   (* Thus, in order to prove that F is small ... *)
-  apply LesserThanSmallIsSmall with (A :x: F:[A]:). 1: apply H1.
+  apply LessThanSmallIsSmall with (A :x: F:[A]:). 1: apply H1.
 
   (* It is sufficient to prove that A x F[A] is small *)
   assert (Small (A :x: F:[A]:)) as A'. 2: apply A'.
