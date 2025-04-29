@@ -3,6 +3,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Less.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Russell.
@@ -14,7 +15,7 @@ Require Import ZF.Set.OrdPair.
 (* The class satisfied by all sets.                                             *)
 Definition V : Class := fun _ => True.
 
-Proposition VIsSuperClass : forall (A:Class), A :<=: V.
+Proposition IsIncl : forall (A:Class), A :<=: V.
 Proof.
   intros A x _. apply I.
 Qed.
@@ -74,7 +75,7 @@ Proof.
 
 Qed.
 
-Proposition VSquareIsProper : Proper (V :x: V).
+Proposition V2IsProper : Proper (V :x: V).
 Proof.
   apply SquareIsProper, VIsProper.
 Qed.
@@ -90,9 +91,9 @@ Proof.
 Qed.
 
 (* V^2 is a strict subclass of V.                                               *)
-Proposition V2InclStrictV : V :x: V :<: V.
+Proposition IsLess : V :x: V :<: V.
 Proof.
-  apply StrictInclExists. split.
+  apply Less.Exists. split.
   - intros x H1. apply I.
   - exists :0:. split.
     + apply I.
@@ -100,7 +101,7 @@ Proof.
       symmetry. assumption.
 Qed.
 
-Proposition InterOfEmptyIsV : :I(:0:) :~: V.
+Proposition InterOfEmpty : :I(:0:) :~: V.
 Proof.
   intros x. split; intros H1.
   - apply I.

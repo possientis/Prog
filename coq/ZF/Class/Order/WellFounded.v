@@ -29,7 +29,7 @@ Proposition WellFoundedWhenFoundedOnSmall : forall (R A:Class),
   Founded R A -> Small A -> WellFounded R A.
 Proof.
   intros R A H1 H2. split. 1: assumption. intros a H3.
-  apply LessThanSmallIsSmall with A. 2: assumption. apply InitSegment.IsIncl.
+  apply InclInSmallIsSmall with A. 2: assumption. apply InitSegment.IsIncl.
 Qed.
 
 (* If R is founded on a set a, then it is well-founded on a.                    *)
@@ -46,7 +46,7 @@ Proposition WellFoundedIncl : forall (R A B:Class),
 Proof.
   intros R A B [H1 H2] H3. split.
   - apply FoundedIncl with A; assumption.
-  - intros a H4. apply LessThanSmallIsSmall with (initSegment R A a).
+  - intros a H4. apply InclInSmallIsSmall with (initSegment R A a).
     + apply InitSegment.InclCompatR. assumption.
     + apply H2, H3. assumption.
 Qed.

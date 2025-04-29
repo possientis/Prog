@@ -2,6 +2,7 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Less.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.

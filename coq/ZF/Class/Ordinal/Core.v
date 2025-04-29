@@ -5,6 +5,7 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Less.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.Minimal.
@@ -61,7 +62,7 @@ Proof.
   intros A H1. split.
   - apply FoundedIncl with V.
     + apply EIsFoundedOnV.
-    + apply VIsSuperClass.
+    + apply V.IsIncl.
   - apply EIsTotalOnOrdinals. assumption.
 Qed.
 
@@ -76,7 +77,7 @@ Proof.
   assert (exists x, Minimal E B x) as H4. { apply HasMinimal with A;
     try assumption. split.
     - apply WellFoundedIncl with V. apply EIsWellFoundedOnV.
-      apply VIsSuperClass.
+      apply V.IsIncl.
     - apply EWellOrdersOrdinals. assumption. }
   destruct H4 as [x H4]. exists x. apply MinimalEA. assumption.
 Qed.
@@ -125,7 +126,7 @@ Proof.
   assert (exists b, (A :\: B) b /\ (A :\: B) :/\: toClass b :~: :0:) as H4. {
     apply HasEMinimal with A. 1: assumption.
     - apply Class.Inter2.InclL.
-    - apply Diff.WhenStrictIncl. assumption. }
+    - apply Diff.WhenLess. assumption. }
 
   (* So let b be such a set.  *)
   destruct H4 as [b [H4 H5]].
@@ -172,7 +173,7 @@ Proof.
      (A :\: toClass a)  :/\: toClass x :~: :0:) as H4. {
      apply HasEMinimal with A. 1: assumption.
      - apply Class.Inter2.InclL.
-     - apply Diff.WhenStrictIncl. assumption. }
+     - apply Diff.WhenLess. assumption. }
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
     assert (x = a) as H7. 2: { subst. assumption. }
     apply ZF.Set.Incl.DoubleInclusion. destruct H1 as [H1 H9]. split; intros u H7.
@@ -235,10 +236,10 @@ Proof.
       apply InterIsOrdinal; assumption. }
     assert (A a) as H7. {
       apply WhenTransitiveLessIsElem; try assumption.
-      apply StrictEquivCompatL with (A:/\:B); assumption. }
+      apply Less.EquivCompatL with (A:/\:B); assumption. }
     assert (B a) as H8. {
       apply WhenTransitiveLessIsElem; try assumption.
-      apply StrictEquivCompatL with (A:/\:B); assumption. }
+      apply Less.EquivCompatL with (A:/\:B); assumption. }
     apply NoElemLoop1 with a. apply H5. split; assumption. }
   assert (A:/\:B :~: A \/ A:/\:B :~: B) as H4. {
     apply DoubleNegation. intros H4. apply H3. split.
@@ -298,7 +299,7 @@ Proposition IsIncl : forall (A:Class),
   Ordinal A -> A :<=: On.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On) as H2. {
-    apply Core.IsLess. assumption. }
+    apply IsLess. assumption. }
   destruct H2 as [H2|H2].
   - apply Incl.EquivCompatL with On. apply EquivSym. 1: assumption.
     apply Class.Incl.InclRefl.
@@ -310,7 +311,7 @@ Proposition IsSmall : forall (A:Class),
   Ordinal A -> A :~: On \/ Small A.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On) as H2. {
-    apply Core.IsLess. assumption. }
+    apply IsLess. assumption. }
   destruct H2 as [H2|H2].
   - left. assumption.
   - right. apply TransitiveLessIsSmall with On. 3: assumption.
@@ -325,7 +326,7 @@ Proposition TransfiniteInduction : forall (A:Class),
   A :~: On.
 Proof.
   intros A H1 H2. apply DoubleNegation. intros H3.
-  assert (On :\: A :<>: :0:) as H4. { apply WhenStrictIncl. split; assumption. }
+  assert (On :\: A :<>: :0:) as H4. { apply Diff.WhenLess. split; assumption. }
   assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
     apply HasEMinimal with On. 3: assumption.
     - apply OnIsOrdinal.

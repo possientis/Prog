@@ -7,6 +7,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Less.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 
@@ -27,8 +28,8 @@ Proposition LessIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2. split; intros H3.
   - apply (LessIsElem (toClass b)); try assumption.
-    apply StrictInclFromClass. assumption.
-  - apply StrictInclFromClass, (LessIsElem (toClass b)); assumption.
+    apply LessFromClass. assumption.
+  - apply LessFromClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
 Proposition IfElemThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -58,9 +59,9 @@ Proof.
     destruct H3 as [H3|[H3|H3]].
     - left. apply EquivSetEqual. assumption.
     - right. left. apply LessIsElem; try assumption.
-      apply StrictInclFromClass. assumption.
+      apply LessFromClass. assumption.
     - right. right. apply LessIsElem; try assumption.
-      apply StrictInclFromClass. assumption.
+      apply LessFromClass. assumption.
 Qed.
 
 Proposition InclIsEqualOrElem : forall (a b:U),
@@ -69,7 +70,7 @@ Proposition InclIsEqualOrElem : forall (a b:U),
   a :<=: b <-> a = b \/ a :< b.
 Proof.
   intros a b H1 H2. split; intros H3.
-  - apply Incl.InclIsEqualOrStrictIncl in H3. destruct H3 as [H3|H3].
+  - apply Less.EqualOrLess in H3. destruct H3 as [H3|H3].
     + left. assumption.
     + right. apply LessIsElem; assumption.
   - destruct H3 as [H3|H3].
@@ -108,7 +109,7 @@ Proposition InclElemTran : forall (a b c:U),
   a :<   c.
 Proof.
   intros a b c H1 H2 H3 H4 H5. apply LessIsElem; try assumption.
-  apply Incl.InclStrictInclTran with b. 1: assumption.
+  apply Less.InclLessTran with b. 1: assumption.
   apply LessIsElem; assumption.
 Qed.
 
@@ -121,7 +122,7 @@ Proposition ElemInclTran : forall (a b c:U),
   a :<   c.
 Proof.
   intros a b c H1 H2 H3 H4 H5. apply LessIsElem; try assumption.
-  apply Incl.StrictInclInclTran with b. 2: assumption.
+  apply Less.LessInclTran with b. 2: assumption.
   apply LessIsElem; assumption.
 Qed.
 

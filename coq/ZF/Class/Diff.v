@@ -7,6 +7,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Less.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.Core.
@@ -37,11 +38,11 @@ Proof.
     + apply Class.Empty.Charac in H2. contradiction.
 Qed.
 
-Proposition WhenStrictIncl : forall (P Q:Class),
+Proposition WhenLess : forall (P Q:Class),
   P :<: Q -> Q :\: P :<>: :0:.
 Proof.
   intros P Q H1. apply HasElem.
-  apply StrictInclExists in H1. destruct H1 as [_ H1]. assumption.
+  apply Less.Exists in H1. destruct H1 as [_ H1]. assumption.
 Qed.
 
 Proposition UnionInter : forall (P Q R:Class),

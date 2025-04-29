@@ -310,7 +310,7 @@ Proof.
 
   (* Having assumed that P x Q is small, it follows that domain R is small. *)
   assert (Small (domain R)) as H7. {
-    apply LessThanSmallIsSmall with (P :x: Q); assumption.
+    apply InclInSmallIsSmall with (P :x: Q); assumption.
   }
 
   (* However, we claim that P is the direct image of domain R by R. *)
