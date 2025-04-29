@@ -77,17 +77,17 @@ Proof.
   - apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
-Proposition ToClassWhenEmpty : forall (a:U),
-  toClass a :~: :0: <-> a = :0:.
+Proposition EmptyFromClass : forall (a:U),
+  a = :0: <-> toClass a :~: :0:.
 Proof.
   intros a. split; intros H1.
-  - apply EquivSetEqual. apply EquivTran with :0:. 1: assumption.
-    apply EquivSym, ToClassOfEmpty.
   - rewrite H1. apply ToClassOfEmpty.
+  - apply EqualFromClass. apply EquivTran with :0:. 1: assumption.
+    apply EquivSym, ToClassOfEmpty.
 Qed.
 
-Proposition ToClassWhenNotEmpty : forall (a:U),
-  toClass a :<>: :0: <-> a <> :0:.
+Proposition NotEmptyFromClass : forall (a:U),
+  a <> :0: <-> toClass a :<>: :0:.
 Proof.
-  intros a. split; intros H1 H2; apply H1, ToClassWhenEmpty; assumption.
+  intros a. split; intros H1 H2; apply H1, EmptyFromClass; assumption.
 Qed.

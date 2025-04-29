@@ -42,18 +42,18 @@ Proof.
   intros P Q H1 H2. apply H1, EquivSym. assumption.
 Qed.
 
-Proposition EquivSetEqual : forall (a b:U),
-  toClass a :~: toClass b <-> a = b.
+Proposition EqualFromClass : forall (a b:U),
+  a = b <-> toClass a :~: toClass b.
 Proof.
   intros a b. split.
-  - apply Extensionality.
   - intros H1. subst. apply EquivRefl.
+  - apply Extensionality.
 Qed.
 
-Proposition NotEquivSetNotEqual : forall (a b:U),
-  toClass a :<>: toClass b <-> a <> b.
+Proposition NotEqualFromClass : forall (a b:U),
+  a <> b <-> toClass a :<>: toClass b.
 Proof.
-  intros a b. split; intros H1 H2; apply H1, EquivSetEqual; assumption.
+  intros a b. split; intros H1 H2; apply H1, EqualFromClass; assumption.
 Qed.
 
 Proposition NotEquivCompat : forall (P Q R S:Class),
@@ -80,4 +80,3 @@ Proof.
   - apply EquivRefl.
   - assumption.
 Qed.
-

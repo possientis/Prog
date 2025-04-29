@@ -12,7 +12,7 @@ Definition Less (a b:U) : Prop := a :<=: b /\ a <> b.
 (* Notation "a :<: b" := (Less a b)                                             *)
 Global Instance SetLt : Lt U := { lt := Less }.
 
-Proposition LessExists : forall (a b:U),
+Proposition Exists : forall (a b:U),
   a :<: b <-> a :<=: b /\ exists x, x :< b /\ ~ x :< a.
 Proof.
   intros a b. split; intros H1.
@@ -30,7 +30,7 @@ Proposition LessFromClass : forall (a b:U),
   a :<: b <-> toClass a :<: toClass b.
 Proof.
   intros a b. split; intros [H1 H2]; split; try assumption;
-  apply NotEquivSetNotEqual; assumption.
+  apply NotEqualFromClass; assumption.
 Qed.
 
 Proposition EqualOrLess : forall (a b:U),
@@ -38,7 +38,7 @@ Proposition EqualOrLess : forall (a b:U),
 Proof.
   intros a b. split; intros H1.
   - apply Class.Less.EquivOrLess in H1. destruct H1 as [H1|H1].
-    + left. apply EquivSetEqual. assumption.
+    + left. apply EqualFromClass. assumption.
     + right. apply LessFromClass. assumption.
   - destruct H1 as [H1|H1].
     + subst. apply InclRefl.

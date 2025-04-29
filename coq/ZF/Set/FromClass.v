@@ -19,7 +19,7 @@ Qed.
 Proposition Unique : forall (P:Class), Define.Unique (IsSetFromClass P).
 Proof.
   intros P a b Ha Hb.
-  apply EquivSetEqual. apply EquivTran with P.
+  apply EqualFromClass. apply EquivTran with P.
   - intros x. apply Ha.
   - apply EquivSym. intros x. apply Hb.
 Qed.
@@ -53,7 +53,7 @@ Qed.
 Proposition FromToClass : forall (a:U),
   fromClass (toClass a) (SetIsSmall a) = a.
 Proof.
-  intro a. apply EquivSetEqual. intros x. apply Charac.
+  intro a. apply EqualFromClass. intros x. apply Charac.
 Qed.
 
 (* The class associated with the set associated with a small class is the class.*)

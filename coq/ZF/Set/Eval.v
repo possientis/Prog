@@ -26,7 +26,7 @@ Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1. split; intros H2.
-  - unfold eval. apply EquivSetEqual.
+  - unfold eval. apply EqualFromClass.
     apply EquivTran with (Relation.Eval.eval F a).
     + apply ToFromClass.
     + apply Relation.Eval.WhenHasValueAt; assumption.
@@ -65,7 +65,7 @@ Qed.
 Proposition WhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
 Proof.
-  intros F a H1. apply EquivSetEqual. unfold eval, zero, SetZero, empty.
+  intros F a H1. apply EqualFromClass. unfold eval, zero, SetZero, empty.
   apply EquivTran with (Relation.Eval.eval F a). 1: apply ToFromClass.
   apply EquivTran with :0:.
   - apply Relation.Eval.WhenNotHasValueAt. assumption.

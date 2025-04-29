@@ -16,7 +16,7 @@ Proposition Foundation : forall (A:Class),
 Proof.
   intros A H1 H2. apply Small.IsSomeSet in H2. destruct H2 as [b H2].
   assert (b <> :0:) as H3. {
-    apply ToClassWhenNotEmpty, NotEquivCompatL with A; assumption. }
+    apply NotEmptyFromClass, NotEquivCompatL with A; assumption. }
   assert (exists a, a :< b /\ a :/\: b = :0:) as H4. {
     apply Foundation. assumption. }
   destruct H4 as [a [H4 H5]]. exists a. split.

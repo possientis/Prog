@@ -22,7 +22,7 @@ Proof.
   assert (exists a, range F a /\ toClass a :/\: range F :~: :0: ) as H2. {
     apply Foundation.
     - apply FunctionOn.RangeIsNotEmpty with (toClass :N). 1: assumption.
-      apply ToClassWhenNotEmpty, Omega.IsNotEmpty.
+      apply NotEmptyFromClass, Omega.IsNotEmpty.
     - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
       apply Small.EquivCompat with :N.
       + apply EquivSym, Omega.ToClass.
@@ -50,7 +50,7 @@ Proof.
       apply EquivSym, Omega.ToClass.
     - apply H1.
     - apply Fun.RangeIsNotEmpty with (toClass :N) A. 1: assumption.
-      apply ToClassWhenNotEmpty, Omega.IsNotEmpty. }
+      apply NotEmptyFromClass, Omega.IsNotEmpty. }
   destruct H3 as [a H3].
   assert (range F a) as H4. { apply Minimal.IsIn with R. assumption. }
   apply (Fun.RangeCharac F (toClass :N) A) in H4. 2: assumption.

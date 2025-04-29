@@ -57,7 +57,7 @@ Proof.
     toClass b :<: toClass a) as H3. {
       apply Class.Ordinal.Core.OrdinalTotal; assumption. }
     destruct H3 as [H3|[H3|H3]].
-    - left. apply EquivSetEqual. assumption.
+    - left. apply EqualFromClass. assumption.
     - right. left. apply LessIsElem; try assumption.
       apply LessFromClass. assumption.
     - right. right. apply LessIsElem; try assumption.
