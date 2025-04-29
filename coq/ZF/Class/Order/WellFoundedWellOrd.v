@@ -49,7 +49,7 @@ Proof.
   assert (exists x, Minimal R B x) as X. 2: apply X.
 
   (* Being non-empty, B has an element, *)
-  apply Class.Empty.NotEmptyHasElem in H4.
+  apply Class.Empty.HasElem in H4.
 
   (* Let b be such an element of B. *)
   destruct H4 as [b H4]. assert (B b) as X. apply H4. clear X.

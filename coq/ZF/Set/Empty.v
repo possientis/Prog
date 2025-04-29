@@ -29,7 +29,7 @@ Proof.
 Qed.
 
 (* If a set is not empty, then it has an element.                               *)
-Proposition NotEmptyHasElem : forall (a:U),
+Proposition HasElem : forall (a:U),
   a <> :0: <-> exists x, x :< a.
 Proof.
   intros a. split; intros H1.

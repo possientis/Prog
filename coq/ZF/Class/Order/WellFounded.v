@@ -129,7 +129,7 @@ Proof.
     + assert (~exists x, :{x}: :< a) as X. apply H3. clear X.
 
       (* Let y z be such that {y,z} belongs to a and y <> z. *)
-      apply NotEmptyHasElem in H2. destruct H2 as [x H2].
+      apply HasElem in H2. destruct H2 as [x H2].
       assert (H4 := H2). apply H1 in H4. rewrite EA in H4.
       destruct H4 as [H4|H4]. 1: {
         destruct H4 as [y H4]. rewrite H4 in H2. exfalso. apply H3.

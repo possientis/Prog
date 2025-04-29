@@ -3,6 +3,6 @@ Open    Scope ZF_Core_Union_scope.
 
 Class Union (v:Type) := { union : v -> v }.
 
-Notation ":U( a )" := (union a)
+Notation ":U( a  )" := (union a)
   (at level 0, no associativity) : ZF_Core_Union_scope.
 

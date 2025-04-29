@@ -224,6 +224,6 @@ Qed.
 Proposition RangeIsNotEmpty : forall (F A:Class),
   FunctionOn F A -> A :<>: :0: -> range F :<>: :0:.
 Proof.
-  intros F A H1 H2. apply NotEmptyHasElem in H2. destruct H2 as [x H2].
-  apply NotEmptyHasElem. exists F!x. apply EvalIsInRange with A; assumption.
+  intros F A H1 H2. apply HasElem in H2. destruct H2 as [x H2].
+  apply HasElem. exists F!x. apply EvalIsInRange with A; assumption.
 Qed.

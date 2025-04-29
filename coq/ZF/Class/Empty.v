@@ -50,7 +50,7 @@ Proof.
   - intros H3. contradiction.
 Qed.
 
-Proposition NotEmptyHasElem : forall (P:Class),
+Proposition HasElem : forall (P:Class),
   P :<>: :0: <-> exists x, P x.
 Proof.
   intros P. split; intros H1.

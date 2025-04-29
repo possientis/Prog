@@ -21,7 +21,7 @@ Proof.
     apply Foundation. assumption. }
   destruct H4 as [a [H4 H5]]. exists a. split.
   - apply H2. assumption.
-  - apply DoubleNegation. intros H6. apply Class.Empty.NotEmptyHasElem in H6.
+  - apply DoubleNegation. intros H6. apply Class.Empty.HasElem in H6.
     destruct H6 as [x [H6 H7]]. apply ZF.Set.Empty.Charac with x.
     rewrite <- H5. apply ZF.Set.Inter2.Charac. split. 1: assumption.
     apply H2. assumption.

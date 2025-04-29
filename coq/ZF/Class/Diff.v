@@ -40,7 +40,7 @@ Qed.
 Proposition WhenStrictIncl : forall (P Q:Class),
   P :<: Q -> Q :\: P :<>: :0:.
 Proof.
-  intros P Q H1. apply NotEmptyHasElem.
+  intros P Q H1. apply HasElem.
   apply StrictInclExists in H1. destruct H1 as [_ H1]. assumption.
 Qed.
 
