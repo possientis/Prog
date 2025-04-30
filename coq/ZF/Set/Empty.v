@@ -70,7 +70,7 @@ Proof.
   intros a. apply PairIsNotEmpty.
 Qed.
 
-Proposition ToClassOfEmpty : toClass :0: :~: :0:.
+Proposition ToClass : toClass :0: :~: :0:.
 Proof.
   intros x. split; intros H1.
   - apply Charac in H1. contradiction.
@@ -81,9 +81,9 @@ Proposition EmptyFromClass : forall (a:U),
   a = :0: <-> toClass a :~: :0:.
 Proof.
   intros a. split; intros H1.
-  - rewrite H1. apply ToClassOfEmpty.
+  - rewrite H1. apply ToClass.
   - apply EqualFromClass. apply EquivTran with :0:. 1: assumption.
-    apply EquivSym, ToClassOfEmpty.
+    apply EquivSym, ToClass.
 Qed.
 
 Proposition NotEmptyFromClass : forall (a:U),
