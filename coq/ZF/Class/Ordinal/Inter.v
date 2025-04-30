@@ -36,3 +36,21 @@ Proof.
   - apply IsTransitive. assumption.
   - apply IsIncl; assumption.
 Qed.
+
+Proposition IsLowerBound : forall (A:Class),
+  A :<=: On     ->
+  A :<>: :0:    ->
+  forall a, A a -> :I(A) :<=: toClass a.
+Proof.
+  intros A H1 H2 a H3 x H4. apply H4. assumption.
+Qed.
+
+Proposition IsLargest : forall (A:Class) (a:U),
+  A :<=: On                     ->
+  A :<>: :0:                    ->
+  (forall b, A b  -> a :<=: b)  ->
+  toClass a :<=: :I(A).
+Proof.
+  intros A a H1 H2 H3 x H4 b H5. apply H3; assumption.
+Qed.
+

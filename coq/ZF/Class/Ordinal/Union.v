@@ -31,12 +31,11 @@ Qed.
 
 (* The union of a class of ordinals is its smallest 'upper-bound'.              *)
 Proposition IsSmallest : forall (A:Class) (a:U),
-  A :<=: On                           ->
-  On a                                ->
+  A :<=: On                   ->
   (forall b, A b -> b :<=: a) ->
   :U(A) :<=: toClass a.
 Proof.
-  intros A a H1 H2 H3 b H4. assert (On b) as H5. {
+  intros A a H1 H3 b H4. assert (On b) as H5. {
     apply Core.IsOrdinal with :U(A). 2: assumption.
     apply IsOrdinal. assumption. }
     destruct H4 as [c [H4 H6]]. assert (On c) as H7. {
