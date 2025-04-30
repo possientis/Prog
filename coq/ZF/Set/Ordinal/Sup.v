@@ -1,0 +1,65 @@
+Require Import ZF.Class.Core.
+Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Sup.
+Require Import ZF.Set.Core.
+Require Import ZF.Set.Inter2.
+Require Import ZF.Set.Specify.
+Require Import ZF.Set.Union.
+
+Export ZF.Notation.SupBelow.
+
+(* The supremum of the set a.                                                   *)
+Definition sup (a:U) : U := :U( :{ a | On }: ).
+
+
+(* The supremum of the set a below b.                                           *)
+Definition supBelow (b a:U) : U := :U( :{ a :/\: b | On }: ).
+
+(* Notation "sup(:< b ) a" := (supBelow b a)                                    *)
+Global Instance SetSupBelow : SupBelow U := { supBelow := supBelow }.
+
+Proposition Charac : forall (a:U),
+  forall x, x :< sup a <-> exists y, x :< y /\ y :< a /\ On y.
+Proof.
+  intros a x. split; intros H1.
+  - apply Union.Charac in H1. destruct H1 as [y [H1 H2]].
+    apply Specify.Charac in H2. destruct H2 as [H2 H3].
+    exists y. split. 1: assumption. split; assumption.
+  - destruct H1 as [y [H1 [H2 H3]]]. apply Union.Charac.
+    exists y. split. 1: assumption. apply Specify.Charac.
+    split; assumption.
+Qed.
+
+Proposition CharacBelow : forall (b a:U),
+  forall x, x :< sup(:<b) a <-> exists y, x :< y /\ y :< a /\ y :< b /\ On y.
+Proof.
+  intros b a x. split; intros H1.
+  - apply Union.Charac in H1. destruct H1 as [y [H1 H2]].
+    apply Specify.Charac in H2. destruct H2 as [H2 H3].
+    apply Inter2.Charac in H2. destruct H2 as [H2 H4].
+    exists y. split. 1: assumption. split. 1: assumption.
+    split; assumption.
+  - destruct H1 as [y [H1 [H2 [H3 H4]]]]. apply Union.Charac.
+    exists y. split. 1: assumption. apply Specify.Charac.
+    split. 2: assumption. apply Inter2.Charac. split; assumption.
+Qed.
+
+Proposition ToClass : forall (a:U),
+  Class.Ordinal.Sup.sup (toClass a) :~: toClass (sup a).
+Proof.
+  intros a x. split; intros H1.
+  - destruct H1 as [y [H1 [H2 H3]]]. apply Charac. exists y.
+    split. 1: assumption. split; assumption.
+  - apply Charac in H1. destruct H1 as [y [H1 [H2 H3]]].
+    exists y. split. 1: assumption. split; assumption.
+Qed.
+
+Proposition ToClassBelow : forall (a b:U),
+  sup(:< b) (toClass a) :~: toClass (sup(:< b) a).
+Proof.
+  intros a b x. split; intros H1.
+  - destruct H1 as [y [H1 [H2 [H3 H4]]]]. apply CharacBelow.
+    exists y. split. 1: assumption. split. 1: assumption. split; assumption.
+  - apply CharacBelow in H1. destruct H1 as [y [H1 [H2 [H3 H4]]]].
+    exists y. split. 1: assumption. split. 1: assumption. split; assumption.
+Qed.
