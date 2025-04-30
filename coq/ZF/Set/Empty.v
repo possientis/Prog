@@ -77,7 +77,7 @@ Proof.
   - apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
-Proposition EmptyFromClass : forall (a:U),
+Proposition EmptyToClass : forall (a:U),
   a = :0: <-> toClass a :~: :0:.
 Proof.
   intros a. split; intros H1.
@@ -86,8 +86,8 @@ Proof.
     apply EquivSym, ToClass.
 Qed.
 
-Proposition NotEmptyFromClass : forall (a:U),
+Proposition NotEmptyToClass : forall (a:U),
   a <> :0: <-> toClass a :<>: :0:.
 Proof.
-  intros a. split; intros H1 H2; apply H1, EmptyFromClass; assumption.
+  intros a. split; intros H1 H2; apply H1, EmptyToClass; assumption.
 Qed.

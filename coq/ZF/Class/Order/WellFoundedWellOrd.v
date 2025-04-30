@@ -100,7 +100,7 @@ Proof.
     assert (c <> :0:) as H9. {
       intros H9. apply H5. apply EquivTran with (toClass c).
       - apply EquivSym. assumption.
-      - apply EmptyFromClass. assumption.
+      - apply EmptyToClass. assumption.
     }
 
   (* So c is a non-empty subset of the class B. *)

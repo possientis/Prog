@@ -39,7 +39,7 @@ Proof.
   assert (exists x, Minimal R (toClass b) x) as H5. {
     apply H1.
     - apply Incl.EquivCompatL with B; assumption.
-    - apply NotEmptyFromClass. apply NotEquivCompatL with B; assumption. }
+    - apply NotEmptyToClass. apply NotEquivCompatL with B; assumption. }
   destruct H5 as [x H5]. exists x.
   apply Minimal.EquivCompatR with (toClass b). 2: assumption.
   apply EquivSym. assumption.

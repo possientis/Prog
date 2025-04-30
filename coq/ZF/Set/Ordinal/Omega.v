@@ -153,5 +153,5 @@ Proposition HasMinimal2 : forall (a:U),
     forall n, n :< a -> m :<=: n.
 Proof.
   intros a H1 H2. apply HasMinimal. 1: assumption.
-  apply NotEmptyFromClass. assumption.
+  apply NotEmptyToClass. assumption.
 Qed.
