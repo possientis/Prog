@@ -267,7 +267,7 @@ Proof.
       toClass a :<: toClass b \/
       toClass b :<: toClass a) as H3. { apply OrdinalTotal; assumption. }
     destruct H3 as [H3|[H3|H3]].
-    + left. apply EqualFromClass. assumption.
+    + left. apply EqualToClass. assumption.
     + right. left. apply (LessIsElem (toClass b)); assumption.
     + right. right. apply (LessIsElem (toClass a)); assumption.
 Qed.

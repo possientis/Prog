@@ -19,7 +19,7 @@ Proof.
   intros a. apply FromClass.Charac.
 Qed.
 
-Proposition UnionOfToClass : forall (a:U),
+Proposition ToClass : forall (a:U),
   :U(toClass a) :~: toClass :U(a).
 Proof.
   intros a x. split; intros H1.

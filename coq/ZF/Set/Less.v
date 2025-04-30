@@ -26,11 +26,11 @@ Proof.
     + intros H4. subst. contradiction.
 Qed.
 
-Proposition LessFromClass : forall (a b:U),
+Proposition ToClass : forall (a b:U),
   a :<: b <-> toClass a :<: toClass b.
 Proof.
   intros a b. split; intros [H1 H2]; split; try assumption;
-  apply NotEqualFromClass; assumption.
+  apply NotEqualToClass; assumption.
 Qed.
 
 Proposition EqualOrLess : forall (a b:U),
@@ -38,8 +38,8 @@ Proposition EqualOrLess : forall (a b:U),
 Proof.
   intros a b. split; intros H1.
   - apply Class.Less.EquivOrLess in H1. destruct H1 as [H1|H1].
-    + left. apply EqualFromClass. assumption.
-    + right. apply LessFromClass. assumption.
+    + left. apply EqualToClass. assumption.
+    + right. apply ToClass. assumption.
   - destruct H1 as [H1|H1].
     + subst. apply InclRefl.
     + apply H1.
@@ -48,15 +48,15 @@ Qed.
 Proposition InclLessTran : forall (a b c:U),
   a :<=: b -> b :<: c -> a :<: c.
 Proof.
-  intros a b c H1 H2. apply LessFromClass.
+  intros a b c H1 H2. apply ToClass.
   apply Class.Less.InclLessTran with (toClass b). 1: assumption.
-  apply LessFromClass. assumption.
+  apply ToClass. assumption.
 Qed.
 
 Proposition LessInclTran : forall (a b c:U),
   a :<: b -> b :<=: c -> a :<: c.
 Proof.
-  intros a b c H1 H2. apply LessFromClass.
+  intros a b c H1 H2. apply ToClass.
   apply Class.Less.LessInclTran with (toClass b). 2: assumption.
-  apply LessFromClass. assumption.
+  apply ToClass. assumption.
 Qed.

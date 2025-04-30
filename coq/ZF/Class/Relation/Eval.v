@@ -76,7 +76,7 @@ Proof.
       unfold eval. exists y. split. 1: assumption. unfold IsValueAt.
       split; assumption.
   - destruct H1 as [y' [H1 H3]]. assert (y = y') as H4. 2: { subst. assumption. }
-    apply EqualFromClass. apply EquivTran with (eval F a).
+    apply EqualToClass. apply EquivTran with (eval F a).
     + apply EquivSym. assumption.
     + clear H2 y. intros x. split; intros H4.
       * unfold eval in H4. destruct H4 as [y [H4 H5]]. unfold IsValueAt in H5.

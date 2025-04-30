@@ -82,7 +82,7 @@ Proposition EmptyFromClass : forall (a:U),
 Proof.
   intros a. split; intros H1.
   - rewrite H1. apply ToClass.
-  - apply EqualFromClass. apply EquivTran with :0:. 1: assumption.
+  - apply EqualToClass. apply EquivTran with :0:. 1: assumption.
     apply EquivSym, ToClass.
 Qed.
 

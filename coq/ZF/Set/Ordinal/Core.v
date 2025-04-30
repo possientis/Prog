@@ -28,8 +28,8 @@ Proposition LessIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2. split; intros H3.
   - apply (LessIsElem (toClass b)); try assumption.
-    apply LessFromClass. assumption.
-  - apply LessFromClass, (LessIsElem (toClass b)); assumption.
+    apply Less.ToClass. assumption.
+  - apply Less.ToClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
 Proposition IfElemThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -57,11 +57,11 @@ Proof.
     toClass b :<: toClass a) as H3. {
       apply Class.Ordinal.Core.OrdinalTotal; assumption. }
     destruct H3 as [H3|[H3|H3]].
-    - left. apply EqualFromClass. assumption.
+    - left. apply EqualToClass. assumption.
     - right. left. apply LessIsElem; try assumption.
-      apply LessFromClass. assumption.
+      apply Less.ToClass. assumption.
     - right. right. apply LessIsElem; try assumption.
-      apply LessFromClass. assumption.
+      apply Less.ToClass. assumption.
 Qed.
 
 Proposition InclIsEqualOrElem : forall (a b:U),
