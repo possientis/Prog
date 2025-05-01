@@ -81,5 +81,9 @@ Qed.
 Proposition Succ : forall (a:U), Ordinal a ->
   sup (succ a) = a.
 Proof.
-Admitted.
-
+  intros a H1. unfold sup.
+  assert (:{succ a | Ordinal}: = succ a) as H2. {
+    apply Specify.IsA. intros x H2. apply Core.IsOrdinal with (succ a).
+    2: assumption. apply Succ.IsOrdinal. assumption. }
+  rewrite H2. apply UnionOfSucc. assumption.
+Qed.
