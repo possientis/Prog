@@ -8,7 +8,7 @@ Require Import ZF.Set.Union.
 
 (* The union of a set of ordinals is an ordinal.                                *)
 Proposition IsOrdinal : forall (a:U),
-  toClass a :<=: On -> Ordinal :U(a).
+  toClass a :<=: Ordinal -> Ordinal :U(a).
 Proof.
   intros a H1. apply Class.Ordinal.Core.EquivCompat with :U(toClass a).
   - apply Union.ToClass.
@@ -17,8 +17,8 @@ Qed.
 
 (* The union of a set of ordinals is an 'upper-bound' of the set.               *)
 Proposition IsUpperBound : forall (a b:U),
-  toClass a :<=: On ->
-  b :< a            ->
+  toClass a :<=: Ordinal ->
+  b :< a                 ->
   b :<=: :U(a).
 Proof.
   intros a b H1 H2. apply Incl.EquivCompatR with :U(toClass a).
@@ -28,7 +28,7 @@ Qed.
 
 (* The union of a set of ordinals is the smallest 'upper-bound'.                *)
 Proposition IsSmallest : forall (a b:U),
-  toClass a :<=: On               ->
+  toClass a :<=: Ordinal          ->
   Ordinal b                       ->
   (forall c, c :< a -> c :<=: b)  ->
   :U(a) :<=: b.

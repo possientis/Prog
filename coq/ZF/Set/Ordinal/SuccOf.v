@@ -1,7 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.
@@ -17,8 +16,8 @@ Qed.
 
 (* The successor of the union of a set of ordinals is a strict 'upper-bound'.   *)
 Proposition IsStrictUpperBound : forall (a b:U),
-  toClass a :<=: On ->
-  b :< a            ->
+  toClass a :<=: Ordinal  ->
+  b :< a                  ->
   b :< succ :U(a).
 Proof.
   intros a b H1 H2. apply InclElemTran with :U(a).

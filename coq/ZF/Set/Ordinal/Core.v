@@ -41,9 +41,9 @@ Qed.
 
 (* An ordinal is a strict subclass of the class of ordinals.                    *)
 Proposition IsLess : forall (a:U), Ordinal a ->
-  toClass a :<: On.
+  toClass a :<: Ordinal.
 Proof.
-  intros a H1. apply (Class.Ordinal.Core.LessIsElem On); try assumption.
+  intros a H1. apply (Class.Ordinal.Core.LessIsElem Ordinal); try assumption.
   apply OnIsOrdinal.
 Qed.
 
@@ -140,8 +140,8 @@ Qed.
 
 (* An non-empty class of ordinals has a minimal ordinal.                        *)
 Proposition HasMinimal : forall (A:Class),
-  A :<=: On   ->
-  A :<>: :0:  ->
+  A :<=: Ordinal  ->
+  A :<>: :0:      ->
   exists a,
     Ordinal a /\
     A a       /\
@@ -149,9 +149,9 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
-    apply HasEMinimal with On; try assumption. apply OnIsOrdinal. }
+    apply HasEMinimal with Ordinal; try assumption. apply OnIsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
-    apply Class.Ordinal.Core.IsOrdinal with On.
+    apply Class.Ordinal.Core.IsOrdinal with Ordinal.
     apply OnIsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
