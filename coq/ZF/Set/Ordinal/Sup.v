@@ -1,8 +1,12 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter2.
+Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
@@ -62,4 +66,12 @@ Proof.
     exists y. split. 1: assumption. split. 1: assumption. split; assumption.
   - apply CharacBelow in H1. destruct H1 as [y [H1 [H2 [H3 H4]]]].
     exists y. split. 1: assumption. split. 1: assumption. split; assumption.
+Qed.
+
+Proposition Omega : sup :N = :N.
+Proof.
+  assert (:{:N | On}: = :N) as H1. { apply Specify.IsA, Omega.HasOrdinalElem. }
+  assert (Limit :N) as H2. { apply NIsLimit. }
+  apply Limit.Charac in H2. 2: apply Omega.IsOrdinal. destruct H2 as [_ H2].
+  unfold sup. rewrite H1. symmetry. assumption.
 Qed.

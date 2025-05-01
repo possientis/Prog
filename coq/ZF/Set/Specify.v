@@ -2,10 +2,12 @@ Declare Scope ZF_Axiom_Specify_scope.
 Open    Scope ZF_Axiom_Specify_scope.
 
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Incl.
 
 (* Set comprehension (specification)  {x :< a | P x }.                          *)
 Definition specify (P:Class) (a:U) : U := fromClass (toClass a :/\: P)
@@ -34,3 +36,14 @@ Proposition InP : forall (P:Class) (a:U),
 Proof.
   intros P a x H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
 Qed.
+
+Proposition IsA : forall (P:Class) (a:U),
+  toClass a :<=: P <-> :{a | P}: = a.
+Proof.
+  intros P a. split; intros H1.
+  - apply DoubleInclusion. split; intros x H2.
+    + apply InA with P. assumption.
+    + apply Charac. split. 1: assumption. apply H1. assumption.
+  - intros x H2. apply InP with a. rewrite H1. assumption.
+Qed.
+

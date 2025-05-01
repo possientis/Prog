@@ -47,8 +47,24 @@ Proof.
   - apply FromClass.Charac. apply Class.Ordinal.Omega.Charac; assumption.
 Qed.
 
+(* N is a transitive set.                                                       *)
+Proposition IsTransitive : Transitive :N.
+Proof.
+  apply Transitive.EquivCompat with :N.
+  - apply EquivSym, ToClass.
+  - apply Class.Ordinal.Omega.IsTransitive.
+Qed.
+
+(* The set N is an ordinal.                                                     *)
+Proposition IsOrdinal : Ordinal :N.
+Proof.
+  apply Core.EquivCompat with :N.
+  - apply EquivSym, ToClass.
+  - apply Class.Ordinal.Omega.IsOrdinal.
+Qed.
+
 (* Every element of N is an ordinal.                                            *)
-Proposition IsOrdinal : forall (n:U), n :< :N -> Ordinal n.
+Proposition HasOrdinalElem : toClass :N :<=: Ordinal.
 Proof.
   intros n H1. apply Charac in H1. destruct H1 as [H1 _]. assumption.
 Qed.
@@ -115,22 +131,6 @@ Proof.
   apply Incl.EquivCompatR with (toClass :N). 2: assumption. apply ToClass.
 Qed.
 
-(* N is a transitive set.                                                       *)
-Proposition IsTransitive : Transitive :N.
-Proof.
-  apply Transitive.EquivCompat with :N.
-  - apply EquivSym, ToClass.
-  - apply Class.Ordinal.Omega.IsTransitive.
-Qed.
-
-(* The set N is an ordinal.                                                     *)
-Proposition NIsOrdinal : Ordinal :N.
-Proof.
-  apply Core.EquivCompat with :N.
-  - apply EquivSym, ToClass.
-  - apply Class.Ordinal.Omega.IsOrdinal.
-Qed.
-
 (* A non-empty subclass of N has a minimal element.                             *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: toClass :N   ->
@@ -141,7 +141,7 @@ Proof.
   intros A H1 H2.
   assert (exists m, Ordinal m /\ A m /\forall n, A n -> m :<=: n) as H3. {
     apply Core.HasMinimal. 2: assumption.
-    intros x H3. apply IsOrdinal, H1. assumption. }
+    intros x H3. apply HasOrdinalElem, H1. assumption. }
   destruct H3 as [m [H3 [H4 H5]]]. exists m. split; assumption.
 Qed.
 
@@ -155,3 +155,5 @@ Proof.
   intros a H1 H2. apply HasMinimal. 1: assumption.
   apply NotEmptyToClass. assumption.
 Qed.
+
+

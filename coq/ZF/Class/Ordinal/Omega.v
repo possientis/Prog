@@ -30,13 +30,13 @@ Definition omega : Class := fun a =>
 Global Instance ClassN : N Class := { omega := omega }.
 
 (* N is a class of ordinals.                                                    *)
-Proposition IsClassOfOrdinals : :N :<=: On.
+Proposition HasOrdinalElem : :N :<=: On.
 Proof.
   intros a [H1 _]. assumption.
 Qed.
 
 (* N is a class of non-limit ordinals.                                          *)
-Proposition IsClassOfNonLimits : :N :<=: NonLimit.
+Proposition HasNonLimitElem : :N :<=: NonLimit.
 Proof.
   intros a [H1 H2]. apply H2. apply Succ.IsIn.
 Qed.
@@ -114,7 +114,7 @@ Proof.
   assert (:N :\: A :<=: On) as H4. {
     apply InclTran with :N.
     - apply Class.Inter2.InclL.
-    - apply IsClassOfOrdinals. }
+    - apply HasOrdinalElem. }
   assert (exists n,
     Ordinal n                       /\
     (:N :\: A) n                    /\
@@ -122,7 +122,7 @@ Proof.
       apply HasMinimal; assumption. }
   destruct H5 as [n [H5 [[H6 H7] H8]]].
   assert (n <> :0:) as H9. { intros H9. subst. contradiction. }
-  assert (NonLimit n) as H10. { apply IsClassOfNonLimits. assumption. }
+  assert (NonLimit n) as H10. { apply HasNonLimitElem. assumption. }
   destruct H10 as [H10|H10]. 1: contradiction.
   destruct H10 as [b [H10 H11]]. assert (H12 := H6). destruct H12 as [_ H12].
   assert ((:N : Class) b) as H13. { split. 1: assumption.

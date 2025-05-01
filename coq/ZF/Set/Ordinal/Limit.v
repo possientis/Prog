@@ -18,7 +18,7 @@ Require Import ZF.Set.Union.
 Definition Limit : Class := Ordinal :\: NonLimit.
 
 (* Limit is a class of ordinals.                                                *)
-Proposition IsClassOfOrdinals : Limit :<=: Ordinal.
+Proposition HasOrdinalElem : Limit :<=: Ordinal.
 Proof.
   apply Class.Inter2.InclL.
 Qed.
@@ -44,7 +44,7 @@ Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
 Proof.
   intros a b H1 H2. assert (Ordinal a) as H3. {
-    apply IsClassOfOrdinals. assumption. }
+    apply HasOrdinalElem. assumption. }
     apply Charac in H1; try assumption.
   destruct H1 as [_ H1]. assert (H4 := H2). rewrite H1 in H4.
   apply Union.Charac in H4. destruct H4 as [c [H4 H5]].
@@ -69,9 +69,9 @@ Qed.
 Proposition NIsLimit : Limit :N.
 Proof.
   split.
-  - apply NIsOrdinal.
+  - apply Omega.IsOrdinal.
   - intros H1. apply NoElemLoop1 with :N. apply Omega.Charac. split.
-    + apply NIsOrdinal.
+    + apply Omega.IsOrdinal.
     + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
       * apply IsNonLimit. assumption.
       * apply Single.Charac in H2. subst. assumption.
@@ -82,8 +82,8 @@ Proposition NoLessThanN : forall (a:U), Limit a -> :N :<=: a.
 Proof.
   intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
     apply ElemOrIncl.
-    - apply IsClassOfOrdinals. assumption.
-    - apply NIsOrdinal. }
+    - apply HasOrdinalElem. assumption.
+    - apply Omega.IsOrdinal. }
   destruct H2 as [H2|H2]. 2: assumption. exfalso.
   apply H1. apply Omega.Charac in H2. apply H2, Succ.IsIn.
 Qed.
