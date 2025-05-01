@@ -6,6 +6,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
@@ -95,3 +96,15 @@ Proposition WhenOmega : sup :N = :N.
 Proof.
   apply WhenLimit. apply Omega.IsLimit.
 Qed.
+
+Proposition WhenNonLimit : forall (a:U),
+  NonLimit a -> a = succ (sup a).
+Proof.
+  intros a H1.
+  assert (Ordinal a) as H2. { apply NonLimit.HasOrdinalElem. assumption. }
+  assert (:{a | Ordinal}: = a) as H3. {
+    apply Specify.IsA. intros x H3. apply Core.IsOrdinal with a; assumption. }
+  unfold sup. rewrite H3.
+Admitted.
+
+
