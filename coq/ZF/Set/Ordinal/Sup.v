@@ -70,15 +70,7 @@ Proof.
     exists y. split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
-Proposition Omega : sup :N = :N.
-Proof.
-  assert (:{:N | Ordinal}: = :N) as H1. { apply Specify.IsA, Omega.HasOrdinalElem. }
-  assert (Limit :N) as H2. { apply Omega.IsLimit. }
-  apply Limit.Charac in H2. 2: apply Omega.IsOrdinal. destruct H2 as [_ H2].
-  unfold sup. rewrite H1. symmetry. assumption.
-Qed.
-
-Proposition Succ : forall (a:U), Ordinal a ->
+Proposition WhenSucc : forall (a:U), Ordinal a ->
   sup (succ a) = a.
 Proof.
   intros a H1. unfold sup.
@@ -86,4 +78,20 @@ Proof.
     apply Specify.IsA. intros x H2. apply Core.IsOrdinal with (succ a).
     2: assumption. apply Succ.IsOrdinal. assumption. }
   rewrite H2. apply UnionOfSucc. assumption.
+Qed.
+
+Proposition WhenLimit : forall (a:U),
+  Limit a -> sup a = a.
+Proof.
+  intros a H1.
+  assert (Ordinal a) as H2. { apply Limit.HasOrdinalElem. assumption. }
+  assert (:{a | Ordinal}: = a) as H3. {
+    apply Specify.IsA. intros x H3. apply Core.IsOrdinal with a; assumption. }
+  unfold sup. rewrite H3. apply Limit.Charac in H1. 2: assumption.
+  symmetry. apply H1.
+Qed.
+
+Proposition WhenOmega : sup :N = :N.
+Proof.
+  apply WhenLimit. apply Omega.IsLimit.
 Qed.
