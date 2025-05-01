@@ -4,6 +4,8 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 (* The union of a class of ordinals is an ordinal class.                        *)
 Proposition IsOrdinal : forall (A:Class),
@@ -41,4 +43,13 @@ Proof.
     destruct H4 as [c [H4 H6]]. assert (On c) as H7. {
       apply H1. assumption. }
     apply (H3 c); assumption.
+Qed.
+
+Proposition UnionOfOn : :U(On) :~: On.
+Proof.
+  apply Class.Incl.DoubleInclusion. split.
+  - apply Class.Ordinal.Transitive.UnionIncl, OnIsOrdinal.
+  - intros a H1. exists (a :\/: :{a}:). split.
+    + apply Union2.Charac. right. apply Single.IsIn.
+    + apply Core.Succ. assumption.
 Qed.

@@ -21,6 +21,8 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 (* Predicate defining an ordinal class.                                         *)
 Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
@@ -347,4 +349,20 @@ Proof.
   intros A a H1 H2. apply Class.Incl.DoubleInclusion. split.
   2: apply Class.Inter2.InclL. intros x H3. split. 1: assumption.
   destruct H1 as [H1 _]. specialize (H1 a H2 x). apply H1. assumption.
+Qed.
+
+Proposition Succ : forall (a:U), On a -> On (a :\/: :{a}:).
+Proof.
+  intros a H1. split.
+  - intros x H2 y H3. apply Union2.Charac in H2.
+    apply Union2.Charac. destruct H2 as [H2|H2].
+    + left. destruct H1 as [H1 _]. specialize (H1 x H2 y). apply H1. assumption.
+    + apply Single.Charac in H2. subst. left. assumption.
+  - intros x y H2 H3. apply Union2.Charac in H2. apply Union2.Charac in H3.
+    destruct H2 as [H2|H2]; destruct H3 as [H3|H3].
+    + destruct H1 as [_ H1]. apply H1; assumption.
+    + apply Single.Charac in H3. subst. right. left. assumption.
+    + apply Single.Charac in H2. subst. right. right. assumption.
+    + apply Single.Charac in H2. apply Single.Charac in H3.
+      subst. left. apply eq_refl.
 Qed.

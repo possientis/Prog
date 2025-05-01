@@ -60,18 +60,7 @@ Qed.
 Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ a).
 Proof.
-  intros a H1. split.
-  - intros x H2 y H3. apply Union2.Charac in H2.
-    apply Union2.Charac. destruct H2 as [H2|H2].
-    + left. destruct H1 as [H1 _]. specialize (H1 x H2 y). apply H1. assumption.
-    + apply Single.Charac in H2. subst. left. assumption.
-  - intros x y H2 H3. apply Union2.Charac in H2. apply Union2.Charac in H3.
-    destruct H2 as [H2|H2]; destruct H3 as [H3|H3].
-    + destruct H1 as [_ H1]. apply H1; assumption.
-    + apply Single.Charac in H3. subst. right. left. assumption.
-    + apply Single.Charac in H2. subst. right. right. assumption.
-    + apply Single.Charac in H2. apply Single.Charac in H3.
-      subst. left. apply eq_refl.
+  apply Class.Ordinal.Core.Succ.
 Qed.
 
 (* The successor operation is compatible with set inclusion for ordinals.       *)
@@ -171,14 +160,4 @@ Proof.
   assert (:U(succ b) = b) as H5. { apply UnionOfSucc. assumption. }
   rewrite <- H4 in H5. assert (a = b) as H6. { rewrite <- H5. assumption. }
   rewrite <- H6 in H4. symmetry. assumption.
-Qed.
-
-(* TODO; move: The union of the class of ordinals is the class of ordinals.     *)
-Proposition UnionOfOn : :U(On) :~: On.
-Proof.
-  apply Class.Incl.DoubleInclusion. split.
-  - apply Class.Ordinal.Transitive.UnionIncl, OnIsOrdinal.
-  - intros a H1. exists (a :\/: :{a}:). split.
-    + apply Union2.Charac. right. apply Single.IsIn.
-    + apply IsOrdinal. assumption.
 Qed.

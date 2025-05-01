@@ -1,29 +1,30 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter2.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
 Export ZF.Notation.SupBelow.
 
 (* The supremum of the set a.                                                   *)
-Definition sup (a:U) : U := :U( :{ a | On }: ).
+Definition sup (a:U) : U := :U( :{ a | Ordinal }: ).
 
 
 (* The supremum of the set a below b.                                           *)
-Definition supBelow (b a:U) : U := :U( :{ a :/\: b | On }: ).
+Definition supBelow (b a:U) : U := :U( :{ a :/\: b | Ordinal }: ).
 
 (* Notation "sup(:< b ) a" := (supBelow b a)                                    *)
 Global Instance SetSupBelow : SupBelow U := { supBelow := supBelow }.
 
 Proposition Charac : forall (a:U),
-  forall x, x :< sup a <-> exists y, x :< y /\ y :< a /\ On y.
+  forall x, x :< sup a <-> exists y, x :< y /\ y :< a /\ Ordinal y.
 Proof.
   intros a x. split; intros H1.
   - apply Union.Charac in H1. destruct H1 as [y [H1 H2]].
@@ -35,7 +36,8 @@ Proof.
 Qed.
 
 Proposition CharacBelow : forall (b a:U),
-  forall x, x :< sup(:<b) a <-> exists y, x :< y /\ y :< a /\ y :< b /\ On y.
+  forall x, x :< sup(:<b) a <->
+    exists y, x :< y /\ y :< a /\ y :< b /\ Ordinal y.
 Proof.
   intros b a x. split; intros H1.
   - apply Union.Charac in H1. destruct H1 as [y [H1 H2]].
@@ -70,8 +72,14 @@ Qed.
 
 Proposition Omega : sup :N = :N.
 Proof.
-  assert (:{:N | On}: = :N) as H1. { apply Specify.IsA, Omega.HasOrdinalElem. }
+  assert (:{:N | Ordinal}: = :N) as H1. { apply Specify.IsA, Omega.HasOrdinalElem. }
   assert (Limit :N) as H2. { apply Omega.IsLimit. }
   apply Limit.Charac in H2. 2: apply Omega.IsOrdinal. destruct H2 as [_ H2].
   unfold sup. rewrite H1. symmetry. assumption.
 Qed.
+
+Proposition Succ : forall (a:U), Ordinal a ->
+  sup (succ a) = a.
+Proof.
+Admitted.
+
