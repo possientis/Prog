@@ -7,8 +7,10 @@ Require Import ZF.Class.Ordinal.Omega.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
@@ -47,6 +49,27 @@ Proof.
   - apply FromClass.Charac. apply Class.Ordinal.Omega.Charac; assumption.
 Qed.
 
+(* 0 is a natural number.                                                       *)
+Proposition HasZero : :0: :< :N.
+Proof.
+  apply FromClass.Charac, Class.Ordinal.Omega.HasZero.
+Qed.
+
+(* The successor of a natural number is a natural number.                       *)
+Proposition HasSucc : forall (n:U), n :< :N -> succ n :< :N.
+Proof.
+  intros n H1. apply FromClass.Charac in H1. apply FromClass.Charac.
+  apply Class.Ordinal.Omega.HasSucc. assumption.
+Qed.
+
+(* The set N is not empty.                                                      *)
+Proposition IsNotEmpty : :N <> :0:.
+Proof.
+  intros H1. apply Empty.Charac with :0:.
+  assert (:0: :< :N) as H2. { apply HasZero. }
+  rewrite H1 in H2. assumption.
+Qed.
+
 (* N is a transitive set.                                                       *)
 Proposition IsTransitive : Transitive :N.
 Proof.
@@ -70,30 +93,32 @@ Proof.
 Qed.
 
 (* Every element of N is a non-limit ordinal.                                   *)
-Proposition IsNonLimit : forall (n:U), n :< :N -> NonLimit n.
+Proposition HasNonLimitElem : toClass :N :<=: NonLimit.
 Proof.
   intros n H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1, Succ.IsIn.
 Qed.
 
-(* 0 is a natural number.                                                       *)
-Proposition HasZero : :0: :< :N.
+(* The set N is a limit ordinal.                                                *)
+Proposition IsLimit : Limit :N.
 Proof.
-  apply FromClass.Charac, Class.Ordinal.Omega.HasZero.
+  split.
+  - apply IsOrdinal.
+  - intros H1. apply NoElemLoop1 with :N. apply Charac. split.
+    + apply IsOrdinal.
+    + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
+      * apply HasNonLimitElem. assumption.
+      * apply Single.Charac in H2. subst. assumption.
 Qed.
 
-(* The successor of a natural number is a natural number.                       *)
-Proposition HasSucc : forall (n:U), n :< :N -> succ n :< :N.
+(* A limit ordinal is no less than N.                                           *)
+Proposition IsInclInLimit : forall (a:U), Limit a -> :N :<=: a.
 Proof.
-  intros n H1. apply FromClass.Charac in H1. apply FromClass.Charac.
-  apply Class.Ordinal.Omega.HasSucc. assumption.
-Qed.
-
-(* The set N is not empty.                                                      *)
-Proposition IsNotEmpty : :N <> :0:.
-Proof.
-  intros H1. apply Empty.Charac with :0:.
-  assert (:0: :< :N) as H2. { apply HasZero. }
-  rewrite H1 in H2. assumption.
+  intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
+    apply ElemOrIncl.
+    - apply Limit.HasOrdinalElem. assumption.
+    - apply IsOrdinal. }
+  destruct H2 as [H2|H2]. 2: assumption. exfalso.
+  apply H1. apply Charac in H2. apply H2, Succ.IsIn.
 Qed.
 
 (* An ordinal with non-limit ordinals as elements is a subset of N.             *)
@@ -155,5 +180,3 @@ Proof.
   intros a H1 H2. apply HasMinimal. 1: assumption.
   apply NotEmptyToClass. assumption.
 Qed.
-
-

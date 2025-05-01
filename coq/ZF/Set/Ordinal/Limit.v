@@ -4,11 +4,9 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
-Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.SuccOf.
 Require Import ZF.Set.Ordinal.Union.
@@ -63,27 +61,4 @@ Proof.
   intros a b H1 H2. exists (succ b). split.
   - apply Succ.IsIn.
   - apply HasSucc; assumption.
-Qed.
-
-(* The set N is a limit ordinal.                                                *)
-Proposition NIsLimit : Limit :N.
-Proof.
-  split.
-  - apply Omega.IsOrdinal.
-  - intros H1. apply NoElemLoop1 with :N. apply Omega.Charac. split.
-    + apply Omega.IsOrdinal.
-    + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
-      * apply IsNonLimit. assumption.
-      * apply Single.Charac in H2. subst. assumption.
-Qed.
-
-(* A limit ordinal is no less than N.                                           *)
-Proposition NoLessThanN : forall (a:U), Limit a -> :N :<=: a.
-Proof.
-  intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
-    apply ElemOrIncl.
-    - apply HasOrdinalElem. assumption.
-    - apply Omega.IsOrdinal. }
-  destruct H2 as [H2|H2]. 2: assumption. exfalso.
-  apply H1. apply Omega.Charac in H2. apply H2, Succ.IsIn.
 Qed.

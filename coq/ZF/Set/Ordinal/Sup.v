@@ -71,7 +71,7 @@ Qed.
 Proposition Omega : sup :N = :N.
 Proof.
   assert (:{:N | On}: = :N) as H1. { apply Specify.IsA, Omega.HasOrdinalElem. }
-  assert (Limit :N) as H2. { apply NIsLimit. }
+  assert (Limit :N) as H2. { apply Omega.IsLimit. }
   apply Limit.Charac in H2. 2: apply Omega.IsOrdinal. destruct H2 as [_ H2].
   unfold sup. rewrite H1. symmetry. assumption.
 Qed.
