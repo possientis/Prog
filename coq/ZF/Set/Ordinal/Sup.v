@@ -71,14 +71,32 @@ Proof.
     exists y. split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
+Proposition WhenOrdinal : forall (a:U),
+  Ordinal a -> sup a = :U(a).
+Proof.
+  intros a H1. unfold sup.
+  assert (:{a | Ordinal}: = a) as H2. {
+    apply Specify.IsA. intros x H2. apply Core.IsOrdinal with a; assumption. }
+  rewrite H2. reflexivity.
+Qed.
+
+Proposition WhenOrdinalBelow : forall (a b:U), Ordinal a -> Ordinal b ->
+  sup(:< b) a = :U(a :/\: b).
+Proof.
+  intros a b H1 H2.
+  unfold Notation.SupBelow.supBelow, SetSupBelow, supBelow.
+  assert (:{a :/\: b | Ordinal}: = a :/\: b) as H3. {
+    apply Specify.IsA. intros x H3. apply Inter2.Charac in H3.
+    destruct H3 as [H3 _]. apply Core.IsOrdinal with a; assumption. }
+  rewrite H3. reflexivity.
+Qed.
+
 Proposition WhenSucc : forall (a:U), Ordinal a ->
   sup (succ a) = a.
 Proof.
-  intros a H1. unfold sup.
-  assert (:{succ a | Ordinal}: = succ a) as H2. {
-    apply Specify.IsA. intros x H2. apply Core.IsOrdinal with (succ a).
-    2: assumption. apply Succ.IsOrdinal. assumption. }
-  rewrite H2. apply UnionOfSucc. assumption.
+  intros a H1. rewrite WhenOrdinal.
+  - apply UnionOfSucc. assumption.
+  - apply Succ.IsOrdinal. assumption.
 Qed.
 
 Proposition WhenLimit : forall (a:U),
@@ -86,10 +104,8 @@ Proposition WhenLimit : forall (a:U),
 Proof.
   intros a H1.
   assert (Ordinal a) as H2. { apply Limit.HasOrdinalElem. assumption. }
-  assert (:{a | Ordinal}: = a) as H3. {
-    apply Specify.IsA. intros x H3. apply Core.IsOrdinal with a; assumption. }
-  unfold sup. rewrite H3. apply Limit.Charac in H1. 2: assumption.
-  symmetry. apply H1.
+  rewrite WhenOrdinal. 2: assumption. symmetry. apply Limit.Charac in H1.
+  2: assumption. destruct H1 as [_ H1]. assumption.
 Qed.
 
 Proposition WhenOmega : sup :N = :N.
@@ -102,8 +118,21 @@ Proposition WhenNonLimit : forall (a:U),
 Proof.
   intros a H1 H2.
   assert (Ordinal a) as H3. { apply NonLimit.HasOrdinalElem. assumption. }
-  assert (:{a | Ordinal}: = a) as H4. {
-    apply Specify.IsA. intros x H4. apply Core.IsOrdinal with a; assumption. }
-  unfold sup. rewrite H4. apply NonLimit.Charac in H1. 2: assumption.
-  destruct H1 as [H1|H1]. 2: assumption. - contradiction.
+  rewrite WhenOrdinal. 2: assumption.
+  apply NonLimit.Charac in H1. 2: assumption.
+  destruct H1 as [H1|H1]. 2: assumption. contradiction.
+Qed.
+
+Proposition WhenElem : forall (a b:U), Ordinal a -> Ordinal b ->
+  b :< a -> sup(:< succ b) a = b.
+Proof.
+  intros a b H1 H2 H3.
+  assert (a :/\: succ b = succ b) as H4. {
+    apply ElemIsIncl in H3; try assumption.
+    apply ZF.Set.Incl.DoubleInclusion. split; intros x H4.
+    - apply Inter2.Charac in H4. destruct H4 as [_ H4]. assumption.
+    - apply Inter2.Charac. split. 2: assumption. apply H3. assumption. }
+  rewrite WhenOrdinalBelow. 2: assumption.
+  - rewrite H4. apply UnionOfSucc. assumption.
+  - apply Succ.IsOrdinal. assumption.
 Qed.
