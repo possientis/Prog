@@ -189,7 +189,7 @@ Proof.
     }
 
     (* We obtain a contradiction by showing the class of singletons is small.   *)
-    apply SingletonIsProper.
+    apply Singleton.IsProper.
 
     (* So we need to show that the class of singletons is small.                *)
     assert (Small Singleton) as X. 2: apply X.

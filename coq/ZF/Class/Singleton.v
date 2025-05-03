@@ -11,7 +11,7 @@ Require Import ZF.Set.Single.
 (* The class of all singletons.                                                 *)
 Definition Singleton : Class := fun x => exists y, x = :{y}:.
 
-Proposition SingletonIsProper : Proper Singleton.
+Proposition IsProper : Proper Singleton.
 Proof.
   (* Assume Singleton is small. *)
   intros H1. assert (Small Singleton) as A. apply H1. clear A.
