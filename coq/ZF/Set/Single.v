@@ -1,5 +1,5 @@
-Declare Scope ZF_Set_Singleton_scope.
-Open    Scope ZF_Set_Singleton_scope.
+Declare Scope ZF_Set_Single_scope.
+Open    Scope ZF_Set_Single_scope.
 
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
@@ -10,7 +10,7 @@ Require Import ZF.Set.Pair.
 Definition singleton (a:U) : U := :{a,a}:.
 
 Notation ":{ a }:" := (singleton a)
-  (at level 1, no associativity) : ZF_Set_Singleton_scope.
+  (at level 1, no associativity) : ZF_Set_Single_scope.
 
 (* Characterisation of the elements of {a}.                                     *)
 Proposition Charac : forall (a:U),
