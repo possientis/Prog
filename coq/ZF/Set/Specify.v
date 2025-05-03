@@ -1,5 +1,5 @@
-Declare Scope ZF_Axiom_Specify_scope.
-Open    Scope ZF_Axiom_Specify_scope.
+Declare Scope ZF_Set_Specify_scope.
+Open    Scope ZF_Set_Specify_scope.
 
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
@@ -14,7 +14,7 @@ Definition specify (P:Class) (a:U) : U := fromClass (toClass a :/\: P)
   (Inter2.IsSmallL (toClass a) P (SetIsSmall a)).
 
 Notation ":{ a | P }:" := (specify P a)
-  (at level 1, no associativity) : ZF_Axiom_Specify_scope.
+  (at level 1, no associativity) : ZF_Set_Specify_scope.
 
 (* Characterisation of the elements of { x :< a | P x}.                         *)
 Proposition Charac : forall (P:Class) (a:U),
