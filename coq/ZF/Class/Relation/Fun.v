@@ -1,5 +1,5 @@
-Declare Scope ZF_Class_Fun_scope.
-Open    Scope ZF_Class_Fun_scope.
+Declare Scope ZF_Class_Relation_Fun_scope.
+Open    Scope ZF_Class_Relation_Fun_scope.
 
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
@@ -20,7 +20,7 @@ Require Import ZF.Set.OrdPair.
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
 Notation "F :: A :-> B" := (Fun F A B)
-  (at level 0, no associativity) : ZF_Class_Fun_scope.
+  (at level 0, no associativity) : ZF_Class_Relation_Fun_scope.
 
 (* The direct image of a small class by a function is small.                    *)
 Proposition ImageIsSmall : forall (F A B C:Class),
