@@ -14,7 +14,7 @@ Proof.
   apply Core.IsLess. assumption.
 Qed.
 
-(* The union of an ordinal is an upper-bound ot its elements.                   *)
+(* The union of an ordinal is an upper-bound of its elements.                   *)
 Proposition IsUpperBound : forall (a b:U), Ordinal a ->
   b :< a -> b :<=: :U(a).
 Proof.

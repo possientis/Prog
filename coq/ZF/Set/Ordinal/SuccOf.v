@@ -38,7 +38,7 @@ Proof.
   apply Core.IsLess. assumption.
 Qed.
 
-(* An ordinal is a subset of the successor ot its union.                        *)
+(* An ordinal is a subset of the successor of its union.                        *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   a :<=: succ :U(a).
 Proof.
