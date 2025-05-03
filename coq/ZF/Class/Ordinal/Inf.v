@@ -1,25 +1,23 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Incl.
-Require Import ZF.Class.Less.
-Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.Union.
-Require Import ZF.Class.Union.
+Require Import ZF.Class.Diff.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Small.
+Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Set.Core.
 
-Require Import ZF.Notation.SupBelow.
-Export ZF.Notation.SupBelow.
+Require Import ZF.Notation.InfAbove.
+Export ZF.Notation.InfAbove.
 
-(* The supremum of the class A.                                                 *)
-Definition sup (A:Class) : Class := :U(A :/\: On).
+(* The infimum of the class A. (using tweaked intersection, so 0 when 0).       *)
+Definition inf (A:Class) : Class := :J(A :/\: On).
 
-(* The supremum of the class A below b.                                         *)
-Definition supBelow (b:U)(A:Class) : Class := :U(A :/\: On :/\: toClass b).
+(* The infimum of the class A above b.                                          *)
+Definition infAbove (b:U)(A:Class) : Class := inf (A :\: toClass b).
 
-(* Notation "sup(:< b ) A" := (supBelow b A)                                    *)
-Global Instance ClassSupBelow : SupBelow Class := { supBelow := supBelow }.
+(* Notation "inf(>: b ) A" := (infAbove b A)                                    *)
+Global Instance ClassInfAbove : InfAbove Class := { infAbove := infAbove }.
 
+(*
 (* The supremum operation is compatible with class equivalence.                 *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> sup A :~: sup B.
@@ -76,4 +74,4 @@ Proof.
 Qed.
 *)
 
-
+*)
