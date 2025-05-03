@@ -68,12 +68,11 @@ Proof.
   1: assumption. apply IsSmallBelow.
 Qed.
 
-(*
 Proposition IsequivOrLess : forall (A:Class),
   sup A :~: On \/ sup A :<: On.
 Proof.
   intros A. apply Core.IsEquivOrLess, IsOrdinal.
 Qed.
-*)
+
 
 
