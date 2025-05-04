@@ -43,6 +43,7 @@ Proof.
   intros A. apply Ordinal.Union.IsOrdinal, Class.Inter2.InclR.
 Qed.
 
+(* The supremum of a class below b is an ordinal class.                         *)
 Proposition IsOrdinalBelow : forall (A:Class) (b:U),
   Ordinal (sup(:< b) A).
 Proof.
@@ -50,6 +51,7 @@ Proof.
   destruct H1 as [H1 [H2 H3]]. assumption.
 Qed.
 
+(* The supremum of a class below b is a small class.                            *)
 Proposition IsSmallBelow : forall (A:Class) (b:U),
   Small (sup(:< b) A).
 Proof.
@@ -57,6 +59,7 @@ Proof.
   apply SetIsSmall.
 Qed.
 
+(* The supremum of a class below b is a strict subclass of On.                  *)
 Proposition IsLessBelow : forall (A:Class) (b:U),
   sup(:< b) A :<: On.
 Proof.
@@ -68,11 +71,9 @@ Proof.
   1: assumption. apply IsSmallBelow.
 Qed.
 
+(* The supremum is either the class of ordinals or a subclass thereof.          *)
 Proposition IsequivOrLess : forall (A:Class),
   sup A :~: On \/ sup A :<: On.
 Proof.
   intros A. apply Core.IsEquivOrLess, IsOrdinal.
 Qed.
-
-
-

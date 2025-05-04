@@ -1,8 +1,12 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Inter.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 
 Require Import ZF.Notation.InfAbove.
@@ -17,61 +21,68 @@ Definition infAbove (b:U)(A:Class) : Class := inf (A :\: toClass b).
 (* Notation "inf(>: b ) A" := (infAbove b A)                                    *)
 Global Instance ClassInfAbove : InfAbove Class := { infAbove := infAbove }.
 
-(*
-(* The supremum operation is compatible with class equivalence.                 *)
+(* The infimum operation is compatible with class equivalence.                  *)
 Proposition EquivCompat : forall (A B:Class),
-  A :~: B -> sup A :~: sup B.
+  A :~: B -> inf A :~: inf B.
 Proof.
-  intros A B H1. apply Union.EquivCompat, Inter2.EquivCompatL. assumption.
+  intros A B H1. apply Inter.EquivCompat', Inter2.EquivCompatL. assumption.
 Qed.
 
-(* The supremum of a class of ordinals coincide with its union.                 *)
+(* The infimum of a class of ordinals coincide with its (tweaked) intersection. *)
 Proposition WhenHasOrdinalElem : forall (A:Class),
-  A :<=: On -> sup A :~: :U(A).
+  A :<=: On -> inf A :~: :J(A).
 Proof.
-  intros A H1. unfold sup. apply Union.EquivCompat.
+  intros A H1. unfold inf. apply Inter.EquivCompat'.
   intros x. split; intros H2.
   - apply H2.
   - split. 1: assumption. apply H1. assumption.
 Qed.
 
-(* The supremum of a class is an ordinal class.                                 *)
-Proposition IsOrdinal : forall (A:Class), Ordinal (sup A).
+(* The infimum of a class is an ordinal class.                                 *)
+Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
-  intros A. apply Ordinal.Union.IsOrdinal, Class.Inter2.InclR.
+  intros A. apply Ordinal.Inter.IsOrdinal', Class.Inter2.InclR.
 Qed.
 
-Proposition IsOrdinalBelow : forall (A:Class) (b:U),
-  Ordinal (sup(:< b) A).
+(* The infimum of a class above b is an ordinal class.                          *)
+Proposition IsOrdinalAbove : forall (A:Class) (b:U),
+  Ordinal (inf(>: b) A).
 Proof.
-  intros A b. apply Ordinal.Union.IsOrdinal. intros x H1.
-  destruct H1 as [H1 [H2 H3]]. assumption.
+  intros A b. apply Ordinal.Inter.IsOrdinal', Class.Inter2.InclR.
 Qed.
 
-Proposition IsSmallBelow : forall (A:Class) (b:U),
-  Small (sup(:< b) A).
+(* The infimum of a class is small.                                             *)
+Proposition IsSmall : forall (A:Class), Small (inf A).
 Proof.
-  intros A b. apply Union.IsSmall, Inter2.IsSmallR, Inter2.IsSmallR.
-  apply SetIsSmall.
+  intros A. apply Inter.IsSmall'.
 Qed.
 
-Proposition IsLessBelow : forall (A:Class) (b:U),
-  sup(:< b) A :<: On.
+(* The infimum of a class above b is small.                                     *)
+Proposition IsSmallAbove : forall (A:Class) (b:U),
+  Small (inf(>: b) A).
+Proof.
+  intros A b. apply Inter.IsSmall'.
+Qed.
+
+(* The infimum of a class is a strict subclass of On.                           *)
+Proposition IsLess : forall (A:Class), inf A :<: On.
+Proof.
+  intros A.
+  assert (inf A :~: On \/ inf A :<: On) as H1. {
+    apply Core.IsEquivOrLess, IsOrdinal. }
+  destruct H1 as [H1|H1]. 2: assumption. exfalso.
+  apply OnIsProper. apply Small.EquivCompat with (inf A).
+  1: assumption. apply IsSmall.
+Qed.
+
+(* The infimum of a class above b is a strict subclass of On.                   *)
+Proposition IsLessAbove : forall (A:Class) (b:U),
+  inf(>: b) A :<: On.
 Proof.
   intros A b.
-  assert (sup(:< b) A :~: On \/ sup(:< b) A :<: On) as H1. {
-    apply Core.IsEquivOrLess, IsOrdinalBelow. }
+  assert (inf(>: b) A :~: On \/ inf(>: b) A :<: On) as H1. {
+    apply Core.IsEquivOrLess, IsOrdinalAbove. }
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
-  apply OnIsProper. apply Small.EquivCompat with (sup(:< b) A).
-  1: assumption. apply IsSmallBelow.
+  apply OnIsProper. apply Small.EquivCompat with (inf(>: b) A).
+  1: assumption. apply IsSmallAbove.
 Qed.
-
-(*
-Proposition IsequivOrLess : forall (A:Class),
-  sup A :~: On \/ sup A :<: On.
-Proof.
-  intros A. apply Core.IsEquivOrLess, IsOrdinal.
-Qed.
-*)
-
-*)
