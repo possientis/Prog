@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Ordinal.Core.
 
@@ -21,22 +22,20 @@ Proposition IsLowerBound : forall (a b:U),
   b :< a                 ->
   :I(a) :<=: b.
 Proof.
-Admitted.
-(*
-  intros a b H1 H2. apply Incl.EquivCompatR with :U(toClass a).
-  - apply Union.ToClass.
-  - apply Class.Ordinal.Union.IsUpperBound; assumption.
+  intros a b H1 H2. apply Incl.EquivCompatL with :J(toClass a).
+  - apply ToClass'.
+  - apply Class.Ordinal.Inter.IsLowerBound'; assumption.
 Qed.
 
-(* The union of a set of ordinals is the smallest 'upper-bound'.                *)
-Proposition IsSmallest : forall (a b:U),
+(* The intersection of a set of ordinals is the largest 'lower-bound'.          *)
+Proposition IsLargest : forall (a b:U),
   toClass a :<=: Ordinal          ->
-  Ordinal b                       ->
-  (forall c, c :< a -> c :<=: b)  ->
-  :U(a) :<=: b.
+  a <> :0:                        ->
+  (forall c, c :< a -> b :<=: c)  ->
+  b :<=: :I(a).
 Proof.
-  intros a b H1 H2 H3. apply Incl.EquivCompatL with :U(toClass a).
-  - apply Union.ToClass.
-  - apply Class.Ordinal.Union.IsSmallest; assumption.
+  intros a b H1 H2 H3. apply Incl.EquivCompatR with :J(toClass a).
+  - apply Inter.ToClass'.
+  - apply Class.Ordinal.Inter.IsLargest'; try assumption.
+    apply Empty.NotEmptyToClass. assumption.
 Qed.
-*)

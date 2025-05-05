@@ -29,11 +29,10 @@ Qed.
 (* The union of a set of ordinals is the smallest 'upper-bound'.                *)
 Proposition IsSmallest : forall (a b:U),
   toClass a :<=: Ordinal          ->
-  Ordinal b                       ->
   (forall c, c :< a -> c :<=: b)  ->
   :U(a) :<=: b.
 Proof.
-  intros a b H1 H2 H3. apply Incl.EquivCompatL with :U(toClass a).
+  intros a b H1 H2. apply Incl.EquivCompatL with :U(toClass a).
   - apply Union.ToClass.
   - apply Class.Ordinal.Union.IsSmallest; assumption.
 Qed.
