@@ -1,9 +1,11 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Inter.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
+
 Export ZF.Notation.Inter.
 
 (* We consider the set defined by the (tweaked) intersection of a.              *)
@@ -28,6 +30,7 @@ Proof.
   - apply Empty.HasElem in H1. assumption.
 Qed.
 
+(* The intersection of the class is the class of the intersection.              *)
 Proposition ToClass : forall (a:U), a <> :0: ->
   :I(toClass a) :~: toClass :I(a).
 Proof.
@@ -36,3 +39,11 @@ Proof.
   - intros y H3. apply Charac with a; assumption.
 Qed.
 
+(* The (tweaked) intersection of the class is the class of the intersection.    *)
+Proposition ToClass' : forall (a:U),
+  :J(toClass a) :~: toClass :I(a).
+Proof.
+  intros a x. split; intros H1.
+  - apply FromClass.Charac. assumption.
+  - apply FromClass.Charac in H1. assumption.
+Qed.

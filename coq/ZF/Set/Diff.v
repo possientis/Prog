@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Small.
@@ -24,6 +25,15 @@ Proof.
   intros a b x. split; intros H1.
   - apply FromClass.Charac in H1. apply H1.
   - apply FromClass.Charac, H1.
+Qed.
+
+(* The class of the difference is the diffence of the classes.                  *)
+Proposition ToClass : forall (a b:U),
+  toClass (a :\: b) :~: toClass a :\: toClass b.
+Proof.
+  intros a b x. split; intros H1.
+  - apply Charac in H1. destruct H1 as [H1 H2]. split; assumption.
+  - destruct H1 as [H1 H2]. apply Charac. split; assumption.
 Qed.
 
 Proposition DiffOfUnion : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.

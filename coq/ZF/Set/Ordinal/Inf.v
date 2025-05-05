@@ -1,100 +1,116 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Sup.
+Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Inter2.
+Require Import ZF.Set.Inter.
 Require Import ZF.Set.Ordinal.Core.
-Require Import ZF.Set.Ordinal.Limit.
-Require Import ZF.Set.Ordinal.NonLimit.
-Require Import ZF.Set.Ordinal.Omega.
-Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
-Require Import ZF.Set.Union.
 
-Export ZF.Notation.SupBelow.
+Export ZF.Notation.InfAbove.
 
-(* The supremum of the set a.                                                   *)
-Definition sup (a:U) : U := :U( :{ a | Ordinal }: ).
+(* The infimum of the set a.                                                    *)
+Definition inf (a:U) : U := :I( :{ a | Ordinal }: ).
 
+(* The infimum of the set a above b.                                            *)
+Definition infAbove (b a:U) : U := inf (a :\: b).
 
-(* The supremum of the set a below b.                                           *)
-Definition supBelow (b a:U) : U := :U( :{ a :/\: b | Ordinal }: ).
+(* Notation "inf(>: b ) a" := (infAbove b a)                                    *)
+Global Instance SetInfAbove : InfAbove U := { infAbove := infAbove }.
 
-(* Notation "sup(:< b ) a" := (supBelow b a)                                    *)
-Global Instance SetSupBelow : SupBelow U := { supBelow := supBelow }.
-
-Proposition Charac : forall (a:U),
-  forall x, x :< sup a <-> exists y, x :< y /\ y :< a /\ Ordinal y.
+Proposition Charac : forall (a x y:U),
+  x :< inf a  ->
+  y :< a      ->
+  Ordinal y   ->
+  x :< y.
 Proof.
-  intros a x. split; intros H1.
-  - apply Union.Charac in H1. destruct H1 as [y [H1 H2]].
-    apply Specify.Charac in H2. destruct H2 as [H2 H3].
-    exists y. split. 1: assumption. split; assumption.
-  - destruct H1 as [y [H1 [H2 H3]]]. apply Union.Charac.
-    exists y. split. 1: assumption. apply Specify.Charac.
-    split; assumption.
+  intros a x y H1 H2 H3. apply Inter.Charac with :{a | Ordinal}:.
+  1: assumption. apply Specify.Charac. split; assumption.
 Qed.
 
-Proposition CharacBelow : forall (a b:U),
-  forall x, x :< sup(:<b) a <->
-    exists y, x :< y /\ y :< a /\ y :< b /\ Ordinal y.
+Proposition CharacRev : forall (a x:U),
+  :{a | Ordinal}:  <> :0:                   ->
+  (forall y, y :< a -> Ordinal y -> x :< y) ->
+  x :< inf a.
 Proof.
-  intros a b x. split; intros H1.
-  - apply Union.Charac in H1. destruct H1 as [y [H1 H2]].
-    apply Specify.Charac in H2. destruct H2 as [H2 H3].
-    apply Inter2.Charac in H2. destruct H2 as [H2 H4].
-    exists y. split. 1: assumption. split. 1: assumption.
-    split; assumption.
-  - destruct H1 as [y [H1 [H2 [H3 H4]]]]. apply Union.Charac.
-    exists y. split. 1: assumption. apply Specify.Charac.
-    split. 2: assumption. apply Inter2.Charac. split; assumption.
+  intros a x H1 H2. apply Inter.CharacRev. 1: assumption.
+  intros y H3. apply Specify.Charac in H3. destruct H3 as [H3 H4].
+  apply H2; assumption.
 Qed.
 
-(* The supremum of the class is the class of the supremum.                      *)
+Proposition CharacAbove : forall (a b x y:U),
+  x :< inf(>: b) a  ->
+  y :< a            ->
+  ~ y :< b          ->
+  Ordinal y         ->
+  x :< y.
+Proof.
+  intros a b x y H1 H2 H3 H4. apply Charac with (a :\: b); try assumption.
+  apply Diff.Charac. split; assumption.
+Qed.
+
+Proposition CharacAboveRev : forall (a b x:U),
+  :{ a :\: b | Ordinal }:  <> :0:                      ->
+  (forall y, y :< a -> ~ y :< b -> Ordinal y -> x :< y) ->
+  x :< inf(>: b) a.
+Proof.
+  intros a b x H1 H2. apply Inter.CharacRev. 1: assumption.
+  intros y H3. apply Specify.Charac in H3. destruct H3 as [H3 H4].
+  apply Diff.Charac in H3. destruct H3 as [H3 H5]. apply H2; assumption.
+Qed.
+
+(* The infimum of the class is the class of the infimum.                        *)
 Proposition ToClass : forall (a:U),
-  Class.Ordinal.Sup.sup (toClass a) :~: toClass (sup a).
+  Class.Ordinal.Inf.inf (toClass a) :~: toClass (inf a).
 Proof.
   intros a x. split; intros H1.
-  - destruct H1 as [y [H1 [H2 H3]]]. apply Charac. exists y.
-    split. 1: assumption. split; assumption.
-  - apply Charac in H1. destruct H1 as [y [H1 [H2 H3]]].
-    exists y. split. 1: assumption. split; assumption.
+  - apply FromClass.Charac.
+    apply Class.Inter.EquivCompat' with (toClass a :/\: On). 2: assumption.
+    intros y. split; intros H2.
+    + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.
+    + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
+  - apply FromClass.Charac in H1.
+    apply Class.Inter.EquivCompat' with (toClass :{a|Ordinal}:). 2: assumption.
+    intros y. split; intros H2.
+    + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
+    + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.
 Qed.
 
-(* The supremum below b of the class is the class of the supremum below b.      *)
-Proposition ToClassBelow : forall (a b:U),
-  sup(:< b) (toClass a) :~: toClass (sup(:< b) a).
+(* The infimum above b of the class is the class of the infimum above b.        *)
+Proposition ToClassAbove : forall (a b:U),
+  inf(>: b) (toClass a) :~: toClass (inf(>: b) a).
 Proof.
-  intros a b x. split; intros H1.
-  - destruct H1 as [y [H1 [H2 [H3 H4]]]]. apply CharacBelow.
-    exists y. split. 1: assumption. split. 1: assumption. split; assumption.
-  - apply CharacBelow in H1. destruct H1 as [y [H1 [H2 [H3 H4]]]].
-    exists y. split. 1: assumption. split. 1: assumption. split; assumption.
+  intros a b. apply EquivTran with (Class.Ordinal.Inf.inf (toClass (a :\: b))).
+  - apply Inf.EquivCompat, EquivSym, Diff.ToClass.
+  - apply ToClass.
 Qed.
 
-(* The supremum of an ordinal is simply its union.                              *)
+(* The infimum of an ordinal is simply its intersection.                        *)
 Proposition WhenOrdinal : forall (a:U),
-  Ordinal a -> sup a = :U(a).
+  Ordinal a -> inf a = :I(a).
 Proof.
-  intros a H1. unfold sup.
+  intros a H1. unfold inf.
   assert (:{a | Ordinal}: = a) as H2. {
     apply Specify.IsA. intros x H2. apply Core.IsOrdinal with a; assumption. }
   rewrite H2. reflexivity.
 Qed.
 
-(* When dealing with ordinals, the supremum of a below b is the union of a/\b.  *)
-Proposition WhenOrdinalBelow : forall (a b:U), Ordinal a -> Ordinal b ->
-  sup(:< b) a = :U(a :/\: b).
+(* When ordinals, the infimum of a above b is the intersection of a\b.          *)
+Proposition WhenOrdinalAbove : forall (a b:U), Ordinal a -> Ordinal b ->
+  inf(>: b) a = :I(a :\: b).
 Proof.
-  intros a b H1 H2.
-  unfold Notation.SupBelow.supBelow, SetSupBelow, supBelow.
-  assert (:{a :/\: b | Ordinal}: = a :/\: b) as H3. {
-    apply Specify.IsA. intros x H3. apply Inter2.Charac in H3.
-    destruct H3 as [H3 _]. apply Core.IsOrdinal with a; assumption. }
+  intros a b H1 H2. unfold Notation.InfAbove.infAbove, infAbove, SetInfAbove.
+  unfold infAbove, inf.
+  assert (:{a :\: b | Ordinal}: = a :\: b) as H3. {
+    apply Specify.IsA. intros x H3. apply Core.IsOrdinal with a.
+    1: assumption. apply Diff.Charac in H3. apply H3. }
   rewrite H3. reflexivity.
 Qed.
 
+(*
 (* The supremum of an ordinal is an ordinal.                                    *)
 Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (sup a).
@@ -188,3 +204,4 @@ Proof.
   intros a H1. rewrite WhenOrdinal. 2: assumption.
   apply UnionOf.IsIncl. assumption.
 Qed.
+*)
