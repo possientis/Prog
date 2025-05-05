@@ -25,11 +25,10 @@ Qed.
 (* The union of an ordinal is the smallest upper-bound.                         *)
 Proposition IsSmallest : forall (a b:U),
   Ordinal a                      ->
-  Ordinal b                      ->
   (forall c, c :< a -> c :<=: b) ->
   :U(a) :<=: b.
 Proof.
-  intros a b H1 H2 H3. apply Union.IsSmallest; try assumption.
+  intros a b H1 H2. apply Union.IsSmallest; try assumption.
   apply Core.IsLess. assumption.
 Qed.
 
