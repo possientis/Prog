@@ -20,7 +20,7 @@ Qed.
 (* The (tweaked) intersection of a class of ordinals is a class of ordinals.    *)
 Proposition IsIncl' : forall (A:Class), A :<=: On -> :J(A) :<=: On.
 Proof.
-  intros A H1. 
+  intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. {
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
@@ -46,7 +46,7 @@ Qed.
 (* The (tweaked) intersection of a class of ordinals is a transitive class.     *)
 Proposition IsTransitive' : forall (A:Class), A :<=: On -> Transitive :J(A).
 Proof.
-  intros A H1. 
+  intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. {
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
@@ -72,7 +72,7 @@ Qed.
 Proposition IsOrdinal' : forall (A:Class),
   A :<=: On -> Class.Ordinal.Core.Ordinal :J(A).
 Proof.
-  intros A H1. 
+  intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. {
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
@@ -85,27 +85,24 @@ Proof.
 Qed.
 
 (* The intersection of a non-empty class of ordinals is a lower-bound.          *)
-Proposition IsLowerBound : forall (A:Class),
-  A :<=: On     ->
-  A :<>: :0:    ->
-  forall a, A a -> :I(A) :<=: toClass a.
+Proposition IsLowerBound : forall (A:Class) (a:U),
+  A :<=: On  -> A a -> :I(A) :<=: toClass a.
 Proof.
-  intros A H1 H2 a H3 x H4. apply H4. assumption.
+  intros A a H1 H2 x H3. apply H3. assumption.
 Qed.
 
 (* The (tweaked) intersection of a class of ordinals is a lower-bound.          *)
-Proposition IsLowerBound' : forall (A:Class),
-  A :<=: On     ->
-  forall a, A a -> :J(A) :<=: toClass a.
+Proposition IsLowerBound' : forall (A:Class) (a:U),
+  A :<=: On -> A a -> :J(A) :<=: toClass a.
 Proof.
-  intros A H1. 
-  assert (A :~: :0: \/ A :<>: :0:) as H2. {
+  intros A a H1 H2.
+  assert (A :~: :0: \/ A :<>: :0:) as H3. {
     apply LawExcludedMiddle. }
-  destruct H2 as [H2|H2].
-  - intros a H3. apply Incl.EquivCompatL with :0:.
+  destruct H3 as [H3|H3].
+  - apply Incl.EquivCompatL with :0:.
     + apply EquivSym, Inter.WhenEmpty. assumption.
     + intros x H4. contradiction.
-  - intros a H3. apply Incl.EquivCompatL with :I(A).
+  - apply Incl.EquivCompatL with :I(A).
     + apply EquivSym, WhenNotEmpty. assumption.
     + apply IsLowerBound; assumption.
 Qed.
@@ -131,5 +128,3 @@ Proof.
   - apply EquivSym, Inter.WhenNotEmpty. assumption.
   - apply IsLargest; assumption.
 Qed.
-
-
