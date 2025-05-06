@@ -39,7 +39,7 @@ Proof.
   }
 
   (* We obtain a contradiction by proving that V is small. *)
-  apply VIsProper.
+  apply V.IsProper.
 
   (* So we need to prove that V is small. *)
   assert (Small V) as A. 2: apply A.

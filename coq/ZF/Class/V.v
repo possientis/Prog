@@ -15,11 +15,13 @@ Require Import ZF.Set.OrdPair.
 (* The class satisfied by all sets.                                             *)
 Definition V : Class := fun _ => True.
 
+(* Every class is a subclass of V.                                              *)
 Proposition IsIncl : forall (A:Class), A :<=: V.
 Proof.
   intros A x _. apply I.
 Qed.
 
+(* V is a left-identity for the binary intersection of classes.                 *)
 Proposition Inter2VL : forall (P:Class),
   V :/\: P :~: P.
 Proof.
@@ -30,6 +32,7 @@ Proof.
     + assumption.
 Qed.
 
+(* V is a right-identity for the binary intersection of classes.                *)
 Proposition Inter2VR : forall (P:Class),
   P :/\: V :~: P.
 Proof.
@@ -40,7 +43,8 @@ Proof.
     + apply I.
 Qed.
 
-Proposition VIsProper : Proper V.
+(* V is a proper class.                                                         *)
+Proposition IsProper : Proper V.
 Proof.
 
   (* We need to show that the class of all sets is a proper class. *)
@@ -75,9 +79,10 @@ Proof.
 
 Qed.
 
+(* V^2 is a proper class.                                                       *)
 Proposition V2IsProper : Proper (V :x: V).
 Proof.
-  apply SquareIsProper, VIsProper.
+  apply SquareIsProper, IsProper.
 Qed.
 
 (* The product of two classes is a subclass of V^2.                             *)
@@ -101,6 +106,7 @@ Proof.
       symmetry. assumption.
 Qed.
 
+(* The intersection of the empty class is V.                                    *)
 Proposition InterOfEmpty : :I(:0:) :~: V.
 Proof.
   intros x. split; intros H1.
