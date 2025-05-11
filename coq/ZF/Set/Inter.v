@@ -4,6 +4,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Inter.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.FromClass.
 
 Export ZF.Notation.Inter.
@@ -46,4 +47,13 @@ Proof.
   intros a x. split; intros H1.
   - apply FromClass.Charac. assumption.
   - apply FromClass.Charac in H1. assumption.
+Qed.
+
+Proposition IsZero : :I(:0:) = :0:.
+Proof.
+  apply DoubleInclusion. split; intros x H1.
+  - apply FromClass.Charac in H1. apply (Inter.EquivCompat' :0:) in H1.
+    + apply IsZero in H1. contradiction.
+    + apply EquivSym, Empty.ToClass.
+  - apply Empty.Charac in H1. contradiction.
 Qed.

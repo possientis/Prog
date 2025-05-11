@@ -138,6 +138,26 @@ Proof.
   apply IfElemThenIncl; assumption.
 Qed.
 
+(* 0 is an ordinal.                                                             *)
+Proposition ZeroIsOrdinal : Ordinal :0:.
+Proof.
+  apply Class.Ordinal.Core.EquivCompat with :0:.
+  2: apply Class.Ordinal.Core.ZeroIsOrdinal.
+  apply EquivSym, Empty.ToClass.
+Qed.
+
+(* Every non-empty ordinal contains 0.                                          *)
+Proposition HasZero : forall (a:U), Ordinal a ->
+  a <> :0: -> :0: :< a.
+Proof.
+  intros a H1 H2.
+  assert (:0: :< a \/ a :<=: :0:) as H3. {
+    apply ElemOrIncl. 2: assumption. apply ZeroIsOrdinal. }
+  destruct H3 as [H3|H3]. 1: assumption. exfalso.
+  apply Empty.HasElem in H2. destruct H2 as [x H2].
+  apply Empty.Charac with x. apply H3. assumption.
+Qed.
+
 (* An non-empty class of ordinals has a minimal ordinal.                        *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: Ordinal  ->
@@ -162,3 +182,4 @@ Proof.
   - right. assumption.
   - exfalso. apply Class.Empty.Charac with b. apply H4. split; assumption.
 Qed.
+

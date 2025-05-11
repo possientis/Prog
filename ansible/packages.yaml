@@ -293,6 +293,10 @@
     ansible.builtin.apt:
       name: ansible
 
+  - name: Build - Install pkgconf
+    ansible.builtin.apt:
+      name: pkgconf
+
   # Package Manager
 
   - name: Package Manager - Install pkg-config

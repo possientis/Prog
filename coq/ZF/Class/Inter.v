@@ -103,3 +103,8 @@ Proof.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2]. intros y H3.
     apply Pair.Charac in H3. destruct H3 as [H3|H3]; subst; assumption.
 Qed.
+
+Proposition IsZero : :J(:0:) :~: :0:.
+Proof.
+  apply WhenEmpty, EquivRefl.
+Qed.

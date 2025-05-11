@@ -10,8 +10,7 @@ Require Import ZF.Set.Ordinal.Union.
 Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal :U(a).
 Proof.
-  intros a H1. apply Union.IsOrdinal.
-  apply Core.IsLess. assumption.
+  intros a H1. apply Union.IsOrdinal, Core.IsLess. assumption.
 Qed.
 
 (* The union of an ordinal is an upper-bound of its elements.                   *)

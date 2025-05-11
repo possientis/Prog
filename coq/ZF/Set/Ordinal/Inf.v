@@ -8,6 +8,7 @@ Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Inter.
 Require Import ZF.Set.Specify.
 
 Export ZF.Notation.InfAbove.
@@ -89,8 +90,8 @@ Proof.
 Qed.
 
 (* The infimum of an ordinal is simply its intersection.                        *)
-Proposition WhenOrdinal : forall (a:U),
-  Ordinal a -> inf a = :I(a).
+Proposition WhenOrdinal : forall (a:U), Ordinal a ->
+  inf a = :I(a).
 Proof.
   intros a H1. unfold inf.
   assert (:{a | Ordinal}: = a) as H2. {
@@ -110,98 +111,9 @@ Proof.
   rewrite H3. reflexivity.
 Qed.
 
-(*
-(* The supremum of an ordinal is an ordinal.                                    *)
-Proposition IsOrdinal : forall (a:U), Ordinal a ->
-  Ordinal (sup a).
+Proposition IsZero : forall (a:U), Ordinal a ->
+  inf a = :0:.
 Proof.
   intros a H1. rewrite WhenOrdinal. 2: assumption.
-  apply UnionOf.IsOrdinal. assumption.
+  apply Inter.IsZero. assumption.
 Qed.
-
-(* The supremum of the successor of an ordinal is the ordinal.                  *)
-Proposition WhenSucc : forall (a:U), Ordinal a ->
-  sup (succ a) = a.
-Proof.
-  intros a H1. rewrite WhenOrdinal.
-  - apply UnionOfSucc. assumption.
-  - apply Succ.IsOrdinal. assumption.
-Qed.
-
-(* The supremum of a limit ordinal is itself.                                   *)
-Proposition WhenLimit : forall (a:U),
-  Limit a -> sup a = a.
-Proof.
-  intros a H1.
-  assert (Ordinal a) as H2. { apply Limit.HasOrdinalElem. assumption. }
-  rewrite WhenOrdinal. 2: assumption. symmetry. apply Limit.Charac in H1.
-  2: assumption. destruct H1 as [_ H1]. assumption.
-Qed.
-
-(* The supremum of N is N itself.                                               *)
-Proposition WhenOmega : sup :N = :N.
-Proof.
-  apply WhenLimit. apply Omega.IsLimit.
-Qed.
-
-(* A non-empty, non-limit ordinal is equal to the successor of its supremum.    *)
-Proposition WhenNonLimit : forall (a:U),
-  NonLimit a -> a <> :0: -> a = succ (sup a).
-Proof.
-  intros a H1 H2.
-  assert (Ordinal a) as H3. { apply NonLimit.HasOrdinalElem. assumption. }
-  rewrite WhenOrdinal. 2: assumption.
-  apply NonLimit.Charac in H1. 2: assumption.
-  destruct H1 as [H1|H1]. 2: assumption. contradiction.
-Qed.
-
-(* If b belongs to a, the supremum of a below succ b is b.                      *)
-Proposition WhenElem : forall (a b:U), Ordinal a -> Ordinal b ->
-  b :< a -> sup(:< succ b) a = b.
-Proof.
-  intros a b H1 H2 H3.
-  assert (a :/\: succ b = succ b) as H4. {
-    apply ElemIsIncl in H3; try assumption.
-    apply ZF.Set.Incl.DoubleInclusion. split; intros x H4.
-    - apply Inter2.Charac in H4. destruct H4 as [_ H4]. assumption.
-    - apply Inter2.Charac. split. 2: assumption. apply H3. assumption. }
-  rewrite WhenOrdinalBelow. 2: assumption.
-  - rewrite H4. apply UnionOfSucc. assumption.
-  - apply Succ.IsOrdinal. assumption.
-Qed.
-
-(* The supremum of an ordinal is an upper-bound of its elements.                *)
-Proposition IsUpperBound : forall (a b:U), Ordinal a ->
-  b :< a -> b :<=: sup a.
-Proof.
-  intros a b H1 H2. rewrite WhenOrdinal. 2: assumption.
-  apply UnionOf.IsUpperBound; assumption.
-Qed.
-
-(* The supremum of an ordinal is the smallest upper-bound.                      *)
-Proposition IsSmallest : forall (a b:U),
-  Ordinal a                       ->
-  Ordinal b                       ->
-  (forall c, c :< a -> c :<=: b)  ->
-  sup a :<=: b.
-Proof.
-  intros a b H1 H2. rewrite WhenOrdinal. 2: assumption.
-  apply UnionOf.IsSmallest; assumption.
-Qed.
-
-(* The supremum of an ordinal is not an element of it iff it is equal to it.    *)
-Proposition NotElemIsEqual : forall (a:U), Ordinal a ->
-  ~ sup a :< a <-> sup a = a.
-Proof.
-  intros a H1. rewrite WhenOrdinal. 2: assumption.
-  apply UnionOf.NotElemIsEqual. assumption.
-Qed.
-
-(* The supremum of an ordinal is a subset of it.                                *)
-Proposition IsIncl : forall (a:U), Ordinal a ->
-  sup a :<=: a.
-Proof.
-  intros a H1. rewrite WhenOrdinal. 2: assumption.
-  apply UnionOf.IsIncl. assumption.
-Qed.
-*)

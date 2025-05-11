@@ -1,9 +1,11 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Ordinal.Core.
 
@@ -38,4 +40,17 @@ Proof.
   - apply Inter.ToClass'.
   - apply Class.Ordinal.Inter.IsLargest'; try assumption.
     apply Empty.NotEmptyToClass. assumption.
+Qed.
+
+(* The notion of intersection is interesting only for sets of ordinals.         *)
+Proposition IsZero : forall (a:U), Ordinal a -> :I(a) = :0:.
+Proof.
+  intros a H1.
+  assert (a = :0: \/ a <> :0:) as H2. {
+    apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - subst. apply Inter.IsZero.
+  - apply DoubleInclusion. split; intros x H3.
+    + apply Inter.Charac with a. 1: assumption. apply Core.HasZero; assumption.
+    + apply Empty.Charac in H3. contradiction.
 Qed.
