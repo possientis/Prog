@@ -6,6 +6,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Single.
 
 Export ZF.Notation.Inter.
 
@@ -56,4 +57,14 @@ Proof.
     + apply IsZero in H1. contradiction.
     + apply EquivSym, Empty.ToClass.
   - apply Empty.Charac in H1. contradiction.
+Qed.
+
+Proposition WhenSingleton : forall (a:U),
+  :I(:{a}:) = a.
+Proof.
+  intros a. apply DoubleInclusion. split; intros x H1.
+  - apply Charac with :{a}:. 1: assumption. apply Single.IsIn.
+  - apply CharacRev.
+    + apply SingletonIsNotEmpty.
+    + intros y H2. apply Single.Charac in H2. subst. assumption.
 Qed.

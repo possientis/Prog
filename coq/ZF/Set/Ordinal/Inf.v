@@ -150,6 +150,3 @@ Proof.
       assert (c :< b \/ b :<=: c) as H7. { apply Core.ElemOrIncl; assumption. }
       destruct H7 as [H7|H7]. 1: contradiction. assumption.
 Qed.
-
-
-
