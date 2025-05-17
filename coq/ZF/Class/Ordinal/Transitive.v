@@ -48,6 +48,7 @@ Proof.
   intros x H1. apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
+(* ERROR: See after Definition 7.35 Exercises (3) page 44.                      *)
 Proposition InterIsIncl: forall (A:Class),
   Transitive A -> A :<>: :0: -> :I(A) :<=: A.
 Proof.

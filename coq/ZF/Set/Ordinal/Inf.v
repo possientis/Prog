@@ -7,8 +7,11 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inter.
+Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Specify.
 
 Export ZF.Notation.InfAbove.
@@ -117,3 +120,36 @@ Proof.
   intros a H1. rewrite WhenOrdinal. 2: assumption.
   apply Inter.IsZero. assumption.
 Qed.
+
+Proposition IsZeroAbove : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b -> inf(>: b) a = :0:.
+Proof.
+  intros a b H1 H2 H3.
+  rewrite WhenOrdinalAbove; try assumption.
+  assert (a :\: b = :0:) as H4. { apply Diff.WhenEmpty. assumption. }
+  rewrite H4. apply ZF.Set.Inter.IsZero.
+Qed.
+
+(* ERROR: See after Definition 7.37 Exercises (2) page 45.                      *)
+Proposition IsAbove : forall (a b:U), Ordinal a -> Ordinal b ->
+  b :< a -> inf(>: b) a = b.
+Proof.
+  intros a b H1 H2 H3. rewrite WhenOrdinalAbove; try assumption.
+  apply DoubleInclusion. split.
+  - apply Ordinal.Inter.IsLowerBound.
+    + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
+      apply Core.IsOrdinal with a; assumption.
+    + apply Diff.Charac. split. 1: assumption. apply NoElemLoop1.
+  - apply Ordinal.Inter.IsLargest.
+    + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
+      apply Core.IsOrdinal with a; assumption.
+    + intros H4. apply Diff.WhenEmpty in H4. apply NoElemLoop1 with b.
+      apply H4. assumption.
+    + intros c H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
+      assert (Ordinal c) as H6. { apply Core.IsOrdinal with a; assumption. }
+      assert (c :< b \/ b :<=: c) as H7. { apply Core.ElemOrIncl; assumption. }
+      destruct H7 as [H7|H7]. 1: contradiction. assumption.
+Qed.
+
+
+

@@ -128,6 +128,7 @@ Proof.
   apply WhenLimit. apply Omega.IsLimit.
 Qed.
 
+(* ERROR: See after Definition 7.36 Exercises (4) page 45.                      *)
 (* A non-empty, non-limit ordinal is equal to the successor of its supremum.    *)
 Proposition WhenNonLimit : forall (a:U),
   NonLimit a -> a <> :0: -> a = succ (sup a).
