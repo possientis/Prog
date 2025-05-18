@@ -1,5 +1,6 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
@@ -104,4 +105,39 @@ Proof.
   intros A a b H1. apply Core.EquivCompat with (inf(>: b) A).
   - apply EquivSym. assumption.
   - apply IsOrdinalAbove.
+Qed.
+
+(* ERROR: See after Definition 7.37 Exercise (4) page 45.                       *)
+Proposition IsIn : forall (A:Class) (a:U),
+  A :<=: On         ->
+  A :<>: :0:        ->
+  IsSetOf (inf A) a ->
+  A a.
+Proof.
+  intros A a H1 H2 H3.
+  assert (exists b, A b /\ A :/\: toClass b :~: :0:) as H4. {
+    apply HasEMinimal with On; try assumption. apply OnIsOrdinal. }
+  destruct H4 as [b [H4 H5]].
+  assert (forall c, A c -> b :<=: c) as H6. {
+    intros c H6.
+    assert (
+      toClass b :~: toClass c \/
+      toClass b :<: toClass c \/
+      toClass c :<: toClass b) as H7. {
+        apply OrdinalTotal; apply H1; assumption. }
+    destruct H7 as [H7|[H7|H7]].
+    - apply EqualToClass in H7. subst. apply InclRefl.
+    - apply H7.
+    - apply LessIsElem in H7.
+      + exfalso. apply Class.Empty.Charac with c. apply H5. split; assumption.
+      + apply H1. assumption.
+      + apply H1. assumption. }
+  assert (a = b) as H7. {
+    apply ZF.Set.Incl.DoubleInclusion. split; intros x H7.
+    - assert (inf A x) as H8. { apply H3. assumption. }
+      apply H8. split. 1: assumption. apply H1. assumption.
+    - apply H3. split.
+      + intros c [H9 H10]. apply H6; assumption.
+      + exists b. split. 1: assumption. apply H1. assumption. }
+  subst. assumption.
 Qed.
