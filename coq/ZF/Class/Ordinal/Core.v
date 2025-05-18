@@ -76,8 +76,8 @@ Proposition HasEMinimal : forall (A B:Class),
   exists x, B x /\ B :/\: toClass x :~: :0:.
 Proof.
   intros A B H1 H2 H3.
-  assert (exists x, Minimal E B x) as H4. { apply HasMinimal with A;
-    try assumption. split.
+  assert (exists x, Minimal E B x) as H4. {
+    apply HasMinimal with A; try assumption. split.
     - apply WellFoundedIncl with V. apply EIsWellFoundedOnV.
       apply V.IsIncl.
     - apply EWellOrdersOrdinals. assumption. }
