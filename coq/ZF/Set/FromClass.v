@@ -63,12 +63,6 @@ Proof.
   intros P q x. apply Charac.
 Qed.
 
-Proposition IsSetOfTo : forall (P:Class) (a:U),
-  IsSetOf P a <-> toClass a :~: P.
-Proof.
-  intros P a. split; intros H1; assumption.
-Qed.
-
 Proposition IsSetOfFrom : forall (P:Class) (a:U) (q:Small P),
   IsSetOf P a <-> a = fromClass P q.
 Proof.

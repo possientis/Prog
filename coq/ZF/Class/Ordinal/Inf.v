@@ -8,6 +8,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.FromClass.
 
 Require Import ZF.Notation.InfAbove.
 Export ZF.Notation.InfAbove.
@@ -85,4 +86,22 @@ Proof.
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
   apply OnIsProper. apply Small.EquivCompat with (inf(>: b) A).
   1: assumption. apply IsSmallAbove.
+Qed.
+
+(* The set of the class 'inf A' is an ordinal.                                  *)
+Proposition IsOrdinalAsSet : forall (A:Class) (a:U),
+  IsSetOf (inf A) a -> On a.
+Proof.
+  intros A a H1. apply Core.EquivCompat with (inf A).
+  - apply EquivSym. assumption.
+  - apply IsOrdinal.
+Qed.
+
+(* The set of the class 'inf(>: b) A' is an ordinal.                            *)
+Proposition IsOrdinalAsSetAbove : forall (A:Class) (a b:U),
+  IsSetOf (inf(>: b) A) a -> On a.
+Proof.
+  intros A a b H1. apply Core.EquivCompat with (inf(>: b) A).
+  - apply EquivSym. assumption.
+  - apply IsOrdinalAbove.
 Qed.
