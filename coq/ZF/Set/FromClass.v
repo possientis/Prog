@@ -5,18 +5,18 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 
 (* Let us consider the predicate of the set potentially defined by a class P.   *)
-Definition IsSetFromClass (P:Class) : U -> Prop := fun a =>
+Definition IsSetOf (P:Class) : U -> Prop := fun a =>
   forall x, x :< a <-> P x.
 
 (* If a class is a small, its set predicate is satisfied by at least one set.   *)
 Proposition Exists : forall (P:Class),
-  Small P -> Define.Exists (IsSetFromClass P).
+  Small P -> Define.Exists (IsSetOf P).
 Proof.
   intros P H. apply H.
 Qed.
 
 (* The set predicate of a class is always satisfied by at most one set.         *)
-Proposition Unique : forall (P:Class), Define.Unique (IsSetFromClass P).
+Proposition Unique : forall (P:Class), Define.Unique (IsSetOf P).
 Proof.
   intros P a b Ha Hb.
   apply EqualToClass. apply EquivTran with P.
@@ -26,11 +26,11 @@ Qed.
 
 (* If a class is small, we can define the set to which it corresponds .         *)
 Definition fromClass (P :Class) (q:Small P) : U
-  := define (IsSetFromClass P) (Exists P q) (Unique P).
+  := define (IsSetOf P) (Exists P q) (Unique P).
 
 (* The set associated with a small class satisfies its set predicate.           *)
 Proposition Satisfy : forall (P:Class) (q:Small P),
-  IsSetFromClass P (fromClass P q).
+  IsSetOf P (fromClass P q).
 Proof.
   intros P q. unfold fromClass. apply DefineSatisfy.
 Qed.
@@ -62,3 +62,18 @@ Proposition ToFromClass : forall (P:Class) (q:Small P),
 Proof.
   intros P q x. apply Charac.
 Qed.
+
+Proposition IsSetOfTo : forall (P:Class) (a:U),
+  IsSetOf P a <-> toClass a :~: P.
+Proof.
+  intros P a. split; intros H1; assumption.
+Qed.
+
+Proposition IsSetOfFrom : forall (P:Class) (a:U) (q:Small P),
+  IsSetOf P a <-> a = fromClass P q.
+Proof.
+  intros P a q. split; intros H1.
+  - apply DefineUnique. assumption.
+  - rewrite H1. apply Satisfy.
+Qed.
+
