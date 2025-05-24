@@ -6,5 +6,6 @@ cd ${DIR}
 rm -f Main
 rm -f ./{*,.*}.{aux,glob,vo,vok,vos,o,hi}
 rm -f */{*,.*}.{aux,glob,vo,vok,vos,o,hi}
+rm deps
 
 
