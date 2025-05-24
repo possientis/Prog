@@ -117,7 +117,7 @@ Proof.
   intros A a H1 H2 H3 x H4 b H5. apply H3; assumption.
 Qed.
 
-(* The non-empty assumption is needed here even for the twaked case..           *)
+(* The non-empty assumption is needed here even for the tweaked case..          *)
 Proposition IsLargest' : forall (A:Class) (a:U),
   A :<=: On                     ->
   A :<>: :0:                    ->

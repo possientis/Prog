@@ -1,3 +1,4 @@
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
@@ -9,6 +10,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.FromClass.
 
 Require Import ZF.Notation.InfAbove.
@@ -140,4 +142,46 @@ Proof.
       + intros c [H9 H10]. apply H6; assumption.
       + exists b. split. 1: assumption. apply H1. assumption. }
   subst. assumption.
+Qed.
+
+Proposition WhenOrdinal : forall (A:Class) (a:U),
+  Ordinal A                         ->
+  On a                              ->
+  A :\: toClass a :<>: :0:          ->
+  IsSetOf (inf (A :\: toClass a)) a.
+Proof.
+  intros A a H1 H2 H3 x. split; intros H4.
+  - assert (toClass a :<=: inf (A :\: toClass a)) as H5. {
+      apply Inter.IsLargest'.
+      + apply Class.Inter2.InclR.
+      + apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
+        apply Class.Empty.HasElem. exists b. split.
+        * split; assumption.
+        * apply Class.Ordinal.Core.IsOrdinal with A; assumption.
+      + intros b [[H5 H6] H7].
+        assert (
+          toClass a :~: toClass b \/
+          toClass a :<: toClass b \/
+          toClass b :<: toClass a) as H8. {
+            apply OrdinalTotal; assumption. }
+        destruct H8 as [H8|[H8|H8]].
+        * apply EqualToClass in H8. subst. apply InclRefl.
+        * apply H8.
+        * apply LessIsElem in H8; try assumption. contradiction. }
+    apply H5. assumption.
+  - assert (inf (A :\: toClass a) :<=: toClass a) as H5. {
+      apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
+      apply Inter.IsLowerBound'.
+      + apply Class.Inter2.InclR.
+      + split. 2: assumption. split. 2: apply NoElemLoop1.
+        assert (
+          toClass a :~: A \/
+          toClass a :<: A \/
+          A :<: toClass a) as H6. {
+            apply OrdinalTotal; assumption. }
+        destruct H6 as [H6|[H6|H6]].
+        * exfalso. apply H5, H6. assumption.
+        * apply Class.Ordinal.Core.LessIsElem; assumption.
+        * exfalso. apply H5, H6. assumption. }
+        apply H5. assumption.
 Qed.
