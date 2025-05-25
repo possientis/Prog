@@ -10,7 +10,7 @@ Require Import ZF.Set.FromClass.
 (* of inter to be a class rather than a set. We do not introduce a notation.    *)
 
 (* We consider the set defined by the (tweaked) intersection of A.              *)
-Definition inter (A:Class) : U := fromClass :J(A) (IsSmall' A).
+Definition inter (A:Class) : U := fromClass :I(A) (IsSmall A).
 
 (* Characterisation of the elements of the intersection of A.                   *)
 Proposition Charac : forall (A:Class) (x y:U),
@@ -31,11 +31,11 @@ Proposition EquivCompat : forall (A B:Class),
   A :~: B -> inter A = inter B.
 Proof.
   intros A B H1.
-  apply FromClass.EquivCompat, Class.Inter.EquivCompat'. assumption.
+  apply FromClass.EquivCompat, Class.Inter.EquivCompat. assumption.
 Qed.
 
-Proposition ToClass' : forall (A:Class),
-  :J(A) :~: toClass (inter A).
+Proposition ToClass : forall (A:Class),
+  :I(A) :~: toClass (inter A).
 Proof.
   intros A x. split; intros H1.
   - apply FromClass.Charac. assumption.

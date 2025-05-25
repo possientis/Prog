@@ -18,9 +18,9 @@ Require Import ZF.Set.Ordinal.Core.
 Proposition IsOrdinal : forall (A:Class),
   A :<=: Ordinal -> Ordinal (inter A).
 Proof.
-  intros A H1. apply Class.Ordinal.Core.EquivCompat with :J(A).
-  - apply ToClass'.
-  - apply Class.Ordinal.Inter.IsOrdinal'. assumption.
+  intros A H1. apply Class.Ordinal.Core.EquivCompat with :I(A).
+  - apply ZF.Set.InterOfClass.ToClass.
+  - apply Class.Ordinal.Inter.IsOrdinal. assumption.
 Qed.
 
 (* The intersection of a class of ordinals is a lower-bound of the class.       *)
@@ -29,9 +29,9 @@ Proposition IsLowerBound : forall (A:Class) (a:U),
   A a             ->
   inter A :<=: a.
 Proof.
-  intros A a H1 H2. apply Class.Incl.EquivCompatL with :J(A).
-  - apply ZF.Set.InterOfClass.ToClass'.
-  - apply Class.Ordinal.Inter.IsLowerBound'; assumption.
+  intros A a H1 H2. apply Class.Incl.EquivCompatL with :I(A).
+  - apply ZF.Set.InterOfClass.ToClass.
+  - apply Class.Ordinal.Inter.IsLowerBound; assumption.
 Qed.
 
 (* The intersection of a class of ordinals is the largest lower-bound.          *)
@@ -41,9 +41,9 @@ Proposition IsLargest : forall (A:Class) (a:U),
   (forall b, A b -> a :<=: b) ->
   a :<=: inter A.
 Proof.
-  intros A a H1 H2 H3. apply Class.Incl.EquivCompatR with :J(A).
-  - apply ZF.Set.InterOfClass.ToClass'.
-  - apply Class.Ordinal.Inter.IsLargest'; assumption.
+  intros A a H1 H2 H3. apply Class.Incl.EquivCompatR with :I(A).
+  - apply ZF.Set.InterOfClass.ToClass.
+  - apply Class.Ordinal.Inter.IsLargest; assumption.
 Qed.
 
 (* The intersection of an ordinal class is 0.                                   *)

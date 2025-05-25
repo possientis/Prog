@@ -72,12 +72,12 @@ Proposition ToClass : forall (a:U),
 Proof.
   intros a x. split; intros H1.
   - apply FromClass.Charac.
-    apply Class.Inter.EquivCompat' with (toClass a :/\: On). 2: assumption.
+    apply Class.Inter.EquivCompat with (toClass a :/\: On). 2: assumption.
     intros y. split; intros H2.
     + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.
     + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
   - apply FromClass.Charac in H1.
-    apply Class.Inter.EquivCompat' with (toClass :{a|Ordinal}:). 2: assumption.
+    apply Class.Inter.EquivCompat with (toClass :{a|Ordinal}:). 2: assumption.
     intros y. split; intros H2.
     + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
     + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.

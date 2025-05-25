@@ -11,75 +11,80 @@ Require Import ZF.Set.Pair.
 Require Import ZF.Notation.Inter.
 Export ZF.Notation.Inter.
 
-(* The class of sets x which belong to all elements of P.                       *)
-Definition inter (P:Class) : Class := fun x =>
-  forall y, P y -> x :< y.
+(* inter A is the empty class if A is empty, and otherwise is the class of all  *)
+(* sets x which belong to all elements of A. We could define the intersection   *)
+(* as being the whole universe of sets in the empty case, but this creates an   *)
+(* issue, namely that the intersection cannot always be viewed as a set.        *)
+Definition inter (A:Class) : Class := fun x =>
+  (forall y, A y -> x :< y) /\ exists y, A y.
 
-(* Notation ":I( P )" := (inter P)                                              *)
+(* A more natural definition but less useful.                                   *)
+Definition inter' (A:Class) : Class := fun x =>
+  (forall y, A y -> x :< y).
+
+(* Notation ":I( A )" := (inter A)                                              *)
 Global Instance ClassInter : Inter Class := { inter := inter }.
 
-(* Tweak which reduces the class to 0 when P is empty.                          *)
-Definition inter' (P:Class) : Class := fun x =>
-  :I(P) x /\ exists y, P y.
-
-(* Notation ":J( P )" := (inter' P)                                             *)
-Global Instance ClassInter' : Inter' Class := { inter' := inter' }.
-
-(* The class J(P) reduces to 0 when P is empty.                                 *)
-Proposition WhenEmpty : forall (P:Class),
-  P :~: :0: -> :J(P) :~: :0:.
+(* The class I(A) reduces to 0 when A is empty.                                 *)
+Proposition WhenEmpty : forall (A:Class),
+  A :~: :0: -> :I(A) :~: :0:.
 Proof.
-  intros P H1 a. split; intros H2.
+  intros A H1 a. split; intros H2.
   - destruct H2 as [H2 [b H3]]. exfalso.
     apply Class.Empty.Charac with b. apply H1. assumption.
   - contradiction.
 Qed.
 
-(* The class J(P) coincides with I(P) when P is not empty.                      *)
-Proposition WhenNotEmpty : forall (P:Class),
-  P :<>: :0: -> :J(P) :~: :I(P).
+Proposition IsZero : :I(:0:) :~: :0:.
 Proof.
-  intros P H1 x. split; intros H2.
-  - apply H2.
+  apply WhenEmpty, EquivRefl.
+Qed.
+
+(* The class I(A) coincides with inter' A when A is not empty.                  *)
+Proposition WhenNotEmpty : forall (A:Class),
+  A :<>: :0: -> :I(A) :~: inter' A.
+Proof.
+  intros A H1 x. split; intros H2.
+  - unfold inter'. apply H2.
   - split. 1: assumption. apply Class.Empty.HasElem in H1. assumption.
 Qed.
 
+(* The intersection inter' is compatible with class equivalence.                *)
+Proposition EquivCompat' : forall (A B:Class),
+  A :~: B-> inter' A :~: inter' B.
+Proof.
+  intros A B H1 x. split; intros H2 y H3; apply H2, H1; assumption.
+Qed.
+
 (* The intersection is compatible with class equivalence.                       *)
-Proposition EquivCompat : forall (P Q:Class),
-  P :~: Q -> :I(P) :~: :I(Q).
+Proposition EquivCompat : forall (A B:Class),
+  A :~: B -> :I(A) :~: :I(B).
 Proof.
-  intros P Q H1 x. split; intros H2 y H3; apply H2, H1; assumption.
-Qed.
-
-(* The (tweaked) intersection is compatible with class equivalence.             *)
-Proposition EquivCompat' : forall (P Q:Class),
-  P :~: Q -> :J(P) :~: :J(Q).
-Proof.
-  intros P Q H1 x. split; intros [H2 H3]; split.
-  - apply EquivCompat with P. 2: assumption. apply EquivSym. assumption.
+  intros A B H1 x. split; intros [H2 H3]; split.
+  - apply EquivCompat' with A. 2: assumption. apply EquivSym. assumption.
   - destruct H3 as [a H3]. exists a. apply H1. assumption.
-  - apply EquivCompat with Q; assumption.
+  - apply EquivCompat' with B; assumption.
   - destruct H3 as [a H3]. exists a. apply H1. assumption.
 Qed.
 
-(* The intersection of P is a subclass of all elements of P.                    *)
-Proposition IsIncl : forall (P:Class) (a:U),
-  P a -> :I(P) :<=: toClass a.
+(* The intersection inter' A is a subclass of all elements of A.                *)
+Proposition IsIncl' : forall (A:Class) (a:U),
+  A a -> inter' A :<=: toClass a.
 Proof.
   intros P a H1 x H2. apply H2. assumption.
 Qed.
 
-(* The intersection of P is small when P is not empty.                          *)
-Proposition IsSmall : forall (P:Class), P :<>: :0: -> Small :I(P).
+(* The intersection inter' A is small when A is not empty.                      *)
+Proposition IsSmall' : forall (A:Class), A :<>: :0: -> Small (inter' A).
 Proof.
-  intros P H1. apply Class.Empty.HasElem in H1. destruct H1 as [a H1].
-  apply Bounded.IsSmall. exists a. apply IsIncl. assumption.
+  intros A H1. apply Class.Empty.HasElem in H1. destruct H1 as [a H1].
+  apply Bounded.IsSmall. exists a. apply IsIncl'. assumption.
 Qed.
 
-(* The (tweaked) intersection of P is small.                                    *)
-Proposition IsSmall' : forall (P:Class), Small :J(P).
+(* The intersection of A is small.                                              *)
+Proposition IsSmall : forall (A:Class), Small :I(A).
 Proof.
-  intros P. assert (P :~: :0: \/ P :<>: :0:) as H1. {
+  intros A. assert (A :~: :0: \/ A :<>: :0:) as H1. {
     apply LawExcludedMiddle. }
   destruct H1 as [H1|H1].
   - apply Small.EquivCompat with :0:.
@@ -87,9 +92,9 @@ Proof.
     + apply Small.EquivCompat with (toClass :0:).
       * apply ZF.Set.Empty.ToClass.
       * apply SetIsSmall.
-  - apply Small.EquivCompat with :I(P).
+  - apply Small.EquivCompat with (inter' A).
     + apply EquivSym, WhenNotEmpty. assumption.
-    + apply IsSmall. assumption.
+    + apply IsSmall'. assumption.
 Qed.
 
 (* The intersection of a pair is the binary intersection of its elements.       *)
@@ -100,11 +105,8 @@ Proof.
   - apply Inter2.Charac. split; apply H1.
     + apply Pair.IsInL.
     + apply Pair.IsInR.
-  - apply Inter2.Charac in H1. destruct H1 as [H1 H2]. intros y H3.
-    apply Pair.Charac in H3. destruct H3 as [H3|H3]; subst; assumption.
-Qed.
-
-Proposition IsZero : :J(:0:) :~: :0:.
-Proof.
-  apply WhenEmpty, EquivRefl.
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2]. split.
+    + intros y H3.
+      apply Pair.Charac in H3. destruct H3 as [H3|H3]; subst; assumption.
+    + exists a. apply Pair.IsInL.
 Qed.

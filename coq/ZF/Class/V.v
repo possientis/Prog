@@ -105,11 +105,3 @@ Proof.
     + intros [x [y [H1 _]]]. apply (OrdPairIsNotEmpty x y).
       symmetry. assumption.
 Qed.
-
-(* The intersection of the empty class is V.                                    *)
-Proposition InterOfEmpty : :I(:0:) :~: V.
-Proof.
-  intros x. split; intros H1.
-  - apply I.
-  - intros y H2. contradiction.
-Qed.

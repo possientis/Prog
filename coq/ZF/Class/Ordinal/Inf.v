@@ -16,8 +16,8 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Notation.InfAbove.
 Export ZF.Notation.InfAbove.
 
-(* The infimum of the class A. (using tweaked intersection, so 0 when 0).       *)
-Definition inf (A:Class) : Class := :J(A :/\: On).
+(* The infimum of the class A.                                                  *)
+Definition inf (A:Class) : Class := :I(A :/\: On).
 
 (* The infimum of the class A above b.                                          *)
 Definition infAbove (b:U)(A:Class) : Class := inf (A :\: toClass b).
@@ -29,14 +29,14 @@ Global Instance ClassInfAbove : InfAbove Class := { infAbove := infAbove }.
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> inf A :~: inf B.
 Proof.
-  intros A B H1. apply Inter.EquivCompat', Inter2.EquivCompatL. assumption.
+  intros A B H1. apply Inter.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
-(* The infimum of a class of ordinals coincide with its (tweaked) intersection. *)
+(* The infimum of a class of ordinals coincide with its intersection.           *)
 Proposition WhenHasOrdinalElem : forall (A:Class),
-  A :<=: On -> inf A :~: :J(A).
+  A :<=: On -> inf A :~: :I(A).
 Proof.
-  intros A H1. unfold inf. apply Inter.EquivCompat'.
+  intros A H1. unfold inf. apply Inter.EquivCompat.
   intros x. split; intros H2.
   - apply H2.
   - split. 1: assumption. apply H1. assumption.
@@ -45,27 +45,27 @@ Qed.
 (* The infimum of a class is an ordinal class.                                 *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
-  intros A. apply Ordinal.Inter.IsOrdinal', Class.Inter2.InclR.
+  intros A. apply Ordinal.Inter.IsOrdinal, Class.Inter2.InclR.
 Qed.
 
 (* The infimum of a class above b is an ordinal class.                          *)
 Proposition IsOrdinalAbove : forall (A:Class) (b:U),
   Ordinal (inf(>: b) A).
 Proof.
-  intros A b. apply Ordinal.Inter.IsOrdinal', Class.Inter2.InclR.
+  intros A b. apply Ordinal.Inter.IsOrdinal, Class.Inter2.InclR.
 Qed.
 
 (* The infimum of a class is small.                                             *)
 Proposition IsSmall : forall (A:Class), Small (inf A).
 Proof.
-  intros A. apply Inter.IsSmall'.
+  intros A. apply Inter.IsSmall.
 Qed.
 
 (* The infimum of a class above b is small.                                     *)
 Proposition IsSmallAbove : forall (A:Class) (b:U),
   Small (inf(>: b) A).
 Proof.
-  intros A b. apply Inter.IsSmall'.
+  intros A b. apply Inter.IsSmall.
 Qed.
 
 (* The infimum of a class is a strict subclass of On.                           *)
@@ -152,7 +152,7 @@ Proposition WhenOrdinal : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2 H3 x. split; intros H4.
   - assert (toClass a :<=: inf (A :\: toClass a)) as H5. {
-      apply Inter.IsLargest'.
+      apply Inter.IsLargest.
       + apply Class.Inter2.InclR.
       + apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
         apply Class.Empty.HasElem. exists b. split.
@@ -171,7 +171,7 @@ Proof.
     apply H5. assumption.
   - assert (inf (A :\: toClass a) :<=: toClass a) as H5. {
       apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
-      apply Inter.IsLowerBound'.
+      apply Inter.IsLowerBound.
       + apply Class.Inter2.InclR.
       + split. 2: assumption. split. 2: apply NoElemLoop1.
         assert (
