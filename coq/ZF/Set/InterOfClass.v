@@ -31,7 +31,8 @@ Proposition EquivCompat : forall (A B:Class),
   A :~: B -> inter A = inter B.
 Proof.
   intros A B H1.
-Admitted.
+  apply FromClass.EquivCompat, Class.Inter.EquivCompat'. assumption.
+Qed.
 
 Proposition ToClass' : forall (A:Class),
   :J(A) :~: toClass (inter A).
@@ -47,4 +48,3 @@ Proof.
   - apply FromClass.Charac in H1. destruct H1 as [_ [y H1]]. contradiction.
   - apply ZF.Set.Empty.Charac in H1. contradiction.
 Qed.
-

@@ -49,7 +49,8 @@ Proof.
   assert (a = :0: \/ a <> :0:) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - subst. apply Inter.IsZero.
-  - apply DoubleInclusion. split; intros x H3.
-    + apply Inter.Charac with a. 1: assumption. apply Core.HasZero; assumption.
-    + apply Empty.Charac in H3. contradiction.
+  - apply ZF.Set.Incl.DoubleInclusion. split; intros x H3.
+    + apply Inter.Charac with a. 1: assumption.
+      apply ZF.Set.Ordinal.Core.HasZero; assumption.
+    + apply ZF.Set.Empty.Charac in H3. contradiction.
 Qed.

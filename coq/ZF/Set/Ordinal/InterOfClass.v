@@ -53,5 +53,9 @@ Proof.
   intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  -
-Admitted.
+  - rewrite <- InterOfClass.IsZero. apply InterOfClass.EquivCompat. assumption.
+  - apply ZF.Set.Incl.DoubleInclusion. split; intros x H3.
+    + apply InterOfClass.Charac with A. 1: assumption.
+      apply Class.Ordinal.Core.HasZero; assumption.
+    + apply ZF.Set.Empty.Charac in H3. contradiction.
+Qed.
