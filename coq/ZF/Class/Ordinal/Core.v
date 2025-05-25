@@ -6,6 +6,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
+Require Import ZF.Class.One.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.Minimal.
@@ -36,6 +37,13 @@ Proof.
   split.
   - apply ZeroIsTransitive.
   - intros x y H1.  apply Class.Empty.Charac in H1. contradiction.
+Qed.
+
+Proposition OneIsOrdinal : Ordinal :1:.
+Proof.
+  split.
+  - apply OneIsTransitive.
+  - intros x y H1 H2. rewrite H1, H2. left. reflexivity.
 Qed.
 
 (* Being an ordinal class is compatible with class equivalence.                 *)
@@ -365,4 +373,20 @@ Proof.
     + apply Single.Charac in H2. subst. right. right. assumption.
     + apply Single.Charac in H2. apply Single.Charac in H3.
       subst. left. apply eq_refl.
+Qed.
+
+(* Every non-empty ordinal class contains 0.                                    *)
+Proposition HasZero : forall (A:Class),
+  Ordinal A -> A :<>: :0: -> A :0:.
+Proof.
+  intros A H1 H2.
+  assert (:1: :~: A \/ :1: :<: A \/ A :<: :1:) as H3. {
+    apply OrdinalTotal. 2: assumption. apply OneIsOrdinal. }
+  destruct H3 as [H3|[H3|[H3 H4]]].
+  - apply H3. reflexivity.
+  - apply H3. reflexivity.
+  - exfalso. apply H4. apply Class.Incl.DoubleInclusion. split.
+    1: assumption. intros x H5. rewrite H5. apply Class.Empty.HasElem in H2.
+    destruct H2 as [y H2]. assert (H6 := H2). apply H3 in H6.
+    rewrite H6 in H2. assumption.
 Qed.

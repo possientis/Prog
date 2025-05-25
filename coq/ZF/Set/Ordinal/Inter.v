@@ -18,26 +18,26 @@ Proof.
   - apply Class.Ordinal.Inter.IsOrdinal'. assumption.
 Qed.
 
-(* The intersection of a set of ordinals is a 'lower-bound' of the set.         *)
+(* The intersection of a set of ordinals is a lower-bound of the set.           *)
 Proposition IsLowerBound : forall (a b:U),
   toClass a :<=: Ordinal ->
   b :< a                 ->
   :I(a) :<=: b.
 Proof.
-  intros a b H1 H2. apply Incl.EquivCompatL with :J(toClass a).
-  - apply ToClass'.
+  intros a b H1 H2. apply Class.Incl.EquivCompatL with :J(toClass a).
+  - apply ZF.Set.Inter.ToClass'.
   - apply Class.Ordinal.Inter.IsLowerBound'; assumption.
 Qed.
 
-(* The intersection of a set of ordinals is the largest 'lower-bound'.          *)
+(* The intersection of a set of ordinals is the largest lower-bound.            *)
 Proposition IsLargest : forall (a b:U),
   toClass a :<=: Ordinal          ->
   a <> :0:                        ->
   (forall c, c :< a -> b :<=: c)  ->
   b :<=: :I(a).
 Proof.
-  intros a b H1 H2 H3. apply Incl.EquivCompatR with :J(toClass a).
-  - apply Inter.ToClass'.
+  intros a b H1 H2 H3. apply Class.Incl.EquivCompatR with :J(toClass a).
+  - apply ZF.Set.Inter.ToClass'.
   - apply Class.Ordinal.Inter.IsLargest'; try assumption.
     apply Empty.NotEmptyToClass. assumption.
 Qed.
@@ -46,8 +46,7 @@ Qed.
 Proposition IsZero : forall (a:U), Ordinal a -> :I(a) = :0:.
 Proof.
   intros a H1.
-  assert (a = :0: \/ a <> :0:) as H2. {
-    apply LawExcludedMiddle. }
+  assert (a = :0: \/ a <> :0:) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - subst. apply Inter.IsZero.
   - apply DoubleInclusion. split; intros x H3.

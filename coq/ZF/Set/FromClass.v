@@ -4,70 +4,77 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 
-(* Let us consider the predicate of the set potentially defined by a class P.   *)
-Definition IsSetOf (P:Class) : U -> Prop := fun a =>
-  forall x, x :< a <-> P x.
+(* The class of all sets defined by the predicate A.                            *)
+Definition IsSetOf (A:Class) : Class := fun a =>
+  forall x, x :< a <-> A x.
 
-(* If a class is a small, its set predicate is satisfied by at least one set.   *)
-Proposition Exists : forall (P:Class),
-  Small P -> Define.Exists (IsSetOf P).
+(* If a class is a small, it defines at least one set.                          *)
+Proposition Exists : forall (A:Class),
+  Small A -> Define.Exists (IsSetOf A).
 Proof.
-  intros P H. apply H.
+  intros A H1. apply H1.
 Qed.
 
-(* The set predicate of a class is always satisfied by at most one set.         *)
-Proposition Unique : forall (P:Class), Define.Unique (IsSetOf P).
+(* A class defines at most one set.                                             *)
+Proposition Unique : forall (A:Class), Define.Unique (IsSetOf A).
 Proof.
-  intros P a b Ha Hb.
-  apply EqualToClass. apply EquivTran with P.
-  - intros x. apply Ha.
-  - apply EquivSym. intros x. apply Hb.
+  intros A a b H1 H2.
+  apply EqualToClass. apply EquivTran with A.
+  - intros x. apply H1.
+  - apply EquivSym. intros x. apply H2.
 Qed.
 
-(* If a class is small, we can define the set to which it corresponds .         *)
-Definition fromClass (P :Class) (q:Small P) : U
-  := define (IsSetOf P) (Exists P q) (Unique P).
+(* If a class is small, we can define the set it defines.                       *)
+Definition fromClass (A :Class) (p:Small A) : U
+  := define (IsSetOf A) (Exists A p) (Unique A).
 
-(* The set associated with a small class satisfies its set predicate.           *)
-Proposition Satisfy : forall (P:Class) (q:Small P),
-  IsSetOf P (fromClass P q).
+Proposition EquivCompat : forall (A B:Class) (p:Small A) (q:Small B),
+  A :~: B -> fromClass A p = fromClass B q.
 Proof.
-  intros P q. unfold fromClass. apply DefineSatisfy.
+  intros A Q p q H1.
+Admitted.
+
+(* The set defined by a small class belongs to the class of all sets defined.   *)
+Proposition IsIn : forall (A:Class) (p:Small A),
+  IsSetOf A (fromClass A p).
+Proof.
+  intros A p. unfold fromClass. apply Define.IsIn.
 Qed.
 
-(* Characterisation of the elements of the set associated with a small class.   *)
-Proposition Charac : forall (P:Class) (q:Small P),
-  forall x, x :< (fromClass P q) <-> P x.
+(* Characterisation of the elements of the set defined by a small class.        *)
+Proposition Charac : forall (A:Class) (p:Small A),
+  forall x, x :< (fromClass A p) <-> A x.
 Proof.
-  apply Satisfy.
+  apply IsIn.
 Qed.
 
 (* The set defined by a small class does not depend on the proof being used.    *)
-Proposition ProofIrrelevant : forall (P:Class) (q q':Small P),
-  fromClass P q = fromClass P q'.
+Proposition ProofIrrelevant : forall (A:Class) (p q:Small A),
+  fromClass A p = fromClass A q.
 Proof.
-  intros P q q'. unfold fromClass. apply DefineProof.
+  intros A p q. unfold fromClass. apply Define.ProofIrrelevant.
 Qed.
 
-(* The set associated with the class associated with a set is the set itself.   *)
+(* The set defined by the class associated with a set is the set itself.        *)
 Proposition FromToClass : forall (a:U),
   fromClass (toClass a) (SetIsSmall a) = a.
 Proof.
   intro a. apply EqualToClass. intros x. apply Charac.
 Qed.
 
-(* The class associated with the set associated with a small class is the class.*)
-Proposition ToFromClass : forall (P:Class) (q:Small P),
-  toClass (fromClass P q) :~: P.
+(* The class associated with the set defined by a small class is the class.     *)
+Proposition ToFromClass : forall (A:Class) (p:Small A),
+  toClass (fromClass A p) :~: A.
 Proof.
-  intros P q x. apply Charac.
+  intros A p x. apply Charac.
 Qed.
 
-Proposition IsSetOfFrom : forall (P:Class) (a:U) (q:Small P),
-  IsSetOf P a <-> a = fromClass P q.
+(* Belonging to the class of all sets defined, is the same as being defined by  *)
+Proposition IsSetOfFrom : forall (A:Class) (a:U) (p:Small A),
+  IsSetOf A a <-> a = fromClass A p.
 Proof.
-  intros P a q. split; intros H1.
-  - apply DefineUnique. assumption.
-  - rewrite H1. apply Satisfy.
+  intros A a p. split; intros H1.
+  - apply Define.IsUnique. assumption.
+  - rewrite H1. apply IsIn.
 Qed.
 

@@ -3,6 +3,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Less.
+Require Import ZF.Class.One.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
@@ -48,6 +49,11 @@ Proof.
   intros x H1. apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
+Proposition OneIsTransitive : Transitive :1:.
+Proof.
+  intros x H1. rewrite H1. intros y H2. apply Empty.Charac in H2. contradiction.
+Qed.
+
 (* ERROR: See after Definition 7.35 Exercises (3) page 44.                      *)
 Proposition InterIsIncl: forall (A:Class),
   Transitive A -> A :<>: :0: -> :I(A) :<=: A.
@@ -55,3 +61,4 @@ Proof.
   intros A H1 H2 x H3. apply HasElem in H2. destruct H2 as [y H2].
   specialize (H1 y H2). apply H1. apply H3. assumption.
 Qed.
+
