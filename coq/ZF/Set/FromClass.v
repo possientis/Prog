@@ -1,38 +1,18 @@
 Require Import ZF.Axiom.Define.
-Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.Core.
+Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 
-(* The class of all sets defined by the predicate A.                            *)
-Definition IsSetOf (A:Class) : Class := fun a =>
-  forall x, x :< a <-> A x.
-
-(* If a class is a small, it defines at least one set.                          *)
-Proposition Exists : forall (A:Class),
-  Small A -> Define.Exists (IsSetOf A).
-Proof.
-  intros A H1. apply H1.
-Qed.
-
-(* A class defines at most one set.                                             *)
-Proposition Unique : forall (A:Class), Define.Unique (IsSetOf A).
-Proof.
-  intros A a b H1 H2.
-  apply EqualToClass. apply EquivTran with A.
-  - intros x. apply H1.
-  - apply EquivSym. intros x. apply H2.
-Qed.
-
 (* If a class is small, we can define the set it defines.                       *)
 Definition fromClass (A :Class) (p:Small A) : U
-  := define (IsSetOf A) (Exists A p) (Unique A).
+  := define (IsSetOf A) (IsSetOf.Exists A p) (IsSetOf.Unique A).
 
 Proposition EquivCompat : forall (A B:Class) (p:Small A) (q:Small B),
   A :~: B -> fromClass A p = fromClass B q.
 Proof.
-  intros A Q p q H1.
-Admitted.
+  intros A B p q H1. apply Define.EquivCompat, IsSetOf.EquivCompat. assumption.
+Qed.
 
 (* The set defined by a small class belongs to the class of all sets defined.   *)
 Proposition IsIn : forall (A:Class) (p:Small A),
@@ -77,4 +57,3 @@ Proof.
   - apply Define.IsUnique. assumption.
   - rewrite H1. apply IsIn.
 Qed.
-

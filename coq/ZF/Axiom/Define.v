@@ -22,6 +22,16 @@ Proof.
   - apply IsIn.
 Qed.
 
+(* Two equivalent classes define the same set.                                  *)
+Proposition EquivCompat : forall (A B:Class),
+  forall (p:Exists A) (q:Unique A),
+  forall (p':Exists B) (q':Unique B),
+    A :~: B  ->
+    define A p q = define B p' q'.
+Proof.
+  intros A B p q p' q' H1. apply IsUnique, H1, IsIn.
+Qed.
+
 (* The set defined by a class with a unique element is proof-irrelevant.        *)
 Proposition ProofIrrelevant : forall (A:Class) (p p':Exists A) (q q':Unique A),
   define A p q = define A p' q'.
@@ -39,3 +49,4 @@ Proof.
     rewrite H3. apply H1.
   - intros H1. apply H1, IsIn.
 Qed.
+
