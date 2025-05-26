@@ -23,11 +23,11 @@ Proof.
 Qed.
 
 (* The infimum of a class of ordinals coincide with its intersection.           *)
-Proposition WhenHasOrdinalElem : forall (A:Class),
-  A :<=: On -> inf A :~: :I(A).
+Proposition WhenOrdinalElem : forall (A:Class),
+  A :<=: On -> :I(A) :~: inf A.
 Proof.
   intros A H1. unfold inf. apply Inter.EquivCompat.
-  apply Class.Inter2.WhenInclL. assumption.
+  apply EquivSym, Class.Inter2.WhenInclL. assumption.
 Qed.
 
 (* The infimum of a class is an ordinal class.                                 *)
@@ -58,7 +58,7 @@ Proposition IsLowerBound : forall (A:Class) (a:U),
   A :<=: On -> A a -> inf A :<=: toClass a.
 Proof.
   intros A a H1 H2. apply Incl.EquivCompatL with :I(A).
-  - apply EquivSym, WhenHasOrdinalElem. assumption.
+  - apply WhenOrdinalElem. assumption.
   - apply Ordinal.Inter.IsLowerBound; assumption.
 Qed.
 
@@ -70,7 +70,7 @@ Proposition IsLargest : forall (A:Class) (a:U),
   toClass a :<=: inf A.
 Proof.
   intros A a H1 H2 H3. apply Incl.EquivCompatR with :I(A).
-  - apply EquivSym, WhenHasOrdinalElem. assumption.
+  - apply WhenOrdinalElem. assumption.
   - apply Ordinal.Inter.IsLargest; assumption.
 Qed.
 

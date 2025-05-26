@@ -37,7 +37,7 @@ Proof.
 Qed.
 
 (* The infimum of a class of ordinals coincide with its intersection.           *)
-Proposition WhenHasOrdinalElem : forall (A:Class),
+Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> inf A = inter A.
 Proof.
   intros A H1. unfold inf. apply InterOfClass.EquivCompat.
