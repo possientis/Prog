@@ -45,7 +45,7 @@ Proof.
     apply (H3 c); assumption.
 Qed.
 
-Proposition UnionOfOn : :U(On) :~: On.
+Proposition IsOn : :U(On) :~: On.
 Proof.
   apply Class.Incl.DoubleInclusion. split.
   - apply Class.Ordinal.Transitive.UnionIncl, OnIsOrdinal.

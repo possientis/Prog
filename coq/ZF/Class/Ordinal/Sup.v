@@ -39,3 +39,31 @@ Proposition IsequivOrLess : forall (A:Class),
 Proof.
   intros A. apply Core.IsEquivOrLess, IsOrdinal.
 Qed.
+
+(* The supremum of a class of ordinals is an upper-bound of that class.         *)
+Proposition IsUpperBound : forall (A:Class) (a:U),
+  A :<=: On -> A a -> toClass a :<=: sup A.
+Proof.
+  intros A a H1 H2. apply Incl.EquivCompatR with :U(A).
+  - apply EquivSym, WhenHasOrdinalElem. assumption.
+  - apply Ordinal.Union.IsUpperBound; assumption.
+Qed.
+
+(* The supremum of a class of ordinals is its smallest upper-bound.             *)
+Proposition IsSmallest : forall (A:Class) (a:U),
+  A :<=: On                   ->
+  (forall b, A b -> b :<=: a) ->
+  sup A :<=: toClass a.
+Proof.
+  intros A a H1 H2. apply Incl.EquivCompatL with :U(A).
+  - apply EquivSym, WhenHasOrdinalElem. assumption.
+  - apply Ordinal.Union.IsSmallest; assumption.
+Qed.
+
+Proposition IsOn : sup On :~: On.
+Proof.
+  apply EquivTran with :U(On).
+  - apply WhenHasOrdinalElem, InclRefl.
+  - apply Ordinal.Union.IsOn.
+Qed.
+
