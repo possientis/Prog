@@ -1,10 +1,14 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 
 (* The infimum of the class A.                                                  *)
@@ -43,3 +47,50 @@ Proof.
   intros A H1. unfold inf. apply InterOfClass.EquivCompat.
   apply Class.Inter2.WhenInclL. assumption.
 Qed.
+
+(* The infimum of a class is an ordinal.                                        *)
+Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
+Proof.
+  intros A. apply InterOfClass.IsOrdinal, Inter2.IsInclR.
+Qed.
+
+(* The infimum of a class of ordinals is a lower-bound of the class.            *)
+Proposition IsLowerBound : forall (A:Class) (a:U),
+  A :<=: On -> A a -> inf A :<=: a.
+Proof.
+  intros A a H1 H2. apply Incl.EquivCompatL with  (Class.Ordinal.Inf.inf A).
+  1: apply ToClass. apply Class.Ordinal.Inf.IsLowerBound; assumption.
+Qed.
+
+(* The infimum of a non-empty class of ordinals is the largest lower-bound.     *)
+Proposition IsLargest : forall (A:Class) (a:U),
+  A :<=: On                     ->
+  A :<>: :0:                    ->
+  (forall b, A b  -> a :<=: b)  ->
+  a :<=: inf A.
+Proof.
+  intros A a H1 H2 H3. apply Incl.EquivCompatR with  (Class.Ordinal.Inf.inf A).
+  1: apply ToClass. apply Class.Ordinal.Inf.IsLargest; assumption.
+Qed.
+
+(* The infimum of a non-empty class of ordinals belongs to the class.           *)
+Proposition IsIn : forall (A:Class),
+  A :<=: On -> A :<>: :0: -> A (inf A).
+Proof.
+  intros A H1 H2.
+  assert (IsSetOf (Class.Ordinal.Inf.inf A) (inf A)) as H3. {
+    apply Class.IsSetOf.ToClass, EquivSym, ToClass. }
+  apply Class.Ordinal.Inf.IsIn; assumption.
+Qed.
+
+Proposition WhenOrdClass : forall (A:Class) (a:U),
+  Class.Ordinal.Core.Ordinal A  ->
+  Ordinal a                     ->
+  A :\: toClass a :<>: :0:      ->
+  inf (A :\: toClass a) = a.
+Proof.
+  intros A a H1 H2 H3. symmetry. apply EqualToClass.
+  apply EquivTran with (Class.Ordinal.Inf.inf (A :\: toClass a)).
+  2: apply ToClass. apply Class.Ordinal.Inf.WhenOrdClass; assumption.
+Qed.
+

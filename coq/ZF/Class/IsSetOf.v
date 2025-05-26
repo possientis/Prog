@@ -32,3 +32,9 @@ Proof.
   - apply H1, H2. assumption.
   - apply H2, H1. assumption.
 Qed.
+
+Proposition ToClass : forall (A:Class) (a:U),
+  IsSetOf A a <-> toClass a :~: A.
+Proof.
+  intros A a. split; intros H1; assumption.
+Qed.

@@ -109,7 +109,7 @@ Proof.
   subst. assumption.
 Qed.
 
-Proposition WhenOrdinal : forall (A:Class) (a:U),
+Proposition WhenOrdClass : forall (A:Class) (a:U),
   Ordinal A                         ->
   On a                              ->
   A :\: toClass a :<>: :0:          ->
@@ -150,4 +150,3 @@ Proof.
         * exfalso. apply H5, H6. assumption. }
         apply H5. assumption.
 Qed.
-
