@@ -27,9 +27,7 @@ Proposition WhenHasOrdinalElem : forall (A:Class),
   A :<=: On -> inf A :~: :I(A).
 Proof.
   intros A H1. unfold inf. apply Inter.EquivCompat.
-  intros x. split; intros H2.
-  - apply H2.
-  - split. 1: assumption. apply H1. assumption.
+  apply EquivSym, Class.Inter2.IsInter2InclL. assumption.
 Qed.
 
 (* The infimum of a class is an ordinal class.                                 *)
@@ -152,3 +150,4 @@ Proof.
         * exfalso. apply H5, H6. assumption. }
         apply H5. assumption.
 Qed.
+
