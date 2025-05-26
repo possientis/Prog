@@ -83,7 +83,7 @@ Proof.
   apply Class.Ordinal.Inf.IsIn; assumption.
 Qed.
 
-Proposition WhenOrdClass : forall (A:Class) (a:U),
+Proposition WhenOrdinal : forall (A:Class) (a:U),
   Class.Ordinal.Core.Ordinal A  ->
   Ordinal a                     ->
   A :\: toClass a :<>: :0:      ->
@@ -91,6 +91,6 @@ Proposition WhenOrdClass : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2 H3. symmetry. apply EqualToClass.
   apply EquivTran with (Class.Ordinal.Inf.inf (A :\: toClass a)).
-  2: apply ToClass. apply Class.Ordinal.Inf.WhenOrdClass; assumption.
+  2: apply ToClass. apply Class.Ordinal.Inf.WhenOrdinal; assumption.
 Qed.
 
