@@ -98,7 +98,7 @@ Proof.
 Qed.
 
 (* The intersection of a pair is the binary intersection of its elements.       *)
-Proposition InterOfPair : forall (a b:U),
+Proposition Pair : forall (a b:U),
   :I(toClass :{a,b}:) :~: toClass (a :/\: b).
 Proof.
   intros a b x. split; intros H1.

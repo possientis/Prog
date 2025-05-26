@@ -5,6 +5,8 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Inter2.
+Require Import ZF.Set.Pair.
 
 (* This is a more general treatment of ZF.Set.Inter where we allow the argument *)
 (* of inter to be a class rather than a set. We do not introduce a notation.    *)
@@ -47,4 +49,12 @@ Proof.
   apply DoubleInclusion. split; intros x H1.
   - apply FromClass.Charac in H1. destruct H1 as [_ [y H1]]. contradiction.
   - apply ZF.Set.Empty.Charac in H1. contradiction.
+Qed.
+
+Proposition Pair : forall (a b:U),
+  inter (toClass :{a,b}:) = a :/\: b.
+Proof.
+  intros a b. apply EqualToClass. apply EquivTran with :I(toClass :{a,b}:).
+  - apply EquivSym, ToClass.
+  - apply Class.Inter.Pair.
 Qed.
