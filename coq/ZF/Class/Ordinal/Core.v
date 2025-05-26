@@ -317,7 +317,7 @@ Proof.
 Qed.
 
 (* Every ordinal class is small, unless it is the class of ordinals.            *)
-Proposition IsSmall : forall (A:Class),
+Proposition IsOnOrSmall : forall (A:Class),
   Ordinal A -> A :~: On \/ Small A.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On) as H2. {

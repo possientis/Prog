@@ -55,13 +55,25 @@ Proof.
   1: assumption. apply IsSmall.
 Qed.
 
-(* The set of the class 'inf A' is an ordinal.                                  *)
-Proposition IsOrdinalAsSet : forall (A:Class) (a:U),
-  IsSetOf (inf A) a -> On a.
+(* The infimum of a class of ordinals is a lower-bound.                         *)
+Proposition IsLowerBound : forall (A:Class) (a:U),
+  A :<=: On -> A a -> inf A :<=: toClass a.
 Proof.
-  intros A a H1. apply Core.EquivCompat with (inf A).
-  - apply EquivSym. assumption.
-  - apply IsOrdinal.
+  intros A a H1 H2. apply Incl.EquivCompatL with :I(A).
+  - apply EquivSym, WhenHasOrdinalElem. assumption.
+  - apply Ordinal.Inter.IsLowerBound; assumption.
+Qed.
+
+(* The infimum of a non-empty class of ordinals is the largest lower-bound.     *)
+Proposition IsLargest : forall (A:Class) (a:U),
+  A :<=: On                     ->
+  A :<>: :0:                    ->
+  (forall b, A b  -> a :<=: b)  ->
+  toClass a :<=: inf A.
+Proof.
+  intros A a H1 H2 H3. apply Incl.EquivCompatR with :I(A).
+  - apply EquivSym, WhenHasOrdinalElem. assumption.
+  - apply Ordinal.Inter.IsLargest; assumption.
 Qed.
 
 (* ERROR: See after Definition 7.37 Exercise (4) page 45.                       *)

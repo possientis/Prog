@@ -4,6 +4,7 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
+Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 
@@ -31,6 +32,13 @@ Qed.
 Proposition IsOrdinal : forall (A:Class), Ordinal (sup A).
 Proof.
   intros A. apply Ordinal.Union.IsOrdinal, Class.Inter2.InclR.
+Qed.
+
+(* The supremum of a class is either the class of ordinals, or it is small.     *)
+Proposition IsOnOrSmall : forall (A:Class),
+  sup A :~: On \/ Small (sup A).
+Proof.
+  intros A. apply Core.IsOnOrSmall, IsOrdinal.
 Qed.
 
 (* The supremum is either the class of ordinals or a subclass thereof.          *)
