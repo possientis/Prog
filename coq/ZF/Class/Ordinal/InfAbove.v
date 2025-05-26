@@ -37,7 +37,7 @@ Proposition IsLess : forall (A:Class) (b:U),
 Proof.
   intros A b.
   assert (inf(>: b) A :~: On \/ inf(>: b) A :<: On) as H1. {
-    apply Core.IsEquivOrLess, IsOrdinal. }
+    apply Core.IsOnOrLess, IsOrdinal. }
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
   apply OnIsProper. apply Small.EquivCompat with (inf(>: b) A).
   1: assumption. apply IsSmall.

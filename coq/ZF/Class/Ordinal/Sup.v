@@ -34,10 +34,10 @@ Proof.
 Qed.
 
 (* The supremum is either the class of ordinals or a subclass thereof.          *)
-Proposition IsEquivOrLess : forall (A:Class),
+Proposition IsOnOrLess : forall (A:Class),
   sup A :~: On \/ sup A :<: On.
 Proof.
-  intros A. apply Core.IsEquivOrLess, IsOrdinal.
+  intros A. apply Core.IsOnOrLess, IsOrdinal.
 Qed.
 
 (* The supremum of a class of ordinals is an upper-bound of that class.         *)

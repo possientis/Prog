@@ -291,7 +291,7 @@ Proof.
 Qed.
 
 (* Every ordinal class is the class of ordinals or a strict subclass thereof.   *)
-Proposition IsEquivOrLess : forall (A:Class),
+Proposition IsOnOrLess : forall (A:Class),
   Ordinal A -> A :~: On \/ A :<: On.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On \/ On :<: A) as H2. {
@@ -309,7 +309,7 @@ Proposition IsIncl : forall (A:Class),
   Ordinal A -> A :<=: On.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On) as H2. {
-    apply IsEquivOrLess. assumption. }
+    apply IsOnOrLess. assumption. }
   destruct H2 as [H2|H2].
   - apply Incl.EquivCompatL with On. apply EquivSym. 1: assumption.
     apply Class.Incl.InclRefl.
@@ -321,7 +321,7 @@ Proposition IsSmall : forall (A:Class),
   Ordinal A -> A :~: On \/ Small A.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On) as H2. {
-    apply IsEquivOrLess. assumption. }
+    apply IsOnOrLess. assumption. }
   destruct H2 as [H2|H2].
   - left. assumption.
   - right. apply TransitiveLessIsSmall with On. 3: assumption.
