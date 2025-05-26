@@ -34,7 +34,7 @@ Proof.
 Qed.
 
 (* The supremum is either the class of ordinals or a subclass thereof.          *)
-Proposition IsequivOrLess : forall (A:Class),
+Proposition IsEquivOrLess : forall (A:Class),
   sup A :~: On \/ sup A :<: On.
 Proof.
   intros A. apply Core.IsEquivOrLess, IsOrdinal.
