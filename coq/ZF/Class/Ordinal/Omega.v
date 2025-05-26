@@ -113,7 +113,7 @@ Proof.
   intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
   assert (:N :\: A :<=: On) as H4. {
     apply InclTran with :N.
-    - apply Class.Inter2.InclL.
+    - apply Class.Inter2.IsInclL.
     - apply HasOrdinalElem. }
   assert (exists n,
     Ordinal n                       /\

@@ -71,13 +71,13 @@ Proof.
   destruct H1 as [H1 H2]; split; assumption.
 Qed.
 
-Proposition InclL : forall (P Q:Class),
+Proposition IsInclL : forall (P Q:Class),
   P :/\: Q :<=: P.
 Proof.
   intros P Q x H1. apply H1.
 Qed.
 
-Proposition InclR : forall (P Q:Class),
+Proposition IsInclR : forall (P Q:Class),
   P :/\: Q :<=: Q.
 Proof.
   intros P Q x H1. apply H1.
@@ -126,7 +126,7 @@ Proof.
   - apply IsSmallL. assumption.
 Qed.
 
-Proposition InclInter2 : forall (P Q R:Class),
+Proposition IsIncl : forall (P Q R:Class),
   R :<=: P -> R :<=: Q -> R :<=: P :/\: Q.
 Proof.
   intros P Q R H1 H2 x H3. split.
@@ -134,23 +134,22 @@ Proof.
   - apply H2. assumption.
 Qed.
 
-Proposition IsInter2InclL : forall (P Q:Class),
-  P :~: P :/\: Q <-> P :<=: Q.
+Proposition WhenInclL : forall (P Q:Class),
+  P :<=: Q <-> P :/\: Q :~: P.
 Proof.
   intros P Q. split; intros H1.
-  - apply Incl.EquivCompatL with (P:/\:Q). 2: apply InclR. apply EquivSym. assumption.
   - apply DoubleInclusion. split.
-    + apply InclInter2. 2: assumption. apply InclRefl.
-    + apply InclL.
+    + apply IsInclL.
+    + apply IsIncl. 2: assumption. apply InclRefl.
+  - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclR. assumption.
 Qed.
 
-Proposition IsInter2InclR : forall (P Q:Class),
-  Q :~: P :/\: Q <-> Q :<=: P.
+Proposition WhenInclR : forall (P Q:Class),
+  Q :<=: P <-> P :/\: Q :~: Q.
 Proof.
   intros P Q. split; intros H1.
-  - apply Incl.EquivCompatL with (P:/\:Q). 2: apply InclL. apply EquivSym. assumption.
   - apply DoubleInclusion. split.
-    + apply InclInter2. 1: assumption. apply InclRefl.
-    + apply InclR.
+    + apply IsInclR.
+    + apply IsIncl. 1: assumption. apply InclRefl.
+  - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclL. assumption.
 Qed.
-

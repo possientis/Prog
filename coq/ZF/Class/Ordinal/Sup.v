@@ -31,7 +31,7 @@ Qed.
 (* The supremum of a class is an ordinal class.                                 *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (sup A).
 Proof.
-  intros A. apply Ordinal.Union.IsOrdinal, Class.Inter2.InclR.
+  intros A. apply Ordinal.Union.IsOrdinal, Class.Inter2.IsInclR.
 Qed.
 
 (* The supremum of a class is either the class of ordinals, or it is small.     *)

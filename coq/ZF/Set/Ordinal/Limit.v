@@ -18,7 +18,7 @@ Definition Limit : Class := Ordinal :\: NonLimit.
 (* Limit is a class of ordinals.                                                *)
 Proposition HasOrdinalElem : Limit :<=: Ordinal.
 Proof.
-  apply Class.Inter2.InclL.
+  apply Class.Inter2.IsInclL.
 Qed.
 
 (* An ordinal is a limit ordinal iff it is not empty and is equal to its union. *)

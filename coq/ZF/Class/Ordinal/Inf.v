@@ -27,13 +27,13 @@ Proposition WhenHasOrdinalElem : forall (A:Class),
   A :<=: On -> inf A :~: :I(A).
 Proof.
   intros A H1. unfold inf. apply Inter.EquivCompat.
-  apply EquivSym, Class.Inter2.IsInter2InclL. assumption.
+  apply Class.Inter2.WhenInclL. assumption.
 Qed.
 
 (* The infimum of a class is an ordinal class.                                 *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
-  intros A. apply Ordinal.Inter.IsOrdinal, Class.Inter2.InclR.
+  intros A. apply Ordinal.Inter.IsOrdinal, Class.Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class is small.                                             *)
@@ -118,7 +118,7 @@ Proof.
   intros A a H1 H2 H3 x. split; intros H4.
   - assert (toClass a :<=: inf (A :\: toClass a)) as H5. {
       apply Inter.IsLargest.
-      + apply Class.Inter2.InclR.
+      + apply Class.Inter2.IsInclR.
       + apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
         apply Class.Empty.HasElem. exists b. split.
         * split; assumption.
@@ -137,7 +137,7 @@ Proof.
   - assert (inf (A :\: toClass a) :<=: toClass a) as H5. {
       apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
       apply Inter.IsLowerBound.
-      + apply Class.Inter2.InclR.
+      + apply Class.Inter2.IsInclR.
       + split. 2: assumption. split. 2: apply NoElemLoop1.
         assert (
           toClass a :~: A \/

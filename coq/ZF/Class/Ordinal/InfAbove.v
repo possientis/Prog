@@ -20,7 +20,7 @@ Global Instance ClassInfAbove : InfAbove Class := { infAbove := infAbove }.
 Proposition IsOrdinal : forall (A:Class) (b:U),
   Ordinal (inf(>: b) A).
 Proof.
-  intros A b. apply Ordinal.Inter.IsOrdinal, Class.Inter2.InclR.
+  intros A b. apply Ordinal.Inter.IsOrdinal, Class.Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class above b is small.                                     *)

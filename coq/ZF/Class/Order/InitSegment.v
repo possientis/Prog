@@ -113,7 +113,7 @@ Qed.
 Proposition IsIncl : forall (R A:Class) (a:U),
   initSegment R A a :<=: A.
 Proof.
-  intros R A a. apply Class.Inter2.InclL.
+  intros R A a. apply Class.Inter2.IsInclL.
 Qed.
 
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)

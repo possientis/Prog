@@ -41,5 +41,5 @@ Proposition WhenHasOrdinalElem : forall (A:Class),
   A :<=: On -> inf A = inter A.
 Proof.
   intros A H1. unfold inf. apply InterOfClass.EquivCompat.
-  apply EquivSym, Class.Inter2.IsInter2InclL. assumption.
+  apply Class.Inter2.WhenInclL. assumption.
 Qed.
