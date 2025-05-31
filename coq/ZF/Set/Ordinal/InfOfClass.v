@@ -48,6 +48,13 @@ Proof.
   apply Class.Inter2.WhenInclL. assumption.
 Qed.
 
+(* Restricting a class to its ordinal elements leads to the same infimum.       *)
+Proposition InterOn : forall (A:Class), inf A = inf (A :/\: On).
+Proof.
+  intros A. rewrite WhenOrdinalElem with (A :/\: On). 1: reflexivity.
+  apply Inter2.IsInclR.
+Qed.
+
 (* The infimum of a class is an ordinal.                                        *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
@@ -62,6 +69,14 @@ Proof.
   1: apply ToClass. apply Class.Ordinal.Inf.IsLowerBound; assumption.
 Qed.
 
+(* The infimum of a class is a lower-bound of its ordinal elements.             *)
+Proposition IsLowerBoundOrd : forall (A:Class) (a:U), Ordinal a ->
+  A a -> inf A :<=: a.
+Proof.
+  intros A a H1 H2. rewrite InterOn. apply IsLowerBound.
+  1: apply Inter2.IsInclR. split; assumption.
+Qed.
+
 (* The infimum of a non-empty class of ordinals is the largest lower-bound.     *)
 Proposition IsLargest : forall (A:Class) (a:U),
   A :<=: On                     ->
@@ -73,6 +88,17 @@ Proof.
   1: apply ToClass. apply Class.Ordinal.Inf.IsLargest; assumption.
 Qed.
 
+(* The infimum of a class with an ordinal is largest lower-bound of its ordinals*)
+Proposition IsLargestOrd : forall (A:Class) (a:U),
+  A :/\: On :<>: :0:                        ->
+  (forall b, Ordinal b -> A b -> a :<=: b)  ->
+  a :<=: inf A.
+Proof.
+  intros A a H1 H2. rewrite InterOn. apply IsLargest. 2: assumption.
+  - apply Inter2.IsInclR.
+  - intros b [H3 H4]. apply H2; assumption.
+Qed.
+
 (* The infimum of a non-empty class of ordinals belongs to the class.           *)
 Proposition IsIn : forall (A:Class),
   A :<=: On -> A :<>: :0: -> A (inf A).
@@ -81,6 +107,14 @@ Proof.
   assert (IsSetOf (Class.Ordinal.Inf.inf A) (inf A)) as H3. {
     apply Class.IsSetOf.ToClass, EquivSym, ToClass. }
   apply Class.Ordinal.Inf.IsIn; assumption.
+Qed.
+
+(* The infimum of a class with an ordinal belongs to the class.                 *)
+Proposition IsInOrd : forall (A:Class),
+  A :/\: On :<>: :0: -> A (inf A).
+Proof.
+  intros A H1. rewrite InterOn. apply Inter2.IsInclL with On. apply IsIn.
+  2: assumption. apply Inter2.IsInclR.
 Qed.
 
 Proposition WhenOrdinal : forall (A:Class) (a:U),
