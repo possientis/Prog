@@ -18,6 +18,12 @@ Proof.
   intros A B H1. apply Union.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
+Proposition InterOn : forall (A:Class), sup A :~: sup (A :/\: On).
+Proof.
+  intros A.
+  apply Union.EquivCompat, EquivSym, Inter2.WhenInclL, Inter2.IsInclR.
+Qed.
+
 (* The supremum of a class of ordinals coincide with its union.                 *)
 Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> :U(A) :~: sup A.
