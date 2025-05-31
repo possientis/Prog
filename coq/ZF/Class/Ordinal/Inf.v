@@ -22,6 +22,12 @@ Proof.
   intros A B H1. apply Inter.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
+Proposition InterOn : forall (A:Class), inf A :~: inf (A :/\: On).
+Proof.
+  intros A.
+  apply Inter.EquivCompat, EquivSym, Inter2.WhenInclL, Inter2.IsInclR.
+Qed.
+
 (* The infimum of a class of ordinals coincide with its intersection.           *)
 Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> :I(A) :~: inf A.
@@ -62,6 +68,17 @@ Proof.
   - apply Ordinal.Inter.IsLowerBound; assumption.
 Qed.
 
+(* The infimum of a class is a lower-bound of its ordinals.                     *)
+Proposition IsLowerBoundOrd : forall (A:Class) (a:U), On a ->
+  A a -> inf A :<=: toClass a.
+Proof.
+  intros A a H1 H2. apply Incl.EquivCompatL with (inf (A :/\: On)).
+  - apply EquivSym, InterOn.
+  - apply IsLowerBound.
+    + apply Inter2.IsInclR.
+    + split; assumption.
+Qed.
+
 (* The infimum of a non-empty class of ordinals is the largest lower-bound.     *)
 Proposition IsLargest : forall (A:Class) (a:U),
   A :<=: On                     ->
@@ -74,7 +91,21 @@ Proof.
   - apply Ordinal.Inter.IsLargest; assumption.
 Qed.
 
-(* ERROR: See after Definition 7.37 Exercise (4) page 45.                       *)
+(* The infimum of a class with an ordinal is the largest ordinal lower-bound.   *)
+Proposition IsLargestOrd : forall (A:Class) (a:U),
+  A :/\: On :<>: :0:                  ->
+  (forall b, On b -> A b -> a :<=: b) ->
+  toClass a :<=: inf A.
+Proof.
+  intros A a H1 H2. apply Incl.EquivCompatR with (inf (A :/\: On)).
+  - apply EquivSym, InterOn.
+  - apply IsLargest. 2: assumption.
+    + apply Inter2.IsInclR.
+    + intros b [H3 H4]. apply H2; assumption.
+Qed.
+
+(* ERROR: See after Definition 7.37 Exercises (4) page 45.                      *)
+(* The set of the infimum of a non-empty class of ordinals belongs to the class.*)
 Proposition IsIn : forall (A:Class) (a:U),
   A :<=: On         ->
   A :<>: :0:        ->
@@ -107,6 +138,24 @@ Proof.
       + intros c [H9 H10]. apply H6; assumption.
       + exists b. split. 1: assumption. apply H1. assumption. }
   subst. assumption.
+Qed.
+
+(* The set of the infimum of a class with an ordinal belongs to the class.      *)
+Proposition IsInOrd : forall (A:Class) (a:U),
+  A :/\: On :<>: :0:  ->
+  IsSetOf (inf A) a   ->
+  A a.
+Proof.
+  intros A a H1 H2.
+  assert (On a) as H3. {
+    apply Class.Ordinal.Core.EquivCompat with (inf A).
+    apply EquivSym. assumption. apply IsOrdinal. }
+  assert (IsSetOf (inf (A :/\: On)) a) as H4. {
+    apply IsSetOf.EquivCompat with (inf A). 2: assumption.
+    apply EquivSym, InterOn. }
+  assert ((A :/\: On) a) as H5. {
+    apply IsIn; try assumption. apply Inter2.IsInclR. }
+  destruct H5 as [H5 _]. assumption.
 Qed.
 
 Proposition WhenOrdinal : forall (A:Class) (a:U),
@@ -150,3 +199,4 @@ Proof.
         * exfalso. apply H5, H6. assumption. }
         apply H5. assumption.
 Qed.
+

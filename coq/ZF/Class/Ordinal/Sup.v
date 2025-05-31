@@ -63,6 +63,17 @@ Proof.
   - apply Ordinal.Union.IsUpperBound; assumption.
 Qed.
 
+(* The supremum of a class is an upper-bound of its ordinals.                   *)
+Proposition IsUpperBoundOrd : forall (A:Class) (a:U), On a ->
+  A a -> toClass a :<=: sup A.
+Proof.
+  intros A a H1 H2. apply Incl.EquivCompatR with (sup (A :/\: On)).
+  - apply EquivSym, InterOn.
+  - apply IsUpperBound.
+    + apply Inter2.IsInclR.
+    + split; assumption.
+Qed.
+
 (* The supremum of a class of ordinals is its smallest upper-bound.             *)
 Proposition IsSmallest : forall (A:Class) (a:U),
   A :<=: On                   ->
@@ -74,10 +85,21 @@ Proof.
   - apply Ordinal.Union.IsSmallest; assumption.
 Qed.
 
+(* The supremum is the smallest of ordinal upper-bounds.                        *)
+Proposition IsSmallestOrd : forall (A:Class) (a:U),
+  (forall b, On b -> A b -> b :<=: a) ->
+  sup A :<=: toClass a.
+Proof.
+  intros A a H1. apply Incl.EquivCompatL with (sup (A :/\: On)).
+  - apply EquivSym, InterOn.
+  - apply IsSmallest.
+    + apply Inter2.IsInclR.
+    + intros b [H2 H3]. apply H1; assumption.
+Qed.
+
 Proposition IsOn : sup On :~: On.
 Proof.
   apply EquivTran with :U(On).
   - apply EquivSym, WhenOrdinalElem, InclRefl.
   - apply Ordinal.Union.IsOn.
 Qed.
-

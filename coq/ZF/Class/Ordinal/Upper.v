@@ -4,8 +4,10 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -25,7 +27,7 @@ Proof.
 Qed.
 
 (* An ordinal is an ordinal upper-bound iff it does not belong to the supremum. *)
-Proposition Charac : forall (A:Class) (a:U), On a ->
+Proposition NotInSup : forall (A:Class) (a:U), On a ->
   upper A a <-> ~ sup A a.
 Proof.
   intros A a H1. split; intros H2.
@@ -37,9 +39,10 @@ Proof.
   - split. 1: assumption. intros b H3 H4.
     assert (
       sup A :~: toClass a \/ sup A :<: toClass a \/ toClass a :<: sup A) as H5. {
-        apply Core.OrdinalTotal.
+        apply Class.Ordinal.Core.OrdinalTotal.
         - apply Sup.IsOrdinal.
-        - apply Core.IsOrdinal with On. 2: assumption. apply OnIsOrdinal. }
+        - apply Class.Ordinal.Core.IsOrdinal with On.
+          2: assumption. apply OnIsOrdinal. }
     destruct H5 as [H5|[H5|H5]].
     + intros x H6. apply H5. apply Sup.InterOn.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
@@ -49,10 +52,11 @@ Proof.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
       * apply Inter2.IsInclR.
       * split; assumption.
-    + apply Core.LessIsElem in H5.
+    + apply Class.Ordinal.Core.LessIsElem in H5.
       * contradiction.
       * apply Sup.IsOrdinal.
-      * apply Core.IsOrdinal with On. 2: assumption. apply OnIsOrdinal.
+      * apply Class.Ordinal.Core.IsOrdinal with On.
+        2: assumption. apply OnIsOrdinal.
 Qed.
 
 (* The supremum is a small class iff there is an ordinal upper-bound.           *)
@@ -63,7 +67,7 @@ Proof.
   - apply Class.Empty.HasElem in H1. destruct H1 as [a H1].
     assert (sup A :~: On \/ Small (sup A)) as H2. { apply Sup.IsOnOrSmall. }
     destruct H2 as [H2|H2]. 2: assumption. exfalso. assert (H3 := H1).
-    destruct H3 as [H3 _]. apply Charac in H1. 2: assumption.
+    destruct H3 as [H3 _]. apply NotInSup in H1. 2: assumption.
     apply H1, H2. assumption.
   - assert (sup A :~: On \/ sup A :<: On) as H2. {
       apply Core.IsOnOrLess, Sup.IsOrdinal. }
@@ -71,7 +75,26 @@ Proof.
     + exfalso. apply Core.OnIsProper, Small.EquivCompat with (sup A); assumption.
     + apply Diff.WhenLess in H2. apply Class.Empty.HasElem in H2.
       destruct H2 as [a [H2 H3]]. apply Class.Empty.HasElem. exists a.
-      apply Charac; assumption.
+      apply NotInSup; assumption.
 Qed.
 
+(* If the supremum is a set, it belongs to the class of ordinal upper-bounds.   *)
+Proposition IsIn : forall (A:Class) (a:U),
+  IsSetOf (sup A) a -> upper A a.
+Proof.
+  intros A a H1.
+  assert (On a) as H2. {
+    apply Class.Ordinal.Core.EquivCompat with (sup A).
+    apply EquivSym. assumption. apply Sup.IsOrdinal. }
+  split. 1: assumption. intros b H3 H4. apply Incl.EquivCompatR with (sup A).
+  - apply EquivSym. assumption.
+  - apply Sup.IsUpperBoundOrd; assumption.
+Qed.
+
+(* ERROR: See after Definition 7.38, Exercises (2).                             *)
+(* The supremum is the infimum of all ordinal upper-bounds.                     *)
+Proposition IsInf : forall (A:Class), upper A :<>: :0: ->
+  sup A :~: inf (upper A).
+Proof.
+Admitted.
 
