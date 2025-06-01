@@ -181,7 +181,18 @@ Proof.
   - apply E.MinimalEA in H3. destruct H3 as [H3 H4].
     apply Class.Incl.DoubleInclusion. split.
     + apply IsLargest; try assumption. intros b H5.
-Admitted.
+      assert (toClass a :~: toClass b \/
+              toClass a :<: toClass b \/
+              toClass b :<: toClass a) as H6. {
+        apply OrdinalTotal; apply H1; assumption. }
+      destruct H6 as [H6|[H6|H6]].
+      * apply Incl.EquivCompatR with (toClass a). 1: assumption. apply InclRefl.
+      * apply H6.
+      * exfalso. apply Empty.HasNoElem in H4. apply H4. exists b. split.
+        1: assumption. apply Class.Ordinal.Core.LessIsElem;
+        try assumption; apply H1; assumption.
+    + apply IsLowerBound; assumption.
+Qed.
 
 Proposition WhenOrdinal : forall (A:Class) (a:U),
   Ordinal A                         ->
@@ -224,4 +235,3 @@ Proof.
         * exfalso. apply H5, H6. assumption. }
         apply H5. assumption.
 Qed.
-
