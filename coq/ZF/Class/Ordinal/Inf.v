@@ -6,11 +6,17 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Less.
+Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
+Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Single.
 
 (* The infimum of the class A.                                                  *)
 Definition inf (A:Class) : Class := :I(A :/\: On).
@@ -157,6 +163,25 @@ Proof.
     apply IsIn; try assumption. apply Inter2.IsInclR. }
   destruct H5 as [H5 _]. assumption.
 Qed.
+
+Proposition IsEMinimal : forall (A:Class) (a:U),
+  A :<=: On   ->
+  A :<>: :0:  ->
+  IsSetOf (inf A) a <-> Minimal E A a.
+Proof.
+  intros A a H1 H2. split; intros H3.
+  - assert (A a) as H4. { apply IsIn; assumption. }
+    apply E.MinimalEA. split. 1: assumption.
+    apply Class.Empty.HasNoElem. intros [b [H5 H6]].
+    assert (a :<=: b) as H7. {
+      apply Incl.EquivCompatL with (inf A).
+      + apply EquivSym. assumption.
+      + apply IsLowerBound; assumption. }
+    apply NoElemLoop1 with b. apply H7. assumption.
+  - apply E.MinimalEA in H3. destruct H3 as [H3 H4].
+    apply Class.Incl.DoubleInclusion. split.
+    + apply IsLargest; try assumption. intros b H5.
+Admitted.
 
 Proposition WhenOrdinal : forall (A:Class) (a:U),
   Ordinal A                         ->

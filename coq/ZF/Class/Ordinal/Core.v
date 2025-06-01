@@ -61,8 +61,8 @@ Proposition EIsTotal : forall (A:Class),
 Proof.
   intros A [H1 H2] x y H3 H4. specialize (H2 x y H3 H4). destruct H2 as [H2|[H2|H2]].
   - subst. left. reflexivity.
-  - right. left. apply ECharac2. assumption.
-  - right. right. apply ECharac2. assumption.
+  - right. left. apply E.Charac2. assumption.
+  - right. right. apply E.Charac2. assumption.
 Qed.
 
 (* E is a well-ordering on every ordinal class.                                 *)
@@ -71,7 +71,7 @@ Proposition EWellOrders : forall (A:Class),
 Proof.
   intros A H1. split.
   - apply FoundedIncl with V.
-    + apply EIsFoundedOnV.
+    + apply E.IsFoundedOnV.
     + apply V.IsIncl.
   - apply EIsTotal. assumption.
 Qed.
@@ -86,7 +86,7 @@ Proof.
   intros A B H1 H2 H3.
   assert (exists x, Minimal E B x) as H4. {
     apply HasMinimal with A; try assumption. split.
-    - apply WellFoundedIncl with V. apply EIsWellFoundedOnV.
+    - apply WellFoundedIncl with V. apply E.IsWellFoundedOnV.
       apply V.IsIncl.
     - apply EWellOrders. assumption. }
   destruct H4 as [x H4]. exists x. apply MinimalEA. assumption.

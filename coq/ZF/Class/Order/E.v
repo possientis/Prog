@@ -18,7 +18,7 @@ Require Import ZF.Set.Single.
 (* The class satisfied by all ordered pairs (x,y) with x :< y.                  *)
 Definition E : Class := fun x => exists y z, x = :(y,z): /\ y :< z.
 
-Proposition ECharac2 : forall (y z:U), E :(y,z): <-> y :< z.
+Proposition Charac2 : forall (y z:U), E :(y,z): <-> y :< z.
 Proof.
   intros y z. split; intros H1.
   - unfold E in H1. destruct H1 as [y' [z' [H1 H2]]].
@@ -31,11 +31,11 @@ Lemma InitSegmentEA : forall (A:Class) (a:U),
 Proof.
   intros A a. split; intros [H1 H2].
   - apply InvImage.Charac in H2. destruct H2 as [y [H2 H3]].
-    apply Single.Charac in H2. apply ECharac2 in H3.
+    apply Single.Charac in H2. apply Charac2 in H3.
     subst. split; assumption.
   - split. 1: assumption. apply InvImage.Charac. exists a. split.
     + apply Single.IsIn.
-    + apply ECharac2. assumption.
+    + apply Charac2. assumption.
 Qed.
 
 Lemma InitSegmentEV : forall (a:U),
@@ -57,7 +57,7 @@ Proof.
 Qed.
 
 (* The class E is founded on V, i.e. every subset of V has an E-minimal element.*)
-Proposition EIsFoundedOnV : Founded E V.
+Proposition IsFoundedOnV : Founded E V.
 Proof.
   (* Let a be an arbitrary set. *)
   intros a.
@@ -109,12 +109,12 @@ Proof.
     assert (y :< x :/\: a) as A. 2: apply A.
 
   (* Which follows easily. *)
-    apply Inter2.Charac. split. 2: assumption. apply ECharac2. assumption.
+    apply Inter2.Charac. split. 2: assumption. apply Charac2. assumption.
 Qed.
 
-Proposition EIsWellFoundedOnV : WellFounded E V.
+Proposition IsWellFoundedOnV : WellFounded E V.
 Proof.
-  split. 1: apply EIsFoundedOnV. intros a _.
+  split. 1: apply IsFoundedOnV. intros a _.
   apply Small.EquivCompat with (toClass a).
   - apply EquivSym, InitSegmentEV.
   - apply SetIsSmall.

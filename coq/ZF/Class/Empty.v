@@ -50,20 +50,31 @@ Proof.
   - intros H3. contradiction.
 Qed.
 
-Proposition HasElem : forall (P:Class),
-  P :<>: :0: <-> exists x, P x.
+Proposition HasElem : forall (A:Class),
+  A :<>: :0: <-> exists x, A x.
 Proof.
-  intros P. split; intros H1.
+  intros A. split; intros H1.
   - apply NotForAllNot. intros H2. apply H1. intros x. split; intros H3.
     + apply Charac, (H2 x), H3.
     + apply Charac in H3. contradiction.
   - destruct H1 as [x H1]. intros H2. apply H2, Charac in H1. contradiction.
 Qed.
 
-Proposition EmptyImage : forall (P Q:Class),
-  Q :~: :0: -> P:[Q]: :~: :0:.
+Proposition HasNoElem : forall (A:Class),
+  A :~: :0: <-> ~ exists x, A x.
 Proof.
-  intros P Q H1 y. split; intros H2.
+  intros A. split; intros H1.
+  - intros [a H2]. apply Charac with a. apply H1. assumption.
+  - intros a. split; intros H2.
+    + apply Charac, H1. exists a. assumption.
+    + apply Charac in H2. contradiction.
+Qed.
+
+Proposition EmptyImage : forall (F A:Class),
+  A :~: :0: -> F:[A]: :~: :0:.
+Proof.
+  intros F A H1 y. split; intros H2.
   - destruct H2 as [x [H2 H3]]. apply H1 in H2. apply Charac in H2. contradiction.
   - apply Charac in H2. contradiction.
 Qed.
+
