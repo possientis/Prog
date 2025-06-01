@@ -1,24 +1,33 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
+Require Import ZF.Set.Foundation.
 
 (* An element a of an ordinal class A is a :<-minimal element of A\a.           *)
-Proposition EMinimal : forall (A:Class) (a:U),
+Proposition IsEMinimal : forall (A:Class) (a:U),
   Ordinal A ->
   A a       ->
   Minimal E (A :\: toClass a) a.
 Proof.
-Admitted.
+  intros A a H1 H2.
+  assert (On a) as H3. { apply Class.Ordinal.Core.IsOrdinal with A; assumption. }
+  assert (A :\: toClass a :<>: :0:) as H4. {
+    apply Class.Empty.HasElem. exists a. split. 1: assumption. apply NoElemLoop1. }
+  apply Inf.IsEMinimal. 2: assumption.
+  - intros x [H5 _]. apply Class.Ordinal.Core.IsOrdinal with A; assumption.
+  - apply Inf.WhenOrdinal; assumption.
+Qed.
 
-
-(*
 Proposition IsomIsId : forall (F A B:Class),
   Ordinal A       ->
   Ordinal B       ->
@@ -37,9 +46,8 @@ Proof.
         rewrite H4 in H9. destruct H9 as [H9 H10]. apply H10.
         assert (H11 := H1). destruct H11 as [H11 _].
         apply H11 with b; assumption. }
+Admitted.
 
-Show.
-*)
 (*
   intros a H6.
   assert (On a) as H7. { apply Core.IsOrdinal with A; assumption. }
