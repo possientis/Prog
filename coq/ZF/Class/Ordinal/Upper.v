@@ -26,6 +26,20 @@ Proof.
   - apply H2. 1: assumption. split; assumption.
 Qed.
 
+Proposition IsIncl : forall (A:Class), upper A :<=: On.
+Proof.
+  intros A a [H1 _]. assumption.
+Qed.
+
+Proposition NotEmptyOn : forall (A:Class),
+  upper A :<>: :0: <-> upper A :/\: On :<>: :0:.
+Proof.
+  intros A. split; intros H1; apply Class.Empty.HasElem in H1;
+  destruct H1 as [a H1]; apply Class.Empty.HasElem; exists a.
+  - split. 1: assumption. apply IsIncl with A. assumption.
+  - destruct H1 as [H1 _]. assumption.
+Qed.
+
 (* An ordinal is an ordinal upper-bound iff it does not belong to the supremum. *)
 Proposition NotInSup : forall (A:Class) (a:U), On a ->
   upper A a <-> ~ sup A a.
@@ -92,9 +106,25 @@ Proof.
 Qed.
 
 (* ERROR: See after Definition 7.38, Exercises (2).                             *)
-(* The supremum is the infimum of all ordinal upper-bounds.                     *)
+(* The supremum is the infimum of all ordinal upper-bounds (when these exist).  *)
 Proposition IsInf : forall (A:Class), upper A :<>: :0: ->
   sup A :~: inf (upper A).
 Proof.
-Admitted.
-
+  intros A H1.
+  assert (Small (sup A)) as H2. { apply IsSmall. assumption. }
+  assert (exists a, IsSetOf (sup A) a) as H3. { assumption. }
+  destruct H3 as [a H3].
+  assert (Small (inf (upper A))) as H4. { apply Inf.IsSmall. }
+  assert (exists b, IsSetOf (inf (upper A)) b) as H5. { assumption. }
+  destruct H5 as [b H5]. apply Class.Incl.DoubleInclusion. split.
+  - apply Incl.EquivCompatR with (toClass b). 1: assumption.
+    apply Sup.IsSmallestOrd. intros c H6 H7.
+    apply Incl.EquivCompatR with (inf (upper A)).
+    + apply EquivSym. assumption.
+    + apply Inf.IsLargestOrd.
+      * apply NotEmptyOn. assumption.
+      * intros d H8 H9. apply H9; assumption.
+  - apply Incl.EquivCompatR with (toClass a). 1: assumption.
+    assert (upper A a) as H10. { apply IsIn. assumption. }
+    apply Inf.IsLowerBoundOrd. 2: assumption. apply IsIncl with A. assumption.
+Qed.
