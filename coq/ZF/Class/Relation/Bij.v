@@ -180,6 +180,14 @@ Proof.
   intros F A B H1. apply ImageOfDomain, ConverseIsBij. assumption.
 Qed.
 
+Proposition RangeIsSmall : forall (F A B:Class),
+  Bij F A B -> Small A -> Small B.
+Proof.
+  intros F A B H1 H2. apply Small.EquivCompat with (range F).
+  - apply H1.
+  - apply BijectionOn.RangeIsSmall with A. 2: assumption. apply H1.
+Qed.
+
 Proposition InvImageOfImage : forall (F A B C:Class),
   Bij F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
 Proof.
@@ -205,3 +213,4 @@ Proposition EvalInImage : forall (F A B C:Class) (a:U),
 Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
 Qed.
+

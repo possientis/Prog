@@ -5,46 +5,46 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Specify.
 
 (* Predicate on classes, stating that a class is smaller than a set.            *)
-Definition Bounded (P:Class) : Prop := exists a, forall x, P x -> x :< a.
+Definition Bounded (A:Class) : Prop := exists a, forall x, A x -> x :< a.
 
-Proposition InclInSmallIsSmall : forall (P Q:Class),
-  P :<=: Q -> Small Q -> Small P.
+Proposition InclInSmallIsSmall : forall (A B:Class),
+  A :<=: B -> Small B -> Small A.
 Proof.
 
-  (* Let P and Q be arbitrary classes. *)
-  intros P Q.
+  (* Let A and B be arbitrary classes. *)
+  intros A B.
 
-  (* We assume that P <= Q. *)
-  intros H1. assert (P :<=: Q) as A. { apply H1. } clear A.
+  (* We assume that A <= B. *)
+  intros H1. assert (A :<=: B) as X. { apply H1. } clear X.
 
-  (* We assume that Q is small. *)
-  intros H2. assert (Small Q) as A. { apply H2. } clear A.
+  (* We assume that B is small. *)
+  intros H2. assert (Small B) as X. { apply H2. } clear X.
 
-  (* In particular Q is equivalent to some set a. *)
-  assert (exists a, Q :~: toClass a) as H3. { apply Small.IsSomeSet, H2. }
+  (* In particular B is equivalent to some set a. *)
+  assert (exists a, B :~: toClass a) as H3. { apply Small.IsSomeSet, H2. }
 
-  (* So let a be a set equivalent to the class Q. *)
+  (* So let a be a set equivalent to the class B. *)
   destruct H3 as [a H3].
 
-  (* We need to show that P is small. *)
-  assert (Small P) as A. 2: apply A.
+  (* We need to show that A is small. *)
+  assert (Small A) as X. 2: apply X.
 
-  (* We have P x -> x :< a for all x. *)
-  assert (forall x, P x -> x :< a) as H4. {
+  (* We have A x -> x :< a for all x. *)
+  assert (forall x, A x -> x :< a) as H4. {
     intros x H. apply H3, H1, H.
   }
 
-  (* We need to show the existence of a set b such that x :< b <-> P x. *)
-  assert (exists b, forall x, x :< b <-> P x) as A. 2: apply A.
+  (* We need to show the existence of a set b such that x :< b <-> A x. *)
+  assert (exists b, forall x, x :< b <-> A x) as X. 2: apply X.
 
   (* Consider the set b = { x :< a | P x }. *)
-  remember :{a|P}: as b eqn:Eb.
+  remember :{a|A}: as b eqn:Eb.
 
   (* We claim that b has the desired property. *)
   exists b.
 
-  (* We need to show that x :< b <-> P x for all x. *)
-  assert (forall x, x :< b <-> P x) as A. 2: apply A.
+  (* We need to show that x :< b <-> A x for all x. *)
+  assert (forall x, x :< b <-> A x) as X. 2: apply X.
 
   (* So let x be an arbitrary set *)
   intros x. split; intros H5.
@@ -59,10 +59,10 @@ Proof.
 Qed.
 
 (* A class is small if and only if it is bounded.                               *)
-Proposition IsSmall : forall (P:Class),
-  Bounded P <-> Small P.
+Proposition IsSmall : forall (A:Class),
+  Bounded A <-> Small A.
 Proof.
-  intros P. split; intros H1; destruct H1 as [a H1].
+  intros A. split; intros H1; destruct H1 as [a H1].
   - apply InclInSmallIsSmall with (toClass a).
     intros x. apply H1. apply SetIsSmall.
   - exists a. intros x H2. apply H1. assumption.

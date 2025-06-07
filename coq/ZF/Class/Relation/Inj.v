@@ -1,3 +1,4 @@
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
@@ -170,6 +171,12 @@ Proposition InvImageOfRange : forall (F A B:Class),
   Inj F A B -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.InvImageOfRange. assumption.
+Qed.
+
+Proposition RangeIsSmall : forall (F A B:Class),
+  Inj F A B -> Small A -> Small (range F).
+Proof.
+  intros F A B H1. apply BijectionOn.RangeIsSmall, H1.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B C:Class),

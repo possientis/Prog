@@ -186,6 +186,14 @@ Proof.
   apply FunctionOn.InvImageOfRange, IsFunctionOn. assumption.
 Qed.
 
+Proposition RangeIsSmall : forall (F A:Class),
+  BijectionOn F A -> Small A -> Small (range F).
+Proof.
+  intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
+  - apply ImageOfDomain. assumption.
+  - apply ImageIsSmall with A; assumption.
+Qed.
+
 Proposition InvImageOfImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
 Proof.
@@ -212,3 +220,4 @@ Proof.
   intros F A B a [H1 H2] H3. apply Bijection.EvalInImage. 1: assumption.
   apply H2. assumption.
 Qed.
+
