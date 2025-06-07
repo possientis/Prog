@@ -8,6 +8,8 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Fun.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.Inj.
+Require Import ZF.Class.Relation.Onto.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
@@ -35,6 +37,18 @@ Proposition IsFun : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
   split. 1: assumption. apply DoubleInclusion, EquivSym. assumption.
+Qed.
+
+Proposition IsInj : forall (F A B:Class),
+  Bij F A B -> Inj F A B.
+Proof.
+  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, EquivSym, H1.
+Qed.
+
+Proposition IsOnto : forall (F A B:Class),
+  Bij F A B -> Onto F A B.
+Proof.
+  intros F A B H1. split. 2: apply H1. apply BijectionOn.IsFunctionOn, H1.
 Qed.
 
 Proposition ConverseIsBij : forall (F A B:Class),
