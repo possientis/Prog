@@ -1,6 +1,3 @@
-Declare Scope ZF_Set_Eval_scope.
-Open    Scope ZF_Set_Eval_scope.
-
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Relation.Domain.
@@ -15,11 +12,15 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
-(* Evaluate the class F at a, returning a set.                                  *)
-Definition eval (F:Class) (a:U) : U := fromClass (eval F a) (Eval.IsSmall F a).
+Require Import ZF.Notation.Eval.
+Export ZF.Notation.Eval.
 
-Notation "F ! a" := (eval F a)
-  (at level 0, no associativity) : ZF_Set_Eval_scope.
+(* Evaluate the class F at a, returning a set.                                  *)
+Definition eval (F:Class) (a:U) : U :=
+  fromClass (Class.Relation.Eval.eval F a) (Eval.IsSmall F a).
+
+(* Notation "F ! a" := (eval F a)                                               *)
+Global Instance ClassEval : Eval Class := { eval := eval }.
 
 (* If F has a value at a, then y corresponds to a iff F!a = y.                  *)
 Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
