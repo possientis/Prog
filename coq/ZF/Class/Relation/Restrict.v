@@ -14,7 +14,7 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 Require Import ZF.Notation.Pipe.
@@ -196,7 +196,7 @@ Proof.
     + assumption.
     + split.
       * assumption.
-      * apply Restrict.Charac2. split.
+      * apply Charac2. split.
         { apply H1. assumption. }
         { assumption. }
 Qed.
@@ -219,17 +219,17 @@ Proof.
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. {
       apply DomainOfRestrict. split; assumption. }
-    apply Eval.Charac.
+    apply EvalOfClass.Charac.
     + assumption.
     + assumption.
     + apply Charac2. split. 1: assumption. rewrite E.
-      apply Eval.Satisfies; assumption.
+      apply EvalOfClass.Satisfies; assumption.
   - assert (~ domain (F:|:A) x) as H5. { intros H5.
       destruct H5 as [z H5].
       apply Charac2 in H5. destruct H5 as [H5 H6]. apply H4.
       exists z. assumption. }
-    assert (y = :0:) as H6. { rewrite E. apply Eval.WhenNotInDomain. assumption. }
-    rewrite H6. apply Eval.WhenNotInDomain. assumption.
+    assert (y = :0:) as H6. { rewrite E. apply EvalOfClass.WhenNotInDomain. assumption. }
+    rewrite H6. apply EvalOfClass.WhenNotInDomain. assumption.
 Qed.
 
 Proposition LesserThanRangeOfRestrict : forall (F A:Class),

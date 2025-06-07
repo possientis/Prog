@@ -13,7 +13,7 @@ Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.

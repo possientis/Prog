@@ -18,7 +18,7 @@ Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 
 (* I|A is the restriction of the identity class I to the class A.               *)
 Proposition IACharac : forall (A:Class) (x:U),

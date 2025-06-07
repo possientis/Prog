@@ -12,7 +12,7 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 (* F is a bijection from A to B.                                                *)

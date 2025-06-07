@@ -8,7 +8,7 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 

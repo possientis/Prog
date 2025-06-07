@@ -5,7 +5,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that R is a total class on A.                  *)

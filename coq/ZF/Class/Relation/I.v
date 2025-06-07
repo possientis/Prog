@@ -16,7 +16,7 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 (* The class of all ordered pairs of the form (x,x), aka the 'identity' class.  *)
@@ -121,7 +121,7 @@ Qed.
 (* The value of I at x is x.                                                    *)
 Proposition IEval : forall (x:U), I!x = x.
 Proof.
-  intros x. apply Eval.Charac.
+  intros x. apply EvalOfClass.Charac.
   - apply IIsFunctional.
   - apply IDomain, Logic.I.
   - apply ICharac2. reflexivity.

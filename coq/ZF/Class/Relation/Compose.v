@@ -8,7 +8,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 Require Import ZF.Notation.Dot.

@@ -7,7 +7,7 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that a is an R-minimal element of A.           *)

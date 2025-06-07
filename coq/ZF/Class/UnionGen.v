@@ -1,7 +1,7 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 
 (* Defining the generalized union \/_{x in P} Q(x).                             *)
 Definition unionGen (P Q:Class) : Class

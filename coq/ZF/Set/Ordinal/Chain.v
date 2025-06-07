@@ -12,7 +12,7 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 
 (* There is no infinite descending :<-chain.                                    *)
 Proposition NoInfiniteDescent : forall (F:Class),

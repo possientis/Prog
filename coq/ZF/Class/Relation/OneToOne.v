@@ -9,7 +9,7 @@ Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 Definition OneToOne (F:Class) : Prop := Functional F /\ Functional F^:-1:.
@@ -62,19 +62,19 @@ Qed.
 Proposition EvalCharac : forall (F:Class) (a y:U),
   OneToOne F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [H1 _]. apply Eval.Charac. assumption.
+  intros F a y [H1 _]. apply EvalOfClass.Charac. assumption.
 Qed.
 
 Proposition EvalSatisfies : forall (F:Class) (a:U),
   OneToOne F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a [H1 _]. apply Eval.Satisfies. assumption.
+  intros F a [H1 _]. apply EvalOfClass.Satisfies. assumption.
 Qed.
 
 Proposition EvalIsInRange : forall (F:Class) (a:U),
   OneToOne F -> domain F a -> range F (F!a).
 Proof.
-  intros F a [H1 _]. apply Eval.IsInRange. assumption.
+  intros F a [H1 _]. apply EvalOfClass.IsInRange. assumption.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
@@ -99,20 +99,20 @@ Qed.
 Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
   OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
-  intros F x [H1 H2] H3. apply Eval.Charac. 1: assumption.
-  - apply ConverseDomain. exists x. apply Eval.Satisfies; assumption.
-  - apply Converse.Charac2Rev. apply Eval.Satisfies; assumption.
+  intros F x [H1 H2] H3. apply EvalOfClass.Charac. 1: assumption.
+  - apply ConverseDomain. exists x. apply EvalOfClass.Satisfies; assumption.
+  - apply Converse.Charac2Rev. apply EvalOfClass.Satisfies; assumption.
 Qed.
 
 Proposition EvalOfConverseEval : forall (F:Class) (y:U),
   OneToOne F -> range F y -> F!(F^:-1:!y) = y.
 Proof.
   intros F y [H1 H2] H3. assert (H4 := H3). destruct H4 as [x H4].
-  assert (F^:-1:!y = x) as H5. { apply Eval.Charac.
+  assert (F^:-1:!y = x) as H5. { apply EvalOfClass.Charac.
     - assumption.
     - apply ConverseDomain. assumption.
     - apply Converse.Charac2Rev. assumption. }
-  rewrite H5. apply Eval.Charac; try assumption. exists y. assumption.
+  rewrite H5. apply EvalOfClass.Charac; try assumption. exists y. assumption.
 Qed.
 
 Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),

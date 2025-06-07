@@ -10,7 +10,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.

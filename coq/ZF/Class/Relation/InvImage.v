@@ -6,7 +6,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 Export ZF.Notation.Image.
 Export ZF.Notation.Inverse.
@@ -92,10 +92,10 @@ Proof.
   - destruct H2 as [y [H2 H3]]. apply Converse.Charac2 in H3.
     assert (domain F x) as H4. { exists y. assumption. }
     split. 1: assumption.
-    assert (F!x = y) as H5. { apply Eval.Charac; assumption. }
+    assert (F!x = y) as H5. { apply EvalOfClass.Charac; assumption. }
     rewrite H5. assumption.
   - destruct H2 as [H2 H3]. exists (F!x). split. 1: assumption.
-    apply Converse.Charac2Rev. apply Eval.Satisfies; assumption.
+    apply Converse.Charac2Rev. apply EvalOfClass.Satisfies; assumption.
 Qed.
 
 Proposition InvImageOfImageIsLess : forall (F A:Class),

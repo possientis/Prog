@@ -6,7 +6,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
 (* F is an (R,S)-isomorphism from A to B.                                       *)
