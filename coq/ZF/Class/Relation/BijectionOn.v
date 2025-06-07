@@ -1,5 +1,6 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bijection.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -43,6 +44,12 @@ Proposition IsFunctionOn : forall (F A:Class),
   BijectionOn F A -> FunctionOn F A.
 Proof.
   intros F A [H1 H2]. apply Bijection.IsFunction in H1. split; assumption.
+Qed.
+
+Proposition InclInProduct : forall (F A:Class),
+  BijectionOn F A -> F :<=: A :x: F:[A]:.
+Proof.
+  intros F A H1. apply FunctionOn.InclInProduct, IsFunctionOn. assumption.
 Qed.
 
 (* A bijection defined on a small class is small.                               *)

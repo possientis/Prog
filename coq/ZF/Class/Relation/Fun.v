@@ -115,12 +115,11 @@ Qed.
 Proposition InclInProduct : forall (F A B:Class),
   F :: A :-> B -> F :<=: A :x: B.
 Proof.
-  intros F A B H1. assert (H2 := H1). destruct H2 as [H2 H3].
+  intros F A B H1.
   apply InclTran with (A :x: F:[A]:).
-  - apply FunctionOn.InclInProduct. assumption.
-  - apply Incl.EquivCompatL with (A :x: range F).
-    + apply Prod.EquivCompatR, EquivSym, ImageOfDomainIsRange with B. assumption.
-    + apply Prod.InclCompatR. assumption.
+  - apply FunctionOn.InclInProduct, H1.
+  - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
+    2: apply H1. apply EquivSym, ImageOfDomainIsRange with B. assumption.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)
@@ -150,4 +149,3 @@ Proposition RangeIsNotEmpty : forall (F A B:Class),
 Proof.
   intros F A B H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
-

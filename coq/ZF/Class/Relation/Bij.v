@@ -1,5 +1,6 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bijection.
 Require Import ZF.Class.Relation.BijectionOn.
 Require Import ZF.Class.Relation.Compose.
@@ -37,6 +38,13 @@ Proposition IsFun : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
   split. 1: assumption. apply DoubleInclusion, EquivSym. assumption.
+Qed.
+
+(* A bijection F:A -> B is a subclass of AxB.                                   *)
+Proposition InclInProduct : forall (F A B:Class),
+  Bij F A B -> F :<=: A :x: B.
+Proof.
+  intros F A B H1. apply Fun.InclInProduct, IsFun. assumption.
 Qed.
 
 Proposition IsInj : forall (F A B:Class),

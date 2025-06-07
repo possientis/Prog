@@ -1,5 +1,6 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.BijectionOn.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -29,6 +30,13 @@ Proposition ImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F:[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
+Qed.
+
+(* An injection F:A -> B is a subclass of AxB.                                  *)
+Proposition InclInProduct : forall (F A B:Class),
+  Inj F A B -> F :<=: A :x: B.
+Proof.
+  intros F A B H1. apply Fun.InclInProduct, IsFun. assumption.
 Qed.
 
 (* The inverse image of a small class by an injection from any A to B is small. *)
