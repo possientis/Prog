@@ -105,21 +105,21 @@ Proof.
   intros F A B b [H1 _]. apply BijectionOn.ConverseEvalIsInDomain. assumption.
 Qed.
 
-Proposition InjF_FEval : forall (F A B:Class) (x:U),
+Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
   Inj F A B -> A x -> F^:-1:!(F!x) = x.
 Proof.
   intros F A B x [H1 _].
   apply BijectionOn.ConverseEvalOfEval. assumption.
 Qed.
 
-Proposition InjFF_Eval : forall (F A B:Class) (y:U),
+Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
   Inj F A B -> range F y -> F!(F^:-1:!y) = y.
 Proof.
   intros F A B y [H1 _].
   apply BijectionOn.EvalOfConverseEval with A. assumption.
 Qed.
 
-Proposition InjComposeDomainCharac : forall (F G A B C:Class) (a:U),
+Proposition DomainiOfComposeCharac : forall (F G A B C:Class) (a:U),
   Inj F A B ->
   Inj G B C ->
   domain (G :.: F) a <-> A a.
@@ -129,7 +129,7 @@ Proof.
   destruct H3 as [[_ H3] _]. apply H3.
 Qed.
 
-Proposition InjComposeEval : forall (F G A B C:Class) (a:U),
+Proposition ComposeEval : forall (F G A B C:Class) (a:U),
   Inj F A B ->
   Inj G B C ->
   A a       ->
