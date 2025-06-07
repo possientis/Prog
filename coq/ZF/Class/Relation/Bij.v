@@ -174,7 +174,7 @@ Proof.
   2: assumption. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
-Proposition InvImageOfRangeIsDomain : forall (F A B:Class),
+Proposition InvImageOfRange : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
   intros F A B H1. apply ImageOfDomain, ConverseIsBij. assumption.

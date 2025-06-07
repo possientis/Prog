@@ -166,10 +166,10 @@ Proof.
   intros F A B [H1 _]. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
-Proposition InvImageOfRangeIsDomain : forall (F A B:Class),
+Proposition InvImageOfRange : forall (F A B:Class),
   Inj F A B -> F^:-1::[range F]: :~: A.
 Proof.
-  intros F A B [H1 _]. apply BijectionOn.InvImageOfRangeIsDomain. assumption.
+  intros F A B [H1 _]. apply BijectionOn.InvImageOfRange. assumption.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B C:Class),

@@ -203,11 +203,11 @@ Proof.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)
-Proposition InvImageOfRangeIsDomain : forall (F A:Class),
+Proposition InvImageOfRange : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A [H1 H2]. apply EquivTran with (domain F).
-  2: assumption. apply InvImageOfRangeIsDomain.
+  2: assumption. apply InvImageOfRange.
 Qed.
 
 (* If F is defined on a small class A, then its range is small.                 *)

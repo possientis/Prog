@@ -179,11 +179,11 @@ Proof.
   apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
 Qed.
 
-Proposition InvImageOfRangeIsDomain : forall (F A:Class),
+Proposition InvImageOfRange : forall (F A:Class),
   BijectionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A H1.
-  apply FunctionOn.InvImageOfRangeIsDomain, IsFunctionOn. assumption.
+  apply FunctionOn.InvImageOfRange, IsFunctionOn. assumption.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B:Class),

@@ -74,7 +74,7 @@ Proof.
   - assumption.
 Qed.
 
-Proposition InvImageOfRangeIsDomain : forall (F:Class),
+Proposition InvImageOfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
   intros F. apply EquivTran with F^:-1::[domain F^:-1:]:.

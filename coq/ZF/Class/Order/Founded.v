@@ -77,7 +77,7 @@ Proof.
       - apply InclTran with F^:-1::[B]:.
         + apply Image.InclCompatR. assumption.
         + apply Incl.EquivCompatL with A. 2: apply InclRefl.
-          apply EquivSym, Bij.InvImageOfRangeIsDomain, H1. }
+          apply EquivSym, Bij.InvImageOfRange, H1. }
     assert (a <> :0:) as H8. { apply HasElem in H4.
       destruct H4 as [y H4]. apply HasElem.
       exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
