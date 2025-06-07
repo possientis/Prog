@@ -65,7 +65,7 @@ Proof.
   intros F a y [H1 _]. apply EvalOfClass.Charac. assumption.
 Qed.
 
-Proposition EvalSatisfies : forall (F:Class) (a:U),
+Proposition Satisfies : forall (F:Class) (a:U),
   OneToOne F -> domain F a -> F :(a,F!a):.
 Proof.
   intros F a [H1 _]. apply EvalOfClass.Satisfies. assumption.
@@ -151,8 +151,8 @@ Proposition EvalInjective : forall (F:Class) (x y:U),
   OneToOne F -> domain F x -> domain F y -> F!x = F!y -> x = y.
 Proof.
   intros F x y H1 H2 H3 H4.
-  assert (F :(x,F!x):) as H5. { apply EvalSatisfies; assumption. }
-  assert (F :(y,F!y):) as H6. { apply EvalSatisfies; assumption. }
+  assert (F :(x,F!x):) as H5. { apply Satisfies; assumption. }
+  assert (F :(y,F!y):) as H6. { apply Satisfies; assumption. }
   rewrite <- H4 in H6. revert H5 H6. apply CharacL. assumption.
 Qed.
 
@@ -162,8 +162,8 @@ Proof.
   intros F A a H1 H2. split; intros H3.
   - destruct H3 as [x [H3 H4]]. assert (x = a) as H5. {
       apply CharacL with F (F!a); try assumption.
-      apply EvalSatisfies; assumption. }
+      apply Satisfies; assumption. }
     subst. assumption.
-  - exists a. split. 1: assumption. apply EvalSatisfies; assumption.
+  - exists a. split. 1: assumption. apply Satisfies; assumption.
 Qed.
 

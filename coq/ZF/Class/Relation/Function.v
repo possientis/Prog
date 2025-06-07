@@ -76,7 +76,7 @@ Proof.
   intros F a y [_ H1]. apply EvalOfClass.Charac. assumption.
 Qed.
 
-Proposition EvalSatisfies : forall (F:Class) (a:U),
+Proposition Satisfies : forall (F:Class) (a:U),
   Function F -> domain F a -> F :(a,F!a):.
 Proof.
   intros F a [_ H1]. apply EvalOfClass.Satisfies. assumption.

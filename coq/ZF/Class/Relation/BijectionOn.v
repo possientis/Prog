@@ -87,11 +87,11 @@ Proof.
   apply FunctionOn.EvalCharac. assumption.
 Qed.
 
-Proposition EvalSatisfies : forall (F A:Class) (a:U),
+Proposition Satisfies : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> F :(a,F!a):.
 Proof.
   intros F A a H1. apply IsFunctionOn in H1.
-  apply FunctionOn.EvalSatisfies. assumption.
+  apply FunctionOn.Satisfies. assumption.
 Qed.
 
 Proposition IsInRange : forall (F A:Class) (a:U),

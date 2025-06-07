@@ -136,10 +136,10 @@ Proof.
 Qed.
 
 (* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
-Proposition EvalSatisfies : forall (F A:Class) (a:U),
+Proposition Satisfies : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> F :(a,F!a):.
 Proof.
-  intros F A a [H1 H2] H3. apply Function.EvalSatisfies. 1: assumption.
+  intros F A a [H1 H2] H3. apply Function.Satisfies. 1: assumption.
   apply H2. assumption.
 Qed.
 

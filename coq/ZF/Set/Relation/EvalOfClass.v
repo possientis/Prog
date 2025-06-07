@@ -36,7 +36,7 @@ Proof.
 Qed.
 
 (* If F has a value at a, then (a,F!a) satisfies the class F.                   *)
-Proposition HasValueAtEvalSatisfies : forall (F:Class) (a:U),
+Proposition HasValueAtSatisfies : forall (F:Class) (a:U),
   HasValueAt F a -> F :(a,F!a):.
 Proof.
   intros F a H1. apply HasValueAtEvalCharac.
@@ -53,7 +53,7 @@ Proof.
 Qed.
 
 (* If F is functional at a and a lies in domain then (a,F!a) satisfies F.       *)
-Proposition FunctionalAtEvalSatisfies : forall (F:Class) (a:U),
+Proposition FunctionalAtSatisfies : forall (F:Class) (a:U),
   FunctionalAt F a -> domain F a -> F :(a,F!a):.
 Proof.
   intros F a H1 H2. apply FunctionalAtEvalCharac.
@@ -101,7 +101,7 @@ Qed.
 Proposition Satisfies : forall (F:Class) (a:U),
   Functional F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a H1 H2. apply FunctionalAtEvalSatisfies. 2: assumption.
+  intros F a H1 H2. apply FunctionalAtSatisfies. 2: assumption.
   apply IsFunctionalAt. assumption.
 Qed.
 

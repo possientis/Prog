@@ -44,10 +44,10 @@ Proof.
 Qed.
 
 (* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
-Proposition EvalSatisfies : forall (F A B:Class) (a:U),
+Proposition Satisfies : forall (F A B:Class) (a:U),
   F :: A :-> B -> A a -> F :(a,F!a):.
 Proof.
-  intros F A B a H1. apply FunctionOn.EvalSatisfies, H1.
+  intros F A B a H1. apply FunctionOn.Satisfies, H1.
 Qed.
 
 (* The value at a of a function defined on A lies in B  when a im A.            *)

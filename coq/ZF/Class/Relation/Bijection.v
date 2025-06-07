@@ -72,10 +72,10 @@ Proof.
   intros F a y [_ H1]. apply OneToOne.EvalCharac. assumption.
 Qed.
 
-Proposition EvalSatisfies : forall (F:Class) (a:U),
+Proposition Satisfies : forall (F:Class) (a:U),
   Bijection F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a [_ H1]. apply OneToOne.EvalSatisfies. assumption.
+  intros F a [_ H1]. apply OneToOne.Satisfies. assumption.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),

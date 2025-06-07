@@ -81,10 +81,10 @@ Proof.
   intros F A B a y [H1 _]. apply BijectionOn.EvalCharac. assumption.
 Qed.
 
-Proposition EvalSatisfies : forall (F A B:Class) (a:U),
+Proposition Satisfies : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> F :(a,F!a):.
 Proof.
-  intros F A B a [H1 _]. apply BijectionOn.EvalSatisfies. assumption.
+  intros F A B a [H1 _]. apply BijectionOn.Satisfies. assumption.
 Qed.
 
 Proposition IsInRange : forall (F A B:Class) (a:U),

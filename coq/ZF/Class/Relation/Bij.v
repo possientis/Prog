@@ -54,11 +54,11 @@ Proof.
   apply Fun.EvalCharac with B. assumption.
 Qed.
 
-Proposition EvalSatisfies : forall (F A B:Class) (a:U),
+Proposition Satisfies : forall (F A B:Class) (a:U),
   Bij F A B -> A a -> F :(a,F!a):.
 Proof.
   intros F A B a H1. apply IsFun in H1.
-  apply Fun.EvalSatisfies with B. assumption.
+  apply Fun.Satisfies with B. assumption.
 Qed.
 
 Proposition IsInRange : forall (F A B:Class) (x:U),

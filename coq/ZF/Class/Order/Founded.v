@@ -82,7 +82,7 @@ Proof.
     assert (a <> :0:) as H8. { apply HasElem in H4.
       destruct H4 as [y H4]. apply HasElem.
       exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
-      apply Bij.EvalSatisfies with B A.
+      apply Bij.Satisfies with B A.
       - apply ConverseIsBij, Isom.IsBij with R S. assumption.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
