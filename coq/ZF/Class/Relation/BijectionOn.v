@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bijection.
@@ -221,3 +222,8 @@ Proof.
   apply H2. assumption.
 Qed.
 
+Proposition RangeIsNotEmpty : forall (F A:Class),
+  BijectionOn F A -> A :<>: :0: -> range F :<>: :0:.
+Proof.
+  intros F A H1. apply FunctionOn.RangeIsNotEmpty, IsFunctionOn. assumption.
+Qed.

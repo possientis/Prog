@@ -1,5 +1,6 @@
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.BijectionOn.
@@ -203,3 +204,8 @@ Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
 Qed.
 
+Proposition RangeIsNotEmpty : forall (F A B:Class),
+  Inj F A B -> A :<>: :0: -> range F :<>: :0:.
+Proof.
+  intros F A B H1. apply BijectionOn.RangeIsNotEmpty, H1.
+Qed.

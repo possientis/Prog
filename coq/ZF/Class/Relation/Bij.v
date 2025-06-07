@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bijection.
@@ -21,6 +22,25 @@ Require Import ZF.Set.OrdPair.
 (* F is a bijection from A to B.                                                *)
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
 
+Proposition IsFun : forall (F A B:Class),
+  Bij F A B -> F :: A :-> B.
+Proof.
+  intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
+  split. 1: assumption. apply DoubleInclusion, EquivSym. assumption.
+Qed.
+
+Proposition IsInj : forall (F A B:Class),
+  Bij F A B -> Inj F A B.
+Proof.
+  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, EquivSym, H1.
+Qed.
+
+Proposition IsOnto : forall (F A B:Class),
+  Bij F A B -> Onto F A B.
+Proof.
+  intros F A B H1. split. 2: apply H1. apply BijectionOn.IsFunctionOn, H1.
+Qed.
+
 Proposition ImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F:[C]:.
 Proof.
@@ -31,13 +51,6 @@ Proposition InvImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
-Qed.
-
-Proposition IsFun : forall (F A B:Class),
-  Bij F A B -> F :: A :-> B.
-Proof.
-  intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
-  split. 1: assumption. apply DoubleInclusion, EquivSym. assumption.
 Qed.
 
 (* A bijection F:A -> B is a subclass of AxB.                                   *)
@@ -64,18 +77,6 @@ Proof.
   intros F A B G C D H1 H2. apply BijectionOn.EquivCharac.
   - apply H1.
   - apply H2.
-Qed.
-
-Proposition IsInj : forall (F A B:Class),
-  Bij F A B -> Inj F A B.
-Proof.
-  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, EquivSym, H1.
-Qed.
-
-Proposition IsOnto : forall (F A B:Class),
-  Bij F A B -> Onto F A B.
-Proof.
-  intros F A B H1. split. 2: apply H1. apply BijectionOn.IsFunctionOn, H1.
 Qed.
 
 Proposition ConverseIsBij : forall (F A B:Class),
@@ -214,3 +215,8 @@ Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
 Qed.
 
+Proposition RangeIsNotEmpty : forall (F A B:Class),
+  Bij F A B -> A :<>: :0: -> B :<>: :0:.
+Proof.
+  intros F A B H1. apply Onto.RangeIsNotEmpty with F, IsOnto. assumption.
+Qed.
