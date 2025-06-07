@@ -16,7 +16,7 @@ Qed.
 
 (* The union of a class of relations is a relation class.                       *)
 Proposition UnionClassOfRelsIsRel : forall (P:Class),
-  (forall x, P x -> Relation x) -> Relation.Relation.Relation :U(P).
+  (forall x, P x -> Relation x) -> Class.Relation.Relation.Relation :U(P).
 Proof.
   intros P H1 x H2. unfold union in H2. destruct H2 as [y [H2 H3]].
   apply H1 in H3. apply H3, H2.

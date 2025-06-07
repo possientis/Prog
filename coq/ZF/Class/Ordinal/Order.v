@@ -9,6 +9,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Eval.
 Require Import ZF.Set.Foundation.
@@ -46,6 +47,7 @@ Proof.
         rewrite H4 in H9. destruct H9 as [H9 H10]. apply H10.
         assert (H11 := H1). destruct H11 as [H11 _].
         apply H11 with b; assumption. }
+      assert (F:[toClass b]: :~: toClass b) as H9. {
 Admitted.
 
 (*
