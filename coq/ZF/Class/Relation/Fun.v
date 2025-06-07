@@ -77,13 +77,13 @@ Proof.
 Qed.
 
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
-Proposition ComposeIsFun : forall (F G A B C: Class),
+Proposition Compose : forall (F G A B C: Class),
   F :: A :-> B ->
   G :: B :-> C ->
   (G :.: F) :: A :-> C.
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
-  - apply ComposeIsFunctionOn with B; assumption.
+  - apply FunctionOn.Compose with B; assumption.
   - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
 Qed.
 

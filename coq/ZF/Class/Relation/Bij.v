@@ -121,11 +121,11 @@ Proof.
   apply ConverseIsBij. assumption.
 Qed.
 
-Proposition ComposeIsBij : forall (F G A B C:Class),
+Proposition Compose : forall (F G A B C:Class),
   Bij F A B -> Bij G B C -> Bij (G :.: F) A C.
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
-  - apply ComposeIsBijectionOn with B; try assumption.
+  - apply BijectionOn.Compose with B; try assumption.
     apply DoubleInclusion, EquivSym. assumption.
   - apply EquivTran with (range G). 2: assumption.
     apply Compose.RangeIsSame. destruct H3 as [H3 H5].

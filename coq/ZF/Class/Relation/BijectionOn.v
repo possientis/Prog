@@ -79,14 +79,14 @@ Proof.
   - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
 Qed.
 
-Proposition ComposeIsBijectionOn : forall (F A G B:Class),
+Proposition Compose : forall (F A G B:Class),
   BijectionOn F A ->
   BijectionOn G B ->
   range F :<=: B   ->
   BijectionOn (G :.: F) A.
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
-  - apply Bijection.ComposeIsBijection; assumption.
+  - apply Bijection.Compose; assumption.
   - apply EquivTran with (domain F). 2: assumption.
     apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
     apply EquivSym. assumption.

@@ -56,7 +56,7 @@ Proof.
 Qed.
 
 (* The composition of two functional classes is a function class.               *)
-Proposition FunctionalComposeIsFunction : forall (F G:Class),
+Proposition FunctionalCompose : forall (F G:Class),
   Functional F -> Functional G -> Function (G :.: F).
 Proof.
   intros F G Hf Hg. split.
@@ -65,10 +65,10 @@ Proof.
 Qed.
 
 (* The composition of two function classes is a function class.                 *)
-Proposition ComposeIsFunction : forall (F G:Class),
+Proposition Compose : forall (F G:Class),
   Function F -> Function G -> Function (G :.: F).
 Proof.
-  intros F G [_ Hf] [_ Hg]. apply FunctionalComposeIsFunction; assumption.
+  intros F G [_ Hf] [_ Hg]. apply FunctionalCompose; assumption.
 Qed.
 
 Proposition EvalCharac : forall (F:Class) (a y:U),

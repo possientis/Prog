@@ -1,6 +1,8 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Relation.Compose.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Fun.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Image.
@@ -51,4 +53,17 @@ Proof.
   - apply H2.
 Qed.
 
-
+(* If F and G are surjections then so is the composition G.F.                   *)
+Proposition Compose : forall (F G A B C:Class),
+  Onto F A B ->
+  Onto G B C ->
+  Onto (G :.: F) A C.
+Proof.
+  intros F G A B C [H1 H2] [H3 H4]. split.
+  - apply FunctionOn.Compose with B; try assumption.
+    apply Incl.EquivCompatL with B. 2: apply InclRefl.
+    apply EquivSym. assumption.
+  - apply EquivTran with (range G). 2: assumption.
+    apply Compose.RangeIsSame, DoubleInclusion, EquivTran with B. 1: assumption.
+    apply EquivSym, H3.
+Qed.

@@ -78,13 +78,13 @@ Proof.
 Qed.
 
 (* If F and G are injections then so is the composition G.F.                    *)
-Proposition ComposeIsInj : forall (F G A B C:Class),
+Proposition Compose : forall (F G A B C:Class),
   Inj F A B ->
   Inj G B C ->
   Inj (G :.: F) A C.
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
-  - apply ComposeIsBijectionOn with B; assumption.
+  - apply BijectionOn.Compose with B; assumption.
   - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
 Qed.
 
@@ -145,7 +145,7 @@ Proposition DomainiOfComposeCharac : forall (F G A B C:Class) (a:U),
   domain (G :.: F) a <-> A a.
 Proof.
   intros F G A B C a H1 H2. assert (Inj (G :.: F) A C) as H3. {
-    apply ComposeIsInj with B; assumption. }
+    apply Compose with B; assumption. }
   destruct H3 as [[_ H3] _]. apply H3.
 Qed.
 

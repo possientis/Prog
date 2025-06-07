@@ -32,13 +32,13 @@ Proof.
 Qed.
 
 (* The composition of two isomorpshims is an isomorphism.                       *)
-Proposition ComposeIsIsom : forall (F G R S T A B C:Class),
+Proposition Compose : forall (F G R S T A B C:Class),
   Isom F R S A B ->
   Isom G S T B C ->
   Isom (G :.: F) R T A C.
 Proof.
   intros F G R S T A B C [H1 H2] [H3 H4]. split.
-  - apply ComposeIsBij with B; assumption.
+  - apply Bij.Compose with B; assumption.
   - intros x y H5 H6. split; intros H7.
     + rewrite (Bij.ComposeEval F G A B C x); try assumption.
       rewrite (Bij.ComposeEval F G A B C y); try assumption.

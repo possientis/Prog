@@ -114,14 +114,14 @@ Proof.
 Qed.
 
 (* If F defined on A, G defined on B and range F <= B, then G.F defined on A.   *)
-Proposition ComposeIsFunctionOn : forall (F A G B:Class),
+Proposition Compose : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
   range F :<=: B ->
   FunctionOn (G :.: F) A.
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
-  - apply ComposeIsFunction; assumption.
+  - apply Function.Compose; assumption.
   - apply EquivTran with (domain F). 2: assumption.
     apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
     apply EquivSym. assumption.
