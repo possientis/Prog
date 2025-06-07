@@ -36,6 +36,18 @@ Proof.
   intros F a B H1. apply FunctionOn.IsSmall, H1.
 Qed.
 
+(* Two functions are equal iff they have same domain and coincide pointwise.    *)
+Proposition EquivCharac : forall (F A B G C D:Class),
+  Fun F A B ->
+  Fun G C D ->
+  F :~: G  <->
+  A :~: C /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A B G C D H1 H2. apply FunctionOn.EquivCharac.
+  - apply H1.
+  - apply H2.
+Qed.
+
 (* Characterization of the value at a of a function defined on A when a in A.   *)
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
   F :: A :-> B -> A a -> F :(a,y): <-> F!a = y.
@@ -149,3 +161,4 @@ Proposition RangeIsNotEmpty : forall (F A B:Class),
 Proof.
   intros F A B H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
+

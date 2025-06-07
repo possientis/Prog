@@ -60,6 +60,17 @@ Proof.
   apply IsFunctionOn. assumption.
 Qed.
 
+(* Two bijections are equal iff they have same domain and coincide pointwise.   *)
+Proposition EquivCharac : forall (F A G B:Class),
+  BijectionOn F A ->
+  BijectionOn G B ->
+  F :~: G        <->
+  A :~: B /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A G B H1 H2. apply FunctionOn.EquivCharac;
+  apply IsFunctionOn; assumption.
+Qed.
+
 Proposition ConverseIsBijectionOn : forall (F A B:Class),
   BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
 Proof.
@@ -201,4 +212,3 @@ Proof.
   intros F A B a [H1 H2] H3. apply Bijection.EvalInImage. 1: assumption.
   apply H2. assumption.
 Qed.
-

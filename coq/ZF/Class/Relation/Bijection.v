@@ -24,16 +24,26 @@ Proof.
   intros F A [_ H1]. apply ImageIsSmall. assumption.
 Qed.
 
-Proposition InvImageIsSmall : forall (F B:Class),
-  Bijection F -> Small B -> Small F^:-1::[B]:.
-Proof.
-  intros F B [_ H1]. apply InvImageIsSmall. assumption.
-Qed.
-
 Proposition IsFunction : forall (F:Class),
   Bijection F -> Function F.
 Proof.
   intros F [H1 [H2 _]]. split; assumption.
+Qed.
+
+(* Two bijections are equal iff they have same domain and coincide pointwise.   *)
+Proposition EquivCharac : forall (F G:Class),
+  Bijection F ->
+  Bijection G ->
+  F :~: G   <->
+  domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
+Proof.
+  intros F G H1 H2. apply Function.EquivCharac; apply IsFunction; assumption.
+Qed.
+
+Proposition InvImageIsSmall : forall (F B:Class),
+  Bijection F -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F B [_ H1]. apply InvImageIsSmall. assumption.
 Qed.
 
 Proposition ConverseIsFunction : forall (F:Class),

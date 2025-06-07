@@ -23,7 +23,8 @@ Qed.
 Proposition EquivCharac : forall (F G:Class),
   Function F ->
   Function G ->
-  F :~: G <-> domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
+  F :~: G   <->
+  domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G. intros [Hf Gf] [Hg Gg].
   unfold Relation in Hf. unfold Relation in Hg. split; intros H1.
