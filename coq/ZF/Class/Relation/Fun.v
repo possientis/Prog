@@ -117,10 +117,10 @@ Proof.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)
-Proposition ImageOfDomainIsRange : forall (F A B:Class),
+Proposition ImageOfDomain : forall (F A B:Class),
   F :: A :-> B -> F:[A]: :~: range F.
 Proof.
-  intros F A B H1. apply FunctionOn.ImageOfDomainIsRange, H1.
+  intros F A B H1. apply FunctionOn.ImageOfDomain, H1.
 Qed.
 
 (* A function F:A -> B is a subclass of AxB.                                    *)
@@ -131,7 +131,7 @@ Proof.
   apply InclTran with (A :x: F:[A]:).
   - apply FunctionOn.InclInProduct, H1.
   - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
-    2: apply H1. apply EquivSym, ImageOfDomainIsRange with B. assumption.
+    2: apply H1. apply EquivSym, ImageOfDomain with B. assumption.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)

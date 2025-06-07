@@ -160,10 +160,10 @@ Proof.
   apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
-Proposition ImageOfDomainIsRange : forall (F A B:Class),
+Proposition ImageOfDomain : forall (F A B:Class),
   Inj F A B -> F:[A]: :~: range F.
 Proof.
-  intros F A B [H1 _]. apply BijectionOn.ImageOfDomainIsRange. assumption.
+  intros F A B [H1 _]. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
 Proposition InvImageOfRangeIsDomain : forall (F A B:Class),

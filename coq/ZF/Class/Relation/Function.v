@@ -110,4 +110,3 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
 Proof.
   intros F G a [H1 H2] [H3 H4]. apply Compose.Eval; assumption.
 Qed.
-

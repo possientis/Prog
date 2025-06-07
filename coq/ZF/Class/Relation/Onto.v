@@ -126,11 +126,11 @@ Proof.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)
-Proposition ImageOfDomainIsRange : forall (F A B:Class),
+Proposition ImageOfDomain : forall (F A B:Class),
   Onto F A B -> F:[A]: :~: B.
 Proof.
   intros F A B H1. apply EquivTran with (range F).
-  - apply FunctionOn.ImageOfDomainIsRange, H1.
+  - apply FunctionOn.ImageOfDomain, H1.
   - apply H1.
 Qed.
 

@@ -62,7 +62,7 @@ Proof.
   - apply H1.
 Qed.
 
-Proposition ImageOfDomainIsRange : forall (F:Class),
+Proposition ImageOfDomain : forall (F:Class),
   F:[domain F]: :~: range F.
 Proof.
   intros F y. split; intros H1.

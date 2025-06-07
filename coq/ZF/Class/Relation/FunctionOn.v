@@ -194,12 +194,12 @@ Proof.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)
-Proposition ImageOfDomainIsRange : forall (F A:Class),
+Proposition ImageOfDomain : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
   intros F A [H1 H2]. apply EquivTran with F:[domain F]:.
   - apply Image.EquivCompatR, EquivSym. assumption.
-  - apply Range.ImageOfDomainIsRange.
+  - apply Range.ImageOfDomain.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)
@@ -215,7 +215,7 @@ Proposition RangeIsSmall : forall (F A:Class),
   FunctionOn F A -> Small A -> Small (range F).
 Proof.
   intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
-  - apply ImageOfDomainIsRange. assumption.
+  - apply ImageOfDomain. assumption.
   - apply ImageIsSmall with A; assumption.
 Qed.
 

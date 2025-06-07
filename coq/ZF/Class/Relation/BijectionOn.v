@@ -172,11 +172,11 @@ Proof.
   apply FunctionOn.ComposeEval; assumption.
 Qed.
 
-Proposition ImageOfDomainIsRange : forall (F A:Class),
+Proposition ImageOfDomain : forall (F A:Class),
   BijectionOn F A -> F:[A]: :~: range F.
 Proof.
   intros F A H1.
-  apply FunctionOn.ImageOfDomainIsRange, IsFunctionOn. assumption.
+  apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
 Qed.
 
 Proposition InvImageOfRangeIsDomain : forall (F A:Class),
