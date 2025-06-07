@@ -74,3 +74,9 @@ Proposition EvalCharac : forall (F A B:Class) (a y:U),
 Proof.
   intros F A B a y H1. apply FunctionOn.EvalCharac, H1.
 Qed.
+
+Proposition Satisfies : forall (F A B:Class) (a:U),
+  Onto F A B -> A a -> F :(a,F!a):.
+Proof.
+  intros F A B a H1. apply FunctionOn.Satisfies, H1.
+Qed.
