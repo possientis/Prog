@@ -9,6 +9,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
 
@@ -66,4 +67,10 @@ Proof.
   - apply EquivTran with (range G). 2: assumption.
     apply Compose.RangeIsSame, DoubleInclusion, EquivTran with B. 1: assumption.
     apply EquivSym, H3.
+Qed.
+
+Proposition EvalCharac : forall (F A B:Class) (a y:U),
+  Onto F A B -> A a -> F :(a,y): <-> F!a = y.
+Proof.
+  intros F A B a y H1. apply FunctionOn.EvalCharac, H1.
 Qed.
