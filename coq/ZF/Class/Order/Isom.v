@@ -13,13 +13,6 @@ Require Import ZF.Set.OrdPair.
 Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y ->
   R :(x,y): <-> S :(F!x,F!y):.
 
-(* An isomorphism is a bijection.                                               *)
-Proposition IsBij : forall (F R S A B:Class),
-  Isom F R S A B -> Bij F A B.
-Proof.
-  intros F R S A B [H1 _]. assumption.
-Qed.
-
 (* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorpshism. *)
 Proposition ConverseIsIsom : forall (F R S A B:Class),
   Isom F R S A B -> Isom F^:-1: S R B A.

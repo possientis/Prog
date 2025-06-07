@@ -149,8 +149,7 @@ Proof.
   intros F R S A B a H1 H2.
   apply EquivTran with (initSegment S F:[A]: F!a).
   - apply IsomImage with A B; try assumption. apply InclRefl.
-  - apply EquivCompatR, Bij.ImageOfDomainIsRange, Isom.IsBij with R S.
-    assumption.
+  - apply EquivCompatR, Bij.ImageOfDomainIsRange, H1.
 Qed.
 
 Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),

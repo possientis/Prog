@@ -128,8 +128,7 @@ Proposition BoundEvalIsNotInSegmentImage : forall (F R S A B:Class) (a:U),
 Proof.
   intros F R S A B a H1 H2 H3 H4. apply (BoundIsNotInSegment R A a).
   - apply (WhenIsom F R S A B); assumption.
-  - apply (Bij.EvalInImage F A B); try assumption.
-    apply Isom.IsBij with R S. assumption.
+  - apply (Bij.EvalInImage F A B); try assumption. apply H2.
 Qed.
 
 (* If R well-orders A the minimal element of a subset of A is unique.           *)

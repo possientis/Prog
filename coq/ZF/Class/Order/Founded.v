@@ -63,7 +63,7 @@ Proof.
     remember (F^:-1::[toClass b]:) as C eqn:EC.
     assert (Small C) as H5. { rewrite EC.
       apply Bij.InvImageIsSmall with A B.
-      - apply Isom.IsBij with R S. assumption.
+      - apply H1.
       - apply SetIsSmall. }
     remember (fromClass C H5) as a eqn:Ea. specialize (H2 a).
     assert (toClass a :~: F^:-1::[toClass b]:) as H6. {
@@ -77,23 +77,21 @@ Proof.
       - apply InclTran with F^:-1::[B]:.
         + apply Image.InclCompatR. assumption.
         + apply Incl.EquivCompatL with A. 2: apply InclRefl.
-          apply EquivSym, Bij.InvImageOfRangeIsDomain.
-          apply Isom.IsBij with R S. assumption. }
+          apply EquivSym, Bij.InvImageOfRangeIsDomain, H1. }
     assert (a <> :0:) as H8. { apply HasElem in H4.
       destruct H4 as [y H4]. apply HasElem.
       exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
       apply Bij.Satisfies with B A.
-      - apply ConverseIsBij, Isom.IsBij with R S. assumption.
+      - apply ConverseIsBij, H1.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
     assert (F:[toClass a]: :~: toClass b) as H9. {
       apply EquivTran with F:[F^:-1::[toClass b]:]:.
       - apply Image.EquivCompatR. assumption.
-      - apply Bij.ImageOfInvImage with A B. 2: assumption.
-        apply Isom.IsBij with R S. assumption. }
-        exists (F!x). apply Minimal.EquivCompatR with F:[toClass a]:.
-        1: assumption. apply Minimal.IsomImage with R A B; try assumption.
-        apply H7, Minimal.IsIn with R. assumption. }
+      - apply Bij.ImageOfInvImage with A B. 2: assumption. apply H1. }
+    exists (F!x). apply Minimal.EquivCompatR with F:[toClass a]:.
+    1: assumption. apply Minimal.IsomImage with R A B; try assumption.
+    apply H7, Minimal.IsIn with R. assumption. }
 
   (* The proof of the equivalence follows. *)
   intros F R S A B H1. split.
