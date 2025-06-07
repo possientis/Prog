@@ -50,11 +50,11 @@ Proof.
     + rewrite (Bij.ComposeEval F G A B C x); try assumption.
       rewrite (Bij.ComposeEval F G A B C y); try assumption.
       apply H4. 3: apply H2; try assumption.
-      * apply Bij.EvalIsInRange with A; assumption.
-      * apply Bij.EvalIsInRange with A; assumption.
+      * apply Bij.IsInRange with A; assumption.
+      * apply Bij.IsInRange with A; assumption.
     + apply H2; try assumption. apply H4.
-      * apply Bij.EvalIsInRange with A; assumption.
-      * apply Bij.EvalIsInRange with A; assumption.
+      * apply Bij.IsInRange with A; assumption.
+      * apply Bij.IsInRange with A; assumption.
       * rewrite (Bij.ComposeEval F G A B C x) in H7; try assumption.
         rewrite (Bij.ComposeEval F G A B C y) in H7; try assumption.
 Qed.

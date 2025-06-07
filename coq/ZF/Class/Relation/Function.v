@@ -82,7 +82,7 @@ Proof.
   intros F a [_ H1]. apply EvalOfClass.Satisfies. assumption.
 Qed.
 
-Proposition EvalIsInRange : forall (F:Class) (a:U),
+Proposition IsInRange : forall (F:Class) (a:U),
   Function F -> domain F a -> range F (F!a).
 Proof.
   intros F a [_ H1]. apply EvalOfClass.IsInRange. assumption.

@@ -144,10 +144,10 @@ Proof.
 Qed.
 
 (* The value at a of a function defined on A lies in the range when a im A.     *)
-Proposition EvalIsInRange : forall (F A:Class) (a:U),
+Proposition IsInRange : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> range F (F!a).
 Proof.
-  intros F A a [H1 H2] H3. apply Function.EvalIsInRange. 1: assumption.
+  intros F A a [H1 H2] H3. apply Function.IsInRange. 1: assumption.
   apply H2. assumption.
 Qed.
 
@@ -225,5 +225,5 @@ Proposition RangeIsNotEmpty : forall (F A:Class),
   FunctionOn F A -> A :<>: :0: -> range F :<>: :0:.
 Proof.
   intros F A H1 H2. apply HasElem in H2. destruct H2 as [x H2].
-  apply HasElem. exists F!x. apply EvalIsInRange with A; assumption.
+  apply HasElem. exists F!x. apply IsInRange with A; assumption.
 Qed.

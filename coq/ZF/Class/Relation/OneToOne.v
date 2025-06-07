@@ -71,7 +71,7 @@ Proof.
   intros F a [H1 _]. apply EvalOfClass.Satisfies. assumption.
 Qed.
 
-Proposition EvalIsInRange : forall (F:Class) (a:U),
+Proposition IsInRange : forall (F:Class) (a:U),
   OneToOne F -> domain F a -> range F (F!a).
 Proof.
   intros F a [H1 _]. apply EvalOfClass.IsInRange. assumption.
@@ -80,7 +80,7 @@ Qed.
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   OneToOne F -> range F b -> domain F (F^:-1:!b).
 Proof.
-  intros F b H1 H2. apply ConverseRange, EvalIsInRange.
+  intros F b H1 H2. apply ConverseRange, IsInRange.
   - apply ConverseIsOneToOne. assumption.
   - apply ConverseDomain. assumption.
 Qed.

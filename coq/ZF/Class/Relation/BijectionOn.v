@@ -94,11 +94,11 @@ Proof.
   apply FunctionOn.EvalSatisfies. assumption.
 Qed.
 
-Proposition EvalIsInRange : forall (F A:Class) (a:U),
+Proposition IsInRange : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> range F (F!a).
 Proof.
   intros F A a H1. apply IsFunctionOn in H1.
-  apply FunctionOn.EvalIsInRange. assumption.
+  apply FunctionOn.IsInRange. assumption.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),

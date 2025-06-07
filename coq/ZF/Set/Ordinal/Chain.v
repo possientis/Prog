@@ -32,7 +32,7 @@ Proof.
   destruct H2 as [n [H2 H4]]. exists n. split. 1: assumption. intros H5.
   apply Class.Empty.Charac with (F!(succ n)). apply H3. split.
   - rewrite H4. assumption.
-  - apply FunctionOn.EvalIsInRange with (toClass :N). 1: assumption.
+  - apply FunctionOn.IsInRange with (toClass :N). 1: assumption.
     apply Omega.HasSucc. assumption.
 Qed.
 
@@ -56,6 +56,6 @@ Proof.
   apply (Fun.RangeCharac F (toClass :N) A) in H4. 2: assumption.
   destruct H4 as [n [H4 H5]]. exists n. split. 1: assumption.
   revert H3. rewrite <- H5. apply Minimal.HasNoLesser.
-  apply FunctionOn.EvalIsInRange with (toClass :N). 1: apply H1.
+  apply FunctionOn.IsInRange with (toClass :N). 1: apply H1.
   apply Omega.HasSucc. assumption.
 Qed.

@@ -51,11 +51,11 @@ Proof.
 Qed.
 
 (* The value at a of a function defined on A lies in B  when a im A.            *)
-Proposition EvalIsInRange : forall (F A B:Class) (a:U),
+Proposition IsInRange : forall (F A B:Class) (a:U),
   (F :: A :-> B) -> A a -> B (F!a).
 Proof.
   intros F A B a H1 H2. apply H1.
-  apply FunctionOn.EvalIsInRange with A. 2: assumption. apply H1.
+  apply FunctionOn.IsInRange with A. 2: assumption. apply H1.
 Qed.
 
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
@@ -79,7 +79,7 @@ Proof.
   - apply (FunctionOn.DomainOfComposeCharac F G A B a H1 H3) in H5.
     destruct H5 as [H5 H6]. assumption.
   - apply (FunctionOn.DomainOfComposeCharac F G A B a); try assumption.
-    split. 1: assumption.  apply EvalIsInRange with A.
+    split. 1: assumption.  apply IsInRange with A.
     + split; assumption.
     + assumption.
 Qed.
@@ -93,7 +93,7 @@ Proposition ComposeEval : forall (F G A B C:Class) (a:U),
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply (FunctionOn.ComposeEval F G A B); try assumption.
-  apply EvalIsInRange with A.
+  apply IsInRange with A.
   - split; assumption.
   - assumption.
 Qed.

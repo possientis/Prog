@@ -61,16 +61,16 @@ Proof.
   apply Fun.EvalSatisfies with B. assumption.
 Qed.
 
-Proposition EvalIsInRange : forall (F A B:Class) (x:U),
+Proposition IsInRange : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> B (F!x).
 Proof.
-  intros F A B a H1. apply IsFun in H1. apply Fun.EvalIsInRange. assumption.
+  intros F A B a H1. apply IsFun in H1. apply Fun.IsInRange. assumption.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> A (F^:-1:!y).
 Proof.
-  intros F A B y H1 H2. apply EvalIsInRange with B. 2: assumption.
+  intros F A B y H1 H2. apply IsInRange with B. 2: assumption.
   apply ConverseIsBij. assumption.
 Qed.
 

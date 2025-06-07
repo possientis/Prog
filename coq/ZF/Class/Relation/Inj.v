@@ -87,10 +87,10 @@ Proof.
   intros F A B a [H1 _]. apply BijectionOn.EvalSatisfies. assumption.
 Qed.
 
-Proposition EvalIsInRange : forall (F A B:Class) (a:U),
+Proposition IsInRange : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> B (F!a).
 Proof.
-  intros F A B a H1. apply Fun.EvalIsInRange, IsFun. assumption.
+  intros F A B a H1. apply Fun.IsInRange, IsFun. assumption.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
@@ -131,7 +131,7 @@ Proposition InjComposeEval : forall (F G A B C:Class) (a:U),
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply BijectionOn.ComposeEval with A B; try assumption.
-  apply EvalIsInRange with A. 2: assumption. split; assumption.
+  apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
 Proposition ImageOfDomainIsRange : forall (F A B:Class),
