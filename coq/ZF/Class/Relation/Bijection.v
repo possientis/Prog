@@ -84,6 +84,12 @@ Proof.
   intros F a [_ H1]. apply OneToOne.IsInRange. assumption.
 Qed.
 
+Proposition ImageCharac : forall (F A: Class), Bijection F ->
+  forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
+Proof.
+  intros F A [_ H1]. apply OneToOne.ImageCharac. assumption.
+Qed.
+
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   Bijection F -> range F b -> domain F (F^:-1:!b).
 Proof.
@@ -143,3 +149,4 @@ Proposition EvalInImage : forall (F A:Class) (a:U),
 Proof.
   intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
 Qed.
+

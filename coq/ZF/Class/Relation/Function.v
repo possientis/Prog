@@ -88,6 +88,12 @@ Proof.
   intros F a [_ H1]. apply EvalOfClass.IsInRange. assumption.
 Qed.
 
+Proposition ImageCharac : forall (F A: Class), Function F ->
+  forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
+Proof.
+  intros F A [_ H1]. apply EvalOfClass.ImageCharac. assumption.
+Qed.
+
 Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.

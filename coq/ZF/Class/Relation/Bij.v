@@ -67,6 +67,12 @@ Proof.
   intros F A B a H1. apply IsFun in H1. apply Fun.IsInRange. assumption.
 Qed.
 
+Proposition ImageCharac : forall (F A B C: Class), Bij F A B ->
+  forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
+Proof.
+  intros F A B C H1. apply BijectionOn.ImageCharac, H1.
+Qed.
+
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> A (F^:-1:!y).
 Proof.
@@ -158,3 +164,4 @@ Proposition EvalInImage : forall (F A B C:Class) (a:U),
 Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
 Qed.
+

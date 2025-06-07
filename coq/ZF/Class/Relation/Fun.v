@@ -58,6 +58,12 @@ Proof.
   apply FunctionOn.IsInRange with A. 2: assumption. apply H1.
 Qed.
 
+Proposition ImageCharac : forall (F A B C: Class), F :: A :-> B ->
+  forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
+Proof.
+  intros F A B C H1. apply FunctionOn.ImageCharac, H1.
+Qed.
+
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
 Proposition ComposeIsFun : forall (F G A B C: Class),
   F :: A :-> B ->
@@ -144,3 +150,4 @@ Proposition RangeIsNotEmpty : forall (F A B:Class),
 Proof.
   intros F A B H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
+

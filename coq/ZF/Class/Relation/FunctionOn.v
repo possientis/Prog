@@ -151,6 +151,17 @@ Proof.
   apply H2. assumption.
 Qed.
 
+Proposition ImageCharac : forall (F A B: Class), FunctionOn F A ->
+  forall y, F:[B]: y <-> exists x, B x /\ A x /\ F!x = y.
+Proof.
+  intros F A B [H1 H2] y. split; intros H3.
+  - apply Function.ImageCharac in H3. 2: assumption.
+    destruct H3 as [x [H3 [H4 H5]]]. exists x. split. 1: assumption.
+    split. 2: assumption. apply H2. assumption.
+  - destruct H3 as [x [H3 [H4 H5]]]. apply Function.ImageCharac. 1: assumption.
+    exists x. split. 1: assumption. split. 2: assumption. apply H2. assumption.
+Qed.
+
 (* Characterization of the domain of G.F.                                       *)
 Proposition DomainOfComposeCharac : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
@@ -227,3 +238,4 @@ Proof.
   intros F A H1 H2. apply HasElem in H2. destruct H2 as [x H2].
   apply HasElem. exists F!x. apply IsInRange with A; assumption.
 Qed.
+

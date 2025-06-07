@@ -101,6 +101,17 @@ Proof.
   apply FunctionOn.IsInRange. assumption.
 Qed.
 
+Proposition ImageCharac : forall (F A B: Class), BijectionOn F A ->
+  forall y, F:[B]: y <-> exists x, B x /\ A x /\ F!x = y.
+Proof.
+  intros F A B [H1 H2] y. split; intros H3.
+  - apply Bijection.ImageCharac in H3. 2: assumption.
+    destruct H3 as [x [H3 [H4 H5]]]. exists x. split. 1: assumption.
+    split. 2: assumption. apply H2. assumption.
+  - destruct H3 as [x [H3 [H4 H5]]]. apply Bijection.ImageCharac. 1: assumption.
+    exists x. split. 1: assumption. split. 2: assumption. apply H2. assumption.
+Qed.
+
 Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),
   BijectionOn F A -> range F b -> A (F^:-1:!b).
 Proof.
@@ -183,3 +194,4 @@ Proof.
   intros F A B a [H1 H2] H3. apply Bijection.EvalInImage. 1: assumption.
   apply H2. assumption.
 Qed.
+
