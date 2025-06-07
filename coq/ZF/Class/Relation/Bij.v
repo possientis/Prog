@@ -148,13 +148,13 @@ Proof.
   apply H2. assumption.
 Qed.
 
-Proposition DomainOfComposeCharac : forall (F G A B C:Class) (a:U),
+Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
   Bij F A B ->
   Bij G B C ->
   domain (G :.: F) a <-> A a.
 Proof.
   intros F G A B C a H1 H2. apply IsFun in H1. apply IsFun in H2.
-  apply Fun.DomainOfComposeCharac with B C; assumption.
+  apply Fun.DomainOfCompose with B C; assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),

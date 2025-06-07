@@ -139,7 +139,7 @@ Proof.
   apply BijectionOn.EvalOfConverseEval with A. assumption.
 Qed.
 
-Proposition DomainiOfComposeCharac : forall (F G A B C:Class) (a:U),
+Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
   Inj F A B ->
   Inj G B C ->
   domain (G :.: F) a <-> A a.

@@ -88,15 +88,15 @@ Proof.
 Qed.
 
 (* Characterization of the domain of G.F.                                       *)
-Proposition DomainOfComposeCharac : forall (F G A B C:Class) (a:U),
+Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
   F :: A :-> B  ->
   G :: B :-> C  ->
   domain (G :.: F) a <-> A a.
 Proof.
   intros F G A B C a [H1 H2] [H3 H4]. split; intros H5.
-  - apply (FunctionOn.DomainOfComposeCharac F G A B a H1 H3) in H5.
+  - apply (FunctionOn.DomainOfCompose F G A B a H1 H3) in H5.
     destruct H5 as [H5 H6]. assumption.
-  - apply (FunctionOn.DomainOfComposeCharac F G A B a); try assumption.
+  - apply (FunctionOn.DomainOfCompose F G A B a); try assumption.
     split. 1: assumption.  apply IsInRange with A.
     + split; assumption.
     + assumption.

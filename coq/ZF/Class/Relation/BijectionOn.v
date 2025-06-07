@@ -150,14 +150,14 @@ Proof.
   intros F A y [H1 H2]. apply Bijection.EvalOfConverseEval. assumption.
 Qed.
 
-Proposition DomainOfComposeCharac : forall (F G A B:Class) (a:U),
+Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
   domain (G :.: F) a <-> A a /\ B (F!a).
 Proof.
   intros F G A B a H1 H2.
   apply IsFunctionOn in H1. apply IsFunctionOn in H2.
-  apply FunctionOn.DomainOfComposeCharac; assumption.
+  apply FunctionOn.DomainOfCompose; assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G A B:Class) (a:U),

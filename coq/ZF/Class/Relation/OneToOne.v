@@ -121,7 +121,7 @@ Proof.
   rewrite H5. apply EvalOfClass.Charac; try assumption. exists y. assumption.
 Qed.
 
-Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
+Proposition DomainOfCompose : forall (F G:Class) (a:U),
   OneToOne F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
   intros F G a [H1 _]. apply Compose.FunctionalDomainCharac. assumption.

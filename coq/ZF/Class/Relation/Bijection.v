@@ -120,10 +120,10 @@ Proof.
   intros F y [_ H1]. apply OneToOne.EvalOfConverseEval. assumption.
 Qed.
 
-Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
+Proposition DomainOfCompose : forall (F G:Class) (a:U),
   Bijection F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
-  intros F G a [_ H1]. apply OneToOne.DomainOfComposeCharac. assumption.
+  intros F G a [_ H1]. apply OneToOne.DomainOfCompose. assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G:Class) (a:U),

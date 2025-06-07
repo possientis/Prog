@@ -95,7 +95,7 @@ Proof.
   intros F A [_ H1]. apply EvalOfClass.ImageCharac. assumption.
 Qed.
 
-Proposition DomainOfComposeCharac : forall (F G:Class) (a:U),
+Proposition DomainOfCompose : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
   intros F G a [_ H1]. apply Compose.FunctionalDomainCharac. assumption.
