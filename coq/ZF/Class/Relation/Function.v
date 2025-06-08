@@ -51,23 +51,31 @@ Proof.
       rewrite <- H5. apply H2. assumption.
 Qed.
 
-(* F need not be a function class.                                              *)
+(* The direct image of the domain is the range. F need not be a function.       *)
 Proposition ImageOfDomain : forall (F:Class),
   F:[domain F]: :~: range F.
 Proof.
   apply Range.ImageOfDomain.
 Qed.
 
+(* A function is a subclass of the product of its domain and image thereof.     *)
 Proposition IsIncl : forall (F:Class),
   Function F -> F :<=: (domain F) :x: F:[domain F]:.
 Proof.
 Admitted.
 
+(* The direct image by a function of a small class is small.                    *)
 Proposition ImageIsSmall : forall (F A:Class),
   Function F -> Small A -> Small F:[A]:.
 Proof.
   intros F A [_ H1]. apply Image.IsSmall. assumption.
 Qed.
+
+(* A function class with a small domain is small.                               *)
+Proposition IsSmall : forall (F:Class),
+  Function F -> Small (domain F) -> Small F.
+Proof.
+Admitted.
 
 (* The composition of two functional classes is a function class.               *)
 Proposition FunctionalCompose : forall (F G:Class),

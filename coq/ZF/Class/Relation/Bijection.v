@@ -54,6 +54,13 @@ Proof.
   intros F A [_ H1]. apply ImageIsSmall. assumption.
 Qed.
 
+(* A bijection class with a small domain is small.                              *)
+Proposition IsSmall : forall (F:Class),
+  Bijection F -> Small (domain F) -> Small F.
+Proof.
+  intros F H1. apply Function.IsSmall, IsFunction. assumption.
+Qed.
+
 Proposition InvImageIsSmall : forall (F B:Class),
   Bijection F -> Small B -> Small F^:-1::[B]:.
 Proof.

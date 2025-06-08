@@ -59,18 +59,18 @@ Proof.
   intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
 Qed.
 
-(* The inverse image of a small class by an injection from any A to B is small. *)
-Proposition InvImageIsSmall : forall (F A B C:Class),
-  Inj F A B -> Small C -> Small F^:-1::[C]:.
-Proof.
-  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
-Qed.
-
 (* An injection defined on a small class is small.                              *)
 Proposition IsSmall : forall (F A B:Class),
   Inj F A B -> Small A -> Small F.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.IsSmall. assumption.
+Qed.
+
+(* The inverse image of a small class by an injection from any A to B is small. *)
+Proposition InvImageIsSmall : forall (F A B C:Class),
+  Inj F A B -> Small C -> Small F^:-1::[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
 Qed.
 
 (* If F is an injection fron A to B with range B, F^-1 is an inj from B to A.   *)

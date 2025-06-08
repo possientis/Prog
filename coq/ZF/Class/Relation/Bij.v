@@ -73,17 +73,17 @@ Proof.
   intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
 Qed.
 
-Proposition InvImageIsSmall : forall (F A B C:Class),
-  Bij F A B -> Small C -> Small F^:-1::[C]:.
-Proof.
-  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
-Qed.
-
 (* A bijection F:A -> B defined on a small class  is small.                     *)
 Proposition IsSmall : forall (F A B:Class),
   Bij F A B -> Small A -> Small F.
 Proof.
   intros F A B H1. apply BijectionOn.IsSmall, H1.
+Qed.
+
+Proposition InvImageIsSmall : forall (F A B C:Class),
+  Bij F A B -> Small C -> Small F^:-1::[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
 Qed.
 
 Proposition Converse : forall (F A B:Class),

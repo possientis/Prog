@@ -71,13 +71,6 @@ Proof.
   intros F A B H1. apply Function.ImageIsSmall, H1.
 Qed.
 
-(* A function is always a function defined on its domain.                       *)
-Proposition FunctionIsFunctionOn : forall (F:Class),
-  Function F -> FunctionOn F (domain F).
-Proof.
-  intros F H1. split. { assumption. } { apply EquivRefl. }
-Qed.
-
 (* A function defined on a small class is small.                                *)
 Proposition IsSmall : forall (F A:Class),
   FunctionOn F A -> Small A -> Small F.
@@ -238,4 +231,12 @@ Proof.
   intros F A H1 H2. apply HasElem in H2. destruct H2 as [x H2].
   apply HasElem. exists F!x. apply IsInRange with A; assumption.
 Qed.
+
+(* A function is always a function defined on its domain.                       *)
+Proposition FunctionIsFunctionOn : forall (F:Class),
+  Function F -> FunctionOn F (domain F).
+Proof.
+  intros F H1. split. { assumption. } { apply EquivRefl. }
+Qed.
+
 

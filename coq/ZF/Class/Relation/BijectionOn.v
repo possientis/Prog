@@ -57,26 +57,19 @@ Proof.
   intros F A B [H1 _]. apply Bijection.ImageIsSmall. assumption.
 Qed.
 
-(* The inverse image of a small class by a bijection defined on any A is small. *)
-Proposition InvImageIsSmall : forall (F A B:Class),
-  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
-Proof.
-  intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
-Qed.
-
-(* A bijection is always a bijection defined on its domain. *)
-Proposition BijectionIsBijectionOn : forall (F:Class),
-  Bijection F -> BijectionOn F (domain F).
-Proof.
-  intros F H1. split. { assumption. } { apply EquivRefl. }
-Qed.
-
 (* A bijection defined on a small class is small.                               *)
 Proposition IsSmall : forall (F A:Class),
   BijectionOn F A -> Small A -> Small F.
 Proof.
   intros F A H1 H2. apply FunctionOn.IsSmall with A. 2: assumption.
   apply IsFunctionOn. assumption.
+Qed.
+
+(* The inverse image of a small class by a bijection defined on any A is small. *)
+Proposition InvImageIsSmall : forall (F A B:Class),
+  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
 Qed.
 
 Proposition Converse : forall (F A B:Class),
@@ -226,4 +219,11 @@ Proposition RangeIsNotEmpty : forall (F A:Class),
   BijectionOn F A -> A :<>: :0: -> range F :<>: :0:.
 Proof.
   intros F A H1. apply FunctionOn.RangeIsNotEmpty, IsFunctionOn. assumption.
+Qed.
+
+(* A bijection is always a bijection defined on its domain. *)
+Proposition BijectionIsBijectionOn : forall (F:Class),
+  Bijection F -> BijectionOn F (domain F).
+Proof.
+  intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
