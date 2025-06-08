@@ -148,6 +148,11 @@ Proof.
   intros F G a [H1 H2] [H3 H4]. apply Compose.Eval; assumption.
 Qed.
 
+Proposition RangeCharac : forall (F:Class) (y:U),
+  Function F -> range F y <-> exists x, domain F x /\ y = F!x.
+Proof.
+Admitted.
+
 (* If the domain of F is not empty, then neither is the range.                  *)
 Proposition RangeIsNotEmpty : forall (F:Class),
   domain F :<>: :0: -> range F :<>: :0:.

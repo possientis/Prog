@@ -175,6 +175,15 @@ Proof.
   apply Fun.ComposeEval with B C; assumption.
 Qed.
 
+(* Characterisation of the range of F.                                          *)
+Proposition RangeCharac : forall (F A B:Class) (y:U),
+  Bij F A B -> B y <-> exists x, A x /\ y = F!x.
+Proof.
+  intros F A B y [H1 H2]. split; intros H3.
+  - apply BijectionOn.RangeCharac. 1: assumption. apply H2. assumption.
+  - apply H2. apply BijectionOn.RangeCharac with A; assumption.
+Qed.
+
 Proposition InvImageOfRange : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
@@ -220,3 +229,4 @@ Proposition RangeIsNotEmpty : forall (F A B:Class),
 Proof.
   intros F A B H1. apply Onto.RangeIsNotEmpty with F, IsOnto. assumption.
 Qed.
+

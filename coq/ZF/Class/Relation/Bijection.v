@@ -136,6 +136,12 @@ Proof.
   intros F A [_ H1]. apply OneToOne.ImageCharac. assumption.
 Qed.
 
+Proposition DomainOfCompose : forall (F G:Class) (a:U),
+  Bijection F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
+Proof.
+  intros F G a [_ H1]. apply OneToOne.DomainOfCompose. assumption.
+Qed.
+
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   Bijection F -> range F b -> domain F (F^:-1:!b).
 Proof.
@@ -156,12 +162,6 @@ Proof.
   intros F y [_ H1]. apply OneToOne.EvalOfConverseEval. assumption.
 Qed.
 
-Proposition DomainOfCompose : forall (F G:Class) (a:U),
-  Bijection F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
-Proof.
-  intros F G a [_ H1]. apply OneToOne.DomainOfCompose. assumption.
-Qed.
-
 Proposition ComposeEval : forall (F G:Class) (a:U),
   Bijection F     ->
   Bijection G     ->
@@ -170,6 +170,12 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [_ H1] [_ H2]. apply OneToOne.ComposeEval; assumption.
+Qed.
+
+Proposition RangeCharac : forall (F:Class) (y:U),
+  Bijection F -> range F y <-> exists x, domain F x /\ y = F!x.
+Proof.
+  intros F y H1. apply Function.RangeCharac, IsFunction. assumption.
 Qed.
 
 Proposition InvImageOfImage : forall (F A:Class),

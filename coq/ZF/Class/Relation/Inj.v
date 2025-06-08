@@ -168,6 +168,13 @@ Proof.
   apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
+(* Characterisation of the range of F.                                          *)
+Proposition RangeCharac : forall (F A B:Class) (y:U),
+  Inj F A B -> range F y <-> exists x, A x /\ y = F!x.
+Proof.
+  intros F A B y H1. apply BijectionOn.RangeCharac, H1.
+Qed.
+
 Proposition InvImageOfRange : forall (F A B:Class),
   Inj F A B -> F^:-1::[range F]: :~: A.
 Proof.
@@ -209,3 +216,4 @@ Proposition RangeIsNotEmpty : forall (F A B:Class),
 Proof.
   intros F A B H1. apply BijectionOn.RangeIsNotEmpty, H1.
 Qed.
+

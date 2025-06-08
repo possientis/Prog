@@ -173,6 +173,12 @@ Proof.
   apply FunctionOn.ComposeEval; assumption.
 Qed.
 
+Proposition RangeCharac : forall (F A:Class) (y:U),
+  BijectionOn F A -> range F y <-> exists x, A x /\ y = F!x.
+Proof.
+  intros F A y H1. apply FunctionOn.RangeCharac, IsFunctionOn. assumption.
+Qed.
+
 Proposition InvImageOfRange : forall (F A:Class),
   BijectionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
@@ -227,3 +233,4 @@ Proposition BijectionIsBijectionOn : forall (F:Class),
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
+

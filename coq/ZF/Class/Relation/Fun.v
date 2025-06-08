@@ -66,6 +66,31 @@ Proof.
   intros F a B H1. apply FunctionOn.IsSmall, H1.
 Qed.
 
+(* The inverse image of the range is the domain.                                *)
+Proposition InvImageOfRange : forall (F A B:Class),
+  F :: A :-> B -> F^:-1::[range F]: :~: A.
+Proof.
+  intros F A B H1. apply FunctionOn.InvImageOfRange, H1.
+Qed.
+
+(* If F is defined on a small class A, then its range is small.                 *)
+Proposition RangeIsSmall : forall (F A B:Class),
+  F :: A :-> B -> Small A -> Small (range F).
+Proof.
+  intros F A B H1. apply FunctionOn.RangeIsSmall, H1.
+Qed.
+
+(* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
+Proposition Compose : forall (F G A B C: Class),
+  F :: A :-> B ->
+  G :: B :-> C ->
+  (G :.: F) :: A :-> C.
+Proof.
+  intros F G A B C [H1 H2] [H3 H4]. split.
+  - apply FunctionOn.Compose with B; assumption.
+  - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
+Qed.
+
 (* Characterization of the value at a of a function defined on A when a in A.   *)
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
   F :: A :-> B -> A a -> F :(a,y): <-> F!a = y.
@@ -92,17 +117,6 @@ Proposition ImageCharac : forall (F A B C: Class), F :: A :-> B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply FunctionOn.ImageCharac, H1.
-Qed.
-
-(* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
-Proposition Compose : forall (F G A B C: Class),
-  F :: A :-> B ->
-  G :: B :-> C ->
-  (G :.: F) :: A :-> C.
-Proof.
-  intros F G A B C [H1 H2] [H3 H4]. split.
-  - apply FunctionOn.Compose with B; assumption.
-  - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
 Qed.
 
 (* Characterization of the domain of G.F.                                       *)
@@ -132,20 +146,6 @@ Proof.
   apply IsInRange with A.
   - split; assumption.
   - assumption.
-Qed.
-
-(* The inverse image of the range is the domain.                                *)
-Proposition InvImageOfRange : forall (F A B:Class),
-  F :: A :-> B -> F^:-1::[range F]: :~: A.
-Proof.
-  intros F A B H1. apply FunctionOn.InvImageOfRange, H1.
-Qed.
-
-(* If F is defined on a small class A, then its range is small.                 *)
-Proposition RangeIsSmall : forall (F A B:Class),
-  F :: A :-> B -> Small A -> Small (range F).
-Proof.
-  intros F A B H1. apply FunctionOn.RangeIsSmall, H1.
 Qed.
 
 (* Characterisation of the range of F.                                          *)

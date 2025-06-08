@@ -123,6 +123,15 @@ Proof.
   2: assumption. apply InvImage.InvImageOfRange.
 Qed.
 
+(* If F is defined on a small class A, then its range is small.                 *)
+Proposition RangeIsSmall : forall (F A:Class),
+  FunctionOn F A -> Small A -> Small (range F).
+Proof.
+  intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
+  - apply ImageOfDomain. assumption.
+  - apply ImageIsSmall with A; assumption.
+Qed.
+
 (* If F defined on A, G defined on B and range F <= B, then G.F defined on A.   *)
 Proposition Compose : forall (F A G B:Class),
   FunctionOn F A ->
@@ -201,15 +210,6 @@ Proof.
   apply Function.ComposeEval; try assumption.
   - apply H2. assumption.
   - apply H4. assumption.
-Qed.
-
-(* If F is defined on a small class A, then its range is small.                 *)
-Proposition RangeIsSmall : forall (F A:Class),
-  FunctionOn F A -> Small A -> Small (range F).
-Proof.
-  intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
-  - apply ImageOfDomain. assumption.
-  - apply ImageIsSmall with A; assumption.
 Qed.
 
 (* Characterisation of the range of F.                                          *)
