@@ -7,8 +7,8 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
 
-(* Definition Test1 := Class.Relation.Function.RangeIsNotEmpty. *)
-(* Definition Test2 := Class.Relation.Bijection.RangeIsNotEmpty. *)
+Definition Test1 := Class.Relation.Function.RangeIsNotEmpty.
+Definition Test2 := Class.Relation.Bijection.RangeIsNotEmpty.
 Definition Test3 := Class.Relation.FunctionOn.RangeIsNotEmpty.
 Definition Test4 := Class.Relation.BijectionOn.RangeIsNotEmpty.
 Definition Test5 := Class.Relation.Fun.RangeIsNotEmpty.

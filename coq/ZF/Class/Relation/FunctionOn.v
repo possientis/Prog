@@ -228,8 +228,8 @@ Qed.
 Proposition RangeIsNotEmpty : forall (F A:Class),
   FunctionOn F A -> A :<>: :0: -> range F :<>: :0:.
 Proof.
-  intros F A H1 H2. apply HasElem in H2. destruct H2 as [x H2].
-  apply HasElem. exists F!x. apply IsInRange with A; assumption.
+  intros F A H1 H2. apply Function.RangeIsNotEmpty.
+  apply NotEquivCompatL with A. 2: assumption. apply EquivSym, H1.
 Qed.
 
 (* A function is always a function defined on its domain.                       *)
@@ -238,5 +238,3 @@ Proposition FunctionIsFunctionOn : forall (F:Class),
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
-
-

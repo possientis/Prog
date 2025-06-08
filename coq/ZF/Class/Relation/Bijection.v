@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
@@ -66,6 +67,13 @@ Proposition InvImageOfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
   apply InvImage.InvImageOfRange.
+Qed.
+
+(* If a bijection has a small domain then its range is small.                   *)
+Proposition RangeIsSmall : forall (F:Class),
+  Bijection F -> Small (domain F) -> Small (range F).
+Proof.
+  intros F H1. apply Function.RangeIsSmall, IsFunction. assumption.
 Qed.
 
 Proposition InvImageIsSmall : forall (F B:Class),
@@ -186,5 +194,12 @@ Proposition EvalInImage : forall (F A:Class) (a:U),
   Bijection F -> domain F a -> F:[A]: (F!a) <-> A a.
 Proof.
   intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
+Qed.
+
+(* If the domain of F is not empty, then neither is the range.                  *)
+Proposition RangeIsNotEmpty : forall (F:Class),
+  domain F :<>: :0: -> range F :<>: :0:.
+Proof.
+  apply Range.IsNotEmpty.
 Qed.
 

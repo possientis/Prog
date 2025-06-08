@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
@@ -85,6 +86,12 @@ Proof.
   apply InvImage.InvImageOfRange.
 Qed.
 
+(* If a function has a small domain then its range is small.                    *)
+Proposition RangeIsSmall : forall (F:Class),
+  Function F -> Small (domain F) -> Small (range F).
+Proof.
+Admitted.
+
 (* The composition of two functional classes is a function class.               *)
 Proposition FunctionalCompose : forall (F G:Class),
   Functional F -> Functional G -> Function (G :.: F).
@@ -139,4 +146,11 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [H1 H2] [H3 H4]. apply Compose.Eval; assumption.
+Qed.
+
+(* If the domain of F is not empty, then neither is the range.                  *)
+Proposition RangeIsNotEmpty : forall (F:Class),
+  domain F :<>: :0: -> range F :<>: :0:.
+Proof.
+  apply Range.IsNotEmpty.
 Qed.

@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
@@ -70,3 +71,10 @@ Proof.
   - destruct H1 as [x H1]. exists x. split. 2: assumption. exists y. assumption.
 Qed.
 
+(* If the domain of F is not empty, then neither is the range.                  *)
+Proposition IsNotEmpty : forall (F:Class),
+  domain F :<>: :0: -> range F :<>: :0:.
+Proof.
+  intros F H1. apply Empty.HasElem in H1. destruct H1 as [x [y H1]].
+  apply Empty.HasElem. exists y. exists x. assumption.
+Qed.
