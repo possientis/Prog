@@ -44,6 +44,25 @@ Proof.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
+(* The direct image of the domain is the range.                                 *)
+Proposition ImageOfDomain : forall (F A:Class),
+  FunctionOn F A -> F:[A]: :~: range F.
+Proof.
+  intros F A [H1 H2]. apply EquivTran with F:[domain F]:.
+  - apply Image.EquivCompatR, EquivSym. assumption.
+  - apply Range.ImageOfDomain.
+Qed.
+
+(* If F is a function defined on A, then it is a subclass of A x F[A].          *)
+Proposition IsIncl : forall (F A:Class),
+  FunctionOn F A -> F :<=: A :x: F:[A]:.
+Proof.
+  intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
+  assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
+  exists y. exists z. split. 1: assumption. subst. split.
+  - apply H4. exists z. assumption.
+  - exists y. split. 2: assumption. apply H4. exists z. assumption.
+Qed.
 
 (* The direct image of a small class by a function (defined on A) is small.     *)
 Proposition ImageIsSmall : forall (F A B:Class),
@@ -57,17 +76,6 @@ Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
-Qed.
-
-(* If F is a function defined on A, then it is a subclass of A x F[A].          *)
-Proposition IsIncl : forall (F A:Class),
-  FunctionOn F A -> F :<=: A :x: F:[A]:.
-Proof.
-  intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
-  assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
-  exists y. exists z. split. 1: assumption. subst. split.
-  - apply H4. exists z. assumption.
-  - exists y. split. 2: assumption. apply H4. exists z. assumption.
 Qed.
 
 (* A function defined on a small class is small.                                *)
@@ -192,15 +200,6 @@ Proof.
   apply Function.ComposeEval; try assumption.
   - apply H2. assumption.
   - apply H4. assumption.
-Qed.
-
-(* The direct image of the domain is the range.                                 *)
-Proposition ImageOfDomain : forall (F A:Class),
-  FunctionOn F A -> F:[A]: :~: range F.
-Proof.
-  intros F A [H1 H2]. apply EquivTran with F:[domain F]:.
-  - apply Image.EquivCompatR, EquivSym. assumption.
-  - apply Range.ImageOfDomain.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)

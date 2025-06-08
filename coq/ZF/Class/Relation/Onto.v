@@ -36,11 +36,13 @@ Proof.
   - apply H2.
 Qed.
 
-(* The direct image of a small class by a surjection F:A -> B is small.         *)
-Proposition ImageIsSmall : forall (F A B C:Class),
-  Onto F A B -> Small C -> Small F:[C]:.
+(* The direct image of the domain is the range.                                 *)
+Proposition ImageOfDomain : forall (F A B:Class),
+  Onto F A B -> F:[A]: :~: B.
 Proof.
-  intros F A B C H1. apply FunctionOn.ImageIsSmall with A, H1.
+  intros F A B H1. apply EquivTran with (range F).
+  - apply FunctionOn.ImageOfDomain, H1.
+  - apply H1.
 Qed.
 
 (* A surjection F:A -> B is a subclass of AxB.                                  *)
@@ -48,6 +50,13 @@ Proposition IsIncl : forall (F A B:Class),
   Onto F A B -> F :<=: A :x: B.
 Proof.
   intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
+Qed.
+
+(* The direct image of a small class by a surjection F:A -> B is small.         *)
+Proposition ImageIsSmall : forall (F A B C:Class),
+  Onto F A B -> Small C -> Small F:[C]:.
+Proof.
+  intros F A B C H1. apply FunctionOn.ImageIsSmall with A, H1.
 Qed.
 
 (* A surjection F:A -> B defined on a small class is small.                     *)
@@ -123,15 +132,6 @@ Proof.
   apply IsInRange with A.
   - split; assumption.
   - assumption.
-Qed.
-
-(* The direct image of the domain is the range.                                 *)
-Proposition ImageOfDomain : forall (F A B:Class),
-  Onto F A B -> F:[A]: :~: B.
-Proof.
-  intros F A B H1. apply EquivTran with (range F).
-  - apply FunctionOn.ImageOfDomain, H1.
-  - apply H1.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)

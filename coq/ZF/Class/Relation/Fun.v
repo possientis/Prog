@@ -34,6 +34,24 @@ Proof.
   - apply H2.
 Qed.
 
+(* The direct image of the domain is the range.                                 *)
+Proposition ImageOfDomain : forall (F A B:Class),
+  F :: A :-> B -> F:[A]: :~: range F.
+Proof.
+  intros F A B H1. apply FunctionOn.ImageOfDomain, H1.
+Qed.
+
+(* A function F:A -> B is a subclass of AxB.                                    *)
+Proposition IsIncl : forall (F A B:Class),
+  F :: A :-> B -> F :<=: A :x: B.
+Proof.
+  intros F A B H1.
+  apply InclTran with (A :x: F:[A]:).
+  - apply FunctionOn.IsIncl, H1.
+  - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
+    2: apply H1. apply EquivSym, ImageOfDomain with B. assumption.
+Qed.
+
 (* The direct image of a small class by a function is small.                    *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   F :: A :-> B -> Small C -> Small F:[C]:.
@@ -114,24 +132,6 @@ Proof.
   apply IsInRange with A.
   - split; assumption.
   - assumption.
-Qed.
-
-(* The direct image of the domain is the range.                                 *)
-Proposition ImageOfDomain : forall (F A B:Class),
-  F :: A :-> B -> F:[A]: :~: range F.
-Proof.
-  intros F A B H1. apply FunctionOn.ImageOfDomain, H1.
-Qed.
-
-(* A function F:A -> B is a subclass of AxB.                                    *)
-Proposition IsIncl : forall (F A B:Class),
-  F :: A :-> B -> F :<=: A :x: B.
-Proof.
-  intros F A B H1.
-  apply InclTran with (A :x: F:[A]:).
-  - apply FunctionOn.IsIncl, H1.
-  - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
-    2: apply H1. apply EquivSym, ImageOfDomain with B. assumption.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)

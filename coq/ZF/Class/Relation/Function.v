@@ -1,4 +1,6 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Incl.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
@@ -48,6 +50,18 @@ Proof.
       apply EvalOfClass.Charac. { assumption. } { assumption. }
       rewrite <- H5. apply H2. assumption.
 Qed.
+
+(* F need not be a function class.                                              *)
+Proposition ImageOfDomain : forall (F:Class),
+  F:[domain F]: :~: range F.
+Proof.
+  apply Range.ImageOfDomain.
+Qed.
+
+Proposition IsIncl : forall (F:Class),
+  Function F -> F :<=: (domain F) :x: F:[domain F]:.
+Proof.
+Admitted.
 
 Proposition ImageIsSmall : forall (F A:Class),
   Function F -> Small A -> Small F:[A]:.

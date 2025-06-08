@@ -39,11 +39,10 @@ Proof.
   - apply H2.
 Qed.
 
-(* The image of a small class by an injection from any A to any B is small.     *)
-Proposition ImageIsSmall : forall (F A B C:Class),
-  Inj F A B -> Small C -> Small F:[C]:.
+Proposition ImageOfDomain : forall (F A B:Class),
+  Inj F A B -> F:[A]: :~: range F.
 Proof.
-  intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
+  intros F A B [H1 _]. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
 (* An injection F:A -> B is a subclass of AxB.                                  *)
@@ -51,6 +50,13 @@ Proposition IsIncl : forall (F A B:Class),
   Inj F A B -> F :<=: A :x: B.
 Proof.
   intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
+Qed.
+
+(* The image of a small class by an injection from any A to any B is small.     *)
+Proposition ImageIsSmall : forall (F A B C:Class),
+  Inj F A B -> Small C -> Small F:[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
 Qed.
 
 (* The inverse image of a small class by an injection from any A to B is small. *)
@@ -160,12 +166,6 @@ Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply BijectionOn.ComposeEval with A B; try assumption.
   apply IsInRange with A. 2: assumption. split; assumption.
-Qed.
-
-Proposition ImageOfDomain : forall (F A B:Class),
-  Inj F A B -> F:[A]: :~: range F.
-Proof.
-  intros F A B [H1 _]. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
 Proposition InvImageOfRange : forall (F A B:Class),

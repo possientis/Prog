@@ -53,6 +53,20 @@ Proof.
   - apply H2.
 Qed.
 
+Proposition ImageOfDomain : forall (F A B:Class),
+  Bij F A B -> F:[A]: :~: B.
+Proof.
+  intros F A B [H1 H2]. apply EquivTran with (range F).
+  2: assumption. apply BijectionOn.ImageOfDomain. assumption.
+Qed.
+
+(* A bijection F:A -> B is a subclass of AxB.                                   *)
+Proposition IsIncl : forall (F A B:Class),
+  Bij F A B -> F :<=: A :x: B.
+Proof.
+  intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
+Qed.
+
 Proposition ImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F:[C]:.
 Proof.
@@ -63,13 +77,6 @@ Proposition InvImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
-Qed.
-
-(* A bijection F:A -> B is a subclass of AxB.                                   *)
-Proposition IsIncl : forall (F A B:Class),
-  Bij F A B -> F :<=: A :x: B.
-Proof.
-  intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
 (* A bijection F:A -> B defined on a small class  is small.                     *)
@@ -166,13 +173,6 @@ Proposition ComposeEval : forall (F G A B C:Class) (a:U),
 Proof.
   intros F G A B C a H1 H2. apply IsFun in H1. apply IsFun in H2.
   apply Fun.ComposeEval with B C; assumption.
-Qed.
-
-Proposition ImageOfDomain : forall (F A B:Class),
-  Bij F A B -> F:[A]: :~: B.
-Proof.
-  intros F A B [H1 H2]. apply EquivTran with (range F).
-  2: assumption. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
 Proposition InvImageOfRange : forall (F A B:Class),

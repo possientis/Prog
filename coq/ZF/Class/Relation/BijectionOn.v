@@ -37,6 +37,19 @@ Proof.
   apply IsFunctionOn; assumption.
 Qed.
 
+Proposition ImageOfDomain : forall (F A:Class),
+  BijectionOn F A -> F:[A]: :~: range F.
+Proof.
+  intros F A H1.
+  apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
+Qed.
+
+Proposition IsIncl : forall (F A:Class),
+  BijectionOn F A -> F :<=: A :x: F:[A]:.
+Proof.
+  intros F A H1. apply FunctionOn.IsIncl, IsFunctionOn. assumption.
+Qed.
+
 (* The image of a small class by a bijection class defined on any A is small.   *)
 Proposition ImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F:[B]:.
@@ -56,12 +69,6 @@ Proposition BijectionIsBijectionOn : forall (F:Class),
   Bijection F -> BijectionOn F (domain F).
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
-Qed.
-
-Proposition IsIncl : forall (F A:Class),
-  BijectionOn F A -> F :<=: A :x: F:[A]:.
-Proof.
-  intros F A H1. apply FunctionOn.IsIncl, IsFunctionOn. assumption.
 Qed.
 
 (* A bijection defined on a small class is small.                               *)
@@ -171,13 +178,6 @@ Proof.
   intros F G A B a H1 H2.
   apply IsFunctionOn in H1. apply IsFunctionOn in H2.
   apply FunctionOn.ComposeEval; assumption.
-Qed.
-
-Proposition ImageOfDomain : forall (F A:Class),
-  BijectionOn F A -> F:[A]: :~: range F.
-Proof.
-  intros F A H1.
-  apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
 Qed.
 
 Proposition InvImageOfRange : forall (F A:Class),

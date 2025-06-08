@@ -1,5 +1,6 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -32,6 +33,19 @@ Proposition EquivCharac : forall (F G:Class),
   domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G H1 H2. apply Function.EquivCharac; apply IsFunction; assumption.
+Qed.
+
+(* F need not be a bijection class.                                             *)
+Proposition ImageOfDomain : forall (F:Class),
+  F:[domain F]: :~: range F.
+Proof.
+  apply Range.ImageOfDomain.
+Qed.
+
+Proposition IsIncl : forall (F:Class),
+  Bijection F -> F :<=: (domain F) :x: F:[domain F]:.
+Proof.
+  intros F H1. apply Function.IsIncl, IsFunction. assumption.
 Qed.
 
 Proposition ImageIsSmall : forall (F A:Class),
