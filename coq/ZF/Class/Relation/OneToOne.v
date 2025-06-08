@@ -52,7 +52,7 @@ Proof.
   - subst. apply CharacL with F y2; assumption.
 Qed.
 
-Proposition ConverseIsOneToOne : forall (F:Class),
+Proposition Converse : forall (F:Class),
   OneToOne F -> OneToOne F^:-1:.
 Proof.
   intros F [H1 H2]. split. 1: assumption. apply Functional.InclCompat with F.
@@ -87,7 +87,7 @@ Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   OneToOne F -> range F b -> domain F (F^:-1:!b).
 Proof.
   intros F b H1 H2. apply ConverseRange, IsInRange.
-  - apply ConverseIsOneToOne. assumption.
+  - apply Converse. assumption.
   - apply ConverseDomain. assumption.
 Qed.
 

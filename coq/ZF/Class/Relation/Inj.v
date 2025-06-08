@@ -68,11 +68,11 @@ Proof.
 Qed.
 
 (* If F is an injection fron A to B with range B, F^-1 is an inj from B to A.   *)
-Proposition ConverseIsInj : forall (F A B:Class),
+Proposition Converse : forall (F A B:Class),
   Inj F A B -> range F :~: B -> Inj F^:-1: B A.
 Proof.
   intros F A B [H1 _] H2. split.
-  - apply ConverseIsBijectionOn with A; assumption.
+  - apply BijectionOn.Converse with A; assumption.
   - apply Incl.EquivCompatL with (domain F).
     + apply EquivSym, ConverseRange.
     + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.

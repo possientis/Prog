@@ -82,7 +82,7 @@ Proof.
       destruct H4 as [y H4]. apply HasElem.
       exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
       apply Bij.Satisfies with B A.
-      - apply ConverseIsBij, H1.
+      - apply Bij.Converse, H1.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
     assert (F:[toClass a]: :~: toClass b) as H9. {
@@ -96,7 +96,7 @@ Proof.
   (* The proof of the equivalence follows. *)
   intros F R S A B H1. split.
   - apply L with F. assumption.
-  - apply L with F^:-1:, ConverseIsIsom. assumption.
+  - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
 Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->

@@ -52,12 +52,12 @@ Proof.
   intros F [H1 [_ H2]]. split. 2: assumption. apply Converse.IsRelation.
 Qed.
 
-Proposition ConverseIsBijection : forall (F:Class),
+Proposition Converse : forall (F:Class),
   Bijection F -> Bijection F^:-1:.
 Proof.
   intros F [H1 H2]. split.
   - apply Converse.IsRelation.
-  - apply ConverseIsOneToOne. assumption.
+  - apply OneToOne.Converse. assumption.
 Qed.
 
 (* The composition of two one-to-one classes is a bijection class.              *)
@@ -104,7 +104,7 @@ Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   Bijection F -> range F b -> domain F (F^:-1:!b).
 Proof.
   intros F y H1 H2. apply ConverseRange, IsInRange.
-  - apply ConverseIsBijection. assumption.
+  - apply Converse. assumption.
   - apply ConverseDomain. assumption.
 Qed.
 

@@ -70,7 +70,7 @@ Proof.
   (* The proof of the equivalence follows. *)
   intros F R S A B H1. split.
   - apply L with F. assumption.
-  - apply L with F^:-1:, ConverseIsIsom. assumption.
+  - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
 (* R can be founded for A, but not well-founded for A.                          *)

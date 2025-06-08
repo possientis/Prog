@@ -79,12 +79,12 @@ Proof.
   - apply H2.
 Qed.
 
-Proposition ConverseIsBij : forall (F A B:Class),
+Proposition Converse : forall (F A B:Class),
   Bij F A B -> Bij F^:-1: B A.
 Proof.
   intros F A B [[H1 H2] H3]. split.
   - split.
-    + apply Bijection.ConverseIsBijection. assumption.
+    + apply Bijection.Converse. assumption.
     + apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
   - apply EquivTran with (domain F). 2: assumption. apply ConverseRange.
 Qed.
@@ -119,7 +119,7 @@ Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> A (F^:-1:!y).
 Proof.
   intros F A B y H1 H2. apply IsInRange with B. 2: assumption.
-  apply ConverseIsBij. assumption.
+  apply Converse. assumption.
 Qed.
 
 Proposition Compose : forall (F G A B C:Class),
@@ -178,7 +178,7 @@ Qed.
 Proposition InvImageOfRange : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
-  intros F A B H1. apply ImageOfDomain, ConverseIsBij. assumption.
+  intros F A B H1. apply ImageOfDomain, Converse. assumption.
 Qed.
 
 Proposition RangeIsSmall : forall (F A B:Class),

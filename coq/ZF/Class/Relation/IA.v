@@ -181,5 +181,5 @@ Proof.
   intros F A B H1. assert (H2 := H1). destruct H2 as [[[H2 _] _] _].
   apply EquivTran with ((F^:-1:)^:-1: :.: F^:-1:).
   - apply Compose.EquivCompatL, EquivSym, Converse.IsIdempotent. assumption.
-  - apply IAIsConverseFF with A. apply ConverseIsBij. assumption.
+  - apply IAIsConverseFF with A. apply Bij.Converse. assumption.
 Qed.

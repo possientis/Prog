@@ -14,11 +14,11 @@ Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y 
   R :(x,y): <-> S :(F!x,F!y):.
 
 (* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorpshism. *)
-Proposition ConverseIsIsom : forall (F R S A B:Class),
+Proposition Converse : forall (F R S A B:Class),
   Isom F R S A B -> Isom F^:-1: S R B A.
 Proof.
   intros F R S A B [H1 H2]. split.
-  - apply ConverseIsBij. assumption.
+  - apply Bij.Converse. assumption.
   - intros x y H3 H4. split; intros H5.
     + apply H2.
       * apply Bij.ConverseEvalIsInDomain with B; assumption.
