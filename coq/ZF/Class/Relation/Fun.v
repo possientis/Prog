@@ -22,6 +22,18 @@ Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 Notation "F :: A :-> B" := (Fun F A B)
   (at level 0, no associativity) : ZF_Class_Relation_Fun_scope.
 
+(* Two functions are equal iff they have same domain and coincide pointwise.    *)
+Proposition EquivCharac : forall (F A B G C D:Class),
+  Fun F A B ->
+  Fun G C D ->
+  F :~: G  <->
+  A :~: C /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A B G C D H1 H2. apply FunctionOn.EquivCharac.
+  - apply H1.
+  - apply H2.
+Qed.
+
 (* The direct image of a small class by a function is small.                    *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   F :: A :-> B -> Small C -> Small F:[C]:.
@@ -34,18 +46,6 @@ Proposition IsSmall : forall (F A B:Class),
   F :: A :-> B -> Small A -> Small F.
 Proof.
   intros F a B H1. apply FunctionOn.IsSmall, H1.
-Qed.
-
-(* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition EquivCharac : forall (F A B G C D:Class),
-  Fun F A B ->
-  Fun G C D ->
-  F :~: G  <->
-  A :~: C /\ forall x, A x -> F!x = G!x.
-Proof.
-  intros F A B G C D H1 H2. apply FunctionOn.EquivCharac.
-  - apply H1.
-  - apply H2.
 Qed.
 
 (* Characterization of the value at a of a function defined on A when a in A.   *)
@@ -124,12 +124,12 @@ Proof.
 Qed.
 
 (* A function F:A -> B is a subclass of AxB.                                    *)
-Proposition InclInProduct : forall (F A B:Class),
+Proposition IsIncl : forall (F A B:Class),
   F :: A :-> B -> F :<=: A :x: B.
 Proof.
   intros F A B H1.
   apply InclTran with (A :x: F:[A]:).
-  - apply FunctionOn.InclInProduct, H1.
+  - apply FunctionOn.IsIncl, H1.
   - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
     2: apply H1. apply EquivSym, ImageOfDomain with B. assumption.
 Qed.

@@ -21,6 +21,30 @@ Require Import ZF.Set.OrdPair.
 (* F is a function defined on A.                                                *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
+(* Two functions are equal iff they have same domain and coincide pointwise.    *)
+Proposition EquivCharac : forall (F A G B:Class),
+  FunctionOn F A ->
+  FunctionOn G B ->
+  F :~: G       <->
+  A :~: B /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A G B [H1 H2] [H3 H4].
+  assert (F :~: G <->
+    domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
+    { apply Function.EquivCharac; assumption. }
+  split; intros H6.
+  - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
+    + apply EquivTran with (domain F). 1: { apply EquivSym. assumption. }
+      apply EquivTran with (domain G); assumption.
+    + intros x H8. apply H7, H2. assumption.
+  - destruct H6 as [H6 H7]. apply H5. split.
+    + apply EquivTran with A. 1: assumption.
+      apply EquivTran with B. 1: assumption.
+      apply EquivSym. assumption.
+    + intros x H8. apply H7, H2. assumption.
+Qed.
+
+
 (* The direct image of a small class by a function (defined on A) is small.     *)
 Proposition ImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
@@ -36,7 +60,7 @@ Proof.
 Qed.
 
 (* If F is a function defined on A, then it is a subclass of A x F[A].          *)
-Proposition InclInProduct : forall (F A:Class),
+Proposition IsIncl : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
   intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
@@ -68,7 +92,7 @@ Proof.
   assert (Small F) as A'. 2: apply A'.
 
   (* Being a function defined on A, we have F <= A x F[A]. *)
-  apply InclInProduct in H1. assert (F :<=: A :x: F:[A]:) as A'.
+  apply IsIncl in H1. assert (F :<=: A :x: F:[A]:) as A'.
     { apply H1. } clear A'.
 
   (* Thus, in order to prove that F is small ... *)
@@ -88,29 +112,6 @@ Proof.
 
   (* Which follows from the fact that F is functional and A is small. *)
     apply Image.IsSmall. { apply H2. } { apply H3. }
-Qed.
-
-(* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition EquivCharac : forall (F A G B:Class),
-  FunctionOn F A ->
-  FunctionOn G B ->
-  F :~: G       <->
-  A :~: B /\ forall x, A x -> F!x = G!x.
-Proof.
-  intros F A G B [H1 H2] [H3 H4].
-  assert (F :~: G <->
-    domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
-    { apply Function.EquivCharac; assumption. }
-  split; intros H6.
-  - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
-    + apply EquivTran with (domain F). 1: { apply EquivSym. assumption. }
-      apply EquivTran with (domain G); assumption.
-    + intros x H8. apply H7, H2. assumption.
-  - destruct H6 as [H6 H7]. apply H5. split.
-    + apply EquivTran with A. 1: assumption.
-      apply EquivTran with B. 1: assumption.
-      apply EquivSym. assumption.
-    + intros x H8. apply H7, H2. assumption.
 Qed.
 
 (* If F defined on A, G defined on B and range F <= B, then G.F defined on A.   *)

@@ -19,6 +19,24 @@ Require Import ZF.Set.OrdPair.
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
 
+(* A bijection defined on A is a function defined on A.                         *)
+Proposition IsFunctionOn : forall (F A:Class),
+  BijectionOn F A -> FunctionOn F A.
+Proof.
+  intros F A [H1 H2]. apply Bijection.IsFunction in H1. split; assumption.
+Qed.
+
+(* Two bijections are equal iff they have same domain and coincide pointwise.   *)
+Proposition EquivCharac : forall (F A G B:Class),
+  BijectionOn F A ->
+  BijectionOn G B ->
+  F :~: G        <->
+  A :~: B /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A G B H1 H2. apply FunctionOn.EquivCharac;
+  apply IsFunctionOn; assumption.
+Qed.
+
 (* The image of a small class by a bijection class defined on any A is small.   *)
 Proposition ImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F:[B]:.
@@ -40,17 +58,10 @@ Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
 
-(* A bijection defined on A is a function defined on A.                         *)
-Proposition IsFunctionOn : forall (F A:Class),
-  BijectionOn F A -> FunctionOn F A.
-Proof.
-  intros F A [H1 H2]. apply Bijection.IsFunction in H1. split; assumption.
-Qed.
-
-Proposition InclInProduct : forall (F A:Class),
+Proposition IsIncl : forall (F A:Class),
   BijectionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
-  intros F A H1. apply FunctionOn.InclInProduct, IsFunctionOn. assumption.
+  intros F A H1. apply FunctionOn.IsIncl, IsFunctionOn. assumption.
 Qed.
 
 (* A bijection defined on a small class is small.                               *)
@@ -59,17 +70,6 @@ Proposition IsSmall : forall (F A:Class),
 Proof.
   intros F A H1 H2. apply FunctionOn.IsSmall with A. 2: assumption.
   apply IsFunctionOn. assumption.
-Qed.
-
-(* Two bijections are equal iff they have same domain and coincide pointwise.   *)
-Proposition EquivCharac : forall (F A G B:Class),
-  BijectionOn F A ->
-  BijectionOn G B ->
-  F :~: G        <->
-  A :~: B /\ forall x, A x -> F!x = G!x.
-Proof.
-  intros F A G B H1 H2. apply FunctionOn.EquivCharac;
-  apply IsFunctionOn; assumption.
 Qed.
 
 Proposition Converse : forall (F A B:Class),

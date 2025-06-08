@@ -13,12 +13,6 @@ Require Import ZF.Set.OrdPair.
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
 
-Proposition ImageIsSmall : forall (F A:Class),
-  Function F -> Small A -> Small F:[A]:.
-Proof.
-  intros F A [_ H1]. apply Image.IsSmall. assumption.
-Qed.
-
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition EquivCharac : forall (F G:Class),
   Function F ->
@@ -53,6 +47,12 @@ Proof.
       assert (domain F x) as H6. { apply H1. assumption. }
       apply EvalOfClass.Charac. { assumption. } { assumption. }
       rewrite <- H5. apply H2. assumption.
+Qed.
+
+Proposition ImageIsSmall : forall (F A:Class),
+  Function F -> Small A -> Small F:[A]:.
+Proof.
+  intros F A [_ H1]. apply Image.IsSmall. assumption.
 Qed.
 
 (* The composition of two functional classes is a function class.               *)

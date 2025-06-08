@@ -27,6 +27,18 @@ Proof.
   apply BijectionOn.IsFunctionOn. assumption.
 Qed.
 
+(* Two injections are equal iff they have same domain and coincide pointwise.   *)
+Proposition EquivCharac : forall (F A B G C D:Class),
+  Inj F A B ->
+  Inj G C D ->
+  F :~: G  <->
+  A :~: C /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A B G C D H1 H2. apply BijectionOn.EquivCharac.
+  - apply H1.
+  - apply H2.
+Qed.
+
 (* The image of a small class by an injection from any A to any B is small.     *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F:[C]:.
@@ -35,10 +47,10 @@ Proof.
 Qed.
 
 (* An injection F:A -> B is a subclass of AxB.                                  *)
-Proposition InclInProduct : forall (F A B:Class),
+Proposition IsIncl : forall (F A B:Class),
   Inj F A B -> F :<=: A :x: B.
 Proof.
-  intros F A B H1. apply Fun.InclInProduct, IsFun. assumption.
+  intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
 (* The inverse image of a small class by an injection from any A to B is small. *)
@@ -53,18 +65,6 @@ Proposition IsSmall : forall (F A B:Class),
   Inj F A B -> Small A -> Small F.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.IsSmall. assumption.
-Qed.
-
-(* Two injections are equal iff they have same domain and coincide pointwise.   *)
-Proposition EquivCharac : forall (F A B G C D:Class),
-  Inj F A B ->
-  Inj G C D ->
-  F :~: G  <->
-  A :~: C /\ forall x, A x -> F!x = G!x.
-Proof.
-  intros F A B G C D H1 H2. apply BijectionOn.EquivCharac.
-  - apply H1.
-  - apply H2.
 Qed.
 
 (* If F is an injection fron A to B with range B, F^-1 is an inj from B to A.   *)

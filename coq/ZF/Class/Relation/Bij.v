@@ -41,6 +41,18 @@ Proof.
   intros F A B H1. split. 2: apply H1. apply BijectionOn.IsFunctionOn, H1.
 Qed.
 
+(* Two bijections are equal iff they have same domain and coincide pointwise.   *)
+Proposition EquivCharac : forall (F A B G C D:Class),
+  Bij F A B ->
+  Bij G C D ->
+  F :~: G  <->
+  A :~: C /\ forall x, A x -> F!x = G!x.
+Proof.
+  intros F A B G C D H1 H2. apply BijectionOn.EquivCharac.
+  - apply H1.
+  - apply H2.
+Qed.
+
 Proposition ImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F:[C]:.
 Proof.
@@ -54,10 +66,10 @@ Proof.
 Qed.
 
 (* A bijection F:A -> B is a subclass of AxB.                                   *)
-Proposition InclInProduct : forall (F A B:Class),
+Proposition IsIncl : forall (F A B:Class),
   Bij F A B -> F :<=: A :x: B.
 Proof.
-  intros F A B H1. apply Fun.InclInProduct, IsFun. assumption.
+  intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
 (* A bijection F:A -> B defined on a small class  is small.                     *)
@@ -65,18 +77,6 @@ Proposition IsSmall : forall (F A B:Class),
   Bij F A B -> Small A -> Small F.
 Proof.
   intros F A B H1. apply BijectionOn.IsSmall, H1.
-Qed.
-
-(* Two bijections are equal iff they have same domain and coincide pointwise.   *)
-Proposition EquivCharac : forall (F A B G C D:Class),
-  Bij F A B ->
-  Bij G C D ->
-  F :~: G  <->
-  A :~: C /\ forall x, A x -> F!x = G!x.
-Proof.
-  intros F A B G C D H1 H2. apply BijectionOn.EquivCharac.
-  - apply H1.
-  - apply H2.
 Qed.
 
 Proposition Converse : forall (F A B:Class),

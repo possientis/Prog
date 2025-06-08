@@ -14,16 +14,10 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
-
 (* A class is a bijection if it is a relation and it is one-to-one.             *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
 
-Proposition ImageIsSmall : forall (F A:Class),
-  Bijection F -> Small A -> Small F:[A]:.
-Proof.
-  intros F A [_ H1]. apply ImageIsSmall. assumption.
-Qed.
-
+(* A bijection class is a function class.                                       *)
 Proposition IsFunction : forall (F:Class),
   Bijection F -> Function F.
 Proof.
@@ -38,6 +32,12 @@ Proposition EquivCharac : forall (F G:Class),
   domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G H1 H2. apply Function.EquivCharac; apply IsFunction; assumption.
+Qed.
+
+Proposition ImageIsSmall : forall (F A:Class),
+  Bijection F -> Small A -> Small F:[A]:.
+Proof.
+  intros F A [_ H1]. apply ImageIsSmall. assumption.
 Qed.
 
 Proposition InvImageIsSmall : forall (F B:Class),
