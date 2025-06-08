@@ -48,6 +48,7 @@ Proof.
   intros F H1. apply Function.IsIncl, IsFunction. assumption.
 Qed.
 
+(* The inverse image of the range is the domain. F need not be a bijection.     *)
 Proposition ImageIsSmall : forall (F A:Class),
   Bijection F -> Small A -> Small F:[A]:.
 Proof.
@@ -59,6 +60,12 @@ Proposition IsSmall : forall (F:Class),
   Bijection F -> Small (domain F) -> Small F.
 Proof.
   intros F H1. apply Function.IsSmall, IsFunction. assumption.
+Qed.
+
+Proposition InvImageOfRange : forall (F:Class),
+  F^:-1::[range F]: :~: domain F.
+Proof.
+  apply InvImage.InvImageOfRange.
 Qed.
 
 Proposition InvImageIsSmall : forall (F B:Class),

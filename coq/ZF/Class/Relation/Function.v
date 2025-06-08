@@ -5,6 +5,7 @@ Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Small.
@@ -76,6 +77,13 @@ Proposition IsSmall : forall (F:Class),
   Function F -> Small (domain F) -> Small F.
 Proof.
 Admitted.
+
+(* The inverse image of the range is the domain. F need not be a function.      *)
+Proposition InvImageOfRange : forall (F:Class),
+  F^:-1::[range F]: :~: domain F.
+Proof.
+  apply InvImage.InvImageOfRange.
+Qed.
 
 (* The composition of two functional classes is a function class.               *)
 Proposition FunctionalCompose : forall (F G:Class),

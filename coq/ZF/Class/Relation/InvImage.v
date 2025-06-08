@@ -74,6 +74,7 @@ Proof.
   - assumption.
 Qed.
 
+(* The inverse image of the range is the domain.                                *)
 Proposition InvImageOfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
