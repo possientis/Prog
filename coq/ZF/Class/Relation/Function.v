@@ -64,7 +64,13 @@ Qed.
 Proposition IsIncl : forall (F:Class),
   Function F -> F :<=: (domain F) :x: F:[domain F]:.
 Proof.
-Admitted.
+  intros F [H1 H2] x H3. unfold Relation in H1. specialize (H1 x H3).
+  destruct H1 as [y [z H1]]. exists y. exists z. split. 1: assumption. split.
+  - exists z. subst. assumption.
+  - exists y. split.
+    + exists z. subst. assumption.
+    + subst. assumption.
+Qed.
 
 (* The direct image by a function of a small class is small.                    *)
 Proposition ImageIsSmall : forall (F A:Class),
@@ -159,3 +165,4 @@ Proposition RangeIsNotEmpty : forall (F:Class),
 Proof.
   apply Range.IsNotEmpty.
 Qed.
+

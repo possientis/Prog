@@ -57,11 +57,11 @@ Qed.
 Proposition IsIncl : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
-  intros F A H1 x H2. destruct H1 as [[H1 H3] H4]. unfold Relation in H1.
-  assert (H5 := H1 x H2). destruct H5 as [y [z H5]].
-  exists y. exists z. split. 1: assumption. subst. split.
-  - apply H4. exists z. assumption.
-  - exists y. split. 2: assumption. apply H4. exists z. assumption.
+  intros F A H1. apply Incl.EquivCompatR with (domain F :x: F:[domain F]:).
+  - apply Prod.EquivCompat.
+    + apply H1.
+    + apply Image.EquivCompatR, H1.
+  - apply Function.IsIncl, H1.
 Qed.
 
 (* The direct image of a small class by a function (defined on A) is small.     *)
@@ -238,3 +238,4 @@ Proposition FunctionIsFunctionOn : forall (F:Class),
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
+
