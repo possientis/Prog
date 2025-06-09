@@ -65,19 +65,19 @@ Proof.
   apply IsFunctionOn. assumption.
 Qed.
 
-(* The inverse image of a small class by a bijection defined on any A is small. *)
-Proposition InvImageIsSmall : forall (F A B:Class),
-  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
+Proposition InvImageOfRange : forall (F A:Class),
+  BijectionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
-  intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
+  intros F A H1.
+  apply FunctionOn.InvImageOfRange, IsFunctionOn. assumption.
 Qed.
 
-Proposition Converse : forall (F A B:Class),
-  BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
+Proposition RangeIsSmall : forall (F A:Class),
+  BijectionOn F A -> Small A -> Small (range F).
 Proof.
-  intros F A B [H1 H2] H3. split.
-  - apply Bijection.Converse. assumption.
-  - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
+  intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
+  - apply ImageOfDomain. assumption.
+  - apply ImageIsSmall with A; assumption.
 Qed.
 
 Proposition Compose : forall (F A G B:Class),
@@ -179,21 +179,6 @@ Proof.
   intros F A y H1. apply FunctionOn.RangeCharac, IsFunctionOn. assumption.
 Qed.
 
-Proposition InvImageOfRange : forall (F A:Class),
-  BijectionOn F A -> F^:-1::[range F]: :~: A.
-Proof.
-  intros F A H1.
-  apply FunctionOn.InvImageOfRange, IsFunctionOn. assumption.
-Qed.
-
-Proposition RangeIsSmall : forall (F A:Class),
-  BijectionOn F A -> Small A -> Small (range F).
-Proof.
-  intros F A H1 H2. apply Small.EquivCompat with F:[A]:.
-  - apply ImageOfDomain. assumption.
-  - apply ImageIsSmall with A; assumption.
-Qed.
-
 Proposition InvImageOfImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
 Proof.
@@ -233,4 +218,20 @@ Proposition BijectionIsBijectionOn : forall (F:Class),
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
+
+(* The inverse image of a small class by a bijection defined on any A is small. *)
+Proposition InvImageIsSmall : forall (F A B:Class),
+  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
+Qed.
+
+Proposition Converse : forall (F A B:Class),
+  BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
+Proof.
+  intros F A B [H1 H2] H3. split.
+  - apply Bijection.Converse. assumption.
+  - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
+Qed.
+
 

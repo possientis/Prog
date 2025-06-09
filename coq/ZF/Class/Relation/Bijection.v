@@ -76,26 +76,6 @@ Proof.
   intros F H1. apply Function.RangeIsSmall, IsFunction. assumption.
 Qed.
 
-Proposition InvImageIsSmall : forall (F B:Class),
-  Bijection F -> Small B -> Small F^:-1::[B]:.
-Proof.
-  intros F B [_ H1]. apply InvImageIsSmall. assumption.
-Qed.
-
-Proposition ConverseIsFunction : forall (F:Class),
-  Bijection F -> Function F^:-1:.
-Proof.
-  intros F [H1 [_ H2]]. split. 2: assumption. apply Converse.IsRelation.
-Qed.
-
-Proposition Converse : forall (F:Class),
-  Bijection F -> Bijection F^:-1:.
-Proof.
-  intros F [H1 H2]. split.
-  - apply Converse.IsRelation.
-  - apply OneToOne.Converse. assumption.
-Qed.
-
 (* The composition of two one-to-one classes is a bijection class.              *)
 Proposition OneToOneCompose : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).
@@ -142,26 +122,6 @@ Proof.
   intros F G a [_ H1]. apply OneToOne.DomainOfCompose. assumption.
 Qed.
 
-Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
-  Bijection F -> range F b -> domain F (F^:-1:!b).
-Proof.
-  intros F y H1 H2. apply ConverseRange, IsInRange.
-  - apply Converse. assumption.
-  - apply ConverseDomain. assumption.
-Qed.
-
-Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
-  Bijection F -> domain F x -> F^:-1:!(F!x) = x.
-Proof.
-  intros F x [_ H1]. apply OneToOne.ConverseEvalOfEval. assumption.
-Qed.
-
-Proposition EvalOfConverseEval : forall (F:Class) (y:U),
-  Bijection F -> range F y -> F!(F^:-1:!y) = y.
-Proof.
-  intros F y [_ H1]. apply OneToOne.EvalOfConverseEval. assumption.
-Qed.
-
 Proposition ComposeEval : forall (F G:Class) (a:U),
   Bijection F     ->
   Bijection G     ->
@@ -176,6 +136,53 @@ Proposition RangeCharac : forall (F:Class) (y:U),
   Bijection F -> range F y <-> exists x, domain F x /\ y = F!x.
 Proof.
   intros F y H1. apply Function.RangeCharac, IsFunction. assumption.
+Qed.
+
+(* If the domain of F is not empty, then neither is the range.                  *)
+Proposition RangeIsNotEmpty : forall (F:Class),
+  domain F :<>: :0: -> range F :<>: :0:.
+Proof.
+  apply Range.IsNotEmpty.
+Qed.
+
+Proposition InvImageIsSmall : forall (F B:Class),
+  Bijection F -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F B [_ H1]. apply InvImageIsSmall. assumption.
+Qed.
+
+Proposition ConverseIsFunction : forall (F:Class),
+  Bijection F -> Function F^:-1:.
+Proof.
+  intros F [H1 [_ H2]]. split. 2: assumption. apply Converse.IsRelation.
+Qed.
+
+Proposition Converse : forall (F:Class),
+  Bijection F -> Bijection F^:-1:.
+Proof.
+  intros F [H1 H2]. split.
+  - apply Converse.IsRelation.
+  - apply OneToOne.Converse. assumption.
+Qed.
+
+Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
+  Bijection F -> range F b -> domain F (F^:-1:!b).
+Proof.
+  intros F y H1 H2. apply ConverseRange, IsInRange.
+  - apply Converse. assumption.
+  - apply ConverseDomain. assumption.
+Qed.
+
+Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
+  Bijection F -> domain F x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F x H1. apply OneToOne.ConverseEvalOfEval, H1.
+Qed.
+
+Proposition EvalOfConverseEval : forall (F:Class) (y:U),
+  Bijection F -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F y H1. apply OneToOne.EvalOfConverseEval, H1.
 Qed.
 
 Proposition InvImageOfImage : forall (F A:Class),
@@ -201,11 +208,3 @@ Proposition EvalInImage : forall (F A:Class) (a:U),
 Proof.
   intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
 Qed.
-
-(* If the domain of F is not empty, then neither is the range.                  *)
-Proposition RangeIsNotEmpty : forall (F:Class),
-  domain F :<>: :0: -> range F :<>: :0:.
-Proof.
-  apply Range.IsNotEmpty.
-Qed.
-
