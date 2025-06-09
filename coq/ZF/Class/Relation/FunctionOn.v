@@ -216,12 +216,14 @@ Qed.
 Proposition RangeCharac : forall (F A:Class) (y:U),
   FunctionOn F A -> range F y <-> exists x, A x /\ y = F!x.
 Proof.
-  intros F A y H1. split; intros [x H2]; exists x.
-  - assert (A x) as H3. {
-      destruct H1 as [_ H1]. apply H1. exists y. assumption. }
-    split. 1: assumption. symmetry. apply (EvalCharac F A); assumption.
-  - destruct H2 as [H2 H3]. symmetry in H3.
-    apply (EvalCharac F A); assumption.
+  intros F A y H1. split; intros H2.
+  - apply Function.RangeCharac in H2. destruct H2 as [x [H2 H3]].
+    exists x. split. 2: assumption.
+    + apply H1. assumption.
+    + apply H1.
+  - destruct H2 as [x [H2 H3]]. apply Function.RangeCharac.
+    + apply H1.
+    + exists x. split. 2: assumption. apply H1. assumption.
 Qed.
 
 (* If the domain of F is not empty, then neither is the range.                  *)
