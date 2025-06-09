@@ -96,7 +96,10 @@ Qed.
 Proposition RangeIsSmall : forall (F:Class),
   Function F -> Small (domain F) -> Small (range F).
 Proof.
-Admitted.
+  intros F H1 H2. apply Small.EquivCompat with F:[domain F]:.
+  - apply ImageOfDomain.
+  - apply ImageIsSmall; assumption.
+Qed.
 
 (* The composition of two functional classes is a function class.               *)
 Proposition FunctionalCompose : forall (F G:Class),
