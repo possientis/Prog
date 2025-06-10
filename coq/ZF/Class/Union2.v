@@ -1,5 +1,4 @@
 Require Import ZF.Class.Core.
-Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Pair.
@@ -108,13 +107,4 @@ Proof.
     + rewrite Ec. apply Union.Charac. destruct H5 as [H5|H5].
       * exists a. split. { assumption. } { apply Pair.IsInL. }
       * exists b. split. { assumption. } { apply Pair.IsInR. }
-Qed.
-
-(* The pairwise union of two relation classes is a relation class.              *)
-Proposition IsRelation : forall (P Q:Class),
-  Relation P -> Relation Q -> Relation (P:\/:Q).
-Proof.
-  intros P Q Hp Hq x H1. destruct H1 as [H1|H1].
-  - apply Hp, H1.
-  - apply Hq, H1.
 Qed.

@@ -64,12 +64,7 @@ Qed.
 Proposition IsIncl : forall (F:Class),
   Function F -> F :<=: (domain F) :x: F:[domain F]:.
 Proof.
-  intros F [H1 H2] x H3. unfold Relation in H1. specialize (H1 x H3).
-  destruct H1 as [y [z H1]]. exists y. exists z. split. 1: assumption. split.
-  - exists z. subst. assumption.
-  - exists y. split.
-    + exists z. subst. assumption.
-    + subst. assumption.
+  intros F H1. apply Relation.IsIncl, H1.
 Qed.
 
 (* The direct image by a function of a small class is small.                    *)
