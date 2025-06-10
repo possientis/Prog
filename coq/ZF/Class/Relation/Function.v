@@ -78,7 +78,8 @@ Qed.
 Proposition IsSmall : forall (F:Class),
   Function F -> Small (domain F) -> Small F.
 Proof.
-Admitted.
+  intros F H1. apply Relation.IsSmall; apply H1.
+Qed.
 
 (* The inverse image of the range is the domain. F need not be a function.      *)
 Proposition InvImageOfRange : forall (F:Class),

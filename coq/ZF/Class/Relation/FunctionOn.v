@@ -75,44 +75,8 @@ Qed.
 Proposition IsSmall : forall (F A:Class),
   FunctionOn F A -> Small A -> Small F.
 Proof.
-
-  (* Let F and A be arbitrary classes. *)
-  intros F A.
-
-  (* We assume that F is a function defined on A. *)
-  intros H1. assert (FunctionOn F A) as A'. { apply H1. } clear A'.
-
-  (* Note in particular that F is a functional class. *)
-  assert (H2 := H1). destruct H2 as [[_ H2] _].
-  assert (Functional F) as A'. { apply H2. } clear A'.
-
-  (* And we assume that A is small. *)
-  intros H3. assert (Small A) as A'. { apply H3. } clear A'.
-
-  (* We need to show that F is small. *)
-  assert (Small F) as A'. 2: apply A'.
-
-  (* Being a function defined on A, we have F <= A x F[A]. *)
-  apply IsIncl in H1. assert (F :<=: A :x: F:[A]:) as A'.
-    { apply H1. } clear A'.
-
-  (* Thus, in order to prove that F is small ... *)
-  apply InclInSmallIsSmall with (A :x: F:[A]:). 1: apply H1.
-
-  (* It is sufficient to prove that A x F[A] is small *)
-  assert (Small (A :x: F:[A]:)) as A'. 2: apply A'.
-
-  (* To show that this product class is small ... *)
-  apply Prod.IsSmall.
-
-  (* We need to argue that A is small, which is true by assumption. *)
-  - assert (Small A) as A'. 2: apply A'. assumption.
-
-  (* And we need to show that F[A] is small. *)
-  - assert (Small F:[A]:) as A'. 2: apply A'.
-
-  (* Which follows from the fact that F is functional and A is small. *)
-    apply Image.IsSmall. { apply H2. } { apply H3. }
+  intros F A H1 H2. apply Function.IsSmall. 1: apply H1.
+  apply Small.EquivCompat with A. 2: assumption. apply EquivSym, H1.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)
@@ -240,4 +204,3 @@ Proposition FunctionIsFunctionOn : forall (F:Class),
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
-
