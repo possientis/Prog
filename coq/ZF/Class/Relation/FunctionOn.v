@@ -13,6 +13,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -198,9 +199,18 @@ Proof.
   apply NotEquivCompatL with A. 2: assumption. apply EquivSym, H1.
 Qed.
 
+Proposition IsRestrict : forall (F A:Class),
+  FunctionOn F A -> F :~: F :|: A.
+Proof.
+  intros F A H1. apply EquivTran with (F :|: domain F).
+  - apply Function.IsRestrict, H1.
+  - apply Restrict.EquivCompatR, H1.
+Qed.
+
 (* A function is always a function defined on its domain.                       *)
 Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
+

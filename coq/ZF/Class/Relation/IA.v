@@ -96,7 +96,7 @@ Qed.
 Proposition IADomain : forall (A:Class), domain (I:|:A) :~: A.
 Proof.
   intros A.
-  apply EquivTran with (A :/\: domain I). 1: apply DomainOfRestrict.
+  apply EquivTran with (A :/\: domain I). 1: apply Restrict.DomainOf.
   apply EquivTran with (A :/\: V).
   - apply Inter2.EquivCompatR, IDomain.
   - apply Inter2VR.

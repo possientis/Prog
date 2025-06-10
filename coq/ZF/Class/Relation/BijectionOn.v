@@ -96,7 +96,7 @@ Qed.
 Proposition IsRestrict : forall (F A:Class),
   BijectionOn F A -> F :~: F:|:A.
 Proof.
-  intros F A H1. apply FunctionOnIsRestrict, IsFunctionOn. assumption.
+  intros F A H1. apply FunctionOn.IsRestrict, IsFunctionOn. assumption.
 Qed.
 
 Proposition EvalCharac : forall (F A:Class) (a y:U),

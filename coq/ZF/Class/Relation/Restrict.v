@@ -5,9 +5,7 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.Domain.
-Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
-Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
@@ -82,7 +80,7 @@ Proof.
 Qed.
 
 (* The domain of the restriction F|A is the intersection A/\domain F.           *)
-Proposition DomainOfRestrict : forall (F A:Class),
+Proposition DomainOf : forall (F A:Class),
   domain (F:|:A) :~: A :/\: domain F.
 Proof.
   intros F A x. split; intros H1.
@@ -96,50 +94,12 @@ Qed.
 Proposition IsSmall : forall (F A:Class),
   Functional F -> Small A -> Small (F:|:A).
 Proof.
-
-  (* Let F and A be arbitrary classes. *)
-  intros F A.
-
-  (* We assume that F is functional. *)
-  intros H1. assert (Functional F) as A'. { apply H1. } clear A'.
-
-  (* We assume that A is small. *)
-  intros H2. assert (Small A) as A'. { apply H2. } clear A'.
-
-  (* And we need to show that the restriction F|A is small. *)
-  assert (Small (F:|:A)) as A'. 2: apply A'.
-
-  (* Using the fact that a function defined on a small class is small. *)
-  apply FunctionOn.IsSmall with (domain (F:|:A)).
-
-  (* We first need to show that F|A is a function defined on its domain. *)
-  - assert (FunctionOn (F:|:A) (domain (F:|:A))) as A'. 2: apply A'.
-
-  (* Any function is always a function defined on its domain. *)
-    apply FunctionIsFunctionOn.
-
-  (* So we only need to show that F|A is a function. *)
-    assert (Function (F:|:A)) as A'. 2: apply A'. split.
-
-  (* Which follows from the fact that F|A is always a relation. *)
-    + apply IsRelation.
-
-  (* And the fact that F|A is functional since F is. *)
-    + apply IsFunctional, H1.
-
-  (* It remains to prove that the domain of F|A is small. *)
-  - assert (Small (domain (F:|:A))) as A'. 2: apply A'.
-
-  (* However, the domain of F|A is A /\ domain F. *)
-    apply Small.EquivCompat with (A:/\:domain F).
-      1: { apply EquivSym, DomainOfRestrict. }
-
-  (* So we need to show that A/\domain F is small. *)
-    assert (Small (A:/\:domain F)) as A'. 2: apply A'.
-
-  (* which follows from the assumption that A is small. *)
-  apply Inter2.IsSmallL, H2.
-
+  intros F A H1 H2. apply Relation.IsSmall.
+  - apply IsRelation.
+  - apply IsFunctional. assumption.
+  - apply Small.EquivCompat with (A :/\: domain F).
+    + apply EquivSym, DomainOf.
+    + apply Inter2.IsSmallL. assumption.
 Qed.
 
 (* The range of the restriction F|A is the direct image F[A].                   *)
@@ -176,14 +136,6 @@ Proof.
     exists y. exists z. assumption.
 Qed.
 
-Proposition FunctionOnIsRestrict : forall (F A:Class),
-  FunctionOn F A -> F :~: F:|:A.
-Proof.
-  intros F A [[H1 H2] H3]. apply EquivTran with (F:|:domain F).
-  - apply RelationIsRestrict. assumption.
-  - apply EquivCompatR. assumption.
-Qed.
-
 Proposition TowerProperty : forall (F A B:Class),
   A :<=: B -> (F:|:B) :|: A :~: F:|:A.
 Proof.
@@ -201,7 +153,7 @@ Proof.
         { assumption. }
 Qed.
 
-Proposition LesserThanRangeOfRestrictIsSmall : forall (F A B:Class),
+Proposition LesserThanRangeIsSmall : forall (F A B:Class),
   Functional F -> Small B -> A :<=: range (F:|:B) -> Small A.
 Proof.
   intros F A B H1 H2 H3.
@@ -218,7 +170,7 @@ Proof.
   assert (domain F x \/ ~ domain F x) as H4. { apply LawExcludedMiddle. }
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. {
-      apply DomainOfRestrict. split; assumption. }
+      apply DomainOf. split; assumption. }
     apply EvalOfClass.Charac.
     + assumption.
     + assumption.
@@ -238,8 +190,9 @@ Proposition LesserThanRangeOfRestrict : forall (F A:Class),
   Small A.
 Proof.
   intros F A H1 [a H2]. apply Diff.WhenEmpty in H2.
-  apply LesserThanRangeOfRestrictIsSmall with F (toClass a).
+  apply LesserThanRangeIsSmall with F (toClass a).
   - assumption.
   - apply SetIsSmall.
   - assumption.
 Qed.
+
