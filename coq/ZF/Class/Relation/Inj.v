@@ -66,6 +66,12 @@ Proof.
   intros F A B [H1 _]. apply BijectionOn.IsSmall. assumption.
 Qed.
 
+Proposition InvImageOfRange : forall (F A B:Class),
+  Inj F A B -> F^:-1::[range F]: :~: A.
+Proof.
+  intros F A B H1. apply BijectionOn.InvImageOfRange, H1.
+Qed.
+
 Proposition RangeIsSmall : forall (F A B:Class),
   Inj F A B -> Small A -> Small (range F).
 Proof.
@@ -185,12 +191,6 @@ Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
 Proof.
   intros F A B y [H1 _].
   apply BijectionOn.EvalOfConverseEval with A. assumption.
-Qed.
-
-Proposition InvImageOfRange : forall (F A B:Class),
-  Inj F A B -> F^:-1::[range F]: :~: A.
-Proof.
-  intros F A B [H1 _]. apply BijectionOn.InvImageOfRange. assumption.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B C:Class),
