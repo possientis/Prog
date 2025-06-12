@@ -80,20 +80,25 @@ Proof.
   intros F A B H1. apply BijectionOn.IsSmall, H1.
 Qed.
 
-Proposition InvImageIsSmall : forall (F A B C:Class),
-  Bij F A B -> Small C -> Small F^:-1::[C]:.
+Proposition RangeIsSmall : forall (F A B:Class),
+  Bij F A B -> Small A -> Small B.
 Proof.
-  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
+  intros F A B H1 H2. apply Small.EquivCompat with (range F).
+  - apply H1.
+  - apply BijectionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
-Proposition Converse : forall (F A B:Class),
-  Bij F A B -> Bij F^:-1: B A.
+Proposition Compose : forall (F G A B C:Class),
+  Bij F A B -> Bij G B C -> Bij (G :.: F) A C.
 Proof.
-  intros F A B [[H1 H2] H3]. split.
-  - split.
-    + apply Bijection.Converse. assumption.
-    + apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
-  - apply EquivTran with (domain F). 2: assumption. apply ConverseRange.
+  intros F G A B C [H1 H2] [H3 H4]. split.
+  - apply BijectionOn.Compose with B; try assumption.
+    apply DoubleInclusion, EquivSym. assumption.
+  - apply EquivTran with (range G). 2: assumption.
+    apply Compose.RangeIsSame. destruct H3 as [H3 H5].
+    apply InclTran with B.
+    + apply DoubleInclusion, EquivSym. assumption.
+    + apply DoubleInclusion. assumption.
 Qed.
 
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
@@ -120,40 +125,6 @@ Proposition ImageCharac : forall (F A B C: Class), Bij F A B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply BijectionOn.ImageCharac, H1.
-Qed.
-
-Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
-  Bij F A B -> B y -> A (F^:-1:!y).
-Proof.
-  intros F A B y H1 H2. apply IsInRange with B. 2: assumption.
-  apply Converse. assumption.
-Qed.
-
-Proposition Compose : forall (F G A B C:Class),
-  Bij F A B -> Bij G B C -> Bij (G :.: F) A C.
-Proof.
-  intros F G A B C [H1 H2] [H3 H4]. split.
-  - apply BijectionOn.Compose with B; try assumption.
-    apply DoubleInclusion, EquivSym. assumption.
-  - apply EquivTran with (range G). 2: assumption.
-    apply Compose.RangeIsSame. destruct H3 as [H3 H5].
-    apply InclTran with B.
-    + apply DoubleInclusion, EquivSym. assumption.
-    + apply DoubleInclusion. assumption.
-Qed.
-
-Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
-  Bij F A B -> A x -> F^:-1:!(F!x) = x.
-Proof.
-  intros F A B x [H1 H2]. apply BijectionOn.ConverseEvalOfEval. assumption.
-Qed.
-
-Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
-  Bij F A B -> B y -> F!(F^:-1:!y) = y.
-Proof.
-  intros F A B y [H1 H2] H3.
-  apply BijectionOn.EvalOfConverseEval with A. 1: assumption.
-  apply H2. assumption.
 Qed.
 
 Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
@@ -184,18 +155,59 @@ Proof.
   - apply H2. apply BijectionOn.RangeCharac with A; assumption.
 Qed.
 
+Proposition RangeIsNotEmpty : forall (F A B:Class),
+  Bij F A B -> A :<>: :0: -> B :<>: :0:.
+Proof.
+  intros F A B H1. apply Onto.RangeIsNotEmpty with F, IsOnto. assumption.
+Qed.
+
+Proposition IsRestrict : forall (F A B:Class),
+  Bij F A B -> F :~: F:|:A.
+Proof.
+  intros F A B H1. apply BijectionOn.IsRestrict, H1.
+Qed.
+
+Proposition InvImageIsSmall : forall (F A B C:Class),
+  Bij F A B -> Small C -> Small F^:-1::[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
+Qed.
+
+Proposition Converse : forall (F A B:Class),
+  Bij F A B -> Bij F^:-1: B A.
+Proof.
+  intros F A B [[H1 H2] H3]. split.
+  - split.
+    + apply Bijection.Converse. assumption.
+    + apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
+  - apply EquivTran with (domain F). 2: assumption. apply ConverseRange.
+Qed.
+
+Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
+  Bij F A B -> B y -> A (F^:-1:!y).
+Proof.
+  intros F A B y H1 H2. apply IsInRange with B. 2: assumption.
+  apply Converse. assumption.
+Qed.
+
+Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
+  Bij F A B -> A x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F A B x [H1 H2]. apply BijectionOn.ConverseEvalOfEval. assumption.
+Qed.
+
+Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
+  Bij F A B -> B y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F A B y [H1 H2] H3.
+  apply BijectionOn.EvalOfConverseEval with A. 1: assumption.
+  apply H2. assumption.
+Qed.
+
 Proposition InvImageOfRange : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
   intros F A B H1. apply ImageOfDomain, Converse. assumption.
-Qed.
-
-Proposition RangeIsSmall : forall (F A B:Class),
-  Bij F A B -> Small A -> Small B.
-Proof.
-  intros F A B H1 H2. apply Small.EquivCompat with (range F).
-  - apply H1.
-  - apply BijectionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B C:Class),
@@ -222,11 +234,5 @@ Proposition EvalInImage : forall (F A B C:Class) (a:U),
   Bij F A B -> A a -> F:[C]: (F!a) <-> C a.
 Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
-Qed.
-
-Proposition RangeIsNotEmpty : forall (F A B:Class),
-  Bij F A B -> A :<>: :0: -> B :<>: :0:.
-Proof.
-  intros F A B H1. apply Onto.RangeIsNotEmpty with F, IsOnto. assumption.
 Qed.
 

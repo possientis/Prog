@@ -11,6 +11,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -143,6 +144,12 @@ Proposition RangeIsNotEmpty : forall (F:Class),
   domain F :<>: :0: -> range F :<>: :0:.
 Proof.
   apply Range.IsNotEmpty.
+Qed.
+
+Proposition IsRestrict : forall (F:Class),
+  Bijection F -> F :~: F :|: domain F.
+Proof.
+  intros F H1. apply Function.IsRestrict, IsFunction. assumption.
 Qed.
 
 Proposition InvImageIsSmall : forall (F B:Class),

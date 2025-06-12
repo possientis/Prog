@@ -10,6 +10,7 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Range.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
@@ -64,6 +65,24 @@ Proposition IsSmall : forall (F A B:Class),
   Onto F A B -> Small A -> Small F.
 Proof.
   intros F A B H1. apply FunctionOn.IsSmall, H1.
+Qed.
+
+(* The inverse image of the range is the domain.                                *)
+Proposition InvImageOfRange : forall (F A B:Class),
+  Onto F A B -> F^:-1::[B]: :~: A.
+Proof.
+  intros F A B H1. apply EquivTran with F^:-1::[range F]:.
+  - apply InvImage.EquivCompat. 1: apply EquivRefl. apply EquivSym, H1.
+  - apply FunctionOn.InvImageOfRange, H1.
+Qed.
+
+(* If F is defined on a small class A, then its range is small.                 *)
+Proposition RangeIsSmall : forall (F A B:Class),
+  Onto F A B -> Small A -> Small B.
+Proof.
+  intros F A B H1 H2. apply Small.EquivCompat with (range F).
+  - apply H1.
+  - apply FunctionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
 (* If F and G are surjections then so is the composition G.F.                   *)
@@ -143,24 +162,6 @@ Proof.
   - apply H2. apply FunctionOn.RangeCharac with A; assumption.
 Qed.
 
-(* The inverse image of the range is the domain.                                *)
-Proposition InvImageOfRange : forall (F A B:Class),
-  Onto F A B -> F^:-1::[B]: :~: A.
-Proof.
-  intros F A B H1. apply EquivTran with F^:-1::[range F]:.
-  - apply InvImage.EquivCompat. 1: apply EquivRefl. apply EquivSym, H1.
-  - apply FunctionOn.InvImageOfRange, H1.
-Qed.
-
-(* If F is defined on a small class A, then its range is small.                 *)
-Proposition RangeIsSmall : forall (F A B:Class),
-  Onto F A B -> Small A -> Small B.
-Proof.
-  intros F A B H1 H2. apply Small.EquivCompat with (range F).
-  - apply H1.
-  - apply FunctionOn.RangeIsSmall with A. 2: assumption. apply H1.
-Qed.
-
 (* If the domain of F is not empty, then neither is the range.                  *)
 Proposition RangeIsNotEmpty : forall (F A B:Class),
   Onto F A B -> A :<>: :0: -> B :<>: :0:.
@@ -173,3 +174,8 @@ Proof.
   2: assumption. apply H1.
 Qed.
 
+Proposition IsRestrict : forall (F A B:Class),
+  Onto F A B -> F :~: F :|: A.
+Proof.
+  intros F A B H1. apply FunctionOn.IsRestrict, H1.
+Qed.

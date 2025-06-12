@@ -66,23 +66,10 @@ Proof.
   intros F A B [H1 _]. apply BijectionOn.IsSmall. assumption.
 Qed.
 
-(* The inverse image of a small class by an injection from any A to B is small. *)
-Proposition InvImageIsSmall : forall (F A B C:Class),
-  Inj F A B -> Small C -> Small F^:-1::[C]:.
+Proposition RangeIsSmall : forall (F A B:Class),
+  Inj F A B -> Small A -> Small (range F).
 Proof.
-  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
-Qed.
-
-(* If F is an injection fron A to B with range B, F^-1 is an inj from B to A.   *)
-Proposition Converse : forall (F A B:Class),
-  Inj F A B -> range F :~: B -> Inj F^:-1: B A.
-Proof.
-  intros F A B [H1 _] H2. split.
-  - apply BijectionOn.Converse with A; assumption.
-  - apply Incl.EquivCompatL with (domain F).
-    + apply EquivSym, ConverseRange.
-    + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
-      apply InclRefl.
+  intros F A B H1. apply BijectionOn.RangeIsSmall, H1.
 Qed.
 
 (* If F and G are injections then so is the composition G.F.                    *)
@@ -94,13 +81,6 @@ Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply BijectionOn.Compose with B; assumption.
   - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
-Qed.
-
-(* An injection from A to B is equal to its restriction to A.                   *)
-Proposition IsRestrict : forall (F A B:Class),
-  Inj F A B -> F :~: F:|:A.
-Proof.
-  intros F A B [H1 _]. apply BijectionOn.IsRestrict. assumption.
 Qed.
 
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
@@ -125,26 +105,6 @@ Proposition ImageCharac : forall (F A B C: Class), Inj F A B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply BijectionOn.ImageCharac, H1.
-Qed.
-
-Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
-  Inj F A B -> range F b -> A (F^:-1:!b).
-Proof.
-  intros F A B b [H1 _]. apply BijectionOn.ConverseEvalIsInDomain. assumption.
-Qed.
-
-Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
-  Inj F A B -> A x -> F^:-1:!(F!x) = x.
-Proof.
-  intros F A B x [H1 _].
-  apply BijectionOn.ConverseEvalOfEval. assumption.
-Qed.
-
-Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
-  Inj F A B -> range F y -> F!(F^:-1:!y) = y.
-Proof.
-  intros F A B y [H1 _].
-  apply BijectionOn.EvalOfConverseEval with A. assumption.
 Qed.
 
 Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
@@ -175,16 +135,62 @@ Proof.
   intros F A B y H1. apply BijectionOn.RangeCharac, H1.
 Qed.
 
+Proposition RangeIsNotEmpty : forall (F A B:Class),
+  Inj F A B -> A :<>: :0: -> range F :<>: :0:.
+Proof.
+  intros F A B H1. apply BijectionOn.RangeIsNotEmpty, H1.
+Qed.
+
+(* An injection from A to B is equal to its restriction to A.                   *)
+Proposition IsRestrict : forall (F A B:Class),
+  Inj F A B -> F :~: F:|:A.
+Proof.
+  intros F A B [H1 _]. apply BijectionOn.IsRestrict. assumption.
+Qed.
+
+(* The inverse image of a small class by an injection from any A to B is small. *)
+Proposition InvImageIsSmall : forall (F A B C:Class),
+  Inj F A B -> Small C -> Small F^:-1::[C]:.
+Proof.
+  intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
+Qed.
+
+(* If F is an injection fron A to B with range B, F^-1 is an inj from B to A.   *)
+Proposition Converse : forall (F A B:Class),
+  Inj F A B -> range F :~: B -> Inj F^:-1: B A.
+Proof.
+  intros F A B [H1 _] H2. split.
+  - apply BijectionOn.Converse with A; assumption.
+  - apply Incl.EquivCompatL with (domain F).
+    + apply EquivSym, ConverseRange.
+    + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
+      apply InclRefl.
+Qed.
+
+Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
+  Inj F A B -> range F b -> A (F^:-1:!b).
+Proof.
+  intros F A B b [H1 _]. apply BijectionOn.ConverseEvalIsInDomain. assumption.
+Qed.
+
+Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
+  Inj F A B -> A x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F A B x [H1 _].
+  apply BijectionOn.ConverseEvalOfEval. assumption.
+Qed.
+
+Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
+  Inj F A B -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F A B y [H1 _].
+  apply BijectionOn.EvalOfConverseEval with A. assumption.
+Qed.
+
 Proposition InvImageOfRange : forall (F A B:Class),
   Inj F A B -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A B [H1 _]. apply BijectionOn.InvImageOfRange. assumption.
-Qed.
-
-Proposition RangeIsSmall : forall (F A B:Class),
-  Inj F A B -> Small A -> Small (range F).
-Proof.
-  intros F A B H1. apply BijectionOn.RangeIsSmall, H1.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B C:Class),
@@ -210,10 +216,3 @@ Proposition EvalInImage : forall (F A B C:Class) (a:U),
 Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
 Qed.
-
-Proposition RangeIsNotEmpty : forall (F A B:Class),
-  Inj F A B -> A :<>: :0: -> range F :<>: :0:.
-Proof.
-  intros F A B H1. apply BijectionOn.RangeIsNotEmpty, H1.
-Qed.
-

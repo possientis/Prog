@@ -93,12 +93,6 @@ Proof.
     apply EquivSym. assumption.
 Qed.
 
-Proposition IsRestrict : forall (F A:Class),
-  BijectionOn F A -> F :~: F:|:A.
-Proof.
-  intros F A H1. apply FunctionOn.IsRestrict, IsFunctionOn. assumption.
-Qed.
-
 Proposition EvalCharac : forall (F A:Class) (a y:U),
   BijectionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
@@ -131,26 +125,6 @@ Proof.
     exists x. split. 1: assumption. split. 2: assumption. apply H2. assumption.
 Qed.
 
-Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),
-  BijectionOn F A -> range F b -> A (F^:-1:!b).
-Proof.
-  intros F A b [H1 H2] H3. apply H2.
-  apply Bijection.ConverseEvalIsInDomain; assumption.
-Qed.
-
-Proposition ConverseEvalOfEval : forall (F A:Class) (x:U),
-  BijectionOn F A -> A x -> F^:-1:!(F!x) = x.
-Proof.
-  intros F A x [H1 H2] H3. apply Bijection.ConverseEvalOfEval. 1: assumption.
-  apply H2. assumption.
-Qed.
-
-Proposition EvalOfConverseEval : forall (F A:Class) (y:U),
-  BijectionOn F A -> range F y -> F!(F^:-1:!y) = y.
-Proof.
-  intros F A y [H1 H2]. apply Bijection.EvalOfConverseEval. assumption.
-Qed.
-
 Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
@@ -177,6 +151,53 @@ Proposition RangeCharac : forall (F A:Class) (y:U),
   BijectionOn F A -> range F y <-> exists x, A x /\ y = F!x.
 Proof.
   intros F A y H1. apply FunctionOn.RangeCharac, IsFunctionOn. assumption.
+Qed.
+
+Proposition RangeIsNotEmpty : forall (F A:Class),
+  BijectionOn F A -> A :<>: :0: -> range F :<>: :0:.
+Proof.
+  intros F A H1. apply FunctionOn.RangeIsNotEmpty, IsFunctionOn. assumption.
+Qed.
+
+Proposition IsRestrict : forall (F A:Class),
+  BijectionOn F A -> F :~: F:|:A.
+Proof.
+  intros F A H1. apply FunctionOn.IsRestrict, IsFunctionOn. assumption.
+Qed.
+
+(* The inverse image of a small class by a bijection defined on any A is small. *)
+Proposition InvImageIsSmall : forall (F A B:Class),
+  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
+Proof.
+  intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
+Qed.
+
+Proposition Converse : forall (F A B:Class),
+  BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
+Proof.
+  intros F A B [H1 H2] H3. split.
+  - apply Bijection.Converse. assumption.
+  - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
+Qed.
+
+Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),
+  BijectionOn F A -> range F b -> A (F^:-1:!b).
+Proof.
+  intros F A b [H1 H2] H3. apply H2.
+  apply Bijection.ConverseEvalIsInDomain; assumption.
+Qed.
+
+Proposition ConverseEvalOfEval : forall (F A:Class) (x:U),
+  BijectionOn F A -> A x -> F^:-1:!(F!x) = x.
+Proof.
+  intros F A x [H1 H2] H3. apply Bijection.ConverseEvalOfEval. 1: assumption.
+  apply H2. assumption.
+Qed.
+
+Proposition EvalOfConverseEval : forall (F A:Class) (y:U),
+  BijectionOn F A -> range F y -> F!(F^:-1:!y) = y.
+Proof.
+  intros F A y [H1 H2]. apply Bijection.EvalOfConverseEval. assumption.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B:Class),
@@ -206,32 +227,9 @@ Proof.
   apply H2. assumption.
 Qed.
 
-Proposition RangeIsNotEmpty : forall (F A:Class),
-  BijectionOn F A -> A :<>: :0: -> range F :<>: :0:.
-Proof.
-  intros F A H1. apply FunctionOn.RangeIsNotEmpty, IsFunctionOn. assumption.
-Qed.
-
 (* A bijection is always a bijection defined on its domain. *)
 Proposition BijectionIsBijectionOn : forall (F:Class),
   Bijection F -> BijectionOn F (domain F).
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
-
-(* The inverse image of a small class by a bijection defined on any A is small. *)
-Proposition InvImageIsSmall : forall (F A B:Class),
-  BijectionOn F A -> Small B -> Small F^:-1::[B]:.
-Proof.
-  intros F A B [H1 _]. apply Bijection.InvImageIsSmall. assumption.
-Qed.
-
-Proposition Converse : forall (F A B:Class),
-  BijectionOn F A -> range F :~: B -> BijectionOn F^:-1: B.
-Proof.
-  intros F A B [H1 H2] H3. split.
-  - apply Bijection.Converse. assumption.
-  - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
-Qed.
-
-

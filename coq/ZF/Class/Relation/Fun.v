@@ -11,6 +11,7 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Range.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -162,3 +163,8 @@ Proof.
   intros F A B H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
 
+Proposition IsRestrict : forall (F A B:Class),
+  Fun F A B -> F :~: F :|: A.
+Proof.
+  intros F A B H1. apply FunctionOn.IsRestrict, H1.
+Qed.
