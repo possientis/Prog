@@ -16,6 +16,13 @@ Proof.
   - apply FromClass.Charac. assumption.
 Qed.
 
+Proposition EquivCompat : forall (A B:Class),
+  A :~: B -> truncate A = truncate B.
+Proof.
+  intros A B H1.
+  apply FromClass.EquivCompat, Class.Truncate.EquivCompat. assumption.
+Qed.
+
 Proposition WhenSmall : forall (A:Class),
   Small A -> toClass (truncate A) :~: A.
 Proof.
@@ -34,3 +41,4 @@ Proof.
     + apply Class.Truncate.WhenNotSmall. assumption.
     + apply EquivSym, Empty.ToClass.
 Qed.
+

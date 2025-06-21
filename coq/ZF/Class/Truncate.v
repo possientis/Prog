@@ -8,6 +8,16 @@ Require Import ZF.Set.Core.
 Definition truncate (A:Class) : Class := fun x =>
   Small A /\ A x.
 
+Proposition EquivCompat : forall (A B:Class),
+  A :~: B -> truncate A :~: truncate B.
+Proof.
+  intros A B H1 x. split; intros H2; split.
+  - apply Small.EquivCompat with A. 1: assumption. apply H2.
+  - apply H1, H2.
+  - apply Small.EquivCompat with B. 1: { apply EquivSym. assumption. } apply H2.
+  - apply H1, H2.
+Qed.
+
 Proposition WhenSmall : forall (A:Class),
   Small A -> truncate A :~: A.
 Proof.

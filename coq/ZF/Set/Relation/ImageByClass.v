@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
@@ -39,7 +40,14 @@ Qed.
 Proposition EquivCompat : forall (F G:Class) (a:U),
   F :~: G -> F:[a]: = G:[a]:.
 Proof.
-  intros F G a H1.
-Admitted.
+  intros F G a H1. apply Truncate.EquivCompat, Image.EquivCompatL. assumption.
+Qed.
 
-
+Proposition InclCompat : forall (F G:Class) (a:U), Functional G ->
+  F :<=: G -> F:[a]: :<=: G:[a]:.
+Proof.
+  intros F G a H1 H2 y H3.
+  apply Charac in H3. 2: { apply Functional.InclCompat with G; assumption. }
+  destruct H3 as [x [H3 H4]]. apply CharacRev with x; try assumption.
+  apply H2. assumption.
+Qed.
