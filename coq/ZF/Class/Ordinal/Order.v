@@ -2,6 +2,7 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
@@ -9,6 +10,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -50,8 +52,23 @@ Proof.
         rewrite H4 in H9. destruct H9 as [H9 H10]. apply H10.
         assert (H11 := H1). destruct H11 as [H11 _].
         apply H11 with b; assumption. }
+      clear H4 H6 C.
       assert (F:[b]: = b) as H9. {
         apply DoubleInclusion. split; intros a H9.
+        - apply (Bij.ImageSetCharac F A B) in H9. 2: apply H3.
+          destruct H9 as [x [H9 [H10 H11]]].
+          assert (F!x = x) as H12. { apply H8. assumption. }
+          rewrite H11 in H12. rewrite H12. assumption.
+        - apply (Bij.ImageSetCharac F A B). 1: apply H3.
+          exists a. split. 1: assumption. split.
+          + destruct H1 as [H1 _]. apply (H1 b); assumption.
+          + apply H8, H9. }
+      assert (Minimal E (A :\: toClass b) b) as H10. {
+        apply IsEMinimal; assumption. }
+      assert (Minimal E F:[A :\: toClass b]: (F!b)) as H11. {
+        apply Minimal.IsomImage with E A B; try assumption.
+        apply Inter2.IsInclL. }
+      assert (F:[A :\: toClass b]: :~: B :\: toClass b) as H12. {
 Admitted.
 
 (*

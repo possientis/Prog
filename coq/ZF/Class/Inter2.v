@@ -1,8 +1,10 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Axiom.Specification.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.OrdPair.
 
 Require Import ZF.Notation.And.
 Export ZF.Notation.And.
@@ -152,4 +154,10 @@ Proof.
     + apply IsInclR.
     + apply IsIncl. 1: assumption. apply InclRefl.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclL. assumption.
+Qed.
+
+Proposition ImageIncl : forall (F P Q:Class),
+  F:[P :/\: Q]: :<=: F:[P]: :/\: F:[Q]:.
+Proof.
+  intros F P Q y [x [[H1 H2] H3]]. split; exists x; split; assumption.
 Qed.
