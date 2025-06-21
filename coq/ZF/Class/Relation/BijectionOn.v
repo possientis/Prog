@@ -1,4 +1,5 @@
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -242,4 +243,10 @@ Proposition Inter2Image : forall (F A B C:Class),
   BijectionOn F A -> F:[B :/\: C]: :~: F:[B]: :/\: F:[C]:.
 Proof.
   intros F A B C H1. apply Bijection.Inter2Image, H1.
+Qed.
+
+Proposition DiffImage : forall (F A B C:Class),
+  BijectionOn F A -> F:[B :\: C]: :~: F:[B]: :\: F:[C]:.
+Proof.
+  intros F A B C H1. apply Bijection.DiffImage, H1.
 Qed.
