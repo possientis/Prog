@@ -16,8 +16,10 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
+
 
 (* F is a bijection from A to B.                                                *)
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
@@ -133,6 +135,12 @@ Proposition ImageCharac : forall (F A B C: Class), Bij F A B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply BijectionOn.ImageCharac, H1.
+Qed.
+
+Proposition ImageSetCharac : forall (F A B:Class) (a:U), Bij F A B ->
+  forall y, y :< F:[a]: <-> exists x, x :< a /\ A x /\ F!x = y.
+Proof.
+  intros F A B a H1. apply BijectionOn.ImageSetCharac, H1.
 Qed.
 
 Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),

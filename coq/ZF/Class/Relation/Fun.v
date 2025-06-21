@@ -14,8 +14,9 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
 
 (* F is a function from A to B.                                                 *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
@@ -120,6 +121,12 @@ Proof.
   intros F A B C H1. apply FunctionOn.ImageCharac, H1.
 Qed.
 
+Proposition ImageSetCharac : forall (F A B:Class) (a:U), F :: A :-> B ->
+  forall y, y :< F:[a]: <-> exists x, x :< a /\ A x /\ F!x = y.
+Proof.
+  intros F A B a H1. apply FunctionOn.ImageSetCharac, H1.
+Qed.
+
 (* Characterization of the domain of G.F.                                       *)
 Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
   F :: A :-> B  ->
@@ -168,3 +175,4 @@ Proposition IsRestrict : forall (F A B:Class),
 Proof.
   intros F A B H1. apply FunctionOn.IsRestrict, H1.
 Qed.
+

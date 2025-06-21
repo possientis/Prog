@@ -9,11 +9,13 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Transitive.
-Require Import ZF.Class.Relation.Image.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.ImageByClass.
+
 
 (* An element a of an ordinal class A is a :<-minimal element of A\a.           *)
 Proposition IsEMinimal : forall (A:Class) (a:U),
@@ -48,9 +50,8 @@ Proof.
         rewrite H4 in H9. destruct H9 as [H9 H10]. apply H10.
         assert (H11 := H1). destruct H11 as [H11 _].
         apply H11 with b; assumption. }
-      assert (F:[toClass b]: :~: toClass b) as H9. {
-        intros a. split; intros H9.
-        -
+      assert (F:[b]: = b) as H9. {
+        apply DoubleInclusion. split; intros a H9.
 Admitted.
 
 (*

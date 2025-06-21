@@ -13,8 +13,10 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
+
 
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
@@ -117,12 +119,13 @@ Qed.
 Proposition ImageCharac : forall (F A B: Class), BijectionOn F A ->
   forall y, F:[B]: y <-> exists x, B x /\ A x /\ F!x = y.
 Proof.
-  intros F A B [H1 H2] y. split; intros H3.
-  - apply Bijection.ImageCharac in H3. 2: assumption.
-    destruct H3 as [x [H3 [H4 H5]]]. exists x. split. 1: assumption.
-    split. 2: assumption. apply H2. assumption.
-  - destruct H3 as [x [H3 [H4 H5]]]. apply Bijection.ImageCharac. 1: assumption.
-    exists x. split. 1: assumption. split. 2: assumption. apply H2. assumption.
+  intros F A B H1. apply FunctionOn.ImageCharac, IsFunctionOn. assumption.
+Qed.
+
+Proposition ImageSetCharac : forall (F A:Class) (a:U), BijectionOn F A ->
+  forall y, y :< F:[a]: <-> exists x, x :< a /\ A x /\ F!x = y.
+Proof.
+  intros F A a H1. apply FunctionOn.ImageSetCharac, IsFunctionOn. assumption.
 Qed.
 
 Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
@@ -233,3 +236,4 @@ Proposition BijectionIsBijectionOn : forall (F:Class),
 Proof.
   intros F H1. split. { assumption. } { apply EquivRefl. }
 Qed.
+

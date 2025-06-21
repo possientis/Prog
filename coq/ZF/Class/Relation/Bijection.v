@@ -14,8 +14,10 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
+
 
 (* A class is a bijection if it is a relation and it is one-to-one.             *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
@@ -111,10 +113,16 @@ Proof.
   intros F a [_ H1]. apply OneToOne.IsInRange. assumption.
 Qed.
 
-Proposition ImageCharac : forall (F A: Class), Bijection F ->
+Proposition ImageCharac : forall (F A:Class), Bijection F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
   intros F A [_ H1]. apply OneToOne.ImageCharac. assumption.
+Qed.
+
+Proposition ImageSetCharac : forall (F:Class) (a:U), Bijection F ->
+  forall y, y :< F:[a]: <-> exists x, x :< a /\ domain F x /\ F!x = y.
+Proof.
+  intros F a H1. apply Function.ImageSetCharac, IsFunction. assumption.
 Qed.
 
 Proposition DomainOfCompose : forall (F G:Class) (a:U),
@@ -215,3 +223,4 @@ Proposition EvalInImage : forall (F A:Class) (a:U),
 Proof.
   intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
 Qed.
+

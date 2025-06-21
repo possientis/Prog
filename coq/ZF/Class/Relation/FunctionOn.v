@@ -16,8 +16,9 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
 
 (* F is a function defined on A.                                                *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
@@ -144,6 +145,17 @@ Proof.
     split. 2: assumption. apply H2. assumption.
   - destruct H3 as [x [H3 [H4 H5]]]. apply Function.ImageCharac. 1: assumption.
     exists x. split. 1: assumption. split. 2: assumption. apply H2. assumption.
+Qed.
+
+Proposition ImageSetCharac : forall (F A:Class) (a:U), FunctionOn F A ->
+  forall y, y :< F:[a]: <-> exists x, x :< a /\ A x /\ F!x = y.
+Proof.
+  intros F A a H1 y. split; intros H2.
+  - apply Function.ImageSetCharac in H2. 2: apply H1.
+    destruct H2 as [x [H2 [H3 H4]]]. exists x. split. 1: assumption.
+    split. 2: assumption. apply H1. assumption.
+  - destruct H2 as [x [H2 [H3 H4]]]. apply Function.ImageSetCharac. 1: apply H1.
+    exists x. split. 1: assumption. split. 2: assumption. apply H1. assumption.
 Qed.
 
 (* Characterization of the domain of G.F.                                       *)

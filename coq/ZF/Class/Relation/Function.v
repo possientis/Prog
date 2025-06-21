@@ -12,8 +12,10 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
+
 
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
@@ -138,6 +140,20 @@ Proof.
   intros F A [_ H1]. apply EvalOfClass.ImageCharac. assumption.
 Qed.
 
+Proposition ImageSetCharac : forall (F:Class) (a:U), Function F ->
+  forall y, y :< F:[a]: <-> exists x, x :< a /\ domain F x /\ F!x = y.
+Proof.
+  intros F a H1. intros y. split; intros H2.
+  - apply ImageByClass.Charac in H2. 2: apply H1. destruct H2 as [x [H2 H3]].
+    assert (domain F x) as H4. { exists y. assumption. }
+    exists x. split. 1: assumption. split. 1: assumption.
+    apply EvalCharac; assumption.
+  - destruct H2 as [x [H2 [H3 H4]]]. apply ImageByClass.CharacRev with x.
+    + apply H1.
+    + assumption.
+    + apply EvalCharac; assumption.
+Qed.
+
 Proposition DomainOfCompose : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
@@ -177,3 +193,4 @@ Proposition IsRestrict : forall (F:Class),
 Proof.
   intros F H1. apply Restrict.RelationIsRestrict, H1.
 Qed.
+
