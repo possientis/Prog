@@ -56,7 +56,7 @@ Proposition Converse : forall (F:Class),
   OneToOne F -> OneToOne F^:-1:.
 Proof.
   intros F [H1 H2]. split. 1: assumption. apply Functional.InclCompat with F.
-  2: assumption. apply ConverseOfConverseIncl.
+  2: assumption. apply Converse.IsIncl.
 Qed.
 
 Proposition EvalCharac : forall (F:Class) (a y:U),
@@ -86,9 +86,9 @@ Qed.
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   OneToOne F -> range F b -> domain F (F^:-1:!b).
 Proof.
-  intros F b H1 H2. apply ConverseRange, IsInRange.
+  intros F b H1 H2. apply Converse.Range, IsInRange.
   - apply Converse. assumption.
-  - apply ConverseDomain. assumption.
+  - apply Converse.Domain. assumption.
 Qed.
 
 (* The composition of two one-to-one classes is one-to-one.                     *)
@@ -106,7 +106,7 @@ Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
   OneToOne F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
   intros F x [H1 H2] H3. apply EvalOfClass.Charac. 1: assumption.
-  - apply ConverseDomain. exists x. apply EvalOfClass.Satisfies; assumption.
+  - apply Converse.Domain. exists x. apply EvalOfClass.Satisfies; assumption.
   - apply Converse.Charac2Rev. apply EvalOfClass.Satisfies; assumption.
 Qed.
 
@@ -116,7 +116,7 @@ Proof.
   intros F y [H1 H2] H3. assert (H4 := H3). destruct H4 as [x H4].
   assert (F^:-1:!y = x) as H5. { apply EvalOfClass.Charac.
     - assumption.
-    - apply ConverseDomain. assumption.
+    - apply Converse.Domain. assumption.
     - apply Converse.Charac2Rev. assumption. }
   rewrite H5. apply EvalOfClass.Charac; try assumption. exists y. assumption.
 Qed.

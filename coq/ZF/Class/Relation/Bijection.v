@@ -183,9 +183,9 @@ Qed.
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   Bijection F -> range F b -> domain F (F^:-1:!b).
 Proof.
-  intros F y H1 H2. apply ConverseRange, IsInRange.
+  intros F y H1 H2. apply Converse.Range, IsInRange.
   - apply Converse. assumption.
-  - apply ConverseDomain. assumption.
+  - apply Converse.Domain. assumption.
 Qed.
 
 Proposition ConverseEvalOfEval : forall (F:Class) (x:U),

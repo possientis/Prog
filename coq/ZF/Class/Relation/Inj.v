@@ -176,7 +176,7 @@ Proof.
   intros F A B [H1 _] H2. split.
   - apply BijectionOn.Converse with A; assumption.
   - apply Incl.EquivCompatL with (domain F).
-    + apply EquivSym, ConverseRange.
+    + apply EquivSym, Converse.Range.
     + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
       apply InclRefl.
 Qed.

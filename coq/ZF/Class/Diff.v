@@ -66,7 +66,7 @@ Proof.
   - destruct H2 as [x [H2 H3]]. destruct H2 as [H2 H4]. split.
     + exists x. split; assumption.
     + intros [x' [H5 H6]]. assert (x' = x) as H7. {
-        apply ConverseWhenFunctional with F y; assumption. }
+        apply Converse.WhenFunctional with F y; assumption. }
       subst. contradiction.
   - destruct H2 as [[x [H2 H3]] H4].
     exists x. split. 2: assumption. split.

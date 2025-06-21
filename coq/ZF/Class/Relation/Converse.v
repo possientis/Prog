@@ -99,7 +99,7 @@ Proof.
 Qed.
 
 (* The converse of the converse is a subclass of the original class.            *)
-Proposition ConverseOfConverseIncl : forall (F:Class),
+Proposition IsIncl : forall (F:Class),
   (F^:-1:)^:-1: :<=: F.
 Proof.
   intros F x H1.
@@ -125,7 +125,7 @@ Proof.
 Qed.
 
 (* The converse is the converse of the subclass of ordered pairs.               *)
-Proposition ConverseIsConverseOfOrderedPairs : forall (F:Class),
+Proposition IsConverseOfOrderedPairs : forall (F:Class),
   F^:-1: :~: (F :/\: V:x:V)^:-1:.
 Proof.
   intros F x. split; intros H1.
@@ -137,7 +137,7 @@ Proof.
   - destruct H1 as [y [z [H1 [H2 _]]]]. exists y. exists z. split; assumption.
 Qed.
 
-Proposition ConverseDomain : forall (F:Class),
+Proposition Domain : forall (F:Class),
   domain F^:-1: :~: range F.
 Proof.
   intros F y. split; intros H1.
@@ -146,7 +146,7 @@ Proof.
   - destruct H1 as [x H1]. exists x. apply Charac2Rev. assumption.
 Qed.
 
-Proposition ConverseRange : forall (F:Class),
+Proposition Range : forall (F:Class),
   range F^:-1: :~: domain F.
 Proof.
   intros F x. split; intros H1.
@@ -155,7 +155,7 @@ Proof.
   - destruct H1 as [y H1]. exists y. apply Charac2Rev. assumption.
 Qed.
 
-Proposition ConverseWhenFunctional : forall (F:Class) (x y z:U),
+Proposition WhenFunctional : forall (F:Class) (x y z:U),
   Functional F^:-1: -> F :(x,z): -> F :(y,z): -> x = y.
 Proof.
   intros F x y z H1 H2 H3. unfold Functional in H1. apply H1 with z;

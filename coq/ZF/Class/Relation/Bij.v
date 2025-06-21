@@ -195,8 +195,8 @@ Proof.
   intros F A B [[H1 H2] H3]. split.
   - split.
     + apply Bijection.Converse. assumption.
-    + apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
-  - apply EquivTran with (domain F). 2: assumption. apply ConverseRange.
+    + apply EquivTran with (range F). 2: assumption. apply Converse.Domain.
+  - apply EquivTran with (domain F). 2: assumption. apply Converse.Range.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),

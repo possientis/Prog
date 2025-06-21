@@ -79,10 +79,10 @@ Proposition InvImageOfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
   intros F. apply EquivTran with F^:-1::[domain F^:-1:]:.
-  - apply Image.EquivCompatR, EquivSym, ConverseDomain.
+  - apply Image.EquivCompatR, EquivSym, Converse.Domain.
   - apply EquivTran with (range F^:-1:).
     + apply Range.ImageOfDomain.
-    + apply ConverseRange.
+    + apply Converse.Range.
 Qed.
 
 (* Characterisation of the inverse image F^(-1)[A] in terms of evaluations of F.*)

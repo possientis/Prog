@@ -180,7 +180,7 @@ Proposition Converse : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2] H3. split.
   - apply Bijection.Converse. assumption.
-  - apply EquivTran with (range F). 2: assumption. apply ConverseDomain.
+  - apply EquivTran with (range F). 2: assumption. apply Converse.Domain.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),
