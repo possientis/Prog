@@ -1,6 +1,7 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -224,3 +225,8 @@ Proof.
   intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
 Qed.
 
+Proposition Inter2Image : forall (F A B:Class),
+  Bijection F -> F:[A :/\: B]: :~: F:[A]: :/\: F:[B]:.
+Proof.
+  intros F A B [_ H1]. apply Converse.Inter2Image, H1.
+Qed.

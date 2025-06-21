@@ -1,6 +1,7 @@
 Require Import ZF.Class.Core.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bijection.
 Require Import ZF.Class.Relation.BijectionOn.
@@ -246,3 +247,8 @@ Proof.
   intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
 Qed.
 
+Proposition Inter2Image : forall (F A B C D:Class),
+  Bij F A B -> F:[C :/\: D]: :~: F:[C]: :/\: F:[D]:.
+Proof.
+  intros F A B C D H1. apply BijectionOn.Inter2Image with A, H1.
+Qed.
