@@ -161,3 +161,14 @@ Proof.
   intros F x y z H1 H2 H3. unfold Functional in H1. apply H1 with z;
   apply Charac2Rev; assumption.
 Qed.
+
+Proposition Inter2Image : forall (F A B:Class), Functional F^:-1: ->
+  F:[A :/\: B]: :~: F:[A]: :/\: F:[B]:.
+Proof.
+  intros F A B H1. apply DoubleInclusion. split.
+  - apply Inter2.Image.
+  - intros y [[a [H2 H3]] [b [H4 H5]]].
+    assert (a = b) as H6. { apply WhenFunctional with F y; assumption. }
+    subst. exists b. split. 2: assumption. split; assumption.
+Qed.
+

@@ -156,7 +156,7 @@ Proof.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclL. assumption.
 Qed.
 
-Proposition ImageIncl : forall (F P Q:Class),
+Proposition Image : forall (F P Q:Class),
   F:[P :/\: Q]: :<=: F:[P]: :/\: F:[Q]:.
 Proof.
   intros F P Q y [x [[H1 H2] H3]]. split; exists x; split; assumption.
