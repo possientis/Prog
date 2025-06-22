@@ -4,6 +4,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.IsSetOf.
+Require Import ZF.Class.Less.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
@@ -11,11 +12,13 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Incl.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
@@ -68,21 +71,45 @@ Proof.
       assert (Minimal E F:[A :\: toClass b]: (F!b)) as H11. {
         apply Minimal.IsomImage with E A B; try assumption.
         apply Inter2.IsInclL. }
+      clear H10.
       assert (F:[A :\: toClass b]: :~: B :\: toClass b) as H12. {
-Admitted.
-
-(*
+        apply EquivTran with (F:[A]: :\: F:[toClass b]:).
+        - apply Bij.DiffImage with A B, H3.
+        - apply Diff.EquivCompat.
+          + apply Bij.ImageOfDomain, H3.
+          + apply EquivTran with (toClass F:[b]:).
+            * apply EquivSym, ImageByClass.ToClass, H3.
+            * apply EqualToClass. assumption. }
+      assert (Minimal E (B :\: toClass b) (F!b)) as H13. {
+        apply Minimal.EquivCompatR with F:[A :\: toClass b]:; assumption. }
+      clear H11 H12.
+      assert (B b) as H14. {
+        apply Class.Ordinal.Core.LessIsElem; try assumption. split.
+        - intros a H14. apply (Bij.ImageOfDomain F A B). 1: apply H3.
+          apply (Bij.ImageCharac F A B). 1: apply H3.
+          exists a. assert (A a) as H15. {
+            destruct H1 as [H1 _]. apply (H1 b); assumption. }
+          split. 1: assumption. split. 1: assumption. apply H8, H14.
+        - apply NotEquivSym, Diff.WhenNotEmpty, Class.Empty.HasElem.
+          exists F!b. apply Minimal.IsIn with E. assumption. }
+      assert (Minimal E (B :\: toClass b) b) as H15. {
+        apply IsEMinimal; assumption. }
+      assert (B :\: toClass b :<=: On) as H16. {
+        intros a [H16 _]. apply Class.Ordinal.Core.IsOrdinal with B; assumption. }
+      assert (B :\: toClass b :<>: :0:) as H17. {
+        apply Class.Empty.HasElem. exists b. split. 1: assumption.
+        apply NoElemLoop1. }
+      assert (b = inf (B :\: toClass b)) as H18. {
+        apply InfOfClass.IsEMinimal; assumption. }
+      assert (F!b = inf (B :\: toClass b)) as H19. {
+        apply InfOfClass.IsEMinimal; assumption. }
+      rewrite <- H18 in H19. assumption. }
   intros a H6.
-  assert (On a) as H7. { apply Core.IsOrdinal with A; assumption. }
+  assert (On a) as H7. { apply Class.Ordinal.Core.IsOrdinal with A; assumption. }
   assert (C a) as H8. { apply H5. assumption. }
   rewrite H4 in H8. destruct H8 as [_ H8]. apply H8. assumption.
 Qed.
-*)
-(*
-  assert (C a) as H8. { apply H5. assumption. }
-  rewrite H4 in H8. apply H8. split; assumption.
-Qed.
-*)
+
 (*
 Proposition IsomIsEquiv : forall (F A B:Class), Ordinal A -> Ordinal B ->
   Isom F E E A B -> A :~: B.

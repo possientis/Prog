@@ -237,3 +237,4 @@ Proposition DiffImage : forall (F A B:Class),
 Proof.
   intros F A B [_ H1]. apply Diff.Image, H1.
 Qed.
+

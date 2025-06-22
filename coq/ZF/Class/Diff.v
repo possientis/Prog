@@ -1,13 +1,14 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
 Require Import ZF.Class.Complement.
+Require Import ZF.Class.Core.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Empty.
-Require Import ZF.Class.Relation.Functional.
-Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.Core.
@@ -20,6 +21,13 @@ Definition diff (P Q:Class) : Class := P :/\: :¬:Q.
 
 (* Notation "P :\: Q" := (diff P Q)                                             *)
 Global Instance ClassDiff : Diff Class := { diff := diff }.
+
+Proposition EquivCompat : forall (P Q R S:Class),
+  P :~: R -> Q :~: S -> P :\: Q :~: R :\: S.
+Proof.
+  intros P Q R S H1 H2. apply Inter2.EquivCompat. 1: assumption.
+  apply Complement.EquivCompat. assumption.
+Qed.
 
 Proposition IsSmall : forall (P Q:Class), Small P -> Small (P :\: Q).
 Proof.
@@ -36,6 +44,13 @@ Proof.
     + destruct H2 as [H2 H3].
       apply H1 in H2. contradiction.
     + apply Class.Empty.Charac in H2. contradiction.
+Qed.
+
+Proposition WhenNotEmpty : forall (P Q:Class),
+  P :\: Q :<>: :0: -> P :<>: Q.
+Proof.
+  intros P Q H1 H2. apply Class.Empty.HasElem in H1.
+  destruct H1 as [x [H1 H3]]. apply H3, H2. assumption.
 Qed.
 
 Proposition WhenLess : forall (P Q:Class),
@@ -72,3 +87,4 @@ Proof.
     exists x. split. 2: assumption. split.
     1: assumption. intros H5. apply H4. exists x. split; assumption.
 Qed.
+

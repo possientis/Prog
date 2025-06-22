@@ -4,6 +4,8 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.IsSetOf.
+Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
@@ -128,3 +130,14 @@ Proof.
   2: apply ToClass. apply Class.Ordinal.Inf.WhenOrdinal; assumption.
 Qed.
 
+Proposition IsEMinimal : forall (A:Class) (a:U),
+  A :<=: On   ->
+  A :<>: :0:  ->
+  a = inf A <-> Minimal E A a.
+Proof.
+  intros A a H1 H2. split; intros H3.
+  - apply Inf.IsEMinimal; try assumption. rewrite H3. apply EquivSym, ToClass.
+  - apply Inf.IsEMinimal in H3; try assumption. apply EqualToClass.
+    apply EquivTran with (Class.Ordinal.Inf.inf A). 1: assumption.
+    apply ToClass.
+Qed.
