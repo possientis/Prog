@@ -37,7 +37,7 @@ Proof.
   - apply Inf.WhenOrdinal; assumption.
 Qed.
 
-Proposition IsomIsId : forall (F A B:Class),
+Proposition IsId : forall (F A B:Class),
   Ordinal A       ->
   Ordinal B       ->
   Isom F E E A B  ->
@@ -110,10 +110,19 @@ Proof.
   rewrite H4 in H8. destruct H8 as [_ H8]. apply H8. assumption.
 Qed.
 
-(*
-Proposition IsomIsEquiv : forall (F A B:Class), Ordinal A -> Ordinal B ->
-  Isom F E E A B -> A :~: B.
+Proposition IsEquiv : forall (F A B:Class),
+  Ordinal A       ->
+  Ordinal B       ->
+  Isom F E E A B  ->
+  A :~: B.
 Proof.
-
-Show.
-*)
+  intros F A B H1 H2 H3.
+  assert (F:[A]: :~: B) as H4. { apply Bij.ImageOfDomain, H3. }
+  intros a. split; intros H5.
+  - apply H4. apply (Bij.ImageCharac F A B). 1: apply H3. exists a.
+    split. 1: assumption. split. 1: assumption. apply IsId with A B; assumption.
+  - apply H4 in H5. apply (Bij.ImageCharac F A B) in H5. 2: apply H3.
+    destruct H5 as [x [H5 [_ H7]]].
+    assert (F!x = x) as H8. { apply IsId with A B; assumption. }
+    rewrite H7 in H8. rewrite H8. assumption.
+Qed.
