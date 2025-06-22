@@ -12,6 +12,8 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Compose.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
@@ -125,4 +127,16 @@ Proof.
     destruct H5 as [x [H5 [_ H7]]].
     assert (F!x = x) as H8. { apply IsId with A B; assumption. }
     rewrite H7 in H8. rewrite H8. assumption.
+Qed.
+
+Proposition IsEquivGen : forall (F G R A B C:Class),
+  Ordinal A       ->
+  Ordinal B       ->
+  Isom F E R A C  ->
+  Isom G E R B C  ->
+  A :~: B.
+Proof.
+  intros F G R A B C H1 H2 H3 H4. apply IsEquiv with (G^:-1: :.: F);
+  try assumption. apply Isom.Compose with R C. 1: assumption.
+  apply Isom.Converse. assumption.
 Qed.
