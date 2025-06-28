@@ -6,6 +6,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
+
 (* The domain of a class.                                                       *)
 Definition domain (F:Class) : Class := fun x => exists y, F :(x,y):.
 
