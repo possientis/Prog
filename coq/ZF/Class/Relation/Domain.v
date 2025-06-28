@@ -10,7 +10,7 @@ Require Import ZF.Set.OrdPair.
 Definition domain (F:Class) : Class := fun x => exists y, F :(x,y):.
 
 (* The domain is compatible with class equivalence.                             *)
-Proposition DomainEquivCompat : forall (F G:Class),
+Proposition EquivCompat : forall (F G:Class),
   F :~: G -> domain F :~: domain G.
 Proof.
   intros F G H1 x. split; intros H2; destruct H2 as [y H2];
@@ -18,7 +18,7 @@ Proof.
 Qed.
 
 (* The domain is compatible with class inclusion.                               *)
-Proposition DomainInclCompat : forall (F G:Class),
+Proposition InclCompat : forall (F G:Class),
   F :<=: G -> domain F :<=: domain G.
 Proof.
   intros F G H1 x H2. destruct H2 as [y H2]. exists y. apply H1, H2.
@@ -37,7 +37,7 @@ Proof.
 Qed.
 
 (* The domain of a small class is a small class.                                *)
-Proposition DomainIsSmall : forall (F:Class),
+Proposition IsSmall : forall (F:Class),
   Small F -> Small (domain F).
 Proof.
   (* Let F be an arbitrary class. *)
@@ -62,4 +62,3 @@ Proof.
 
   - apply H1.
 Qed.
-

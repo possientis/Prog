@@ -11,14 +11,14 @@ Require Import ZF.Set.OrdPair.
 (* The range of a class.                                                        *)
 Definition range (F:Class) : Class := fun y => exists x, F :(x,y):.
 
-Proposition RangeEquivCompat : forall (F G:Class),
+Proposition EquivCompat : forall (F G:Class),
   F :~: G -> range F :~: range G.
 Proof.
   intros F G H1 y. split; intros H2; destruct H2 as [x H2];
   exists x; apply H1; assumption.
 Qed.
 
-Proposition RangeInclCompat : forall (F G:Class),
+Proposition InclCompat : forall (F G:Class),
   F :<=: G -> range F :<=: range G.
 Proof.
   intros F G H1 y H2. destruct H2 as [x H2]. exists x. apply H1, H2.
@@ -37,7 +37,7 @@ Proof.
     + apply Snd.Charac2. exists z. exists x. split; reflexivity.
 Qed.
 
-Proposition RangeIsSmall : forall (F:Class),
+Proposition IsSmall : forall (F:Class),
   Small F -> Small (range F).
 Proof.
   (* Let F be an arbitrary class. *)

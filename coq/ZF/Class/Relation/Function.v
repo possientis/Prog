@@ -29,7 +29,7 @@ Proposition EquivCharac : forall (F G:Class),
 Proof.
   intros F G. intros [Hf Gf] [Hg Gg].
   unfold Relation in Hf. unfold Relation in Hg. split; intros H1.
-  assert (domain F :~: domain G) as H2. { apply DomainEquivCompat. assumption. }
+  assert (domain F :~: domain G) as H2. { apply Domain.EquivCompat. assumption. }
   - split. 1: assumption. intros x H3.
     assert (domain G x) as H4. { apply H2. assumption. }
     assert (H5 := H3). assert (H6 := H4).
