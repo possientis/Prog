@@ -50,8 +50,8 @@ Qed.
 Proposition InclCompat : forall (P Q R S:Class),
   P :<=: Q -> R :<=: S -> P:[R]: :<=: Q:[S]:.
 Proof.
-  intros P Q R S H1 H2 y H3. unfold image in H3. destruct H3 as [x [H3 H4]].
-  unfold image. exists x. split.
+  intros P Q R S H1 H2 y H3. destruct H3 as [x [H3 H4]].
+  exists x. split.
   - apply H2. assumption.
   - apply H1. assumption.
 Qed.

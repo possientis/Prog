@@ -2,6 +2,7 @@ Require Import ZF.Class.Core.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -21,6 +22,12 @@ Proposition ToClass : forall (F:Class) (a:U),
 Proof.
   intros F a H1. apply Truncate.WhenSmall. apply Image.IsSmall.
   1: assumption. apply SetIsSmall.
+Qed.
+
+Proposition ToClassWhenSmall : forall (F:Class) (a:U),
+  Small F -> toClass F:[a]: :~: F:[toClass a]:.
+Proof.
+  intros F a H1. apply Truncate.WhenSmall, Restrict.ImageIsSmall. assumption.
 Qed.
 
 Proposition Charac : forall (F:Class) (a y:U),
@@ -51,3 +58,4 @@ Proof.
   destruct H3 as [x [H3 H4]]. apply CharacRev with x; try assumption.
   apply H2. assumption.
 Qed.
+
