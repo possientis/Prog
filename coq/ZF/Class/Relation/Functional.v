@@ -4,7 +4,7 @@ Require Import ZF.Class.Relation.FunctionalAt.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
-(* A class is said to be functional if its associated binary class is           *)
+(* A functional class.                                                          *)
 Definition Functional (F:Class) : Prop :=
   forall x y z, F :(x,y): -> F :(x,z): -> y = z.
 
