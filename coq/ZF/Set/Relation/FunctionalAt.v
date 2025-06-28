@@ -1,23 +1,23 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Core.
+Require Import ZF.Class.Relation.FunctionalAt.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
-(* Local property of being functional at point a.                               *)
-Definition FunctionalAt (F:Class) (a:U) : Prop :=
-  forall y z, F :(a,y): -> F :(a,z): -> y = z.
+(* Local property of a set a being functional at the point b.                   *)
+Definition FunctionalAt (a b:U) : Prop :=
+  forall y z, :(b,y): :< a -> :(b,z): :< a -> y = z.
 
-(* The property of being functional at a is compatible with equivalence.        *)
-Proposition EquivCompat : forall (F G:Class) (a:U),
-  F :~: G -> FunctionalAt F a -> FunctionalAt G a.
+Proposition ToClass : forall (a b:U),
+  FunctionalAt a b <-> Class.Relation.FunctionalAt.FunctionalAt (toClass a) b.
 Proof.
-  intros F G a H1 H2 y z H3 H4. apply H2; apply H1; assumption.
+  intros a b. split; intros H1; assumption.
 Qed.
 
-Proposition WhenNot : forall (F:Class) (a:U),
-  ~ FunctionalAt F a <-> exists y z, y <> z /\ F :(a,y): /\ F :(a,z):.
+Proposition WhenNot : forall (a b:U),
+  ~ FunctionalAt a b <-> exists y z, y <> z /\ :(b,y): :< a /\ :(b,z): :< a.
 Proof.
-  intros F a. split; intros H1.
+  intros a b. split; intros H1.
   - apply NotForAll in H1. destruct H1 as [y H1].
     apply NotForAll in H1. destruct H1 as [z H1].
     exists y. exists z. split.
