@@ -58,7 +58,7 @@ Qed.
 Proposition ImageIsSmall : forall (F A:Class),
   Bijection F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [_ H1]. apply ImageIsSmall. assumption.
+  intros F A [_ H1]. apply OneToOne.ImageIsSmall. assumption.
 Qed.
 
 (* A bijection class with a small domain is small.                              *)

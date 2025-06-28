@@ -9,6 +9,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
+Require Import ZF.Class.Relation.Snd.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -118,6 +119,19 @@ Proposition IsIncl : forall (F A:Class),
   F:|:A :<=: F.
 Proof.
   intros F A x [y [z [H1 [_ H2]]]]. rewrite H1. apply H2.
+Qed.
+
+(* The image of any class by a small class is small.                            *)
+Proposition ImageIsSmall : forall (F A:Class),
+  Small F -> Small F:[A]:.
+Proof.
+  intros F A H1. apply Small.EquivCompat with Snd:[F:|:A]:.
+  - apply EquivTran with (range (F:|:A)).
+    + apply Range.ImageBySnd.
+    + apply EquivSym, ImageIsRangeOfRestrict.
+  - apply Image.IsSmall.
+    + apply Snd.IsFunctional.
+    + apply InclInSmallIsSmall with F. 2: assumption. apply IsIncl.
 Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
