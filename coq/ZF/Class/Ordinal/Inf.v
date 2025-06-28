@@ -188,7 +188,7 @@ Proof.
       destruct H6 as [H6|[H6|H6]].
       * apply Incl.EquivCompatR with (toClass a). 1: assumption. apply InclRefl.
       * apply H6.
-      * exfalso. apply Empty.HasNoElem in H4. apply H4. exists b. split.
+      * exfalso. apply Class.Empty.HasNoElem in H4. apply H4. exists b. split.
         1: assumption. apply Class.Ordinal.Core.LessIsElem;
         try assumption; apply H1; assumption.
     + apply IsLowerBound; assumption.

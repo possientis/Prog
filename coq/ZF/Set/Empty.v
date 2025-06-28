@@ -41,6 +41,16 @@ Proof.
     apply Charac in H1. apply H1.
 Qed.
 
+Proposition HasNoElem : forall (a:U),
+  a = :0: <-> ~ exists x, x :< a.
+Proof.
+  intros a. split; intros H1.
+  - intros [x H2]. apply Charac with x. rewrite <- H1. assumption.
+  - apply DoubleInclusion. split; intros x H2.
+    + apply Charac, H1. exists x. assumption.
+    + apply Charac in H2. contradiction.
+Qed.
+
 (* If a has no element, it is the empty set.                                    *)
 Proposition IfNoElemThenEmpty : forall (a:U),
   (forall x, ~ x :< a) -> a = :0:.
@@ -91,3 +101,4 @@ Proposition NotEmptyToClass : forall (a:U),
 Proof.
   intros a. split; intros H1 H2; apply H1, EmptyToClass; assumption.
 Qed.
+
