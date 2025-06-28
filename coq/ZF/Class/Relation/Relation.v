@@ -13,25 +13,23 @@ Require Import ZF.Set.OrdPair.
 Definition Relation (F:Class) : Prop :=
     forall x, F x -> exists y, exists z, x = :(y,z):.
 
-(* The pairwise union of two relation classes is a relation class.              *)
+(* The union of two relations classes is a relation class.                      *)
 Proposition Union2 : forall (F G:Class),
   Relation F -> Relation G -> Relation (F:\/:G).
 Proof.
-  intros F G Hp Hq x H1. destruct H1 as [H1|H1].
-  - apply Hp, H1.
-  - apply Hq, H1.
+  intros F G H1 H2 x [H3|H3].
+  - apply H1, H3.
+  - apply H2, H3.
 Qed.
 
-(* A function is a subclass of the product of its domain and image thereof.     *)
+(* A relation is a subclass of the product of its domain and image thereof.     *)
 Proposition IsIncl : forall (F:Class),
   Relation F -> F :<=: (domain F) :x: F:[domain F]:.
 Proof.
-  intros F H1 x H3. unfold Relation in H1. specialize (H1 x H3).
-  destruct H1 as [y [z H1]]. exists y. exists z. split. 1: assumption. split.
-  - exists z. subst. assumption.
-  - exists y. split.
-    + exists z. subst. assumption.
-    + subst. assumption.
+  intros F H1 x H3. specialize (H1 x H3). destruct H1 as [y [z H1]].
+  exists y. exists z. split. 1: assumption. subst. split.
+  - exists z. assumption.
+  - exists y. split. 2: assumption. exists z. assumption.
 Qed.
 
 (* A functional relation with a small domain is small.                          *)
