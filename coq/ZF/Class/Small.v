@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
 
@@ -15,7 +15,7 @@ Qed.
 Proposition IsSomeSet : forall (P:Class),
   Small P -> exists a, P :~: toClass a.
 Proof.
-  intros P [a H1]. exists a. apply EquivSym. intros x. apply H1.
+  intros P [a H1]. exists a. apply Equiv.Sym. intros x. apply H1.
 Qed.
 
 (* The property of being small is compatible with class equivalence.            *)

@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -36,13 +36,13 @@ Proof.
     { apply Function.EquivCharac; assumption. }
   split; intros H6.
   - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
-    + apply EquivTran with (domain F). 1: { apply EquivSym. assumption. }
-      apply EquivTran with (domain G); assumption.
+    + apply Equiv.Tran with (domain F). 1: { apply Equiv.Sym. assumption. }
+      apply Equiv.Tran with (domain G); assumption.
     + intros x H8. apply H7, H2. assumption.
   - destruct H6 as [H6 H7]. apply H5. split.
-    + apply EquivTran with A. 1: assumption.
-      apply EquivTran with B. 1: assumption.
-      apply EquivSym. assumption.
+    + apply Equiv.Tran with A. 1: assumption.
+      apply Equiv.Tran with B. 1: assumption.
+      apply Equiv.Sym. assumption.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
@@ -50,8 +50,8 @@ Qed.
 Proposition ImageOfDomain : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.
 Proof.
-  intros F A [H1 H2]. apply EquivTran with F:[domain F]:.
-  - apply Image.EquivCompatR, EquivSym. assumption.
+  intros F A [H1 H2]. apply Equiv.Tran with F:[domain F]:.
+  - apply Image.EquivCompatR, Equiv.Sym. assumption.
   - apply Range.ImageOfDomain.
 Qed.
 
@@ -78,14 +78,14 @@ Proposition IsSmall : forall (F A:Class),
   FunctionOn F A -> Small A -> Small F.
 Proof.
   intros F A H1 H2. apply Function.IsSmall. 1: apply H1.
-  apply Small.EquivCompat with A. 2: assumption. apply EquivSym, H1.
+  apply Small.EquivCompat with A. 2: assumption. apply Equiv.Sym, H1.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)
 Proposition InvImageOfRange : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
-  intros F A [H1 H2]. apply EquivTran with (domain F).
+  intros F A [H1 H2]. apply Equiv.Tran with (domain F).
   2: assumption. apply InvImage.InvImageOfRange.
 Qed.
 
@@ -107,9 +107,9 @@ Proposition Compose : forall (F A G B:Class),
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply Function.Compose; assumption.
-  - apply EquivTran with (domain F). 2: assumption.
+  - apply Equiv.Tran with (domain F). 2: assumption.
     apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
-    apply EquivSym. assumption.
+    apply Equiv.Sym. assumption.
 Qed.
 
 (* Characterization of the value at a of a function defined on A when a in A.   *)
@@ -208,13 +208,13 @@ Proposition RangeIsNotEmpty : forall (F A:Class),
   FunctionOn F A -> A :<>: :0: -> range F :<>: :0:.
 Proof.
   intros F A H1 H2. apply Function.RangeIsNotEmpty.
-  apply NotEquivCompatL with A. 2: assumption. apply EquivSym, H1.
+  apply Equiv.NotCompatL with A. 2: assumption. apply Equiv.Sym, H1.
 Qed.
 
 Proposition IsRestrict : forall (F A:Class),
   FunctionOn F A -> F :~: F :|: A.
 Proof.
-  intros F A H1. apply EquivTran with (F :|: domain F).
+  intros F A H1. apply Equiv.Tran with (F :|: domain F).
   - apply Function.IsRestrict, H1.
   - apply Restrict.EquivCompatR, H1.
 Qed.
@@ -223,6 +223,6 @@ Qed.
 Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply EquivRefl. }
+  intros F H1. split. { assumption. } { apply Equiv.Refl. }
 Qed.
 

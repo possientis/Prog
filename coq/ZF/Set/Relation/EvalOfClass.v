@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Eval.
 Require Import ZF.Class.Relation.Functional.
@@ -28,11 +28,11 @@ Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
 Proof.
   intros F a y H1. split; intros H2.
   - unfold eval. apply EqualToClass.
-    apply EquivTran with (Relation.Eval.eval F a).
+    apply Equiv.Tran with (Relation.Eval.eval F a).
     + apply ToFromClass.
     + apply Relation.Eval.WhenHasValueAt; assumption.
   - apply Relation.Eval.WhenHasValueAt. 1: assumption.
-    unfold eval in H2. rewrite <- H2. apply EquivSym, ToFromClass.
+    unfold eval in H2. rewrite <- H2. apply Equiv.Sym, ToFromClass.
 Qed.
 
 (* If F has a value at a, then (a,F!a) satisfies the class F.                   *)
@@ -67,10 +67,10 @@ Proposition WhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> F!a = :0:.
 Proof.
   intros F a H1. apply EqualToClass. unfold eval, zero, SetZero, empty.
-  apply EquivTran with (Relation.Eval.eval F a). 1: apply ToFromClass.
-  apply EquivTran with :0:.
+  apply Equiv.Tran with (Relation.Eval.eval F a). 1: apply ToFromClass.
+  apply Equiv.Tran with :0:.
   - apply Relation.Eval.WhenNotHasValueAt. assumption.
-  - apply EquivSym, ToFromClass.
+  - apply Equiv.Sym, ToFromClass.
 Qed.
 
 (* If F is not functional at a then F!a is the empty set.                       *)

@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 
 (* Predicate over classes: a class has at least one element.                    *)

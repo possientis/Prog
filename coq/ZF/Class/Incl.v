@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 
 Require Import ZF.Notation.Leq.
 Export ZF.Notation.Leq.
@@ -31,14 +31,14 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<=: P -> R :<=: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 

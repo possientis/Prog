@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Pair.
@@ -31,7 +31,7 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 (* Pairwise union is right-compatible with class equivalence.                   *)
@@ -39,7 +39,7 @@ Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :\/: P :~: R :\/: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 
@@ -79,7 +79,7 @@ Proof.
   - assert (toClass a :\/: toClass b :~: P :\/: Q) as A. 2: apply A.
 
   (* Which follows from the equivalences of a and P and  of b and Q. *)
-    apply EquivCompat; apply EquivSym; assumption.
+    apply EquivCompat; apply Equiv.Sym; assumption.
 
   (* We next need to show that a \/ b is small. *)
   - assert (Small (toClass a :\/: toClass b)) as A. 2: apply A.

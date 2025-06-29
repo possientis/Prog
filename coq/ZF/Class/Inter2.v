@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
@@ -30,14 +30,14 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :/\: P :~: R :/\: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 
@@ -111,7 +111,7 @@ Proof.
   - assert (toClass a :/\: Q :~: P :/\: Q) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-    apply EquivCompatL, EquivSym, H2.
+    apply EquivCompatL, Equiv.Sym, H2.
 
   (* We next need to show that a /\ Q is small. *)
   - assert (Small (toClass a :/\: Q)) as A. 2: apply A.

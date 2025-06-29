@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.

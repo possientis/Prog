@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.Core.

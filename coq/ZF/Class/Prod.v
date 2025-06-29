@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Empty.
@@ -57,7 +57,7 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 (* The product of two classes is right-compatible with class equivalence.       *)
@@ -65,7 +65,7 @@ Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :x: P :~: R :x: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 
@@ -132,7 +132,7 @@ Proof.
   - assert (toClass a :x: toClass b :~: P :x: Q) as A. 2: apply A.
 
   (* Which follows from the equivalences of a and P and  of b and Q. *)
-    apply EquivCompat; apply EquivSym; assumption.
+    apply EquivCompat; apply Equiv.Sym; assumption.
 
   (* We next need to show that a x b is small. *)
   - assert (Small (toClass a :x: toClass b)) as A. 2: apply A.
@@ -363,7 +363,7 @@ Proof.
   apply H1. assert (Small P) as A. 2: apply A.
 
   (* From the equivalence P ~ 0 *)
-  apply Small.EquivCompat with :0:. 1: { apply EquivSym, H2. }
+  apply Small.EquivCompat with :0:. 1: { apply Equiv.Sym, H2. }
 
   (* We need to show that 0 is small *)
   assert (Small :0:) as A. 2: apply A.

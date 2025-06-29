@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.Core.

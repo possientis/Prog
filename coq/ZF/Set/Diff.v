@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.

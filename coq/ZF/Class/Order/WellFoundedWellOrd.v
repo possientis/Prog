@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -98,15 +98,15 @@ Proof.
 
   (* Furthermore, the set c is not empty. *)
     assert (c <> :0:) as H9. {
-      intros H9. apply H5. apply EquivTran with (toClass c).
-      - apply EquivSym. assumption.
+      intros H9. apply H5. apply Equiv.Tran with (toClass c).
+      - apply Equiv.Sym. assumption.
       - apply EmptyToClass. assumption.
     }
 
   (* So c is a non-empty subset of the class B. *)
     assert (toClass c :<=: B) as H10. {
       apply Incl.EquivCompatL with C.
-      - apply EquivSym. assumption.
+      - apply Equiv.Sym. assumption.
       - rewrite EC. apply InitSegment.IsIncl.
    }
 

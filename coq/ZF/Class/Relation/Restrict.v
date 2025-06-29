@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
@@ -53,14 +53,14 @@ Proposition EquivCompatL : forall (F G A:Class),
 Proof.
   intros F G A H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> F:|:A :~: F:|:B.
 Proof.
   intros F A B H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 
@@ -99,7 +99,7 @@ Proof.
   - apply IsRelation.
   - apply IsFunctional. assumption.
   - apply Small.EquivCompat with (A :/\: domain F).
-    + apply EquivSym, DomainOf.
+    + apply Equiv.Sym, DomainOf.
     + apply Inter2.IsSmallL. assumption.
 Qed.
 
@@ -126,9 +126,9 @@ Proposition ImageIsSmall : forall (F A:Class),
   Small F -> Small F:[A]:.
 Proof.
   intros F A H1. apply Small.EquivCompat with Snd:[F:|:A]:.
-  - apply EquivTran with (range (F:|:A)).
+  - apply Equiv.Tran with (range (F:|:A)).
     + apply Range.ImageBySnd.
-    + apply EquivSym, ImageIsRangeOfRestrict.
+    + apply Equiv.Sym, ImageIsRangeOfRestrict.
   - apply Image.IsSmall.
     + apply Snd.IsFunctional.
     + apply InclInSmallIsSmall with F. 2: assumption. apply IsIncl.

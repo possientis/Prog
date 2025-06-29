@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
@@ -26,10 +26,10 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply Incl.EquivCompatL with :0:.
-    + apply EquivSym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
     + intros x H3. contradiction.
   - apply Incl.EquivCompatL with (inter' A).
-    + apply EquivSym, Inter.WhenNotEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
     + apply IsIncl'; assumption.
 Qed.
 
@@ -54,10 +54,10 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply Transitive.EquivCompat with :0:.
-    + apply EquivSym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
     + intros x H3. contradiction.
   - apply Transitive.EquivCompat with (inter' A).
-    + apply EquivSym, Inter.WhenNotEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
     + apply IsTransitive'. assumption.
 Qed.
 
@@ -80,10 +80,10 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply Class.Ordinal.Core.EquivCompat with :0:.
-    + apply EquivSym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
     + apply Class.Ordinal.Core.ZeroIsOrdinal.
   - apply Class.Ordinal.Core.EquivCompat with (inter' A).
-    + apply EquivSym, WhenNotEmpty. assumption.
+    + apply Equiv.Sym, WhenNotEmpty. assumption.
     + apply IsOrdinal'; assumption.
 Qed.
 
@@ -103,10 +103,10 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H3 as [H3|H3].
   - apply Incl.EquivCompatL with :0:.
-    + apply EquivSym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
     + intros x H4. contradiction.
   - apply Incl.EquivCompatL with (inter' A).
-    + apply EquivSym, WhenNotEmpty. assumption.
+    + apply Equiv.Sym, WhenNotEmpty. assumption.
     + apply IsLowerBound'; assumption.
 Qed.
 
@@ -128,6 +128,6 @@ Proposition IsLargest : forall (A:Class) (a:U),
   toClass a :<=: :I(A).
 Proof.
   intros A a H1 H2 H3. apply Incl.EquivCompatR with (inter' A).
-  - apply EquivSym, Inter.WhenNotEmpty. assumption.
+  - apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
   - apply IsLargest'; assumption.
 Qed.

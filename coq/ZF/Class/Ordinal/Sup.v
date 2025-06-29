@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
@@ -21,7 +21,7 @@ Qed.
 Proposition InterOn : forall (A:Class), sup A :~: sup (A :/\: On).
 Proof.
   intros A.
-  apply Union.EquivCompat, EquivSym, Inter2.WhenInclL, Inter2.IsInclR.
+  apply Union.EquivCompat, Equiv.Sym, Inter2.WhenInclL, Inter2.IsInclR.
 Qed.
 
 (* The supremum of a class of ordinals coincide with its union.                 *)
@@ -68,7 +68,7 @@ Proposition IsUpperBoundOrd : forall (A:Class) (a:U), On a ->
   A a -> toClass a :<=: sup A.
 Proof.
   intros A a H1 H2. apply Incl.EquivCompatR with (sup (A :/\: On)).
-  - apply EquivSym, InterOn.
+  - apply Equiv.Sym, InterOn.
   - apply IsUpperBound.
     + apply Inter2.IsInclR.
     + split; assumption.
@@ -91,7 +91,7 @@ Proposition IsSmallestOrd : forall (A:Class) (a:U),
   sup A :<=: toClass a.
 Proof.
   intros A a H1. apply Incl.EquivCompatL with (sup (A :/\: On)).
-  - apply EquivSym, InterOn.
+  - apply Equiv.Sym, InterOn.
   - apply IsSmallest.
     + apply Inter2.IsInclR.
     + intros b [H2 H3]. apply H1; assumption.
@@ -99,7 +99,7 @@ Qed.
 
 Proposition IsOn : sup On :~: On.
 Proof.
-  apply EquivTran with :U(On).
-  - apply EquivSym, WhenOrdinalElem, Class.Incl.Refl.
+  apply Equiv.Tran with :U(On).
+  - apply Equiv.Sym, WhenOrdinalElem, Class.Incl.Refl.
   - apply Ordinal.Union.IsOn.
 Qed.

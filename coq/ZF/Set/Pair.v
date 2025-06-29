@@ -1,7 +1,7 @@
 Declare Scope ZF_Set_Pair_scope.
 Open    Scope ZF_Set_Pair_scope.
 
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Pair.
 Require Import ZF.Set.Core.

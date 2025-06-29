@@ -1,5 +1,5 @@
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -74,7 +74,7 @@ Qed.
 Proposition IsTransitive : Transitive :N.
 Proof.
   apply Transitive.EquivCompat with :N.
-  - apply EquivSym, ToClass.
+  - apply Equiv.Sym, ToClass.
   - apply Class.Ordinal.Omega.IsTransitive.
 Qed.
 
@@ -82,7 +82,7 @@ Qed.
 Proposition IsOrdinal : Ordinal :N.
 Proof.
   apply Core.EquivCompat with :N.
-  - apply EquivSym, ToClass.
+  - apply Equiv.Sym, ToClass.
   - apply Class.Ordinal.Omega.IsOrdinal.
 Qed.
 
@@ -128,7 +128,7 @@ Proposition IsIncl : forall (a:U),
   a :<=: :N.
 Proof.
   intros a H1 H2. apply Incl.EquivCompatR with :N.
-  - apply EquivSym, ToClass.
+  - apply Equiv.Sym, ToClass.
   - apply Class.Ordinal.Omega.IsIncl; assumption.
 Qed.
 
@@ -139,7 +139,7 @@ Proposition Induction : forall (A:Class),
   toClass :N :<=: A.
 Proof.
   intros A H1 H2. apply Incl.EquivCompatL with :N.
-  - apply EquivSym, ToClass.
+  - apply Equiv.Sym, ToClass.
   - apply Class.Ordinal.Omega.Induction. 1: assumption.
     intros n H3. apply H2. apply FromClass.Charac. assumption.
 Qed.
@@ -151,7 +151,7 @@ Proposition FiniteInduction : forall (A:Class),
   (forall n, A n -> A (succ n)) ->
   A :~: toClass :N.
 Proof.
-  intros A H1 H2 H3. apply EquivTran with :N. 2: { apply EquivSym, ToClass. }
+  intros A H1 H2 H3. apply Equiv.Tran with :N. 2: { apply Equiv.Sym, ToClass. }
   apply Class.Ordinal.Omega.FiniteInduction; try assumption.
   apply Incl.EquivCompatR with (toClass :N). 2: assumption. apply ToClass.
 Qed.

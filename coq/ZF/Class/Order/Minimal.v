@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Image.
@@ -19,8 +19,8 @@ Proposition EquivCompat : forall (R S A B:Class) (a:U),
 Proof.
   intros R S A B a H1 H2 [H3 H4]; split.
   - apply H2. assumption.
-  - apply EquivTran with (initSegment R A a). 2: assumption.
-    apply EquivSym, InitSegment.EquivCompat; assumption.
+  - apply Equiv.Tran with (initSegment R A a). 2: assumption.
+    apply Equiv.Sym, InitSegment.EquivCompat; assumption.
 Qed.
 
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
@@ -28,14 +28,14 @@ Proposition EquivCompatL : forall (R S A:Class) (a:U),
 Proof.
   intros R S A a H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Minimal R A a -> Minimal R B a.
 Proof.
   intros R A B a H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 

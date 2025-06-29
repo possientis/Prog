@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -98,7 +98,7 @@ Proof.
   intros F G [H1 H2] [H3 H4]. split.
   - apply Compose.IsFunctional; assumption.
   - apply Functional.EquivCompat with (converse F :.: converse G).
-    + apply EquivSym, ComposeConverse.
+    + apply Equiv.Sym, ComposeConverse.
     + apply Compose.IsFunctional; assumption.
 Qed.
 

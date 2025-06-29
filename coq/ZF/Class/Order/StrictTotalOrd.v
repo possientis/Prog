@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.StrictOrd.
 Require Import ZF.Class.Order.Transitive.

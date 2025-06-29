@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.InfAbove.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
@@ -43,8 +43,8 @@ Qed.
 Proposition ToClass : forall (a b:U),
   inf(>: b) (toClass a) :~: toClass (inf(>: b) a).
 Proof.
-  intros a b. apply EquivTran with (Class.Ordinal.Inf.inf (toClass (a :\: b))).
-  - apply Inf.EquivCompat, EquivSym, Diff.ToClass.
+  intros a b. apply Equiv.Tran with (Class.Ordinal.Inf.inf (toClass (a :\: b))).
+  - apply Inf.EquivCompat, Equiv.Sym, Diff.ToClass.
   - apply Inf.ToClass.
 Qed.
 

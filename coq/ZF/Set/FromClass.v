@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Define.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.

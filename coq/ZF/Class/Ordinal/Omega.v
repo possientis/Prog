@@ -2,7 +2,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Infinity.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.

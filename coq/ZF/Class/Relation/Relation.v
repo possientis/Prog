@@ -1,5 +1,5 @@
 Require Import ZF.Class.Bounded.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Domain.

@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Truncate.
 Require Import ZF.Set.Core.
@@ -26,7 +26,7 @@ Qed.
 Proposition WhenSmall : forall (A:Class),
   Small A -> toClass (truncate A) :~: A.
 Proof.
-  intros A H1. apply EquivTran with (Class.Truncate.truncate A).
+  intros A H1. apply Equiv.Tran with (Class.Truncate.truncate A).
   - apply ToFromClass.
   - apply Class.Truncate.WhenSmall. assumption.
 Qed.
@@ -35,10 +35,10 @@ Proposition WhenNotSmall : forall (A:Class),
   ~ Small A -> truncate A = :0:.
 Proof.
   intros A H1. apply EqualToClass.
-  apply EquivTran with (Class.Truncate.truncate A).
+  apply Equiv.Tran with (Class.Truncate.truncate A).
   - apply ToFromClass.
-  - apply EquivTran with :0:.
+  - apply Equiv.Tran with :0:.
     + apply Class.Truncate.WhenNotSmall. assumption.
-    + apply EquivSym, Empty.ToClass.
+    + apply Equiv.Sym, Empty.ToClass.
 Qed.
 

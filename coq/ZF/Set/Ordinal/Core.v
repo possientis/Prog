@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -143,7 +143,7 @@ Proposition ZeroIsOrdinal : Ordinal :0:.
 Proof.
   apply Class.Ordinal.Core.EquivCompat with :0:.
   2: apply Class.Ordinal.Core.ZeroIsOrdinal.
-  apply EquivSym, Empty.ToClass.
+  apply Equiv.Sym, Empty.ToClass.
 Qed.
 
 (* Every non-empty ordinal contains 0.                                          *)

@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
@@ -29,9 +29,9 @@ Qed.
 Proposition ByClass : forall (f a:U), f:[a]: = (toClass f) :[a]:.
 Proof.
   intros f a. apply EqualToClass.
-  apply EquivTran with ((toClass f) :[toClass a]:).
+  apply Equiv.Tran with ((toClass f) :[toClass a]:).
   - apply ToClass.
-  - apply EquivSym, ImageByClass.ToClassWhenSmall, SetIsSmall.
+  - apply Equiv.Sym, ImageByClass.ToClassWhenSmall, SetIsSmall.
 Qed.
 
 Proposition Charac : forall (f a y:U),

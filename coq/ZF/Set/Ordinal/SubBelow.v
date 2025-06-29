@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.SupBelow.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Inter2.

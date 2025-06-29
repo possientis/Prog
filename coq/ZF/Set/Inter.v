@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Inter.
 Require Import ZF.Set.Core.
@@ -56,7 +56,7 @@ Proof.
   apply DoubleInclusion. split; intros x H1.
   - apply FromClass.Charac in H1. apply (Inter.EquivCompat :0:) in H1.
     + apply IsZero in H1. contradiction.
-    + apply EquivSym, Empty.ToClass.
+    + apply Equiv.Sym, Empty.ToClass.
   - apply Empty.Charac in H1. contradiction.
 Qed.
 

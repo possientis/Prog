@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Relation.Bij.
@@ -79,7 +79,7 @@ Proof.
   intros A. split.
   - apply IAIsFunctional.
   - apply Functional.EquivCompat with (I:|:A).
-    + apply EquivSym, IAConverse.
+    + apply Equiv.Sym, IAConverse.
     + apply IAIsFunctional.
 Qed.
 
@@ -96,8 +96,8 @@ Qed.
 Proposition IADomain : forall (A:Class), domain (I:|:A) :~: A.
 Proof.
   intros A.
-  apply EquivTran with (A :/\: domain I). 1: apply Restrict.DomainOf.
-  apply EquivTran with (A :/\: V).
+  apply Equiv.Tran with (A :/\: domain I). 1: apply Restrict.DomainOf.
+  apply Equiv.Tran with (A :/\: V).
   - apply Inter2.EquivCompatR, IDomain.
   - apply Inter2VR.
 Qed.
@@ -179,7 +179,7 @@ Proposition IBisFConverseF : forall (F A B:Class), Bij F A B ->
   F :.: F^:-1: :~: (I:|:B).
 Proof.
   intros F A B H1. assert (H2 := H1). destruct H2 as [[[H2 _] _] _].
-  apply EquivTran with ((F^:-1:)^:-1: :.: F^:-1:).
-  - apply Compose.EquivCompatL, EquivSym, Converse.IsIdempotent. assumption.
+  apply Equiv.Tran with ((F^:-1:)^:-1: :.: F^:-1:).
+  - apply Compose.EquivCompatL, Equiv.Sym, Converse.IsIdempotent. assumption.
   - apply IAIsConverseFF with A. apply Bij.Converse. assumption.
 Qed.

@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Foundation.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.InvImage.
@@ -41,7 +41,7 @@ Qed.
 Lemma InitSegmentEV : forall (a:U),
   initSegment E V a :~: toClass a.
 Proof.
-  intros a. apply EquivTran with (V :/\: toClass a).
+  intros a. apply Equiv.Tran with (V :/\: toClass a).
   - apply InitSegmentEA.
   - apply Inter2VL.
 Qed.
@@ -50,9 +50,9 @@ Proposition MinimalEA : forall (A:Class) (a:U),
   Minimal E A a <-> A a /\ A :/\: toClass a :~: :0:.
 Proof.
   intros A a. split; intros [H1 H2].
-  - split. 1: assumption. apply EquivTran with (initSegment E A a).
-    2: assumption. apply EquivSym, InitSegmentEA.
-  - split. 1: assumption. apply EquivTran with (A :/\: toClass a).
+  - split. 1: assumption. apply Equiv.Tran with (initSegment E A a).
+    2: assumption. apply Equiv.Sym, InitSegmentEA.
+  - split. 1: assumption. apply Equiv.Tran with (A :/\: toClass a).
     2: assumption. apply InitSegmentEA.
 Qed.
 
@@ -116,7 +116,7 @@ Proposition IsWellFoundedOnV : WellFounded E V.
 Proof.
   split. 1: apply IsFoundedOnV. intros a _.
   apply Small.EquivCompat with (toClass a).
-  - apply EquivSym, InitSegmentEV.
+  - apply Equiv.Sym, InitSegmentEV.
   - apply SetIsSmall.
 Qed.
 

@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -92,9 +92,9 @@ Proposition Compose : forall (F A G B:Class),
 Proof.
   intros F A G B [H1 H2] [H3 H4] H5. split.
   - apply Bijection.Compose; assumption.
-  - apply EquivTran with (domain F). 2: assumption.
+  - apply Equiv.Tran with (domain F). 2: assumption.
     apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
-    apply EquivSym. assumption.
+    apply Equiv.Sym. assumption.
 Qed.
 
 Proposition EvalCharac : forall (F A:Class) (a y:U),
@@ -182,7 +182,7 @@ Proposition Converse : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2] H3. split.
   - apply Bijection.Converse. assumption.
-  - apply EquivTran with (range F). 2: assumption. apply Converse.Domain.
+  - apply Equiv.Tran with (range F). 2: assumption. apply Converse.Domain.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A:Class) (b:U),
@@ -209,7 +209,7 @@ Proposition InvImageOfImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: A -> F^:-1::[ F:[B]: ]: :~: B.
 Proof.
   intros F A B [H1 H2] H3. apply Bijection.InvImageOfImage. 1: assumption.
-  apply Incl.EquivCompatR with A. 2: assumption. apply EquivSym. assumption.
+  apply Incl.EquivCompatR with A. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
 
 Proposition ImageOfInvImage : forall (F A B:Class),
@@ -236,7 +236,7 @@ Qed.
 Proposition BijectionIsBijectionOn : forall (F:Class),
   Bijection F -> BijectionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply EquivRefl. }
+  intros F H1. split. { assumption. } { apply Equiv.Refl. }
 Qed.
 
 Proposition Inter2Image : forall (F A B C:Class),

@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
@@ -264,7 +264,7 @@ Proof.
     + left. split. 2: assumption. apply WhenInclL. assumption.
     + right. split.
       * apply WhenInclR. assumption.
-      * apply NotEquivSym. assumption.
+      * apply Equiv.NotSym. assumption.
 Qed.
 
 (* The class of ordinals is an ordinal class.                                   *)
@@ -311,7 +311,7 @@ Proof.
   intros A H1. assert (A :~: On \/ A :<: On) as H2. {
     apply IsOnOrLess. assumption. }
   destruct H2 as [H2|H2].
-  - apply Incl.EquivCompatL with On. apply EquivSym. 1: assumption.
+  - apply Incl.EquivCompatL with On. apply Equiv.Sym. 1: assumption.
     apply Class.Incl.Refl.
   - apply H2.
 Qed.

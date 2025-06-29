@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -75,12 +75,12 @@ Proof.
         apply Inter2.IsInclL. }
       clear H10.
       assert (F:[A :\: toClass b]: :~: B :\: toClass b) as H12. {
-        apply EquivTran with (F:[A]: :\: F:[toClass b]:).
+        apply Equiv.Tran with (F:[A]: :\: F:[toClass b]:).
         - apply Bij.DiffImage with A B, H3.
         - apply Diff.EquivCompat.
           + apply Bij.ImageOfDomain, H3.
-          + apply EquivTran with (toClass F:[b]:).
-            * apply EquivSym, ImageByClass.ToClass, H3.
+          + apply Equiv.Tran with (toClass F:[b]:).
+            * apply Equiv.Sym, ImageByClass.ToClass, H3.
             * apply EqualToClass. assumption. }
       assert (Minimal E (B :\: toClass b) (F!b)) as H13. {
         apply Minimal.EquivCompatR with F:[A :\: toClass b]:; assumption. }
@@ -92,7 +92,7 @@ Proof.
           exists a. assert (A a) as H15. {
             destruct H1 as [H1 _]. apply (H1 b); assumption. }
           split. 1: assumption. split. 1: assumption. apply H8, H14.
-        - apply NotEquivSym, Diff.WhenNotEmpty, Class.Empty.HasElem.
+        - apply Equiv.NotSym, Diff.WhenNotEmpty, Class.Empty.HasElem.
           exists F!b. apply Minimal.IsIn with E. assumption. }
       assert (Minimal E (B :\: toClass b) b) as H15. {
         apply IsEMinimal; assumption. }

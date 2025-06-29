@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.AntiSymmetric.
 Require Import ZF.Class.Order.Reflexive.
 Require Import ZF.Class.Order.Transitive.

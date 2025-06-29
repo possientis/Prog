@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.NonEmptyUniverse.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.

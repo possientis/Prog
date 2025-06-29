@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.Extensionality.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
@@ -92,8 +92,8 @@ Proposition EmptyToClass : forall (a:U),
 Proof.
   intros a. split; intros H1.
   - rewrite H1. apply ToClass.
-  - apply EqualToClass. apply EquivTran with :0:. 1: assumption.
-    apply EquivSym, ToClass.
+  - apply EqualToClass. apply Equiv.Tran with :0:. 1: assumption.
+    apply Equiv.Sym, ToClass.
 Qed.
 
 Proposition NotEmptyToClass : forall (a:U),

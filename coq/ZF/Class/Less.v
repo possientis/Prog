@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 
 Require Import ZF.Notation.Lt.
@@ -17,8 +17,8 @@ Proposition EquivCompat : forall (P Q R S:Class),
 Proof.
   intros P Q R S H1 H2 [H3 H4]. split.
   - apply Incl.EquivCompat with P R; assumption.
-  - intros H5. apply H4. apply EquivTran with Q. 1: assumption.
-    apply EquivTran with S. 1: assumption. apply EquivSym. assumption.
+  - intros H5. apply H4. apply Equiv.Tran with Q. 1: assumption.
+    apply Equiv.Tran with S. 1: assumption. apply Equiv.Sym. assumption.
 Qed.
 
 Proposition EquivCompatL : forall (P Q R:Class),
@@ -26,14 +26,14 @@ Proposition EquivCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<: P -> R :<: Q.
 Proof.
   intros P Q R H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 
@@ -67,7 +67,7 @@ Proof.
   intros P Q R [H1 H2] H3. split.
   - apply Incl.Tran with Q; assumption.
   - intros H4. apply H2, DoubleInclusion. split. 1: assumption.
-    apply Incl.EquivCompatR with R. 2: assumption. apply EquivSym. assumption.
+    apply Incl.EquivCompatR with R. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
 
 Proposition EquivOrLess : forall (P Q:Class),

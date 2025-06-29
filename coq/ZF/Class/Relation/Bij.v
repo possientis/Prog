@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -30,13 +30,13 @@ Proposition IsFun : forall (F A B:Class),
   Bij F A B -> F :: A :-> B.
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
-  split. 1: assumption. apply DoubleInclusion, EquivSym. assumption.
+  split. 1: assumption. apply DoubleInclusion, Equiv.Sym. assumption.
 Qed.
 
 Proposition IsInj : forall (F A B:Class),
   Bij F A B -> Inj F A B.
 Proof.
-  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, EquivSym, H1.
+  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.
 Qed.
 
 Proposition IsOnto : forall (F A B:Class),
@@ -60,7 +60,7 @@ Qed.
 Proposition ImageOfDomain : forall (F A B:Class),
   Bij F A B -> F:[A]: :~: B.
 Proof.
-  intros F A B [H1 H2]. apply EquivTran with (range F).
+  intros F A B [H1 H2]. apply Equiv.Tran with (range F).
   2: assumption. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
@@ -87,8 +87,8 @@ Qed.
 Proposition InvImageOfRange : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
-  intros F A B H1. apply EquivTran with F^:-1::[range F]:.
-  - apply InvImage.EquivCompatR, EquivSym, H1.
+  intros F A B H1. apply Equiv.Tran with F^:-1::[range F]:.
+  - apply InvImage.EquivCompatR, Equiv.Sym, H1.
   - apply BijectionOn.InvImageOfRange, H1.
 Qed.
 
@@ -105,11 +105,11 @@ Proposition Compose : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply BijectionOn.Compose with B; try assumption.
-    apply DoubleInclusion, EquivSym. assumption.
-  - apply EquivTran with (range G). 2: assumption.
+    apply DoubleInclusion, Equiv.Sym. assumption.
+  - apply Equiv.Tran with (range G). 2: assumption.
     apply Compose.RangeIsSame. destruct H3 as [H3 H5].
     apply Class.Incl.Tran with B.
-    + apply DoubleInclusion, EquivSym. assumption.
+    + apply DoubleInclusion, Equiv.Sym. assumption.
     + apply DoubleInclusion. assumption.
 Qed.
 
@@ -197,8 +197,8 @@ Proof.
   intros F A B [[H1 H2] H3]. split.
   - split.
     + apply Bijection.Converse. assumption.
-    + apply EquivTran with (range F). 2: assumption. apply Converse.Domain.
-  - apply EquivTran with (domain F). 2: assumption. apply Converse.Range.
+    + apply Equiv.Tran with (range F). 2: assumption. apply Converse.Domain.
+  - apply Equiv.Tran with (domain F). 2: assumption. apply Converse.Range.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
@@ -233,7 +233,7 @@ Proposition ImageOfInvImage : forall (F A B C:Class),
 Proof.
   intros F A B C [H1 H2] H3. apply BijectionOn.ImageOfInvImage with A.
   1: assumption. apply Incl.EquivCompatR with B. 2: assumption.
-  apply EquivSym. assumption.
+  apply Equiv.Sym. assumption.
 Qed.
 
 Proposition EvalInjective : forall (F A B:Class) (x y:U),

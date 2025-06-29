@@ -1,5 +1,5 @@
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -99,9 +99,9 @@ Proof.
   intros A a H1.
   assert (On a) as H2. {
     apply Class.Ordinal.Core.EquivCompat with (sup A).
-    apply EquivSym. assumption. apply Sup.IsOrdinal. }
+    apply Equiv.Sym. assumption. apply Sup.IsOrdinal. }
   split. 1: assumption. intros b H3 H4. apply Incl.EquivCompatR with (sup A).
-  - apply EquivSym. assumption.
+  - apply Equiv.Sym. assumption.
   - apply Sup.IsUpperBoundOrd; assumption.
 Qed.
 
@@ -120,7 +120,7 @@ Proof.
   - apply Incl.EquivCompatR with (toClass b). 1: assumption.
     apply Sup.IsSmallestOrd. intros c H6 H7.
     apply Incl.EquivCompatR with (inf (upper A)).
-    + apply EquivSym. assumption.
+    + apply Equiv.Sym. assumption.
     + apply Inf.IsLargestOrd.
       * apply NotEmptyOn. assumption.
       * intros d H8 H9. apply H9; assumption.

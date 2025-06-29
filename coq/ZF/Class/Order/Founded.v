@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
@@ -39,10 +39,10 @@ Proof.
   assert (exists x, Minimal R (toClass b) x) as H5. {
     apply H1.
     - apply Incl.EquivCompatL with B; assumption.
-    - apply NotEmptyToClass. apply NotEquivCompatL with B; assumption. }
+    - apply NotEmptyToClass. apply Equiv.NotCompatL with B; assumption. }
   destruct H5 as [x H5]. exists x.
   apply Minimal.EquivCompatR with (toClass b). 2: assumption.
-  apply EquivSym. assumption.
+  apply Equiv.Sym. assumption.
 Qed.
 
 (* If R is founded on A superclass of B, then it is founded on B.               *)
@@ -67,17 +67,17 @@ Proof.
       - apply SetIsSmall. }
     remember (fromClass C H5) as a eqn:Ea. specialize (H2 a).
     assert (toClass a :~: F^:-1::[toClass b]:) as H6. {
-      apply EquivTran with C.
+      apply Equiv.Tran with C.
       - rewrite Ea. apply ToFromClass.
-      - rewrite <- EC. apply EquivRefl. }
+      - rewrite <- EC. apply Equiv.Refl. }
     clear EC Ea H5 C.
     assert (toClass a :<=: A) as H7. {
       apply Incl.EquivCompatL with (F^:-1::[toClass b]:).
-      - apply EquivSym. assumption.
+      - apply Equiv.Sym. assumption.
       - apply Class.Incl.Tran with F^:-1::[B]:.
         + apply Image.InclCompatR. assumption.
         + apply Incl.EquivCompatL with A. 2: apply Class.Incl.Refl.
-          apply EquivSym, Bij.InvImageOfRange, H1. }
+          apply Equiv.Sym, Bij.InvImageOfRange, H1. }
     assert (a <> :0:) as H8. { apply HasElem in H4.
       destruct H4 as [y H4]. apply HasElem.
       exists F^:-1:!y. apply H6. exists y. split. 1: assumption.
@@ -86,7 +86,7 @@ Proof.
       - apply H3. assumption. }
     specialize (H2 H7 H8). destruct H2 as [x H2].
     assert (F:[toClass a]: :~: toClass b) as H9. {
-      apply EquivTran with F:[F^:-1::[toClass b]:]:.
+      apply Equiv.Tran with F:[F^:-1::[toClass b]:]:.
       - apply Image.EquivCompatR. assumption.
       - apply Bij.ImageOfInvImage with A B. 2: assumption. apply H1. }
     exists (F!x). apply Minimal.EquivCompatR with F:[toClass a]:.

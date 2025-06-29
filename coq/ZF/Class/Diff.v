@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Complement.

@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Define.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 
@@ -18,9 +18,9 @@ Qed.
 Proposition Unique : forall (A:Class), Define.Unique (IsSetOf A).
 Proof.
   intros A a b H1 H2.
-  apply EqualToClass. apply EquivTran with A.
+  apply EqualToClass. apply Equiv.Tran with A.
   - intros x. apply H1.
-  - apply EquivSym. intros x. apply H2.
+  - apply Equiv.Sym. intros x. apply H2.
 Qed.
 
 Proposition EquivCompat : forall (A B:Class),

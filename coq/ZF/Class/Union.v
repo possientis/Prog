@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Union.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 
@@ -52,7 +52,7 @@ Proof.
   - assert (:U(toClass a):~: :U(P)) as A. 2: apply A.
 
   (* Which follows from the equivalence between a and P. *)
-    apply EquivCompat, EquivSym, H2.
+    apply EquivCompat, Equiv.Sym, H2.
 
   (* We next need to show that U(a) is small. *)
   - assert (Small :U(toClass a)) as A. 2: apply A.

@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -52,7 +52,7 @@ Proposition EquivCompatL : forall (F G G':Class),
   G :~: G' -> G :.: F :~: G' :.: F.
 Proof.
   intros F G G' H1. apply EquivCompat.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
   - assumption.
 Qed.
 
@@ -62,7 +62,7 @@ Proposition EquivCompatR : forall (F F' G:Class),
 Proof.
   intros F F' G H1. apply EquivCompat.
   - assumption.
-  - apply EquivRefl.
+  - apply Equiv.Refl.
 Qed.
 
 (* The composition of two classes is a relation.                                *)

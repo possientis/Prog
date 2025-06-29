@@ -1,5 +1,5 @@
 Require Import ZF.Class.Bounded.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -179,7 +179,7 @@ Proof.
   intros F A B [H1 _] H2. split.
   - apply BijectionOn.Converse with A; assumption.
   - apply Incl.EquivCompatL with (domain F).
-    + apply EquivSym, Converse.Range.
+    + apply Equiv.Sym, Converse.Range.
     + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
       apply Class.Incl.Refl.
 Qed.

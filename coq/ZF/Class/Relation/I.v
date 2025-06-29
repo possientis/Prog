@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Prod.
@@ -67,7 +67,7 @@ Proof.
   split.
   - apply IIsFunctional.
   - apply Functional.EquivCompat with I. 2: apply IIsFunctional.
-    apply EquivSym, IConverse.
+    apply Equiv.Sym, IConverse.
 Qed.
 
 (* I is a bijection class.                                                      *)

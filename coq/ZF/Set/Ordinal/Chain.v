@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Foundation.
 Require Import ZF.Class.Inter2.
@@ -25,7 +25,7 @@ Proof.
       apply NotEmptyToClass, Omega.IsNotEmpty.
     - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
       apply Small.EquivCompat with :N.
-      + apply EquivSym, Omega.ToClass.
+      + apply Equiv.Sym, Omega.ToClass.
       + apply Omega.IsSmall. }
   destruct H2 as [a [H2 H3]].
   apply (FunctionOn.RangeCharac F (toClass :N)) in H2. 2: assumption.
@@ -47,7 +47,7 @@ Proof.
     apply Founded.WhenSmall with A. 1: assumption.
     - apply Fun.RangeIsSmall with (toClass :N) A. 1: assumption.
       apply Small.EquivCompat with :N. 2: apply Omega.IsSmall.
-      apply EquivSym, Omega.ToClass.
+      apply Equiv.Sym, Omega.ToClass.
     - apply H1.
     - apply Fun.RangeIsNotEmpty with (toClass :N) A. 1: assumption.
       apply NotEmptyToClass, Omega.IsNotEmpty. }

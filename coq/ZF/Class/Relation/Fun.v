@@ -1,7 +1,7 @@
 Declare Scope ZF_Class_Relation_Fun_scope.
 Open    Scope ZF_Class_Relation_Fun_scope.
 
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
@@ -52,7 +52,7 @@ Proof.
   apply Class.Incl.Tran with (A :x: F:[A]:).
   - apply FunctionOn.IsIncl, H1.
   - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
-    2: apply H1. apply EquivSym, ImageOfDomain with B. assumption.
+    2: apply H1. apply Equiv.Sym, ImageOfDomain with B. assumption.
 Qed.
 
 (* The direct image of a small class by a function is small.                    *)

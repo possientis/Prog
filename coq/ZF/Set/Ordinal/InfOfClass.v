@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -107,7 +107,7 @@ Proposition IsIn : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (IsSetOf (Class.Ordinal.Inf.inf A) (inf A)) as H3. {
-    apply Class.IsSetOf.ToClass, EquivSym, ToClass. }
+    apply Class.IsSetOf.ToClass, Equiv.Sym, ToClass. }
   apply Class.Ordinal.Inf.IsIn; assumption.
 Qed.
 
@@ -126,7 +126,7 @@ Proposition WhenOrdinal : forall (A:Class) (a:U),
   inf (A :\: toClass a) = a.
 Proof.
   intros A a H1 H2 H3. symmetry. apply EqualToClass.
-  apply EquivTran with (Class.Ordinal.Inf.inf (A :\: toClass a)).
+  apply Equiv.Tran with (Class.Ordinal.Inf.inf (A :\: toClass a)).
   2: apply ToClass. apply Class.Ordinal.Inf.WhenOrdinal; assumption.
 Qed.
 
@@ -136,8 +136,8 @@ Proposition IsEMinimal : forall (A:Class) (a:U),
   a = inf A <-> Minimal E A a.
 Proof.
   intros A a H1 H2. split; intros H3.
-  - apply Inf.IsEMinimal; try assumption. rewrite H3. apply EquivSym, ToClass.
+  - apply Inf.IsEMinimal; try assumption. rewrite H3. apply Equiv.Sym, ToClass.
   - apply Inf.IsEMinimal in H3; try assumption. apply EqualToClass.
-    apply EquivTran with (Class.Ordinal.Inf.inf A). 1: assumption.
+    apply Equiv.Tran with (Class.Ordinal.Inf.inf A). 1: assumption.
     apply ToClass.
 Qed.

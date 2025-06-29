@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
@@ -24,7 +24,7 @@ Definition Onto (F A B:Class) : Prop := FunctionOn F A /\ range F :~: B.
 
 Proposition IsFun : forall (F A B:Class), Onto F A B -> Fun F A B.
 Proof.
-  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, EquivSym, H1.
+  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.
 Qed.
 
 (* Two surjections are equal iff they have same domain and coincide pointwise.  *)
@@ -43,7 +43,7 @@ Qed.
 Proposition ImageOfDomain : forall (F A B:Class),
   Onto F A B -> F:[A]: :~: B.
 Proof.
-  intros F A B H1. apply EquivTran with (range F).
+  intros F A B H1. apply Equiv.Tran with (range F).
   - apply FunctionOn.ImageOfDomain, H1.
   - apply H1.
 Qed.
@@ -73,8 +73,8 @@ Qed.
 Proposition InvImageOfRange : forall (F A B:Class),
   Onto F A B -> F^:-1::[B]: :~: A.
 Proof.
-  intros F A B H1. apply EquivTran with F^:-1::[range F]:.
-  - apply InvImage.EquivCompat. 1: apply EquivRefl. apply EquivSym, H1.
+  intros F A B H1. apply Equiv.Tran with F^:-1::[range F]:.
+  - apply InvImage.EquivCompat. 1: apply Equiv.Refl. apply Equiv.Sym, H1.
   - apply FunctionOn.InvImageOfRange, H1.
 Qed.
 
@@ -96,10 +96,10 @@ Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply FunctionOn.Compose with B; try assumption.
     apply Incl.EquivCompatL with B. 2: apply Class.Incl.Refl.
-    apply EquivSym. assumption.
-  - apply EquivTran with (range G). 2: assumption.
-    apply Compose.RangeIsSame, DoubleInclusion, EquivTran with B. 1: assumption.
-    apply EquivSym, H3.
+    apply Equiv.Sym. assumption.
+  - apply Equiv.Tran with (range G). 2: assumption.
+    apply Compose.RangeIsSame, DoubleInclusion, Equiv.Tran with B. 1: assumption.
+    apply Equiv.Sym, H3.
 Qed.
 
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
@@ -176,7 +176,7 @@ Proposition RangeIsNotEmpty : forall (F A B:Class),
 Proof.
   intros F A B H1 H2 H3.
   assert (range F :~: :0:) as H4. {
-    apply EquivTran with B. 2: assumption. apply H1. }
+    apply Equiv.Tran with B. 2: assumption. apply H1. }
   revert H4. replace (range F :~: :0: -> False) with (range F :<>: :0:).
   2: reflexivity. apply FunctionOn.RangeIsNotEmpty with A.
   2: assumption. apply H1.

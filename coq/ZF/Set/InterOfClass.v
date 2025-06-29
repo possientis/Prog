@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Inter.
 Require Import ZF.Set.Core.
@@ -54,7 +54,7 @@ Qed.
 Proposition Pair : forall (a b:U),
   inter (toClass :{a,b}:) = a :/\: b.
 Proof.
-  intros a b. apply EqualToClass. apply EquivTran with :I(toClass :{a,b}:).
-  - apply EquivSym, ToClass.
+  intros a b. apply EqualToClass. apply Equiv.Tran with :I(toClass :{a,b}:).
+  - apply Equiv.Sym, ToClass.
   - apply Class.Inter.Pair.
 Qed.

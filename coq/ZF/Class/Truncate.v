@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -14,7 +14,7 @@ Proof.
   intros A B H1 x. split; intros H2; split.
   - apply Small.EquivCompat with A. 1: assumption. apply H2.
   - apply H1, H2.
-  - apply Small.EquivCompat with B. 1: { apply EquivSym. assumption. } apply H2.
+  - apply Small.EquivCompat with B. 1: { apply Equiv.Sym. assumption. } apply H2.
   - apply H1, H2.
 Qed.
 
@@ -41,9 +41,9 @@ Proof.
   assert (Small A \/ ~ Small A) as H1. { apply LawExcludedMiddle. }
   destruct H1 as [H1|H1].
   - apply Small.EquivCompat with A. 2: assumption.
-    apply EquivSym, WhenSmall. assumption.
+    apply Equiv.Sym, WhenSmall. assumption.
   - apply Small.EquivCompat with :0:.
-    + apply EquivSym, WhenNotSmall. assumption.
+    + apply Equiv.Sym, WhenNotSmall. assumption.
     + apply Empty.IsSmall.
 Qed.
 

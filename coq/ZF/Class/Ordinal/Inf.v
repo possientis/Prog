@@ -1,4 +1,4 @@
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -31,7 +31,7 @@ Qed.
 Proposition InterOn : forall (A:Class), inf A :~: inf (A :/\: On).
 Proof.
   intros A.
-  apply Inter.EquivCompat, EquivSym, Inter2.WhenInclL, Inter2.IsInclR.
+  apply Inter.EquivCompat, Equiv.Sym, Inter2.WhenInclL, Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class of ordinals coincide with its intersection.           *)
@@ -39,7 +39,7 @@ Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> :I(A) :~: inf A.
 Proof.
   intros A H1. unfold inf. apply Inter.EquivCompat.
-  apply EquivSym, Class.Inter2.WhenInclL. assumption.
+  apply Equiv.Sym, Class.Inter2.WhenInclL. assumption.
 Qed.
 
 (* The infimum of a class is an ordinal class.                                 *)
@@ -79,7 +79,7 @@ Proposition IsLowerBoundOrd : forall (A:Class) (a:U), On a ->
   A a -> inf A :<=: toClass a.
 Proof.
   intros A a H1 H2. apply Incl.EquivCompatL with (inf (A :/\: On)).
-  - apply EquivSym, InterOn.
+  - apply Equiv.Sym, InterOn.
   - apply IsLowerBound.
     + apply Inter2.IsInclR.
     + split; assumption.
@@ -104,7 +104,7 @@ Proposition IsLargestOrd : forall (A:Class) (a:U),
   toClass a :<=: inf A.
 Proof.
   intros A a H1 H2. apply Incl.EquivCompatR with (inf (A :/\: On)).
-  - apply EquivSym, InterOn.
+  - apply Equiv.Sym, InterOn.
   - apply IsLargest. 2: assumption.
     + apply Inter2.IsInclR.
     + intros b [H3 H4]. apply H2; assumption.
@@ -155,10 +155,10 @@ Proof.
   intros A a H1 H2.
   assert (On a) as H3. {
     apply Class.Ordinal.Core.EquivCompat with (inf A).
-    apply EquivSym. assumption. apply IsOrdinal. }
+    apply Equiv.Sym. assumption. apply IsOrdinal. }
   assert (IsSetOf (inf (A :/\: On)) a) as H4. {
     apply IsSetOf.EquivCompat with (inf A). 2: assumption.
-    apply EquivSym, InterOn. }
+    apply Equiv.Sym, InterOn. }
   assert ((A :/\: On) a) as H5. {
     apply IsIn; try assumption. apply Inter2.IsInclR. }
   destruct H5 as [H5 _]. assumption.
@@ -175,7 +175,7 @@ Proof.
     apply Class.Empty.HasNoElem. intros [b [H5 H6]].
     assert (a :<=: b) as H7. {
       apply Incl.EquivCompatL with (inf A).
-      + apply EquivSym. assumption.
+      + apply Equiv.Sym. assumption.
       + apply IsLowerBound; assumption. }
     apply NoElemLoop1 with b. apply H7. assumption.
   - apply E.MinimalEA in H3. destruct H3 as [H3 H4].

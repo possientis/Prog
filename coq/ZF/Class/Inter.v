@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Bounded.
-Require Import ZF.Class.Core.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
@@ -37,7 +37,7 @@ Qed.
 
 Proposition IsZero : :I(:0:) :~: :0:.
 Proof.
-  apply WhenEmpty, EquivRefl.
+  apply WhenEmpty, Equiv.Refl.
 Qed.
 
 (* The class I(A) coincides with inter' A when A is not empty.                  *)
@@ -61,7 +61,7 @@ Proposition EquivCompat : forall (A B:Class),
   A :~: B -> :I(A) :~: :I(B).
 Proof.
   intros A B H1 x. split; intros [H2 H3]; split.
-  - apply EquivCompat' with A. 2: assumption. apply EquivSym. assumption.
+  - apply EquivCompat' with A. 2: assumption. apply Equiv.Sym. assumption.
   - destruct H3 as [a H3]. exists a. apply H1. assumption.
   - apply EquivCompat' with B; assumption.
   - destruct H3 as [a H3]. exists a. apply H1. assumption.
@@ -88,12 +88,12 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H1 as [H1|H1].
   - apply Small.EquivCompat with :0:.
-    + apply EquivSym, WhenEmpty. assumption.
+    + apply Equiv.Sym, WhenEmpty. assumption.
     + apply Small.EquivCompat with (toClass :0:).
       * apply ZF.Set.Empty.ToClass.
       * apply SetIsSmall.
   - apply Small.EquivCompat with (inter' A).
-    + apply EquivSym, WhenNotEmpty. assumption.
+    + apply Equiv.Sym, WhenNotEmpty. assumption.
     + apply IsSmall'. assumption.
 Qed.
 
