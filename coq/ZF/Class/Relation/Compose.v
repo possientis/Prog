@@ -1,5 +1,8 @@
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Prod.
+Require Import ZF.Class.Relation.Cmp.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
@@ -7,6 +10,7 @@ Require Import ZF.Class.Relation.FunctionalAt.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
@@ -14,10 +18,10 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.Dot.
 Export ZF.Notation.Dot.
 
+
 (* Composition of two classes.                                                  *)
 Definition compose (G F:Class) : Class := fun u =>
   exists x y z, u = :(x,z): /\ F :(x,y): /\ G :(y,z):.
-
 
 (* Notation "G :.: F" := (compose G F)                                          *)
 Global Instance ClassDot : Dot Class := { dot := compose }.
@@ -241,4 +245,24 @@ Proof.
   intros F G a H1 H2. apply FunctionalAtEval.
   - apply Functional.IsFunctionalAt. assumption.
   - apply Functional.IsFunctionalAt. assumption.
+Qed.
+
+Lemma ImageByCmp : forall (F G:Class),
+  (G :.: F) :<=: Cmp :[F :x: G]:.
+Proof.
+  intros F G u H1. destruct H1 as [x [y [z [H1 [H2 H3]]]]].
+  exists :(:(x,y):,:(y,z):):. split.
+  - apply Prod.Charac2. split; assumption.
+  - apply Cmp.Charac2. exists x. exists y. exists y. exists z.
+    split. 2: assumption. reflexivity.
+Qed.
+
+Proposition IsSmall : forall (F G:Class),
+  Small F -> Small G -> Small (G :.: F).
+Proof.
+  intros F G H1 H2. apply InclInSmallIsSmall with (Cmp :[F :x: G]:).
+  - apply ImageByCmp.
+  - apply Image.IsSmall.
+    + apply Cmp.IsFunctional.
+    + apply Prod.IsSmall; assumption.
 Qed.
