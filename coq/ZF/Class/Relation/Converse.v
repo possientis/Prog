@@ -102,11 +102,9 @@ Qed.
 Proposition IsIncl : forall (F:Class),
   (F^:-1:)^:-1: :<=: F.
 Proof.
-  intros F x H1.
-  destruct H1 as [y [z [H1 H2]]]. destruct H2 as [z' [y' [H2 H3]]].
-  apply WhenEqual in H2. destruct H2 as [H2 H2']. subst. apply H3.
+  intros F x H1. destruct H1 as [y [z [H1 H2]]].
+  apply Charac2 in H2. subst. assumption.
 Qed.
-
 
 (* A class is a relation iff the converse acting on it is idempotent.           *)
 Proposition IsIdempotent : forall (F:Class),
@@ -114,14 +112,12 @@ Proposition IsIdempotent : forall (F:Class),
 Proof.
   intros F. split; intros H1.
   - intros x. split; intros H2.
-    + specialize (H1 x). destruct H2 as [z [y [H2 H3]]]. subst.
-      destruct H3 as [y' [z' [H3 H4]]]. apply WhenEqual in H3.
-      destruct H3 as [H3 H5]. subst. assumption.
-    + specialize (H1 x H2). destruct H1 as [y [z H1]].
-      exists z. exists y. split. 1: assumption. exists y. exists z.
-      split. 1: reflexivity. subst. assumption.
-  - intros x H2. apply H1 in H2. destruct H2 as [z [y [H2 H3]]].
-    exists y. exists z. assumption.
+    + specialize (H1 x). destruct H2 as [y [z [H2 H3]]]. subst.
+      apply Charac2 in H3. assumption.
+    + specialize (H1 x H2). destruct H1 as [y [z H1]]. subst.
+      apply Charac2Rev, Charac2Rev. assumption.
+  - apply Relation.EquivCompat with (F^:-1:)^:-1:. 1: assumption.
+    apply IsRelation.
 Qed.
 
 (* The converse is the converse of the subclass of ordered pairs.               *)
@@ -137,6 +133,7 @@ Proof.
   - destruct H1 as [y [z [H1 [H2 _]]]]. exists y. exists z. split; assumption.
 Qed.
 
+(* The domain of the converse is the range.                                     *)
 Proposition Domain : forall (F:Class),
   domain F^:-1: :~: range F.
 Proof.
@@ -146,6 +143,7 @@ Proof.
   - destruct H1 as [x H1]. exists x. apply Charac2Rev. assumption.
 Qed.
 
+(* The range of the converse is the domain.                                     *)
 Proposition Range : forall (F:Class),
   range F^:-1: :~: domain F.
 Proof.
@@ -158,8 +156,7 @@ Qed.
 Proposition WhenFunctional : forall (F:Class) (x y z:U),
   Functional F^:-1: -> F :(x,z): -> F :(y,z): -> x = y.
 Proof.
-  intros F x y z H1 H2 H3. unfold Functional in H1. apply H1 with z;
-  apply Charac2Rev; assumption.
+  intros F x y z H1 H2 H3. apply H1 with z; apply Charac2Rev; assumption.
 Qed.
 
 Proposition Inter2Image : forall (F A B:Class), Functional F^:-1: ->
@@ -171,4 +168,3 @@ Proof.
     assert (a = b) as H6. { apply WhenFunctional with F y; assumption. }
     subst. exists b. split. 2: assumption. split; assumption.
 Qed.
-

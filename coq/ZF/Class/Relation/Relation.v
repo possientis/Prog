@@ -7,11 +7,18 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* A relation class is a class whose elements are ordered pairs.                *)
 Definition Relation (F:Class) : Prop :=
     forall x, F x -> exists y, exists z, x = :(y,z):.
+
+Proposition EquivCompat : forall (F G:Class),
+  F :~: G -> Relation F -> Relation G.
+Proof.
+  intros F G H1 H2 x H3. apply H1 in H3. specialize (H2 x H3). assumption.
+Qed.
 
 (* The union of two relations classes is a relation class.                      *)
 Proposition Union2 : forall (F G:Class),
@@ -74,3 +81,4 @@ Proof.
   (* Which follows from the fact that F is functional and domain F is small. *)
     apply Image.IsSmall. { apply H2. } { apply H3. }
 Qed.
+

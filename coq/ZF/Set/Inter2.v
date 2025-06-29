@@ -6,6 +6,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Union2.
 Export ZF.Notation.And.
 

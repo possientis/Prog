@@ -5,6 +5,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.ImageByClass.
 
@@ -69,4 +70,12 @@ Proof.
   intros f a b H1. apply InclCompat.
   - apply InclRefl.
   - assumption.
+Qed.
+
+Proposition Inter2 : forall (f a b:U),
+  f:[a :/\: b]: :<=: f:[a]: :/\: f:[b]:.
+Proof.
+  intros f a b y H1. apply Charac in H1. destruct H1 as [x [H1 H2]].
+  apply Inter2.Charac in H1. destruct H1 as [H1 H3]. apply Inter2.Charac.
+  split; apply Charac; exists x; split; assumption.
 Qed.
