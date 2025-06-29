@@ -56,7 +56,7 @@ Proposition InclLessTran : forall (P Q R:Class),
   P :<=: Q -> Q :<: R -> P :<: R.
 Proof.
   intros P Q R H1 [H2 H3]. split.
-  - apply Incl.InclTran with Q; assumption.
+  - apply Incl.Tran with Q; assumption.
   - intros H4. apply H3, DoubleInclusion. split. 1: assumption.
     apply Incl.EquivCompatL with P; assumption.
 Qed.
@@ -65,7 +65,7 @@ Proposition LessInclTran : forall (P Q R:Class),
   P :<: Q -> Q :<=: R -> P :<: R.
 Proof.
   intros P Q R [H1 H2] H3. split.
-  - apply Incl.InclTran with Q; assumption.
+  - apply Incl.Tran with Q; assumption.
   - intros H4. apply H2, DoubleInclusion. split. 1: assumption.
     apply Incl.EquivCompatR with R. 2: assumption. apply EquivSym. assumption.
 Qed.
@@ -79,6 +79,6 @@ Proof.
     + left. assumption.
     + right. split; assumption.
   - destruct H1 as [H1|H1].
-    + apply Incl.EquivCompatR with P. 1: assumption. apply Incl.InclRefl.
+    + apply Incl.EquivCompatR with P. 1: assumption. apply Incl.Refl.
     + apply H1.
 Qed.

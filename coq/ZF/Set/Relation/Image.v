@@ -60,7 +60,7 @@ Proposition InclCompatL : forall (f g a:U),
 Proof.
   intros f g a H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Incl.Refl.
 Qed.
 
 (* The direct image is right-compatible with inclusion.                         *)
@@ -68,7 +68,7 @@ Proposition InclCompatR : forall (f a b:U),
   a :<=: b -> f:[a]: :<=: f:[b]:.
 Proof.
   intros f a b H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Incl.Refl.
   - assumption.
 Qed.
 

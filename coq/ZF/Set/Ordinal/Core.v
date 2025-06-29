@@ -74,7 +74,7 @@ Proof.
     + left. assumption.
     + right. apply LessIsElem; assumption.
   - destruct H3 as [H3|H3].
-    + subst. apply InclRefl.
+    + subst. apply Incl.Refl.
     + apply LessIsElem in H3; try assumption. apply H3.
 Qed.
 
@@ -84,7 +84,7 @@ Proof.
   intros a b H1 H2. assert (a = b \/ a :< b \/ b :< a) as H3. {
     apply OrdinalTotal; assumption. }
   destruct H3 as [H3|[H3|H3]].
-  - subst. left. apply InclRefl.
+  - subst. left. apply Incl.Refl.
   - left. apply LessIsElem in H3; try assumption. apply H3.
   - right. apply LessIsElem in H3; try assumption. apply H3.
 Qed.
@@ -95,7 +95,7 @@ Proof.
   intros a b H1 H2. assert (a = b \/ a :< b \/ b :< a) as H3. {
     apply OrdinalTotal; assumption. }
   destruct H3 as [H3|[H3|H3]].
-  - subst. right. apply InclRefl.
+  - subst. right. apply Incl.Refl.
   - left. assumption.
   - right. apply IfElemThenIncl; assumption.
 Qed.

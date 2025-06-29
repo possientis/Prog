@@ -62,7 +62,7 @@ Proposition InclCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Incl.Refl.
 Qed.
 
 (* The direct image is right-compatible with inclusion.                         *)
@@ -70,7 +70,7 @@ Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R:[P]: :<=: R:[Q]:.
 Proof.
   intros P Q R H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Incl.Refl.
   - assumption.
 Qed.
 

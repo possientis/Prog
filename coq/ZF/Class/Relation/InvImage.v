@@ -62,7 +62,7 @@ Proposition InclCompatL : forall (F G P:Class),
 Proof.
   intros F G P H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Class.Incl.Refl.
 Qed.
 
 (* The inverse image is right-compatible with inclusion.                        *)
@@ -70,7 +70,7 @@ Proposition InclCompatR : forall (F P Q:Class),
   P :<=: Q -> F^:-1: :[P]: :<=: F^:-1: :[Q]:.
 Proof.
   intros F P Q H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Class.Incl.Refl.
   - assumption.
 Qed.
 

@@ -149,7 +149,7 @@ Proposition InclCompatL : forall (a b c:U),
 Proof.
   intros a b c H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Incl.Refl.
 Qed.
 
 (* Diff is 'right-compatible' with inclusion. Not quite of course.              *)
@@ -157,7 +157,7 @@ Proposition InclCompatR : forall (a b c:U),
   a :<=: b -> c :\: b :<=: c :\: a.
 Proof.
   intros a b c H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Incl.Refl.
   - assumption.
 Qed.
 

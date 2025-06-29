@@ -57,5 +57,5 @@ Proof.
   - apply IfElemThenIncl; try assumption. apply IsOrdinal.
     assumption.
   - apply NotElemIsEqual in H2. 2: assumption.
-    rewrite H2. apply InclRefl.
+    rewrite H2. apply Incl.Refl.
 Qed.

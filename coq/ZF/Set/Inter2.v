@@ -42,7 +42,7 @@ Proposition InclCompatL : forall (a b c:U),
 Proof.
   intros a b c H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Incl.Refl.
 Qed.
 
 (* Intersection is right-compatible with inclusion.                             *)
@@ -50,7 +50,7 @@ Proposition InclCompatR : forall (a b c:U),
   a :<=: b -> c:/\:a :<=: c:/\:b.
 Proof.
   intros a b c H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Incl.Refl.
   - assumption.
 Qed.
 

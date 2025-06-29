@@ -108,7 +108,7 @@ Proof.
     apply DoubleInclusion, EquivSym. assumption.
   - apply EquivTran with (range G). 2: assumption.
     apply Compose.RangeIsSame. destruct H3 as [H3 H5].
-    apply InclTran with B.
+    apply Class.Incl.Tran with B.
     + apply DoubleInclusion, EquivSym. assumption.
     + apply DoubleInclusion. assumption.
 Qed.

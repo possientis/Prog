@@ -85,7 +85,7 @@ Proposition InclCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Class.Incl.Refl.
 Qed.
 
 (* The product of two classes is right-compatible with class inclusion.         *)
@@ -93,7 +93,7 @@ Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :x: P :<=: R :x: Q.
 Proof.
   intros P Q R H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Class.Incl.Refl.
   - assumption.
 Qed.
 

@@ -55,14 +55,14 @@ Proposition InclCompatL : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Incl.Refl.
 Qed.
 
 Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :/\: P :<=: R :/\: Q.
 Proof.
   intros P Q R H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Incl.Refl.
   - assumption.
 Qed.
 
@@ -142,7 +142,7 @@ Proof.
   intros P Q. split; intros H1.
   - apply DoubleInclusion. split.
     + apply IsInclL.
-    + apply IsIncl. 2: assumption. apply InclRefl.
+    + apply IsIncl. 2: assumption. apply Incl.Refl.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclR. assumption.
 Qed.
 
@@ -152,7 +152,7 @@ Proof.
   intros P Q. split; intros H1.
   - apply DoubleInclusion. split.
     + apply IsInclR.
-    + apply IsIncl. 1: assumption. apply InclRefl.
+    + apply IsIncl. 1: assumption. apply Incl.Refl.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclL. assumption.
 Qed.
 

@@ -50,7 +50,7 @@ Proposition FoundedIncl : forall (R A B:Class),
   Founded R A -> B :<=: A -> Founded R B.
 Proof.
   intros R A B H1 H2 a H3 H4. apply H1. 2: assumption.
-  apply InclTran with B; assumption.
+  apply Class.Incl.Tran with B; assumption.
 Qed.
 
 Proposition FoundedIsom : forall (F R S A B:Class),
@@ -74,9 +74,9 @@ Proof.
     assert (toClass a :<=: A) as H7. {
       apply Incl.EquivCompatL with (F^:-1::[toClass b]:).
       - apply EquivSym. assumption.
-      - apply InclTran with F^:-1::[B]:.
+      - apply Class.Incl.Tran with F^:-1::[B]:.
         + apply Image.InclCompatR. assumption.
-        + apply Incl.EquivCompatL with A. 2: apply InclRefl.
+        + apply Incl.EquivCompatL with A. 2: apply Class.Incl.Refl.
           apply EquivSym, Bij.InvImageOfRange, H1. }
     assert (a <> :0:) as H8. { apply HasElem in H4.
       destruct H4 as [y H4]. apply HasElem.

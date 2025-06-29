@@ -43,20 +43,20 @@ Proof.
 Qed.
 
 (* The inclusion relation is reflexive.                                         *)
-Proposition InclRefl : forall (P:Class), P :<=: P.
+Proposition Refl : forall (P:Class), P :<=: P.
 Proof.
   intros P x. auto.
 Qed.
 
 (* The inclusion relation is 'anti-symmetric' (modulo equivalence).             *)
-Proposition InclAnti : forall (P Q:Class),
+Proposition Anti : forall (P Q:Class),
   P :<=: Q -> Q :<=: P -> P :~: Q.
 Proof.
   intros P Q H1 H2. apply DoubleInclusion. split; assumption.
 Qed.
 
 (* The inclusion relation is transitive.                                        *)
-Proposition InclTran : forall (P Q R:Class),
+Proposition Tran : forall (P Q R:Class),
   P :<=: Q -> Q :<=: R -> P :<=: R.
 Proof.
   intros P Q R H1 H2 x H3. apply H2, H1, H3.

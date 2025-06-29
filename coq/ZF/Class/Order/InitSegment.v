@@ -67,7 +67,7 @@ Proposition InclCompatL : forall (R S A:Class) (a:U),
 Proof.
   intros R S A a H1. apply InclCompat.
   - assumption.
-  - apply InclRefl.
+  - apply Class.Incl.Refl.
 Qed.
 
 (* Initial segments are right-compatible with inclusion.                        *)
@@ -75,7 +75,7 @@ Proposition InclCompatR : forall (R A B:Class) (a:U),
   A :<=: B -> initSegment R A a :<=: initSegment R B a.
 Proof.
   intros R A B a H1. apply InclCompat.
-  - apply InclRefl.
+  - apply Class.Incl.Refl.
   - assumption.
 Qed.
 
@@ -148,7 +148,7 @@ Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
 Proof.
   intros F R S A B a H1 H2.
   apply EquivTran with (initSegment S F:[A]: F!a).
-  - apply IsomImage with A B; try assumption. apply InclRefl.
+  - apply IsomImage with A B; try assumption. apply Class.Incl.Refl.
   - apply EquivCompatR, Bij.ImageOfDomain, H1.
 Qed.
 

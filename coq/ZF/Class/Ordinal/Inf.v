@@ -130,7 +130,7 @@ Proof.
       toClass c :<: toClass b) as H7. {
         apply OrdinalTotal; apply H1; assumption. }
     destruct H7 as [H7|[H7|H7]].
-    - apply EqualToClass in H7. subst. apply InclRefl.
+    - apply EqualToClass in H7. subst. apply Incl.Refl.
     - apply H7.
     - apply LessIsElem in H7.
       + exfalso. apply Class.Empty.Charac with c. apply H5. split; assumption.
@@ -186,7 +186,7 @@ Proof.
               toClass b :<: toClass a) as H6. {
         apply OrdinalTotal; apply H1; assumption. }
       destruct H6 as [H6|[H6|H6]].
-      * apply Incl.EquivCompatR with (toClass a). 1: assumption. apply InclRefl.
+      * apply Incl.EquivCompatR with (toClass a). 1: assumption. apply Incl.Refl.
       * apply H6.
       * exfalso. apply Class.Empty.HasNoElem in H4. apply H4. exists b. split.
         1: assumption. apply Class.Ordinal.Core.LessIsElem;
@@ -215,7 +215,7 @@ Proof.
           toClass b :<: toClass a) as H8. {
             apply OrdinalTotal; assumption. }
         destruct H8 as [H8|[H8|H8]].
-        * apply EqualToClass in H8. subst. apply InclRefl.
+        * apply EqualToClass in H8. subst. apply Incl.Refl.
         * apply H8.
         * apply LessIsElem in H8; try assumption. contradiction. }
     apply H5. assumption.

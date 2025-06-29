@@ -90,7 +90,8 @@ Proposition Compose : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply BijectionOn.Compose with B; assumption.
-  - apply InclTran with (range G). 2: assumption. apply Compose.RangeIsSmaller.
+  - apply Class.Incl.Tran with (range G). 2: assumption.
+    apply Compose.RangeIsSmaller.
 Qed.
 
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
@@ -180,7 +181,7 @@ Proof.
   - apply Incl.EquivCompatL with (domain F).
     + apply EquivSym, Converse.Range.
     + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
-      apply InclRefl.
+      apply Class.Incl.Refl.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),

@@ -312,7 +312,7 @@ Proof.
     apply IsOnOrLess. assumption. }
   destruct H2 as [H2|H2].
   - apply Incl.EquivCompatL with On. apply EquivSym. 1: assumption.
-    apply Class.Incl.InclRefl.
+    apply Class.Incl.Refl.
   - apply H2.
 Qed.
 

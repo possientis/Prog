@@ -95,7 +95,7 @@ Proposition Compose : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply FunctionOn.Compose with B; try assumption.
-    apply Incl.EquivCompatL with B. 2: apply InclRefl.
+    apply Incl.EquivCompatL with B. 2: apply Class.Incl.Refl.
     apply EquivSym. assumption.
   - apply EquivTran with (range G). 2: assumption.
     apply Compose.RangeIsSame, DoubleInclusion, EquivTran with B. 1: assumption.

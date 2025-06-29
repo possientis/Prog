@@ -112,7 +112,7 @@ Proposition Induction : forall (A:Class),
 Proof.
   intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
   assert (:N :\: A :<=: On) as H4. {
-    apply InclTran with :N.
+    apply Class.Incl.Tran with :N.
     - apply Class.Inter2.IsInclL.
     - apply HasOrdinalElem. }
   assert (exists n,
@@ -126,7 +126,7 @@ Proof.
   destruct H10 as [H10|H10]. 1: contradiction.
   destruct H10 as [b [H10 H11]]. assert (H12 := H6). destruct H12 as [_ H12].
   assert ((:N : Class) b) as H13. { split. 1: assumption.
-    apply InclTran with (toClass (succ n)). 2: assumption.
+    apply Class.Incl.Tran with (toClass (succ n)). 2: assumption.
       rewrite <- H11. apply Succ.IsIncl. }
   assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
     apply NoElemLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }

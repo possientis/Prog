@@ -25,20 +25,20 @@ Proof.
 Qed.
 
 (* The inclusion relation is reflexive.                                         *)
-Proposition InclRefl : forall (a:U), a :<=: a.
+Proposition Refl : forall (a:U), a :<=: a.
 Proof.
   intros a x. auto.
 Qed.
 
 (* The inclusion relation is anti-symmetric.                                    *)
-Proposition InclAnti : forall (a b:U),
+Proposition Anti : forall (a b:U),
   a :<=: b -> b :<=: a -> a = b.
 Proof.
   intros a b H1 H2. apply DoubleInclusion. split; assumption.
 Qed.
 
 (* The inclusion relation is transitive.                                        *)
-Proposition InclTran : forall (a b c:U),
+Proposition Tran : forall (a b c:U),
   a :<=: b -> b :<=: c -> a :<=: c.
 Proof.
   intros a b c H1 H2 x H3. apply H2, H1, H3.

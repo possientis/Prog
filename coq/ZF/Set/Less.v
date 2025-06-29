@@ -41,7 +41,7 @@ Proof.
     + left. apply EqualToClass. assumption.
     + right. apply ToClass. assumption.
   - destruct H1 as [H1|H1].
-    + subst. apply InclRefl.
+    + subst. apply Incl.Refl.
     + apply H1.
 Qed.
 

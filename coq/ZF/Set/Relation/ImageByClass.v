@@ -63,12 +63,12 @@ Qed.
 Proposition InclCompatL : forall (F G:Class) (a:U), Functional G ->
   F :<=: G -> F:[a]: :<=: G:[a]:.
 Proof.
-  intros F G a H1 H2. apply InclCompat; try assumption. apply ZF.Set.Incl.InclRefl.
+  intros F G a H1 H2. apply InclCompat; try assumption. apply ZF.Set.Incl.Refl.
 Qed.
 
 Proposition InclCompatR : forall (F:Class) (a b:U), Functional F ->
   a :<=: b -> F:[a]: :<=: F:[b]:.
 Proof.
-  intros F a b H1 H2. apply InclCompat; try assumption. apply Class.Incl.InclRefl.
+  intros F a b H1 H2. apply InclCompat; try assumption. apply Class.Incl.Refl.
 Qed.
 

@@ -100,6 +100,6 @@ Qed.
 Proposition IsOn : sup On :~: On.
 Proof.
   apply EquivTran with :U(On).
-  - apply EquivSym, WhenOrdinalElem, InclRefl.
+  - apply EquivSym, WhenOrdinalElem, Class.Incl.Refl.
   - apply Ordinal.Union.IsOn.
 Qed.
