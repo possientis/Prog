@@ -50,12 +50,25 @@ Proof.
   intros F G a H1. apply Truncate.EquivCompat, Image.EquivCompatL. assumption.
 Qed.
 
-Proposition InclCompat : forall (F G:Class) (a:U), Functional G ->
+Proposition InclCompat : forall (F G:Class) (a b:U), Functional G ->
+  F :<=: G -> a :<=: b -> F:[a]: :<=: G:[b]:.
+Proof.
+  intros F G a b H1 H2 H3 y H4.
+  apply Charac in H4. 2: { apply Functional.InclCompat with G; assumption. }
+  destruct H4 as [x [H4 H5]]. apply CharacRev with x. 1: assumption.
+  - apply H3. assumption.
+  - apply H2. assumption.
+Qed.
+
+Proposition InclCompatL : forall (F G:Class) (a:U), Functional G ->
   F :<=: G -> F:[a]: :<=: G:[a]:.
 Proof.
-  intros F G a H1 H2 y H3.
-  apply Charac in H3. 2: { apply Functional.InclCompat with G; assumption. }
-  destruct H3 as [x [H3 H4]]. apply CharacRev with x; try assumption.
-  apply H2. assumption.
+  intros F G a H1 H2. apply InclCompat; try assumption. apply ZF.Set.Incl.InclRefl.
+Qed.
+
+Proposition InclCompatR : forall (F:Class) (a b:U), Functional F ->
+  a :<=: b -> F:[a]: :<=: F:[b]:.
+Proof.
+  intros F a b H1 H2. apply InclCompat; try assumption. apply Class.Incl.InclRefl.
 Qed.
 
