@@ -3,7 +3,10 @@ Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Relation.
 
@@ -60,4 +63,24 @@ Proof.
   subst. apply H2 with y2; assumption.
 Qed.
 
+(* The converse of the composition is (almost) the composition of the converse. *)
+Proposition Converse : forall (f g:U),
+  (g :.: f)^:-1: = f^:-1: :.: g^:-1:.
+Proof.
+  intros f g. apply DoubleInclusion. split; intros u H1.
+  - apply Converse.Charac in H1. destruct H1 as [x [z [H1 H2]]].
+    apply Charac2 in H2. destruct H2 as [y [H2 H3]]. apply Charac.
+    exists z. exists y. exists x. split. 1: assumption. split;
+    apply Converse.Charac2Rev; assumption.
+  - apply Charac in H1. destruct H1 as [z [y [x [H1 [H2 H3]]]]].
+    apply Converse.Charac2 in H2. apply Converse.Charac2 in H3.
+    apply Converse.Charac. exists x. exists z. split. 1: assumption.
+    apply Charac2. exists y. split; assumption.
+Qed.
 
+(* The domain of the composition is a subset of the first domain.               *)
+Proposition DomainIsSmaller : forall (f g:U),
+  domain (g :.: f) :<=: domain f.
+Proof.
+  intros f g x H1.
+Admitted.
