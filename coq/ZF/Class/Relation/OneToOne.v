@@ -98,7 +98,7 @@ Proof.
   intros F G [H1 H2] [H3 H4]. split.
   - apply Compose.IsFunctional; assumption.
   - apply Functional.EquivCompat with (converse F :.: converse G).
-    + apply Equiv.Sym, ComposeConverse.
+    + apply Equiv.Sym, Compose.Converse.
     + apply Compose.IsFunctional; assumption.
 Qed.
 

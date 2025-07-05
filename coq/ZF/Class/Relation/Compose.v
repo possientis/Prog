@@ -87,7 +87,7 @@ Proof.
 Qed.
 
 (* The converse of the composition is (almost) the composition of the converse. *)
-Proposition ComposeConverse : forall (F G:Class),
+Proposition Converse : forall (F G:Class),
   (G :.: F)^:-1: :~: F^:-1: :.: G^:-1:.
 Proof.
   intros F G u. split; intros H1.
