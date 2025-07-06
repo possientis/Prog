@@ -260,7 +260,7 @@ Qed.
 Proposition IsSmall : forall (F G:Class),
   Small F -> Small G -> Small (G :.: F).
 Proof.
-  intros F G H1 H2. apply InclInSmallIsSmall with (Cmp :[F :x: G]:).
+  intros F G H1 H2. apply Bounded.WhenSmaller with (Cmp :[F :x: G]:).
   - apply ImageByCmp.
   - apply Image.IsSmall.
     + apply Cmp.IsFunctional.

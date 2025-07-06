@@ -64,7 +64,7 @@ Proof.
   assert (F :<=: domain F :x: F:[domain F]: ) as X. { apply H1. } clear X.
 
   (* Thus, in order to prove that F is small ... *)
-  apply InclInSmallIsSmall with (domain F :x: F:[domain F]:). 1: apply H1.
+  apply Bounded.WhenSmaller with (domain F :x: F:[domain F]:). 1: apply H1.
 
   (* It is sufficient to prove that (domain F) x F[domain F] is small *)
   assert (Small (domain F :x: F:[domain F]:)) as X. 2: apply X.

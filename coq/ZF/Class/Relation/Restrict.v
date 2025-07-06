@@ -31,10 +31,10 @@ Proposition Charac2 : forall (F A:Class) (y z:U),
 Proof.
   intros F A y z. split; intros H1.
   - destruct H1 as [y' [z' [H1 H2]]]. apply WhenEqual in H1.
-    destruct H1 as [H1 H1']. subst. apply H2.
+    destruct H1 as [H1 H1']. subst. assumption.
   - exists y. exists z. split.
     + reflexivity.
-    + apply H1.
+    + assumption.
 Qed.
 
 Proposition EquivCompat : forall (F G A B:Class),
@@ -67,20 +67,21 @@ Qed.
 (* The restriction is always a relation.                                        *)
 Proposition IsRelation : forall (F A:Class), Relation (F:|:A).
 Proof.
-  intros F A x H1. destruct H1 as [y [z [H1 [H2 H3]]]].
+  intros F A x H1. destruct H1 as [y [z [H1 _]]].
   exists y. exists z. assumption.
 Qed.
 
-(* The restriction of a functional class is always functional.                  *)
+(* The restriction of a functional class is functional.                         *)
 Proposition IsFunctional : forall (F A:Class),
   Functional F -> Functional (F:|:A).
 Proof.
-  intros F A H1 x y z H2 H3. apply H1 with x.
-  - apply Charac2 in H2. destruct H2 as [_ H2]. assumption.
-  - apply Charac2 in H3. destruct H3 as [_ H3]. assumption.
+  intros F A H1 x y z H2 H3.
+  apply Charac2 in H2. destruct H2 as [_ H2].
+  apply Charac2 in H3. destruct H3 as [_ H3].
+  apply H1 with x; assumption.
 Qed.
 
-(* The domain of the restriction F|A is the intersection A/\domain F.           *)
+(* The domain of the restriction F|A is the intersection of A and domain F.     *)
 Proposition DomainOf : forall (F A:Class),
   domain (F:|:A) :~: A :/\: domain F.
 Proof.
@@ -104,7 +105,7 @@ Proof.
 Qed.
 
 (* The range of the restriction F|A is the direct image F[A].                   *)
-Proposition ImageIsRangeOfRestrict : forall (F A:Class),
+Proposition ImageIsRange : forall (F A:Class),
   F:[A]: :~: range (F:|:A).
 Proof.
   intros F A y. split; intros H1.
@@ -121,6 +122,13 @@ Proof.
   intros F A x [y [z [H1 [_ H2]]]]. rewrite H1. apply H2.
 Qed.
 
+Proposition IsSmall' : forall (F A:Class),
+  Small F -> Small (F:|:A).
+Proof.
+  intros F A H1. apply Bounded.WhenSmaller with F.
+  2: assumption. apply IsIncl.
+Qed.
+
 (* The image of any class by a small class is small.                            *)
 Proposition ImageIsSmall : forall (F A:Class),
   Small F -> Small F:[A]:.
@@ -128,10 +136,10 @@ Proof.
   intros F A H1. apply Small.EquivCompat with Snd:[F:|:A]:.
   - apply Equiv.Tran with (range (F:|:A)).
     + apply Range.ImageBySnd.
-    + apply Equiv.Sym, ImageIsRangeOfRestrict.
+    + apply Equiv.Sym, ImageIsRange.
   - apply Image.IsSmall.
     + apply Snd.IsFunctional.
-    + apply InclInSmallIsSmall with F. 2: assumption. apply IsIncl.
+    + apply Bounded.WhenSmaller with F. 2: assumption. apply IsIncl.
 Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
@@ -171,8 +179,8 @@ Proposition LesserThanRangeIsSmall : forall (F A B:Class),
   Functional F -> Small B -> A :<=: range (F:|:B) -> Small A.
 Proof.
   intros F A B H1 H2 H3.
-  apply InclInSmallIsSmall with (range (F:|:B)). 1: assumption.
-  apply Small.EquivCompat with F:[B]:. 1: apply ImageIsRangeOfRestrict.
+  apply Bounded.WhenSmaller with (range (F:|:B)). 1: assumption.
+  apply Small.EquivCompat with F:[B]:. 1: apply ImageIsRange.
   apply Image.IsSmall; assumption.
 Qed.
 
