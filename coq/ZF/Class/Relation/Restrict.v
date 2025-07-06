@@ -104,22 +104,21 @@ Proof.
     + apply Inter2.IsSmallL. assumption.
 Qed.
 
-(* The range of the restriction F|A is the direct image F[A].                   *)
+(* The direct image by F of A is the range of the restriction F|A.              *)
 Proposition ImageIsRange : forall (F A:Class),
   F:[A]: :~: range (F:|:A).
 Proof.
   intros F A y. split; intros H1.
-  - unfold image in H1. destruct H1 as [x [H1 H2]].
-    exists x. apply Charac2. split; assumption.
+  - destruct H1 as [x [H1 H2]]. exists x. apply Charac2. split; assumption.
   - destruct H1 as [x H1]. apply Charac2 in H1.
     destruct H1 as [H1 H2]. exists x. split; assumption.
 Qed.
 
-(* A restriction is always a subclass of the original class.                    *)
+(* A restriction is a subclass of the original class.                           *)
 Proposition IsIncl : forall (F A:Class),
   F:|:A :<=: F.
 Proof.
-  intros F A x [y [z [H1 [_ H2]]]]. rewrite H1. apply H2.
+  intros F A x [y [z [H1 [_ H2]]]]. subst. assumption.
 Qed.
 
 Proposition IsSmall' : forall (F A:Class),

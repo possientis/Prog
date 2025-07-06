@@ -8,6 +8,8 @@ Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Functional.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 
 Export ZF.Notation.Pipe.
@@ -77,3 +79,23 @@ Proof.
     apply Domain.Charac in H2. destruct H2 as [y H2].
     apply Domain.Charac. exists y. apply Charac2. split; assumption.
 Qed.
+
+(* The direct image by f of a is the range of the restriction f|a.              *)
+Proposition ImageIsRange : forall (f a:U),
+  f:[a]: = range (f:|:a).
+Proof.
+  intros f a. apply DoubleInclusion. split; intros y H1.
+  - apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
+    apply Range.Charac. exists x. apply Charac2. split; assumption.
+  - apply Range.Charac in H1. destruct H1 as [x H1].
+    apply Charac2 in H1. destruct H1 as [H1 H2].
+    apply Image.Charac. exists x. split; assumption.
+Qed.
+
+(* A restriction is a subset of the original set.                               *)
+Proposition IsIncl : forall (f a:U),
+  f:|:a :<=: f.
+Proof.
+  intros f a x H1. apply Charac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
+  subst. assumption.
+Admitted.
