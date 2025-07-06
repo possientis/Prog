@@ -86,7 +86,7 @@ Proposition InvImageOfRange : forall (F A:Class),
   FunctionOn F A -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A [H1 H2]. apply Equiv.Tran with (domain F).
-  2: assumption. apply InvImage.InvImageOfRange.
+  2: assumption. apply InvImage.OfRange.
 Qed.
 
 (* If F is defined on a small class A, then its range is small.                 *)

@@ -141,16 +141,16 @@ Proposition InvImageOfImage : forall (F A:Class),
   OneToOne F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
 Proof.
   intros F A [H1 H2] H3. apply DoubleInclusion. split.
-  - apply InvImageOfImageIsLess. assumption.
-  - apply InvImageOfImageIsMore. assumption.
+  - apply InvImage.OfImageIsLess. assumption.
+  - apply InvImage.OfImageIsMore. assumption.
 Qed.
 
 Proposition ImageOfInvImage : forall (F B:Class),
   OneToOne F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
   intros F B [H1 H2] H3. apply DoubleInclusion. split.
-  - apply ImageOfInvImageIsLess. assumption.
-  - apply ImageOfInvImageIsMore. assumption.
+  - apply InvImage.ImageIsLess. assumption.
+  - apply InvImage.ImageIsMore. assumption.
 Qed.
 
 Proposition EvalInjective : forall (F:Class) (x y:U),

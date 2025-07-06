@@ -75,7 +75,7 @@ Proof.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)
-Proposition InvImageOfRange : forall (F:Class),
+Proposition OfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
   intros F. apply Equiv.Tran with F^:-1::[domain F^:-1:]:.
@@ -99,7 +99,7 @@ Proof.
     apply Converse.Charac2Rev. apply EvalOfClass.Satisfies; assumption.
 Qed.
 
-Proposition InvImageOfImageIsLess : forall (F A:Class),
+Proposition OfImageIsLess : forall (F A:Class),
   Functional F^:-1: -> F^:-1::[ F:[A]: ]: :<=: A.
 Proof.
   intros F A H1 x H2. apply Charac in H2. destruct H2 as [y [H2 H3]].
@@ -109,7 +109,7 @@ Proof.
   subst. assumption.
 Qed.
 
-Proposition InvImageOfImageIsMore : forall (F A:Class),
+Proposition OfImageIsMore : forall (F A:Class),
   A :<=: domain F -> A :<=: F^:-1::[ F:[A]: ]:.
 Proof.
   intros F A H1 x H2. specialize (H1 x H2).
@@ -117,7 +117,7 @@ Proof.
   split. 2: assumption. exists x. split; assumption.
 Qed.
 
-Proposition ImageOfInvImageIsLess : forall (F B:Class),
+Proposition ImageIsLess : forall (F B:Class),
   Functional F -> F:[ F^:-1::[B]: ]: :<=: B.
 Proof.
   intros F B H1 y H2.
@@ -127,7 +127,7 @@ Proof.
   subst. assumption.
 Qed.
 
-Proposition ImageOfInvImageIsMore : forall (F B:Class),
+Proposition ImageIsMore : forall (F B:Class),
   B :<=: range F -> B :<=: F:[ F^:-1::[B]: ]:.
 Proof.
   intros F B H1 y H2. specialize (H1 y H2).

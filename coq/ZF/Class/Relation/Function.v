@@ -88,7 +88,7 @@ Qed.
 Proposition InvImageOfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
-  apply InvImage.InvImageOfRange.
+  apply InvImage.OfRange.
 Qed.
 
 (* If a function has a small domain then its range is small.                    *)
