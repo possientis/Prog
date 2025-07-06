@@ -85,7 +85,7 @@ Proof.
     + apply Converse.Range.
 Qed.
 
-(* Characterisation of the inverse image F^(-1)[A] in terms of evaluations of F.*)
+(* Characterisation of the inverse image F^(-1)[B] in terms of evaluations of F.*)
 Proposition EvalCharac : forall (F B:Class), Functional F ->
   forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
 Proof.
@@ -103,9 +103,8 @@ Proposition OfImageIsLess : forall (F A:Class),
   Functional F^:-1: -> F^:-1::[ F:[A]: ]: :<=: A.
 Proof.
   intros F A H1 x H2. apply Charac in H2. destruct H2 as [y [H2 H3]].
-  destruct H2 as [x' [H2 H4]]. assert (x' = x) as H5. { apply H1 with y.
-    - apply Converse.Charac2Rev. assumption.
-    - apply Converse.Charac2Rev. assumption. }
+  destruct H2 as [x' [H2 H4]].
+  assert (x' = x) as H5. { apply Converse.WhenFunctional with F y; assumption. }
   subst. assumption.
 Qed.
 
@@ -120,10 +119,9 @@ Qed.
 Proposition ImageIsLess : forall (F B:Class),
   Functional F -> F:[ F^:-1::[B]: ]: :<=: B.
 Proof.
-  intros F B H1 y H2.
-  destruct H2 as [x [H2 H3]].
+  intros F B H1 y H2. destruct H2 as [x [H2 H3]].
   apply Charac in H2. destruct H2 as [y' [H2 H4]].
-  assert (y' = y) as H6. { apply H1 with x; assumption. }
+  assert (y' = y) as H5. { apply H1 with x; assumption. }
   subst. assumption.
 Qed.
 
@@ -134,4 +132,3 @@ Proof.
   destruct H1 as [x H1]. exists x. split. 2: assumption.
   apply Charac. exists y. split; assumption.
 Qed.
-

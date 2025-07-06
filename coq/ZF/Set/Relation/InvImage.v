@@ -2,7 +2,11 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.Range.
 
 Export ZF.Notation.Image.
 Export ZF.Notation.Inverse.
@@ -43,3 +47,63 @@ Proof.
   - assumption.
 Qed.
 
+(* The inverse image of the range is the domain.                                *)
+Proposition OfRange : forall (f:U),
+  f^:-1::[range f]: = domain f.
+Proof.
+  intros f.
+  assert (domain f^:-1: = range f) as H1. { apply Converse.Domain. }
+  assert (range f^:-1: = domain f) as H2. { apply Converse.Range. }
+  rewrite <- H1, <- H2. apply Range.ImageOfDomain.
+Qed.
+
+(* Characterisation of the inverse image f^(-1)[b] in terms of evaluations of f.*)
+Proposition EvalCharac : forall (f b:U), Functional f ->
+  forall x, x :< f^:-1: :[b]: <-> x :< domain f /\ f!x :< b.
+Proof.
+  intros f b H1 x. split; intros H2.
+  - apply Charac in H2. destruct H2 as [y [H2 H3]].
+    assert (x :< domain f) as H4. { apply Domain.Charac. exists y. assumption. }
+    assert (f!x = y) as H5. { apply Eval.Charac; assumption. }
+    split. 1: assumption. rewrite H5. assumption.
+  - destruct H2 as [H2 H3]. apply Domain.Charac in H2. destruct H2 as [y H2].
+    assert (x :< domain f) as H4. { apply Domain.Charac. exists y. assumption. }
+    assert (f!x = y) as H5. { apply Eval.Charac; assumption. }
+    apply Charac. exists y. split. 2: assumption. rewrite H5 in H3. assumption.
+Qed.
+
+Proposition OfImageIsLess : forall (f a:U),
+  Functional f^:-1: -> f^:-1::[ f:[a]: ]: :<=: a.
+Proof.
+  intros f a H1 x H2. apply Charac in H2. destruct H2 as [y [H2 H3]].
+  apply Image.Charac in H2. destruct H2 as [x' [H2 H4]].
+  assert (x' = x) as H5. { apply Converse.WhenFunctional with f y; assumption. }
+  subst. assumption.
+Qed.
+
+Proposition OfImageIsMore : forall (f a:U),
+  a :<=: domain f -> a :<=: f^:-1::[ f:[a]: ]:.
+Proof.
+  intros f a H1 x H2. specialize (H1 x H2).
+  apply Domain.Charac in H1. destruct H1 as [y H1].
+  apply Charac. exists y. split. 2: assumption.
+  apply Image.Charac. exists x. split; assumption.
+Qed.
+
+Proposition ImageIsLess : forall (f b:U),
+  Functional f -> f:[ f^:-1::[b]: ]: :<=: b.
+Proof.
+  intros f b H1 y H2. apply Image.Charac in H2. destruct H2 as [x [H2 H3]].
+  apply Charac in H2. destruct H2 as [y' [H2 H4]].
+  assert (y' = y) as H5. { apply H1 with x; assumption. }
+  subst. assumption.
+Qed.
+
+Proposition ImageIsMore : forall (f b:U),
+  b :<=: range f -> b :<=: f:[ f^:-1::[b]: ]:.
+Proof.
+  intros f b H1 y H2. specialize (H1 y H2).
+  apply Range.Charac in H1. destruct H1 as [x H1].
+  apply Image.Charac. exists x. split. 2: assumption.
+  apply Charac. exists y. split; assumption.
+Qed.
