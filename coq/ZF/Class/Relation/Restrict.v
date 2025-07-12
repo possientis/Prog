@@ -162,16 +162,11 @@ Proposition TowerProperty : forall (F A B:Class),
 Proof.
   intros F A B H1 x. split; intros H2.
   - destruct H2 as [y [z [H2 [H3 H4]]]]. apply Charac2 in H4.
-    destruct H4 as [H4 H5]. exists y. exists z. split.
-    + assumption.
-    + split; assumption.
+    destruct H4 as [H4 H5]. exists y. exists z. split. 1: assumption.
+    split; assumption.
   - destruct H2 as [y [z [H2 [H3 H4]]]]. exists y. exists z. split.
-    + assumption.
-    + split.
-      * assumption.
-      * apply Charac2. split.
-        { apply H1. assumption. }
-        { assumption. }
+    1: assumption. split. 1: assumption. apply Charac2. split.
+    2: assumption. apply H1. assumption.
 Qed.
 
 Proposition LesserThanRangeIsSmall : forall (F A B:Class),

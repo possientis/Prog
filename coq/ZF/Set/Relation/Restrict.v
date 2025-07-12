@@ -7,6 +7,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Range.
@@ -98,4 +99,38 @@ Proposition IsIncl : forall (f a:U),
 Proof.
   intros f a x H1. apply Charac in H1. destruct H1 as [y [z [H1 [_ H2]]]].
   subst. assumption.
+Qed.
+
+(* A set is a relation iff it equals the restriction to its domain.             *)
+Proposition RelationIsRestrict : forall (f:U),
+  Relation f <-> f = f :|: domain f.
+Proof.
+  intros f. split; intros H1.
+  - apply DoubleInclusion. split; intros x H2.
+    + destruct (H1 x H2) as [y [z H3]]. apply Charac. exists y. exists z.
+      split. 1: assumption. subst. split. 2: assumption. 
+      apply Domain.Charac. exists z. assumption.
+    + apply Charac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
+      rewrite H3. apply H4. 
+  - intros x H2. rewrite H1 in H2. apply Charac in H2.
+    destruct H2 as [y [z [H2 _]]]. exists y. exists z. assumption.
+Qed.
+
+Proposition TowerProperty : forall (f a b:U),
+  a :<=: b -> (f:|:b) :|: a = f:|:a.
+Proof.
+  intros f a b H1. apply DoubleInclusion. split; intros x H2.
+  - apply Charac in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
+    apply Charac2 in H4. destruct H4 as [H4 H5]. apply Charac.
+    exists y. exists z. split. 1: assumption. split; assumption.
+  - apply Charac in H2. destruct H2 as [y [z [H2 [H3 H4]]]]. 
+    apply Charac. exists y. exists z. split. 1: assumption.
+    split. 1: assumption. apply Charac2.  split. 2: assumption.
+    apply H1. assumption.
+Qed.
+
+Proposition Eval : forall (f a x:U), Functional f -> x :< a ->
+  (f:|:a)!x = f!x.
+Proof.
 Admitted.
+
