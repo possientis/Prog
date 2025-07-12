@@ -28,7 +28,7 @@ Proposition EquivCharac : forall (F G:Class),
   domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G. intros [Hf Gf] [Hg Gg].
-  unfold Relation in Hf. unfold Relation in Hg. split; intros H1.
+  split; intros H1.
   assert (domain F :~: domain G) as H2. { apply Domain.EquivCompat. assumption. }
   - split. 1: assumption. intros x H3.
     assert (domain G x) as H4. { apply H2. assumption. }
