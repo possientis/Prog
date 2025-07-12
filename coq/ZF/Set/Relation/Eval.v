@@ -1,5 +1,7 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -13,6 +15,13 @@ Definition eval (f a:U) : U := (toClass f)!a.
 
 (* Notation "f ! a" := (eval f a)                                               *)
 Global Instance SetEval : Eval U := { eval := eval }.
+
+Proposition WhenNotInDomain : forall (f x:U), 
+  ~ x :< domain f -> f!x = :0:.
+Proof.
+  intros f x H1. apply EvalOfClass.WhenNotInDomain. intros H2.
+  apply H1. apply ZF.Set.Relation.Domain.ToClass. assumption. 
+Qed.
 
 (* If f is functional and a lies in domain of f then (a,y) :< f iff f!a = y.    *)
 Proposition Charac : forall (f a y:U),

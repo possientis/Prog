@@ -1,7 +1,9 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
@@ -132,5 +134,21 @@ Qed.
 Proposition Eval : forall (f a x:U), Functional f -> x :< a ->
   (f:|:a)!x = f!x.
 Proof.
-Admitted.
+  intros f a x H1 H2.
+  assert (Functional (f:|:a)) as H3. { apply IsFunctional. assumption. }
+  assert (x :< domain f \/ ~ x :< domain f) as H4. { apply LawExcludedMiddle. }
+  remember (f!x) as y eqn:E. destruct H4 as [H4|H4].
+  - assert (x :< domain (f:|:a)) as H5. {
+      rewrite DomainOf. apply Inter2.Charac. split; assumption. }
+    apply Eval.Charac; try assumption. apply Charac2. split. 1: assumption.
+    rewrite E. apply Eval.Satisfies; assumption.
+  - assert (~ x :< domain (f:|:a)) as H5. {
+      intros H5. apply Domain.Charac in H5. destruct H5 as [z H5].
+      apply Charac2 in H5. destruct H5 as [H5 H6]. apply H4.
+      apply Domain.Charac. exists z. assumption. }
+    assert (y = :0:) as H6. { 
+      rewrite E. apply Eval.WhenNotInDomain. assumption. }
+    rewrite H6. apply Eval.WhenNotInDomain. assumption.
+Qed.
+
 

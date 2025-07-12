@@ -185,18 +185,15 @@ Proof.
   assert (Functional (F:|:A)) as H3. { apply IsFunctional. assumption. }
   assert (domain F x \/ ~ domain F x) as H4. { apply LawExcludedMiddle. }
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
-  - assert (domain (F:|:A) x) as H5. {
-      apply DomainOf. split; assumption. }
-    apply EvalOfClass.Charac.
-    + assumption.
-    + assumption.
-    + apply Charac2. split. 1: assumption. rewrite E.
-      apply EvalOfClass.Satisfies; assumption.
-  - assert (~ domain (F:|:A) x) as H5. { intros H5.
-      destruct H5 as [z H5].
-      apply Charac2 in H5. destruct H5 as [H5 H6]. apply H4.
-      exists z. assumption. }
-    assert (y = :0:) as H6. { rewrite E. apply EvalOfClass.WhenNotInDomain. assumption. }
+  - assert (domain (F:|:A) x) as H5. { apply DomainOf. split; assumption. }
+    apply EvalOfClass.Charac; try assumption.
+    apply Charac2. split. 1: assumption. rewrite E.
+    apply EvalOfClass.Satisfies; assumption.
+  - assert (~ domain (F:|:A) x) as H5. { 
+      intros H5. destruct H5 as [z H5]. apply Charac2 in H5. 
+      destruct H5 as [H5 H6]. apply H4.  exists z. assumption. }
+    assert (y = :0:) as H6. { 
+      rewrite E. apply EvalOfClass.WhenNotInDomain. assumption. }
     rewrite H6. apply EvalOfClass.WhenNotInDomain. assumption.
 Qed.
 
