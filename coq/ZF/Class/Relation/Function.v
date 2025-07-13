@@ -119,25 +119,25 @@ Qed.
 Proposition EvalCharac : forall (F:Class) (a y:U),
   Function F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [_ H1]. apply EvalOfClass.Charac. assumption.
+  intros F a y H1. apply EvalOfClass.Charac, H1.
 Qed.
 
 Proposition Satisfies : forall (F:Class) (a:U),
   Function F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a [_ H1]. apply EvalOfClass.Satisfies. assumption.
+  intros F a H1. apply EvalOfClass.Satisfies, H1.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),
   Function F -> domain F a -> range F (F!a).
 Proof.
-  intros F a [_ H1]. apply EvalOfClass.IsInRange. assumption.
+  intros F a H1. apply EvalOfClass.IsInRange, H1.
 Qed.
 
 Proposition ImageCharac : forall (F A: Class), Function F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
-  intros F A [_ H1]. apply EvalOfClass.ImageCharac. assumption.
+  intros F A H1. apply EvalOfClass.ImageCharac, H1.
 Qed.
 
 Proposition ImageSetCharac : forall (F:Class) (a:U), Function F ->
@@ -157,7 +157,7 @@ Qed.
 Proposition DomainOfCompose : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
-  intros F G a [_ H1]. apply Compose.FunctionalDomainCharac. assumption.
+  intros F G a H1. apply Compose.FunctionalDomainCharac, H1.
 Qed.
 
 Proposition ComposeEval : forall (F G:Class) (a:U),
@@ -167,7 +167,7 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   domain G (F!a) ->
   (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G a [H1 H2] [H3 H4]. apply Compose.Eval; assumption.
+  intros F G a [_ H1] [_ H2]. apply Compose.Eval; assumption.
 Qed.
 
 Proposition RangeCharac : forall (F:Class) (y:U),
