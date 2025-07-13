@@ -116,9 +116,13 @@ Proof.
   intros f g x [_ H1] [_ H2]. apply Compose.Eval; assumption.
 Qed.
 
-(* TODO: Inconsistent y = f!x with ImageCharac *)
 Proposition RangeCharac : forall (f y:U),
   Function f -> y :< range f <-> exists x, x :< domain f /\ y = f!x.
 Proof.
   intros f y H1. split; intros H2.
+  - apply Range.Charac in H2. destruct H2 as [x H2]. exists x. split.
+    + apply Domain.Charac. exists y. assumption.
+    + symmetry. apply EvalCharac; try assumption. apply Domain.Charac. 
+      exists y. assumption.
+  - destruct H2 as [x [H2 H3]]. 
 Admitted.
