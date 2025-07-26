@@ -87,7 +87,7 @@ Proposition OneToOneCompose : forall (F G:Class),
 Proof.
   intros F G Hf Hg. split.
   - apply Compose.IsRelation.
-  - apply ComposeIsOneToOne; assumption.
+  - apply OneToOne.Compose; assumption.
 Qed.
 
 (* The composition of two bijection classes is a bijection class.               *)

@@ -77,7 +77,7 @@ Proof.
   intros F a [H1 _]. apply EvalOfClass.IsInRange. assumption.
 Qed.
 
-Proposition ImageCharac : forall (F A: Class), OneToOne F ->
+Proposition ImageCharac : forall (F A:Class), OneToOne F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
   intros F A [H1 _]. apply EvalOfClass.ImageCharac. assumption.
@@ -92,7 +92,7 @@ Proof.
 Qed.
 
 (* The composition of two one-to-one classes is one-to-one.                     *)
-Proposition ComposeIsOneToOne : forall (F G:Class),
+Proposition Compose : forall (F G:Class),
   OneToOne F -> OneToOne G -> OneToOne (G :.: F).
 Proof.
   intros F G [H1 H2] [H3 H4]. split.
@@ -107,15 +107,15 @@ Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
 Proof.
   intros F x [H1 H2] H3. apply EvalOfClass.Charac. 1: assumption.
   - apply Converse.Domain. exists x. apply EvalOfClass.Satisfies; assumption.
-  - apply Converse.Charac2Rev. apply EvalOfClass.Satisfies; assumption.
+  - apply Converse.Charac2Rev, EvalOfClass.Satisfies; assumption.
 Qed.
 
 Proposition EvalOfConverseEval : forall (F:Class) (y:U),
   OneToOne F -> range F y -> F!(F^:-1:!y) = y.
 Proof.
   intros F y [H1 H2] H3. assert (H4 := H3). destruct H4 as [x H4].
-  assert (F^:-1:!y = x) as H5. { apply EvalOfClass.Charac.
-    - assumption.
+  assert (F^:-1:!y = x) as H5. {
+    apply EvalOfClass.Charac. 1: assumption.
     - apply Converse.Domain. assumption.
     - apply Converse.Charac2Rev. assumption. }
   rewrite H5. apply EvalOfClass.Charac; try assumption. exists y. assumption.
@@ -166,7 +166,8 @@ Proposition EvalInImage : forall (F A:Class) (a:U),
   OneToOne F -> domain F a -> F:[A]: (F!a) <-> A a.
 Proof.
   intros F A a H1 H2. split; intros H3.
-  - destruct H3 as [x [H3 H4]]. assert (x = a) as H5. {
+  - destruct H3 as [x [H3 H4]].
+    assert (x = a) as H5. {
       apply CharacL with F (F!a); try assumption.
       apply Satisfies; assumption. }
     subst. assumption.
