@@ -21,7 +21,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
-(* A class is a bijection if it is a relation and it is one-to-one.             *)
+(* A class is a bijection iff it is a relation and it is one-to-one.            *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
 
 (* A bijection class is a function class.                                       *)
