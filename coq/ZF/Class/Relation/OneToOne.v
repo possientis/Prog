@@ -12,15 +12,15 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
+(* A class is one-to-one iff both itself and its converse are functional.       *)
 Definition OneToOne (F:Class) : Prop := Functional F /\ Functional F^:-1:.
 
 (* Uniqueness of left coordinate when one-to-one.                               *)
 Proposition CharacL : forall (F:Class), OneToOne F ->
   forall x y z, F :(y,x): -> F :(z,x): -> y = z.
 Proof.
-  intros F [_ H1] x y z H2 H3. apply H1 with x.
-  - apply Converse.Charac2Rev. assumption.
-  - apply Converse.Charac2Rev. assumption.
+  intros F [_ H1] x y z H2 H3.
+  apply H1 with x; apply Converse.Charac2Rev; assumption.
 Qed.
 
 (* Uniqueness of right coordinate when one-to-one.                              *)
@@ -47,9 +47,9 @@ Qed.
 Proposition CoordEquiv : forall (F:Class) (x1 x2 y1 y2:U),
   OneToOne F -> F :(x1,y1): -> F :(x2,y2): -> x1 = x2 <-> y1 = y2.
 Proof.
-  intros F x1 x2 y1 y2 H3 H1 H2. split; intros H4.
-  - subst. apply CharacR with F x2; assumption.
-  - subst. apply CharacL with F y2; assumption.
+  intros F x1 x2 y1 y2 H3 H1 H2. split; intros H4; subst.
+  - apply CharacR with F x2; assumption.
+  - apply CharacL with F y2; assumption.
 Qed.
 
 Proposition Converse : forall (F:Class),
