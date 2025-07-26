@@ -20,7 +20,7 @@ Definition Function (f:U) : Prop := Relation f /\ Functional f.
 Proposition EqualCharac : forall (f g:U),
   Function f                              ->
   Function g                              ->
-  domain f = domain g                     -> 
+  domain f = domain g                     ->
   (forall x, x :< domain f -> f!x = g!x)  ->
   f = g.
 Proof.
@@ -30,7 +30,7 @@ Proof.
     assert (f!y = z) as H9. { apply Eval.Charac; assumption. }
     assert (g!y = z) as H10. { rewrite <- H9. symmetry. apply H6. assumption. }
     rewrite <- H10. apply Eval.Satisfies. 1: assumption.
-    rewrite <- H5. assumption. 
+    rewrite <- H5. assumption.
   - specialize (H3 x H7). destruct H3 as [y [z H3]]. subst.
     assert (y :< domain g) as H8. { apply Domain.Charac. exists z. assumption. }
     assert (g!y = z) as H9. { apply Eval.Charac; assumption. }
@@ -57,7 +57,7 @@ Qed.
 Proposition InvImageOfRange : forall (f:U),
   f^:-1::[range f]: = domain f.
 Proof.
-  apply InvImage.OfRange.  
+  apply InvImage.OfRange.
 Qed.
 
 (* The composition of two functional sets is a function.                        *)
@@ -117,12 +117,13 @@ Proof.
 Qed.
 
 Proposition RangeCharac : forall (f y:U),
-  Function f -> y :< range f <-> exists x, x :< domain f /\ y = f!x.
+  Function f -> y :< range f <-> exists x, x :< domain f /\ f!x = y.
 Proof.
   intros f y H1. split; intros H2.
   - apply Range.Charac in H2. destruct H2 as [x H2]. exists x. split.
     + apply Domain.Charac. exists y. assumption.
-    + symmetry. apply EvalCharac; try assumption. apply Domain.Charac. 
+    + apply EvalCharac; try assumption. apply Domain.Charac.
       exists y. assumption.
-  - destruct H2 as [x [H2 H3]]. 
-Admitted.
+  - destruct H2 as [x [H2 H3]]. apply Range.Charac. exists x.
+    apply EvalCharac; assumption.
+Qed.
