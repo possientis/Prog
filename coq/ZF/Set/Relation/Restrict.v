@@ -104,16 +104,16 @@ Proof.
 Qed.
 
 (* A set is a relation iff it equals the restriction to its domain.             *)
-Proposition RelationIsRestrict : forall (f:U),
+Proposition RelationCharac : forall (f:U),
   Relation f <-> f = f :|: domain f.
 Proof.
   intros f. split; intros H1.
   - apply DoubleInclusion. split; intros x H2.
     + destruct (H1 x H2) as [y [z H3]]. apply Charac. exists y. exists z.
-      split. 1: assumption. subst. split. 2: assumption. 
+      split. 1: assumption. subst. split. 2: assumption.
       apply Domain.Charac. exists z. assumption.
     + apply Charac in H2. destruct H2 as [y [z [H3 [_ H4]]]].
-      rewrite H3. apply H4. 
+      rewrite H3. apply H4.
   - intros x H2. rewrite H1 in H2. apply Charac in H2.
     destruct H2 as [y [z [H2 _]]]. exists y. exists z. assumption.
 Qed.
@@ -125,7 +125,7 @@ Proof.
   - apply Charac in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
     apply Charac2 in H4. destruct H4 as [H4 H5]. apply Charac.
     exists y. exists z. split. 1: assumption. split; assumption.
-  - apply Charac in H2. destruct H2 as [y [z [H2 [H3 H4]]]]. 
+  - apply Charac in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
     apply Charac. exists y. exists z. split. 1: assumption.
     split. 1: assumption. apply Charac2.  split. 2: assumption.
     apply H1. assumption.
@@ -146,9 +146,7 @@ Proof.
       intros H5. apply Domain.Charac in H5. destruct H5 as [z H5].
       apply Charac2 in H5. destruct H5 as [H5 H6]. apply H4.
       apply Domain.Charac. exists z. assumption. }
-    assert (y = :0:) as H6. { 
+    assert (y = :0:) as H6. {
       rewrite E. apply Eval.WhenNotInDomain. assumption. }
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
-
-

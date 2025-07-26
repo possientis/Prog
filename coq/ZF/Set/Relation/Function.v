@@ -1,4 +1,5 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
@@ -11,6 +12,7 @@ Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.InvImage.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
+Require Import ZF.Set.Relation.Restrict.
 
 
 (* A set is a function iff it is a relation and it is functional.               *)
@@ -126,4 +128,17 @@ Proof.
       exists y. assumption.
   - destruct H2 as [x [H2 H3]]. apply Range.Charac. exists x.
     apply EvalCharac; assumption.
+Qed.
+
+(* If the domain of f is not empty, then neither is the range.                  *)
+Proposition RangeIsNotEmpty : forall (f:U),
+  domain f <> :0: -> range f <> :0:.
+Proof.
+  apply Range.IsNotEmpty.
+Qed.
+
+Proposition IsRestrict : forall (f:U),
+  Function f -> f = f :|: domain f.
+Proof.
+  intros f H1. apply Restrict.RelationCharac, H1.
 Qed.

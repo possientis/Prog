@@ -190,6 +190,6 @@ Qed.
 Proposition IsRestrict : forall (F:Class),
   Function F -> F :~: F :|: domain F.
 Proof.
-  intros F H1. apply Restrict.RelationIsRestrict, H1.
+  intros F H1. apply Restrict.RelationCharac, H1.
 Qed.
 

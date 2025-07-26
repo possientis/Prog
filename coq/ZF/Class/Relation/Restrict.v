@@ -142,7 +142,7 @@ Proof.
 Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
-Proposition RelationIsRestrict : forall (F:Class),
+Proposition RelationCharac : forall (F:Class),
   Relation F <-> F :~: F :|: domain F.
 Proof.
   intros F. split; intros H1.
@@ -189,10 +189,10 @@ Proof.
     apply EvalOfClass.Charac; try assumption.
     apply Charac2. split. 1: assumption. rewrite E.
     apply EvalOfClass.Satisfies; assumption.
-  - assert (~ domain (F:|:A) x) as H5. { 
-      intros H5. destruct H5 as [z H5]. apply Charac2 in H5. 
+  - assert (~ domain (F:|:A) x) as H5. {
+      intros H5. destruct H5 as [z H5]. apply Charac2 in H5.
       destruct H5 as [H5 H6]. apply H4.  exists z. assumption. }
-    assert (y = :0:) as H6. { 
+    assert (y = :0:) as H6. {
       rewrite E. apply EvalOfClass.WhenNotInDomain. assumption. }
     rewrite H6. apply EvalOfClass.WhenNotInDomain. assumption.
 Qed.
