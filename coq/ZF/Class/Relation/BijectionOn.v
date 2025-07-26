@@ -153,7 +153,7 @@ Proof.
 Qed.
 
 Proposition RangeCharac : forall (F A:Class) (y:U),
-  BijectionOn F A -> range F y <-> exists x, A x /\ y = F!x.
+  BijectionOn F A -> range F y <-> exists x, A x /\ F!x = y.
 Proof.
   intros F A y H1. apply FunctionOn.RangeCharac, IsFunctionOn. assumption.
 Qed.

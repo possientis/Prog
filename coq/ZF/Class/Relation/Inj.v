@@ -147,7 +147,7 @@ Qed.
 
 (* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
-  Inj F A B -> range F y <-> exists x, A x /\ y = F!x.
+  Inj F A B -> range F y <-> exists x, A x /\ F!x = y.
 Proof.
   intros F A B y H1. apply BijectionOn.RangeCharac, H1.
 Qed.

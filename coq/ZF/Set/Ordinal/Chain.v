@@ -31,7 +31,7 @@ Proof.
   apply (FunctionOn.RangeCharac F (toClass :N)) in H2. 2: assumption.
   destruct H2 as [n [H2 H4]]. exists n. split. 1: assumption. intros H5.
   apply Class.Empty.Charac with (F!(succ n)). apply H3. split.
-  - rewrite H4. assumption.
+  - rewrite <- H4. assumption.
   - apply FunctionOn.IsInRange with (toClass :N). 1: assumption.
     apply Omega.HasSucc. assumption.
 Qed.

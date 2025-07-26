@@ -163,7 +163,7 @@ Qed.
 
 (* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
-  Onto F A B -> B y <-> exists x, A x /\ y = F!x.
+  Onto F A B -> B y <-> exists x, A x /\ F!x = y.
 Proof.
   intros F A B y [H1 H2]. split; intros H3.
   - apply FunctionOn.RangeCharac. 1: assumption. apply H2. assumption.

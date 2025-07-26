@@ -171,14 +171,13 @@ Proof.
 Qed.
 
 Proposition RangeCharac : forall (F:Class) (y:U),
-  Function F -> range F y <-> exists x, domain F x /\ y = F!x.
+  Function F -> range F y <-> exists x, domain F x /\ F!x = y.
 Proof.
   intros F y H1. split; intros H2.
   - destruct H2 as [x H2]. exists x. split.
     + exists y. assumption.
-    + symmetry. apply EvalCharac; try assumption. exists y. assumption.
-  - destruct H2 as [x [H2 H3]]. exists x. apply EvalCharac; try assumption.
-    symmetry. assumption.
+    + apply EvalCharac; try assumption. exists y. assumption.
+  - destruct H2 as [x [H2 H3]]. exists x. apply EvalCharac; assumption.
 Qed.
 
 (* If the domain of F is not empty, then neither is the range.                  *)
