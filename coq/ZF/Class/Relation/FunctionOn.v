@@ -24,7 +24,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition EquivCharac : forall (F A G B:Class),
+Proposition EqualCharac : forall (F A G B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
   F :~: G       <->
@@ -33,7 +33,7 @@ Proof.
   intros F A G B [H1 H2] [H3 H4].
   assert (F :~: G <->
     domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
-    { apply Function.EquivCharac; assumption. }
+    { apply Function.EqualCharac; assumption. }
   split; intros H6.
   - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
     + apply Equiv.Tran with (domain F). 1: { apply Equiv.Sym. assumption. }

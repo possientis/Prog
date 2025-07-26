@@ -21,7 +21,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition EquivCharac : forall (F G:Class),
+Proposition EqualCharac : forall (F G:Class),
   Function F ->
   Function G ->
   F :~: G   <->

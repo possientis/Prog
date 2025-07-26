@@ -26,13 +26,13 @@ Notation "F :: A :-> B" := (Fun F A B)
   (at level 0, no associativity) : ZF_Class_Relation_Fun_scope.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition EquivCharac : forall (F A B G C D:Class),
+Proposition EqualCharac : forall (F A B G C D:Class),
   Fun F A B ->
   Fun G C D ->
   F :~: G  <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D H1 H2. apply FunctionOn.EquivCharac.
+  intros F A B G C D H1 H2. apply FunctionOn.EqualCharac.
   - apply H1.
   - apply H2.
 Qed.
