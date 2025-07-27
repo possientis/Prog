@@ -8,6 +8,7 @@ Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.FunctionOn.
 
 Definition Test1  := Class.Relation.Function.IsRestrict.
 Definition Test2  := Class.Relation.Bijection.IsRestrict.
@@ -19,4 +20,5 @@ Definition Test7  := Class.Relation.Inj.IsRestrict.
 Definition Test8  := Class.Relation.Onto.IsRestrict.
 Definition Test9  := ZF.Set.Relation.Bijection.IsRestrict.
 Definition Test10 := ZF.Set.Relation.Function.IsRestrict.
+Definition Test11 := ZF.Set.Relation.FunctionOn.IsRestrict.
 

@@ -8,6 +8,7 @@ Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.FunctionOn.
 
 Definition Test1  := Class.Relation.Function.ImageCharac.
 Definition Test2  := Class.Relation.Bijection.ImageCharac.
@@ -19,3 +20,4 @@ Definition Test7  := Class.Relation.Inj.ImageCharac.
 Definition Test8  := Class.Relation.Onto.ImageCharac.
 Definition Test9  := ZF.Set.Relation.Bijection.ImageCharac.
 Definition Test10 := ZF.Set.Relation.Function.ImageCharac.
+Definition Test11 := ZF.Set.Relation.FunctionOn.ImageCharac.

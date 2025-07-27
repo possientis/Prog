@@ -8,6 +8,7 @@ Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.FunctionOn.
 
 Definition Test1  := Class.Relation.Function.EvalCharac.
 Definition Test2  := Class.Relation.Bijection.EvalCharac.
@@ -19,3 +20,4 @@ Definition Test7  := Class.Relation.Inj.EvalCharac.
 Definition Test8  := Class.Relation.Onto.EvalCharac.
 Definition Test9  := ZF.Set.Relation.Bijection.EvalCharac.
 Definition Test10 := ZF.Set.Relation.Function.EvalCharac.
+Definition Test11 := ZF.Set.Relation.FunctionOn.EvalCharac.
