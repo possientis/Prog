@@ -200,5 +200,5 @@ Qed.
 Proposition DiffImage : forall (f a b:U),
   Bijection f -> f:[a :\: b]: = f:[a]: :\: f:[b]:.
 Proof.
-  intros f a b H1.
-Admitted.
+  intros f a b H1. apply Diff.Image, H1.
+Qed.
