@@ -56,11 +56,11 @@ Qed.
 Proposition WhenLess : forall (P Q:Class),
   P :<: Q -> Q :\: P :<>: :0:.
 Proof.
-  intros P Q H1. apply HasElem.
+  intros P Q H1. apply Class.Empty.HasElem.
   apply Less.Exists in H1. destruct H1 as [_ H1]. assumption.
 Qed.
 
-Proposition UnionInter : forall (P Q R:Class),
+Proposition UnionR : forall (P Q R:Class),
   P :\: (Q:\/:R) :~: (P:\:Q) :/\: P:\:R.
 Proof.
   intros P Q R x. split; intros H1.
@@ -80,7 +80,8 @@ Proof.
   intros F A B H1 y. split; intros H2.
   - destruct H2 as [x [H2 H3]]. destruct H2 as [H2 H4]. split.
     + exists x. split; assumption.
-    + intros [x' [H5 H6]]. assert (x' = x) as H7. {
+    + intros [x' [H5 H6]].
+      assert (x' = x) as H7. {
         apply Converse.WhenFunctional with F y; assumption. }
       subst. contradiction.
   - destruct H2 as [[x [H2 H3]] H4].
