@@ -54,7 +54,6 @@ Proof.
   intros F H1. apply Function.IsIncl, IsFunction. assumption.
 Qed.
 
-(* The inverse image of the range is the domain. F need not be a bijection.     *)
 Proposition ImageIsSmall : forall (F A:Class),
   Bijection F -> Small A -> Small F:[A]:.
 Proof.
@@ -68,6 +67,7 @@ Proof.
   intros F H1. apply Function.IsSmall, IsFunction. assumption.
 Qed.
 
+(* The inverse image of the range is the domain. F need not be a bijection.     *)
 Proposition InvImageOfRange : forall (F:Class),
   F^:-1::[range F]: :~: domain F.
 Proof.
@@ -85,7 +85,7 @@ Qed.
 Proposition OneToOneCompose : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).
 Proof.
-  intros F G Hf Hg. split.
+  intros F G H1 H2. split.
   - apply Compose.IsRelation.
   - apply OneToOne.Compose; assumption.
 Qed.
@@ -94,31 +94,31 @@ Qed.
 Proposition Compose: forall (F G:Class),
   Bijection F -> Bijection G -> Bijection (G :.: F).
 Proof.
-  intros F G [_ Hf] [_ Hg]. apply OneToOneCompose; assumption.
+  intros F G [_ H1] [_ H2]. apply OneToOneCompose; assumption.
 Qed.
 
 Proposition EvalCharac : forall (F:Class) (a y:U),
   Bijection F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F a y [_ H1]. apply OneToOne.EvalCharac. assumption.
+  intros F a y H1. apply OneToOne.EvalCharac, H1.
 Qed.
 
 Proposition Satisfies : forall (F:Class) (a:U),
   Bijection F -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a [_ H1]. apply OneToOne.Satisfies. assumption.
+  intros F a H1. apply OneToOne.Satisfies, H1.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),
   Bijection F -> domain F a -> range F (F!a).
 Proof.
-  intros F a [_ H1]. apply OneToOne.IsInRange. assumption.
+  intros F a H1. apply OneToOne.IsInRange, H1.
 Qed.
 
 Proposition ImageCharac : forall (F A:Class), Bijection F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.
-  intros F A [_ H1]. apply OneToOne.ImageCharac. assumption.
+  intros F A H1. apply OneToOne.ImageCharac, H1.
 Qed.
 
 Proposition ImageSetCharac : forall (F:Class) (a:U), Bijection F ->
@@ -130,7 +130,7 @@ Qed.
 Proposition DomainOfCompose : forall (F G:Class) (a:U),
   Bijection F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
-  intros F G a [_ H1]. apply OneToOne.DomainOfCompose. assumption.
+  intros F G a H1. apply OneToOne.DomainOfCompose, H1.
 Qed.
 
 Proposition ComposeEval : forall (F G:Class) (a:U),
@@ -185,7 +185,7 @@ Qed.
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   Bijection F -> range F b -> domain F (F^:-1:!b).
 Proof.
-  intros F y H1 H2. apply Converse.Range, IsInRange.
+  intros F b H1 H2. apply Converse.Range, IsInRange.
   - apply Converse. assumption.
   - apply Converse.Domain. assumption.
 Qed.
@@ -205,36 +205,36 @@ Qed.
 Proposition InvImageOfImage : forall (F A:Class),
   Bijection F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
 Proof.
-  intros F A [_ H1]. apply OneToOne.InvImageOfImage. assumption.
+  intros F A H1. apply OneToOne.InvImageOfImage, H1.
 Qed.
 
 Proposition ImageOfInvImage : forall (F B:Class),
   Bijection F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
-  intros F B [_ H1]. apply OneToOne.ImageOfInvImage. assumption.
+  intros F B H1. apply OneToOne.ImageOfInvImage, H1.
 Qed.
 
 Proposition EvalInjective : forall (F:Class) (x y:U),
   Bijection F -> domain F x -> domain F y -> F!x = F!y -> x = y.
 Proof.
-  intros F x y [_ H1]. apply OneToOne.EvalInjective. assumption.
+  intros F x y H1. apply OneToOne.EvalInjective, H1.
 Qed.
 
 Proposition EvalInImage : forall (F A:Class) (a:U),
   Bijection F -> domain F a -> F:[A]: (F!a) <-> A a.
 Proof.
-  intros F A a [_ H1]. apply OneToOne.EvalInImage. assumption.
+  intros F A a H1. apply OneToOne.EvalInImage, H1.
 Qed.
 
 Proposition Inter2Image : forall (F A B:Class),
   Bijection F -> F:[A :/\: B]: :~: F:[A]: :/\: F:[B]:.
 Proof.
-  intros F A B [_ H1]. apply Converse.Inter2Image, H1.
+  intros F A B H1. apply Converse.Inter2Image, H1.
 Qed.
 
 Proposition DiffImage : forall (F A B:Class),
   Bijection F -> F:[A :\: B]: :~: F:[A]: :\: F:[B]:.
 Proof.
-  intros F A B [_ H1]. apply Diff.Image, H1.
+  intros F A B H1. apply Diff.Image, H1.
 Qed.
 
