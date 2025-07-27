@@ -24,13 +24,13 @@ Require Import ZF.Set.Relation.ImageByClass.
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition EqualCharac : forall (F A G B:Class),
+Proposition EqualCharac : forall (F G A B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
   F :~: G       <->
   A :~: B /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A G B [H1 H2] [H3 H4].
+  intros F G A B [H1 H2] [H3 H4].
   assert (F :~: G <->
     domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
     { apply Function.EqualCharac; assumption. }
@@ -99,13 +99,13 @@ Proof.
 Qed.
 
 (* If F defined on A, G defined on B and range F <= B, then G.F defined on A.   *)
-Proposition Compose : forall (F A G B:Class),
+Proposition Compose : forall (F G A B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
   range F :<=: B ->
   FunctionOn (G :.: F) A.
 Proof.
-  intros F A G B [H1 H2] [H3 H4] H5. split.
+  intros F G A B [H1 H2] [H3 H4] H5. split.
   - apply Function.Compose; assumption.
   - apply Equiv.Tran with (domain F). 2: assumption.
     apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
@@ -136,7 +136,7 @@ Proof.
   apply H2. assumption.
 Qed.
 
-Proposition ImageCharac : forall (F A B: Class), FunctionOn F A ->
+Proposition ImageCharac : forall (F A B:Class), FunctionOn F A ->
   forall y, F:[B]: y <-> exists x, B x /\ A x /\ F!x = y.
 Proof.
   intros F A B [H1 H2] y. split; intros H3.
@@ -175,7 +175,7 @@ Proof.
     + apply H4. assumption.
 Qed.
 
-(* The value at a of G.F is the value at F!a of G when a in A.                  *)
+(* The value at a of G.F is the value at F!a of G when a in A and F!a in B.     *)
 Proposition ComposeEval : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
@@ -219,10 +219,10 @@ Proof.
   - apply Restrict.EquivCompatR, H1.
 Qed.
 
-(* A function is always a function defined on its domain.                       *)
+(* A function is a function defined on its domain.                              *)
 Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply Equiv.Refl. }
+  intros F H1. split. 1: assumption. apply Equiv.Refl.
 Qed.
 
