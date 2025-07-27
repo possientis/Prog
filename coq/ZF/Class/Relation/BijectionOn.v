@@ -84,13 +84,13 @@ Proof.
   - apply ImageIsSmall with A; assumption.
 Qed.
 
-Proposition Compose : forall (F A G B:Class),
+Proposition Compose : forall (F G A B:Class),
   BijectionOn F A ->
   BijectionOn G B ->
   range F :<=: B   ->
   BijectionOn (G :.: F) A.
 Proof.
-  intros F A G B [H1 H2] [H3 H4] H5. split.
+  intros F G A B [H1 H2] [H3 H4] H5. split.
   - apply Bijection.Compose; assumption.
   - apply Equiv.Tran with (domain F). 2: assumption.
     apply Compose.DomainIsSame. apply Incl.EquivCompatR with B. 2: assumption.
@@ -100,25 +100,22 @@ Qed.
 Proposition EvalCharac : forall (F A:Class) (a y:U),
   BijectionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A a y H1. apply IsFunctionOn in H1.
-  apply FunctionOn.EvalCharac. assumption.
+  intros F A a y H1. apply FunctionOn.EvalCharac, IsFunctionOn. assumption.
 Qed.
 
 Proposition Satisfies : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> F :(a,F!a):.
 Proof.
-  intros F A a H1. apply IsFunctionOn in H1.
-  apply FunctionOn.Satisfies. assumption.
+  intros F A a H1. apply FunctionOn.Satisfies, IsFunctionOn. assumption.
 Qed.
 
 Proposition IsInRange : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> range F (F!a).
 Proof.
-  intros F A a H1. apply IsFunctionOn in H1.
-  apply FunctionOn.IsInRange. assumption.
+  intros F A a H1. apply FunctionOn.IsInRange, IsFunctionOn. assumption.
 Qed.
 
-Proposition ImageCharac : forall (F A B: Class), BijectionOn F A ->
+Proposition ImageCharac : forall (F A B:Class), BijectionOn F A ->
   forall y, F:[B]: y <-> exists x, B x /\ A x /\ F!x = y.
 Proof.
   intros F A B H1. apply FunctionOn.ImageCharac, IsFunctionOn. assumption.
@@ -136,8 +133,7 @@ Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
   domain (G :.: F) a <-> A a /\ B (F!a).
 Proof.
   intros F G A B a H1 H2.
-  apply IsFunctionOn in H1. apply IsFunctionOn in H2.
-  apply FunctionOn.DomainOfCompose; assumption.
+  apply FunctionOn.DomainOfCompose; apply IsFunctionOn; assumption.
 Qed.
 
 Proposition ComposeEval : forall (F G A B:Class) (a:U),
@@ -148,8 +144,7 @@ Proposition ComposeEval : forall (F G A B:Class) (a:U),
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B a H1 H2.
-  apply IsFunctionOn in H1. apply IsFunctionOn in H2.
-  apply FunctionOn.ComposeEval; assumption.
+  apply FunctionOn.ComposeEval; apply IsFunctionOn; assumption.
 Qed.
 
 Proposition RangeCharac : forall (F A:Class) (y:U),
@@ -215,7 +210,7 @@ Qed.
 Proposition ImageOfInvImage : forall (F A B:Class),
   BijectionOn F A -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
-  intros F A B [H1 _]. apply Bijection.ImageOfInvImage. assumption.
+  intros F A B H1. apply Bijection.ImageOfInvImage, H1.
 Qed.
 
 Proposition EvalInjective : forall (F A:Class) (x y:U),
@@ -232,11 +227,11 @@ Proof.
   apply H2. assumption.
 Qed.
 
-(* A bijection is always a bijection defined on its domain. *)
+(* A bijection is a bijection defined on its domain.                            *)
 Proposition BijectionIsBijectionOn : forall (F:Class),
   Bijection F -> BijectionOn F (domain F).
 Proof.
-  intros F H1. split. { assumption. } { apply Equiv.Refl. }
+  intros F H1. split. 1: assumption. apply Equiv.Refl.
 Qed.
 
 Proposition Inter2Image : forall (F A B C:Class),
