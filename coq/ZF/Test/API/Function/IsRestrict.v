@@ -6,15 +6,17 @@ Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
+Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.Function.
 
-Definition Test1 := Class.Relation.Function.IsRestrict.
-Definition Test2 := Class.Relation.Bijection.IsRestrict.
-Definition Test3 := Class.Relation.FunctionOn.IsRestrict.
-Definition Test4 := Class.Relation.BijectionOn.IsRestrict.
-Definition Test5 := Class.Relation.Fun.IsRestrict.
-Definition Test6 := Class.Relation.Bij.IsRestrict.
-Definition Test7 := Class.Relation.Inj.IsRestrict.
-Definition Test8 := Class.Relation.Onto.IsRestrict.
-Definition Test9 := ZF.Set.Relation.Function.IsRestrict.
+Definition Test1  := Class.Relation.Function.IsRestrict.
+Definition Test2  := Class.Relation.Bijection.IsRestrict.
+Definition Test3  := Class.Relation.FunctionOn.IsRestrict.
+Definition Test4  := Class.Relation.BijectionOn.IsRestrict.
+Definition Test5  := Class.Relation.Fun.IsRestrict.
+Definition Test6  := Class.Relation.Bij.IsRestrict.
+Definition Test7  := Class.Relation.Inj.IsRestrict.
+Definition Test8  := Class.Relation.Onto.IsRestrict.
+Definition Test9  := ZF.Set.Relation.Bijection.IsRestrict.
+Definition Test10 := ZF.Set.Relation.Function.IsRestrict.
 
