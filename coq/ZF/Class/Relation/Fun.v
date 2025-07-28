@@ -83,8 +83,8 @@ Qed.
 
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
 Proposition Compose : forall (F G A B C: Class),
-  F :: A :-> B ->
-  G :: B :-> C ->
+  F :: A :-> B          ->
+  G :: B :-> C          ->
   (G :.: F) :: A :-> C.
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
@@ -109,13 +109,13 @@ Qed.
 
 (* The value at a of a function defined on A lies in B  when a im A.            *)
 Proposition IsInRange : forall (F A B:Class) (a:U),
-  (F :: A :-> B) -> A a -> B (F!a).
+  F :: A :-> B -> A a -> B (F!a).
 Proof.
   intros F A B a H1 H2. apply H1.
   apply FunctionOn.IsInRange with A. 2: assumption. apply H1.
 Qed.
 
-Proposition ImageCharac : forall (F A B C: Class), F :: A :-> B ->
+Proposition ImageCharac : forall (F A B C:Class), F :: A :-> B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply FunctionOn.ImageCharac, H1.

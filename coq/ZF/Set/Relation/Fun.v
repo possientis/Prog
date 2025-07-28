@@ -1,6 +1,10 @@
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Compose.
+Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
@@ -37,8 +41,64 @@ Qed.
 Proposition IsIncl : forall (f a b:U),
   f :: a :-> b -> f :<=: a :x: b.
 Proof.
-  intros f a b [H1 H2]. apply ZF.Set.Incl.Tran with (a :x: f:[a]:).
-  - apply FunctionOn.IsIncl. assumption.
-  - Admitted.
+  intros f a b H1. apply ZF.Set.Incl.Tran with (a :x: f:[a]:).
+  - apply FunctionOn.IsIncl, H1.
+  - apply Prod.InclCompatR. rewrite (ImageOfDomain f a b).
+    2: assumption. apply H1.
+Qed.
 
+(* The inverse image of the range is the domain.                                *)
+Proposition InvImageOfRange : forall (f a b:U),
+  f :: a :-> b -> f^:-1::[range f]: = a.
+Proof.
+  intros f a b H1. apply FunctionOn.InvImageOfRange, H1.
+Qed.
+
+(* If f:a -> b and g:b -> c then g.f : a -> c.                                  *)
+Proposition Compose : forall (f g a b c:U),
+  f :: a :-> b          ->
+  g :: b :-> c          ->
+  (g :.: f) :: a :-> c.
+Proof.
+  intros f g a b c [H1 H2] [H3 H4]. split.
+  - apply FunctionOn.Compose with b; assumption.
+  - apply ZF.Set.Incl.Tran with (range g). 2: assumption.
+    apply Compose.RangeIsSmaller.
+Qed.
+
+(* Characterization of the value at x of a function defined on a when x in a.   *)
+Proposition EvalCharac : forall (f a b x y:U),
+  f :: a :-> b -> x :< a -> :(x,y): :< f <-> f!x = y.
+Proof.
+  intros f a b x y H1. apply FunctionOn.EvalCharac, H1.
+Qed.
+
+(* The ordered pair (x,f!x) lies in the set f when x in a.                      *)
+Proposition Satisfies : forall (f a b x:U),
+  f :: a :-> b -> x :< a -> :(x,f!x): :< f.
+Proof.
+  intros f a b x H1. apply FunctionOn.Satisfies, H1.
+Qed.
+
+(* The value at x of a function defined on a lies in b  when x im a.            *)
+Proposition IsInRange : forall (f a b x:U),
+  f :: a :-> b -> x :< a -> f!x :< b.
+Proof.
+  intros f a b x H1 H2. apply H1.
+  apply FunctionOn.IsInRange with a. 2: assumption. apply H1.
+Qed.
+
+Proposition ImageCharac : forall (f a b c:U), f :: a :-> b ->
+  forall y, y :< f:[c]: <-> exists x, x :< c /\ x :< a /\ f!x = y.
+Proof.
+  intros f a b c H1. apply FunctionOn.ImageCharac, H1.
+Qed.
+
+(* Characterization of the domain of g.f.                                       *)
+Proposition DomainOfCompose : forall (f g a b c:U),
+  f :: a :-> b  ->
+  g :: b :-> c  ->
+  domain (g :.: f) = a.
+Proof.
+Admitted.
 
