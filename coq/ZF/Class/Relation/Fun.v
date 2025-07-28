@@ -1,6 +1,3 @@
-Declare Scope ZF_Class_Relation_Fun_scope.
-Open    Scope ZF_Class_Relation_Fun_scope.
-
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
@@ -19,11 +16,14 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
+Require Import ZF.Notation.Fun.
+Export ZF.Notation.Fun.
+
 (* F is a function from A to B.                                                 *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
-Notation "F :: A :-> B" := (Fun F A B)
-  (at level 0, no associativity) : ZF_Class_Relation_Fun_scope.
+(* Notation "F :: A :-> B" := (Fun F A B)                                       *)
+Global Instance ClassFun : Notation.Fun.Fun Class Class := { IsFun := Fun }.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition EqualCharac : forall (F A B G C D:Class),
