@@ -1,4 +1,5 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
@@ -9,6 +10,7 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Relation.Restrict.
 
 Require Import ZF.Notation.Fun.
 Export ZF.Notation.Fun.
@@ -100,5 +102,42 @@ Proposition DomainOfCompose : forall (f g a b c:U),
   g :: b :-> c  ->
   domain (g :.: f) = a.
 Proof.
-Admitted.
+  intros f g a b c [H1 H2] [H3 H4]. apply DoubleInclusion. split; intros x H5.
+  - apply (FunctionOn.DomainOfCompose f g a b x H1 H3) in H5.
+    destruct H5 as [H5 H6]. assumption.
+  - apply (FunctionOn.DomainOfCompose f g a b x); try assumption.
+    split. 1: assumption. apply IsInRange with a. 2: assumption.
+    split; assumption.
+Qed.
 
+(* The value at x of g.f is the value at f!x of g when x in a.                  *)
+Proposition ComposeEval : forall (f g a b c x:U),
+  f :: a :-> b  ->
+  g :: b :-> c  ->
+  x :< a        ->
+  (g :.: f)!x = g!(f!x).
+Proof.
+  intros f g a b c x [H1 H2] [H3 H4] H5.
+  apply (FunctionOn.ComposeEval f g a b); try assumption.
+  apply IsInRange with a. 2: assumption. split; assumption.
+Qed.
+
+(* Characterisation of the range of f.                                          *)
+Proposition RangeCharac : forall (f a b y:U),
+  f :: a :-> b -> y :< range f <-> exists x, x :< a /\ f!x = y.
+Proof.
+  intros f a b y H1. apply FunctionOn.RangeCharac, H1.
+Qed.
+
+(* If the domain of f is not empty, then neither is the range.                  *)
+Proposition RangeIsNotEmpty : forall (f a b:U),
+  f :: a :-> b -> a <> :0: -> range f <> :0:.
+Proof.
+  intros f a b H1. apply FunctionOn.RangeIsNotEmpty, H1.
+Qed.
+
+Proposition IsRestrict : forall (f a b:U),
+  f :: a :-> b -> f = f :|: a.
+Proof.
+  intros f a b H1. apply FunctionOn.IsRestrict, H1.
+Qed.

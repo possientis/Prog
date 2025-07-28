@@ -137,9 +137,8 @@ Proof.
   - apply (FunctionOn.DomainOfCompose F G A B a H1 H3) in H5.
     destruct H5 as [H5 H6]. assumption.
   - apply (FunctionOn.DomainOfCompose F G A B a); try assumption.
-    split. 1: assumption.  apply IsInRange with A.
-    + split; assumption.
-    + assumption.
+    split. 1: assumption.  apply IsInRange with A. 2: assumption.
+    split; assumption.
 Qed.
 
 (* The value at a of G.F is the value at F!a of G when a in A.                  *)
@@ -151,9 +150,7 @@ Proposition ComposeEval : forall (F G A B C:Class) (a:U),
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply (FunctionOn.ComposeEval F G A B); try assumption.
-  apply IsInRange with A.
-  - split; assumption.
-  - assumption.
+  apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
 (* Characterisation of the range of F.                                          *)
@@ -171,8 +168,7 @@ Proof.
 Qed.
 
 Proposition IsRestrict : forall (F A B:Class),
-  Fun F A B -> F :~: F :|: A.
+  F :: A :-> B -> F :~: F :|: A.
 Proof.
   intros F A B H1. apply FunctionOn.IsRestrict, H1.
 Qed.
-
