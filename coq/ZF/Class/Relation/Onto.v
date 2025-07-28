@@ -133,12 +133,12 @@ Proof.
   intros F A B a H1. apply FunctionOn.ImageSetCharac, H1.
 Qed.
 
-Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
+Proposition DomainOfCompose : forall (F G A B C:Class),
   Onto F A B  ->
   Onto G B C  ->
-  domain (G :.: F) a <-> A a.
+  domain (G :.: F) :~: A.
 Proof.
-  intros F G A B C a [H1 H2] [H3 H4]. split; intros H5.
+  intros F G A B C [H1 H2] [H3 H4]. intros a. split; intros H5.
   - apply (FunctionOn.DomainOfCompose F G A B a H1 H3) in H5.
     destruct H5 as [H5 H6]. assumption.
   - apply (FunctionOn.DomainOfCompose F G A B a); try assumption.

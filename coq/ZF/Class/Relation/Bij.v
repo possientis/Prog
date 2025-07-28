@@ -145,12 +145,12 @@ Proof.
   intros F A B a H1. apply BijectionOn.ImageSetCharac, H1.
 Qed.
 
-Proposition DomainOfCompose : forall (F G A B C:Class) (a:U),
+Proposition DomainOfCompose : forall (F G A B C:Class),
   Bij F A B ->
   Bij G B C ->
-  domain (G :.: F) a <-> A a.
+  domain (G :.: F) :~: A.
 Proof.
-  intros F G A B C a H1 H2. apply IsFun in H1. apply IsFun in H2.
+  intros F G A B C H1 H2. apply IsFun in H1. apply IsFun in H2.
   apply Fun.DomainOfCompose with B C; assumption.
 Qed.
 
