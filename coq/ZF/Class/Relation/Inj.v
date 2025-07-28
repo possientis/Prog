@@ -38,15 +38,13 @@ Proposition EqualCharac : forall (F A B G C D:Class),
   F :~: G  <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D H1 H2. apply BijectionOn.EqualCharac.
-  - apply H1.
-  - apply H2.
+  intros F A B G C D [H1 _] [H2i _]. apply BijectionOn.EqualCharac; assumption.
 Qed.
 
 Proposition ImageOfDomain : forall (F A B:Class),
   Inj F A B -> F:[A]: :~: range F.
 Proof.
-  intros F A B [H1 _]. apply BijectionOn.ImageOfDomain. assumption.
+  intros F A B H1. apply BijectionOn.ImageOfDomain, H1.
 Qed.
 
 (* An injection F:A -> B is a subclass of AxB.                                  *)
@@ -97,13 +95,13 @@ Qed.
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
   Inj F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B a y [H1 _]. apply BijectionOn.EvalCharac. assumption.
+  intros F A B a y H1. apply BijectionOn.EvalCharac, H1.
 Qed.
 
 Proposition Satisfies : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> F :(a,F!a):.
 Proof.
-  intros F A B a [H1 _]. apply BijectionOn.Satisfies. assumption.
+  intros F A B a H1. apply BijectionOn.Satisfies, H1.
 Qed.
 
 Proposition IsInRange : forall (F A B:Class) (a:U),
@@ -162,7 +160,7 @@ Qed.
 Proposition IsRestrict : forall (F A B:Class),
   Inj F A B -> F :~: F:|:A.
 Proof.
-  intros F A B [H1 _]. apply BijectionOn.IsRestrict. assumption.
+  intros F A B H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
 (* The inverse image of a small class by an injection from any A to B is small. *)
