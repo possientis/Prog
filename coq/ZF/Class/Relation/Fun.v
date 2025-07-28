@@ -27,14 +27,12 @@ Global Instance ClassFun : Notation.Fun.Fun Class Class := { IsFun := Fun }.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition EqualCharac : forall (F A B G C D:Class),
-  Fun F A B ->
-  Fun G C D ->
-  F :~: G  <->
+  F :: A :-> B  ->
+  G :: C :-> D  ->
+  F :~: G      <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D H1 H2. apply FunctionOn.EqualCharac.
-  - apply H1.
-  - apply H2.
+  intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.EqualCharac; assumption.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)
