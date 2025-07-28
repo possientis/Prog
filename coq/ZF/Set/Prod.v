@@ -35,7 +35,36 @@ Proof.
     + split; assumption.
 Qed.
 
-Proposition InterProdIsProdInter: forall (a1 a2 b1 b2:U),
+(* The product of two sets is compatible with inclusion.                        *)
+Proposition InclCompat : forall (a b c d:U),
+  a :<=: b -> c :<=: d -> a :x: c :<=: b :x: d.
+Proof.
+  intros a b c d H1 H2 x H3. apply Charac in H3.
+  destruct H3 as [y [z [H3 [H4 H5]]]]. apply Charac. exists y. exists z.
+  split. 1: assumption. split.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
+
+(* The product of two sets is left-compatible with inclusion.                   *)
+Proposition InclCompatL : forall (a b c:U),
+  a :<=: b -> a :x: c :<=: b :x: c.
+Proof.
+  intros a b c H1. apply InclCompat.
+  - assumption.
+  - apply Incl.Refl.
+Qed.
+
+(* The product of two sets is right-compatible with inclusion.                  *)
+Proposition InclCompatR : forall (a b c:U),
+  a :<=: b -> c :x: a :<=: c :x: b.
+Proof.
+  intros a b c H1. apply InclCompat.
+  - apply Incl.Refl.
+  - assumption.
+Qed.
+
+Proposition Inter2 : forall (a1 a2 b1 b2:U),
   (a1:x:b1) :/\: (a2:x:b2) = (a1:/\:a2) :x: (b1:/\:b2).
 Proof.
   intros a1 a2 b1 b2. apply DoubleInclusion. split; intros x H1.
@@ -53,3 +82,4 @@ Proof.
     + assumption.
     + split; assumption.
 Qed.
+
