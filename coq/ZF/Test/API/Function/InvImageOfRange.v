@@ -8,6 +8,7 @@ Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 
@@ -21,6 +22,7 @@ Definition Test7  := Class.Relation.Inj.InvImageOfRange.
 Definition Test8  := Class.Relation.Onto.InvImageOfRange.
 Definition Test9  := ZF.Set.Relation.Bijection.InvImageOfRange.
 Definition Test10 := ZF.Set.Relation.BijectionOn.InvImageOfRange.
-Definition Test11 := ZF.Set.Relation.Function.InvImageOfRange.
-Definition Test12 := ZF.Set.Relation.FunctionOn.InvImageOfRange.
+Definition Test11 := ZF.Set.Relation.Fun.InvImageOfRange.
+Definition Test12 := ZF.Set.Relation.Function.InvImageOfRange.
+Definition Test13 := ZF.Set.Relation.FunctionOn.InvImageOfRange.
 
