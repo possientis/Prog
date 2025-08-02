@@ -11,6 +11,7 @@ Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Inj.
 
 Definition Test1  := Class.Relation.Function.Satisfies.
 Definition Test2  := Class.Relation.Bijection.Satisfies.
@@ -25,4 +26,5 @@ Definition Test10 := ZF.Set.Relation.BijectionOn.Satisfies.
 Definition Test11 := ZF.Set.Relation.Fun.Satisfies.
 Definition Test12 := ZF.Set.Relation.Function.Satisfies.
 Definition Test13 := ZF.Set.Relation.FunctionOn.Satisfies.
+Definition Test14 := ZF.Set.Relation.Inj.Satisfies.
 
