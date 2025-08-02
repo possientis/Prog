@@ -1,6 +1,8 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.BijectionOn.
@@ -16,7 +18,6 @@ Require Import ZF.Set.Relation.Restrict.
 
 (* f is an injective function from a to b.                                      *)
 Definition Inj (f a b:U) : Prop := BijectionOn f a /\ range f :<=: b.
-
 
 (* If f is an injection from a to b, then it is a function from a to b.         *)
 Proposition IsFun : forall (f a b:U), Inj f a b -> f :: a :-> b.
@@ -136,4 +137,61 @@ Qed.
 Proposition Converse : forall (f a b:U),
   Inj f a b -> range f = b -> Inj f^:-1: b a.
 Proof.
-Admitted.
+  intros f a b [H1 _] H2. split.
+  - apply BijectionOn.Converse with a; assumption.
+  - destruct H1 as [_ H1]. rewrite Converse.Range, H1. apply Incl.Refl.
+Qed.
+
+Proposition ConverseEvalIsInDomain : forall (f a b y:U),
+  Inj f a b -> y :< range f -> f^:-1:!y :< a.
+Proof.
+  intros f a b y H1. apply BijectionOn.ConverseEvalIsInDomain, H1.
+Qed.
+
+Proposition ConverseEvalOfEval : forall (f a b x:U),
+  Inj f a b -> x :< a -> f^:-1:!(f!x) = x.
+Proof.
+  intros f a b x H1. apply BijectionOn.ConverseEvalOfEval, H1.
+Qed.
+
+Proposition EvalOfConverseEval : forall (f a b y:U),
+  Inj f a b -> y :< range f -> f!(f^:-1:!y) = y.
+Proof.
+  intros f a b y H1. apply BijectionOn.EvalOfConverseEval with a, H1.
+Qed.
+
+Proposition InvImageOfImage : forall (f a b c:U),
+  Inj f a b -> c :<=: a -> f^:-1::[ f:[c]: ]: =  c.
+Proof.
+  intros f a b c H1. apply BijectionOn.InvImageOfImage, H1.
+Qed.
+
+Proposition ImageOfInvImage : forall (f a b c:U),
+  Inj f a b -> c :<=: range f -> f:[ f^:-1::[c]: ]: =  c.
+Proof.
+  intros f a b c H1. apply BijectionOn.ImageOfInvImage with a, H1.
+Qed.
+
+Proposition EvalInjective : forall (f a b x y:U),
+  Inj f a b -> x :< a -> y :< a -> f!x = f!y -> x = y.
+Proof.
+  intros f a b x y H1. apply BijectionOn.EvalInjective, H1.
+Qed.
+
+Proposition EvalInImage : forall (f a b c x:U),
+  Inj f a b -> x :< a -> f!x :< f:[c]: <-> x :< c.
+Proof.
+  intros f a b c x H1. apply BijectionOn.EvalInImage, H1.
+Qed.
+
+Proposition Inter2Image : forall (f a b c d:U),
+  Inj f a b -> f:[c :/\: d]: = f:[c]: :/\: f:[d]:.
+Proof.
+  intros f a b c d H1. apply BijectionOn.Inter2Image with a, H1.
+Qed.
+
+Proposition DiffImage : forall (f a b c d:U),
+  Inj f a b -> f:[c :\: d]: = f:[c]: :\: f:[d]:.
+Proof.
+  intros f a b c d H1. apply BijectionOn.DiffImage with a, H1.
+Qed.

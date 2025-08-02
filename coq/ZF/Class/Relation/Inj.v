@@ -185,45 +185,43 @@ Qed.
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
   Inj F A B -> range F b -> A (F^:-1:!b).
 Proof.
-  intros F A B b [H1 _]. apply BijectionOn.ConverseEvalIsInDomain. assumption.
+  intros F A B b H1. apply BijectionOn.ConverseEvalIsInDomain, H1.
 Qed.
 
 Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
   Inj F A B -> A x -> F^:-1:!(F!x) = x.
 Proof.
-  intros F A B x [H1 _].
-  apply BijectionOn.ConverseEvalOfEval. assumption.
+  intros F A B x H1. apply BijectionOn.ConverseEvalOfEval, H1.
 Qed.
 
 Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
   Inj F A B -> range F y -> F!(F^:-1:!y) = y.
 Proof.
-  intros F A B y [H1 _].
-  apply BijectionOn.EvalOfConverseEval with A. assumption.
+  intros F A B y H1. apply BijectionOn.EvalOfConverseEval with A, H1.
 Qed.
 
 Proposition InvImageOfImage : forall (F A B C:Class),
   Inj F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
 Proof.
-  intros F A B C [H1 _]. apply BijectionOn.InvImageOfImage. assumption.
+  intros F A B C H1. apply BijectionOn.InvImageOfImage, H1.
 Qed.
 
 Proposition ImageOfInvImage : forall (F A B C:Class),
   Inj F A B -> C :<=: range F -> F:[ F^:-1::[C]: ]: :~: C.
 Proof.
-  intros F A B C [H1 _]. apply BijectionOn.ImageOfInvImage with A. assumption.
+  intros F A B C H1. apply BijectionOn.ImageOfInvImage with A, H1.
 Qed.
 
 Proposition EvalInjective : forall (F A B:Class) (x y:U),
   Inj F A B -> A x -> A y -> F!x = F!y -> x = y.
 Proof.
-  intros F A B x y [H1 _]. apply BijectionOn.EvalInjective. assumption.
+  intros F A B x y H1. apply BijectionOn.EvalInjective, H1.
 Qed.
 
 Proposition EvalInImage : forall (F A B C:Class) (a:U),
   Inj F A B -> A a -> F:[C]: (F!a) <-> C a.
 Proof.
-  intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
+  intros F A B C a H1. apply BijectionOn.EvalInImage, H1.
 Qed.
 
 Proposition Inter2Image : forall (F A B C D:Class),
