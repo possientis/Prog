@@ -6,6 +6,7 @@ Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Inj.
 Require Import ZF.Class.Relation.Onto.
+Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Fun.
@@ -14,18 +15,19 @@ Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Onto.
 
-Definition Test1  := Class.Relation.Function.RangeIsNotEmpty.
+Definition Test1  := Class.Relation.Bij.RangeIsNotEmpty.
 Definition Test2  := Class.Relation.Bijection.RangeIsNotEmpty.
-Definition Test3  := Class.Relation.FunctionOn.RangeIsNotEmpty.
-Definition Test4  := Class.Relation.BijectionOn.RangeIsNotEmpty.
-Definition Test5  := Class.Relation.Fun.RangeIsNotEmpty.
-Definition Test6  := Class.Relation.Bij.RangeIsNotEmpty.
+Definition Test3  := Class.Relation.BijectionOn.RangeIsNotEmpty.
+Definition Test4  := Class.Relation.Fun.RangeIsNotEmpty.
+Definition Test5  := Class.Relation.Function.RangeIsNotEmpty.
+Definition Test6  := Class.Relation.FunctionOn.RangeIsNotEmpty.
 Definition Test7  := Class.Relation.Inj.RangeIsNotEmpty.
 Definition Test8  := Class.Relation.Onto.RangeIsNotEmpty.
-Definition Test9  := ZF.Set.Relation.Bijection.RangeIsNotEmpty.
-Definition Test10 := ZF.Set.Relation.BijectionOn.RangeIsNotEmpty.
-Definition Test11 := ZF.Set.Relation.Fun.RangeIsNotEmpty.
-Definition Test12 := ZF.Set.Relation.Function.RangeIsNotEmpty.
-Definition Test13 := ZF.Set.Relation.FunctionOn.RangeIsNotEmpty.
-Definition Test14 := ZF.Set.Relation.Inj.RangeIsNotEmpty.
-Definition Test15 := ZF.Set.Relation.Onto.RangeIsNotEmpty.
+Definition Test9  := ZF.Set.Relation.Bij.RangeIsNotEmpty.
+Definition Test10 := ZF.Set.Relation.Bijection.RangeIsNotEmpty.
+Definition Test11 := ZF.Set.Relation.BijectionOn.RangeIsNotEmpty.
+Definition Test12 := ZF.Set.Relation.Fun.RangeIsNotEmpty.
+Definition Test13 := ZF.Set.Relation.Function.RangeIsNotEmpty.
+Definition Test14 := ZF.Set.Relation.FunctionOn.RangeIsNotEmpty.
+Definition Test15 := ZF.Set.Relation.Inj.RangeIsNotEmpty.
+Definition Test16 := ZF.Set.Relation.Onto.RangeIsNotEmpty.
