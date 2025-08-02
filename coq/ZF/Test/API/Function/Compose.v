@@ -12,6 +12,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.Onto.
 
 Definition Test1  := Class.Relation.Function.Compose.
 Definition Test2  := Class.Relation.Bijection.Compose.
@@ -27,4 +28,5 @@ Definition Test11 := ZF.Set.Relation.Fun.Compose.
 Definition Test12 := ZF.Set.Relation.Function.Compose.
 Definition Test13 := ZF.Set.Relation.FunctionOn.Compose.
 Definition Test14 := ZF.Set.Relation.Inj.Compose.
+Definition Test15 := ZF.Set.Relation.Onto.Compose.
 

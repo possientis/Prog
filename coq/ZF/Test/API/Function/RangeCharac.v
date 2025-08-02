@@ -12,6 +12,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.Onto.
 
 Definition Test1  := Class.Relation.Function.RangeCharac.
 Definition Test2  := Class.Relation.Bijection.RangeCharac.
@@ -27,4 +28,5 @@ Definition Test11 := ZF.Set.Relation.Fun.RangeCharac.
 Definition Test12 := ZF.Set.Relation.Function.RangeCharac.
 Definition Test13 := ZF.Set.Relation.FunctionOn.RangeCharac.
 Definition Test14 := ZF.Set.Relation.Inj.RangeCharac.
+Definition Test15 := ZF.Set.Relation.Onto.RangeCharac.
 

@@ -12,6 +12,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.Onto.
 
 Definition Test1  := Class.Relation.Function.RangeIsNotEmpty.
 Definition Test2  := Class.Relation.Bijection.RangeIsNotEmpty.
@@ -27,3 +28,4 @@ Definition Test11 := ZF.Set.Relation.Fun.RangeIsNotEmpty.
 Definition Test12 := ZF.Set.Relation.Function.RangeIsNotEmpty.
 Definition Test13 := ZF.Set.Relation.FunctionOn.RangeIsNotEmpty.
 Definition Test14 := ZF.Set.Relation.Inj.RangeIsNotEmpty.
+Definition Test15 := ZF.Set.Relation.Onto.RangeIsNotEmpty.

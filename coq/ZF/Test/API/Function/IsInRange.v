@@ -12,6 +12,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.Onto.
 
 Definition Test1  := Class.Relation.Function.IsInRange.
 Definition Test2  := Class.Relation.Bijection.IsInRange.
@@ -27,4 +28,5 @@ Definition Test11 := ZF.Set.Relation.Fun.IsInRange.
 Definition Test12 := ZF.Set.Relation.Function.IsInRange.
 Definition Test13 := ZF.Set.Relation.FunctionOn.IsInRange.
 Definition Test14 := ZF.Set.Relation.Inj.IsInRange.
+Definition Test15 := ZF.Set.Relation.Onto.IsInRange.
 
