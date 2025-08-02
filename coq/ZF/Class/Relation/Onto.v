@@ -22,7 +22,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is a surjective function class from A to B.                                *)
 Definition Onto (F A B:Class) : Prop := FunctionOn F A /\ range F :~: B.
 
-Proposition IsFun : forall (F A B:Class), Onto F A B -> Fun F A B.
+Proposition IsFun : forall (F A B:Class), Onto F A B -> F :: A :-> B.
 Proof.
   intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.
 Qed.
@@ -34,9 +34,7 @@ Proposition EqualCharac : forall (F A B G C D:Class),
   F :~: G   <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D H1 H2. apply FunctionOn.EqualCharac.
-  - apply H1.
-  - apply H2.
+  intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.EqualCharac; assumption.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)
@@ -121,7 +119,7 @@ Proof.
   apply FunctionOn.IsInRange with A. 2: assumption. apply H1.
 Qed.
 
-Proposition ImageCharac : forall (F A B C: Class), Onto F A B ->
+Proposition ImageCharac : forall (F A B C:Class), Onto F A B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply FunctionOn.ImageCharac, H1.
@@ -134,31 +132,28 @@ Proof.
 Qed.
 
 Proposition DomainOfCompose : forall (F G A B C:Class),
-  Onto F A B  ->
-  Onto G B C  ->
+  Onto F A B              ->
+  Onto G B C              ->
   domain (G :.: F) :~: A.
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. intros a. split; intros H5.
   - apply (FunctionOn.DomainOfCompose F G A B a H1 H3) in H5.
     destruct H5 as [H5 H6]. assumption.
   - apply (FunctionOn.DomainOfCompose F G A B a); try assumption.
-    split. 1: assumption.  apply IsInRange with A.
-    + split; assumption.
-    + assumption.
+    split. 1: assumption.  apply IsInRange with A. 2: assumption.
+    split; assumption.
 Qed.
 
 (* The value at a of G.F is the value at F!a of G when a in A.                  *)
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),
-  Onto F A B ->
-  Onto G B C ->
-  A a           ->
+  Onto F A B            ->
+  Onto G B C            ->
+  A a                   ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
   apply (FunctionOn.ComposeEval F G A B); try assumption.
-  apply IsInRange with A.
-  - split; assumption.
-  - assumption.
+  apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
 (* Characterisation of the range of F.                                          *)

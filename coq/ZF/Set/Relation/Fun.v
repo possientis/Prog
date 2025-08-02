@@ -23,10 +23,10 @@ Global Instance SetFun : Notation.Fun.Fun U U := { IsFun := Fun }.
 
 (* Two functions with the same domains and which coincide pointwise are equal.  *)
 Proposition EqualCharac : forall (f a b g c d:U),
-  f :: a :-> b                     ->
-  g :: c :-> d                     ->
-  a = c                            ->
-  (forall x, x :< a -> f!x = g!x)  ->
+  f :: a :-> b                    ->
+  g :: c :-> d                    ->
+  a = c                           ->
+  (forall x, x :< a -> f!x = g!x) ->
   f = g.
 Proof.
   intros f a b g c d [H1 _] [H2 _]. apply FunctionOn.EqualCharac; assumption.
