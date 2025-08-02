@@ -52,9 +52,7 @@ Proposition EqualCharac : forall (F A B G C D:Class),
   F :~: G  <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D H1 H2. apply BijectionOn.EqualCharac.
-  - apply H1.
-  - apply H2.
+  intros F A B G C D [H1 _] [H2i _]. apply BijectionOn.EqualCharac; assumption.
 Qed.
 
 Proposition ImageOfDomain : forall (F A B:Class),
@@ -116,15 +114,13 @@ Qed.
 Proposition EvalCharac : forall (F A B:Class) (a y:U),
   Bij F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B a y H1. apply IsFun in H1.
-  apply Fun.EvalCharac with B. assumption.
+  intros F A B a y H1. apply IsFun in H1. apply Fun.EvalCharac with B. assumption.
 Qed.
 
 Proposition Satisfies : forall (F A B:Class) (a:U),
   Bij F A B -> A a -> F :(a,F!a):.
 Proof.
-  intros F A B a H1. apply IsFun in H1.
-  apply Fun.Satisfies with B. assumption.
+  intros F A B a H1. apply IsFun in H1. apply Fun.Satisfies with B. assumption.
 Qed.
 
 Proposition IsInRange : forall (F A B:Class) (x:U),
@@ -133,7 +129,7 @@ Proof.
   intros F A B a H1. apply IsFun in H1. apply Fun.IsInRange. assumption.
 Qed.
 
-Proposition ImageCharac : forall (F A B C: Class), Bij F A B ->
+Proposition ImageCharac : forall (F A B C:Class), Bij F A B ->
   forall y, F:[C]: y <-> exists x, C x /\ A x /\ F!x = y.
 Proof.
   intros F A B C H1. apply BijectionOn.ImageCharac, H1.
@@ -146,8 +142,8 @@ Proof.
 Qed.
 
 Proposition DomainOfCompose : forall (F G A B C:Class),
-  Bij F A B ->
-  Bij G B C ->
+  Bij F A B               ->
+  Bij G B C               ->
   domain (G :.: F) :~: A.
 Proof.
   intros F G A B C H1 H2. apply IsFun in H1. apply IsFun in H2.
@@ -155,13 +151,13 @@ Proof.
 Qed.
 
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),
-  Bij F A B ->
-  Bij G B C ->
-  A a       ->
+  Bij F A B               ->
+  Bij G B C               ->
+  A a                     ->
   (G :.: F)!a = G!(F!a).
 Proof.
-  intros F G A B C a H1 H2. apply IsFun in H1. apply IsFun in H2.
-  apply Fun.ComposeEval with B C; assumption.
+  intros F G A B C a H1 H2.
+  apply Fun.ComposeEval with B C; apply IsFun; assumption.
 Qed.
 
 (* Characterisation of the range of F.                                          *)
@@ -194,11 +190,10 @@ Qed.
 Proposition Converse : forall (F A B:Class),
   Bij F A B -> Bij F^:-1: B A.
 Proof.
-  intros F A B [[H1 H2] H3]. split.
-  - split.
-    + apply Bijection.Converse. assumption.
-    + apply Equiv.Tran with (range F). 2: assumption. apply Converse.Domain.
-  - apply Equiv.Tran with (domain F). 2: assumption. apply Converse.Range.
+  intros F A B [H1 H2]. split.
+  - apply BijectionOn.Converse with A; assumption.
+  - destruct H1 as [_ H1]. apply Equiv.Tran with (domain F). 2: assumption.
+    apply Converse.Range.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
@@ -211,7 +206,7 @@ Qed.
 Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> F^:-1:!(F!x) = x.
 Proof.
-  intros F A B x [H1 H2]. apply BijectionOn.ConverseEvalOfEval. assumption.
+  intros F A B x H1. apply BijectionOn.ConverseEvalOfEval, H1.
 Qed.
 
 Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
@@ -239,13 +234,13 @@ Qed.
 Proposition EvalInjective : forall (F A B:Class) (x y:U),
   Bij F A B -> A x -> A y -> F!x = F!y -> x = y.
 Proof.
-  intros F A B x y [H1 _]. apply BijectionOn.EvalInjective. assumption.
+  intros F A B x y H1. apply BijectionOn.EvalInjective, H1.
 Qed.
 
 Proposition EvalInImage : forall (F A B C:Class) (a:U),
   Bij F A B -> A a -> F:[C]: (F!a) <-> C a.
 Proof.
-  intros F A B C a [H1 _]. apply BijectionOn.EvalInImage. assumption.
+  intros F A B C a H1. apply BijectionOn.EvalInImage, H1.
 Qed.
 
 Proposition Inter2Image : forall (F A B C D:Class),
