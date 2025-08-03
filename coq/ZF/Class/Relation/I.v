@@ -22,7 +22,7 @@ Require Import ZF.Set.OrdPair.
 (* The class of all ordered pairs of the form (x,x), aka the 'identity' class.  *)
 Definition I : Class := fun x => exists y, x = :(y,y):.
 
-Proposition ICharac2 : forall (y z:U), I :(y,z): <-> y = z.
+Proposition Charac2 : forall (y z:U), I :(y,z): <-> y = z.
 Proof.
   intros y z. split; intros H1.
   - destruct H1 as [x H1]. apply WhenEqual in H1.
@@ -31,108 +31,108 @@ Proof.
 Qed.
 
 (* I is a functional class.                                                     *)
-Proposition IIsFunctional : Functional I.
+Proposition IsFunctional : Functional I.
 Proof.
   intros x y z H1 H2.
-  apply ICharac2 in H1. apply ICharac2 in H2. subst. reflexivity.
+  apply Charac2 in H1. apply Charac2 in H2. subst. reflexivity.
 Qed.
 
 (* I is a relation class.                                                       *)
-Proposition IIsRelation : Relation I.
+Proposition IsRelation : Relation I.
 Proof.
   intros x H1. destruct H1 as [y H1]. exists y. exists y. assumption.
 Qed.
 
 (* I is a function class.                                                       *)
-Proposition IIsFunction : Function I.
+Proposition IsFunction : Function I.
 Proof.
   split.
-    - apply IIsRelation.
-    - apply IIsFunctional.
+    - apply IsRelation.
+    - apply IsFunctional.
 Qed.
 
 (* The Converse of I is I itself.                                               *)
-Proposition IConverse : I^:-1: :~: I.
+Proposition Converse : I^:-1: :~: I.
 Proof.
   intros x. split; intros H1.
   - destruct H1 as [y [z [H1 H2]]].
-    apply ICharac2 in H2. subst. apply ICharac2. reflexivity.
+    apply Charac2 in H2. subst. apply Charac2. reflexivity.
   - destruct H1 as [y H1]. exists y. exists y.
-    split. 1: assumption. apply ICharac2. reflexivity.
+    split. 1: assumption. apply Charac2. reflexivity.
 Qed.
 
 (* I is a one-to-one class.                                                     *)
-Proposition IIsOneToOne : OneToOne I.
+Proposition IsOneToOne : OneToOne I.
 Proof.
   split.
-  - apply IIsFunctional.
-  - apply Functional.EquivCompat with I. 2: apply IIsFunctional.
-    apply Equiv.Sym, IConverse.
+  - apply IsFunctional.
+  - apply Functional.EquivCompat with I. 2: apply IsFunctional.
+    apply Equiv.Sym, Converse.
 Qed.
 
 (* I is a bijection class.                                                      *)
-Proposition IIsBijection : Bijection I.
+Proposition IsBijection : Bijection I.
 Proof.
   split.
-  - apply IIsRelation.
-  - apply IIsOneToOne.
+  - apply IsRelation.
+  - apply IsOneToOne.
 Qed.
 
 (* The domain of I is the class of all sets.                                    *)
-Proposition IDomain : domain I :~: V.
+Proposition Domain : domain I :~: V.
 Proof.
   intros x. split; intros H1.
   - apply Logic.I.
-  - exists x. apply ICharac2. reflexivity.
+  - exists x. apply Charac2. reflexivity.
 Qed.
 
 (* The range of I is the class of all sets.                                     *)
-Proposition IRange : range I :~: V.
+Proposition Range : range I :~: V.
 Proof.
   intros y. split; intros H1.
   - apply Logic.I.
-  - exists y. apply ICharac2. reflexivity.
+  - exists y. apply Charac2. reflexivity.
 Qed.
 
 (* I is a function class defined on the class of all sets.                      *)
-Proposition IIsFunctionOn : FunctionOn I V.
+Proposition IsFunctionOn : FunctionOn I V.
 Proof.
   split.
-  - apply IIsFunction.
-  - apply IDomain.
+  - apply IsFunction.
+  - apply Domain.
 Qed.
 
 (* I is a bijection class defined on the class of all sets.                     *)
-Proposition IIsBijectionOn : BijectionOn I V.
+Proposition IsBijectionOn : BijectionOn I V.
 Proof.
   split.
-  - apply IIsBijection.
-  - apply IDomain.
+  - apply IsBijection.
+  - apply Domain.
 Qed.
 
 (* I is a bijection class from the class of all sets onto the class of all sets.*)
-Proposition IIsBij : Bij I V V.
+Proposition IsBij : Bij I V V.
 Proof.
   split.
-  - apply IIsBijectionOn.
-  - apply IRange.
+  - apply IsBijectionOn.
+  - apply Range.
 Qed.
 
 (* The value of I at x is x.                                                    *)
-Proposition IEval : forall (x:U), I!x = x.
+Proposition Eval : forall (x:U), I!x = x.
 Proof.
   intros x. apply EvalOfClass.Charac.
-  - apply IIsFunctional.
-  - apply IDomain, Logic.I.
-  - apply ICharac2. reflexivity.
+  - apply IsFunctional.
+  - apply Domain, Logic.I.
+  - apply Charac2. reflexivity.
 Qed.
 
 (* Given any class R, I is an isomorphism class from V to V w.r. to R (and R).  *)
-Proposition IIsIsom : forall (R:Class), Isom I R R V V.
+Proposition IsIsom : forall (R:Class), Isom I R R V V.
 Proof.
   intros R. split.
-  - apply IIsBij.
+  - apply IsBij.
   - intros x y _ _. split; intros H1.
-    + rewrite (IEval x) , (IEval y). assumption.
-    + rewrite (IEval x) , (IEval y) in H1. assumption.
+    + rewrite (Eval x) , (Eval y). assumption.
+    + rewrite (Eval x) , (Eval y) in H1. assumption.
 Qed.

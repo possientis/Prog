@@ -30,11 +30,11 @@ Lemma ImageByFst : forall (F:Class),
   Fst :[F]: :~: domain F.
 Proof.
   intros F x. split; intros H1.
-  - destruct H1 as [x' [H1 H2]]. apply FstCharac2 in H2.
+  - destruct H1 as [x' [H1 H2]]. apply Fst.Charac2 in H2.
     destruct H2 as [y [z [H2 H3]]]. exists z. subst. assumption.
   - destruct H1 as [y H1]. exists :(x,y):. split.
     + assumption.
-    + apply FstCharac2. exists x. exists y. split; reflexivity.
+    + apply Fst.Charac2. exists x. exists y. split; reflexivity.
 Qed.
 
 (* The domain of a small class is a small class.                                *)
@@ -59,7 +59,7 @@ Proof.
   (* This follows from the fact that Fst is functional and F is small. *)
   apply Image.IsSmall.
 
-  - apply FstIsFunctional.
+  - apply Fst.IsFunctional.
 
   - apply H1.
 Qed.
