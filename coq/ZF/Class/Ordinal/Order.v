@@ -112,6 +112,7 @@ Proof.
   rewrite H4 in H8. destruct H8 as [_ H8]. apply H8. assumption.
 Qed.
 
+(* Two isomorphic ordinal classes are in fact equal.                            *)
 Proposition IsEquiv : forall (F A B:Class),
   Ordinal A       ->
   Ordinal B       ->
@@ -129,6 +130,7 @@ Proof.
     rewrite H7 in H8. rewrite H8. assumption.
 Qed.
 
+(* An R-ordered class C is isomorphic to at most one ordinal class.             *)
 Proposition IsEquivGen : forall (F G R A B C:Class),
   Ordinal A       ->
   Ordinal B       ->
