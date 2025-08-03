@@ -179,4 +179,20 @@ Proposition Restrict : forall (F A B C:Class),
 Proof.
   intros F A B C H1. split.
   - apply FunctionOn.Restrict, H1.
-  - Admitted.
+  - apply Class.Incl.Tran with (range F).
+    + apply Restrict.RangeIsIncl.
+    + apply H1.
+Qed.
+
+Proposition RestrictEqual : forall (F A B G C D E:Class),
+  F :: A :-> B                  ->
+  G :: C :-> D                  ->
+  E :<=: A                      ->
+  E :<=: C                      ->
+  (forall x, E x -> F!x = G!x)  ->
+  F:|:E :~: G:|:E.
+Proof.
+  intros F A B G C D E [H1 H2] [H3 H4].
+  apply FunctionOn.RestrictEqual; assumption.
+Qed.
+
