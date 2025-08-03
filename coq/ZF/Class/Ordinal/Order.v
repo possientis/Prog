@@ -50,7 +50,7 @@ Proof.
   remember (fun a => On a /\ (A a -> F!a = a)) as C eqn:H4.
   assert (C :~: On) as H5. {
     apply Transfinite.Induction.
-    - intros a H5. rewrite H4 in H5. destruct H5 as [H5 _]. assumption.
+    - intros a H5. rewrite H4 in H5. apply H5.
     - intros b H5 H6. rewrite H4. split. 1: assumption. intros H7.
       assert (forall a, a :< b -> F!a = a) as H8. {
         intros a H8.
