@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Domain.
@@ -191,5 +192,42 @@ Proposition IsRestrict : forall (F:Class),
   Function F -> F :~: F :|: domain F.
 Proof.
   intros F H1. apply Restrict.RelationCharac, H1.
+Qed.
+
+Proposition Restrict : forall (F A:Class),
+  Function F  -> Function (F:|:A).
+Proof.
+  intros F A H1. split.
+  - apply Restrict.IsRelation.
+  - apply Restrict.IsFunctional, H1.
+Qed.
+
+Proposition RestrictEqual : forall (F G A:Class),
+  Function F                    ->
+  Function G                    ->
+  A :<=: domain F               ->
+  A :<=: domain G               ->
+  (forall x, A x -> F!x = G!x)  ->
+  F:|:A :~: G:|:A.
+Proof.
+  intros F G A H1 H2 H3 H4 H5. apply EqualCharac.
+  - apply Restrict. assumption.
+  - apply Restrict. assumption.
+  - assert (domain (F:|:A) :~: A) as H6. {
+      apply Equiv.Tran with (A :/\: domain F).
+      - apply Restrict.DomainOf.
+      - apply Inter2.WhenInclL. assumption. }
+    assert (domain (G:|:A) :~: A) as H7. {
+      apply Equiv.Tran with (A :/\: domain G).
+      - apply Restrict.DomainOf.
+      - apply Inter2.WhenInclL. assumption. }
+    split.
+    + apply Equiv.Tran with A. 1: assumption. apply Equiv.Sym. assumption.
+    + intros x H8.
+      assert (A x) as H9. { apply H6. assumption. }
+      rewrite Restrict.Eval, Restrict.Eval; try assumption.
+      * apply H5. assumption.
+      * apply H2.
+      * apply H1.
 Qed.
 
