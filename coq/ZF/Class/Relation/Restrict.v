@@ -92,6 +92,24 @@ Proof.
     apply Charac2. split; assumption.
 Qed.
 
+(* The direct image by F of A is the range of the restriction F|A.              *)
+Proposition RangeOf : forall (F A:Class),
+  range (F:|:A) :~: F:[A]:.
+Proof.
+  intros F A y. split; intros H1.
+  - destruct H1 as [x H1]. apply Charac2 in H1.
+    destruct H1 as [H1 H2]. exists x. split; assumption.
+  - destruct H1 as [x [H1 H2]]. exists x. apply Charac2. split; assumption.
+Qed.
+
+Proposition RangeIsIncl : forall (F A:Class),
+  range (F:|:A) :<=: range F.
+Proof.
+  intros F A. apply Incl.EquivCompatL with F:[A]:.
+  - apply Equiv.Sym, RangeOf.
+  - apply Range.ImageIsIncl.
+Qed.
+
 (* The restriction of a functional class to a small class is small.             *)
 Proposition IsSmall : forall (F A:Class),
   Functional F -> Small A -> Small (F:|:A).
@@ -102,16 +120,6 @@ Proof.
   - apply Small.EquivCompat with (A :/\: domain F).
     + apply Equiv.Sym, DomainOf.
     + apply Inter2.IsSmallL. assumption.
-Qed.
-
-(* The direct image by F of A is the range of the restriction F|A.              *)
-Proposition ImageIsRange : forall (F A:Class),
-  F:[A]: :~: range (F:|:A).
-Proof.
-  intros F A y. split; intros H1.
-  - destruct H1 as [x [H1 H2]]. exists x. apply Charac2. split; assumption.
-  - destruct H1 as [x H1]. apply Charac2 in H1.
-    destruct H1 as [H1 H2]. exists x. split; assumption.
 Qed.
 
 (* A restriction is a subclass of the original class.                           *)
@@ -135,7 +143,7 @@ Proof.
   intros F A H1. apply Small.EquivCompat with Snd:[F:|:A]:.
   - apply Equiv.Tran with (range (F:|:A)).
     + apply Range.ImageBySnd.
-    + apply Equiv.Sym, ImageIsRange.
+    + apply RangeOf.
   - apply Image.IsSmall.
     + apply Snd.IsFunctional.
     + apply Bounded.WhenSmaller with F. 2: assumption. apply IsIncl.
@@ -174,7 +182,7 @@ Proposition LesserThanRangeIsSmall : forall (F A B:Class),
 Proof.
   intros F A B H1 H2 H3.
   apply Bounded.WhenSmaller with (range (F:|:B)). 1: assumption.
-  apply Small.EquivCompat with F:[B]:. 1: apply ImageIsRange.
+  apply Small.EquivCompat with F:[B]:. 1: apply Equiv.Sym, RangeOf.
   apply Image.IsSmall; assumption.
 Qed.
 

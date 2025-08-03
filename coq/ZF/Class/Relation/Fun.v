@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -172,3 +173,10 @@ Proposition IsRestrict : forall (F A B:Class),
 Proof.
   intros F A B H1. apply FunctionOn.IsRestrict, H1.
 Qed.
+
+Proposition Restrict : forall (F A B C:Class),
+  F :: A :-> B -> (F:|:C) :: (A :/\: C) :-> B.
+Proof.
+  intros F A B C H1. split.
+  - apply FunctionOn.Restrict, H1.
+  - Admitted.

@@ -54,3 +54,10 @@ Proof.
   apply Domain.Charac in H1. destruct H1 as [y H1].
   apply Empty.HasElem. exists y. apply Charac. exists x. assumption.
 Qed.
+
+Proposition ImageIsIncl: forall (f a:U),
+  f:[a]: :<=: range f.
+Proof.
+  intros f a y H1. apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
+  apply Charac. exists x. assumption.
+Qed.

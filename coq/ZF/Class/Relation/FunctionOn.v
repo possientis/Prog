@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -224,5 +225,31 @@ Proposition FunctionIsFunctionOn : forall (F:Class),
   Function F -> FunctionOn F (domain F).
 Proof.
   intros F H1. split. 1: assumption. apply Equiv.Refl.
+Qed.
+
+Proposition Restrict : forall (F A B:Class),
+  FunctionOn F A -> FunctionOn (F:|:B) (A:/\:B).
+Proof.
+  intros F A B [H1 H2]. split.
+  - apply Function.Restrict. assumption.
+  - apply Equiv.Tran with (B :/\: domain F).
+    + apply Restrict.DomainOf.
+    + apply Equiv.Tran with (B :/\: A).
+      * apply Inter2.EquivCompatR. assumption.
+      * apply Class.Inter2.Comm.
+Qed.
+
+Proposition RestrictEqual : forall (F G A B C:Class),
+  FunctionOn F A                ->
+  FunctionOn G B                ->
+  C :<=: A                      ->
+  C :<=: B                      ->
+  (forall x, C x -> F!x = G!x)  ->
+  F:|:C :~: G:|:C.
+Proof.
+  intros F G A B C [H1 H2] [H3 H4] H5 H6.
+  apply Function.RestrictEqual; try assumption.
+  - apply Incl.EquivCompatR with A. 2: assumption. apply Equiv.Sym. assumption.
+  - apply Incl.EquivCompatR with B. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
 

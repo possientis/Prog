@@ -84,15 +84,21 @@ Proof.
 Qed.
 
 (* The direct image by f of a is the range of the restriction f|a.              *)
-Proposition ImageIsRange : forall (f a:U),
-  f:[a]: = range (f:|:a).
+Proposition RangeOf : forall (f a:U),
+  range (f:|:a) = f:[a]:.
 Proof.
   intros f a. apply DoubleInclusion. split; intros y H1.
-  - apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
-    apply Range.Charac. exists x. apply Charac2. split; assumption.
   - apply Range.Charac in H1. destruct H1 as [x H1].
     apply Charac2 in H1. destruct H1 as [H1 H2].
     apply Image.Charac. exists x. split; assumption.
+  - apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
+    apply Range.Charac. exists x. apply Charac2. split; assumption.
+Qed.
+
+Proposition RangeIsIncl : forall (f a:U),
+  range (f:|:a) :<=: range f.
+Proof.
+  intros f a. rewrite RangeOf. apply Range.ImageIsIncl.
 Qed.
 
 (* A restriction is a subset of the original set.                               *)
@@ -150,3 +156,4 @@ Proof.
       rewrite E. apply Eval.WhenNotInDomain. assumption. }
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
+

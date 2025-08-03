@@ -78,3 +78,9 @@ Proof.
   intros F H1. apply Empty.HasElem in H1. destruct H1 as [x [y H1]].
   apply Empty.HasElem. exists y. exists x. assumption.
 Qed.
+
+Proposition ImageIsIncl : forall (F A:Class),
+  F:[A]: :<=: range F.
+Proof.
+  intros F A y H1. destruct H1 as [x [H1 H2]]. exists x. assumption.
+Qed.
