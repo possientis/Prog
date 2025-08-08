@@ -162,6 +162,26 @@ Proof.
   intros F H1. apply Function.IsRestrict, IsFunction. assumption.
 Qed.
 
+Proposition Restrict : forall (F A:Class),
+  Bijection F -> Bijection (F:|:A).
+Proof.
+  intros F A [H1 H2]. split.
+  - apply Restrict.IsRelation.
+  - apply OneToOne.Restrict. assumption.
+Qed.
+
+Proposition RestrictEqual : forall (F G A:Class),
+  Bijection F                   ->
+  Bijection G                   ->
+  A :<=: domain F               ->
+  A :<=: domain G               ->
+  (forall x, A x -> F!x = G!x)  ->
+  F:|:A :~: G:|:A.
+Proof.
+  intros F G A H1 H2.
+  apply Function.RestrictEqual; apply IsFunction; assumption.
+Qed.
+
 Proposition InvImageIsSmall : forall (F B:Class),
   Bijection F -> Small B -> Small F^:-1::[B]:.
 Proof.

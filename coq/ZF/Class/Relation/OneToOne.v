@@ -7,6 +7,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Range.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -172,4 +173,16 @@ Proof.
       apply Satisfies; assumption. }
     subst. assumption.
   - exists a. split. 1: assumption. apply Satisfies; assumption.
+Qed.
+
+Proposition Restrict : forall (F A:Class),
+  OneToOne F  -> OneToOne (F:|:A).
+Proof.
+  intros F A [H1 H2]. split.
+  - apply Restrict.IsFunctional. assumption.
+  - intros z y x H3 H4.
+    apply Converse.Charac2 in H3. apply Restrict.Charac2 in H3.
+    apply Converse.Charac2 in H4. apply Restrict.Charac2 in H4.
+    destruct H3 as [H3 H5]. destruct H4 as [H4 H6].
+    apply H2 with z; apply Converse.Charac2Rev; assumption.
 Qed.
