@@ -165,6 +165,32 @@ Proof.
   intros F A H1. apply FunctionOn.IsRestrict, IsFunctionOn. assumption.
 Qed.
 
+Proposition Restrict : forall (F A B:Class),
+  BijectionOn F A -> BijectionOn (F:|:B) (A:/\:B).
+Proof.
+  intros F A B [H1 H2]. split.
+  - apply Bijection.Restrict. assumption.
+  - apply Equiv.Tran with (B :/\: domain F).
+    + apply Restrict.DomainOf.
+    + apply Equiv.Tran with (B :/\: A).
+      * apply Inter2.EquivCompatR. assumption.
+      * apply Class.Inter2.Comm.
+Qed.
+
+Proposition RestrictEqual : forall (F G A B C:Class),
+  BijectionOn F A               ->
+  BijectionOn G B               ->
+  C :<=: A                      ->
+  C :<=: B                      ->
+  (forall x, C x -> F!x = G!x)  ->
+  F:|:C :~: G:|:C.
+Proof.
+  intros F G A B C [H1 H2] [H3 H4] H5 H6.
+  apply Bijection.RestrictEqual; try assumption.
+  - apply Incl.EquivCompatR with A. 2: assumption. apply Equiv.Sym. assumption.
+  - apply Incl.EquivCompatR with B. 2: assumption. apply Equiv.Sym. assumption.
+Qed.
+
 (* The inverse image of a small class by a bijection defined on any A is small. *)
 Proposition InvImageIsSmall : forall (F A B:Class),
   BijectionOn F A -> Small B -> Small F^:-1::[B]:.
@@ -245,3 +271,4 @@ Proposition DiffImage : forall (F A B C:Class),
 Proof.
   intros F A B C H1. apply Bijection.DiffImage, H1.
 Qed.
+
