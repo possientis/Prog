@@ -181,6 +181,25 @@ Proof.
   intros F A B H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+Proposition Restrict : forall (F A B C:Class),
+  Bij F A B -> Bij (F:|:C) (A :/\: C) F:[C]:.
+Proof.
+  intros F A B C [H1 H2]. split.
+  - apply BijectionOn.Restrict. assumption.
+  - apply Restrict.RangeOf.
+Qed.
+
+Proposition RestrictEqual : forall (F A B G C D E:Class),
+  Bij F A B                     ->
+  Bij G C D                     ->
+  E :<=: A                      ->
+  E :<=: C                      ->
+  (forall x, E x -> F!x = G!x)  ->
+  F:|:E :~: G:|:E.
+Proof.
+  intros F A B G C D E [H1 _] [H2 _]. apply BijectionOn.RestrictEqual; assumption.
+Qed.
+
 Proposition InvImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
@@ -254,3 +273,4 @@ Proposition DiffImage : forall (F A B C D:Class),
 Proof.
   intros F A B C D H1. apply BijectionOn.DiffImage with A, H1.
 Qed.
+
