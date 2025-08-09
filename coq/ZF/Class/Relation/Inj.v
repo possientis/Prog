@@ -163,6 +163,27 @@ Proof.
   intros F A B H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+Proposition Restrict : forall (F A B C:Class),
+  Inj F A B -> Inj (F:|:C) (A :/\: C) B.
+Proof.
+  intros F A B C [H1 H2]. split.
+  - apply BijectionOn.Restrict. assumption.
+  - apply Class.Incl.Tran with (range F). 2: assumption.
+    apply Restrict.RangeIsIncl.
+Qed.
+
+Proposition RestrictEqual : forall (F A B G C D E:Class),
+  Inj F A B                     ->
+  Inj G C D                     ->
+  E :<=: A                      ->
+  E :<=: C                      ->
+  (forall x, E x -> F!x = G!x)  ->
+  F:|:E :~: G:|:E.
+Proof.
+  intros F A B G C D E [H1 H2] [H3 H4].
+  apply BijectionOn.RestrictEqual; assumption.
+Qed.
+
 (* The inverse image of a small class by an injection from any A to B is small. *)
 Proposition InvImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F^:-1::[C]:.
@@ -235,3 +256,4 @@ Proposition DiffImage : forall (F A B C D:Class),
 Proof.
   intros F A B C D H1. apply BijectionOn.DiffImage with A, H1.
 Qed.
+
