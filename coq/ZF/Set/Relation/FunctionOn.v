@@ -1,6 +1,7 @@
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
@@ -129,9 +130,32 @@ Proof.
   intros f a [H1 H2]. subst. apply Function.IsRestrict. assumption.
 Qed.
 
+Proposition Restrict : forall (f a b:U),
+  FunctionOn f a -> FunctionOn (f:|:b) (a:/\:b).
+Proof.
+  intros f a b [H1 H2]. split.
+  - apply Function.Restrict. assumption.
+  - rewrite Restrict.DomainOf, H2. apply Inter2.Comm.
+Qed.
+
+Proposition RestrictEqual : forall (f g a b c:U),
+  FunctionOn f a                  ->
+  FunctionOn g b                  ->
+  c :<=: a                        ->
+  c :<=: b                        ->
+  (forall x, x :< c -> f!x = g!x) ->
+  f:|:c = g:|:c.
+Proof.
+  intros f g a b c [H1 H2] [H3 H4] H5 H6.
+  apply Function.RestrictEqual; try assumption.
+  - rewrite H2. assumption.
+  - rewrite H4. assumption.
+Qed.
+ 
 (* A function is a function defined on its domain.                              *)
 Proposition FunctionIsFunctionOn : forall (f:U),
   Function f -> FunctionOn f (domain f).
 Proof.
   intros f H1. split. 1: assumption. reflexivity.
 Qed.
+

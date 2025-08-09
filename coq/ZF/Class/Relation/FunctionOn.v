@@ -220,13 +220,6 @@ Proof.
   - apply Restrict.EquivCompatR, H1.
 Qed.
 
-(* A function is a function defined on its domain.                              *)
-Proposition FunctionIsFunctionOn : forall (F:Class),
-  Function F -> FunctionOn F (domain F).
-Proof.
-  intros F H1. split. 1: assumption. apply Equiv.Refl.
-Qed.
-
 Proposition Restrict : forall (F A B:Class),
   FunctionOn F A -> FunctionOn (F:|:B) (A:/\:B).
 Proof.
@@ -252,4 +245,12 @@ Proof.
   - apply Incl.EquivCompatR with A. 2: assumption. apply Equiv.Sym. assumption.
   - apply Incl.EquivCompatR with B. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
+
+(* A function is a function defined on its domain.                              *)
+Proposition FunctionIsFunctionOn : forall (F:Class),
+  Function F -> FunctionOn F (domain F).
+Proof.
+  intros F H1. split. 1: assumption. apply Equiv.Refl.
+Qed.
+
 
