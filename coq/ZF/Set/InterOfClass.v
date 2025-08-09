@@ -51,10 +51,3 @@ Proof.
   - apply ZF.Set.Empty.Charac in H1. contradiction.
 Qed.
 
-Proposition Pair : forall (a b:U),
-  inter (toClass :{a,b}:) = a :/\: b.
-Proof.
-  intros a b. apply EqualToClass. apply Equiv.Tran with :I(toClass :{a,b}:).
-  - apply Equiv.Sym, ToClass.
-  - apply Class.Inter.Pair.
-Qed.

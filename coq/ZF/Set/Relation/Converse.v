@@ -121,7 +121,7 @@ Proposition Inter2Image : forall (f a b:U), Functional f^:-1: ->
   f:[a :/\: b]: = f:[a]: :/\: f:[b]:.
 Proof.
   intros f a b H1. apply DoubleInclusion. split.
-  - apply Image.Inter2.
+  - apply Inter2.Image.
   - intros y H2. apply Inter2.Charac in H2. destruct H2 as [H2 H3].
     apply Image.Charac in H2. apply Image.Charac in H3.
     destruct H2 as [x1 [H2 H4]]. destruct H3 as [x2 [H3 H5]].

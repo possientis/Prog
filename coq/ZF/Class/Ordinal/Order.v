@@ -73,7 +73,7 @@ Proof.
         apply IsEMinimal; assumption. }
       assert (Minimal E F:[A :\: toClass b]: (F!b)) as H11. {
         apply Minimal.IsomImage with E A B; try assumption.
-        apply Inter2.IsInclL. }
+        apply Class.Inter2.IsInclL. }
       clear H10.
       assert (F:[A :\: toClass b]: :~: B :\: toClass b) as H12. {
         apply Equiv.Tran with (F:[A]: :\: F:[toClass b]:).

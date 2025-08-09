@@ -31,7 +31,7 @@ Qed.
 Proposition InterOn : forall (A:Class), inf A :~: inf (A :/\: On).
 Proof.
   intros A.
-  apply Inter.EquivCompat, Equiv.Sym, Inter2.WhenInclL, Inter2.IsInclR.
+  apply Inter.EquivCompat, Equiv.Sym, Class.Inter2.WhenInclL, Class.Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class of ordinals coincide with its intersection.           *)
@@ -81,7 +81,7 @@ Proof.
   intros A a H1 H2. apply Incl.EquivCompatL with (inf (A :/\: On)).
   - apply Equiv.Sym, InterOn.
   - apply IsLowerBound.
-    + apply Inter2.IsInclR.
+    + apply Class.Inter2.IsInclR.
     + split; assumption.
 Qed.
 
@@ -106,7 +106,7 @@ Proof.
   intros A a H1 H2. apply Incl.EquivCompatR with (inf (A :/\: On)).
   - apply Equiv.Sym, InterOn.
   - apply IsLargest. 2: assumption.
-    + apply Inter2.IsInclR.
+    + apply Class.Inter2.IsInclR.
     + intros b [H3 H4]. apply H2; assumption.
 Qed.
 
@@ -160,7 +160,7 @@ Proof.
     apply IsSetOf.EquivCompat with (inf A). 2: assumption.
     apply Equiv.Sym, InterOn. }
   assert ((A :/\: On) a) as H5. {
-    apply IsIn; try assumption. apply Inter2.IsInclR. }
+    apply IsIn; try assumption. apply Class.Inter2.IsInclR. }
   destruct H5 as [H5 _]. assumption.
 Qed.
 

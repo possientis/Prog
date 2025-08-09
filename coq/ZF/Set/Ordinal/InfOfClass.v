@@ -54,13 +54,13 @@ Qed.
 Proposition InterOn : forall (A:Class), inf A = inf (A :/\: On).
 Proof.
   intros A. rewrite WhenOrdinalElem with (A :/\: On). 1: reflexivity.
-  apply Inter2.IsInclR.
+  apply Class.Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class is an ordinal.                                        *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
-  intros A. apply InterOfClass.IsOrdinal, Inter2.IsInclR.
+  intros A. apply InterOfClass.IsOrdinal, Class.Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class of ordinals is a lower-bound of the class.            *)
@@ -76,7 +76,7 @@ Proposition IsLowerBoundOrd : forall (A:Class) (a:U), Ordinal a ->
   A a -> inf A :<=: a.
 Proof.
   intros A a H1 H2. rewrite InterOn. apply IsLowerBound.
-  1: apply Inter2.IsInclR. split; assumption.
+  1: apply Class.Inter2.IsInclR. split; assumption.
 Qed.
 
 (* The infimum of a non-empty class of ordinals is the largest lower-bound.     *)
@@ -97,7 +97,7 @@ Proposition IsLargestOrd : forall (A:Class) (a:U),
   a :<=: inf A.
 Proof.
   intros A a H1 H2. rewrite InterOn. apply IsLargest. 2: assumption.
-  - apply Inter2.IsInclR.
+  - apply Class.Inter2.IsInclR.
   - intros b [H3 H4]. apply H2; assumption.
 Qed.
 
@@ -115,8 +115,8 @@ Qed.
 Proposition IsInOrd : forall (A:Class),
   A :/\: On :<>: :0: -> A (inf A).
 Proof.
-  intros A H1. rewrite InterOn. apply Inter2.IsInclL with On. apply IsIn.
-  2: assumption. apply Inter2.IsInclR.
+  intros A H1. rewrite InterOn. apply Class.Inter2.IsInclL with On. apply IsIn.
+  2: assumption. apply Class.Inter2.IsInclR.
 Qed.
 
 Proposition WhenOrdinal : forall (A:Class) (a:U),

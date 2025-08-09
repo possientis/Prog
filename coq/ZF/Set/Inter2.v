@@ -4,9 +4,11 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.FromClass.
+Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.FromClass.
-Require Import ZF.Set.FromClass.
+Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Union2.
 Export ZF.Notation.And.
 
@@ -63,7 +65,7 @@ Proof.
 Qed.
 
 (* The intersection of two sets is associative.                                 *)
-Proposition Assoc : forall (a b c:U), (a:/\:b):/\:c = a:/\:(b:/\:c).
+Proposition Assoc : forall (a b c:U), (a:/\:b) :/\: c = a :/\: (b:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1;
   apply Charac in H1; apply Charac; destruct H1 as [H1 H2]; split.
@@ -75,7 +77,7 @@ Qed.
 
 (* The intersection is distributive over the union.                             *)
 Proposition Inter2DistOverUnion2 : forall (a b c:U),
-  a:/\:(b:\/:c) = (a:/\:b):\/:(a:/\:c).
+  a :/\: (b:\/:c) = (a:/\:b) :\/: (a:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
@@ -92,7 +94,7 @@ Qed.
 
 (* The union is distributive over the intersection                              *)
 Proposition Union2DistOverInter2 : forall (a b c:U),
-  a:\/:(b:/\:c) = (a:\/:b):/\:(a:\/:c).
+  a :\/: (b:/\:c) = (a:\/:b) :/\: (a:\/:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Union2.Charac in H1. destruct H1 as [H1|H1];
@@ -120,14 +122,51 @@ Proof.
   - left. apply H2.
 Qed.
 
-Proposition InclL : forall (a b:U), a:/\:b :<=: a.
+Proposition IsInclL : forall (a b:U), a:/\:b :<=: a.
 Proof.
   intros a b x H1. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
 Qed.
 
-Proposition InclR : forall (a b:U), a:/\:b :<=: b.
+Proposition IsInclR : forall (a b:U), a:/\:b :<=: b.
 Proof.
   intros a b x H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
+Qed.
+
+Proposition IsIncl : forall (a b c:U),
+  c :<=: a -> c :<=: b -> c :<=: a :/\: b.
+Proof.
+  intros a b c H1 H2 x H3. apply Charac. split.
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
+
+Proposition WhenInclL : forall (a b:U),
+  a :<=: b <-> a :/\: b = a.
+Proof.
+  intros a b. split; intros H1.
+  - apply DoubleInclusion. split.
+    + apply IsInclL.
+    + apply IsIncl. 2: assumption. apply Incl.Refl.
+  - rewrite <- H1. apply IsInclR.
+Qed.
+
+Proposition WhenInclR : forall (a b:U),
+  b :<=: a <-> a :/\: b = b.
+Proof.
+  intros a b. split; intros H1.
+  - apply DoubleInclusion. split.
+    + apply IsInclR.
+    + apply IsIncl. 1: assumption. apply Incl.Refl.
+  - rewrite <- H1. apply IsInclL.
+Qed.
+
+Proposition Image : forall (f a b:U),
+  f:[a :/\: b]: :<=: f:[a]: :/\: f:[b]:.
+Proof.
+  intros f a b y H1.
+  apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
+  apply Charac in H1. destruct H1 as [H1 H3].
+  apply Charac. split; apply Image.Charac; exists x; split; assumption.
 Qed.
 
 Proposition WhenEqualL : forall (a b:U),

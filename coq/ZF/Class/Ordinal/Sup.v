@@ -21,7 +21,7 @@ Qed.
 Proposition InterOn : forall (A:Class), sup A :~: sup (A :/\: On).
 Proof.
   intros A.
-  apply Union.EquivCompat, Equiv.Sym, Inter2.WhenInclL, Inter2.IsInclR.
+  apply Union.EquivCompat, Equiv.Sym, Class.Inter2.WhenInclL, Class.Inter2.IsInclR.
 Qed.
 
 (* The supremum of a class of ordinals coincide with its union.                 *)
@@ -70,7 +70,7 @@ Proof.
   intros A a H1 H2. apply Incl.EquivCompatR with (sup (A :/\: On)).
   - apply Equiv.Sym, InterOn.
   - apply IsUpperBound.
-    + apply Inter2.IsInclR.
+    + apply Class.Inter2.IsInclR.
     + split; assumption.
 Qed.
 
@@ -93,7 +93,7 @@ Proof.
   intros A a H1. apply Incl.EquivCompatL with (sup (A :/\: On)).
   - apply Equiv.Sym, InterOn.
   - apply IsSmallest.
-    + apply Inter2.IsInclR.
+    + apply Class.Inter2.IsInclR.
     + intros b [H2 H3]. apply H1; assumption.
 Qed.
 

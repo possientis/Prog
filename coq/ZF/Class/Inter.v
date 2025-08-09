@@ -5,8 +5,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Inter2.
-Require Import ZF.Set.Pair.
+Require Import ZF.Set.Empty.
 
 Require Import ZF.Notation.Inter.
 Export ZF.Notation.Inter.
@@ -97,16 +96,3 @@ Proof.
     + apply IsSmall'. assumption.
 Qed.
 
-(* The intersection of a pair is the binary intersection of its elements.       *)
-Proposition Pair : forall (a b:U),
-  :I(toClass :{a,b}:) :~: toClass (a :/\: b).
-Proof.
-  intros a b x. split; intros H1.
-  - apply Inter2.Charac. split; apply H1.
-    + apply Pair.IsInL.
-    + apply Pair.IsInR.
-  - apply Inter2.Charac in H1. destruct H1 as [H1 H2]. split.
-    + intros y H3.
-      apply Pair.Charac in H3. destruct H3 as [H3|H3]; subst; assumption.
-    + exists a. apply Pair.IsInL.
-Qed.

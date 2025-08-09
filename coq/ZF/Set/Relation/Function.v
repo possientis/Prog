@@ -1,6 +1,7 @@
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
@@ -141,4 +142,36 @@ Proposition IsRestrict : forall (f:U),
   Function f -> f = f :|: domain f.
 Proof.
   intros f H1. apply Restrict.RelationCharac, H1.
+Qed.
+
+Proposition Restrict : forall (f a:U),
+  Function f  -> Function (f:|:a).
+Proof.
+  intros f a H1. split.
+  - apply Restrict.IsRelation.
+  - apply Restrict.IsFunctional, H1.
+Qed.
+
+Proposition RestrictEqual : forall (f g a:U),
+  Function f                      ->
+  Function g                      ->
+  a :<=: domain f                 ->
+  a :<=: domain g                 ->
+  (forall x, x :< a -> f!x = g!x) ->
+  f:|:a = g:|:a.
+Proof.
+  intros f g a H1 H2 H3 H4 H5. 
+  assert (domain (f:|:a) = a) as H6. {
+    rewrite Restrict.DomainOf. apply Inter2.WhenInclL. assumption. }
+  assert (domain (g:|:a) = a) as H7. {
+    rewrite Restrict.DomainOf. apply Inter2.WhenInclL. assumption. }
+  apply EqualCharac.
+  - apply Restrict. assumption.
+  - apply Restrict. assumption.
+  - rewrite H6, H7. reflexivity.
+  - intros x H8. rewrite H6 in H8.
+    rewrite Restrict.Eval, Restrict.Eval; try assumption.
+    + apply H5. assumption.
+    + apply H2.
+    + apply H1.
 Qed.

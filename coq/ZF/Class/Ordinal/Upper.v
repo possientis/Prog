@@ -47,7 +47,7 @@ Proof.
   intros A a H1. split; intros H2.
   - destruct H2 as [H2 H3]. intros H4. apply NoElemLoop1 with a.
     apply Sup.IsSmallest with (A :/\: On).
-    + apply Inter2.IsInclR.
+    + apply Class.Inter2.IsInclR.
     + intros b [H5 H6]. apply H3; assumption.
     + apply Sup.InterOn in H4. assumption.
   - split. 1: assumption. intros b H3 H4.
@@ -60,11 +60,11 @@ Proof.
     destruct H5 as [H5|[H5|H5]].
     + intros x H6. apply H5. apply Sup.InterOn.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
-      * apply Inter2.IsInclR.
+      * apply Class.Inter2.IsInclR.
       * split; assumption.
     + intros x H6. apply H5. apply Sup.InterOn.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
-      * apply Inter2.IsInclR.
+      * apply Class.Inter2.IsInclR.
       * split; assumption.
     + apply Class.Ordinal.Core.LessIsElem in H5.
       * contradiction.
