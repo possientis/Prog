@@ -1,6 +1,7 @@
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
@@ -141,3 +142,26 @@ Proposition IsRestrict : forall (f a b:U),
 Proof.
   intros f a b H1. apply FunctionOn.IsRestrict, H1.
 Qed.
+
+Proposition Restrict : forall (f a b c:U),
+  f :: a :-> b -> (f:|:c) :: (a :/\: c) :-> b.
+Proof.
+  intros f a b c H1. split.
+  - apply FunctionOn.Restrict, H1.
+  - apply Incl.Tran with (range f).
+    + apply Restrict.RangeIsIncl.
+    + apply H1.
+Qed.
+
+Proposition RestrictEqual : forall (f a b g c d e:U),
+  f :: a :-> b                    ->
+  g :: c :-> d                    ->
+  e :<=: a                        ->
+  e :<=: c                        ->
+  (forall x, x :< e -> f!x = g!x) ->
+  f:|:e = g:|:e.
+Proof.
+  intros f a b g c d e [H1 H2] [H3 H4].
+  apply FunctionOn.RestrictEqual; assumption. 
+Qed.
+
