@@ -9,6 +9,7 @@ Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.InvImage.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Relation.Restrict.
 
 (* A set is one-to-one iff both itself and its converse are functional.         *)
 Definition OneToOne (f:U) : Prop := Functional f /\ Functional f^:-1:.
@@ -161,4 +162,16 @@ Proof.
     subst. assumption.
   - apply Image.Charac. exists x. split. 1: assumption.
     apply Satisfies; assumption.
+Qed.
+
+Proposition Restrict : forall (f a:U),
+  OneToOne f  -> OneToOne (f:|:a).
+Proof.
+  intros f a [H1 H2]. split.
+  - apply Restrict.IsFunctional. assumption.
+  - intros z y x H3 H4.
+    apply Converse.Charac2 in H3. apply Restrict.Charac2 in H3.
+    apply Converse.Charac2 in H4. apply Restrict.Charac2 in H4.
+    destruct H3 as [H3 H5]. destruct H4 as [H4 H6].
+    apply H2 with z; apply Converse.Charac2Rev; assumption.
 Qed.

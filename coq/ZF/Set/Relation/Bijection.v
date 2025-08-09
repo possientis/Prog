@@ -133,6 +133,26 @@ Proof.
   intros f H1. apply Function.IsRestrict, IsFunction. assumption.
 Qed.
 
+Proposition Restrict : forall (f a:U),
+  Bijection f -> Bijection (f:|:a).
+Proof.
+  intros f a [H1 H2]. split.
+  - apply Restrict.IsRelation.
+  - apply OneToOne.Restrict. assumption.
+Qed.
+
+Proposition RestrictEqual : forall (f g a:U),
+  Bijection f                     ->
+  Bijection g                     ->
+  a :<=: domain f                 ->
+  a :<=: domain g                 ->
+  (forall x, x :< a -> f!x = g!x) ->
+  f:|:a =  g:|:a.
+Proof.
+  intros f g a H1 H2.
+  apply Function.RestrictEqual; apply IsFunction; assumption.
+Qed.
+
 Proposition ConverseIsFunction : forall (f:U),
   Bijection f -> Function f^:-1:.
 Proof.
