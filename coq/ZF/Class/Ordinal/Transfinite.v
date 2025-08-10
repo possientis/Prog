@@ -9,6 +9,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
@@ -28,11 +29,11 @@ Proof.
     - apply OnIsOrdinal.
     - apply Class.Inter2.IsInclL. }
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
-    apply LessIsElem; try assumption. apply OnIsOrdinal. }
+    apply Class.Ordinal.Core.LessIsElem; try assumption. apply OnIsOrdinal. }
   assert (toClass a :<=: A) as H9. {
     intros x H10. apply DoubleNegation. intros H11.
     apply Class.Empty.Charac with x, H7. split. 2: assumption. split. 2: assumption.
-    apply IsOrdinal with (toClass a); assumption. }
+    apply Class.Ordinal.Core.IsOrdinal with (toClass a); assumption. }
   apply H6, H2; assumption.
 Qed.
 
@@ -51,11 +52,20 @@ Proof.
   assert (A :~: On) as H9. {
     apply Induction.
     - intros x H9. rewrite H8 in H9. apply H9.
-    - intros c H9 H10. rewrite H8. split. 1: assumption. intros H11. Admitted.
-(*
+    - intros c H9 H10. rewrite H8. split. 1: assumption. intros H11.
+      assert (f:|:c = g:|:c) as H12. {
+        assert (c :<=: a) as H12. {
+          apply ZF.Set.Ordinal.Core.LessIsElem; assumption. }
+        apply FunctionOn.RestrictEqual with a b; try assumption.
+        + apply Incl.Tran with a; assumption.
+        + intros x H13.
+          assert (A x) as H14. { apply H10. assumption. }
+          rewrite H8 in H14. destruct H14 as [H14 H15].
+          apply H15, H12. assumption. }
+          rewrite H6, H7, H12. 1: reflexivity. 2: assumption.
+          apply H3. assumption. }
   intros x H10.
-  assert (On x) as H11. { apply IsOrdinal with (toClass a); assumption. }
+  assert (On x) as H11. { apply ZF.Set.Ordinal.Core.IsOrdinal with a; assumption. }
   assert (A x) as H12. { apply H9. assumption. }
   rewrite H8 in H12. destruct H12 as [_ H12]. apply H12. assumption.
-*)
-
+Qed.
