@@ -133,6 +133,27 @@ Proof.
   intros f a b H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+Proposition Restrict : forall (f a b c:U),
+  Inj f a b -> Inj (f:|:c) (a :/\: c) b.
+Proof.
+  intros f a b c [H1 H2]. split.
+  - apply BijectionOn.Restrict. assumption.
+  - apply Incl.Tran with (range f). 2: assumption.
+    apply Restrict.RangeIsIncl.
+Qed.
+
+Proposition RestrictEqual : forall (f a b g c d e:U),
+  Inj f a b                       ->
+  Inj g c d                       ->
+  e :<=: a                        ->
+  e :<=: c                        ->
+  (forall x, x :< e -> f!x = g!x) ->
+  f:|:e = g:|:e.
+Proof.
+  intros f a b g c d e [H1 H2] [H3 H4].
+  apply BijectionOn.RestrictEqual; assumption.
+Qed.
+
 (* If f is an injection fron a to b with range b, f^-1 is an inj from b to a.   *)
 Proposition Converse : forall (f a b:U),
   Inj f a b -> range f = b -> Inj f^:-1: b a.
@@ -195,3 +216,4 @@ Proposition DiffImage : forall (f a b c d:U),
 Proof.
   intros f a b c d H1. apply BijectionOn.DiffImage with a, H1.
 Qed.
+
