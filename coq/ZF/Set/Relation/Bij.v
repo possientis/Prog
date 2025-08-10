@@ -141,6 +141,25 @@ Proof.
   intros f a b H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+Proposition Restrict : forall (f a b c:U),
+  Bij f a b -> Bij (f:|:c) (a :/\: c) f:[c]:.
+Proof.
+  intros f a b c [H1 H2]. split.
+  - apply BijectionOn.Restrict. assumption.
+  - apply Restrict.RangeOf.
+Qed.
+
+Proposition RestrictEqual : forall (f a b g c d e:U),
+  Bij f a b                       ->
+  Bij g c d                       ->
+  e :<=: a                        ->
+  e :<=: c                        ->
+  (forall x, x :< e -> f!x = g!x) ->
+  f:|:e = g:|:e.
+Proof.
+  intros f a b g c d e [H1 _] [H2 _]. apply BijectionOn.RestrictEqual; assumption.
+Qed.
+
 Proposition Converse : forall (f a b:U),
   Bij f a b -> Bij f^:-1: b a.
 Proof.
@@ -205,3 +224,4 @@ Proposition DiffImage : forall (f a b c d:U),
 Proof.
   intros f a b c d H1. apply BijectionOn.DiffImage with a, H1.
 Qed.
+
