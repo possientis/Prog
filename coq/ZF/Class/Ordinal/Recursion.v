@@ -1,43 +1,23 @@
-Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Diff.
-Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Induction.
+Require Import ZF.Class.Relation.Function.
+Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Incl.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.Eval.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Restrict.
 
+(* Transfinite recursion class associated with a class F.                       *)
+Definition Recursion (F:Class) : Class := fun x => exists f, exists b,
+  x :< f                                  /\
+  On b                                    /\
+  FunctionOn f b                          /\
+  (forall a, a :< b -> f!a = F!(f:|:a)).
 
-(* Principle of transfinite induction.                                          *)
-Proposition Induction : forall (A:Class),
-  A :<=: On                                   ->
-  (forall a, On a -> toClass a :<=: A -> A a) ->
-  A :~: On.
-Proof.
-  intros A H1 H2. apply DoubleNegation. intros H3.
-  assert (On :\: A :<>: :0:) as H4. { apply Diff.WhenLess. split; assumption. }
-  assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
-    apply HasEMinimal with On. 3: assumption.
-    - apply OnIsOrdinal.
-    - apply Class.Inter2.IsInclL. }
-  destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
-    apply Class.Ordinal.Core.LessIsElem; try assumption. apply OnIsOrdinal. }
-  assert (toClass a :<=: A) as H9. {
-    intros x H10. apply DoubleNegation. intros H11.
-    apply Class.Empty.Charac with x, H7. split. 2: assumption. split. 2: assumption.
-    apply Class.Ordinal.Core.IsOrdinal with (toClass a); assumption. }
-  apply H6, H2; assumption.
-Qed.
-
-Proposition Coincide : forall (F:Class) (f g a b:U),
+Lemma Coincide : forall (F:Class) (f g a b:U),
   On a                                  ->
   On b                                  ->
   a :<=: b                              ->
@@ -69,3 +49,28 @@ Proof.
   assert (A x) as H12. { apply H9. assumption. }
   rewrite H8 in H12. destruct H12 as [_ H12]. apply H12. assumption.
 Qed.
+
+(* The transfinite recursion class associated with F is a relation.             *)
+Proposition IsRelation : forall (F:Class), Relation (Recursion F).
+Proof.
+  intros F x H1. destruct H1 as [f [b [H1 [_ [[[H2 _] _] _]]]]].
+  specialize (H2 x H1). assumption.
+Qed.
+
+(* The transfinite recursion class associated with F is a function.            *)
+Proposition IsFunction : forall (F:Class), Function (Recursion F).
+Proof.
+  intros F. split. 1: apply IsRelation. intros x y z H1 H2.
+  destruct H1 as [f [a [H1 [H3 [H4 H5]]]]].
+  destruct H2 as [g [b [H2 [H6 [H7 H8]]]]].
+  assert (a :<=: b \/ b :<=: a) as H9. {
+    apply ZF.Set.Ordinal.Core.InclOrIncl; assumption. }
+  assert (x :< a) as H10. {
+    destruct H4 as [_ H4]. rewrite <- H4.
+    apply Domain.Charac. exists y. assumption. }
+  assert (x :< b) as H11. {
+    destruct H7 as [_ H7]. rewrite <- H7.
+    apply Domain.Charac. exists z. assumption. }
+  assert (f!x = y) as H12. { apply (FunctionOn.EvalCharac f a); assumption. }
+  assert (g!x = z) as H13. { apply (FunctionOn.EvalCharac g b); assumption. }
+Admitted.

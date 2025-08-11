@@ -10,7 +10,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
-Require Import ZF.Class.Ordinal.Transfinite.
+Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Compose.
@@ -49,7 +49,7 @@ Proof.
   intros F A B H1 H2 H3.
   remember (fun a => On a /\ (A a -> F!a = a)) as C eqn:H4.
   assert (C :~: On) as H5. {
-    apply Transfinite.Induction.
+    apply Induction.
     - intros a H5. rewrite H4 in H5. apply H5.
     - intros b H5 H6. rewrite H4. split. 1: assumption. intros H7.
       assert (forall a, a :< b -> F!a = a) as H8. {
