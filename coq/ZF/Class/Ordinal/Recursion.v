@@ -5,6 +5,7 @@ Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
@@ -73,4 +74,7 @@ Proof.
     apply Domain.Charac. exists z. assumption. }
   assert (f!x = y) as H12. { apply (FunctionOn.EvalCharac f a); assumption. }
   assert (g!x = z) as H13. { apply (FunctionOn.EvalCharac g b); assumption. }
-Admitted.
+  rewrite <- H12, <- H13. destruct H9 as [H9|H9].
+  - apply Coincide with F a b; assumption.
+  - symmetry. apply Coincide with F b a; assumption.
+Qed.
