@@ -329,6 +329,20 @@ Proof.
     + apply H1.
 Qed.
 
+Proposition IsOnOrOrdinalSet : forall (A:Class),
+  Ordinal A -> A :~: On \/ exists a, On a /\ A :~: toClass a.
+Proof.
+  intros A H1.
+  assert (A :~: On \/ Small A) as H2. { apply IsOnOrSmall. assumption. }
+  destruct H2 as [H2|H2].
+  - left. assumption.
+  - right.
+    assert (exists a, A :~: toClass a) as H3. {
+      apply Small.IsSomeSet. assumption. }
+    destruct H3 as [a H3]. exists a. split. 2: assumption.
+    apply EquivCompat with A; assumption.
+Qed.
+
 (* An element of an ordinal class is equal to its intersection with the class.  *)
 Proposition ElemIsInter : forall (A:Class) (a:U),
   Ordinal A -> A a -> toClass a :~: toClass a :/\: A.
@@ -369,3 +383,4 @@ Proof.
     destruct H2 as [y H2]. assert (H6 := H2). apply H3 in H6.
     rewrite H6 in H2. assumption.
 Qed.
+

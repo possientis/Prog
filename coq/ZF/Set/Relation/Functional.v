@@ -6,8 +6,14 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.FunctionalAt.
 
 (* A functional set.                                                            *)
-Definition Functional (a:U) : Prop :=
-  forall x y z, :(x,y): :< a -> :(x,z): :< a -> y = z.
+Definition Functional (f:U) : Prop :=
+  forall x y z, :(x,y): :< f -> :(x,z): :< f -> y = z.
+
+Proposition ToClass : forall (f:U),
+  Functional f <-> Class.Relation.Functional.Functional (toClass f).
+Proof.
+  intros f. split; intros H1 x y z H3 H4; apply H1 with x; assumption.
+Qed.
 
 (* Being functional is compatible with set inclusion (not quite of course).     *)
 Proposition InclCompat : forall (f g:U),
@@ -24,3 +30,4 @@ Proof.
   - intros a y z. apply H1.
   - intros x. apply H1.
 Qed.
+

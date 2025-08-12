@@ -13,9 +13,11 @@ Qed.
 
 (* A class is small if and only if it is equivalent to some set.                *)
 Proposition IsSomeSet : forall (P:Class),
-  Small P -> exists a, P :~: toClass a.
+  Small P <-> exists a, P :~: toClass a.
 Proof.
-  intros P [a H1]. exists a. apply Equiv.Sym. intros x. apply H1.
+  intros P. split; intros [a H1]; exists a.
+  - apply Equiv.Sym. intros x. apply H1.
+  - apply Equiv.Sym in H1. assumption.
 Qed.
 
 (* The property of being small is compatible with class equivalence.            *)
@@ -26,3 +28,4 @@ Proof.
   - apply H1, H2, H3.
   - apply H2, H1, H3.
 Qed.
+
