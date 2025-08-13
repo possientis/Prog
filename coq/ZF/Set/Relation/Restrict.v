@@ -52,7 +52,7 @@ Proof.
     + assumption.
 Qed.
 
-(* The restriction is always a relation.                                        *)
+(* The restriction of a set is always a relation.                               *)
 Proposition IsRelation : forall (f a:U), Relation (f:|:a).
 Proof.
   intros f a x H1. apply Charac in H1. destruct H1 as [y [z [H1 _]]].
@@ -83,7 +83,7 @@ Proof.
     apply Domain.Charac. exists y. apply Charac2. split; assumption.
 Qed.
 
-(* The direct image by f of a is the range of the restriction f|a.              *)
+(* The range of the restriction f|a is the direct image by f of a.              *)
 Proposition RangeOf : forall (f a:U),
   range (f:|:a) = f:[a]:.
 Proof.
@@ -95,6 +95,7 @@ Proof.
     apply Range.Charac. exists x. apply Charac2. split; assumption.
 Qed.
 
+(* The range of the restriction is a subset of the range.                       *)
 Proposition RangeIsIncl : forall (f a:U),
   range (f:|:a) :<=: range f.
 Proof.
@@ -156,4 +157,3 @@ Proof.
       rewrite E. apply Eval.WhenNotInDomain. assumption. }
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
-

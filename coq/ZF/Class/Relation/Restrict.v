@@ -92,7 +92,7 @@ Proof.
     apply Charac2. split; assumption.
 Qed.
 
-(* The direct image by F of A is the range of the restriction F|A.              *)
+(* The range of the restriction F|A is the direct image by F of A.              *)
 Proposition RangeOf : forall (F A:Class),
   range (F:|:A) :~: F:[A]:.
 Proof.
@@ -102,6 +102,7 @@ Proof.
   - destruct H1 as [x [H1 H2]]. exists x. apply Charac2. split; assumption.
 Qed.
 
+(* The range of the restriction is a subclass of the range.                     *)
 Proposition RangeIsIncl : forall (F A:Class),
   range (F:|:A) :<=: range F.
 Proof.
