@@ -15,28 +15,35 @@ Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
-Module CF := ZF.Class.Relation.FunctionOn.
-Module SF := ZF.Set.Relation.FunctionOn.
+Module COC := ZF.Class.Ordinal.Core.
+Module CRD := ZF.Class.Relation.Domain.
+Module CFO := ZF.Class.Relation.FunctionOn.
+
+Module SOC := ZF.Set.Ordinal.Core.
+Module SRD := ZF.Set.Relation.Domain.
+Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* Transfinite recursion class associated with a class F.                       *)
 Definition Recursion (F:Class) : Class := fun x => exists f, exists a,
   x :< f                                  /\
   On a                                    /\
-  SF.FunctionOn f a                       /\
+  SFO.FunctionOn f a                      /\
   (forall b, b :< a -> f!b = F!(f:|:b)).
 
 Lemma Coincide : forall (F:Class) (f g a b:U),
   On a                                  ->
   On b                                  ->
   a :<=: b                              ->
-  SF.FunctionOn f a                     ->
-  SF.FunctionOn g b                     ->
+  SFO.FunctionOn f a                    ->
+  SFO.FunctionOn g b                    ->
   (forall x, x :< a -> f!x = F!(f:|:x)) ->
   (forall x, x :< b -> g!x = F!(g:|:x)) ->
   (forall x, x :< a -> f!x = g!x).
@@ -49,8 +56,8 @@ Proof.
     - intros c H9 H10. rewrite H8. split. 1: assumption. intros H11.
       assert (f:|:c = g:|:c) as H12. {
         assert (c :<=: a) as H12. {
-          apply ZF.Set.Ordinal.Core.LessIsElem; assumption. }
-        apply SF.RestrictEqual with a b; try assumption.
+          apply SOC.LessIsElem; assumption. }
+        apply SFO.RestrictEqual with a b; try assumption.
         + apply Incl.Tran with a; assumption.
         + intros x H13.
           assert (A x) as H14. { apply H10. assumption. }
@@ -59,7 +66,7 @@ Proof.
           rewrite H6, H7, H12. 1: reflexivity. 2: assumption.
           apply H3. assumption. }
   intros x H10.
-  assert (On x) as H11. { apply ZF.Set.Ordinal.Core.IsOrdinal with a; assumption. }
+  assert (On x) as H11. { apply SOC.IsOrdinal with a; assumption. }
   assert (A x) as H12. { apply H9. assumption. }
   rewrite H8 in H12. destruct H12 as [_ H12]. apply H12. assumption.
 Qed.
@@ -78,15 +85,15 @@ Proof.
   destruct H1 as [f [a [H1 [H3 [H4 H5]]]]].
   destruct H2 as [g [b [H2 [H6 [H7 H8]]]]].
   assert (a :<=: b \/ b :<=: a) as H9. {
-    apply ZF.Set.Ordinal.Core.InclOrIncl; assumption. }
+    apply SOC.InclOrIncl; assumption. }
   assert (x :< a) as H10. {
     destruct H4 as [_ H4]. rewrite <- H4.
-    apply Domain.Charac. exists y. assumption. }
+    apply SRD.Charac. exists y. assumption. }
   assert (x :< b) as H11. {
     destruct H7 as [_ H7]. rewrite <- H7.
-    apply Domain.Charac. exists z. assumption. }
-  assert (f!x = y) as H12. { apply (SF.EvalCharac f a); assumption. }
-  assert (g!x = z) as H13. { apply (SF.EvalCharac g b); assumption. }
+    apply SRD.Charac. exists z. assumption. }
+  assert (f!x = y) as H12. { apply (SFO.EvalCharac f a); assumption. }
+  assert (g!x = z) as H13. { apply (SFO.EvalCharac g b); assumption. }
   rewrite <- H12, <- H13. destruct H9 as [H9|H9].
   - apply Coincide with F a b; assumption.
   - symmetry. apply Coincide with F b a; assumption.
@@ -94,39 +101,39 @@ Qed.
 
 (* The domain of the transfinite recursion class is an Ordinal class.           *)
 Lemma DomainIsOrdinal : forall (F:Class),
-  Class.Ordinal.Core.Ordinal (domain (Recursion F)).
+  COC.Ordinal (CRD.domain (Recursion F)).
 Proof.
   intros F.
-  assert (Transitive (domain (Recursion F))) as H1. {
+  assert (Transitive (CRD.domain (Recursion F))) as H1. {
     intros x [y [f [a [H1 [H2 [H3 H4]]]]]] u H5.
     assert (x :< a) as H6. {
-      destruct H3 as [_ H3]. rewrite <- H3. apply ZF.Set.Relation.Domain.Charac.
+      destruct H3 as [_ H3]. rewrite <- H3. apply SRD.Charac.
       exists y. assumption. }
-    assert (toClass a :<=: domain (Recursion F)) as H7. {
+    assert (toClass a :<=: CRD.domain (Recursion F)) as H7. {
       intros v H7. exists (f!v). exists f. exists a. split.
-      - apply SF.Satisfies with a; assumption.
+      - apply SFO.Satisfies with a; assumption.
       - split. 1: assumption. split; assumption. }
     apply H7.
     assert (On x) as H8. {
-      apply ZF.Set.Ordinal.Core.IsOrdinal with a; assumption. }
-    apply ZF.Set.Ordinal.Core.IfElemThenIncl in H6; try assumption.
+      apply SOC.IsOrdinal with a; assumption. }
+    apply SOC.IfElemThenIncl in H6; try assumption.
     apply H6. assumption. }
-  assert (domain (Recursion F) :<=: On) as H2. {
+  assert (CRD.domain (Recursion F) :<=: On) as H2. {
     intros x [y [f [a [H2 [H3 [H4 H5]]]]]].
     assert (x :< a) as H6. {
-      destruct H4 as [_ H4]. rewrite <- H4. apply ZF.Set.Relation.Domain.Charac.
+      destruct H4 as [_ H4]. rewrite <- H4. apply SRD.Charac.
       exists y. assumption. }
-    apply ZF.Set.Ordinal.Core.IsOrdinal with a; assumption. }
+    apply SOC.IsOrdinal with a; assumption. }
   apply TransitiveInclIsOrdinal with On; try assumption. apply OnIsOrdinal.
 Qed.
 
 (* The domain of the transfinite recursion class is the class of ordinals       *)
-Proposition DomainIsOn : forall (F:Class), domain (Recursion F) :~: On.
+Proposition DomainIsOn : forall (F:Class), CRD.domain (Recursion F) :~: On.
 Proof.
   intros F.
   assert (
-    domain (Recursion F) :~: On                           \/
-    exists a, On a /\ domain (Recursion F) :~: toClass a) as H1. {
+    CRD.domain (Recursion F) :~: On                           \/
+    exists a, On a /\ CRD.domain (Recursion F) :~: toClass a) as H1. {
       apply IsOnOrOrdinalSet. apply DomainIsOrdinal. }
   destruct H1 as [H1|H1]. 1: assumption. exfalso. destruct H1 as [c [H1 H2]].
   assert (Small (Recursion F)) as H3. {
@@ -134,12 +141,12 @@ Proof.
     - apply IsFunction.
     - apply IsSomeSet. exists c. assumption. }
   apply IsSomeSet in H3. destruct H3 as [f H3].
-  assert (ZF.Set.Relation.Domain.domain f = c) as H4. {
+  assert (SRD.domain f = c) as H4. {
     apply DoubleInclusion. split; intros x H4.
-    - apply Domain.ToClass in H4. apply H2.
-      apply Domain.EquivCompat with (toClass f); assumption.
-    - apply H2 in H4. apply Domain.ToClass.
-      apply Domain.EquivCompat with (Recursion F). 2: assumption.
+    - apply SRD.ToClass in H4. apply H2.
+      apply CRD.EquivCompat with (toClass f); assumption.
+    - apply H2 in H4. apply SRD.ToClass.
+      apply CRD.EquivCompat with (Recursion F). 2: assumption.
       apply Equiv.Sym. assumption. }
   assert (ZF.Set.Relation.Relation.Relation f) as H5. {
     apply Relation.ToClass. apply Relation.EquivCompat with (Recursion F).
@@ -148,10 +155,10 @@ Proof.
     apply Functional.ToClass. apply Functional.EquivCompat with (Recursion F).
     1: assumption. apply IsFunction. }
   assert (ZF.Set.Relation.Function.Function f) as H7. { split; assumption. }
-  assert (SF.FunctionOn f c) as H8. { split; assumption. }
+  assert (SFO.FunctionOn f c) as H8. { split; assumption. }
   remember (fun f a =>
     On a                                    /\
-    SF.FunctionOn f a                       /\
+    SFO.FunctionOn f a                       /\
     (forall b, b :< a -> f!b = F!(f:|:b))) as K eqn:H9.
   assert (forall x y, :(x,y): :< f <-> exists g a, :(x,y): :< g /\ K g a) as H10. {
     intros x y. split; intros H10.
@@ -164,44 +171,44 @@ Proof.
   assert (forall g a, K g a -> a :<=: c) as H11. {
     intros g a H11 x H12. assert (H13 := H11). rewrite H9 in H13.
     destruct H13 as [_ [[_ H13] _]]. rewrite <- H13 in H12.
-    apply Domain.Charac in H12. destruct H12 as [y H12].
+    apply SRD.Charac in H12. destruct H12 as [y H12].
     assert (:(x,y): :< f) as H14. {
       apply H10. exists g. exists a. split; assumption. }
-    rewrite <- H4. apply Domain.Charac. exists y. assumption. }
-  assert (forall g a, K g a -> SF.FunctionOn (f:|:a) a) as H12. {
-    intros g a H12. apply (SF.Restrict f c a) in H8.
+    rewrite <- H4. apply SRD.Charac. exists y. assumption. }
+  assert (forall g a, K g a -> SFO.FunctionOn (f:|:a) a) as H12. {
+    intros g a H12. apply (SFO.Restrict f c a) in H8.
     assert (c :/\: a = a) as H13. {
       apply Inter2.WhenInclR. apply H11 with g. assumption. }
     rewrite H13 in H8. assumption. }
   assert (forall g a, K g a -> g = f:|:a) as H13. {
     intros g a H13. assert (H14 := H13). rewrite H9 in H14.
     destruct H14 as [H14 [H15 H16]].
-    apply SF.EqualCharac with a a. 1: assumption.
+    apply SFO.EqualCharac with a a. 1: assumption.
     - apply H12 with g. assumption.
     - reflexivity.
     - intros x H17.
       assert ((f:|:a)!x = f!x) as H18. {
         apply Restrict.Eval. 2: assumption.
         destruct H8 as [[_ H8] _]. assumption. }
-      rewrite H18. symmetry. apply (SF.EvalCharac f c). 1: assumption.
+      rewrite H18. symmetry. apply (SFO.EvalCharac f c). 1: assumption.
       apply (H11 g a); try assumption. apply H10. exists g. exists a. split.
-      2: assumption. apply SF.Satisfies with a; assumption. }
+      2: assumption. apply SFO.Satisfies with a; assumption. }
   assert (forall b, b :< c -> f!b = F!(f:|:b)) as H14. {
     intros b H14.
     assert (:(b,f!b): :< f) as H15. {
-      apply SF.Satisfies with c; assumption. }
+      apply SFO.Satisfies with c; assumption. }
     apply H10 in H15. destruct H15 as [g [a [H15 H16]]].
     assert (H17 := H16). rewrite H9 in H17. destruct H17 as [H17 [H18 H19]].
     assert (b :< a) as H20. {
-      destruct H18 as [_ H18]. rewrite <- H18. apply Domain.Charac.
+      destruct H18 as [_ H18]. rewrite <- H18. apply SRD.Charac.
       exists f!b. assumption. }
     assert (f!b = g!b) as H21. {
-      symmetry. apply (SF.EvalCharac g a); assumption. }
+      symmetry. apply (SFO.EvalCharac g a); assumption. }
     assert (g = f:|:a) as H22. { apply H13. assumption. }
     assert (g:|:b = f:|:b) as H23. {
       rewrite H22. apply Restrict.TowerProperty.
-      apply ZF.Set.Ordinal.Core.IfElemThenIncl; try assumption.
-      apply ZF.Set.Ordinal.Core.IsOrdinal with a; assumption. }
+      apply SOC.IfElemThenIncl; try assumption.
+      apply SOC.IsOrdinal with a; assumption. }
     rewrite H21, <- H23. apply H19. assumption. }
   remember (f :\/: :{ :(c,F!f): }:) as g eqn:H15.
   assert (ZF.Set.Relation.Relation.Relation g) as H16. {
@@ -217,46 +224,46 @@ Proof.
     - apply H6 with x; assumption.
     - exfalso. apply Single.Charac in H18. apply OrdPair.WhenEqual in H18.
       destruct H18 as [H18 _]. rewrite H18 in H17.
-      assert (c :< ZF.Set.Relation.Domain.domain f) as H19. {
-        apply Domain.Charac. exists y. assumption. }
+      assert (c :< SRD.domain f) as H19. {
+        apply SRD.Charac. exists y. assumption. }
       rewrite H4 in H19. apply NoElemLoop1 with c. assumption.
     - exfalso. apply Single.Charac in H17. apply OrdPair.WhenEqual in H17.
       destruct H17 as [H17 _]. rewrite H17 in H18.
-      assert (c :< ZF.Set.Relation.Domain.domain f) as H19. {
-        apply Domain.Charac. exists z. assumption. }
+      assert (c :< SRD.domain f) as H19. {
+        apply SRD.Charac. exists z. assumption. }
       rewrite H4 in H19. apply NoElemLoop1 with c. assumption.
     - apply Single.Charac in H17. apply Single.Charac in H18.
       apply OrdPair.WhenEqual in H17. apply OrdPair.WhenEqual in H18.
       destruct H17 as [_ H17]. destruct H18 as [_ H18]. subst. reflexivity. }
-  assert (SF.FunctionOn g (succ c)) as H18. {
+  assert (SFO.FunctionOn g (succ c)) as H18. {
     split. 1: assumption. apply DoubleInclusion. split; intros x H18.
-    - apply Domain.Charac in H18. destruct H18 as [y H18].
+    - apply SRD.Charac in H18. destruct H18 as [y H18].
       rewrite H15 in H18. apply Union2.Charac in H18. apply Union2.Charac.
       destruct H18 as [H18|H18].
-      + left. rewrite <- H4. apply Domain.Charac. exists y. assumption.
+      + left. rewrite <- H4. apply SRD.Charac. exists y. assumption.
       + right. apply Single.Charac in H18. apply OrdPair.WhenEqual in H18.
         destruct H18 as [H18 _]. apply Single.Charac. assumption.
-    - apply Domain.Charac. apply Union2.Charac in H18. destruct H18 as [H18|H18].
-      + rewrite <- H4 in H18. apply Domain.Charac in H18. destruct H18 as [y H18].
+    - apply SRD.Charac. apply Union2.Charac in H18. destruct H18 as [H18|H18].
+      + rewrite <- H4 in H18. apply SRD.Charac in H18. destruct H18 as [y H18].
         exists y. rewrite H15. apply Union2.Charac. left. assumption.
       + apply Single.Charac in H18. exists F!f. rewrite H15.
         apply Union2.Charac. right. rewrite H18. apply Single.IsIn. }
   assert (g:|:c = f) as H19. {
-    apply SF.EqualCharac with c c. 2: assumption.
+    apply SFO.EqualCharac with c c. 2: assumption.
     - assert (succ c :/\: c = c) as H19. {
         apply Inter2.WhenInclR, Succ.IsIncl. }
-      assert (SF.FunctionOn (g:|:c) (succ c :/\: c)) as H20. {
-        apply SF.Restrict. assumption. }
+      assert (SFO.FunctionOn (g:|:c) (succ c :/\: c)) as H20. {
+        apply SFO.Restrict. assumption. }
       rewrite H19 in H20. assumption.
     - reflexivity.
     - intros x H19.
       assert ((g:|:c)!x = g!x) as H20. {
         apply Restrict.Eval. 2: assumption. destruct H18 as [[_ H18] _].
         assumption. }
-      rewrite H20. apply (SF.EvalCharac g (succ c)). 1: assumption.
+      rewrite H20. apply (SFO.EvalCharac g (succ c)). 1: assumption.
       + apply Union2.Charac. left. assumption.
       + rewrite H15. apply Union2.Charac. left.
-        apply SF.Satisfies with c; assumption. }
+        apply SFO.Satisfies with c; assumption. }
   assert (forall b, b :< succ c -> g!b = F!(g:|:b)) as H20. {
     intros b H20. apply Union2.Charac in H20. destruct H20 as [H20|H20].
     - assert (g!b = f!b) as H21. {
@@ -264,12 +271,12 @@ Proof.
         destruct H18 as [[_ H18] _]. assumption. }
       assert (g:|:b = f:|:b) as H22. {
         rewrite <- H19. symmetry. apply Restrict.TowerProperty.
-        apply ZF.Set.Ordinal.Core.IfElemThenIncl; try assumption.
-        apply ZF.Set.Ordinal.Core.IsOrdinal with c; assumption. }
+        apply SOC.IfElemThenIncl; try assumption.
+        apply SOC.IsOrdinal with c; assumption. }
       rewrite H21, H22. apply H14. assumption.
     - apply Single.Charac in H20.
       assert (g!b = F!f) as H21. {
-        apply (SF.EvalCharac g (succ c)). 1: assumption.
+        apply (SFO.EvalCharac g (succ c)). 1: assumption.
         + apply Union2.Charac. right. rewrite H20. apply Single.IsIn.
         + rewrite H20, H15. apply Union2.Charac. right. apply Single.IsIn. }
       rewrite H21, H20, H19. reflexivity. }
@@ -280,17 +287,22 @@ Proof.
   assert (:(c, F!f): :< f) as H22. {
     apply H10. exists g. exists (succ c). split. 2: assumption.
     rewrite H15. apply Union2.Charac. right. apply Single.IsIn. }
-  assert (c :< ZF.Set.Relation.Domain.domain f) as H23. {
-    apply Domain.Charac. exists F!f. assumption. }
+  assert (c :< SRD.domain f) as H23. {
+    apply SRD.Charac. exists F!f. assumption. }
   rewrite H4 in H23. apply NoElemLoop1 with c. assumption.
 Qed.
 
 (* The transfinite recursion class is a function class defined on the ordinals. *)
 Proposition IsFunctionOn : forall (F:Class),
-  CF.FunctionOn (Recursion F) On.
+  CFO.FunctionOn (Recursion F) On.
 Proof.
   intros F. split.
   - apply IsFunction.
   - apply DomainIsOn.
 Qed.
+
+Proposition IsRecursive : forall (F:Class) (b:U), On b ->
+  (Recursion F)!b = F!((Recursion F) :|: b).
+Proof.
+Admitted.
 

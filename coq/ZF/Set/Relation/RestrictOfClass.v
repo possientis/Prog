@@ -24,6 +24,7 @@ Export ZF.Notation.Pipe.
 Module CD := ZF.Class.Relation.Domain.
 Module CF := ZF.Class.Relation.Functional.
 Module CR := ZF.Class.Relation.Range.
+
 Module SD := ZF.Set.Relation.Domain.
 Module SF := ZF.Set.Relation.Functional.
 Module SR := ZF.Set.Relation.Range.
