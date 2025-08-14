@@ -33,4 +33,14 @@ Proposition Induction' : forall (A:Class),
   (forall a, On a -> (forall x, x :< a -> A x) -> A a) ->
    forall a, On a -> A a.
 Proof.
-Admitted.
+  intros A H1.
+  remember (fun x => On x /\ A x) as B eqn:H2.
+  assert (B :~: On) as H3. {
+    apply Induction.
+    - intros x H3. rewrite H2 in H3. apply H3.
+    - intros a H3 H4. rewrite H2. split. 1: assumption.
+      apply H1. 1: assumption. intros x H5.
+      assert (B x) as H6. { apply H4. assumption. }
+      rewrite H2 in H6. apply H6. }
+      intros a H4. apply H3 in H4. rewrite H2 in H4. apply H4.
+Qed.

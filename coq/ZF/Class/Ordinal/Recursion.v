@@ -17,6 +17,7 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
@@ -26,11 +27,13 @@ Require Import ZF.Set.Union2.
 
 Module COC := ZF.Class.Ordinal.Core.
 Module CRD := ZF.Class.Relation.Domain.
+Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 
 Module SOC := ZF.Set.Ordinal.Core.
 Module SRD := ZF.Set.Relation.Domain.
+Module SRF := ZF.Set.Relation.Function.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRR := ZF.Set.Relation.Relation.
 
@@ -98,7 +101,7 @@ Proof.
 Qed.
 
 (* The transfinite recursion class associated with F is a function.             *)
-Proposition IsFunction : forall (F:Class), Function (Recursion F).
+Proposition IsFunction : forall (F:Class), CRF.Function (Recursion F).
 Proof.
   intros F. split. 1: apply IsRelation. intros x y z H1 H2.
   destruct H1 as [f [a [H1 [H3 [H4 H5]]]]].
@@ -173,7 +176,7 @@ Proof.
   assert  (ZF.Set.Relation.Functional.Functional f) as H6. {
     apply Functional.ToClass. apply Functional.EquivCompat with (Recursion F).
     1: assumption. apply IsFunction. }
-  assert (ZF.Set.Relation.Function.Function f) as H7. { split; assumption. }
+  assert (SRF.Function f) as H7. { split; assumption. }
   assert (SFO.FunctionOn f c) as H8. { split; assumption. }
   remember (K F) as K' eqn:H9.
   assert (forall x y, :(x,y): :< f <-> exists g a, :(x,y): :< g /\ K' g a) as H10. {
@@ -228,7 +231,7 @@ Proof.
     destruct H16 as [H16|H16].
     - apply H5 in H16. assumption.
     - apply Single.Charac in H16. exists c. exists F!f. assumption. }
-  assert (ZF.Set.Relation.Function.Function g) as H17. {
+  assert (SRF.Function g) as H17. {
     split. 1: apply H16. intros x y z H17 H18.
     rewrite H15 in H17. rewrite H15 in H18.
     apply Union2.Charac in H17. apply Union2.Charac in H18.
@@ -317,9 +320,7 @@ Lemma RestrictIsFunctionOn : forall (F:Class) (f a:U),
   K F f a -> SFO.FunctionOn ((Recursion F) :|: a) a.
 Proof.
   intros F f a H1. split.
-  - split.
-    + apply RestrictOfClass.IsRelation, IsFunction.
-    + apply RestrictOfClass.IsFunctional, IsFunction.
+  - apply RestrictOfClass.IsFunction, IsFunction.
   - apply DoubleInclusion. split; intros x H2.
     + apply RestrictOfClass.DomainOf in H2. 2: apply IsFunction.
       destruct H2 as [H2 _]. assumption.
@@ -375,6 +376,9 @@ Proof.
   intros F G H1 H2.
   apply (CFO.EqualCharac G (Recursion F) On On). 1: assumption.
   - apply IsFunctionOn.
-  - split. 1: apply Equiv.Refl.
+  - split. 1: apply Equiv.Refl. apply Induction'.
+    intros a H3 H4.
+    assert (G:|:a = (Recursion F) :|: a) as H5. {
+      apply SRF.EqualCharac.
 Admitted.
 

@@ -157,3 +157,4 @@ Proof.
       rewrite E. apply Eval.WhenNotInDomain. assumption. }
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
+
