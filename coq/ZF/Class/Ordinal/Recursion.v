@@ -344,6 +344,7 @@ Proof.
       apply SFO.Satisfies with a; assumption.
 Qed.
 
+(* The transfinite recursion class associated with F is F-recursive.            *)
 Proposition IsRecursive : forall (F:Class) (b:U), On b ->
   (Recursion F)!b = F!((Recursion F) :|: b).
 Proof.
@@ -364,4 +365,16 @@ Proof.
     - apply SOC.IfElemThenIncl; assumption. }
   rewrite H8, <- H10. apply H6. assumption.
 Qed.
+
+(* The transfinite recursion class is the unique F-recursive function on On.    *)
+Proposition IsUnique : forall (F G:Class),
+  CFO.FunctionOn G On                 ->
+  (forall b, On b -> G!b = F!(G:|:b)) ->
+  G :~: Recursion F.
+Proof.
+  intros F G H1 H2.
+  apply (CFO.EqualCharac G (Recursion F) On On). 1: assumption.
+  - apply IsFunctionOn.
+  - split. 1: apply Equiv.Refl.
+Admitted.
 

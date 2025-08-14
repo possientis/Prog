@@ -6,6 +6,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Set.Core.
 
 (* Principle of transfinite induction.                                          *)
 Proposition Induction : forall (A:Class),
@@ -27,3 +28,9 @@ Proof.
     apply Class.Ordinal.Core.IsOrdinal with (toClass a); assumption. }
   apply H6, H2; assumption.
 Qed.
+
+Proposition Induction' : forall (A:Class),
+  (forall a, On a -> (forall x, x :< a -> A x) -> A a) ->
+   forall a, On a -> A a.
+Proof.
+Admitted.
