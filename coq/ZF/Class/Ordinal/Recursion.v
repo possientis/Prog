@@ -378,7 +378,26 @@ Proof.
   - apply IsFunctionOn.
   - split. 1: apply Equiv.Refl. apply Induction'.
     intros a H3 H4.
+    assert (SRD.domain (G:|:a) = a) as H6. {
+      apply RestrictOfClass.DomainWhenIncl. 1: apply H1. destruct H1 as [_ H1].
+      intros x H6. apply H1. apply SOC.IsOrdinal with a; assumption. }
+    assert (SRD.domain ((Recursion F) :|: a) = a) as H7. {
+      apply RestrictOfClass.DomainWhenIncl. 1: apply IsFunction.
+      intros x H7. apply DomainIsOn. apply SOC.IsOrdinal with a; assumption. }
     assert (G:|:a = (Recursion F) :|: a) as H5. {
       apply SRF.EqualCharac.
-Admitted.
+      - apply RestrictOfClass.IsFunction, H1.
+      - apply RestrictOfClass.IsFunction, IsFunction.
+      - rewrite H6, H7. reflexivity.
+      - intros x H8. rewrite H6 in H8.
+        assert ((G:|:a)!x = G!x) as H9. {
+          apply RestrictOfClass.Eval. 2: assumption. apply H1. }
+        assert (((Recursion F) :|: a)!x = (Recursion F)!x) as H10. {
+          apply RestrictOfClass.Eval. 2: assumption. apply IsFunction. }
+        rewrite H9, H10. apply H4. assumption. }
+    assert (G!a = F!(G:|:a)) as H8. { apply H2. assumption. }
+    assert ((Recursion F)!a = F!((Recursion F) :|: a)) as H9. {
+      apply IsRecursive. assumption. }
+    rewrite H8, H9, H5. reflexivity.
+Qed.
 

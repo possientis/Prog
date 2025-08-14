@@ -120,6 +120,14 @@ Proof.
     apply Charac2Rev; assumption.
 Qed.
 
+Proposition DomainWhenIncl : forall (F:Class) (a:U), CFL.Functional F ->
+  toClass a :<=: CRD.domain F -> SRD.domain (F:|:a) = a.
+Proof.
+  intros F a H1 H2. apply DoubleInclusion. split; intros x H3.
+  - apply DomainOf in H3. 2: assumption. apply H3.
+  - apply DomainOf. 1: assumption. split. 1: assumption. apply H2. assumption.
+Qed.
+
 (* The range of the restriction f|a is the direct image by f of a.              *)
 Proposition RangeOf : forall (F:Class) (a:U), CFL.Functional F ->
   SRR.range (F:|:a) = F:[a]:.
