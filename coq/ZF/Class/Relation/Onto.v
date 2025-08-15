@@ -185,10 +185,10 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F A B C:Class),
-  Onto F A B -> Onto (F:|:C) (A:/\:C) F:[C]:.
+  Onto F A B -> C :<=: A -> Onto (F:|:C) C F:[C]:.
 Proof.
-  intros F A B C [H1 H2]. split.
-  - apply FunctionOn.Restrict. assumption.
+  intros F A B C [H1 H2] H3. split.
+  - apply FunctionOn.Restrict with A; assumption.
   - apply Restrict.RangeOf.
 Qed.
 
@@ -202,5 +202,4 @@ Proposition RestrictEqual : forall (F A B G C D E:Class),
 Proof.
   intros F A B G C D E [H1 _] [H2 _]. apply FunctionOn.RestrictEqual; assumption.
 Qed.
-
 

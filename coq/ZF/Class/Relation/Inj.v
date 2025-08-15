@@ -164,10 +164,10 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F A B C:Class),
-  Inj F A B -> Inj (F:|:C) (A :/\: C) B.
+  Inj F A B -> C :<=: A -> Inj (F:|:C) C B.
 Proof.
-  intros F A B C [H1 H2]. split.
-  - apply BijectionOn.Restrict. assumption.
+  intros F A B C [H1 H2] H3. split.
+  - apply BijectionOn.Restrict with A; assumption.
   - apply Class.Incl.Tran with (range F). 2: assumption.
     apply Restrict.RangeIsIncl.
 Qed.

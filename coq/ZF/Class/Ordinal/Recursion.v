@@ -191,10 +191,8 @@ Proof.
       apply H10. exists g. exists a. split; assumption. }
     rewrite <- H4. apply SRD.Charac. exists y. assumption. }
   assert (forall g a, K' g a -> SFO.FunctionOn (f:|:a) a) as H12. {
-    intros g a H12. apply (SFO.Restrict f c a) in H8.
-    assert (c :/\: a = a) as H13. {
-      apply Inter2.WhenInclR. apply H11 with g. assumption. }
-    rewrite H13 in H8. assumption. }
+    intros g a H12. apply (SFO.Restrict f c a). 1: assumption.
+    apply H11 with g. assumption. }
   assert (forall g a, K' g a -> g = f:|:a) as H13. {
     intros g a H13. assert (H14 := H13). rewrite H9 in H14.
     destruct H14 as [H14 [H15 H16]].
@@ -265,11 +263,7 @@ Proof.
         apply Union2.Charac. right. rewrite H18. apply Single.IsIn. }
   assert (g:|:c = f) as H19. {
     apply SFO.EqualCharac with c c. 2: assumption.
-    - assert (succ c :/\: c = c) as H19. {
-        apply Inter2.WhenInclR, Succ.IsIncl. }
-      assert (SFO.FunctionOn (g:|:c) (succ c :/\: c)) as H20. {
-        apply SFO.Restrict. assumption. }
-      rewrite H19 in H20. assumption.
+    - apply SFO.Restrict with (succ c). 1: assumption. apply Succ.IsIncl.
     - reflexivity.
     - intros x H19.
       assert ((g:|:c)!x = g!x) as H20. {

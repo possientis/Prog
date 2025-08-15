@@ -182,10 +182,10 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F A B C:Class),
-  Bij F A B -> Bij (F:|:C) (A :/\: C) F:[C]:.
+  Bij F A B ->  C :<=: A -> Bij (F:|:C) C F:[C]:.
 Proof.
-  intros F A B C [H1 H2]. split.
-  - apply BijectionOn.Restrict. assumption.
+  intros F A B C [H1 H2] H3. split.
+  - apply BijectionOn.Restrict with A; assumption.
   - apply Restrict.RangeOf.
 Qed.
 

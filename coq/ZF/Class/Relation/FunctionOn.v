@@ -221,15 +221,14 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F A B:Class),
-  FunctionOn F A -> FunctionOn (F:|:B) (A:/\:B).
+  FunctionOn F A -> B :<=: A -> FunctionOn (F:|:B) B.
 Proof.
-  intros F A B [H1 H2]. split.
+  intros F A B [H1 H2] H3. split.
   - apply Function.Restrict. assumption.
   - apply Equiv.Tran with (B :/\: domain F).
     + apply Restrict.DomainOf.
-    + apply Equiv.Tran with (B :/\: A).
-      * apply Inter2.EquivCompatR. assumption.
-      * apply Class.Inter2.Comm.
+    + intros x. split; intros H4. 1: apply H4. split. 1: assumption.
+      apply H2, H3. assumption.
 Qed.
 
 Proposition RestrictEqual : forall (F G A B C:Class),
@@ -252,5 +251,4 @@ Proposition FunctionIsFunctionOn : forall (F:Class),
 Proof.
   intros F H1. split. 1: assumption. apply Equiv.Refl.
 Qed.
-
 

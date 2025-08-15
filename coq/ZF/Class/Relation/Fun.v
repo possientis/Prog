@@ -175,13 +175,13 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F A B C:Class),
-  F :: A :-> B -> (F:|:C) :: (A :/\: C) :-> B.
+  F :: A :-> B -> C :<=: A -> (F:|:C) :: C :-> B.
 Proof.
-  intros F A B C H1. split.
-  - apply FunctionOn.Restrict, H1.
+  intros F A B C [H1 H2] H3. split.
+  - apply FunctionOn.Restrict with A; assumption.
   - apply Class.Incl.Tran with (range F).
     + apply Restrict.RangeIsIncl.
-    + apply H1.
+    + apply H2.
 Qed.
 
 Proposition RestrictEqual : forall (F A B G C D E:Class),

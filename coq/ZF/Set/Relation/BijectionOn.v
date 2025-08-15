@@ -19,7 +19,6 @@ Require Import ZF.Set.Relation.Restrict.
 (* f is a bijection defined on a.                                               *)
 Definition BijectionOn (f a:U) : Prop := Bijection f /\ domain f = a.
 
-
 (* A bijection defined on a is a function defined on a.                         *)
 Proposition IsFunctionOn : forall (f a:U),
   BijectionOn f a -> FunctionOn f a.
@@ -132,11 +131,11 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (f a b:U),
-  BijectionOn f a -> BijectionOn (f:|:b) (a:/\:b).
+  BijectionOn f a -> b :<=: a -> BijectionOn (f:|:b) b.
 Proof.
-  intros f a b [H1 H2]. split.
+  intros f a b [H1 H2] H3. split.
   - apply Bijection.Restrict. assumption.
-  - rewrite Restrict.DomainOf, H2. apply Inter2.Comm.
+  - rewrite Restrict.DomainOf, H2. apply Inter2.WhenInclL. assumption.
 Qed.
 
 Proposition RestrictEqual : forall (f g a b c:U),

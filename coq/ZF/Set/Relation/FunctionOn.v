@@ -131,11 +131,11 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (f a b:U),
-  FunctionOn f a -> FunctionOn (f:|:b) (a:/\:b).
+  FunctionOn f a ->  b :<=: a -> FunctionOn (f:|:b) b.
 Proof.
-  intros f a b [H1 H2]. split.
+  intros f a b [H1 H2] H3. split.
   - apply Function.Restrict. assumption.
-  - rewrite Restrict.DomainOf, H2. apply Inter2.Comm.
+  - rewrite Restrict.DomainOf, H2. apply Inter2.WhenInclL. assumption.
 Qed.
 
 Proposition RestrictEqual : forall (f g a b c:U),
@@ -151,7 +151,7 @@ Proof.
   - rewrite H2. assumption.
   - rewrite H4. assumption.
 Qed.
- 
+
 (* A function is a function defined on its domain.                              *)
 Proposition FunctionIsFunctionOn : forall (f:U),
   Function f -> FunctionOn f (domain f).

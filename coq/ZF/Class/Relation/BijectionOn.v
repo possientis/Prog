@@ -166,15 +166,14 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F A B:Class),
-  BijectionOn F A -> BijectionOn (F:|:B) (A:/\:B).
+  BijectionOn F A -> B :<=: A -> BijectionOn (F:|:B) B.
 Proof.
-  intros F A B [H1 H2]. split.
+  intros F A B [H1 H2] H3. split.
   - apply Bijection.Restrict. assumption.
   - apply Equiv.Tran with (B :/\: domain F).
     + apply Restrict.DomainOf.
-    + apply Equiv.Tran with (B :/\: A).
-      * apply Inter2.EquivCompatR. assumption.
-      * apply Class.Inter2.Comm.
+    + intros x. split; intros H4. 1: apply H4. split. 1: assumption.
+      apply H2, H3. assumption.
 Qed.
 
 Proposition RestrictEqual : forall (F G A B C:Class),

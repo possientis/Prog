@@ -138,10 +138,10 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (f a b c:U),
-  Onto f a b -> Onto (f:|:c) (a:/\:c) f:[c]:.
+  Onto f a b -> c :<=: a -> Onto (f:|:c) c f:[c]:.
 Proof.
-  intros f a b c [H1 H2]. split.
-  - apply FunctionOn.Restrict. assumption.
+  intros f a b c [H1 H2] H3. split.
+  - apply FunctionOn.Restrict with a; assumption.
   - apply Restrict.RangeOf.
 Qed.
 
@@ -153,5 +153,5 @@ Proposition RestrictEqual : forall (f a b g c d e:U),
   (forall x, x :< e -> f!x = g!x) ->
   f:|:e =  g:|:e.
 Proof.
-  intros f a b g c d e [H1 _] [H2 _]. apply FunctionOn.RestrictEqual; assumption. 
+  intros f a b g c d e [H1 _] [H2 _]. apply FunctionOn.RestrictEqual; assumption.
 Qed.
