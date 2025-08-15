@@ -138,7 +138,7 @@ Proof.
     apply H7.
     assert (On x) as H8. {
       apply SOC.IsOrdinal with a; assumption. }
-    apply SOC.IfElemThenIncl in H6; try assumption.
+    apply SOC.ElemIsIncl in H6; try assumption.
     apply H6. assumption. }
   assert (CRD.domain (Recursion F) :<=: On) as H2. {
     intros x [y [f [a [H2 [H3 [H4 H5]]]]]].
@@ -220,7 +220,7 @@ Proof.
     assert (g = f:|:a) as H22. { apply H13. assumption. }
     assert (g:|:b = f:|:b) as H23. {
       rewrite H22. apply Restrict.TowerProperty.
-      apply SOC.IfElemThenIncl; try assumption.
+      apply SOC.ElemIsIncl; try assumption.
       apply SOC.IsOrdinal with a; assumption. }
     rewrite H21, <- H23. apply H19. assumption. }
   remember (f :\/: :{ :(c,F!f): }:) as g eqn:H15.
@@ -280,7 +280,7 @@ Proof.
         destruct H18 as [[_ H18] _]. assumption. }
       assert (g:|:b = f:|:b) as H22. {
         rewrite <- H19. symmetry. apply Restrict.TowerProperty.
-        apply SOC.IfElemThenIncl; try assumption.
+        apply SOC.ElemIsIncl; try assumption.
         apply SOC.IsOrdinal with c; assumption. }
       rewrite H21, H22. apply H14. assumption.
     - apply Single.Charac in H20.
@@ -357,7 +357,7 @@ Proof.
   assert (f:|:b = (Recursion F) :|: b) as H10. {
     rewrite H9. apply RestrictOfClass.TowerProperty.
     - apply IsFunction.
-    - apply SOC.IfElemThenIncl; assumption. }
+    - apply SOC.ElemIsIncl; assumption. }
   rewrite H8, <- H10. apply H6. assumption.
 Qed.
 

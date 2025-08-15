@@ -70,6 +70,7 @@ Proof.
   assert ((f:|:b)!c = f!c) as H6. {
     apply Restrict.Eval. 2: assumption. apply H3. }
   assert ((f:|:b) :|: c = f:|:c) as H7. {
-    apply FunctionOn.RestrictEqual with b a.
+    apply FunctionOn.RestrictEqual with b a. 2: assumption.
+    - apply FunctionOn.Restrict with a; assumption.
     -
 Admitted.

@@ -32,7 +32,7 @@ Proof.
   - apply Less.ToClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
-Proposition IfElemThenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition ElemIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b -> a :<=: b.
 Proof.
   intros a b H1 H2 H3. apply LessIsElem in H3;
@@ -97,7 +97,7 @@ Proof.
   destruct H3 as [H3|[H3|H3]].
   - subst. right. apply Incl.Refl.
   - left. assumption.
-  - right. apply IfElemThenIncl; assumption.
+  - right. apply ElemIsIncl; assumption.
 Qed.
 
 Proposition InclElemTran : forall (a b c:U),
@@ -135,7 +135,7 @@ Proposition ElemElemTran : forall (a b c:U),
   a :< c.
 Proof.
   intros a b c H1 H2 H3 H4 H5. apply InclElemTran with b; try assumption.
-  apply IfElemThenIncl; assumption.
+  apply ElemIsIncl; assumption.
 Qed.
 
 (* 0 is an ordinal.                                                             *)

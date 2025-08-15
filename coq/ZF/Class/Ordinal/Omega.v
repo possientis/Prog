@@ -152,7 +152,7 @@ Proof.
   assert (Ordinal a) as H5. { apply Core.IsOrdinal with b; assumption. }
   assert (toClass (succ a) :<=: NonLimit) as H6. {
     intros x H7. apply Union2.Charac in H7. destruct H7 as [H7|H7].
-    - apply H4, Succ.IsIncl. apply (IfElemThenIncl a b); assumption.
+    - apply H4, Succ.IsIncl. apply (Core.ElemIsIncl a b); assumption.
     - apply Single.Charac in H7. subst. apply H4, Succ.IsIncl. assumption. }
   split; assumption.
 Qed.
