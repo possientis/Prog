@@ -72,5 +72,4 @@ Proof.
   assert ((f:|:b) :|: c = f:|:c) as H7. {
     apply FunctionOn.RestrictEqual with b a. 2: assumption.
     - apply FunctionOn.Restrict with a; assumption.
-    -
 Admitted.

@@ -220,8 +220,7 @@ Proof.
     assert (g = f:|:a) as H22. { apply H13. assumption. }
     assert (g:|:b = f:|:b) as H23. {
       rewrite H22. apply Restrict.TowerProperty.
-      apply SOC.ElemIsIncl; try assumption.
-      apply SOC.IsOrdinal with a; assumption. }
+      apply SOC.ElemIsIncl; assumption. }
     rewrite H21, <- H23. apply H19. assumption. }
   remember (f :\/: :{ :(c,F!f): }:) as g eqn:H15.
   assert (SRR.Relation g) as H16. {
@@ -280,8 +279,7 @@ Proof.
         destruct H18 as [[_ H18] _]. assumption. }
       assert (g:|:b = f:|:b) as H22. {
         rewrite <- H19. symmetry. apply Restrict.TowerProperty.
-        apply SOC.ElemIsIncl; try assumption.
-        apply SOC.IsOrdinal with c; assumption. }
+        apply SOC.ElemIsIncl; assumption. }
       rewrite H21, H22. apply H14. assumption.
     - apply Single.Charac in H20.
       assert (g!b = F!f) as H21. {

@@ -32,11 +32,12 @@ Proof.
   - apply Less.ToClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
-Proposition ElemIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition ElemIsIncl : forall (a b:U), Ordinal b ->
   a :< b -> a :<=: b.
 Proof.
-  intros a b H1 H2 H3. apply LessIsElem in H3;
-  try assumption. apply H3.
+  intros a b H1 H2. apply LessIsElem in H2. 3: assumption.
+  - apply H2.
+  - apply IsOrdinal with b; assumption.
 Qed.
 
 (* An ordinal is a strict subclass of the class of ordinals.                    *)
