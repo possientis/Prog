@@ -316,10 +316,10 @@ Proof.
   - apply DomainIsOn.
 Qed.
 
-Lemma RestrictIsFunctionOn : forall (F:Class) (f a:U),
-  K F f a -> SFO.FunctionOn ((Recursion F) :|: a) a.
+Lemma RestrictIsFunctionOn : forall (F:Class) (a:U), On a ->
+  SFO.FunctionOn ((Recursion F) :|: a) a.
 Proof.
-  intros F f a H1. split.
+  intros F a H1. split.
   - apply RestrictOfClass.IsFunction, IsFunction.
   - apply DoubleInclusion. split; intros x H2.
     + apply RestrictOfClass.DomainOf in H2. 2: apply IsFunction.
@@ -328,12 +328,12 @@ Proof.
       apply DomainIsOn. apply SOC.IsOrdinal with a. 2: assumption. apply H1.
 Qed.
 
-Lemma Restrict : forall (F:Class) (f a:U),
+Lemma K_Restrict : forall (F:Class) (f a:U),
   K F f a -> f = (Recursion F) :|: a.
 Proof.
   intros F f a H1. assert (H2 := H1). destruct H2 as [H2 [H3 H4]].
   apply SFO.EqualCharac with a a. 1: assumption.
-  - apply RestrictIsFunctionOn with f. assumption.
+  - apply RestrictIsFunctionOn. assumption.
   - reflexivity.
   - intros x H5.
     assert (((Recursion F) :|: a)!x = (Recursion F)!x) as H6. {
@@ -359,7 +359,7 @@ Proof.
     exists (Recursion F)!b. assumption. }
   assert ((Recursion F)!b = f!b) as H8. {
     symmetry. apply (SFO.EvalCharac f a); assumption. }
-  assert (f = (Recursion F) :|: a) as H9. { apply Restrict. assumption. }
+  assert (f = (Recursion F) :|: a) as H9. { apply K_Restrict. assumption. }
   assert (f:|:b = (Recursion F) :|: b) as H10. {
     rewrite H9. apply RestrictOfClass.TowerProperty.
     - apply IsFunction.
