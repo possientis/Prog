@@ -1,18 +1,18 @@
-Declare Scope ZF_Class_InterGen_scope.
-Open    Scope ZF_Class_InterGen_scope.
-
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Inter.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 
+Require Import ZF.Notation.InterGen.
+Export ZF.Notation.InterGen.
+
 (* Defining the generalized intersection /\_{x in P} Q(x).                      *)
 Definition interGen (P Q:Class) : Class
   := :I( fun y => exists x, P x /\ y = Q!x ).
 
-Notation ":/\:_{ P } Q" := (interGen P Q)
-  (at level 1, no associativity) : ZF_Class_InterGen_scope.
+(* Notation ":/\:_{ P } Q" := (interGen P Q)                                    *)
+Global Instance ClassInterGen : InterGen Class Class := {interGen := interGen }.
 
 Proposition Charac : forall (P Q:Class) (y:U), P :<>: :0: ->
   :/\:_{P} Q y <-> forall x, P x -> y :< Q!x.
