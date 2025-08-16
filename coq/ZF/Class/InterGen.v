@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Inter.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 
@@ -24,4 +25,10 @@ Proof.
     + intros z [x [H3 H4]]. subst. apply H2. assumption.
     + destruct H1 as [x H1]. exists Q!x. exists x.
       split. 1: assumption. reflexivity.
+Qed.
+
+Proposition IsSmall : forall (P Q:Class),
+  Small :/\:_{P} Q.
+Proof.
+  intros P Q. apply Inter.IsSmall.
 Qed.
