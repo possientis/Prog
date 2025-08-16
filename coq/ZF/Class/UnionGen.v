@@ -1,3 +1,6 @@
+Declare Scope ZF_Class_UnionGen_scope.
+Open    Scope ZF_Class_UnionGen_scope.
+
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
@@ -7,8 +10,11 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Definition unionGen (P Q:Class) : Class
   := :U( fun y => exists x, P x /\ y = Q!x ).
 
-Proposition UnionGenCharac : forall (P Q:Class) (y:U),
-  unionGen P Q y <-> exists x, P x /\ y :< Q!x.
+Notation ":\/:_{ P } Q" := (unionGen P Q)
+  (at level 1, no associativity) : ZF_Class_UnionGen_scope.
+
+Proposition Charac : forall (P Q:Class) (y:U),
+  :\/:_{P} Q y <-> exists x, P x /\ y :< Q!x.
 Proof.
   intros P Q y. split; intros H1.
   - destruct H1 as [q [H1 H2]]. destruct H2 as [x [H2 H3]].
