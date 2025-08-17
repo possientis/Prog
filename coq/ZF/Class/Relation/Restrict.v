@@ -218,3 +218,10 @@ Proof.
   - assumption.
 Qed.
 
+Proposition WhenEmpty : forall (F:Class),
+  F :|: :0: :~: :0:.
+Proof.
+  intros F x. split; intros H1.
+  - destruct H1 as [y [z [H1 [H2 _]]]]. contradiction.
+  - contradiction.
+Qed.

@@ -15,6 +15,12 @@ Require Import ZF.Set.Union.
 (* The class of limit ordinals.                                                 *)
 Definition Limit : Class := Ordinal :\: NonLimit.
 
+Proposition NotBoth : forall (a:U),
+  Limit a -> NonLimit a -> False.
+Proof.
+  intros a [H1 H2] H3. apply H2. assumption.
+Qed.
+
 (* Limit is a class of ordinals.                                                *)
 Proposition HasOrdinalElem : Limit :<=: Ordinal.
 Proof.
@@ -62,3 +68,4 @@ Proof.
   - apply Succ.IsIn.
   - apply HasSucc; assumption.
 Qed.
+

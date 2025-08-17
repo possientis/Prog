@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
@@ -34,3 +35,10 @@ Proof.
   apply Charac. exists y. apply H1. assumption.
 Qed.
 
+Proposition WhenEmpty : domain :0: = :0:.
+Proof.
+  apply DoubleInclusion. split; intros x H1.
+  - apply Charac in H1. destruct H1 as [y H1].
+    apply Empty.Charac in H1. contradiction.
+  - apply Empty.Charac in H1. contradiction.
+Qed.

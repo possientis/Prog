@@ -1,3 +1,4 @@
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Fst.
 Require Import ZF.Class.Relation.Image.
@@ -62,4 +63,11 @@ Proof.
   - apply Fst.IsFunctional.
 
   - apply H1.
+Qed.
+
+Proposition WhenEmpty : domain :0: :~: :0:.
+Proof.
+  intros x. split; intros H1.
+  - destruct H1 as [y H1]. contradiction.
+  - contradiction.
 Qed.
