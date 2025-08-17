@@ -14,7 +14,7 @@ Export ZF.Notation.UnionGen.
 Definition unionGen (A B:Class) : Class
   := :U( fun y => exists x, A x /\ y = B!x ).
 
-(* Notation ":\/:_{ P } Q" := (unionGen P Q)                                    *)
+(* Notation ":\/:_{ A } B" := (unionGen A B)                                    *)
 Global Instance ClassUnionGen : UnionGen Class Class := {unionGen := unionGen }.
 
 Proposition Charac : forall (A B:Class) (y:U),
@@ -28,6 +28,7 @@ Proof.
     + exists x. split. { assumption. } { reflexivity. }
 Qed.
 
+(* The generalized union over a small class is a small class.                   *)
 Proposition IsSmall : forall (A B:Class),
   Small A -> Small :\/:_{A} B.
 Proof.
