@@ -65,9 +65,10 @@ Proof.
   - apply H1.
 Qed.
 
-Proposition WhenEmpty : domain :0: :~: :0:.
+Proposition WhenEmpty : forall (F:Class),
+  F :~: :0: ->  domain F :~: :0:.
 Proof.
-  intros x. split; intros H1.
-  - destruct H1 as [y H1]. contradiction.
+  intros F H1 x. split; intros H2.
+  - destruct H2 as [y H2]. apply H1 in H2. contradiction.
   - contradiction.
 Qed.

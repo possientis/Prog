@@ -35,10 +35,11 @@ Proof.
   apply Charac. exists y. apply H1. assumption.
 Qed.
 
-Proposition WhenEmpty : domain :0: = :0:.
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> domain f = :0:.
 Proof.
-  apply DoubleInclusion. split; intros x H1.
-  - apply Charac in H1. destruct H1 as [y H1].
-    apply Empty.Charac in H1. contradiction.
-  - apply Empty.Charac in H1. contradiction.
+  intros F H1. apply DoubleInclusion. split; intros x H2.
+  - apply Charac in H2. destruct H2 as [y H2]. rewrite H1 in H2.
+    apply Empty.Charac in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
 Qed.

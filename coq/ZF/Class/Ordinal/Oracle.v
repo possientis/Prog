@@ -1,4 +1,5 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -15,9 +16,13 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGen.
 
+Module CRD := ZF.Class.Relation.Domain.
 Module CFL := ZF.Class.Relation.Functional.
+
+Module SRD := ZF.Set.Relation.Domain.
 Module SFL := ZF.Set.Relation.Functional.
 
 Definition Oracle (F:Class) (a:U) : Class := fun x => exists f y, x = :(f,y): /\
@@ -56,36 +61,37 @@ Proof.
   - destruct H3 as [_ H3]. destruct H4 as [_ H4]. subst. reflexivity.
 Qed.
 
-Lemma L1 : forall (F:Class) (a f:U), (Oracle F a)!(f :|: :0:) = a.
+Lemma L1 : forall (F G:Class) (a:U), (Oracle F a)!(G :|: :0:) = a.
 Proof.
-  intros F a f. apply EvalOfClass.Charac.
+  intros F G a. rewrite RestrictOfClass.WhenEmpty. 2: reflexivity.
+  assert (Oracle F a :(:0:,a):) as H1. { apply Charac2. left. split; reflexivity. }
+  apply EvalOfClass.Charac. 3: assumption.
   - apply IsFunctional.
-  - rewrite Restrict.WhenEmpty. exists a. apply Charac2. left. split; reflexivity.
-  - rewrite Restrict.WhenEmpty. apply Charac2. left. split; reflexivity.
+  - exists a. assumption.
 Qed.
 
-Lemma L2 : forall (F:Class) (a b f:U),
+Lemma L2 : forall (F G:Class) (a b:U),
   Ordinal b                               ->
-  SFL.Functional f                        ->
-  succ b :<=: domain f                    ->
-  (Oracle F a)!(f:|:(succ b)) = F!(f!b).
+  CFL.Functional G                        ->
+  toClass (succ b) :<=: CRD.domain G      ->
+  (Oracle F a)!(G:|:(succ b)) = F!(G!b).
 Proof.
-  intros F a b f H1 H2 H3.
-  remember (f:|:(succ b)) as g eqn:H4.
+  intros F G a b H1 H2 H3.
+  remember (G:|:(succ b)) as g eqn:H4.
   assert (domain g = succ b) as H5. {
-    rewrite H4, Restrict.DomainOf. apply Inter2.WhenInclL. assumption. }
+    rewrite H4. apply RestrictOfClass.DomainWhenIncl; assumption. }
   assert (NonLimit (succ b)) as H6. { apply NonLimit.HasSucc. assumption. }
   assert (succ b <> :0:) as H7. { apply Succ.IsNotEmpty. }
   assert (sup (succ b) = b) as H8. { apply Sup.WhenSucc. assumption. }
   assert (g <> :0:) as H9. {
-    intros H9. apply H7. rewrite <- H5, H9. apply Domain.WhenEmpty. }
-  assert (g!b = f!b) as H10. {
-    rewrite H4. apply Restrict.Eval. 1: assumption. apply Succ.IsIn. }
-  assert (Oracle F a :(g,F!(f!b)):) as H11. {
+    intros H9. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
+  assert (g!b = G!b) as H10. {
+    rewrite H4. apply RestrictOfClass.Eval. 1: assumption. apply Succ.IsIn. }
+  assert (Oracle F a :(g,F!(G!b)):) as H11. {
     apply Charac2. right. left. split. 1: assumption. split.
     - rewrite H5. assumption.
     - rewrite H5, H8, H10. reflexivity. }
   apply EvalOfClass.Charac. 3: assumption.
   - apply IsFunctional.
-  - exists F!(f!b). assumption.
+  - exists F!(G!b). assumption.
 Qed.

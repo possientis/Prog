@@ -313,11 +313,11 @@ Lemma RestrictIsFunctionOn : forall (F:Class) (a:U), On a ->
 Proof.
   intros F a H1. split.
   - apply RestrictOfClass.IsFunction, IsFunction.
-  - apply DoubleInclusion. split; intros x H2.
-    + apply RestrictOfClass.DomainOf in H2. 2: apply IsFunction.
-      destruct H2 as [H2 _]. assumption.
-    + apply RestrictOfClass.DomainOf. 1: apply IsFunction. split. 1: assumption.
-      apply DomainIsOn. apply SOC.IsOrdinal with a. 2: assumption. apply H1.
+  - rewrite RestrictOfClass.DomainWhenIncl. 1: reflexivity.
+    + apply IsFunction.
+    + apply Incl.EquivCompatR with On.
+      * apply Equiv.Sym, DomainIsOn.
+      * intros x H2. apply SOC.IsOrdinal with a; assumption.
 Qed.
 
 Lemma K_Restrict : forall (F:Class) (f a:U),

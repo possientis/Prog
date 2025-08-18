@@ -158,10 +158,11 @@ Proof.
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
 
-Proposition WhenEmpty : forall (f:U), f :|: :0: = :0:.
+Proposition WhenEmpty : forall (f a:U),
+  a = :0: -> f :|: a = :0:.
 Proof.
-  intros f. apply DoubleInclusion. split; intros x H1.
-  - apply Charac in H1. destruct H1 as [y [z [H1 [H2 _]]]].
-    apply Empty.Charac in H2. contradiction.
-  - apply Empty.Charac in H1. contradiction.
+  intros f a H1. apply DoubleInclusion. split; intros x H2.
+  - apply Charac in H2. destruct H2 as [y [z [_ [H2 _]]]].
+    rewrite H1 in H2. apply Empty.Charac in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
 Qed.

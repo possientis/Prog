@@ -18,6 +18,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Truncate.
 
 Export ZF.Notation.Pipe.
@@ -109,23 +110,24 @@ Proof.
 Qed.
 
 (* The domain of the restriction F|a is the intersection of a and domain F.     *)
-Proposition DomainOf : forall (F:Class) (a x:U), CFL.Functional F ->
-  x :< SRD.domain (F:|:a) <-> x :< a /\ CRD.domain F x.
+Proposition DomainOf : forall (F:Class) (a:U), CFL.Functional F ->
+  SRD.domain (F:|:a) = :{ a | CRD.domain F }:.
 Proof.
-  intros F a x H1. split; intros H2.
-  - apply SRD.Charac in H2. destruct H2 as [y H2].
-    apply Charac2 in H2. 2: assumption. destruct H2 as [H2 H3].
+  intros F a H1. apply DoubleInclusion. split; intros x H2.
+  - apply SRD.Charac in H2. destruct H2 as [y H2]. apply Charac2 in H2.
+    2: assumption. destruct H2 as [H2 H3]. apply Specify.Charac.
     split. 1: assumption. exists y. assumption.
-  - destruct H2 as [H2 [y H3]]. apply SRD.Charac. exists y.
-    apply Charac2Rev; assumption.
+  - apply Specify.Charac in H2. destruct H2 as [H2 [y H3]].
+    apply SRD.Charac. exists y. apply Charac2Rev; assumption.
 Qed.
 
 Proposition DomainWhenIncl : forall (F:Class) (a:U), CFL.Functional F ->
   toClass a :<=: CRD.domain F -> SRD.domain (F:|:a) = a.
 Proof.
-  intros F a H1 H2. apply DoubleInclusion. split; intros x H3.
-  - apply DomainOf in H3. 2: assumption. apply H3.
-  - apply DomainOf. 1: assumption. split. 1: assumption. apply H2. assumption.
+  intros F a H1 H2. rewrite DomainOf. 2: assumption.
+  apply DoubleInclusion. split; intros x H3.
+  - apply Specify.Charac in H3. apply H3.
+  - apply Specify.Charac. split. 1: assumption. apply H2. assumption.
 Qed.
 
 (* The range of the restriction f|a is the direct image by f of a.              *)
@@ -178,7 +180,7 @@ Proof.
   assert (CRD.domain F x \/ ~ CRD.domain F x) as H4. { apply LawExcludedMiddle. }
   remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
   - assert (x :< SRD.domain (F:|:a)) as H5. {
-      apply DomainOf. 1: assumption. split; assumption. }
+      rewrite DomainOf. 2: assumption. apply Specify.Charac. split; assumption. }
     apply Eval.Charac; try assumption. apply Charac2Rev; try assumption.
     rewrite E. apply EvalOfClass.Satisfies; assumption.
   - assert (~ x :< SRD.domain (F:|:a)) as H5. {
@@ -188,5 +190,14 @@ Proof.
     assert (y = :0:) as H6. {
       rewrite E. apply EvalOfClass.WhenNotInDomain. assumption. }
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
+Qed.
+
+Proposition WhenEmpty : forall (F:Class) (a:U),
+  a = :0: -> F :|: a = :0:.
+Proof.
+  intros F a H1. apply Truncate.WhenEmpty. intros x. split; intros H2.
+  - destruct H2 as [y [z [_ [H2 _]]]]. rewrite H1 in H2.
+    apply Empty.Charac in H2. contradiction.
+  - contradiction.
 Qed.
 

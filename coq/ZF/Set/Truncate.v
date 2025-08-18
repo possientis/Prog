@@ -4,6 +4,7 @@ Require Import ZF.Class.Truncate.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Incl.
 
 Definition truncate (A:Class) : U :=
   fromClass (Class.Truncate.truncate A) (Class.Truncate.IsSmall A).
@@ -42,3 +43,9 @@ Proof.
     + apply Equiv.Sym, Empty.ToClass.
 Qed.
 
+Proposition WhenEmpty : forall (A:Class), A :~: :0: -> truncate A = :0:.
+Proof.
+  intros A H1. apply DoubleInclusion. split; intros x H2.
+  - apply Charac in H2. destruct H2 as [_ H2]. apply H1 in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
+Qed.
