@@ -63,6 +63,12 @@ Proof.
   apply Class.Ordinal.Core.Succ.
 Qed.
 
+Proposition IsOrdinalRev : forall (a:U),
+  Ordinal (succ a) -> Ordinal a.
+Proof.
+  intros a H1. apply Core.IsOrdinal with (succ a). 1: assumption. apply IsIn.
+Qed.
+
 (* The successor operation is compatible with set inclusion for ordinals.       *)
 Proposition InclCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> succ a :<=: succ b.
@@ -161,3 +167,4 @@ Proof.
   rewrite <- H4 in H5. assert (a = b) as H6. { rewrite <- H5. assumption. }
   rewrite <- H6 in H4. symmetry. assumption.
 Qed.
+

@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
@@ -67,5 +68,17 @@ Proof.
   intros a b H1 H2. exists (succ b). split.
   - apply Succ.IsIn.
   - apply HasSucc; assumption.
+Qed.
+
+Proposition ThreeWay : forall (a:U), Ordinal a ->
+  a = :0: \/ a = succ :U(a) \/ Limit a.
+Proof.
+  intros a H1.
+  assert (NonLimit a \/ ~NonLimit a) as H2. { apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - apply NonLimit.Charac in H2. 2: assumption. destruct H2 as [H2|H2].
+    + left. assumption.
+    + right. left. assumption.
+  - right. right. split; assumption.
 Qed.
 

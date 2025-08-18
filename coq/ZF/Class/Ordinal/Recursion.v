@@ -37,7 +37,8 @@ Module SRF := ZF.Set.Relation.Function.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRR := ZF.Set.Relation.Relation.
 
-(* Transfinite recursion class associated with a class F.                       *)
+(* Transfinite recursion class associated with a class F. In other words, the   *)
+(* unique function class G defined on On by the recursion G(b) = F(G|b).        *)
 Definition Recursion (F:Class) : Class := fun x => exists f, exists a,
   x :< f                                  /\
   On a                                    /\
