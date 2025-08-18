@@ -367,7 +367,7 @@ Proposition IsUnique : forall (F G:Class),
   G :~: Recursion F.
 Proof.
   intros F G H1 H2.
-  apply (CFO.EqualCharac G (Recursion F) On On). 1: assumption.
+  apply (CFO.EqualCharac _ _ On On). 1: assumption.
   - apply IsFunctionOn.
   - split. 1: apply Equiv.Refl. apply Induction'.
     intros a H3 H4.

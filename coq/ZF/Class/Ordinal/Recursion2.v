@@ -1,19 +1,23 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Oracle.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module COR := ZF.Class.Ordinal.Recursion.
+Module CFO := ZF.Class.Relation.FunctionOn.
 
 (* Transfinite recursion class associated with F and a. In other words, the     *)
 (* unique function class G defined on On by the equations:                      *)
@@ -65,11 +69,34 @@ Proof.
     + intros x H2. apply Core.IsOrdinal with b. 2: assumption. apply H1.
 Qed.
 
+(* The transfinite recursion class is the unique function class defined on On   *)
+(* which satisfies the three equation (i), (ii) and (iii).                      *)
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                               ->
-  G!:0: = a                                     ->
-  (forall b, Ordinal b -> G!(succ b) = F!(G!b)) ->
-  (forall b, Limit b   -> G!b = :\/:_{b} G)     ->
+  G!:0: = a                                     ->  (* (i)   *)
+  (forall b, Ordinal b -> G!(succ b) = F!(G!b)) ->  (* (ii)  *)
+  (forall b, Limit b   -> G!b = :\/:_{b} G)     ->  (* (iii) *)
   G :~: Recursion F a.
 Proof.
-Admitted.
+  intros F G a H1 H2 H3 H4.
+  apply (CFO.EqualCharac _ _ On On). 1: assumption.
+  - apply COR.IsFunctionOn.
+  - split. 1: apply Equiv.Refl. apply Induction'.
+    intros b H5 H6.
+    assert (b = :0: \/ b = succ :U(b) \/ Limit b) as H7.
+      { apply Limit.ThreeWay. assumption. }
+    destruct H7 as [H7|[H7|H7]].
+    + rewrite H7, H2, WhenZero. reflexivity.
+    + assert (Ordinal :U(b)) as H8. {
+        apply Succ.IsOrdinalRev. rewrite <- H7. assumption. }
+      rewrite H7, H3, WhenSucc, H6; try assumption. 1: reflexivity.
+      remember (:U(b)) as c eqn:H9. rewrite H7. apply Succ.IsIn.
+    + assert (:\/:_{b} G = :\/:_{b} (Recursion F a)) as H8. {
+        apply DoubleInclusion. split; intros y H8;
+        apply UnionGenOfClass.Charac in H8; destruct H8 as [x [H8 H9]].
+          rewrite H6 in H9. 2: assumption. apply UnionGenOfClass.Charac.
+          exists x. split; assumption.
+        * rewrite <- H6 in H9. 2: assumption. apply UnionGenOfClass.Charac.
+          exists x. split; assumption. }
+      rewrite H4, WhenLimit; assumption.
+Qed.
