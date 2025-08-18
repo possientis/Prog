@@ -61,7 +61,7 @@ Proof.
   - destruct H3 as [_ H3]. destruct H4 as [_ H4]. subst. reflexivity.
 Qed.
 
-Lemma L1 : forall (F G:Class) (a:U), (Oracle F a)!(G :|: :0:) = a.
+Lemma WhenZero : forall (F G:Class) (a:U), (Oracle F a)!(G :|: :0:) = a.
 Proof.
   intros F G a. rewrite RestrictOfClass.WhenEmpty. 2: reflexivity.
   assert (Oracle F a :(:0:,a):) as H1. { apply Charac2. left. split; reflexivity. }
@@ -70,7 +70,7 @@ Proof.
   - exists a. assumption.
 Qed.
 
-Lemma L2 : forall (F G:Class) (a b:U),
+Lemma WhenSucc : forall (F G:Class) (a b:U),
   Ordinal b                               ->
   CFL.Functional G                        ->
   toClass (succ b) :<=: CRD.domain G      ->
@@ -94,4 +94,33 @@ Proof.
   apply EvalOfClass.Charac. 3: assumption.
   - apply IsFunctional.
   - exists F!(G!b). assumption.
+Qed.
+
+Lemma WhenLimit : forall (F G:Class) (a b:U),
+  Limit b                           ->
+  CFL.Functional G                  ->
+  toClass b :<=: CRD.domain G       ->
+  (Oracle F a)!(G:|:b) = :\/:_{b} G.
+Proof.
+  intros F G a b H1 H2 H3.
+  remember (G:|:b) as g eqn:H4.
+  assert (domain g = b) as H5. {
+    rewrite H4. apply RestrictOfClass.DomainWhenIncl; assumption. }
+  assert (b <> :0:) as H7. { apply Limit.Charac. 2: assumption. apply H1. }
+  assert (g <> :0:) as H8. {
+    intros H8. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
+  assert (:\/:_{b} g = :\/:_{b} G)as H9. {
+    apply DoubleInclusion. split; intros y H9.
+    - apply UnionGen.Charac in H9. destruct H9 as [x [H9 H10]].
+      rewrite H4 in H10. rewrite RestrictOfClass.Eval in H10; try assumption.
+      apply UnionGenOfClass.Charac. exists x. split; assumption.
+    - apply UnionGenOfClass.Charac in H9. destruct H9 as [x [H9 H10]].
+      apply UnionGen.Charac. exists x. split. 1: assumption.
+      rewrite H4. rewrite RestrictOfClass.Eval; assumption. }
+  assert (Oracle F a :(g,:\/:_{b} G):) as H10. {
+    apply Charac2. right. right. split. 1: assumption. split; rewrite H5. 1: assumption.
+    symmetry. assumption. }
+  apply EvalOfClass.Charac. 3: assumption.
+  - apply IsFunctional.
+  - exists :\/:_{b} G. assumption.
 Qed.
