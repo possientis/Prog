@@ -18,6 +18,7 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Module COR := ZF.Class.Ordinal.Recursion.
 Module CFO := ZF.Class.Relation.FunctionOn.
+Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* Transfinite recursion class associated with F and a. In other words, the     *)
 (* unique function class G defined on On by the equations:                      *)
@@ -83,8 +84,8 @@ Proof.
   - apply COR.IsFunctionOn.
   - split. 1: apply Equiv.Refl. apply Induction'.
     intros b H5 H6.
-    assert (b = :0: \/ b = succ :U(b) \/ Limit b) as H7.
-      { apply Limit.ThreeWay. assumption. }
+    assert (b = :0: \/ b = succ :U(b) \/ Limit b) as H7. {
+      apply Limit.ThreeWay. assumption. }
     destruct H7 as [H7|[H7|H7]].
     + rewrite H7, H2, WhenZero. reflexivity.
     + assert (Ordinal :U(b)) as H8. {
@@ -99,4 +100,10 @@ Proof.
         * rewrite <- H6 in H9. 2: assumption. apply UnionGenOfClass.Charac.
           exists x. split; assumption. }
       rewrite H4, WhenLimit; assumption.
+Qed.
+
+Proposition RestrictIsFunctionOn : forall (F:Class) (a b:U), On b ->
+  SFO.FunctionOn (Recursion F a :|: b) b.
+Proof.
+  intros F a b. apply COR.RestrictIsFunctionOn.
 Qed.

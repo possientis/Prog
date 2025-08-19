@@ -28,6 +28,16 @@ Proof.
     + exists x. split. { assumption. } { reflexivity. }
 Qed.
 
+Proposition EqualCharac : forall (A B C:Class),
+  (forall x, A x -> B!x = C!x)  -> :\/:_{A} B :~: :\/:_{A} C.
+Proof.
+  intros A B C H1 y. split; intros H2;
+  apply Charac in H2; destruct H2 as [x [H2 H3]];
+  apply Charac; exists x; split; try assumption.
+  - rewrite <- H1; assumption.
+  - rewrite H1; assumption.
+Qed.
+
 (* The generalized union over a small class is a small class.                   *)
 Proposition IsSmall : forall (A B:Class),
   Small A -> Small :\/:_{A} B.

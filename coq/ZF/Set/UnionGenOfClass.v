@@ -3,6 +3,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.Eval.
 
 Require Import ZF.Notation.UnionGen.
@@ -21,4 +22,14 @@ Proof.
   intros A a y. split; intros H1.
   - apply FromClass.Charac in H1. apply UnionGen.Charac in H1. assumption.
   - apply FromClass.Charac, UnionGen.Charac. assumption.
+Qed.
+
+Proposition EqualCharac : forall (a:U) (A B:Class),
+  (forall x, x :< a -> A!x = B!x) -> :\/:_{a} A = :\/:_{a} B.
+Proof.
+  intros a A B H1. apply DoubleInclusion. split; intros y H2;
+  apply Charac in H2; destruct H2 as [x [H2 H3]]; apply Charac;
+  exists x; split; try assumption.
+  - rewrite <- H1; assumption.
+  - rewrite H1; assumption.
 Qed.

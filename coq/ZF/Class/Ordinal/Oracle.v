@@ -110,13 +110,8 @@ Proof.
   assert (g <> :0:) as H8. {
     intros H8. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
   assert (:\/:_{b} g = :\/:_{b} G)as H9. {
-    apply DoubleInclusion. split; intros y H9.
-    - apply UnionGen.Charac in H9. destruct H9 as [x [H9 H10]].
-      rewrite H4 in H10. rewrite RestrictOfClass.Eval in H10; try assumption.
-      apply UnionGenOfClass.Charac. exists x. split; assumption.
-    - apply UnionGenOfClass.Charac in H9. destruct H9 as [x [H9 H10]].
-      apply UnionGen.Charac. exists x. split. 1: assumption.
-      rewrite H4. rewrite RestrictOfClass.Eval; assumption. }
+    apply UnionGenOfClass.EqualCharac. intros x H9.
+    rewrite H4. apply RestrictOfClass.Eval; assumption. }
   assert (Oracle F a :(g,:\/:_{b} G):) as H10. {
     apply Charac2. right. right. split. 1: assumption. split; rewrite H5. 1: assumption.
     symmetry. assumption. }
@@ -124,3 +119,4 @@ Proof.
   - apply IsFunctional.
   - exists :\/:_{b} G. assumption.
 Qed.
+
