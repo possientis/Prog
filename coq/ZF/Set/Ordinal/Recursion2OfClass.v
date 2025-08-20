@@ -41,7 +41,7 @@ Proof.
   - apply Core.HasZero; assumption.
 Qed.
 
-(* The recursion set satisfies the equation G(succ c) = F(G(c)).                *)
+(* The recursion set satisfies the equation f(succ c) = F(f(c)).                *)
 Proposition WhenSucc : forall (F:Class) (a b c:U),
   Ordinal b                                               ->
   succ c :< b                                             ->
@@ -59,7 +59,7 @@ Proof.
 Qed.
 
 (* The recursion set satisfies the equation:                                    *)
-(* G(c) = \/_{x :< c} G(x) when c is a limit ordinal.                           *)
+(* f(c) = \/_{x :< c} f(x) when c is a limit ordinal.                           *)
 Proposition WhenLimit : forall (F:Class) (a b c:U),
   Ordinal b ->
   Limit c   ->
@@ -109,5 +109,3 @@ Proof.
         rewrite H10. apply WhenLimit; assumption. }
     rewrite H6 in H7. assumption.
 Qed.
-
-
