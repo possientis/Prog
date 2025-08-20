@@ -71,7 +71,7 @@ Proof.
 Qed.
 
 (* The transfinite recursion class is the unique function class defined on On   *)
-(* which satisfies the three equation (i), (ii) and (iii).                      *)
+(* which satisfies the three equations (i), (ii) and (iii).                     *)
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                               ->
   G!:0: = a                                     ->  (* (i)   *)

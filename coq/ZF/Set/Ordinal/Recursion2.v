@@ -56,7 +56,7 @@ Proof.
 Qed.
 
 (* The recursion set of f a b is the unique function defined on b which         *)
-(* satisfies the three equation (i), (ii) and (iii).                            *)
+(* satisfies the three equations (i), (ii) and (iii).                           *)
 Proposition IsUnique : forall (f g a b:U),
   Ordinal b                                                       ->
   FunctionOn g b                                                  ->
