@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Induction.
+Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
