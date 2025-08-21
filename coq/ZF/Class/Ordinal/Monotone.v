@@ -5,6 +5,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.OrdFun.
+Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
@@ -14,6 +15,8 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 
 Module COC := ZF.Class.Ordinal.Core.
+Module CRF := ZF.Class.Relation.Function.
+
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* A strictly monotone ordinal function.                                        *)
@@ -26,7 +29,7 @@ Proof.
   intros F a [[H1 [H2 H3]] H4] H5.
   assert (On a) as H6. {
     apply COC.IsOrdinal with (domain F); assumption. }
-  assert (On (F!a)) as H7. { apply H3, Function.IsInRange; assumption. }
+  assert (On (F!a)) as H7. { apply H3, CRF.IsInRange; assumption. }
   remember (fun b => domain F b /\ F!b :< b) as A eqn:H8.
   assert (A :~: :0: \/ A :<>: :0:) as H9. { apply LawExcludedMiddle. }
   destruct H9 as [H9|H9].
@@ -49,3 +52,22 @@ Proof.
       split. 2: assumption. rewrite H8. split; assumption. }
     apply H12 in H16. contradiction.
 Qed.
+
+Proposition RecursionMonotone : forall (F:Class) (a:U),
+  On a                      ->
+  Monotone F                ->
+  domain F :~: On           ->
+  Monotone (Recursion F a).
+Proof.
+  intros F a H1 [[H2 [H3 H4]] H5] H6.
+  assert (domain (Recursion F a) :~: On) as H7. { apply Recursion2.IsFunctionOn. }
+  split.
+  - split.
+    + apply Recursion2.IsFunctionOn.
+    + split.
+      * apply COC.EquivCompat with On.
+          { apply Equiv.Sym. assumption. }
+          { apply COC.OnIsOrdinal. }
+      * admit.
+  - intros b c H8 H9 H10. admit.
+Admitted.

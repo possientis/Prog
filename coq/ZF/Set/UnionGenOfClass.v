@@ -4,7 +4,7 @@ Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
