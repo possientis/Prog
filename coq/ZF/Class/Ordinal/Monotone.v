@@ -96,22 +96,23 @@ Proof.
   rewrite H8 in H9. assumption.
 Qed.
 
-Proposition RecursionMonotone : forall (F:Class) (a:U),
+Proposition FromRecursion : forall (F:Class) (a:U),
   On a                      ->
+  a :< F!a                  ->
   Monotone F                ->
   domain F :~: On           ->
   Monotone (Recursion F a).
 Proof.
-  intros F a H1 [[H2 [H3 H4]] H5] H6.
-  assert (domain (Recursion F a) :~: On) as H7. { apply Recursion2.IsFunctionOn. }
-  split.
-  - split.
-    + apply Recursion2.IsFunctionOn.
-    + split.
-      * apply COC.EquivCompat with On.
-          { apply Equiv.Sym. assumption. }
-          { apply COC.OnIsOrdinal. }
-      * admit.
-  - intros b c H8 H9 H10. admit.
+  intros F a H1 H2 [H3 H4] H5. split.
+  - apply OrdFun.FromRecursion; assumption.
+  - assert (domain (Recursion F a) :~: On) as H6. {
+      apply Recursion2.IsFunctionOn. }
+    intros b c H7 H8. apply H6 in H7. apply H6 in H8. revert b H7.
+    remember (fun b => b :< c -> (Recursion F a)!b :< (Recursion F a)!c) as A eqn:H9.
+    assert (forall b, On b -> A b) as H10. {
+      apply Induction2; rewrite H9.
+      - intros H10. rewrite Recursion2.WhenZero. apply RecursionInitial; try assumption.
+        + split; assumption.
+        + apply HasElem. exists :0:. assumption.
+      - intros b H10 H11 H12. rewrite Recursion2.WhenSucc. 2: assumption.
 Admitted.
-
