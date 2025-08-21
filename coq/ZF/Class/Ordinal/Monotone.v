@@ -4,6 +4,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -12,6 +13,11 @@ Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.UnionGenOfClass.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
 Module COC := ZF.Class.Ordinal.Core.
@@ -53,6 +59,43 @@ Proof.
     apply H12 in H16. contradiction.
 Qed.
 
+Lemma RecursionInitial : forall (F:Class) (a:U),
+  On a                                                    ->
+  a :< F!a                                                ->
+  Monotone F                                              ->
+  domain F :~: On                                         ->
+  (forall b, On b -> b <> :0: -> a :< (Recursion F a)!b).
+Proof.
+  intros F a H1 H2 [H3 H4] H5.
+  assert (Ordinal F!a) as H6. {
+    apply H3. exists a. apply CRF.Satisfies. 1: apply H3.
+    apply H5. assumption. }
+  assert (range (Recursion F a) :<=: On) as H7. {
+    apply OrdFun.FromRecursion; assumption. }
+  remember (fun b => b <> :0: -> a :< (Recursion F a)!b) as A eqn:H8.
+  assert (forall b, On b -> A b) as H9. {
+    apply Induction2; rewrite H8.
+    - intros H9. contradiction.
+    - intros b H9 H10 _. rewrite Recursion2.WhenSucc. 2: assumption.
+      assert (b = :0: \/ b <> :0:) as H11. { apply LawExcludedMiddle. }
+      destruct H11 as [H11|H11].
+      + subst. rewrite Recursion2.WhenZero. assumption.
+      + apply SOC.ElemElemTran with F!a; try assumption.
+        * apply H3. exists (Recursion F a)!b. apply CRF.Satisfies. 1: apply H3.
+          apply H5, H7. exists b. apply CRF.Satisfies;
+          apply Recursion2.IsFunctionOn. assumption.
+        * apply H4.
+          { apply H5. assumption. }
+          { apply H5, H7. exists b. apply CRF.Satisfies;
+            apply Recursion2.IsFunctionOn. assumption. }
+          { apply H10. assumption. }
+    - intros b H9 H10 _. rewrite Recursion2.WhenLimit. 2: assumption.
+      apply Limit.HasOne in H9. apply UnionGenOfClass.Charac.
+      exists :1:. split. 1: assumption. apply H10. 1: assumption.
+      apply Empty.HasElem. exists :0:. apply Succ.IsIn. }
+  rewrite H8 in H9. assumption.
+Qed.
+
 Proposition RecursionMonotone : forall (F:Class) (a:U),
   On a                      ->
   Monotone F                ->
@@ -71,3 +114,4 @@ Proof.
       * admit.
   - intros b c H8 H9 H10. admit.
 Admitted.
+

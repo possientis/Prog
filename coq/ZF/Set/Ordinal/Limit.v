@@ -47,7 +47,7 @@ Qed.
 
 Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
-Proof.
+
   intros a b H1 H2. assert (Ordinal a) as H3. {
     apply HasOrdinalElem. assumption. }
     apply Charac in H1; try assumption.
@@ -82,3 +82,17 @@ Proof.
   - right. right. split; assumption.
 Qed.
 
+Proposition HasZero : forall (a:U),
+  Limit a -> :0: :< a.
+Proof.
+  intros a H1.
+  assert (Ordinal a) as H2. { apply H1. }
+  apply Charac in H1. 2: assumption.
+  apply Core.HasZero. 1: assumption. apply H1.
+Qed.
+
+Proposition HasOne : forall (a:U),
+  Limit a -> :1: :< a.
+Proof.
+  intros a H1. apply HasSucc. 1: assumption. apply HasZero. assumption.
+Qed.
