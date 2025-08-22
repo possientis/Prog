@@ -59,43 +59,7 @@ Proof.
     apply H12 in H16. contradiction.
 Qed.
 
-Lemma RecursionInitial : forall (F:Class) (a:U),
-  On a                                                    ->
-  a :< F!a                                                ->
-  Monotone F                                              ->
-  domain F :~: On                                         ->
-  (forall b, On b -> b <> :0: -> a :< (Recursion F a)!b).
-Proof.
-  intros F a H1 H2 [H3 H4] H5.
-  assert (Ordinal F!a) as H6. {
-    apply H3. exists a. apply CRF.Satisfies. 1: apply H3.
-    apply H5. assumption. }
-  assert (range (Recursion F a) :<=: On) as H7. {
-    apply OrdFun.FromRecursion; assumption. }
-  remember (fun b => b <> :0: -> a :< (Recursion F a)!b) as A eqn:H8.
-  assert (forall b, On b -> A b) as H9. {
-    apply Induction2; rewrite H8.
-    - intros H9. contradiction.
-    - intros b H9 H10 _. rewrite Recursion2.WhenSucc. 2: assumption.
-      assert (b = :0: \/ b <> :0:) as H11. { apply LawExcludedMiddle. }
-      destruct H11 as [H11|H11].
-      + subst. rewrite Recursion2.WhenZero. assumption.
-      + apply SOC.ElemElemTran with F!a; try assumption.
-        * apply H3. exists (Recursion F a)!b. apply CRF.Satisfies. 1: apply H3.
-          apply H5, H7. exists b. apply CRF.Satisfies;
-          apply Recursion2.IsFunctionOn. assumption.
-        * apply H4.
-          { apply H5. assumption. }
-          { apply H5, H7. exists b. apply CRF.Satisfies;
-            apply Recursion2.IsFunctionOn. assumption. }
-          { apply H10. assumption. }
-    - intros b H9 H10 _. rewrite Recursion2.WhenLimit. 2: assumption.
-      apply Limit.HasOne in H9. apply UnionGenOfClass.Charac.
-      exists :1:. split. 1: assumption. apply H10. 1: assumption.
-      apply Empty.HasElem. exists :0:. apply Succ.IsIn. }
-  rewrite H8 in H9. assumption.
-Qed.
-
+(* ERROR: See page 50, exercise (2). The assumption a :< F!a is necessary.      *)
 Proposition FromRecursion : forall (F:Class) (a:U),
   On a                      ->
   a :< F!a                  ->
@@ -107,12 +71,5 @@ Proof.
   - apply OrdFun.FromRecursion; assumption.
   - assert (domain (Recursion F a) :~: On) as H6. {
       apply Recursion2.IsFunctionOn. }
-    intros b c H7 H8. apply H6 in H7. apply H6 in H8. revert b H7.
-    remember (fun b => b :< c -> (Recursion F a)!b :< (Recursion F a)!c) as A eqn:H9.
-    assert (forall b, On b -> A b) as H10. {
-      apply Induction2; rewrite H9.
-      - intros H10. rewrite Recursion2.WhenZero. apply RecursionInitial; try assumption.
-        + split; assumption.
-        + apply HasElem. exists :0:. assumption.
-      - intros b H10 H11 H12. rewrite Recursion2.WhenSucc. 2: assumption.
+    intros b c H7 H8.
 Admitted.

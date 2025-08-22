@@ -24,7 +24,7 @@ Proof.
   - apply FromClass.Charac, UnionGen.Charac. assumption.
 Qed.
 
-Proposition EqualCharac : forall (a:U) (A B:Class),
+Proposition EqualCharac : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x = B!x) -> :\/:_{a} A = :\/:_{a} B.
 Proof.
   intros a A B H1. apply DoubleInclusion. split; intros y H2;
@@ -32,4 +32,10 @@ Proof.
   exists x; split; try assumption.
   - rewrite <- H1; assumption.
   - rewrite H1; assumption.
+Qed.
+
+Proposition IsIncl : forall (A:Class) (a x:U),
+  x :< a -> A!x :<=: :\/:_{a} A.
+Proof.
+  intros A a x H1 y H2. apply Charac. exists x. split; assumption.
 Qed.

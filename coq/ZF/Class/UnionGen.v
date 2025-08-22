@@ -1,3 +1,4 @@
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
@@ -38,6 +39,12 @@ Proof.
   - rewrite H1; assumption.
 Qed.
 
+Proposition IsIncl : forall (A B:Class) (x:U),
+  A x -> toClass B!x :<=: :\/:_{A} B.
+Proof.
+  intros A B x H1 y H2. apply Charac. exists x. split; assumption.
+Qed.
+
 (* The generalized union over a small class is a small class.                   *)
 Proposition IsSmall : forall (A B:Class),
   Small A -> Small :\/:_{A} B.
@@ -61,3 +68,4 @@ Proof.
     apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H8].
     subst. reflexivity.
 Qed.
+

@@ -28,3 +28,9 @@ Proof.
   - rewrite <- H1; assumption.
   - rewrite H1; assumption.
 Qed.
+
+Proposition IsIncl : forall (a b x:U),
+  x :< a -> b!x :<=: :\/:_{a} b.
+Proof.
+  intros a b. apply UnionGenOfClass.IsIncl.
+Qed.
