@@ -156,6 +156,23 @@ Proof.
   apply Incl.EquivCompatR with (toClass :N). 2: assumption. apply ToClass.
 Qed.
 
+Proposition FiniteInduction' : forall (A:Class),
+  A :0:                                     ->
+  (forall n, n :< :N -> A n -> A (succ n))  ->
+   forall n, n :< :N -> A n.
+Proof.
+  intros A H1 H2.
+  remember (fun n => n :< :N /\ A n) as B eqn:H3.
+  assert (B :~: toClass :N) as H4. {
+    apply FiniteInduction; rewrite H3.
+    - intros n H4. apply H4.
+    - split. 2: assumption. apply HasZero.
+    - intros n [H4 H5]. split.
+      + apply HasSucc. assumption.
+      + apply H2; assumption. }
+  intros n H5. apply H4 in H5. rewrite H3 in H5. apply H5.
+Qed.
+
 (* A non-empty subclass of N has a minimal element.                             *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: toClass :N   ->
@@ -180,3 +197,4 @@ Proof.
   intros a H1 H2. apply HasMinimal. 1: assumption.
   apply NotEmptyToClass. assumption.
 Qed.
+

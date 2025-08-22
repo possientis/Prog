@@ -19,6 +19,8 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
@@ -60,16 +62,50 @@ Proof.
 Qed.
 
 (* ERROR: See page 50, exercise (2). The assumption a :< F!a is necessary.      *)
+(* The condition b :< F!b for all b appears to be sufficient.                   *)
 Proposition FromRecursion : forall (F:Class) (a:U),
-  On a                      ->
-  a :< F!a                  ->
-  Monotone F                ->
-  domain F :~: On           ->
+  On a                            ->
+  (forall b, On b ->  b :< F!b)   ->
+  Monotone F                      ->
+  domain F :~: On                 ->
   Monotone (Recursion F a).
 Proof.
-  intros F a H1 H2 [H3 H4] H5. split.
-  - apply OrdFun.FromRecursion; assumption.
-  - assert (domain (Recursion F a) :~: On) as H6. {
-      apply Recursion2.IsFunctionOn. }
-    intros b c H7 H8.
-Admitted.
+  intros F a H1 H2 [H3 H4] H5.
+  assert (OrdFun (Recursion F a)) as H6. {
+    apply OrdFun.FromRecursion; assumption. }
+  split. 1: assumption.
+  assert (domain (Recursion F a) :~: On) as H7. { apply Recursion2.IsFunctionOn. }
+  intros b c H8 H9. apply H7 in H8. apply H7 in H9. revert c H9 b H8.
+  remember (fun c => forall b, On b ->
+    b :< c -> (Recursion F a)!b :< (Recursion F a)!c) as A eqn:H10.
+  assert (forall c, On c -> A c) as H11. {
+    apply Induction2; rewrite H10.
+    - intros b H11 H12. apply Empty.Charac in H12. contradiction.
+    - intros c H11 H12 b H13 H14. rewrite Recursion2.WhenSucc. 2: assumption.
+      assert (Ordinal (Recursion F a)!b) as H15. {
+        apply H6, CRF.IsInRange. 1: apply H6. apply H7. assumption. }
+      assert (Ordinal (Recursion F a)!c) as H16. {
+        apply H6, CRF.IsInRange. 1: apply H6. apply H7. assumption. }
+      apply Union2.Charac in H14. destruct H14 as [H14|H14].
+      + apply SOC.ElemInclTran with (Recursion F a)!c; try assumption.
+        * apply H3, CRF.IsInRange. 1: apply H3. apply H5. assumption.
+        * apply H12; assumption.
+        * apply IsIncl. { split; assumption. } { apply H5. assumption. }
+      + apply Single.Charac in H14. subst. apply H2. assumption.
+    - intros c H11 H12 b H13 H14. rewrite (Recursion2.WhenLimit F a c).
+      2: assumption.
+      assert (exists d, b :< d /\ d :< c) as H15. {
+        apply Limit.InBetween; assumption. }
+      destruct H15 as [d [H15 H16]].
+      apply SOC.ElemInclTran with (Recursion F a)!d.
+      + apply H6, CRF.IsInRange. 1: apply H6. apply H7. assumption.
+      + apply H6, CRF.IsInRange. 1: apply H6. apply H7.
+        apply SOC.IsOrdinal with c. 2: assumption. apply H11.
+      + apply UnionGenOfClass.IsOrdinal. intros x H17.
+        apply H6, CRF.IsInRange. 1: apply H6. apply H7.
+        apply SOC.IsOrdinal with c. 2: assumption. apply H11.
+      + apply H12; assumption.
+      + apply UnionGenOfClass.IsIncl. assumption. }
+  rewrite H10 in H11. assumption.
+Qed.
+
