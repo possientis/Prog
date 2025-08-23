@@ -17,6 +17,7 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Relation.
@@ -39,7 +40,7 @@ Module SRR := ZF.Set.Relation.Relation.
 
 (* Transfinite recursion class associated with a class F. In other words, the   *)
 (* unique function class G defined on On by the recursion G(b) = F(G|b).        *)
-Definition Recursion (F:Class) : Class := fun x => exists f, exists a,
+Definition Recursion (F:Class) : Class := fun x => exists f a,
   x :< f                                  /\
   On a                                    /\
   SFO.FunctionOn f a                      /\

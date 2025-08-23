@@ -34,7 +34,7 @@ Module SRR := ZF.Set.Relation.Range.
 Definition restrict (F:Class) (a:U) : U := truncate (F:|:toClass a).
 
 (* Notation "F :|: a" := (restrict F a)                                         *)
-Global Instance ClassPipe : Pipe Class U := { pipe := restrict }.
+Global Instance SetOfClassPipe : Pipe Class U U := { pipe := restrict }.
 
 Proposition ToClass : forall (F:Class) (a:U), CFL.Functional F ->
   toClass (F:|:a) :~: F:|:toClass a.
@@ -83,7 +83,7 @@ Proof.
   intros F a y z H1 H2 H3. apply CharacRev with y z; try assumption. reflexivity.
 Qed.
 
-(* The restriction of a set is always a relation.                               *)
+(* The restriction of a class by a set is always a relation.                    *)
 Proposition IsRelation : forall (F:Class) (a:U), CFL.Functional F ->
   Relation (F:|:a).
 Proof.
@@ -92,8 +92,8 @@ Proof.
 Qed.
 
 (* The restriction of a functional class is a functional set.                   *)
-Proposition IsFunctional : forall (F:Class) (a:U), CFL.Functional F ->
-  SFL.Functional (F:|:a).
+Proposition IsFunctional : forall (F:Class) (a:U), 
+  CFL.Functional F -> SFL.Functional (F:|:a).
 Proof.
   intros F a H1 x y z H2 H3.
   apply Charac2 in H2. 2: assumption. destruct H2 as [_ H2].

@@ -24,7 +24,7 @@ Definition restrict (F A:Class) : Class := fun x =>
   exists y z, x = :(y,z): /\ A y /\ F :(y,z):.
 
 (* Notation "F :|: A" := (restrict F A)                                         *)
-Global Instance ClassPipe : Pipe Class Class := { pipe := restrict }.
+Global Instance ClassPipe : Pipe Class Class Class := { pipe := restrict }.
 
 Proposition Charac2 : forall (F A:Class) (y z:U),
   (F:|:A) :(y,z): <-> A y /\ F :(y,z):.

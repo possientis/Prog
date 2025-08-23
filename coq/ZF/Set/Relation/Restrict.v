@@ -22,7 +22,7 @@ Definition restrict (f a:U) : U := fromClass (toClass f :|: toClass a)
   (Restrict.IsSmall' (toClass f) (toClass a) (SetIsSmall f)).
 
 (* Notation "f :|: a" := (restrict f a)                                         *)
-Global Instance SetPipe : Pipe U U := { pipe := restrict }.
+Global Instance SetPipe : Pipe U U U := { pipe := restrict }.
 
 Proposition ToClass : forall (f a:U),
   toClass (f:|:a) :~: toClass f :|: toClass a.
