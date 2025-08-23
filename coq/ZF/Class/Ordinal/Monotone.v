@@ -3,11 +3,14 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Range.
@@ -109,3 +112,21 @@ Proof.
   rewrite H10 in H11. assumption.
 Qed.
 
+Proposition FromIsom : forall (F A B:Class),
+  Isom F E E A B  ->
+  COC.Ordinal A   ->
+  B :<=: On       ->
+  Monotone F.
+Proof.
+  intros F A B [H1 H2] H3 H4. split.
+  - split.
+    + split; apply H1. 
+    + split. apply COC.EquivCompat with A. 2: assumption.
+      * apply Equiv.Sym, H1.
+      * apply Incl.EquivCompatL with B. 2: assumption.
+        apply Equiv.Sym, H1.
+  - assert (domain F :~: A) as H5. { apply H1. }
+    intros a b H6 H7 H8.  apply E.Charac2. apply H5 in H6. apply H5 in H7.
+    specialize (H2 a b H6 H7). destruct H2 as [H2 H9]. apply H2, E.Charac2.
+    assumption.
+Qed.
