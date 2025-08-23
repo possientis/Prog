@@ -15,7 +15,7 @@ Definition image (f a:U) : U := fromClass (toClass f) :[toClass a]:
   (Restrict.ImageIsSmall (toClass f) (toClass a) (SetIsSmall f)).
 
 (* Notation "f :[ a ]:" := (image f a)                                          *)
-Global Instance SetImage : Image U U := { image := image }.
+Global Instance SetImage : Image U U U := { image := image }.
 
 (* The class of the image is the image by the class of the class.               *)
 Proposition ToClass : forall (f a:U),

@@ -15,7 +15,7 @@ Export ZF.Notation.Image.
 Definition image (F:Class) (a:U) : U := truncate F:[toClass a]:.
 
 (* Notation "F :[ a ]:" := (image F a)                                          *)
-Global Instance SetImageByClass : Image Class U := { image := image }.
+Global Instance SetByClassImage : Image Class U U := { image := image }.
 
 Proposition ToClass : forall (F:Class) (a:U),
   Functional F -> toClass F:[a]: :~: F:[toClass a]:.

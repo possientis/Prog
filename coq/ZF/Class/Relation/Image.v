@@ -14,7 +14,7 @@ Definition image (F A:Class) : Class := fun y =>
   exists x, A x /\ F :(x,y):.
 
 (* Notation "F :[ A ]:" := (image F A)                                          *)
-Global Instance ClassImage : Image Class Class := { image := image }.
+Global Instance ClassImage : Image Class Class Class := { image := image }.
 
 (* The direct image is compatible with equivalences.                            *)
 Proposition EquivCompat : forall (P Q R S:Class),
