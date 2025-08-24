@@ -25,7 +25,7 @@ Definition WellFounded (R A:Class) : Prop :=
   Founded R A /\ forall (a:U), A a -> Small (initSegment R A a).
 
 (* If R is founded on a small class A, then it is well-founded on A.            *)
-Proposition WellFoundedWhenFoundedOnSmall : forall (R A:Class),
+Proposition WhenSmall : forall (R A:Class),
   Founded R A -> Small A -> WellFounded R A.
 Proof.
   intros R A H1 H2. split. 1: assumption. intros a H3.
@@ -33,15 +33,15 @@ Proof.
 Qed.
 
 (* If R is founded on a set a, then it is well-founded on a.                    *)
-Proposition WellFoundedWhenFoundedOnSet : forall (R:Class) (a:U),
+Proposition WhenSet : forall (R:Class) (a:U),
   Founded R (toClass a) -> WellFounded R (toClass a).
 Proof.
-  intros R a H1. apply WellFoundedWhenFoundedOnSmall. 1: assumption.
+  intros R a H1. apply WhenSmall. 1: assumption.
   apply SetIsSmall.
 Qed.
 
 (* If R is well-founded on A superclass of B, then it is well-founded on B.     *)
-Proposition WellFoundedIncl : forall (R A B:Class),
+Proposition WhenIncl : forall (R A B:Class),
   WellFounded R A -> B :<=: A -> WellFounded R B.
 Proof.
   intros R A B [H1 H2] H3. split.
@@ -51,7 +51,7 @@ Proof.
     + apply H2, H3. assumption.
 Qed.
 
-Proposition WellFoundedIsom : forall (F R S A B: Class),
+Proposition WhenIsom : forall (F R S A B: Class),
   Isom F R S A B -> WellFounded R A <-> WellFounded S B.
 Proof.
   (* It is sufficient to prove -> *)
@@ -74,7 +74,7 @@ Proof.
 Qed.
 
 (* R can be founded for A, but not well-founded for A.                          *)
-Proposition WellFoundedCanFailWhenFounded : exists (R A:Class),
+Proposition Example : exists (R A:Class),
   Founded R A /\ ~ WellFounded R A.
 Proof.
   (* Let A be the class of all singletons and pairs. *)

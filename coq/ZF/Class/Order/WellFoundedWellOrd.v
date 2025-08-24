@@ -84,7 +84,7 @@ Proof.
 
   (* R being well-founded on A, it is well-founded on B. *)
     assert (WellFounded R B) as H6. {
-      apply WellFoundedIncl with A; assumption.
+      apply WellFounded.WhenIncl with A; assumption.
     }
 
   (* And furthermore C is a small class. *)

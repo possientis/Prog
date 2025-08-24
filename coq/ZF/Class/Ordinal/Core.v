@@ -85,8 +85,8 @@ Proposition HasEMinimal : forall (A B:Class),
 Proof.
   intros A B H1 H2 H3.
   assert (exists x, Minimal E B x) as H4. {
-    apply HasMinimal with A; try assumption. split.
-    - apply WellFoundedIncl with V. apply E.IsWellFoundedOnV.
+    apply WellFoundedWellOrd.HasMinimal with A; try assumption. split.
+    - apply WellFounded.WhenIncl with V. apply E.IsWellFoundedOnV.
       apply V.IsIncl.
     - apply EWellOrders. assumption. }
   destruct H4 as [x H4]. exists x. apply MinimalEA. assumption.
