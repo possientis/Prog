@@ -6,10 +6,6 @@
 
   # Setup
 
-  - name: Setup - Install gtk canberra
-    ansible.builtin.apt:
-      name: libcanberra-gtk-module
-
   - name: Setup - Install ufw
     ansible.builtin.apt:
       name: ufw
@@ -56,13 +52,9 @@
     ansible.builtin.apt:
       name: curl
 
-  - name: General - Install tldr
+  - name: General - Install fastfetch
     ansible.builtin.apt:
-      name: tldr
-
-  - name: General - Install neofetch
-    ansible.builtin.apt:
-      name: neofetch
+      name: fastfetch
 
   # Benchmarking
   
@@ -583,10 +575,6 @@
   - name: Haskell - Install libghc-crypto-api-dev
     ansible.builtin.apt:
       name: libghc-crypto-api-dev
-
-  - name: Haskell - Install libghc-monadcryptorandom-dev
-    ansible.builtin.apt:
-      name: libghc-monadcryptorandom-dev
 
   - name: Haskell - Install libghc-hashable-dev
     ansible.builtin.apt:
