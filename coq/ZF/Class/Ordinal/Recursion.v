@@ -55,11 +55,8 @@ Definition K (F:Class) : U -> U -> Prop := fun f a =>
 Lemma Charac2 : forall (F:Class) (x y:U),
   Recursion F :(x,y): <-> exists f a, :(x,y): :< f /\ K F f a.
 Proof.
-  intros F x y. split; intros H1.
-  - destruct H1 as [f [a [H1 H2]]]. exists f. exists a.
-    split; assumption.
-  - destruct H1 as [f [a [H1 H2]]]. exists f. exists a.
-    split; assumption.
+  intros F x y. split; intros H1; destruct H1 as [f [a [H1 H2]]];
+  exists f; exists a; split; assumption.
 Qed.
 
 Lemma Coincide : forall (F:Class) (f g a b:U),
