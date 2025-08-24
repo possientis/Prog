@@ -76,7 +76,7 @@ Qed.
 
 (* If F is functional and P is small, then F:[P]: is small.                     *)
 Proposition IsSmall : forall (F P:Class),
-  Functional F -> Small P -> Small F :[P]:.
+  Functional F -> Small P -> Small F:[P]:.
 Proof.
 
   (* Let F and P be two arbitrary classes. *)
@@ -111,4 +111,62 @@ Proof.
 
   (* Which follows from replacement and the fact F is functional. *)
     apply Replacement, H1.
+Qed.
+
+(* If F is small, then F:[P]: is small.                                         *)
+Proposition IsSmall' : forall (F P:Class),
+    Small F -> Small F:[P]:.
+Proof.
+  (* Let F and P be two arbitrary classes. *)
+  intros F P.
+
+  (* We assume that F is small. *)
+  intros H1. assert (Small F) as A. { apply H1. } clear A.
+
+  (* We need to show that F[P] is small. *)
+  assert (Small F:[P]:) as A. 2: apply A.
+
+  (* Consider the function Snd : (y,z) -> z defined on PxV. *)
+  remember (fun x => exists y z, x = :(:(y,z):,z): /\ P y) as Snd eqn:H2.
+
+  (* We claim that Snd is a functional class. *)
+  assert (Functional Snd) as H3. {
+    intros x y z H3 H4.
+    rewrite H2 in H3. destruct H3 as [y1 [z1 [H3 _]]].
+    rewrite H2 in H4. destruct H4 as [y2 [z2 [H4 _]]].
+    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+    apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H6].
+    rewrite H3 in H4. apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H7].
+    subst. reflexivity. }
+
+  (* Having assumed F to be small, we have a set f. *)
+  destruct H1 as [f H1].
+
+  (* x :< f iff F x. *)
+  assert (forall x, x :< f <-> F x) as A. { apply H1. } clear A.
+
+  (* Applying the replacement theorem to f and Snd, we have a set a. *)
+  assert (exists a, forall y, y :< a <-> exists x, x :< f /\ Snd :(x,y):) as H8. {
+    apply Replacement. assumption. }
+
+  destruct H8 as [a H8].
+
+  (* y :< a iff exists x, x :< f /\ (x,y) in Snd. *)
+  assert (forall y, y :< a <-> exists x, x :< f /\ Snd :(x,y):) as A.
+    { apply H8. } clear A.
+
+  (* We claim that the set a demonstrates that F[P] is small. *)
+  exists a.
+
+  (* So we need to show x :< a iff x in F[P]. *)
+  assert (forall x, x :< a <-> F:[P]: x) as A. 2: apply A.
+
+  intros z. split; intros H9.
+  - apply H8 in H9. destruct H9 as [x [H9 H10]]. rewrite H2 in H10.
+    destruct H10 as [y [z' [H10 H11]]]. apply OrdPair.WhenEqual in H10.
+    destruct H10 as [H10 H12]. subst. apply H1 in H9.
+    exists y. split; assumption.
+  - destruct H9 as [y [H9 H10]]. apply H1 in H10. apply H8. exists :(y,z):.
+    split. 1: assumption. rewrite H2. exists y. exists z. split.
+    2: assumption. reflexivity.
 Qed.
