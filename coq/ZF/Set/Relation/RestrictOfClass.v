@@ -92,7 +92,7 @@ Proof.
 Qed.
 
 (* The restriction of a functional class is a functional set.                   *)
-Proposition IsFunctional : forall (F:Class) (a:U), 
+Proposition IsFunctional : forall (F:Class) (a:U),
   CFL.Functional F -> SFL.Functional (F:|:a).
 Proof.
   intros F a H1 x y z H2 H3.
@@ -172,8 +172,8 @@ Proof.
     split. 1: assumption. apply Charac2Rev; try assumption. apply H2. assumption.
 Qed.
 
-Proposition Eval : forall (F:Class) (a x:U), CFL.Functional F -> x :< a ->
-  (F:|:a)!x = F!x.
+Proposition Eval : forall (F:Class) (a x:U), CFL.Functional F ->
+  x :< a -> (F:|:a)!x = F!x.
 Proof.
   intros F a x H1 H2.
   assert (SFL.Functional (F:|:a)) as H3. { apply IsFunctional. assumption. }
