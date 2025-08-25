@@ -108,7 +108,6 @@ Proof.
   + apply Class.Empty.Charac in H2. contradiction.
 Qed.
 
-
 (* Initial segments of R in A are subclasses of A.                              *)
 Proposition IsIncl : forall (R A:Class) (a:U),
   initSegment R A a :<=: A.
@@ -118,9 +117,9 @@ Qed.
 
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
-  Isom F R S A B    ->
-  C :<=: A          ->
-  A a               ->
+  Isom F R S A B                                          ->
+  C :<=: A                                                ->
+  A a                                                     ->
   F:[initSegment R C a]: :~: initSegment S F:[C]: (F!a).
 Proof.
   intros F R S A B C a [H1 H2] H3 H4 y. split; intros H5.

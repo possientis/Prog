@@ -24,6 +24,18 @@ Require Import ZF.Set.Single.
 Definition WellFounded (R A:Class) : Prop :=
   Founded R A /\ forall (a:U), A a -> Small (initSegment R A a).
 
+Proposition IsSmall : forall (R A B:Class) (a:U),
+  WellFounded R A             ->
+  A a                         ->
+  B :<=: A                    ->
+  Small (initSegment R B a).
+Proof.
+  intros R A B a H1 H2 H3. 
+  apply Bounded.WhenSmaller with (initSegment R A a).
+  - apply InitSegment.InclCompatR. assumption.
+  - apply H1. assumption.
+Qed.
+
 (* If R is founded on a small class A, then it is well-founded on A.            *)
 Proposition WhenSmall : forall (R A:Class),
   Founded R A -> Small A -> WellFounded R A.
@@ -62,7 +74,8 @@ Proof.
     - intros b H5. remember (F^:-1:!b) as a eqn:H6.
       assert (b = F!a) as H7. { rewrite H6. symmetry.
         apply Bij.EvalOfConverseEval with A B; assumption. }
-      assert (A a) as H8. { rewrite H6. apply Bij.ConverseEvalIsInDomain with B; assumption. }
+      assert (A a) as H8. 
+        { rewrite H6. apply Bij.ConverseEvalIsInDomain with B; assumption. }
       rewrite H7. apply Small.EquivCompat with F:[initSegment R A a]:.
       + apply InitSegment.IsomFullImage; assumption.
       + apply Bij.ImageIsSmall with A B. 1: assumption. apply H3. assumption. }
@@ -203,4 +216,3 @@ Proof.
     (* Which is a consequence of our well-foundedness assumption.               *)
     apply H1; assumption.
 Qed.
-

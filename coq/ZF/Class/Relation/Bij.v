@@ -169,6 +169,14 @@ Proof.
   - apply H2. apply BijectionOn.RangeCharac with A; assumption.
 Qed.
 
+(* TODO: add to API.                                                            *)
+Proposition ImageIncl : forall (F A B C:Class),
+  Bij F A B -> C :<=: A -> F:[C]: :<=: B.
+Proof.
+  intros F A B C H1 H2 y H3.
+  destruct H3 as [x [H3 H4]]. apply H1. exists x. assumption.
+Qed.
+
 Proposition RangeIsNotEmpty : forall (F A B:Class),
   Bij F A B -> A :<>: :0: -> B :<>: :0:.
 Proof.
