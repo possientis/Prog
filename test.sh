@@ -30,7 +30,7 @@ testing gradle
 testing c#
 testing haskell
 testing coq
-testing agda
+#testing agda
 #testing lean
 testing idris
 testing scheme
