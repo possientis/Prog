@@ -5,6 +5,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Truncate.
@@ -70,5 +71,14 @@ Proposition InclCompatR : forall (F:Class) (a b:U), Functional F ->
   a :<=: b -> F:[a]: :<=: F:[b]:.
 Proof.
   intros F a b H1 H2. apply InclCompat; try assumption. apply Class.Incl.Refl.
+Qed.
+
+Proposition WhenEmpty : forall (F:Class) (a:U),
+  a = :0: -> F:[a]: = :0:.
+Proof.
+  intros F a H1. rewrite H1. apply Truncate.WhenEmpty.
+  intros x. split; intros H2.
+  - destruct H2 as [y [H2 H3]]. apply Empty.Charac in H2. contradiction.
+  - contradiction.
 Qed.
 

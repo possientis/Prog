@@ -70,7 +70,7 @@ Proof.
     + apply Charac in H2. contradiction.
 Qed.
 
-Proposition EmptyImage : forall (F A:Class),
+Proposition ImageOf : forall (F A:Class),
   A :~: :0: -> F:[A]: :~: :0:.
 Proof.
   intros F A H1 y. split; intros H2.

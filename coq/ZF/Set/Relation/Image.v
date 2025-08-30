@@ -3,6 +3,7 @@ Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
@@ -69,4 +70,13 @@ Proof.
   intros f a b H1. apply InclCompat.
   - apply Incl.Refl.
   - assumption.
+Qed.
+
+Proposition WhenEmpty : forall (f a:U),
+  a = :0: -> f:[a]: = :0:.
+Proof.
+  intros f a H1. apply DoubleInclusion. split; intros y H2.
+  - apply Charac in H2. destruct H2 as [x [H2 H3]].
+    rewrite H1 in H2. apply Empty.Charac in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
 Qed.

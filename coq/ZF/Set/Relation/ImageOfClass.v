@@ -1,8 +1,10 @@
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
@@ -59,4 +61,13 @@ Proposition InclCompatR : forall (A B:Class) (f:U),
   A :<=: B -> f:[A]: :<=: f:[B]:.
 Proof.
   intros A B f. apply InclCompat, ZF.Set.Incl.Refl.
+Qed.
+
+Proposition WhenEmpty : forall (A:Class) (f:U),
+  A :~: :0: -> f:[A]: = :0:.
+Proof.
+  intros A f H1. apply DoubleInclusion. split; intros y H2.
+  - apply Charac in H2. destruct H2 as [x [H2 H3]].
+    apply H1 in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
 Qed.

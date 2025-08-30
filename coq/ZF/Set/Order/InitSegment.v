@@ -143,7 +143,7 @@ Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   A a                                                   ->
   C :<=: A                                              ->
   Isom F R S A B                                        ->
-  F:[initSegment R C a]: = initSegment S F:[C]: (F!a).
+  F:[initSegment R C a]: = initSegment S F:[C]: F!a.
 Proof.
   intros F R S A B C a H1 H2 H3 H4.
   assert (WellFounded S B) as H5. {
@@ -175,3 +175,29 @@ Proof.
     + apply (CharacRev R A C a); assumption.
 Qed.
 
+Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
+  WellFounded R A                                         ->
+  A a                                                     ->
+  Isom F R S A B                                          ->
+  F:[initSegment R A a]: = initSegment S B F!a.
+Proof.
+  intros F R S A B a H1 H2 H3.
+  assert (F:[A]: :~: B) as H4. { apply Bij.ImageOfDomain, H3. }
+  assert (initSegment S F:[A]: (F!a) = initSegment S B (F!a)) as H5. {
+    apply EquivCompatR. assumption. }
+  rewrite <- H5. apply IsomImage with A B; try assumption.
+  apply Class.Incl.Refl.
+Qed.
+
+Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),
+  WellFounded R A                   ->
+  A a                               ->
+  C :<=: A                          ->
+  Isom F R S A B                    ->
+  initSegment R C a = :0:           ->
+  initSegment S F:[C]: F!a = :0:.
+Proof.
+  intros F R S A B C a H1 H2 H3 H4 H5.
+  rewrite <- (IsomImage F R S A B C); try assumption.
+  apply ImageByClass.WhenEmpty. assumption.
+Qed.

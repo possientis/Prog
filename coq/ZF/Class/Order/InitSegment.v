@@ -143,7 +143,7 @@ Qed.
 Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
   Isom F R S A B    ->
   A a               ->
-  F:[initSegment R A a]: :~: initSegment S B (F!a).
+  F:[initSegment R A a]: :~: initSegment S B F!a.
 Proof.
   intros F R S A B a H1 H2.
   apply Equiv.Tran with (initSegment S F:[A]: F!a).
@@ -161,5 +161,5 @@ Proof.
   intros F R S A B C a H1 H2 H3 H4.
   apply Equiv.Tran with F:[initSegment R C a]:.
   - apply Equiv.Sym, IsomImage with A B; assumption.
-  - apply EmptyImage. assumption.
+  - apply Empty.ImageOf. assumption.
 Qed.
