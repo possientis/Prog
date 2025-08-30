@@ -2,6 +2,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Image.
@@ -79,7 +80,6 @@ Proof.
   - apply H1.
 Qed.
 
-
 Proposition WhenIn : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
@@ -99,7 +99,7 @@ Proposition IsLess : forall (R A B:Class) (a x:U),
   R :(x,a):.
 Proof.
   intros R A B a x H1 H2 H3 H4.
-  apply (Charac R A B a) in H4; try assumption. apply H4.
+  apply (Charac R A) in H4; try assumption. apply H4.
 Qed.
 
 (* The initial segment is empty iff there is no x in A which is less than a.    *)
@@ -123,7 +123,7 @@ Proposition WhenEmptyRev : forall (R A B:Class) (a:U),
   initSegment R B a = :0:.
 Proof.
   intros R A B a H1 H2 H3 H4. apply DoubleInclusion. split; intros x H5.
-  - exfalso. apply (Charac R A B a) in H5; try assumption.
+  - exfalso. apply (Charac R A) in H5; try assumption.
     destruct H5 as [H5 H6]. specialize (H4 x H5). contradiction.
   - apply Empty.Charac in H5. contradiction.
 Qed.
@@ -135,6 +135,21 @@ Proposition IsIncl : forall (R A B:Class) (a:U),
   toClass (initSegment R B a) :<=: B.
 Proof.
   intros R A B a H1 H2 H3 x H4. apply (WhenIn R A B a); assumption.
+Qed.
+
+Proposition WhenLess : forall (R A B:Class) (a b:U),
+  WellFounded R A                             ->
+  Transitive R A                              ->
+  A a                                         ->
+  A b                                         ->
+  B :<=: A                                    ->
+  R :(a,b):                                   ->
+  initSegment R B a :<=: initSegment R B b.
+Proof.
+  intros R A B a b H1 H2 H3 H4 H5 H6 x H7.
+  apply (Charac R A) in H7; try assumption. destruct H7 as [H7 H8].
+  apply CharacRev with A; try assumption. apply H2 with a; try assumption.
+  apply H5. assumption.
 Qed.
 
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)
@@ -201,3 +216,4 @@ Proof.
   rewrite <- (IsomImage F R S A B C); try assumption.
   apply ImageByClass.WhenEmpty. assumption.
 Qed.
+

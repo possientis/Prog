@@ -5,6 +5,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
@@ -18,6 +19,26 @@ Require Import ZF.Set.OrdPair.
 (* Predicate expressing the fact that R is a well-founded well-ordering on A.   *)
 Definition WellFoundedWellOrd (R A:Class) : Prop :=
   WellFounded R A /\ WellOrdering R A.
+
+Proposition WhenIncl : forall (R A B:Class),
+  WellFoundedWellOrd R A -> B :<=: A -> WellFoundedWellOrd R B.
+Proof.
+  intros R A B [H1 H2] H3. split.
+  - apply WellFounded.WhenIncl with A; assumption.
+  - apply WellOrdering.WhenIncl with A; assumption.
+Qed.
+
+Proposition IsIrreflexive : forall (R A:Class),
+  WellFoundedWellOrd R A -> Irreflexive R A.
+Proof.
+  intros R A H1. apply WellOrdering.IsIrreflexive, H1.
+Qed.
+
+Proposition IsTransitive : forall (R A:Class),
+  WellFoundedWellOrd R A -> Transitive R A.
+Proof.
+  intros R A H1. apply WellOrdering.IsTransitive, H1.
+Qed.
 
 (* If R is a wfwo on A, every non-empty subclass of A has an R-minimal element. *)
 Proposition HasMinimal : forall (R A B:Class),
@@ -160,3 +181,4 @@ Proof.
       apply Minimal.HasNoLesser with (toClass c). 2: assumption.
       apply H8. assumption.
 Qed.
+

@@ -7,6 +7,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
@@ -115,6 +116,18 @@ Proof.
   intros R A a. apply Class.Inter2.IsInclL.
 Qed.
 
+Proposition WhenLess : forall (R A:Class) (a b:U),
+  Transitive R A                            ->
+  A a                                       ->
+  A b                                       ->
+  R :(a,b):                                 ->
+  initSegment R A a :<=: initSegment R A b.
+Proof.
+  intros R A a b H1 H2 H3 H4 x H5.
+  apply Charac in H5. destruct H5 as [H5 H6].
+  apply Charac. split. 1: assumption. apply H1 with a; assumption.
+Qed.
+
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                                          ->
@@ -163,3 +176,4 @@ Proof.
   - apply Equiv.Sym, IsomImage with A B; assumption.
   - apply Empty.ImageOf. assumption.
 Qed.
+

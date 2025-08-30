@@ -3,15 +3,16 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
-
+Require Import ZF.Set.Core.
 
 Proposition Induction : forall (R A B:Class),
-  WellFoundedWellOrd R A                      ->
-  B :<=: A                                    ->
-  (forall x, initSegment R A x :<=: B -> B x) ->
+  WellFoundedWellOrd R A                              ->
+  B :<=: A                                            ->
+  (forall x, A x -> initSegment R A x :<=: B -> B x)  ->
   A :~: B.
 Proof.
 
@@ -25,7 +26,8 @@ Proof.
   intros H2. assert (B :<=: A) as X. apply H2. clear X.
 
   (* We assume the inductive property. *)
-  intros H3. assert (forall x, initSegment R A x :<=: B -> B x) as X. apply H3. clear X.
+  intros H3.
+  assert (forall x, A x -> initSegment R A x :<=: B -> B x) as X. apply H3. clear X.
 
   (* We need to show that A = B. *)
   assert (A :~: B) as X. 2: apply X.
@@ -59,8 +61,24 @@ Proof.
   }
 
   (* From the inductive property, it follows that a lies in B. *)
-  assert (B a) as H8. { apply H3. assumption. }
+  assert (B a) as H8. {
+    apply H3. 2: assumption. apply Minimal.IsIn in H6.
+    destruct H6 as [H6 _]. assumption. }
 
   (* This contradicts the fact that a lies in A\B. *)
   apply Minimal.IsIn in H6. destruct H6 as [_ H6]. contradiction.
+Qed.
+
+Proposition Induction' : forall (R A B:Class),
+  WellFoundedWellOrd R A                                            ->
+  (forall a, A a -> (forall x, initSegment R A a x -> B x) -> B a)  ->
+   forall a, A a -> B a.
+Proof.
+  intros R A B H1 H2.
+  assert (A :~: A :/\: B) as H3. {
+    apply Induction with R. 1: assumption.
+    - apply Inter2.IsInclL.
+    - intros a H3 H4. split. 1: assumption. apply H2. 1: assumption.
+      intros x H5. apply H4. assumption. }
+  intros a H4. apply H3. assumption.
 Qed.
