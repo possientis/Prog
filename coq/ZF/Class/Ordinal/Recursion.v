@@ -59,6 +59,7 @@ Proof.
   exists f; exists a; split; assumption.
 Qed.
 
+(* Two recursive functions coincide on their common domain.                     *)
 Lemma Coincide : forall (F:Class) (f g a b:U),
   On a                                  ->
   On b                                  ->
@@ -95,7 +96,7 @@ Qed.
 (* The transfinite recursion class associated with F is a relation.             *)
 Proposition IsRelation : forall (F:Class), CRR.Relation (Recursion F).
 Proof.
-  intros F x H1. destruct H1 as [f [b [H1 [_ [[[H2 _] _] _]]]]].
+  intros F x H1. destruct H1 as [f [a [H1 [_ [[[H2 _] _] _]]]]].
   specialize (H2 x H1). assumption.
 Qed.
 

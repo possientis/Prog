@@ -15,14 +15,23 @@ Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Restrict.
 
 Module COI := ZF.Class.Order.InitSegment.
-Module SOI := ZF.Set.Order.InitSegment.
+Module CRF := ZF.Class.Relation.Function.
+Module CRR := ZF.Class.Relation.Relation.
 
+Module SOI := ZF.Set.Order.InitSegment.
+Module SRF := ZF.Set.Relation.Function.
+Module SRR := ZF.Set.Relation.Relation.
+
+(* The recursion class associated with R A F. In other words, when R is a well  *)
+(* founded well ordering on A, the unique function class G defined on A by the  *)
+(* recursion G(b) = F(G|initSegment R A b).                                     *)
 Definition Recursion (R A F:Class) : Class := fun x => exists f a,
   x :< f                                                                  /\
   A a                                                                     /\
   FunctionOn f (initSegment R A a)                                        /\
   (forall b, b :< initSegment R A a -> f!b = F!(f:|:initSegment R A b)).
 
+(* Binary predicate underlying the recursion class.                             *)
 Definition K (R A F:Class) : U -> U -> Prop := fun f a =>
   A a                                                                     /\
   FunctionOn f (initSegment R A a)                                        /\
@@ -35,6 +44,7 @@ Proof.
   exists f; exists a; split; assumption.
 Qed.
 
+(* Two recursive functions coincide on their common domain.                     *)
 Lemma Coincide : forall (R A F:Class) (f g a b:U),
   WellFoundedWellOrd R A                                                  ->
   A a                                                                     ->
@@ -84,3 +94,19 @@ Proof.
         + apply SOI.IsLess with A A; try assumption. apply Class.Incl.Refl. }
     rewrite H7, H8, H17. reflexivity.
 Qed.
+
+(* The recursion class associated with R A F is a relation.                     *)
+Proposition IsRelation : forall (R A F:Class), CRR.Relation (Recursion R A F).
+Proof.
+  intros R A F x H1. destruct H1 as [f [a [H1 [_ [[[H2 _] _] _]]]]].
+  specialize (H2 x H1). assumption.
+Qed.
+
+(* The recursion class associated with R A F is a function.                     *)
+Proposition IsFunction : forall (R A F:Class), CRF.Function (Recursion R A F).
+Proof.
+  intros R A F. split. 1: apply IsRelation. intros x y z H1 H2.
+  destruct H1 as [f [a [H1 [H3 [H4 H5]]]]].
+  destruct H2 as [g [b [H2 [H6 [H7 H8]]]]].
+Admitted.
+
