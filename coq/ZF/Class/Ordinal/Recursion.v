@@ -29,12 +29,14 @@ Require Import ZF.Set.Union2.
 Module COC := ZF.Class.Ordinal.Core.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
+Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 
 Module SOC := ZF.Set.Ordinal.Core.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRF := ZF.Set.Relation.Function.
+Module SFL := ZF.Set.Relation.Functional.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRR := ZF.Set.Relation.Relation.
 
@@ -173,13 +175,14 @@ Proof.
   assert (SRR.Relation f) as H5. {
     apply Relation.ToClass. apply Relation.EquivCompat with (Recursion F).
     1: assumption. apply IsRelation. }
-  assert  (ZF.Set.Relation.Functional.Functional f) as H6. {
-    apply Functional.ToClass. apply Functional.EquivCompat with (Recursion F).
+  assert  (SFL.Functional f) as H6. {
+    apply SFL.ToClass. apply CFL.EquivCompat with (Recursion F).
     1: assumption. apply IsFunction. }
   assert (SRF.Function f) as H7. { split; assumption. }
   assert (SFO.FunctionOn f c) as H8. { split; assumption. }
   remember (K F) as K' eqn:H9.
-  assert (forall x y, :(x,y): :< f <-> exists g a, :(x,y): :< g /\ K' g a) as H10. {
+  assert (
+    forall x y, :(x,y): :< f <-> exists g a, :(x,y): :< g /\ K' g a) as H10. {
     intros x y. rewrite H9. split; intros H10.
     - apply (proj1 (Charac2 _ _ _)), H3. assumption.
     - apply Charac2 in H10. apply H3 in H10. assumption. }

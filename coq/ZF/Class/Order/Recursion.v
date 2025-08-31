@@ -1,7 +1,10 @@
+Require Import ZF.Class.Diff.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
@@ -15,16 +18,20 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module COI := ZF.Class.Order.InitSegment.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
+Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 
+Module SIN := ZF.Set.Incl.
 Module SOI := ZF.Set.Order.InitSegment.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRF := ZF.Set.Relation.Function.
+Module SFL := ZF.Set.Relation.Functional.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRR := ZF.Set.Relation.Relation.
 
@@ -134,4 +141,49 @@ Proof.
   - apply Coincide with R A F a b; assumption.
   - symmetry. apply Coincide with R A F b a; assumption.
 Qed.
+
+Proposition DomainIsA : forall (R A F:Class), WellFoundedWellOrd R A ->
+  CRD.domain (Recursion R A F) :~: A.
+Proof.
+  intros R A F H1.
+  remember (CRD.domain (Recursion R A F)) as B eqn:H2.
+  assert (WellFounded R A) as H3. { apply H1. }
+  assert (A :<=: A) as H4. { apply Class.Incl.Refl. }
+  assert (B :<=: A) as H5. {
+    rewrite H2. intros x [y H5]. destruct H5 as [f [a [H5 [H6 [[_ H7] _]]]]].
+    assert (x :< domain f) as H8. {
+      apply SRD.Charac. exists y. assumption. }
+    rewrite H7 in H8. apply SOI.WhenIn with R A a; assumption. }
+  assert (forall a, A a -> B a) as H6. {
+    apply Induction' with R. 1: assumption.
+    intros c H6 H7.
+    remember (Recursion R A F :|: initSegment R A c) as f eqn:H8.
+  assert (SRD.domain f = initSegment R A c) as H9. {
+    apply SIN.DoubleInclusion. split; intros x H9.
+    - apply SRD.Charac in H9. destruct H9 as [y H9]. rewrite H8 in H9.
+      apply RestrictOfClass.Charac2 in H9.
+      + apply H9.
+      + apply IsFunction. assumption.
+    - assert (H10 := H9). apply (InitSegment.ToClass R A A) in H10; try assumption.
+      apply H7 in H10. rewrite H2 in H10. destruct H10 as [y H10].
+      apply SRD.Charac. exists y. rewrite H8.
+      apply RestrictOfClass.Charac2Rev; try assumption.
+      apply IsFunction. assumption. }
+  assert (SRR.Relation f) as H10. {
+    rewrite H8. apply RestrictOfClass.IsRelation, IsFunction. assumption. }
+  assert (SFL.Functional f) as H11. {
+    rewrite H8. apply RestrictOfClass.IsFunctional, IsFunction. assumption. }
+  assert (SRF.Function f) as H12. { split; assumption. }
+  assert (SFO.FunctionOn f (initSegment R A c)) as H13. { split; assumption. }
+  remember (K R A F) as K' eqn:H14.
+  assert ( forall x y, x :< initSegment R A c ->
+    :(x,y): :< f <-> exists g a, :(x,y): :< g /\ K' g a) as H15. {
+    intros x y H15. rewrite H14. split; intros H16.
+    - rewrite H8 in H16.
+      apply RestrictOfClass.Charac2 in H16. 2: { apply IsFunction. assumption. }
+      apply (proj1 (Charac2 _ _ _ _ _)), H16.
+    - apply Charac2 in H16. rewrite H8.
+      apply RestrictOfClass.Charac2Rev; try assumption.
+      apply IsFunction. assumption. }
+Admitted.
 
