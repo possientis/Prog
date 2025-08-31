@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.AntiSymmetric.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Reflexive.
+Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
@@ -88,6 +89,32 @@ Proof.
   apply Charac2 in H5. apply Charac2 in H6.
   destruct H5 as [H5|H5]; destruct H6 as [H6|H6]; subst; try reflexivity.
   exfalso. apply H1 with x. 1: assumption. apply H2 with y; assumption.
+Qed.
+
+Proposition LeqOrLeq : forall (R A:Class) (x y:U),
+  Total R A ->
+  A x       ->
+  A y       ->
+  R^:=: :(x,y): \/ R^:=: :(y,x):.
+Proof.
+  intros R A x y H1 H2 H3. specialize (H1 x y H2 H3).
+  destruct H1 as [H1|[H1|H1]].
+  - subst. left. apply Charac2. left. reflexivity.
+  - left. apply Charac2. right. assumption.
+  - right. apply Charac2. right. assumption.
+Qed.
+
+Proposition LessOrLeq : forall (R A:Class) (x y:U),
+  Total R A ->
+  A x       ->
+  A y       ->
+  R :(x,y): \/ R^:=: :(y,x):.
+Proof.
+  intros R A x y H1 H2 H3. specialize (H1 x y H2 H3).
+  destruct H1 as [H1|[H1|H1]].
+  - subst. right. apply Charac2. left. reflexivity.
+  - left. assumption.
+  - right. apply Charac2. right. assumption.
 Qed.
 
 Proposition LeqLessTran : forall (R A:Class) (x y z:U),

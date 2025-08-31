@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.ReflClosure.
+Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
@@ -16,11 +17,15 @@ Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Restrict.
 
 Module COI := ZF.Class.Order.InitSegment.
+Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
+Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 
 Module SOI := ZF.Set.Order.InitSegment.
+Module SRD := ZF.Set.Relation.Domain.
 Module SRF := ZF.Set.Relation.Function.
+Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRR := ZF.Set.Relation.Relation.
 
 (* The recursion class associated with R A F. In other words, when R is a well  *)
@@ -98,18 +103,35 @@ Proof.
     rewrite H7, H8, H17. reflexivity.
 Qed.
 
-(* The recursion class associated with R A F is a relation.                     *)
+(* The recursion class associated with R A F is a relation class.               *)
 Proposition IsRelation : forall (R A F:Class), CRR.Relation (Recursion R A F).
 Proof.
   intros R A F x H1. destruct H1 as [f [a [H1 [_ [[[H2 _] _] _]]]]].
   specialize (H2 x H1). assumption.
 Qed.
 
-(* The recursion class associated with R A F is a function.                     *)
-Proposition IsFunction : forall (R A F:Class), CRF.Function (Recursion R A F).
+(* The recursion class associated with R A F is a function class.               *)
+Proposition IsFunction : forall (R A F:Class), WellFoundedWellOrd R A ->
+  CRF.Function (Recursion R A F).
 Proof.
-  intros R A F. split. 1: apply IsRelation. intros x y z H1 H2.
-  destruct H1 as [f [a [H1 [H3 [H4 H5]]]]].
-  destruct H2 as [g [b [H2 [H6 [H7 H8]]]]].
-Admitted.
+  intros R A F H1. split. 1: apply IsRelation. intros x y z H2 H3.
+  destruct H2 as [f [a [H2 [H4 [H5 H6]]]]].
+  destruct H3 as [g [b [H3 [H7 [H8 H9]]]]].
+  assert (Total R A) as H10. { apply H1. }
+  assert (R^:=: :(a,b): \/ R^:=: :(b,a):) as H11. {
+    apply ReflClosure.LeqOrLeq with A; assumption. }
+  assert (x :< initSegment R A a) as H12. {
+    destruct H5 as [_ H5]. rewrite <- H5.
+    apply SRD.Charac. exists y. assumption. }
+  assert (x :< initSegment R A b) as H13. {
+    destruct H8 as [_ H8]. rewrite <- H8.
+    apply SRD.Charac. exists z. assumption. }
+  assert (f!x = y) as H14. {
+    apply (SFO.EvalCharac f (initSegment R A a)); assumption. }
+  assert (g!x = z) as H15. {
+    apply (SFO.EvalCharac g (initSegment R A b)); assumption. }
+  rewrite <- H14, <- H15. destruct H11 as [H11|H11].
+  - apply Coincide with R A F a b; assumption.
+  - symmetry. apply Coincide with R A F b a; assumption.
+Qed.
 
