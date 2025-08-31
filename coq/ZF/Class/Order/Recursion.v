@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
@@ -49,14 +50,14 @@ Lemma Coincide : forall (R A F:Class) (f g a b:U),
   WellFoundedWellOrd R A                                                  ->
   A a                                                                     ->
   A b                                                                     ->
-  R :(a,b):                                                               ->
+  R^:=: :(a,b):                                                           ->
   FunctionOn f (initSegment R A a)                                        ->
   FunctionOn g (initSegment R A b)                                        ->
   (forall x, x :< initSegment R A a -> f!x = F!(f:|:initSegment R A x))   ->
   (forall x, x :< initSegment R A b -> g!x = F!(g:|:initSegment R A x))   ->
   (forall x, x :< initSegment R A a -> f!x = g!x).
 Proof.
-  intros R A F f g a b H1 H2 H3 H4 H5 H6 H7 H8.
+  intros R A F f g a b H1 H2 H3 H4 H5 H6 H7 H8. apply ReflClosure.Charac2 in H4.
   assert (forall x c, A c -> x :< initSegment R A c -> A x) as H9. {
     intros x c H9 H10. apply (SOI.IsIncl R A A c) in H10; try assumption.
     - apply H1.
@@ -73,7 +74,9 @@ Proof.
     assert (A c) as H14. {
       apply (SOI.IsIncl R A A) in H10; try assumption. apply Class.Incl.Refl. }
     assert (initSegment R A a :<=: initSegment R A b) as H15. {
-      apply SOI.WhenLess with A; try assumption. apply Class.Incl.Refl. }
+      destruct H4 as [H4|H4].
+      - subst. apply Incl.Refl.
+      - apply SOI.WhenLess with A; try assumption. apply Class.Incl.Refl. }
     assert (c :< initSegment R A b) as H16. { apply H15. assumption. }
     specialize (H7 c H10). specialize (H8 c H16).
     assert (f :|: initSegment R A c = g :|: initSegment R A c) as H17. {
