@@ -142,6 +142,85 @@ Proof.
   - symmetry. apply Coincide with R A F b a; assumption.
 Qed.
 
+Lemma Restrict : forall (R A F:Class) (a f:U),
+  WellFoundedWellOrd R A                                                ->
+  A a                                                                   ->
+  (forall b, b :< initSegment R A a -> CRD.domain (Recursion R A F) b)  ->
+  f = (Recursion R A F) :|: initSegment R A a                           ->
+  K R A F f a.
+Proof.
+  intros R A F a f H1 H2 H3 H4.
+  remember (CRD.domain (Recursion R A F)) as B eqn:H5.
+  assert (WellFounded R A) as H6. { apply H1. }
+  assert (Transitive R A) as H7. {
+    apply WellFoundedWellOrd.IsTransitive. assumption. }
+  assert (A :<=: A) as H8. { apply Class.Incl.Refl. }
+  assert (SRD.domain f = initSegment R A a) as H9. {
+    apply SIN.DoubleInclusion. split; intros x H9.
+    - apply SRD.Charac in H9. destruct H9 as [y H9]. rewrite H4 in H9.
+      apply RestrictOfClass.Charac2 in H9.
+      + apply H9.
+      + apply IsFunction. assumption.
+    - assert (H10 := H9).
+      apply H3 in H9. rewrite H5 in H9. destruct H9 as [y H9].
+      apply SRD.Charac. exists y. rewrite H4.
+      apply RestrictOfClass.Charac2Rev; try assumption.
+      apply IsFunction. assumption. }
+  assert (SRR.Relation f) as H10. {
+    rewrite H4. apply RestrictOfClass.IsRelation, IsFunction. assumption. }
+  assert (SFL.Functional f) as H11. {
+    rewrite H4. apply RestrictOfClass.IsFunctional, IsFunction. assumption. }
+  assert (SRF.Function f) as H12. { split; assumption. }
+  assert (SFO.FunctionOn f (initSegment R A a)) as H13. { split; assumption. }
+  assert (forall b,
+    b :< initSegment R A a -> f!b = F!(f:|:initSegment R A b)) as H14. {
+    intros b H14.
+    remember (Recursion R A F) as G eqn:H15.
+    assert (A b) as H16. { apply (SOI.WhenIn R A A a); assumption. }
+    assert (R :(b,a):) as H17. { apply (SOI.IsLess R A A a b); assumption. }
+    assert (B b) as H18. { apply H3. assumption. }
+    assert (G :(b,G!b):) as H19. {
+      apply CRF.Satisfies.
+      - rewrite H15. apply IsFunction. assumption.
+      - rewrite H5 in H18. assumption. }
+    assert (exists g c, :(b,G!b): :< g /\ K R A F g c) as H20. {
+      apply (proj1 (Charac2 _ _ _ _ _ )). rewrite H15.
+      rewrite H15 in H19. assumption. }
+    destruct H20 as [g [c [H20 H21]]].
+    assert (H22 := H21). destruct H22 as [H22 [[H23 H24] H25]].
+    assert (b :< domain g) as H26. { apply SRD.Charac. exists G!b. assumption. }
+    assert (R :(b,c):) as H27. {
+        rewrite H24 in H26. apply (SOI.IsLess R A A) in H26; assumption. }
+    assert (f!b = g!b) as H28. {
+      assert (g!b = G!b) as H28. { apply SRF.EvalCharac; assumption. }
+      assert (f!b = G!b) as H29. {
+        rewrite H4. apply RestrictOfClass.Eval. 2: assumption.
+        rewrite H15. apply IsFunction. assumption. }
+        rewrite H28, H29. reflexivity. }
+    assert (forall x, x :< initSegment R A b -> f!x = g!x) as H29. {
+      intros x H29.
+      assert (g!x = G!x) as H30. {
+        assert (:(x,g!x): :< g) as H30. {
+          apply SRF.Satisfies. 1: assumption. rewrite H24.
+          apply (SOI.WhenLess R A A b c); assumption. }
+        assert (G :(x,g!x):) as H31. {
+          rewrite H15. apply Charac2. exists g. exists c. split; assumption. }
+        symmetry. apply CRF.EvalCharac. 3: assumption.
+        - rewrite H15. apply IsFunction. assumption.
+        - exists g!x. assumption. }
+      assert (f!x = G!x) as H31. {
+        rewrite H4. apply RestrictOfClass.Eval.
+        - rewrite H15. apply IsFunction. assumption.
+        - apply (SOI.WhenLess R A A b); assumption. }
+      rewrite H30, H31. reflexivity. }
+    assert (f:|:initSegment R A b = g :|: initSegment R A b) as H32. {
+      apply Function.RestrictEqual; try assumption; intros x H32.
+      - rewrite H9. apply (SOI.WhenLess R A A b); assumption.
+      - rewrite H24. apply (SOI.WhenLess R A A b); assumption. }
+    rewrite H28, H32. apply H25. rewrite <- H24. assumption. }
+  split. 1: assumption. split; assumption.
+Qed.
+
 Proposition DomainIsA : forall (R A F:Class), WellFoundedWellOrd R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
@@ -160,70 +239,8 @@ Proof.
     apply Induction' with R. 1: assumption.
     intros c H6 H7.
     remember (Recursion R A F :|: initSegment R A c) as f eqn:H8.
-  assert (SRD.domain f = initSegment R A c) as H9. {
-    apply SIN.DoubleInclusion. split; intros x H9.
-    - apply SRD.Charac in H9. destruct H9 as [y H9]. rewrite H8 in H9.
-      apply RestrictOfClass.Charac2 in H9.
-      + apply H9.
-      + apply IsFunction. assumption.
-    - assert (H10 := H9). apply (SOI.ToClass R A A) in H10; try assumption.
-      apply H7 in H10. rewrite H2 in H10. destruct H10 as [y H10].
-      apply SRD.Charac. exists y. rewrite H8.
-      apply RestrictOfClass.Charac2Rev; try assumption.
-      apply IsFunction. assumption. }
-  assert (SRR.Relation f) as H10. {
-    rewrite H8. apply RestrictOfClass.IsRelation, IsFunction. assumption. }
-  assert (SFL.Functional f) as H11. {
-    rewrite H8. apply RestrictOfClass.IsFunctional, IsFunction. assumption. }
-  assert (SRF.Function f) as H12. { split; assumption. }
-  assert (SFO.FunctionOn f (initSegment R A c)) as H13. { split; assumption. }
-  assert (forall b,
-    b :< initSegment R A c -> f!b = F!(f:|:initSegment R A b)) as H14. {
-    intros b H14.
-    remember (Recursion R A F) as G eqn:H15.
-    assert (A b) as H2'. { apply (SOI.WhenIn R A A c); assumption. }
-    assert (R :(b,c):) as H3'. { apply (SOI.IsLess R A A c b); assumption. }
-    assert (B b) as H16. {
-      apply H7. apply (SOI.ToClass R A A) in H14; assumption. }
-    assert (G :(b,G!b):) as H17. {
-      apply CRF.Satisfies.
-      - rewrite H15. apply IsFunction. assumption.
-      - rewrite H2 in H16. assumption. }
-    assert (exists g a, :(b,G!b): :< g /\ K R A F g a) as H18. {
-      apply (proj1 (Charac2 _ _ _ _ _ )). rewrite H15.
-      rewrite H15 in H17. assumption. }
-    destruct H18 as [g [a [H18 H19]]].
-    assert (H20 := H19). destruct H20 as [H20 [[H21 H22] H23]].
-    assert (b :< domain g) as H24. {
-      apply SRD.Charac. exists G!b. assumption. }
-    assert (R :(b,a):) as H25. {
-      rewrite H22 in H24. apply (SOI.IsLess R A A) in H24; assumption. }
-    assert (f!b = g!b) as H26. {
-      assert (g!b = G!b) as H26. { apply SRF.EvalCharac; assumption. }
-      assert (f!b = G!b) as H27. {
-        rewrite H8. apply RestrictOfClass.Eval. 2: assumption.
-        rewrite H15. apply IsFunction. assumption. }
-        rewrite H26, H27. reflexivity. }
-    assert (forall x, x :< initSegment R A b -> f!x = g!x) as H27. {
-      intros x H27.
-      assert (g!x = G!x) as H28. {
-        assert (:(x,g!x): :< g) as H28. {
-          apply SRF.Satisfies. 1: assumption. rewrite H22.
-          apply (SOI.WhenLess R A A b a); assumption. }
-        assert (G :(x,g!x):) as H29. {
-          rewrite H15. apply Charac2. exists g. exists a. split; assumption. }
-        symmetry. apply CRF.EvalCharac. 3: assumption.
-        - rewrite H15. apply IsFunction. assumption.
-        - exists g!x. assumption. }
-      assert (f!x = G!x) as H29. {
-        rewrite H8. apply RestrictOfClass.Eval.
-        - rewrite H15. apply IsFunction. assumption.
-        - apply (SOI.WhenLess R A A b); assumption. }
-      rewrite H28, H29. reflexivity. }
-    assert (f:|:initSegment R A b = g :|: initSegment R A b) as H30. {
-      apply Function.RestrictEqual; try assumption; intros x H30.
-      - rewrite H9. apply (SOI.WhenLess R A A b); assumption.
-      - rewrite H22. apply (SOI.WhenLess R A A b); assumption. }
-    rewrite H26, H30. apply H23. rewrite <- H22. assumption. }
+    assert (K R A F f c) as H9. {
+      apply Restrict; try assumption.
+      intros b H9. rewrite <- H2. apply H7.
+      apply (SOI.ToClass R A A) in H9; assumption. }
 Admitted.
-
