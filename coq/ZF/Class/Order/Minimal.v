@@ -14,6 +14,14 @@ Require Import ZF.Set.OrdPair.
 Definition Minimal (R A:Class) (a:U) : Prop
   := A a /\ initSegment R A a :~: :0:.
 
+Proposition Charac : forall (R A:Class) (a:U),
+  Minimal R A a <-> A a /\ (forall x, A x -> ~ R :(x,a):).
+Proof.
+  intros R A a. split; intros [H1 H2].
+  - split. 1: assumption. intros x. apply InitSegment.WhenEmpty. assumption.
+  - split. 1: assumption. apply InitSegment.WhenEmptyRev. assumption.
+Qed.
+
 Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> Minimal R A a -> Minimal S B a.
 Proof.
@@ -39,30 +47,17 @@ Proof.
   - assumption.
 Qed.
 
-Proposition Suffice : forall (R A:Class) (a:U),
-  A a -> (forall x, A x -> ~ R :(x,a):) -> Minimal R A a.
-Proof.
-  intros R A a H1 H2. split. 1: assumption.
-  apply InitSegment.WhenEmptyRev. assumption.
-Qed.
-
 Proposition IsIn : forall (R A:Class) (a:U),
   Minimal R A a -> A a.
 Proof.
-  intros R A a [H1 _]. assumption.
+  intros R A a H1. apply Charac in H1. apply H1.
 Qed.
 
-Proposition InitSegmentIsEmpty : forall (R A:Class) (a:U),
-  Minimal R A a -> initSegment R A a :~: :0:.
-Proof.
-  intros R A a [_ H1]. assumption.
-Qed.
-
-Proposition HasNoLesser : forall (R A:Class) (a x:U),
+Proposition NotLess : forall (R A:Class) (a x:U),
   A x -> Minimal R A a -> ~ R :(x,a):.
 Proof.
-  intros R A a x H1 H2. apply InitSegment.WhenEmpty with A.
-  2: assumption. apply InitSegmentIsEmpty. assumption.
+  intros R A a x H1 H2. apply Charac in H2. destruct H2 as [_ H2].
+  apply H2; assumption.
 Qed.
 
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),

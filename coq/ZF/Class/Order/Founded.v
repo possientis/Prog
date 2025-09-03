@@ -167,3 +167,4 @@ Proof.
   - apply (InitSegment.WhenEmpty _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
   - apply (InitSegment.WhenEmpty _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
 Qed.
+

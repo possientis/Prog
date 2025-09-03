@@ -40,7 +40,7 @@ Proof.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x H4]. assert (H5 := H4). apply Minimal.IsIn in H5.
   apply Single.Charac in H5. subst.
-  apply Minimal.HasNoLesser with (toClass :{a}:). 2: assumption. apply Single.IsIn.
+  apply Minimal.NotLess with (toClass :{a}:). 2: assumption. apply Single.IsIn.
 Qed.
 
 Proposition IsTransitive : forall (R A:Class),
@@ -58,17 +58,17 @@ Proof.
     } destruct H8 as [u H8]. assert (H9 := H8). apply Minimal.IsIn in H9.
     apply Tuple3Charac in H9. destruct H9 as [H9|[H9|H9]]; subst.
     + assert (~R :(z,x):) as H9. {
-        apply Minimal.HasNoLesser with (toClass :{x,y,z}:).
+        apply Minimal.NotLess with (toClass :{x,y,z}:).
         2: assumption. apply Tuple3In3.
       } contradiction.
 
     + assert (~R :(x,y):) as H9. {
-        apply Minimal.HasNoLesser with (toClass :{x,y,z}:).
+        apply Minimal.NotLess with (toClass :{x,y,z}:).
         2: assumption. apply Tuple3In1.
       } contradiction.
 
     + assert (~R :(y,z):) as H9. {
-        apply Minimal.HasNoLesser with (toClass :{x,y,z}:).
+        apply Minimal.NotLess with (toClass :{x,y,z}:).
         2: assumption. apply Tuple3In2.
       } contradiction.
 Qed.
@@ -185,7 +185,7 @@ Proof.
 
   (* This contradicts the minimality of y. *)
     assert (~R :(x,y):) as H9. {
-      apply (Minimal.HasNoLesser _ (toClass a)). 2: assumption.
+      apply (Minimal.NotLess _ (toClass a)). 2: assumption.
       apply (Minimal.IsIn R). assumption.
     } contradiction.
 
@@ -194,7 +194,7 @@ Proof.
 
   (* This contradicts the minimality of x. *)
     assert (~R :(y,x):) as H9. {
-      apply (Minimal.HasNoLesser _ (toClass a)). 2: assumption.
+      apply (Minimal.NotLess _ (toClass a)). 2: assumption.
       apply (Minimal.IsIn R). assumption.
     } contradiction.
 Qed.

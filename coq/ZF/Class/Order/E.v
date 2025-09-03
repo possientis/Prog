@@ -90,7 +90,7 @@ Proof.
   assert (Minimal E (toClass a) x) as A. 2: apply A.
 
   (* In other words... *)
-  apply Minimal.Suffice.
+  apply Minimal.Charac. split.
 
   (* We need to show that x :< a, which is true by assumption. *)
   - assert (x :< a) as A. 2: apply A. assumption.
@@ -119,4 +119,3 @@ Proof.
   - apply Equiv.Sym, InitSegmentEV.
   - apply SetIsSmall.
 Qed.
-

@@ -30,7 +30,7 @@ Proposition IsSmall : forall (R A B:Class) (a:U),
   B :<=: A                    ->
   Small (initSegment R B a).
 Proof.
-  intros R A B a H1 H2 H3. 
+  intros R A B a H1 H2 H3.
   apply Bounded.WhenSmaller with (initSegment R A a).
   - apply InitSegment.InclCompatR. assumption.
   - apply H1. assumption.
@@ -74,7 +74,7 @@ Proof.
     - intros b H5. remember (F^:-1:!b) as a eqn:H6.
       assert (b = F!a) as H7. { rewrite H6. symmetry.
         apply Bij.EvalOfConverseEval with A B; assumption. }
-      assert (A a) as H8. 
+      assert (A a) as H8.
         { rewrite H6. apply Bij.ConverseEvalIsInDomain with B; assumption. }
       rewrite H7. apply Small.EquivCompat with F:[initSegment R A a]:.
       + apply InitSegment.IsomFullImage; assumption.
@@ -132,7 +132,7 @@ Proof.
       (* So we need to show this is the case. *)
       assert (Minimal R (toClass a) :{x}:) as X. 2: apply X.
 
-      apply Minimal.Suffice. 1: assumption. intros b H4 H5.
+      apply Minimal.Charac. split. 1: assumption. intros b H4 H5.
       rewrite ER in H5. destruct H5 as [y [z [H5 [_ H6]]]].
       apply OrdPair.WhenEqual in H5. destruct H5 as [_ H5]. subst.
       destruct H6 as [v [w [H6 H7]]]. revert H7.
@@ -162,7 +162,7 @@ Proof.
       (* So we need to show this is the case. *)
       assert (Minimal R (toClass a) :{y,z}:) as X. 2: apply X.
 
-      apply Minimal.Suffice. 1: assumption. intros b H6 H7.
+      apply Minimal.Charac. split. 1: assumption. intros b H6 H7.
       rewrite ER in H7. destruct H7 as [c [d [H7 [H8 _]]]].
       apply OrdPair.WhenEqual in H7. destruct H7 as [H7 _]. subst.
       destruct H8 as [u H8]. subst. apply H3. exists u. assumption.

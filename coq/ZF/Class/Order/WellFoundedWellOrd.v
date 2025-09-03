@@ -144,7 +144,8 @@ Proof.
     exists x.
 
   (* So we need to prove that x is an R-minimal element in B. *)
-    assert (Minimal R B x) as X. 2: apply X. apply Minimal.Suffice.
+    assert (Minimal R B x) as X. 2: apply X.
+    apply Minimal.Charac. split.
 
   (* We first need to show that x lies in B. *)
     + assert (B x) as X. 2: apply X.
@@ -178,7 +179,7 @@ Proof.
 
   (* This contradicts the R-minimality of x in c. *)
       assert (~ R :(y,x):) as H16. 2: contradiction.
-      apply Minimal.HasNoLesser with (toClass c). 2: assumption.
+      apply Minimal.NotLess with (toClass c). 2: assumption.
       apply H8. assumption.
 Qed.
 

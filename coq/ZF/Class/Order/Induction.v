@@ -56,7 +56,7 @@ Proof.
   assert (initSegment R A a :<=: B) as H7. {
     intros x H7. apply InitSegment.Charac in H7. destruct H7 as [H7 H8].
     apply DoubleNegation. intros H9. revert H8.
-    apply (Minimal.HasNoLesser R (A:\:B)). 2: assumption.
+    apply (Minimal.NotLess R (A:\:B)). 2: assumption.
     split; assumption.
   }
 
