@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Empty.
@@ -73,3 +74,12 @@ Proof.
   - apply InitSegment.IsomWhenEmpty with R A B; assumption.
 Qed.
 
+Proposition HasNone : forall (R A:Class) (a:U),
+  A a                        ->
+  ~(exists a, Minimal R A a) ->
+   exists b, A b /\ R :(b,a):.
+Proof.
+  intros R A a H1 H2. apply DoubleNegation. intros H3.
+  apply H2. exists a. apply Charac. split. 1: assumption.
+  intros b H4 H5. apply H3. exists b. split; assumption.
+Qed.
