@@ -1,15 +1,14 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Empty.
-Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
 
 (* Predicate expressing the fact that a is an R-minimal element of A.           *)
 Definition Minimal (R A:Class) (a:U) : Prop
