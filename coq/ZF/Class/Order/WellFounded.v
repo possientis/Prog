@@ -132,7 +132,7 @@ Proof.
       (* So we need to show this is the case. *)
       assert (Minimal R (toClass a) :{x}:) as X. 2: apply X.
 
-      apply Minimal.Charac. split. 1: assumption. intros b H4 H5.
+      split. 1: assumption. intros b H4 H5.
       rewrite ER in H5. destruct H5 as [y [z [H5 [_ H6]]]].
       apply OrdPair.WhenEqual in H5. destruct H5 as [_ H5]. subst.
       destruct H6 as [v [w [H6 H7]]]. revert H7.
@@ -162,7 +162,7 @@ Proof.
       (* So we need to show this is the case. *)
       assert (Minimal R (toClass a) :{y,z}:) as X. 2: apply X.
 
-      apply Minimal.Charac. split. 1: assumption. intros b H6 H7.
+      split. 1: assumption. intros b H6 H7.
       rewrite ER in H7. destruct H7 as [c [d [H7 [H8 _]]]].
       apply OrdPair.WhenEqual in H7. destruct H7 as [H7 _]. subst.
       destruct H8 as [u H8]. subst. apply H3. exists u. assumption.
@@ -216,3 +216,4 @@ Proof.
     (* Which is a consequence of our well-foundedness assumption.               *)
     apply H1; assumption.
 Qed.
+

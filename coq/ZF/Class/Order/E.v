@@ -29,14 +29,15 @@ Qed.
 Lemma InitSegmentEA : forall (A:Class) (a:U),
   initSegment E A a :~: A :/\: toClass a.
 Proof.
-  intros A a. split; intros [H1 H2].
-  - apply InvImage.Charac in H2. destruct H2 as [y [H2 H3]].
+  intros A a x. split; intros [H1 H2].
+  - apply (InvImage.Charac E (toClass :{a}:) x) in H2. destruct H2 as [y [H2 H3]].
     apply Single.Charac in H2. apply Charac2 in H3.
     subst. split; assumption.
   - split. 1: assumption. apply InvImage.Charac. exists a. split.
     + apply Single.IsIn.
     + apply Charac2. assumption.
 Qed.
+
 
 Lemma InitSegmentEV : forall (a:U),
   initSegment E V a :~: toClass a.
@@ -49,11 +50,13 @@ Qed.
 Proposition MinimalEA : forall (A:Class) (a:U),
   Minimal E A a <-> A a /\ A :/\: toClass a :~: :0:.
 Proof.
-  intros A a. split; intros [H1 H2].
-  - split. 1: assumption. apply Equiv.Tran with (initSegment E A a).
+  intros A a. split; intros H1.
+  - apply Minimal.EmptySegment in H1. destruct H1 as [H1 H2].
+    split. 1: assumption. apply Equiv.Tran with (initSegment E A a).
     2: assumption. apply Equiv.Sym, InitSegmentEA.
-  - split. 1: assumption. apply Equiv.Tran with (A :/\: toClass a).
-    2: assumption. apply InitSegmentEA.
+  - destruct H1 as [H1 H2]. apply Minimal.EmptySegment. split. 1: assumption.
+    apply Equiv.Tran with (A :/\: toClass a). 2: assumption.
+    apply InitSegmentEA.
 Qed.
 
 (* The class E is founded on V, i.e. every subset of V has an E-minimal element.*)
@@ -90,7 +93,7 @@ Proof.
   assert (Minimal E (toClass a) x) as A. 2: apply A.
 
   (* In other words... *)
-  apply Minimal.Charac. split.
+  split.
 
   (* We need to show that x :< a, which is true by assumption. *)
   - assert (x :< a) as A. 2: apply A. assumption.
@@ -119,3 +122,4 @@ Proof.
   - apply Equiv.Sym, InitSegmentEV.
   - apply SetIsSmall.
 Qed.
+

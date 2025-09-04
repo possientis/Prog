@@ -109,8 +109,7 @@ Proof.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x [H4 H5]].
   apply Single.Charac in H4. subst. revert H2.
-  apply (InitSegment.WhenEmpty R (toClass :{a}:) a a) in H5.
-  1: contradiction. apply Single.IsIn.
+  specialize (H5 a (Single.IsIn a)). contradiction.
 Qed.
 
 Proposition FoundedNoLoop2 : forall (R A:Class), Founded R A ->
@@ -123,8 +122,8 @@ Proof.
     - apply PairIsNotEmpty.
   } destruct H6 as [x [H6 H7]].
   apply Pair.Charac in H6. destruct H6 as [H6|H6]; subst.
-  - apply (InitSegment.WhenEmpty _ _ _ b) in H7. 1: contradiction. apply Pair.IsInR.
-  - apply (InitSegment.WhenEmpty _ _ _ a) in H7. 1: contradiction. apply Pair.IsInL.
+  - specialize (H7 b (Pair.IsInR a b)). contradiction.
+  - specialize (H7 a (Pair.IsInL a b)). contradiction.
 Qed.
 
 Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
@@ -140,9 +139,9 @@ Proof.
   - apply Tuple3IsNotEmpty.
   } destruct H8 as [x [H8 H9]].
   apply Tuple3Charac in H8. destruct H8 as [H8|[H8|H8]]; subst.
-  - apply (InitSegment.WhenEmpty _ _ _ a3) in H9. 1: contradiction. apply Tuple3In3.
-  - apply (InitSegment.WhenEmpty _ _ _ a1) in H9. 1: contradiction. apply Tuple3In1.
-  - apply (InitSegment.WhenEmpty _ _ _ a2) in H9. 1: contradiction. apply Tuple3In2.
+  - specialize (H9 a3 (Tuple3In3 a1 a2 a3)). contradiction.
+  - specialize (H9 a1 (Tuple3In1 a1 a2 a3)). contradiction.
+  - specialize (H9 a2 (Tuple3In2 a1 a2 a3)). contradiction.
 Qed.
 
 Proposition FoundedNoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 a4,
@@ -162,9 +161,8 @@ Proof.
   - apply Tuple4IsNotEmpty.
   } destruct H10 as [x [H10 H11]].
   apply Tuple4Charac in H10. destruct H10 as [H10|[H10|[H10|H10]]]; subst.
-  - apply (InitSegment.WhenEmpty _ _ _ a4) in H11. 1: contradiction. apply Tuple4In4.
-  - apply (InitSegment.WhenEmpty _ _ _ a1) in H11. 1: contradiction. apply Tuple4In1.
-  - apply (InitSegment.WhenEmpty _ _ _ a2) in H11. 1: contradiction. apply Tuple4In2.
-  - apply (InitSegment.WhenEmpty _ _ _ a3) in H11. 1: contradiction. apply Tuple4In3.
+  - specialize (H11 a4 (Tuple4In4 a1 a2 a3 a4)). contradiction.
+  - specialize (H11 a1 (Tuple4In1 a1 a2 a3 a4)). contradiction.
+  - specialize (H11 a2 (Tuple4In2 a1 a2 a3 a4)). contradiction.
+  - specialize (H11 a3 (Tuple4In3 a1 a2 a3 a4)). contradiction.
 Qed.
-

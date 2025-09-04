@@ -91,7 +91,8 @@ Proof.
     exists b.
 
   (* So we need to prove that b in R-minimal in B. *)
-    assert (Minimal R B b) as X. 2: apply X. split.
+    assert (Minimal R B b) as X. 2: apply X.
+    apply Minimal.EmptySegment. split.
 
   (* Which follows from the fact that b lies in B. *)
     + assert (B b) as X. 2: apply X. assumption.
@@ -144,8 +145,7 @@ Proof.
     exists x.
 
   (* So we need to prove that x is an R-minimal element in B. *)
-    assert (Minimal R B x) as X. 2: apply X.
-    apply Minimal.Charac. split.
+    assert (Minimal R B x) as X. 2: apply X. split.
 
   (* We first need to show that x lies in B. *)
     + assert (B x) as X. 2: apply X.
