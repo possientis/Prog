@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.AntiSymmetric.
+Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Reflexive.
 Require Import ZF.Class.Order.Total.
@@ -145,4 +146,18 @@ Proof.
   apply Charac2 in H6. destruct H6 as [H6|H6].
   - subst. assumption.
   - apply H1 with y; assumption.
+Qed.
+
+Proposition InitSegment : forall (R A:Class) (a x:U),
+  initSegment R^:=: A a x <-> (A x /\ x = a) \/ initSegment R A a x.
+Proof.
+  intros R A a x. split; intros H1.
+  - apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
+    apply Charac2 in H2. destruct H2 as [H2|H2].
+    + left. split; assumption.
+    + right. apply InitSegment.Charac. split; assumption.
+  - destruct H1 as [[H1 H2]|H1]; apply InitSegment.Charac.
+    + split. 1: assumption. apply Charac2. left. assumption.
+    + apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
+      split. 1: assumption. apply Charac2. right. assumption.
 Qed.
