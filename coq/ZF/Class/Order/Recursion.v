@@ -244,3 +244,4 @@ Proof.
       intros b H9. rewrite <- H2. apply H7.
       apply (SOI.ToClass R A A) in H9; assumption. }
 Admitted.
+

@@ -4,6 +4,7 @@ Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
@@ -44,4 +45,71 @@ Proof.
   intros F R S A B H1. split.
   - apply L with F. assumption.
   - apply L with F^:-1:, Isom.Converse. assumption.
+Qed.
+
+(* If R is total on A the minimal element of a subclass of A is unique.         *)
+Proposition IsUnique : forall (R A B:Class) (x y:U),
+  Total R A       ->
+  B :<=: A        ->
+  Minimal R B x   ->
+  Minimal R B y   ->
+  x = y.
+Proof.
+
+  (* Let R A B be arbitrary classes and x y arbitrary sets. *)
+  intros R A B x y.
+
+  (* We assume that R is a total on A. *)
+  intros H1. assert (Total R A) as X. apply H1. clear X.
+
+  (* We assume that B is a subclass of A. *)
+  intros H2. assert (B :<=: A) as X. apply H2. clear X.
+
+  (* We assume that x is R-minimal in B. *)
+  intros H3. assert (Minimal R B x) as X. apply H3. clear X.
+
+  (* And we assume that y is R-minimal in B. *)
+  intros H4. assert (Minimal R B y) as X. apply H4. clear X.
+
+  (* We need to show that x = y. *)
+  assert (x = y) as X. 2: apply X.
+
+  (* x is also an element of A. *)
+  assert (A x) as H5. { apply H2. apply Minimal.IsIn with R. assumption. }
+
+  (* And y is an element of A. *)
+  assert (A y) as H6. { apply H2. apply Minimal.IsIn with R. assumption. }
+
+  (* From the totality of R on A we see that x = y \/  x R y \/ y R x. *)
+  specialize (H1 x y H5 H6).
+  assert (x = y \/ R :(x,y): \/ R :(y,x):) as X. apply H1. clear X.
+
+  (* We consider these three cases separately. *)
+  destruct H1 as [H1|[H1|H1]].
+
+  (* We first consider the case when x = y. *)
+  - assert (x = y) as X. { apply H1. } clear X.
+
+    (* Then we are done. *)
+    assumption.
+
+  (* We then consider the case x R y. *)
+  - assert (R :(x,y):) as X. { apply H1. } clear X.
+
+ (* This contradicts the minimality of y. *)
+    assert (~R :(x,y):) as H7. {
+      apply (Minimal.NotLess _ B). 2: assumption.
+      apply (Minimal.IsIn R). assumption.
+    }
+
+    contradiction.
+
+  (* We finally consider the case y R x. *)
+  - assert (R :(y,x):) as X. { apply H1. } clear X.
+
+ (* This contradicts the minimality of x. *)
+    assert (~R :(y,x):) as H7. {
+      apply (Minimal.NotLess _ B). 2: assumption.
+      apply (Minimal.IsIn R). assumption.
+    } contradiction.
 Qed.
