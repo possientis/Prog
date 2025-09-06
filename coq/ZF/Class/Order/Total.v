@@ -4,6 +4,7 @@ Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Maximal.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -47,8 +48,18 @@ Proof.
   - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
+Proposition Converse : forall (R A:Class),
+  Total R A -> Total R^:-1: A.
+Proof.
+  intros R A H1 x y H2 H3. specialize (H1 x y H2 H3).
+  destruct H1 as [H1|[H1|H1]].
+  - left. assumption.
+  - right. right. apply Converse.Charac2Rev. assumption.
+  - right. left. apply Converse.Charac2Rev. assumption.
+Qed.
+
 (* If R is total on A the minimal element of a subclass of A is unique.         *)
-Proposition IsUnique : forall (R A B:Class) (x y:U),
+Proposition MinUnique : forall (R A B:Class) (x y:U),
   Total R A       ->
   B :<=: A        ->
   Minimal R B x   ->
@@ -112,4 +123,17 @@ Proof.
       apply (Minimal.NotLess _ B). 2: assumption.
       apply (Minimal.IsIn R). assumption.
     } contradiction.
+Qed.
+
+(* If R is total on A the maximal element of a subclass of A is unique.         *)
+Proposition MaxUnique : forall (R A B:Class) (x y:U),
+  Total R A       ->
+  B :<=: A        ->
+  Maximal R B x   ->
+  Maximal R B y   ->
+  x = y.
+Proof.
+  intros R A B x y H1 H2 H3 H4.
+  apply Converse in H1. apply IsMinimal in H3. apply IsMinimal in H4.
+  apply MinUnique with R^:-1: A B; assumption.
 Qed.

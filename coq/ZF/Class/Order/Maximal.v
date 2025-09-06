@@ -2,7 +2,9 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
@@ -77,4 +79,24 @@ Proof.
   - intros y H6 H7. apply (Bij.ImageCharac F A B C) in H6. 2: apply H1.
     destruct H6 as [x [H6 [H8 H9]]]. rewrite <- H9 in H7.
     apply H1 in H7; try assumption. specialize (H5 x H6). contradiction.
+Qed.
+
+Proposition IsMinimal : forall (R A:Class) (a:U),
+  Maximal R A a <-> Minimal R^:-1: A a.
+Proof.
+  intros R A a. split; intros H1.
+  - split. 1: apply H1. intros x H2 H3. apply Converse.Charac2 in H3.
+    destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
+  - split. 1: apply H1. intros x H2 H3. apply Converse.Charac2Rev in H3.
+    destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
+Qed.
+
+Proposition IsMaximal : forall (R A:Class) (a:U),
+  Minimal R A a <-> Maximal R^:-1: A a.
+Proof.
+  intros R A a. split; intros H1.
+  - split. 1: apply H1. intros x H2 H3. apply Converse.Charac2 in H3.
+    destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
+  - split. 1: apply H1. intros x H2 H3. apply Converse.Charac2Rev in H3.
+    destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
 Qed.
