@@ -67,6 +67,12 @@ Proof.
       split. 1: assumption. apply Charac2. right. assumption.
 Qed.
 
+Proposition IsIn : forall (R A:Class) (a:U),
+  A a -> initSegment R^:=: A a a.
+Proof.
+  intros R A a H1. apply InitRefl. left. split. 1: assumption. reflexivity.
+Qed.
+
 Proposition IsSmall : forall (R A B:Class) (a:U),
   WellFounded R A                   ->
   A a                               ->

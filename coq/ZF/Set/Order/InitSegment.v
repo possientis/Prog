@@ -108,6 +108,28 @@ Proof.
     + right. apply (ToClass R A B); assumption.
 Qed.
 
+Proposition IsIn : forall (R A B:Class) (a:U),
+  WellFounded R A               ->
+  B a                           ->
+  B :<=: A                      ->
+  a :< initSegment R^:=: B a.
+Proof.
+  intros R A B a H1 H2 H3.
+  apply (ToClassRefl R A B); try assumption.
+  - apply H3. assumption.
+  - apply ReflClosure.IsIn. assumption.
+Qed.
+
+Proposition IsInclRefl : forall (R A B:Class) (a:U),
+  WellFounded R A                                 ->
+  A a                                             ->
+  B :<=: A                                        ->
+  initSegment R B a :<=: initSegment R^:=: B a.
+Proof.
+  intros R A B a H1 H2 H3 x H4.
+  apply (InitRefl R A B); try assumption. right. assumption.
+Qed.
+
 Proposition WhenIn : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->

@@ -288,15 +288,10 @@ Proof.
     intros x H7.
     assert ((g:|:initSegment R A a)!x = g!x) as H8. {
       apply Restrict.Eval. 2: assumption. apply G4. }
-    rewrite H8. apply SRF.EvalCharac.
-    - apply G4.
-    - assert (domain g = initSegment R^:=: A a) as H9. { apply G4. }
-      rewrite H9. apply (SOI.InitRefl R A A); try assumption.
-      right. assumption.
-    - rewrite H5. apply Union2.Charac. left.
-      apply SFO.Satisfies with (initSegment R A a); assumption. }
-  assert (Transitive R A) as G6. {
-    apply WellFoundedWellOrd.IsTransitive. assumption. }
+
+
+Show.
+(*
   split. 1: assumption.
   intros b H6. apply (SOI.InitRefl R A A) in H6; try assumption.
   destruct H6 as [H6|H6].
@@ -305,20 +300,12 @@ Proof.
       rewrite H7. apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
       - apply (SOI.IsIn R A A); assumption.
       - rewrite H5. apply Union2.Charac. right. apply Single.Charac. reflexivity. }
-    rewrite H8, H7, G5. reflexivity.
-  - assert (g!b = f!b) as H8. {
-      apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
-      - apply (SOI.InitRefl R A A); try assumption. right. assumption.
-      - rewrite H5. apply Union2.Charac. left.
-        apply SFO.Satisfies with (initSegment R A a); assumption. }
-        assert (f:|:initSegment R A b = g:|:initSegment R A b) as H9. {
-          rewrite <- G5. apply Restrict.TowerProperty.
-          apply (SOI.WhenLess R A A); try assumption.
-          - apply (SOI.WhenIn R A A) with a; try assumption.
-          - apply (SOI.IsLess R A A); assumption. }
-        rewrite H8, <- H9. apply H4. assumption.
-Qed.
+    assert (g:|:initSegment R A b = f) as H9. {
+      apply SFO.EqualCharac with (initSegment R A a) (initSegment R A a).
+*)
+Admitted.
 
+(*
 Proposition DomainIsA : forall (R A F:Class), WellFoundedWellOrd R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
@@ -342,4 +329,4 @@ Proof.
       intros b H9. rewrite <- H2. apply H7.
       apply (SOI.ToClass R A A) in H9; assumption. }
 Admitted.
-
+*)
