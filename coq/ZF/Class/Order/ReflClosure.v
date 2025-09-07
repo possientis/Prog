@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.AntiSymmetric.
@@ -6,8 +7,12 @@ Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Reflexive.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
+Require Import ZF.Class.Order.WellFounded.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.ReflClosure.
 Export ZF.Notation.ReflClosure.
@@ -46,6 +51,47 @@ Proof.
   - right. apply H1. assumption.
   - destruct H2 as [y H2]. subst. left. exists y. reflexivity.
   - right. apply H1. assumption.
+Qed.
+
+Proposition InitSegment : forall (R A:Class) (a x:U),
+  initSegment R^:=: A a x <-> (A x /\ x = a) \/ initSegment R A a x.
+Proof.
+  intros R A a x. split; intros H1.
+  - apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
+    apply Charac2 in H2. destruct H2 as [H2|H2].
+    + left. split; assumption.
+    + right. apply InitSegment.Charac. split; assumption.
+  - destruct H1 as [[H1 H2]|H1]; apply InitSegment.Charac.
+    + split. 1: assumption. apply Charac2. left. assumption.
+    + apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
+      split. 1: assumption. apply Charac2. right. assumption.
+Qed.
+
+Proposition IsSmall : forall (R A B:Class) (a:U),
+  WellFounded R A                   ->
+  A a                               ->
+  B :<=: A                          ->
+  Small (initSegment R^:=: B a).
+Proof.
+  intros R A B a H1 H2 H3.
+  assert (Small (initSegment R B a)) as H4. {
+    apply WellFounded.IsSmall with A; assumption. }
+  destruct H4 as [b H4].
+  assert (B a \/ ~B a) as H5. { apply LawExcludedMiddle. }
+  destruct H5 as [H5|H5].
+  - exists (b :\/: :{a}:). intros x. split; intros H6.
+    + apply Union2.Charac in H6. destruct H6 as [H6|H6]; apply InitSegment.
+      * right. apply H4. assumption.
+      * apply Single.Charac in H6. subst. left.
+        split. 1: assumption. reflexivity.
+    + apply InitSegment in H6. destruct H6 as [H6|H6]; apply Union2.Charac.
+      * right. apply Single.Charac, H6.
+      * apply H4 in H6. left. assumption.
+  - exists b. intros x. split; intros H6.
+    + apply InitSegment. right. apply H4. assumption.
+    + apply InitSegment in H6. destruct H6 as [H6|H6].
+      * exfalso. destruct H6 as [H6 H7]. subst. contradiction.
+      * apply H4. assumption.
 Qed.
 
 (* The reflexive closure of R is the smallest reflexive relation containing R.  *)
@@ -148,16 +194,3 @@ Proof.
   - apply H1 with y; assumption.
 Qed.
 
-Proposition InitSegment : forall (R A:Class) (a x:U),
-  initSegment R^:=: A a x <-> (A x /\ x = a) \/ initSegment R A a x.
-Proof.
-  intros R A a x. split; intros H1.
-  - apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
-    apply Charac2 in H2. destruct H2 as [H2|H2].
-    + left. split; assumption.
-    + right. apply InitSegment.Charac. split; assumption.
-  - destruct H1 as [[H1 H2]|H1]; apply InitSegment.Charac.
-    + split. 1: assumption. apply Charac2. left. assumption.
-    + apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
-      split. 1: assumption. apply Charac2. right. assumption.
-Qed.

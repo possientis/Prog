@@ -2,6 +2,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Bij.
@@ -28,6 +29,16 @@ Proposition ToClass : forall (R A B:Class) (a:U),
 Proof.
   intros R A B a H1 H2 H3.
   apply Truncate.WhenSmall, WellFounded.IsSmall with A; assumption.
+Qed.
+
+Proposition ToClassRefl : forall (R A B:Class) (a:U),
+  WellFounded R A                                                 ->
+  A a                                                             ->
+  B :<=: A                                                        ->
+  toClass (initSegment R^:=: B a) :~: COI.initSegment R^:=: B a.
+Proof.
+  intros R A B a H1 H2 H3.
+  apply Truncate.WhenSmall, ReflClosure.IsSmall with A; assumption.
 Qed.
 
 Proposition Charac : forall (R A B:Class) (a x:U),

@@ -262,7 +262,25 @@ Proof.
       apply SIN.DoubleInclusion. split; intros x H9.
       - apply SRD.Charac in H9. destruct H9 as [y H9].
         rewrite H5 in H9. apply Union2.Charac in H9. destruct H9 as [H9|H9].
-        +
+        + apply (SOI.ToClassRefl R A A); try assumption.
+          apply ReflClosure.InitSegment. right. apply (SOI.ToClass R A A);
+          try assumption. rewrite <- G1. apply SRD.Charac.
+          exists y. assumption.
+        + apply Single.Charac in H9. apply OrdPair.WhenEqual in H9.
+          destruct H9 as [H9 H10].
+          apply (SOI.ToClassRefl R A A); try assumption.
+          apply ReflClosure.InitSegment. left. subst.
+          split. 1: assumption. reflexivity.
+      - apply (SOI.ToClassRefl R A A) in H9; try assumption.
+        apply ReflClosure.InitSegment in H9. destruct H9 as [H9|H9];
+        apply SRD.Charac.
+        + destruct H9 as [H9 H10]. exists F!f. rewrite H5. apply Union2.Charac.
+          right. apply Single.Charac. subst. reflexivity.
+        + apply (SOI.ToClass R A A) in H9; try assumption. rewrite <- G1 in H9.
+          apply SRD.Charac in H9. destruct H9 as [y H9]. exists y.
+          rewrite H5. apply Union2.Charac. left. assumption. }
+    split; assumption.
+  - intros b H6.
 Admitted.
 
 (*
