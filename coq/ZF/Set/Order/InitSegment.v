@@ -91,6 +91,23 @@ Proof.
   - apply H1.
 Qed.
 
+Proposition InitRefl : forall (R A B:Class) (a x:U),
+  WellFounded R A                                                           ->
+  A a                                                                       ->
+  B :<=: A                                                                  ->
+  x :< initSegment R^:=: B a <-> (B a /\ x = a) \/ x :< initSegment R B a.
+Proof.
+  intros R A B a x H1 H2 H3. split; intros H4.
+  - apply (ToClassRefl R A B) in H4; try assumption.
+    apply ReflClosure.InitRefl in H4. destruct H4 as [H4|H4].
+    + left. assumption.
+    + right. apply (ToClass R A B); assumption.
+  - apply (ToClassRefl R A B); try assumption.
+    apply ReflClosure.InitRefl. destruct H4 as [H4|H4].
+    + left. assumption.
+    + right. apply (ToClass R A B); assumption.
+Qed.
+
 Proposition WhenIn : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
