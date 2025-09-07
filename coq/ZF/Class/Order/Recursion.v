@@ -19,6 +19,8 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 Module COI := ZF.Class.Order.InitSegment.
 Module CRD := ZF.Class.Relation.Domain.
@@ -221,6 +223,49 @@ Proof.
   split. 1: assumption. split; assumption.
 Qed.
 
+Lemma Extend : forall (R A F:Class) (a f g:U),
+  WellFoundedWellOrd R A      ->
+  K R A F f a                 ->
+  g = f :\/: :{ :(a,F!f): }:  ->
+  K R^:=: A F g a.
+Proof.
+  intros R A F a f g H1 [H2 [H3 H4]] H5. split. 1: assumption.
+  assert (domain f = initSegment R A a) as G1. { apply H3. }
+  assert (WellFounded R A) as G2. { apply H1. }
+  assert (A :<=: A) as G3. { apply Class.Incl.Refl. }
+  split.
+  - assert (SRR.Relation g) as H6. {
+      intros x H6. rewrite H5 in H6. apply Union2.Charac in H6.
+      destruct H6 as [H6|H6].
+      - apply H3. assumption.
+      - apply Single.Charac in H6. exists a. exists F!f. assumption. }
+    assert (SFL.Functional g) as H7. {
+      intros x y z H7 H8. rewrite H5 in H7. rewrite H5 in H8.
+      apply Union2.Charac in H7. apply Union2.Charac in H8.
+      destruct H7 as [H7|H7]; destruct H8 as [H8|H8].
+      - apply H3 with x; assumption.
+      - exfalso. apply Single.Charac in H8. apply OrdPair.WhenEqual in H8.
+        destruct H8 as [H8 _]. subst.
+        assert (a :< domain f) as H9. { apply SRD.Charac. exists y. assumption. }
+        rewrite G1 in H9. apply (SOI.IsLess R A A) in H9; try assumption.
+        apply (WellFoundedWellOrd.IsIrreflexive R A H1 a); assumption.
+      - exfalso. apply Single.Charac in H7. apply OrdPair.WhenEqual in H7.
+        destruct H7 as [H7 _]. subst.
+        assert (a :< domain f) as H9. { apply SRD.Charac. exists z. assumption. }
+        rewrite G1 in H9. apply (SOI.IsLess R A A) in H9; try assumption.
+        apply (WellFoundedWellOrd.IsIrreflexive R A H1 a); assumption.
+      - apply Single.Charac in H7. apply Single.Charac in H8.
+        apply OrdPair.WhenEqual in H7. apply OrdPair.WhenEqual in H8.
+        destruct H7 as [_ H7]. destruct H8 as [_ H8]. subst. reflexivity. }
+    assert (SRF.Function g) as H8. { split; assumption. }
+    assert (domain g = initSegment R^:=: A a) as H9. {
+      apply SIN.DoubleInclusion. split; intros x H9.
+      - apply SRD.Charac in H9. destruct H9 as [y H9].
+        rewrite H5 in H9. apply Union2.Charac in H9. destruct H9 as [H9|H9].
+        +
+Admitted.
+
+(*
 Proposition DomainIsA : forall (R A F:Class), WellFoundedWellOrd R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
@@ -244,4 +289,4 @@ Proof.
       intros b H9. rewrite <- H2. apply H7.
       apply (SOI.ToClass R A A) in H9; assumption. }
 Admitted.
-
+*)
