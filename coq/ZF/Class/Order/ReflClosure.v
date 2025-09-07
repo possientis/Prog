@@ -54,15 +54,15 @@ Proof.
 Qed.
 
 Proposition InitSegment : forall (R A:Class) (a x:U),
-  initSegment R^:=: A a x <-> (A x /\ x = a) \/ initSegment R A a x.
+  initSegment R^:=: A a x <-> (A a /\ x = a) \/ initSegment R A a x.
 Proof.
   intros R A a x. split; intros H1.
   - apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
     apply Charac2 in H2. destruct H2 as [H2|H2].
-    + left. split; assumption.
+    + left. subst. split. 1: assumption. reflexivity.
     + right. apply InitSegment.Charac. split; assumption.
   - destruct H1 as [[H1 H2]|H1]; apply InitSegment.Charac.
-    + split. 1: assumption. apply Charac2. left. assumption.
+    + subst. split. 1: assumption. apply Charac2. left. reflexivity.
     + apply InitSegment.Charac in H1. destruct H1 as [H1 H2].
       split. 1: assumption. apply Charac2. right. assumption.
 Qed.
