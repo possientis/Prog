@@ -263,16 +263,16 @@ Proof.
       - apply SRD.Charac in H9. destruct H9 as [y H9].
         rewrite H5 in H9. apply Union2.Charac in H9. destruct H9 as [H9|H9].
         + apply (SOI.ToClassRefl R A A); try assumption.
-          apply ReflClosure.InitSegment. right. apply (SOI.ToClass R A A);
+          apply ReflClosure.InitRefl. right. apply (SOI.ToClass R A A);
           try assumption. rewrite <- G1. apply SRD.Charac.
           exists y. assumption.
         + apply Single.Charac in H9. apply OrdPair.WhenEqual in H9.
           destruct H9 as [H9 H10].
           apply (SOI.ToClassRefl R A A); try assumption.
-          apply ReflClosure.InitSegment. left. subst.
+          apply ReflClosure.InitRefl. left. subst.
           split. 1: assumption. reflexivity.
       - apply (SOI.ToClassRefl R A A) in H9; try assumption.
-        apply ReflClosure.InitSegment in H9. destruct H9 as [H9|H9];
+        apply ReflClosure.InitRefl in H9. destruct H9 as [H9|H9];
         apply SRD.Charac.
         + destruct H9 as [H9 H10]. exists F!f. rewrite H5. apply Union2.Charac.
           right. apply Single.Charac. subst. reflexivity.
@@ -283,7 +283,7 @@ Proof.
   - intros b H6.
 Admitted.
 
-(*
+
 Proposition DomainIsA : forall (R A F:Class), WellFoundedWellOrd R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
@@ -307,4 +307,4 @@ Proof.
       intros b H9. rewrite <- H2. apply H7.
       apply (SOI.ToClass R A A) in H9; assumption. }
 Admitted.
-*)
+

@@ -53,7 +53,7 @@ Proof.
   - right. apply H1. assumption.
 Qed.
 
-Proposition InitSegment : forall (R A:Class) (a x:U),
+Proposition InitRefl : forall (R A:Class) (a x:U),
   initSegment R^:=: A a x <-> (A a /\ x = a) \/ initSegment R A a x.
 Proof.
   intros R A a x. split; intros H1.
@@ -80,16 +80,16 @@ Proof.
   assert (B a \/ ~B a) as H5. { apply LawExcludedMiddle. }
   destruct H5 as [H5|H5].
   - exists (b :\/: :{a}:). intros x. split; intros H6.
-    + apply Union2.Charac in H6. destruct H6 as [H6|H6]; apply InitSegment.
+    + apply Union2.Charac in H6. destruct H6 as [H6|H6]; apply InitRefl.
       * right. apply H4. assumption.
       * apply Single.Charac in H6. subst. left.
         split. 1: assumption. reflexivity.
-    + apply InitSegment in H6. destruct H6 as [H6|H6]; apply Union2.Charac.
+    + apply InitRefl in H6. destruct H6 as [H6|H6]; apply Union2.Charac.
       * right. apply Single.Charac, H6.
       * apply H4 in H6. left. assumption.
   - exists b. intros x. split; intros H6.
-    + apply InitSegment. right. apply H4. assumption.
-    + apply InitSegment in H6. destruct H6 as [H6|H6].
+    + apply InitRefl. right. apply H4. assumption.
+    + apply InitRefl in H6. destruct H6 as [H6|H6].
       * exfalso. destruct H6 as [H6 H7]. subst. contradiction.
       * apply H4. assumption.
 Qed.
