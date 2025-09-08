@@ -1,6 +1,8 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Order.FinalSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Relation.Bij.
@@ -99,4 +101,13 @@ Proof.
     destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
   - split. 1: apply H1. intros x H2 H3. apply Converse.Charac2Rev in H3.
     destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
+Qed.
+
+
+Proposition EmptySegment : forall (R A:Class) (a:U),
+  Maximal R A a <-> A a /\ finalSegment R A a :~: :0:.
+Proof.
+  intros R A a. split; intros [H1 H2].
+  - split. 1: assumption. apply FinalSegment.WhenEmptyRev. assumption.
+  - split. 1: assumption. intros x. apply FinalSegment.WhenEmpty. assumption.
 Qed.

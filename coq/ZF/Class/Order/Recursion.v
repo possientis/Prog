@@ -4,6 +4,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Maximal.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Total.
@@ -319,27 +320,29 @@ Proof.
         rewrite H8, <- H9. apply H4. assumption.
 Qed.
 
-Proposition DomainIsA : forall (R A F:Class), WellFoundedWellOrd R A ->
+Proposition DomainIsA : forall (R A F:Class),
+  WellFoundedWellOrd R A              ->
+  HasNoMaximal R A                    ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
-  intros R A F H1.
-  remember (CRD.domain (Recursion R A F)) as B eqn:H2.
-  assert (WellFounded R A) as H3. { apply H1. }
-  assert (Transitive R A) as H1'. {
+  intros R A F H1 H2.
+  remember (CRD.domain (Recursion R A F)) as B eqn:H3.
+  assert (WellFounded R A) as H4. { apply H1. }
+  assert (Transitive R A) as G1. {
     apply WellFoundedWellOrd.IsTransitive. assumption. }
-  assert (A :<=: A) as H4. { apply Class.Incl.Refl. }
-  assert (B :<=: A) as H5. {
-    rewrite H2. intros x [y H5]. destruct H5 as [f [a [H5 [H6 [[_ H7] _]]]]].
-    assert (x :< domain f) as H8. {
+  assert (A :<=: A) as H5. { apply Class.Incl.Refl. }
+  assert (B :<=: A) as H6. {
+    rewrite H3. intros x [y H6]. destruct H6 as [f [a [H6 [H7 [[_ H8] _]]]]].
+    assert (x :< domain f) as H9. {
       apply SRD.Charac. exists y. assumption. }
-    rewrite H7 in H8. apply SOI.WhenIn with R A a; assumption. }
-  assert (forall a, A a -> B a) as H6. {
+    rewrite H8 in H9. apply SOI.WhenIn with R A a; assumption. }
+  assert (forall a, A a -> B a) as H7. {
     apply Induction' with R. 1: assumption.
-    intros c H6 H7.
-    remember (Recursion R A F :|: initSegment R A c) as f eqn:H8.
-    assert (K R A F f c) as H9. {
+    intros c H7 H8.
+    remember (Recursion R A F :|: initSegment R A c) as f eqn:H9.
+    assert (K R A F f c) as H10. {
       apply Restrict; try assumption.
-      intros b H9. rewrite <- H2. apply H7.
-      apply (SOI.ToClass R A A) in H9; assumption. }
+      intros b H10. rewrite <- H3. apply H8.
+      apply (SOI.ToClass R A A) in H10; assumption. }
 Admitted.
 

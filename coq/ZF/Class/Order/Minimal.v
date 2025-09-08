@@ -88,3 +88,4 @@ Proof.
   - split. 1: assumption. apply InitSegment.WhenEmptyRev. assumption.
   - split. 1: assumption. intros x. apply InitSegment.WhenEmpty. assumption.
 Qed.
+
