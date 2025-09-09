@@ -49,6 +49,7 @@ Proof.
   - contradiction.
 Qed.
 
+
 Proposition IsSmall : forall (R A:Class) (a:U),
   WellFoundedWellOrd R A  ->
   A a                     ->
