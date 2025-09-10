@@ -89,7 +89,6 @@ Proof.
   - assumption.
 Qed.
 
-
 Proposition WhenIn : forall (R A:Class) (a x:U),
   finalSegment R A a x -> A x.
 Proof.

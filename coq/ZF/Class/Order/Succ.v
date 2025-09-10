@@ -11,7 +11,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
-(* The successor (as a class) in the ordered class R A of a set a.              *)
+(* The successor (as a class) in the ordered class (A,R) of a set a.            *)
 Definition succ (R A:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ Minimal R (finalSegment R A a) y.
 
