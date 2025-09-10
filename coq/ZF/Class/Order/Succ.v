@@ -49,6 +49,39 @@ Proof.
   - contradiction.
 Qed.
 
+Proposition WhenNotMaximal : forall (R A:Class) (a:U),
+  WellFoundedWellOrd R A                        ->
+  A a                                           ->
+  ~ Maximal R A a                               ->
+  exists b,
+    toClass b :~: succ R A a                    /\
+    A b                                         /\
+    R :(a,b):                                   /\
+    forall x, A x -> R :(a,x): -> ~ R :(x,b):.
+Proof.
+  intros R A a H1 H2 H3.
+  remember (finalSegment R A a) as B eqn:H4.
+  assert (B :<>: :0:) as H5. {
+    intros H5. apply H3, Maximal.EmptySegment. split.
+    1: assumption. rewrite <- H4. assumption. }
+  assert (B :<=: A) as H6. { rewrite H4. apply FinalSegment.IsIncl. }
+  assert (exists b, Minimal R B b) as H7. {
+    apply WellFoundedWellOrd.HasMinimal with A; assumption. }
+  destruct H7 as [b H7]. exists b. split.
+  - intros x. split; intros H8.
+    + exists b. split. 1: assumption. rewrite <- H4. assumption.
+    + destruct H8 as [c [H8 H9]]. rewrite <- H4 in H9.
+      assert (b = c) as H10. {
+        apply (Total.MinUnique R A B); try assumption.
+        apply H1. }
+      subst. assumption.
+  - assert (B b) as H8. { apply Minimal.IsIn with R. assumption. }
+    assert (R :(a,b):) as H9. {
+      rewrite H4 in H8. apply FinalSegment.IsMore with A. assumption. }
+    split. 1: apply H6, H8. split. 1: assumption.
+    intros x H10 H11. destruct H7 as [H7 H12]. apply H12.
+    rewrite H4. apply FinalSegment.Charac. split; assumption.
+Qed.
 
 Proposition IsSmall : forall (R A:Class) (a:U),
   WellFoundedWellOrd R A  ->
@@ -61,19 +94,6 @@ Proof.
   - apply Small.EquivCompat with :0:.
     + apply Equiv.Sym, WhenMaximal. assumption.
     + apply Empty.IsSmall.
-  - assert (finalSegment R A a :<>: :0:) as H4. {
-      intros H4. apply H3. apply Maximal.EmptySegment. split; assumption. }
-    remember (finalSegment R A a) as B eqn:H5.
-    assert (B :<=: A) as H6. {
-      rewrite H5. apply FinalSegment.IsIncl. }
-    assert (exists b, Minimal R B b) as H7. {
-      apply WellFoundedWellOrd.HasMinimal with A; assumption. }
-    destruct H7 as [b H7]. exists b. intros x. split; intros H8.
-    + exists b. split. 1: assumption. rewrite <- H5. assumption.
-    + destruct H8 as [c [H8 H9]]. rewrite <- H5 in H9.
-      assert (b = c) as H10. {
-        apply (Total.MinUnique R A B); try assumption.
-        apply H1. }
-      subst. assumption.
+  - apply WhenNotMaximal in H3; try assumption.
+    destruct H3 as [b [H3 _]]. exists b. assumption.
 Qed.
-
