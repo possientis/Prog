@@ -156,6 +156,20 @@ Proof.
     + apply IsMore; assumption.
 Qed.
 
+Proposition InInit: forall (R A:Class) (a:U),
+  WellFoundedWellOrd R A                                ->
+  A a                                                   ->
+  ~ Maximal R A a                                       ->
+  a :< initSegment R A (succ R A a).
+Proof.
+  intros R A a H1 H2 H3.
+  assert (WellFounded R A) as H4. { apply H1. }
+  assert (A :<=: A) as H5. { apply CIN.Refl. }
+  apply (InitSegment.CharacRev R A A); try assumption.
+  - apply IsIn; assumption.
+  - apply IsMore; assumption.
+Qed.
+
 (* The R-initial segment at (succ a) is the R^=-initial segment at a.           *)
 Proposition InitRefl : forall (R A:Class) (a:U),
   WellFoundedWellOrd R A                                ->

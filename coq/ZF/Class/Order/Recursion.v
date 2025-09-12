@@ -13,6 +13,7 @@ Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Order.InitSegment.
+Require Import ZF.Set.Order.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
@@ -39,8 +40,8 @@ Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRR := ZF.Set.Relation.Relation.
 
 (* The recursion class associated with R A F. In other words, when R is a well  *)
-(* founded well ordering on A, the unique function class G defined on A by the  *)
-(* recursion G(b) = F(G|initSegment R A b).                                     *)
+(* founded well ordering on A and A has no maximal element, the unique function *)
+(* class G defined on A by the recursion G(b) = F(G|initSegment R A b).         *)
 Definition Recursion (R A F:Class) : Class := fun x => exists f a,
   x :< f                                                                  /\
   A a                                                                     /\
@@ -320,6 +321,7 @@ Proof.
         rewrite H8, <- H9. apply H4. assumption.
 Qed.
 
+(* The recursion class associated with R A F has domain A.                      *)
 Proposition DomainIsA : forall (R A F:Class),
   WellFoundedWellOrd R A              ->
   HasNoMaximal R A                    ->
@@ -344,5 +346,30 @@ Proof.
       apply Restrict; try assumption.
       intros b H10. rewrite <- H3. apply H8.
       apply (SOI.ToClass R A A) in H10; assumption. }
-Admitted.
+    remember (f :\/: :{ :(c,F!f): }:) as g eqn:H11.
+    assert (KExt R A F g c) as H12. { apply Extend with f; assumption. }
+    assert (~ Maximal R A c) as H13. {
+      intros H13. apply H2. exists c. assumption. }
+    assert (K R A F g (succ R A c)) as H14. {
+      destruct H12 as [H12 [H15 H16]].
+      assert (initSegment R A (succ R A c) = initSegment R^:=: A c) as H17. {
+        apply Succ.InitRefl; assumption. }
+      rewrite <- H17 in H15. rewrite <- H17 in H16.
+      assert (A (succ R A c)) as H18. { apply Succ.IsIn; assumption. }
+      split. 1: assumption. split; assumption. }
+    rewrite H3. exists g!c. apply Charac2. exists g. exists (succ R A c).
+    split. 2: assumption. apply SFO.Satisfies with (initSegment R A (succ R A c)).
+    1: apply H14. apply Succ.InInit; assumption. }
+  apply CIN.DoubleInclusion. split; assumption.
+Qed.
 
+(* The recursion class associated with R A F is a function class defined on A.  *)
+Proposition IsFunctioOn : forall (R A F:Class),
+  WellFoundedWellOrd R A              ->
+  HasNoMaximal R A                    ->
+  CFO.FunctionOn (Recursion R A F) A.
+Proof.
+  intros R A F H1 H2. split.
+  - apply IsFunction. assumption.
+  - apply DomainIsA; assumption.
+Qed.
