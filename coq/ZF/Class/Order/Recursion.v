@@ -448,3 +448,48 @@ Proof.
       apply (SOI.IsLess R A A); assumption. }
   rewrite H13, <- H15, H4. apply H11. assumption.
 Qed.
+
+(* The recursion class of R A F is the unique F-recursive funcrion on A.        *)
+Proposition IsUnique : forall (R A F G:Class),
+  WellFoundedWellOrd R A                               ->
+  HasNoMaximal R A                                     ->
+  CFO.FunctionOn G A                                   ->
+  (forall b, A b -> G!b = F!(G:|:initSegment R A b))   ->
+  G :~: Recursion R A F.
+Proof.
+  intros R A F G H1 H2 H3 H4.
+  assert (WellFounded R A) as H5. { apply H1. }
+  assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
+  apply (CFO.EqualCharac _ _ A A). 1: assumption.
+  - apply IsFunctionOn; assumption.
+  - split. 1: apply Equiv.Refl. apply Induction' with R. 1: assumption.
+    intros a H7 H8.
+    remember (initSegment R A a) as b eqn:H9.
+    assert (SRD.domain (G:|:b) = b) as H10. {
+      apply RestrictOfClass.DomainWhenIncl. 1: apply H3. destruct H3 as [_ H3].
+      intros x H10. apply H3. rewrite H9 in H10.
+      apply (SOI.IsIn R A A a); assumption. }
+    assert (SRD.domain ((Recursion R A F) :|: b) = b) as H11. {
+      apply RestrictOfClass.DomainWhenIncl.
+      - apply IsFunction. assumption.
+      - intros x H11. apply DomainIsA; try assumption.
+        rewrite H9 in H11. apply (SOI.IsIn R A A a); assumption. }
+    assert (G:|:b = (Recursion R A F) :|: b) as H12. {
+      apply SRF.EqualCharac.
+      - apply RestrictOfClass.IsFunction, H3.
+      - apply RestrictOfClass.IsFunction, IsFunction. assumption.
+      - rewrite H10, H11. reflexivity.
+      - intros x H12. rewrite H10 in H12.
+        assert ((G:|:b)!x = G!x) as H13. {
+          apply RestrictOfClass.Eval. 2: assumption. apply H3. }
+        assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H14. {
+          apply RestrictOfClass.Eval. 2: assumption.
+          apply IsFunction. assumption. }
+        rewrite H13, H14. apply H8. apply (SOI.ToClass R A A); try assumption.
+        rewrite H9 in H12. assumption. }
+        assert (G!a = F!(G:|:b)) as H15. { rewrite H9. apply H4. assumption. }
+        assert ((Recursion R A F)!a = F!((Recursion R A F) :|: b)) as H16. {
+          rewrite H9. apply IsRecursive; assumption. }
+        rewrite H15, H16, H12. reflexivity.
+Qed.
+
