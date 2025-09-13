@@ -108,7 +108,7 @@ Proof.
     + right. apply (ToClass R A B); assumption.
 Qed.
 
-Proposition IsIn : forall (R A B:Class) (a:U),
+Proposition IsInRefl : forall (R A B:Class) (a:U),
   WellFounded R A               ->
   B a                           ->
   B :<=: A                      ->
@@ -130,7 +130,7 @@ Proof.
   apply (InitRefl R A B); try assumption. right. assumption.
 Qed.
 
-Proposition WhenIn : forall (R A B:Class) (a x:U),
+Proposition IsIn : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
   B :<=: A                ->
@@ -184,7 +184,7 @@ Proposition IsIncl : forall (R A B:Class) (a:U),
   B :<=: A                            ->
   toClass (initSegment R B a) :<=: B.
 Proof.
-  intros R A B a H1 H2 H3 x H4. apply (WhenIn R A B a); assumption.
+  intros R A B a H1 H2 H3 x H4. apply (IsIn R A B a); assumption.
 Qed.
 
 Proposition WhenLess : forall (R A B:Class) (a b:U),

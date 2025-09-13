@@ -185,7 +185,7 @@ Proof.
     b :< initSegment R A a -> f!b = F!(f:|:initSegment R A b)) as H14. {
     intros b H14.
     remember (Recursion R A F) as G eqn:H15.
-    assert (A b) as H16. { apply (SOI.WhenIn R A A a); assumption. }
+    assert (A b) as H16. { apply (SOI.IsIn R A A a); assumption. }
     assert (R :(b,a):) as H17. { apply (SOI.IsLess R A A a b); assumption. }
     assert (B b) as H18. { apply H3. assumption. }
     assert (G :(b,G!b):) as H19. {
@@ -305,7 +305,7 @@ Proof.
   - destruct H6 as [H6 H7].
     assert (g!b = F!f) as H8. {
       rewrite H7. apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
-      - apply (SOI.IsIn R A A); assumption.
+      - apply (SOI.IsInRefl R A A); assumption.
       - rewrite H5. apply Union2.Charac. right. apply Single.Charac. reflexivity. }
     rewrite H8, H7, G5. reflexivity.
   - assert (g!b = f!b) as H8. {
@@ -316,7 +316,7 @@ Proof.
         assert (f:|:initSegment R A b = g:|:initSegment R A b) as H9. {
           rewrite <- G5. apply Restrict.TowerProperty.
           apply (SOI.WhenLess R A A); try assumption.
-          - apply (SOI.WhenIn R A A) with a; try assumption.
+          - apply (SOI.IsIn R A A) with a; try assumption.
           - apply (SOI.IsLess R A A); assumption. }
         rewrite H8, <- H9. apply H4. assumption.
 Qed.
@@ -337,7 +337,7 @@ Proof.
     rewrite H3. intros x [y H6]. destruct H6 as [f [a [H6 [H7 [[_ H8] _]]]]].
     assert (x :< domain f) as H9. {
       apply SRD.Charac. exists y. assumption. }
-    rewrite H8 in H9. apply SOI.WhenIn with R A a; assumption. }
+    rewrite H8 in H9. apply SOI.IsIn with R A a; assumption. }
   assert (forall a, A a -> B a) as H7. {
     apply Induction' with R. 1: assumption.
     intros c H7 H8.
@@ -390,7 +390,7 @@ Proof.
     + apply IsFunction. assumption.
     + apply Class.Incl.EquivCompatR with A.
       * apply Equiv.Sym, DomainIsA; assumption.
-      * intros x H7. apply (InitSegment.WhenIn R A A) with a; try assumption.
+      * intros x H7. apply (SOI.IsIn R A A) with a; try assumption.
         rewrite H4 in H7. assumption.
 Qed.
 

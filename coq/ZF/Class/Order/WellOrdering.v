@@ -107,7 +107,7 @@ Proposition IsNotIn : forall (R A:Class) (a:U),
 Proof.
   intros R A a H1 H2. assert (H3 := H2). apply InitSegment.IsLess in H2.
   apply IsIrreflexive in H1. specialize (H1 a).
-  apply InitSegment.WhenIn in H3. apply H1; assumption.
+  apply InitSegment.IsIn in H3. apply H1; assumption.
 Qed.
 
 Proposition WhenIsom : forall (F R S A B:Class),

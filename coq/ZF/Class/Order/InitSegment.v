@@ -80,7 +80,7 @@ Proof.
   - assumption.
 Qed.
 
-Proposition WhenIn : forall (R A:Class) (a x:U),
+Proposition IsIn : forall (R A:Class) (a x:U),
   initSegment R A a x -> A x.
 Proof.
   intros R A a x H1. apply Charac in H1. apply H1.
