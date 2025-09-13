@@ -364,7 +364,7 @@ Proof.
 Qed.
 
 (* The recursion class associated with R A F is a function class defined on A.  *)
-Proposition IsFunctioOn : forall (R A F:Class),
+Proposition IsFunctionOn : forall (R A F:Class),
   WellFoundedWellOrd R A              ->
   HasNoMaximal R A                    ->
   CFO.FunctionOn (Recursion R A F) A.
@@ -373,3 +373,42 @@ Proof.
   - apply IsFunction. assumption.
   - apply DomainIsA; assumption.
 Qed.
+
+Proposition RestrictIsFunctionOn : forall (R A F:Class) (a b:U),
+  WellFoundedWellOrd R A                        ->
+  HasNoMaximal R A                              ->
+  A a                                           ->
+  b = initSegment R A a                         ->
+  SFO.FunctionOn ((Recursion R A F) :|: b) b.
+Proof.
+  intros R A F a b H1 H2 H3 H4.
+  assert (WellFounded R A) as H5. { apply H1. }
+  assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
+  split.
+  - apply RestrictOfClass.IsFunction, IsFunction. assumption.
+  - apply RestrictOfClass.DomainWhenIncl.
+    + apply IsFunction. assumption.
+    + apply Class.Incl.EquivCompatR with A.
+      * apply Equiv.Sym, DomainIsA; assumption.
+      * intros x H7. apply (InitSegment.WhenIn R A A) with a; try assumption.
+        rewrite H4 in H7. assumption.
+Qed.
+
+Lemma K_Restrict : forall (R A F:Class) (f a:U),
+  WellFoundedWellOrd R A                          ->
+  HasNoMaximal R A                                ->
+  K R A F f a                                     ->
+  f = (Recursion R A F) :|: (initSegment R A a).
+Proof.
+  intros R A F f a H1 H2 H3. assert (H4 := H3). destruct H4 as [H4 [H5 H6]].
+  remember (initSegment R A a) as b eqn:H7.
+  apply SFO.EqualCharac with b b. 1: assumption.
+  - apply RestrictIsFunctionOn with a; assumption.
+  - reflexivity.
+  - intros x H8.
+    assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H9. {
+      apply RestrictOfClass.Eval. 2: assumption. apply IsFunction. assumption. }
+    rewrite H9. symmetry. apply (CFO.EvalCharac (Recursion R A F) A).
+    + apply IsFunctionOn; assumption.
+Admitted.
+
