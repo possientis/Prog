@@ -374,7 +374,7 @@ Proof.
   - apply DomainIsA; assumption.
 Qed.
 
-Proposition RestrictIsFunctionOn : forall (R A F:Class) (a b:U),
+Lemma RestrictIsFunctionOn : forall (R A F:Class) (a b:U),
   WellFoundedWellOrd R A                        ->
   HasNoMaximal R A                              ->
   A a                                           ->
@@ -402,13 +402,49 @@ Lemma K_Restrict : forall (R A F:Class) (f a:U),
 Proof.
   intros R A F f a H1 H2 H3. assert (H4 := H3). destruct H4 as [H4 [H5 H6]].
   remember (initSegment R A a) as b eqn:H7.
+  assert (WellFounded R A) as H8. { apply H1. }
+  assert (A :<=: A) as H9. { apply Class.Incl.Refl. }
   apply SFO.EqualCharac with b b. 1: assumption.
   - apply RestrictIsFunctionOn with a; assumption.
   - reflexivity.
-  - intros x H8.
-    assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H9. {
+  - intros x H10.
+    assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H11. {
       apply RestrictOfClass.Eval. 2: assumption. apply IsFunction. assumption. }
-    rewrite H9. symmetry. apply (CFO.EvalCharac (Recursion R A F) A).
+    rewrite H11. symmetry. apply (CFO.EvalCharac (Recursion R A F) A).
     + apply IsFunctionOn; assumption.
-Admitted.
+    + apply (SOI.IsIn R A A a); try assumption. rewrite <- H7. assumption.
+    + apply Charac2. exists f. exists a. split. 2: assumption.
+      apply SFO.Satisfies with b; assumption.
+Qed.
 
+(* The recursion class associated with R A F is F-recursive.                    *)
+Proposition IsRecursive : forall (R A F:Class) (b:U),
+  WellFoundedWellOrd R A                                              ->
+  HasNoMaximal R A                                                    ->
+  A b                                                                 ->
+  (Recursion R A F)!b = F!((Recursion R A F :|: initSegment R A b)).
+Proof.
+  intros R A F b H1 H2 H3.
+  remember (initSegment R A b) as c eqn:H4.
+  assert (WellFounded R A) as H5. { apply H1. }
+  assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
+  assert (Transitive R A) as G1. {
+    apply WellFoundedWellOrd.IsTransitive. assumption. }
+  assert (Recursion R A F :(b,(Recursion R A F)!b):) as H7. {
+    apply CFO.Satisfies with A. 2: assumption. apply IsFunctionOn; assumption. }
+  apply (proj1 (Charac2 _ _ _ _ _)) in H7. destruct H7 as [f [a [H7 H8]]].
+  assert (H9 := H8). destruct H9 as [H9 [H10 H11]].
+  assert (b :< initSegment R A a) as H12. {
+    destruct H10 as [_ H10]. rewrite <- H10. apply SRD.Charac.
+    exists (Recursion R A F)!b. assumption. }
+  assert ((Recursion R A F)!b = f!b) as H13. {
+    symmetry. apply (SFO.EvalCharac f (initSegment R A a)); assumption. }
+  assert (f = (Recursion R A F) :|: (initSegment R A a)) as H14. {
+    apply K_Restrict; assumption. }
+  assert (f:|:c = (Recursion R A F) :|: c) as H15. {
+    rewrite H14. apply RestrictOfClass.TowerProperty.
+    - apply IsFunction; assumption.
+    - rewrite H4. apply (SOI.WhenLess R A A); try assumption.
+      apply (SOI.IsLess R A A); assumption. }
+  rewrite H13, <- H15, H4. apply H11. assumption.
+Qed.
