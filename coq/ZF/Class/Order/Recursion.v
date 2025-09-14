@@ -11,6 +11,7 @@ Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.Order.Succ.
@@ -548,4 +549,24 @@ Proof.
       apply (SOI.ToClass R A C); try assumption. rewrite <- H18. assumption. }
     remember (f :\/: :{ :(c,F!f): }:) as g eqn:H20.
     assert (KExt R A F g c) as H21. { apply Extend with f; assumption. }
+    assert (~Maximal R A c) as H22. {
+      intros [H22 H23]. apply (H23 a); assumption. }
+    assert (K R A F g (succ R A c)) as H23. {
+      destruct H21 as [H21 [H23 H24]].
+      assert (initSegment R A (succ R A c) = initSegment R^:=: A c) as H25. {
+        apply Succ.InitRefl; assumption. }
+      rewrite <- H25 in H23. rewrite <- H25 in H24.
+      assert (A (succ R A c)) as H26. { apply Succ.IsIn; assumption. }
+      split. 1: assumption. split; assumption. }
+    rewrite H3. exists g!c. apply Charac2. exists g. exists (succ R A c).
+    split. 2: assumption. apply SFO.Satisfies with (initSegment R A (succ R A c)).
+    1: apply H23. apply Succ.InInit; assumption. }
+  apply CIN.DoubleInclusion. split; assumption.
+Qed.
+
+Lemma IsSmall : forall (R A F:Class) (a:U),
+  WellFoundedWellOrd R A                                    ->
+  Maximal R A a                                             ->
+  Small (Recursion R A F).
+Proof.
 Admitted.
