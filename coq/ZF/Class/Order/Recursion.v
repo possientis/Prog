@@ -321,6 +321,8 @@ Proof.
         rewrite H8, <- H9. apply H4. assumption.
 Qed.
 
+
+
 (* The recursion class associated with R A F has domain A.                      *)
 Proposition DomainIsA : forall (R A F:Class),
   WellFoundedWellOrd R A              ->
@@ -493,3 +495,29 @@ Proof.
         rewrite H15, H16, H12. reflexivity.
 Qed.
 
+Lemma DomainWhenMax : forall (R A F:Class) (a:U),
+  WellFoundedWellOrd R A                                    ->
+  Maximal R A a                                             ->
+  CRD.domain (Recursion R A F) :~: COI.initSegment R A a.
+Proof.
+  intros R A F a H1 H2.
+  remember (CRD.domain (Recursion R A F)) as B eqn:H3.
+  remember (COI.initSegment R A a) as C eqn:H4.
+  assert (WellFounded R A) as H5. { apply H1. }
+  assert (Transitive R A) as H6. {
+    apply WellFoundedWellOrd.IsTransitive. assumption. }
+  assert (A :<=: A) as H7. { apply Class.Incl.Refl. }
+  assert (A a) as H8. { apply Maximal.IsIn with R. assumption. }
+  assert (forall x, A x -> R^:=: :(x,a):) as H9. {
+    intros x H9. apply ReflClosure.Charac2.
+    assert (x = a \/ R :(x,a): \/ R :(a,x):) as H10. { apply H1; assumption. }
+    destruct H10 as [H10|[H10|H10]].
+    - left. assumption.
+    - right. assumption.
+    - exfalso. destruct H2 as [_ H2]. apply (H2 x); assumption. }
+  assert (B :<=: C) as H10. {
+    rewrite H3. intros x [y H10]. destruct H10 as [f [b [H10 [H11 [[_ H12] _]]]]].
+    assert (x :< domain f) as H13. {
+      apply SRD.Charac. exists y. assumption. }
+    rewrite H12 in H13. rewrite H4.
+Admitted.
