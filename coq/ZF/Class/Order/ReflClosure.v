@@ -200,3 +200,14 @@ Proof.
   - apply H1 with y; assumption.
 Qed.
 
+Proposition WhenLeq : forall (R A:Class) (a b:U),
+  Transitive R A                              ->
+  A a                                         ->
+  A b                                         ->
+  R^:=: :(a,b):                               ->
+  initSegment R A a :<=: initSegment R A b.
+Proof.
+  intros R A a b H1 H2 H3 H4. apply Charac2 in H4. destruct H4 as [H4|H4].
+  - subst. apply Class.Incl.Refl.
+  - apply InitSegment.WhenLess; assumption.
+Qed.

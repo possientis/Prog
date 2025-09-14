@@ -202,6 +202,21 @@ Proof.
   apply H5. assumption.
 Qed.
 
+Proposition WhenLeq : forall (R A B:Class) (a b:U),
+  WellFounded R A                             ->
+  Transitive R A                              ->
+  A a                                         ->
+  A b                                         ->
+  B :<=: A                                    ->
+  R^:=: :(a,b):                               ->
+  initSegment R B a :<=: initSegment R B b.
+Proof.
+  intros R A B a b H1 H2 H3 H4 H5 H6.
+  apply ReflClosure.Charac2 in H6. destruct H6 as [H6|H6].
+  - subst. apply ZF.Set.Incl.Refl.
+  - apply WhenLess with A; assumption.
+Qed.
+
 (* The direct image by an isomorphism of an inital segment is an inital segment.*)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   WellFounded R A                                       ->
