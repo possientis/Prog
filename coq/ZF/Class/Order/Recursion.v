@@ -519,5 +519,33 @@ Proof.
     rewrite H3. intros x [y H10]. destruct H10 as [f [b [H10 [H11 [[_ H12] _]]]]].
     assert (x :< domain f) as H13. {
       apply SRD.Charac. exists y. assumption. }
-    rewrite H12 in H13. rewrite H4.
+    assert (R^:=: :(b,a):) as H14. { apply H9. assumption. }
+    rewrite H12 in H13. rewrite H4. apply (SOI.ToClass R A A); try assumption.
+    apply (SOI.WhenLeq R A A b); assumption. }
+  assert (C :<=: A) as H11. {
+    rewrite H4. apply COI.IsIncl. }
+  assert (WellFoundedWellOrd R C) as H12. {
+    apply WellFoundedWellOrd.WhenIncl with A; assumption. }
+  assert (forall b, C b -> B b) as H13. {
+    apply Induction' with R. 1: assumption.
+    intros c H13 H14.
+    remember (Recursion R A F :|: initSegment R A c) as f eqn:H15.
+    assert (A c) as H16. { apply H11. assumption. }
+    assert (R :(c,a):) as H17. {
+      apply (SOI.IsLess R A A); try assumption.
+      apply (SOI.ToClass R A A); try assumption. rewrite <- H4. assumption. }
+    assert (initSegment R A c = initSegment R C c) as H18. {
+      apply ZF.Set.Incl.DoubleInclusion. split; intros x H18.
+      - apply (SOI.Charac R A A) in H18; try assumption. destruct H18 as [H18 H19].
+        apply (SOI.CharacRev R A C); try assumption. rewrite H4.
+        apply COI.Charac. split. 1: assumption. apply H6 with c; assumption.
+      - apply (SOI.Charac R A C) in H18; try assumption. destruct H18 as [H18 H19].
+        apply (SOI.CharacRev R A A); try assumption.
+        apply COI.IsIn with R a. rewrite <- H4. assumption. }
+    assert (K R A F f c) as H19. {
+      apply Restrict; try assumption.
+      intros b H19. rewrite <- H3. apply H14.
+      apply (SOI.ToClass R A C); try assumption. rewrite <- H18. assumption. }
+    remember (f :\/: :{ :(c,F!f): }:) as g eqn:H20.
+    assert (KExt R A F g c) as H21. { apply Extend with f; assumption. }
 Admitted.
