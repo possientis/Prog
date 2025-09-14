@@ -496,7 +496,7 @@ Proof.
         rewrite H15, H16, H12. reflexivity.
 Qed.
 
-Lemma DomainWhenMax : forall (R A F:Class) (a:U),
+Proposition DomainWhenMax : forall (R A F:Class) (a:U),
   WellFoundedWellOrd R A                                    ->
   Maximal R A a                                             ->
   CRD.domain (Recursion R A F) :~: COI.initSegment R A a.
@@ -564,9 +564,16 @@ Proof.
   apply CIN.DoubleInclusion. split; assumption.
 Qed.
 
-Lemma IsSmall : forall (R A F:Class) (a:U),
+Proposition IsSmall : forall (R A F:Class) (a:U),
   WellFoundedWellOrd R A                                    ->
   Maximal R A a                                             ->
   Small (Recursion R A F).
 Proof.
-Admitted.
+  intros R A F a H1 H2. apply CRF.IsSmall.
+  - apply IsFunction. assumption.
+  - apply Small.EquivCompat with (COI.initSegment R A a).
+    + apply Equiv.Sym, DomainWhenMax; assumption.
+    + apply H1, Maximal.IsIn with R. assumption.
+Qed.
+
+
