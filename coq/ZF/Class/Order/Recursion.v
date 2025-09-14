@@ -565,8 +565,8 @@ Proof.
 Qed.
 
 Proposition IsSmall : forall (R A F:Class) (a:U),
-  WellFoundedWellOrd R A                                    ->
-  Maximal R A a                                             ->
+  WellFoundedWellOrd R A    ->
+  Maximal R A a             ->
   Small (Recursion R A F).
 Proof.
   intros R A F a H1 H2. apply CRF.IsSmall.
@@ -576,4 +576,12 @@ Proof.
     + apply H1, Maximal.IsIn with R. assumption.
 Qed.
 
-
+Proposition IsFunctionOnWhenMax : forall (R A F:Class) (a:U),
+  WellFoundedWellOrd R A                                    ->
+  Maximal R A a                                             ->
+  CFO.FunctionOn (Recursion R A F) (COI.initSegment R A a).
+Proof.
+  intros R A F a H1 H2. split.
+  - apply IsFunction. assumption.
+  - apply DomainWhenMax; assumption.
+Qed.
