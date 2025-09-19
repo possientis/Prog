@@ -322,8 +322,6 @@ Proof.
         rewrite H8, <- H9. apply H4. assumption.
 Qed.
 
-
-
 (* The recursion class associated with R A F has domain A.                      *)
 Proposition DomainIsA : forall (R A F:Class),
   WellFoundedWellOrd R A              ->

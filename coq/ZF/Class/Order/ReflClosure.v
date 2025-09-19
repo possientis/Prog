@@ -4,6 +4,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.AntiSymmetric.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Irreflexive.
+Require Import ZF.Class.Order.Maximal.
 Require Import ZF.Class.Order.Reflexive.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
@@ -210,4 +211,19 @@ Proof.
   intros R A a b H1 H2 H3 H4. apply Charac2 in H4. destruct H4 as [H4|H4].
   - subst. apply Class.Incl.Refl.
   - apply InitSegment.WhenLess; assumption.
+Qed.
+
+Proposition WhenMax : forall (R A:Class) (a:U),
+  Total R A                     ->
+  Maximal R A a                 ->
+  A :~: initSegment R^:=: A a.
+Proof.
+  intros R A a H1 H2. apply DoubleInclusion. split; intros x H3.
+  - assert (x = a \/ R :(x,a): \/ R :(a,x):) as H4. {
+      apply H1. 1: assumption. apply Maximal.IsIn with R. assumption. }
+    destruct H4 as [H4|[H4|H4]].
+    + subst. apply IsIn. assumption.
+    + apply InitRefl. right. apply InitSegment.Charac. split; assumption.
+    + exfalso. revert H4. apply H2. assumption.
+  - apply InitSegment.IsIn with R^:=: a. assumption.
 Qed.
