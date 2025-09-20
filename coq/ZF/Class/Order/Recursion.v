@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
@@ -152,7 +153,8 @@ Proof.
   - symmetry. apply Coincide with R A F b a; assumption.
 Qed.
 
-Lemma Restrict : forall (R A F:Class) (a f:U),
+(* See stronger result below.                                                   *)
+Lemma Restrict_ : forall (R A F:Class) (a f:U),
   WellFoundedWellOrd R A                                                ->
   A a                                                                   ->
   (forall b, b :< initSegment R A a -> CRD.domain (Recursion R A F) b)  ->
@@ -344,7 +346,7 @@ Proof.
     intros c H7 H8.
     remember (Recursion R A F :|: initSegment R A c) as f eqn:H9.
     assert (K R A F f c) as H10. {
-      apply Restrict; try assumption.
+      apply Restrict_; try assumption.
       intros b H10. rewrite <- H3. apply H8.
       apply (SOI.ToClass R A A) in H10; assumption. }
     remember (f :\/: :{ :(c,F!f): }:) as g eqn:H11.
@@ -542,7 +544,7 @@ Proof.
         apply (SOI.CharacRev R A A); try assumption.
         apply COI.IsIn with R a. rewrite <- H4. assumption. }
     assert (K R A F f c) as H19. {
-      apply Restrict; try assumption.
+      apply Restrict_; try assumption.
       intros b H19. rewrite <- H3. apply H14.
       apply (SOI.ToClass R A C); try assumption. rewrite <- H18. assumption. }
     remember (f :\/: :{ :(c,F!f): }:) as g eqn:H20.
@@ -582,4 +584,31 @@ Proof.
   intros R A F a H1 H2. split.
   - apply IsFunction. assumption.
   - apply DomainWhenMax; assumption.
+Qed.
+
+Proposition Restrict : forall (R A F:Class) (a f:U),
+  WellFoundedWellOrd R A                                                ->
+  A a                                                                   ->
+  f = (Recursion R A F) :|: initSegment R A a                           ->
+  K R A F f a.
+Proof.
+  intros R A F a f H1 H2 H3. apply Restrict_; try assumption. intros b H4.
+  assert (WellFounded R A) as G1. { apply H1. }
+  assert (A :<=: A) as G2. { apply Class.Incl.Refl. }
+  assert (Total R A) as G3. { apply H1. }
+  assert (Transitive R A) as G4. {
+    apply WellFoundedWellOrd.IsTransitive. assumption. }
+  assert (HasNoMaximal R A \/ ~ HasNoMaximal R A) as H5. {
+    apply LawExcludedMiddle. }
+  assert (A b) as H6. { apply (InitSegment.IsIn R A A a); assumption. }
+  destruct H5 as [H5|H5].
+  - apply DomainIsA; assumption.
+  - apply DoubleNegation in H5. destruct H5 as [c H5].
+    apply (DomainWhenMax R A F c); try assumption.
+    apply COI.Charac. split. 1: assumption.
+    apply (ReflClosure.LessLeqTran R A) with a; try assumption.
+    + apply Maximal.IsIn with R. assumption.
+    + apply (InitSegment.IsLess R A A); assumption.
+    + apply (ReflClosure.WhenMax R A c) in H2; try assumption.
+      apply COI.IsLess with A. assumption.
 Qed.

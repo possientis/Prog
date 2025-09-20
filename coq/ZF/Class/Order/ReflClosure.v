@@ -227,3 +227,4 @@ Proof.
     + exfalso. revert H4. apply H2. assumption.
   - apply InitSegment.IsIn with R^:=: a. assumption.
 Qed.
+
