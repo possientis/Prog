@@ -314,11 +314,11 @@ Proof.
     apply Maximal.InitRefl; assumption. }
   assert ((Recursion R A F)!b = g!b) as H11. { apply H10. assumption. }
   remember (initSegment R A b) as c eqn:H12.
-  assert ((Recursion R A F) :|:c = f :|: c) as H13. {
+  assert ((Recursion R A F) :|:c = f :|: c) as H13. { (* TODO: needed ? *)
     rewrite H4. symmetry. apply RestrictOfClass.TowerProperty.
     - apply IsFunction with a; assumption.
     - rewrite H12. apply (SOI.WhenLeq R A A); try assumption.
-(*
-  assert ((Recursion R A F) :|: c = g :|: c) as H13. {
-*)
+      apply (SOI.IsLeq R A A); try assumption.
+      apply (SOI.ToClassRefl R A A); try assumption.
+      apply Maximal.InitRefl; assumption. }
 Admitted.
