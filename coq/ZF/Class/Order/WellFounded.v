@@ -10,6 +10,7 @@ Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
+Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Singleton.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -18,6 +19,8 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
+
 
 (* Predicate expressing the fact that R is a well-founded class on A. R is well *)
 (* founded on A iff it is founded on A and all initial segments are small.      *)
@@ -34,6 +37,35 @@ Proof.
   apply Bounded.WhenSmaller with (initSegment R A a).
   - apply InitSegment.InclCompatR. assumption.
   - apply H1. assumption.
+Qed.
+
+Proposition IsSmallRefl : forall (R A B:Class) (a:U),
+  WellFounded R A                   ->
+  A a                               ->
+  B :<=: A                          ->
+  Small (initSegment R^:=: B a).
+Proof.
+  intros R A B a H1 H2 H3.
+  assert (Small (initSegment R B a)) as H4. {
+    apply IsSmall with A; assumption. }
+  destruct H4 as [b H4].
+  assert (B a \/ ~B a) as H5. { apply LawExcludedMiddle. }
+  destruct H5 as [H5|H5].
+  - exists (b :\/: :{a}:). intros x. split; intros H6.
+    + apply Union2.Charac in H6.
+      destruct H6 as [H6|H6]; apply InitSegment.ReflCharac.
+      * right. apply H4. assumption.
+      * apply Single.Charac in H6. subst. left.
+        split. 1: assumption. reflexivity.
+    + apply InitSegment.ReflCharac in H6.
+      destruct H6 as [H6|H6]; apply Union2.Charac.
+      * right. apply Single.Charac, H6.
+      * apply H4 in H6. left. assumption.
+  - exists b. intros x. split; intros H6.
+    + apply InitSegment.ReflCharac. right. apply H4. assumption.
+    + apply InitSegment.ReflCharac in H6. destruct H6 as [H6|H6].
+      * exfalso. destruct H6 as [H6 H7]. subst. contradiction.
+      * apply H4. assumption.
 Qed.
 
 (* If R is founded on a small class A, then it is well-founded on A.            *)

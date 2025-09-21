@@ -3,8 +3,11 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.FinalSegment.
+Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
+Require Import ZF.Class.Order.ReflClosure.
+Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
@@ -111,3 +114,33 @@ Proof.
   - split. 1: assumption. apply FinalSegment.WhenEmptyRev. assumption.
   - split. 1: assumption. intros x. apply FinalSegment.WhenEmpty. assumption.
 Qed.
+
+Proposition InitRefl : forall (R A:Class) (a:U),
+  Total R A                     ->
+  Maximal R A a                 ->
+  A :~: initSegment R^:=: A a.
+Proof.
+  intros R A a H1 H2. apply DoubleInclusion. split; intros x H3.
+  - assert (x = a \/ R :(x,a): \/ R :(a,x):) as H4. {
+      apply H1. 1: assumption. apply IsIn with R. assumption. }
+    destruct H4 as [H4|[H4|H4]].
+    + subst. apply InitSegment.IsInRefl. assumption.
+    + apply InitSegment.ReflCharac. right.
+      apply InitSegment.Charac. split; assumption.
+    + exfalso. revert H4. apply H2. assumption.
+  - apply InitSegment.IsIn with R^:=: a. assumption.
+Qed.
+
+(* If R is total on A the maximal element of a subclass of A is unique.         *)
+Proposition Unique : forall (R A B:Class) (x y:U),
+  Total R A       ->
+  B :<=: A        ->
+  Maximal R B x   ->
+  Maximal R B y   ->
+  x = y.
+Proof.
+  intros R A B x y H1 H2 H3 H4.
+  apply Total.Converse in H1. apply IsMinimal in H3. apply IsMinimal in H4.
+  apply Minimal.Unique with R^:-1: A B; assumption.
+Qed.
+

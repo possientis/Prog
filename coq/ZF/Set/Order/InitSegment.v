@@ -38,7 +38,7 @@ Proposition ToClassRefl : forall (R A B:Class) (a:U),
   toClass (initSegment R^:=: B a) :~: COI.initSegment R^:=: B a.
 Proof.
   intros R A B a H1 H2 H3.
-  apply Truncate.WhenSmall, ReflClosure.IsSmall with A; assumption.
+  apply Truncate.WhenSmall, WellFounded.IsSmallRefl with A; assumption.
 Qed.
 
 Proposition Charac : forall (R A B:Class) (a x:U),
@@ -99,11 +99,11 @@ Proposition InitRefl : forall (R A B:Class) (a x:U),
 Proof.
   intros R A B a x H1 H2 H3. split; intros H4.
   - apply (ToClassRefl R A B) in H4; try assumption.
-    apply ReflClosure.InitRefl in H4. destruct H4 as [H4|H4].
+    apply InitSegment.ReflCharac in H4. destruct H4 as [H4|H4].
     + left. assumption.
     + right. apply (ToClass R A B); assumption.
   - apply (ToClassRefl R A B); try assumption.
-    apply ReflClosure.InitRefl. destruct H4 as [H4|H4].
+    apply InitSegment.ReflCharac. destruct H4 as [H4|H4].
     + left. assumption.
     + right. apply (ToClass R A B); assumption.
 Qed.
@@ -117,7 +117,7 @@ Proof.
   intros R A B a H1 H2 H3.
   apply (ToClassRefl R A B); try assumption.
   - apply H3. assumption.
-  - apply ReflClosure.IsIn. assumption.
+  - apply InitSegment.IsInRefl. assumption.
 Qed.
 
 Proposition IsInclRefl : forall (R A B:Class) (a:U),

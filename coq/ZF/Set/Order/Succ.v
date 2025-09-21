@@ -64,7 +64,7 @@ Proof.
         destruct H12 as [H12 H13]. apply H7; assumption. }
     assert (B :<=: A) as H13. { rewrite H10. apply FinalSegment.IsIncl. }
     assert (Total R A) as H14. { apply H1. }
-    assert (c = b) as H15. { apply (Total.MinUnique R A B); assumption. }
+    assert (c = b) as H15. { apply (Minimal.Unique R A B); assumption. }
     subst. symmetry. apply EqualToClass.
     apply Equiv.Tran with (COS.succ R A a). 1: assumption.
     apply Equiv.Sym, ToClass; assumption.

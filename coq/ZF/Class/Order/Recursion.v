@@ -609,6 +609,6 @@ Proof.
     apply (ReflClosure.LessLeqTran R A) with a; try assumption.
     + apply Maximal.IsIn with R. assumption.
     + apply (InitSegment.IsLess R A A); assumption.
-    + apply (ReflClosure.WhenMax R A c) in H2; try assumption.
+    + apply (Maximal.InitRefl R A c) in H2; try assumption.
       apply COI.IsLess with A. assumption.
 Qed.

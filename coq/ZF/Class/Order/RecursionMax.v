@@ -50,7 +50,7 @@ Proposition Charac : forall (R A F:Class) (f a x:U),
 Proof.
   intros R A F f a x H1 H2 H3 H4. destruct H4 as [g [b [H4 [H5 H6]]]].
   assert (a = b) as H7. {
-    apply Total.MaxUnique with R A A; try assumption. 1: apply H1.
+    apply Maximal.Unique with R A A; try assumption. 1: apply H1.
     apply Class.Incl.Refl. }
   assert (f = g) as H8. { rewrite H7 in H3. rewrite <- H5 in H3. assumption. }
   apply Union2.Charac in H6. destruct H6 as [H6|H6].
@@ -263,11 +263,11 @@ Proof.
   assert (toClass g :~: Recursion R A F) as H6. {
     apply (AsSet R A F a f g); assumption. }
   destruct H5 as [_ [[_ H5] _]]. apply CIN.DoubleInclusion. split; intros x H7.
-  - apply (ReflClosure.WhenMax R A a); try assumption.
+  - apply (Maximal.InitRefl R A a); try assumption.
     apply (SOI.ToClassRefl R A A); try assumption. rewrite <- H5.
     destruct H7 as [y H7]. apply H6 in H7. apply SRD.Charac.
     exists y. assumption.
-  - apply (ReflClosure.WhenMax R A a) in H7; try assumption.
+  - apply (Maximal.InitRefl R A a) in H7; try assumption.
     apply (SOI.ToClassRefl R A A) in H7; try assumption.
     rewrite <- H5 in H7. apply SRD.Charac in H7. destruct H7 as [y H7].
     exists y. apply H6. assumption.

@@ -7,6 +7,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -177,3 +178,34 @@ Proof.
   - apply Empty.ImageOf. assumption.
 Qed.
 
+Proposition ReflCharac : forall (R A:Class) (a x:U),
+  initSegment R^:=: A a x <-> (A a /\ x = a) \/ initSegment R A a x.
+Proof.
+  intros R A a x. split; intros H1.
+  - apply Charac in H1. destruct H1 as [H1 H2].
+    apply Charac2 in H2. destruct H2 as [H2|H2].
+    + left. subst. split. 1: assumption. reflexivity.
+    + right. apply Charac. split; assumption.
+  - destruct H1 as [[H1 H2]|H1]; apply Charac.
+    + subst. split. 1: assumption. apply Charac2. left. reflexivity.
+    + apply Charac in H1. destruct H1 as [H1 H2].
+      split. 1: assumption. apply Charac2. right. assumption.
+Qed.
+
+Proposition IsInRefl : forall (R A:Class) (a:U),
+  A a -> initSegment R^:=: A a a.
+Proof.
+  intros R A a H1. apply ReflCharac. left. split. 1: assumption. reflexivity.
+Qed.
+
+Proposition WhenLeq : forall (R A:Class) (a b:U),
+  Transitive R A                              ->
+  A a                                         ->
+  A b                                         ->
+  R^:=: :(a,b):                               ->
+  initSegment R A a :<=: initSegment R A b.
+Proof.
+  intros R A a b H1 H2 H3 H4. apply Charac2 in H4. destruct H4 as [H4|H4].
+  - subst. apply Class.Incl.Refl.
+  - apply WhenLess; assumption.
+Qed.

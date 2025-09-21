@@ -72,7 +72,7 @@ Proof.
     + exists b. split. 1: assumption. rewrite <- H4. assumption.
     + destruct H8 as [c [H8 H9]]. rewrite <- H4 in H9.
       assert (b = c) as H10. {
-        apply (Total.MinUnique R A B); try assumption.
+        apply (Minimal.Unique R A B); try assumption.
         apply H1. }
       subst. assumption.
   - assert (B b) as H8. { apply Minimal.IsIn with R. assumption. }
