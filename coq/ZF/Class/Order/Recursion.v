@@ -425,7 +425,7 @@ Proposition IsRecursive : forall (R A F:Class) (b:U),
   WellFoundedWellOrd R A                                              ->
   HasNoMaximal R A                                                    ->
   A b                                                                 ->
-  (Recursion R A F)!b = F!((Recursion R A F :|: initSegment R A b)).
+  (Recursion R A F)!b = F!(Recursion R A F :|: initSegment R A b).
 Proof.
   intros R A F b H1 H2 H3.
   remember (initSegment R A b) as c eqn:H4.
@@ -586,7 +586,7 @@ Proof.
   - apply DomainWhenMax; assumption.
 Qed.
 
-Proposition Restrict : forall (R A F:Class) (a f:U),
+Lemma Restrict : forall (R A F:Class) (a f:U),
   WellFoundedWellOrd R A                                                ->
   A a                                                                   ->
   f = (Recursion R A F) :|: initSegment R A a                           ->
