@@ -272,12 +272,12 @@ Proof.
       apply SIN.DoubleInclusion. split; intros x H9.
       - apply SRD.Charac in H9. destruct H9 as [y H9].
         rewrite H5 in H9. apply Union2.Charac in H9. destruct H9 as [H9|H9].
-        + apply (SOI.InitRefl R A A); try assumption. right. rewrite <- G1.
+        + apply (SOI.CharacRefl R A A); try assumption. right. rewrite <- G1.
           apply SRD.Charac. exists y. assumption.
         + apply Single.Charac in H9.
           apply OrdPair.WhenEqual in H9. destruct H9 as [H9 H10].
-          apply (SOI.InitRefl R A A); try assumption. left. split; assumption.
-      - apply (SOI.InitRefl R A A) in H9; try assumption.
+          apply (SOI.CharacRefl R A A); try assumption. left. split; assumption.
+      - apply (SOI.CharacRefl R A A) in H9; try assumption.
         apply SRD.Charac. destruct H9 as [H9|H9].
         + destruct H9 as [H9 H10]. exists F!f. rewrite H5. apply Union2.Charac.
           right. apply Single.Charac. subst. reflexivity.
@@ -296,14 +296,14 @@ Proof.
     rewrite H8. apply SRF.EvalCharac.
     - apply G4.
     - assert (domain g = initSegment R^:=: A a) as H9. { apply G4. }
-      rewrite H9. apply (SOI.InitRefl R A A); try assumption.
+      rewrite H9. apply (SOI.CharacRefl R A A); try assumption.
       right. assumption.
     - rewrite H5. apply Union2.Charac. left.
       apply SFO.Satisfies with (initSegment R A a); assumption. }
   assert (Transitive R A) as G6. {
     apply WellFoundedWellOrd.IsTransitive. assumption. }
   split. 1: assumption.
-  intros b H6. apply (SOI.InitRefl R A A) in H6; try assumption.
+  intros b H6. apply (SOI.CharacRefl R A A) in H6; try assumption.
   destruct H6 as [H6|H6].
   - destruct H6 as [H6 H7].
     assert (g!b = F!f) as H8. {
@@ -313,7 +313,7 @@ Proof.
     rewrite H8, H7, G5. reflexivity.
   - assert (g!b = f!b) as H8. {
       apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
-      - apply (SOI.InitRefl R A A); try assumption. right. assumption.
+      - apply (SOI.CharacRefl R A A); try assumption. right. assumption.
       - rewrite H5. apply Union2.Charac. left.
         apply SFO.Satisfies with (initSegment R A a); assumption. }
         assert (f:|:initSegment R A b = g:|:initSegment R A b) as H9. {

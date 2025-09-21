@@ -91,7 +91,7 @@ Proof.
   - apply H1.
 Qed.
 
-Proposition InitRefl : forall (R A B:Class) (a x:U),
+Proposition CharacRefl : forall (R A B:Class) (a x:U),
   WellFounded R A                                                           ->
   A a                                                                       ->
   B :<=: A                                                                  ->
@@ -99,11 +99,11 @@ Proposition InitRefl : forall (R A B:Class) (a x:U),
 Proof.
   intros R A B a x H1 H2 H3. split; intros H4.
   - apply (ToClassRefl R A B) in H4; try assumption.
-    apply InitSegment.ReflCharac in H4. destruct H4 as [H4|H4].
+    apply InitSegment.CharacRefl in H4. destruct H4 as [H4|H4].
     + left. assumption.
     + right. apply (ToClass R A B); assumption.
   - apply (ToClassRefl R A B); try assumption.
-    apply InitSegment.ReflCharac. destruct H4 as [H4|H4].
+    apply InitSegment.CharacRefl. destruct H4 as [H4|H4].
     + left. assumption.
     + right. apply (ToClass R A B); assumption.
 Qed.
@@ -127,7 +127,7 @@ Proposition IsInclRefl : forall (R A B:Class) (a:U),
   initSegment R B a :<=: initSegment R^:=: B a.
 Proof.
   intros R A B a H1 H2 H3 x H4.
-  apply (InitRefl R A B); try assumption. right. assumption.
+  apply (CharacRefl R A B); try assumption. right. assumption.
 Qed.
 
 Proposition IsIn : forall (R A B:Class) (a x:U),
@@ -150,6 +150,20 @@ Proposition IsLess : forall (R A B:Class) (a x:U),
 Proof.
   intros R A B a x H1 H2 H3 H4.
   apply (Charac R A) in H4; try assumption. apply H4.
+Qed.
+
+Proposition IsLeq : forall (R A B:Class) (a x:U),
+  WellFounded R A             ->
+  A a                         ->
+  B :<=: A                    ->
+  x :< initSegment R^:=: B a  ->
+  R^:=: :(x,a):.
+Proof.
+  intros R A B a x H1 H2 H3 H4.
+  apply (CharacRefl R A B) in H4; try assumption.
+  destruct H4 as [H4|H4]; apply ReflClosure.Charac2.
+  - left. apply H4.
+  - right. apply (IsLess R A B); assumption.
 Qed.
 
 (* The initial segment is empty iff there is no x in A which is less than a.    *)

@@ -29,6 +29,20 @@ Proof.
     apply Single.IsIn.
 Qed.
 
+Proposition CharacRefl : forall (R A:Class) (a x:U),
+  initSegment R^:=: A a x <-> (A a /\ x = a) \/ initSegment R A a x.
+Proof.
+  intros R A a x. split; intros H1.
+  - apply Charac in H1. destruct H1 as [H1 H2].
+    apply Charac2 in H2. destruct H2 as [H2|H2].
+    + left. subst. split. 1: assumption. reflexivity.
+    + right. apply Charac. split; assumption.
+  - destruct H1 as [[H1 H2]|H1]; apply Charac.
+    + subst. split. 1: assumption. apply Charac2. left. reflexivity.
+    + apply Charac in H1. destruct H1 as [H1 H2].
+      split. 1: assumption. apply Charac2. right. assumption.
+Qed.
+
 (* Initial segments are compatible with equivalences.                           *)
 Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> initSegment R A a :~: initSegment S B a.
@@ -91,6 +105,12 @@ Proposition IsLess : forall (R A:Class) (a x:U),
   initSegment R A a x -> R :(x,a):.
 Proof.
   intros R A a x H1. apply Charac in H1. apply H1.
+Qed.
+
+Proposition IsLeq : forall (R A:Class) (a x:U),
+  initSegment R^:=: A a x -> R^:=: :(x,a):.
+Proof.
+  intros R. apply IsLess.
 Qed.
 
 (* The initial segment is empty iff there is no x in A which is less than a.    *)
@@ -178,24 +198,10 @@ Proof.
   - apply Empty.ImageOf. assumption.
 Qed.
 
-Proposition ReflCharac : forall (R A:Class) (a x:U),
-  initSegment R^:=: A a x <-> (A a /\ x = a) \/ initSegment R A a x.
-Proof.
-  intros R A a x. split; intros H1.
-  - apply Charac in H1. destruct H1 as [H1 H2].
-    apply Charac2 in H2. destruct H2 as [H2|H2].
-    + left. subst. split. 1: assumption. reflexivity.
-    + right. apply Charac. split; assumption.
-  - destruct H1 as [[H1 H2]|H1]; apply Charac.
-    + subst. split. 1: assumption. apply Charac2. left. reflexivity.
-    + apply Charac in H1. destruct H1 as [H1 H2].
-      split. 1: assumption. apply Charac2. right. assumption.
-Qed.
-
 Proposition IsInRefl : forall (R A:Class) (a:U),
   A a -> initSegment R^:=: A a a.
 Proof.
-  intros R A a H1. apply ReflCharac. left. split. 1: assumption. reflexivity.
+  intros R A a H1. apply CharacRefl. left. split. 1: assumption. reflexivity.
 Qed.
 
 Proposition WhenLeq : forall (R A:Class) (a b:U),
@@ -209,3 +215,4 @@ Proof.
   - subst. apply Class.Incl.Refl.
   - apply WhenLess; assumption.
 Qed.
+

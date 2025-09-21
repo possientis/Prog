@@ -53,17 +53,17 @@ Proof.
   destruct H5 as [H5|H5].
   - exists (b :\/: :{a}:). intros x. split; intros H6.
     + apply Union2.Charac in H6.
-      destruct H6 as [H6|H6]; apply InitSegment.ReflCharac.
+      destruct H6 as [H6|H6]; apply InitSegment.CharacRefl.
       * right. apply H4. assumption.
       * apply Single.Charac in H6. subst. left.
         split. 1: assumption. reflexivity.
-    + apply InitSegment.ReflCharac in H6.
+    + apply InitSegment.CharacRefl in H6.
       destruct H6 as [H6|H6]; apply Union2.Charac.
       * right. apply Single.Charac, H6.
       * apply H4 in H6. left. assumption.
   - exists b. intros x. split; intros H6.
-    + apply InitSegment.ReflCharac. right. apply H4. assumption.
-    + apply InitSegment.ReflCharac in H6. destruct H6 as [H6|H6].
+    + apply InitSegment.CharacRefl. right. apply H4. assumption.
+    + apply InitSegment.CharacRefl in H6. destruct H6 as [H6|H6].
       * exfalso. destruct H6 as [H6 H7]. subst. contradiction.
       * apply H4. assumption.
 Qed.

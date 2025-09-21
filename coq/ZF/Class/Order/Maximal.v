@@ -125,7 +125,7 @@ Proof.
       apply H1. 1: assumption. apply IsIn with R. assumption. }
     destruct H4 as [H4|[H4|H4]].
     + subst. apply InitSegment.IsInRefl. assumption.
-    + apply InitSegment.ReflCharac. right.
+    + apply InitSegment.CharacRefl. right.
       apply InitSegment.Charac. split; assumption.
     + exfalso. revert H4. apply H2. assumption.
   - apply InitSegment.IsIn with R^:=: a. assumption.

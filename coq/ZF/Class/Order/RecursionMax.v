@@ -5,6 +5,7 @@ Require Import ZF.Class.Order.Maximal.
 Require Import ZF.Class.Order.Recursion.
 Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Total.
+Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Small.
@@ -292,6 +293,12 @@ Proposition IsRecursive : forall (R A F:Class) (a b:U),
   (Recursion R A F)!b = F!(Recursion R A F :|: initSegment R A b).
 Proof.
   intros R A F a b H1 H2 H3.
+  assert (WellFounded R A) as G1. { apply H1. }
+  assert (A :<=: A) as G2. { apply Class.Incl.Refl. }
+  assert (A a) as G3. { apply Maximal.IsIn with R. assumption. }
+  assert (Total R A) as G4. { apply H1. }
+  assert (Transitive R A) as G5. {
+      apply WellFoundedWellOrd.IsTransitive. assumption. }
   remember (Recursion R A F :|: initSegment R A a) as f eqn:H4.
   remember (f :\/: :{ :(a,F!f): }:) as g eqn:H5.
   assert (COR.KExt R A F g a) as H6. { apply (Extend R A F a f g); assumption. }
@@ -303,4 +310,15 @@ Proof.
     - apply IsFunction with a; assumption.
     - apply DomainIsA with a; assumption.
     - apply H7, SFO.Satisfies with (initSegment R^:=: A a). 1: assumption.
+    apply (SOI.ToClassRefl R A A); try assumption.
+    apply Maximal.InitRefl; assumption. }
+  assert ((Recursion R A F)!b = g!b) as H11. { apply H10. assumption. }
+  remember (initSegment R A b) as c eqn:H12.
+  assert ((Recursion R A F) :|:c = f :|: c) as H13. {
+    rewrite H4. symmetry. apply RestrictOfClass.TowerProperty.
+    - apply IsFunction with a; assumption.
+    - rewrite H12. apply (SOI.WhenLeq R A A); try assumption.
+(*
+  assert ((Recursion R A F) :|: c = g :|: c) as H13. {
+*)
 Admitted.

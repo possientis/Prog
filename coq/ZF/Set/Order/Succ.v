@@ -184,13 +184,13 @@ Proof.
   split; intros x H7.
   - apply (InitSegment.Charac R A A) in H7; try assumption.
     2: apply IsIn; try assumption. destruct H7 as [H7 H8].
-    apply (InitSegment.InitRefl R A A); try assumption.
+    apply (InitSegment.CharacRefl R A A); try assumption.
     assert (x = a \/ R :(x,a): \/ R :(a,x):) as H9. { apply H5; assumption. }
     destruct H9 as [H9|[H9|H9]].
     + left. split; assumption.
     + right. apply InitSegment.CharacRev with A; assumption.
     + exfalso. apply (IsNotLess R A a x) in H3; try assumption. contradiction.
-  - apply (InitSegment.InitRefl R A A) in H7; try assumption.
+  - apply (InitSegment.CharacRefl R A A) in H7; try assumption.
     destruct H7 as [[H7 H8]|H7].
     + subst. apply InitSegment.CharacRev with A; try assumption.
       * apply IsIn; assumption.
