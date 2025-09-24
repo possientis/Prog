@@ -31,8 +31,9 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 Module SIN := ZF.Set.Incl.
 Module SOI := ZF.Set.Order.InitSegment.
-Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRD := ZF.Set.Relation.Domain.
+Module SRF := ZF.Set.Relation.Function.
+Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* The recursion class associated with R A F. In other words, when R is a well  *)
 (* founded well ordering on A and A has a maximal element, the unique function  *)
@@ -314,11 +315,36 @@ Proof.
     apply Maximal.InitRefl; assumption. }
   assert ((Recursion R A F)!b = g!b) as H11. { apply H10. assumption. }
   remember (initSegment R A b) as c eqn:H12.
-  assert ((Recursion R A F) :|:c = f :|: c) as H13. { (* TODO: needed ? *)
+  assert ((Recursion R A F) :|:c = f :|: c) as H13. {
     rewrite H4. symmetry. apply RestrictOfClass.TowerProperty.
     - apply IsFunction with a; assumption.
     - rewrite H12. apply (SOI.WhenLeq R A A); try assumption.
       apply (SOI.IsLeq R A A); try assumption.
       apply (SOI.ToClassRefl R A A); try assumption.
       apply Maximal.InitRefl; assumption. }
-Admitted.
+  assert (COR.K R A F f a) as H14. { apply Restrict; assumption. }
+  destruct H14 as [H14 [H15 _]].
+  assert (initSegment R A b :<=: initSegment R A a) as H16. {
+    apply (SOI.WhenLeq R A A); try assumption.
+    apply (SOI.IsLeq R A A); try assumption.
+    apply (SOI.ToClassRefl R A A); try assumption.
+    apply Maximal.InitRefl; assumption. }
+  assert (initSegment R A b :<=: initSegment R^:=: A a) as H17. {
+    apply SIN.Tran with (initSegment R A a). 1: assumption.
+    apply (SOI.IsInclRefl R A A); assumption. }
+  assert (f :|: c = g :|: c) as H18. {
+    apply SRF.RestrictEqual.
+    - apply H15.
+    - apply H8.
+    - destruct H15 as [_ H15]. rewrite H12, H15. assumption.
+    - destruct H8 as [_ H8]. rewrite H8, H12. assumption.
+    - intros x H18. symmetry.
+      apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
+      + apply H17. rewrite <- H12. assumption.
+      + rewrite H5. apply Union2.Charac. left.
+        apply (SFO.Satisfies f (initSegment R A a)). 1: assumption.
+        apply H16. rewrite <- H12. assumption. }
+  rewrite H11, H13, H18, H12. apply H9.
+  apply (SOI.ToClassRefl R A A); try assumption.
+  apply Maximal.InitRefl; assumption.
+Qed.
