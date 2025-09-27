@@ -490,10 +490,10 @@ Proof.
           apply IsFunction. assumption. }
         rewrite H13, H14. apply H8. apply (SOI.ToClass R A A); try assumption.
         rewrite H9 in H12. assumption. }
-        assert (G!a = F!(G:|:b)) as H15. { rewrite H9. apply H4. assumption. }
-        assert ((Recursion R A F)!a = F!((Recursion R A F) :|: b)) as H16. {
-          rewrite H9. apply IsRecursive; assumption. }
-        rewrite H15, H16, H12. reflexivity.
+    assert (G!a = F!(G:|:b)) as H15. { rewrite H9. apply H4. assumption. }
+    assert ((Recursion R A F)!a = F!((Recursion R A F) :|: b)) as H16. {
+       rewrite H9. apply IsRecursive; assumption. }
+    rewrite H15, H16, H12. reflexivity.
 Qed.
 
 Proposition DomainWhenMax : forall (R A F:Class) (a:U),
