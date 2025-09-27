@@ -6,12 +6,13 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.FunctionalAt.
-Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.InvImage.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Restrict.
@@ -23,6 +24,15 @@ Require Import ZF.Set.Relation.ImageByClass.
 
 (* F is a function defined on A.                                                *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
+
+Proposition IsOneToOne : forall (F A:Class),
+  FunctionOn F A                                  ->
+  (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
+  OneToOne F.
+Proof.
+  intros F A H1 H2. apply Function.IsOneToOne. 1: apply H1.
+  intros x y H3 H4. apply H2; apply H1; assumption.
+Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition EqualCharac : forall (F G A B:Class),

@@ -163,6 +163,21 @@ Proof.
   rewrite <- H4 in H6. revert H5 H6. apply CharacL. assumption.
 Qed.
 
+Proposition WhenFunctional : forall (F:Class),
+  Functional F                                                  ->
+  (forall x y, domain F x -> domain F y -> F!x = F!y -> x = y)  ->
+  OneToOne F.
+Proof.
+  intros F H1 H2. split. 1: assumption. intros y x1 x2 H3 H4.
+  apply Converse.Charac2 in H3. apply Converse.Charac2 in H4.
+  assert (domain F x1) as H5. { exists y. assumption. }
+  assert (domain F x2) as H6. { exists y. assumption. }
+  assert (F!x1 = y) as H7. { apply EvalOfClass.Charac; assumption. }
+  assert (F!x2 = y) as H8. { apply EvalOfClass.Charac; assumption. }
+  specialize (H2 x1 x2). apply H2; try assumption.
+  rewrite H7. symmetry. assumption.
+Qed.
+
 Proposition EvalInImage : forall (F A:Class) (a:U),
   OneToOne F -> domain F a -> F:[A]: (F!a) <-> A a.
 Proof.
@@ -186,3 +201,4 @@ Proof.
     destruct H3 as [H3 H5]. destruct H4 as [H4 H6].
     apply H2 with z; apply Converse.Charac2Rev; assumption.
 Qed.
+

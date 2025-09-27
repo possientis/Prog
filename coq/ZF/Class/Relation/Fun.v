@@ -8,6 +8,7 @@ Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
@@ -25,6 +26,14 @@ Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
 (* Notation "F :: A :-> B" := (Fun F A B)                                       *)
 Global Instance ClassFun : Notation.Fun.Fun Class Class := { IsFun := Fun }.
+
+Proposition IsOneToOne : forall (F A B:Class),
+  F :: A :-> B                                    ->
+  (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
+  OneToOne F.
+Proof.
+  intros F A B H1. apply FunctionOn.IsOneToOne, H1.
+Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition EqualCharac : forall (F A B G C D:Class),

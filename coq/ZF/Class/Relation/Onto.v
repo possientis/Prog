@@ -11,6 +11,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.InvImage.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
@@ -26,6 +27,14 @@ Definition Onto (F A B:Class) : Prop := FunctionOn F A /\ range F :~: B.
 Proposition IsFun : forall (F A B:Class), Onto F A B -> F :: A :-> B.
 Proof.
   intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.
+Qed.
+
+Proposition IsOneToOne : forall (F A B:Class),
+  Onto F A B                                      ->
+  (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
+  OneToOne F.
+Proof.
+  intros F A B H1. apply FunctionOn.IsOneToOne, H1.
 Qed.
 
 (* Two surjections are equal iff they have same domain and coincide pointwise.  *)

@@ -8,6 +8,7 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.InvImage.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Restrict.
@@ -20,6 +21,14 @@ Require Import ZF.Set.Relation.ImageByClass.
 
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
+
+Proposition IsOneToOne : forall (F:Class),
+  Function F                                                    ->
+  (forall x y, domain F x -> domain F y -> F!x = F!y -> x = y)  ->
+  OneToOne F.
+Proof.
+  intros F H1. apply OneToOne.WhenFunctional, H1.
+Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition EqualCharac : forall (F G:Class),
