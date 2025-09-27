@@ -53,6 +53,17 @@ Proof.
   destruct H1 as [x [H1 H3]]. apply H3, H2. assumption.
 Qed.
 
+Proposition WhenIncl : forall (P Q:Class),
+  Q :<=: P -> P :\: Q :<>: :0: <-> P :<>: Q.
+Proof.
+  intros P Q H1. split; intros H2 H3.
+  - apply Class.Empty.HasElem in H2. destruct H2 as [x [H2 H4]].
+    apply H4, H3. assumption.
+  - apply H2, DoubleInclusion. split. 2: assumption.
+    intros x H4. apply DoubleNegation. intros H5. apply Class.Empty.Charac with x.
+    apply H3. split; assumption.
+Qed.
+
 Proposition WhenLess : forall (P Q:Class),
   P :<: Q -> Q :\: P :<>: :0:.
 Proof.

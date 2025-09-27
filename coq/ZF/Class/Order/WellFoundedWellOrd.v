@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Complement.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
@@ -181,5 +182,39 @@ Proof.
       assert (~ R :(y,x):) as H16. 2: contradiction.
       apply Minimal.NotLess with (toClass c). 2: assumption.
       apply H8. assumption.
+Qed.
+
+Proposition IsAllOrInitSegment : forall (R A B:Class),
+  WellFoundedWellOrd R A                        ->
+  B :<=: A                                      ->
+  (forall x y, A x -> B y -> R :(x,y): -> B x)  ->
+  A :~: B                                       \/
+  exists a, A a /\ B :~: initSegment R A a.
+Proof.
+  intros R A B H1 H2 H3.
+  assert (A :~: B \/ A :<>: B) as H4. { apply LawExcludedMiddle. }
+  destruct H4 as [H4|H4]. 1: { left. assumption. } right.
+  assert (exists a, Minimal R (A:\:B) a) as H5. {
+    apply HasMinimal with A. 1: assumption.
+    - apply Inter2.IsInclL.
+    - apply Diff.WhenIncl; assumption. }
+  destruct H5 as [a H5]. exists a.
+  assert ((A :\: B) a) as H6. { apply Minimal.IsIn with R. assumption. }
+  assert (A a) as H7. { apply Inter2.IsInclL with (:¬:B). assumption. }
+  assert ((:¬:B) a) as H8. { apply Inter2.IsInclR with A. assumption. }
+  split. 1: assumption. apply DoubleInclusion. split; intros b H9.
+  - assert (forall x, B x -> R :(x,a):) as H10. {
+      intros x H10.
+      assert (x = a \/ R :(x,a): \/ R :(a,x):) as H11. {
+        apply H1. 2: assumption. apply H2. assumption. }
+      destruct H11 as [H11|[H11|H11]]. 2: assumption.
+      - subst. contradiction.
+      - exfalso. apply H8. apply H3 with x; assumption. }
+    apply InitSegment.Charac. split.
+    + apply H2. assumption.
+    + apply H10. assumption.
+  - apply InitSegment.Charac in H9. destruct H9 as [H9 H10].
+    apply DoubleNegation. intros H11. revert H10.
+    apply (Minimal.NotLess R (A:\:B)). 2: assumption. split; assumption.
 Qed.
 
