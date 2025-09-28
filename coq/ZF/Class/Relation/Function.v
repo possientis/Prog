@@ -4,6 +4,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
@@ -108,6 +109,20 @@ Proof.
   intros F H1 H2. apply Small.EquivCompat with F:[domain F]:.
   - apply ImageOfDomain.
   - apply ImageIsSmall; assumption.
+Qed.
+
+Proposition DomainIsSmall : forall (F:Class),
+  OneToOne F -> Small (range F) -> Small (domain F).
+Proof.
+  intros F H1 H2.
+  assert (Function F^:-1:) as H3. {
+    split. 2: apply H1. apply Converse.IsRelation. }
+  assert (Small (domain F^:-1:)) as H4. {
+    apply Small.EquivCompat with (range F). 2: assumption.
+    apply Equiv.Sym, Converse.Domain. }
+  assert (Small (range F^:-1:)) as H5. { apply RangeIsSmall; assumption. }
+  apply Small.EquivCompat with (range F^:-1:). 2: assumption.
+  apply Converse.Range.
 Qed.
 
 (* The composition of two functional classes is a function class.               *)

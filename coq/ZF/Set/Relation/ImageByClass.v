@@ -1,5 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Restrict.
@@ -8,6 +9,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Truncate.
 
 Export ZF.Notation.Image.
@@ -82,3 +84,12 @@ Proof.
   - contradiction.
 Qed.
 
+Proposition IsIn : forall (F:Class) (a x:U),
+  Functional F    ->
+  domain F x      ->
+  x :< a          ->
+  F!x :< F:[a]:.
+Proof.
+  intros F a x H1 H2 H3. apply CharacRev with x; try assumption.
+  apply EvalOfClass.Satisfies; assumption.
+Qed.
