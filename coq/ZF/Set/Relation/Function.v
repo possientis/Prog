@@ -11,6 +11,7 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.InvImage.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
@@ -18,6 +19,14 @@ Require Import ZF.Set.Relation.Restrict.
 
 (* A set is a function iff it is a relation and it is functional.               *)
 Definition Function (f:U) : Prop := Relation f /\ Functional f.
+
+Proposition IsOneToOne : forall (f:U),
+  Function f                                                          ->
+  (forall x y, x :< domain f -> y :< domain f -> f!x = f!y -> x = y)  ->
+  OneToOne f.
+Proof.
+  intros f H1. apply OneToOne.WhenFunctional, H1.
+Qed.
 
 (* Two functions with the same domains which coincide pointwise are equal.      *)
 Proposition EqualCharac : forall (f g:U),
@@ -160,7 +169,7 @@ Proposition RestrictEqual : forall (f g a:U),
   (forall x, x :< a -> f!x = g!x) ->
   f:|:a = g:|:a.
 Proof.
-  intros f g a H1 H2 H3 H4 H5. 
+  intros f g a H1 H2 H3 H4 H5.
   assert (domain (f:|:a) = a) as H6. {
     rewrite Restrict.DomainOf. apply Inter2.WhenInclL. assumption. }
   assert (domain (g:|:a) = a) as H7. {
@@ -175,3 +184,4 @@ Proof.
     + apply H2.
     + apply H1.
 Qed.
+

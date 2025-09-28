@@ -11,11 +11,22 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.InvImage.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
 (* f is a function defined on a.                                                *)
 Definition FunctionOn (f a:U) : Prop := Function f /\ domain f = a.
+
+Proposition IsOneToOne : forall (f a:U),
+  FunctionOn f a                                        ->
+  (forall x y, x :< a -> y :< a -> f!x = f!y -> x = y)  ->
+  OneToOne f.
+Proof.
+  intros f a H1 H2. apply Function.IsOneToOne. 1: apply H1.
+  intros x y H3 H4. destruct H1 as [_ H1].
+  rewrite H1 in H3. rewrite H1 in H4. apply H2; assumption.
+Qed.
 
 (* Two functions with the same domains and which coincide pointwise are equal.  *)
 Proposition EqualCharac : forall (f g a b:U),

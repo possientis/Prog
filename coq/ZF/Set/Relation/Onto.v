@@ -12,6 +12,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.InvImage.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
@@ -22,6 +23,14 @@ Definition Onto (f a b:U) : Prop := FunctionOn f a /\ range f = b.
 Proposition IsFun : forall (f a b:U), Onto f a b -> f :: a :-> b.
 Proof.
   intros f a b [H1 H2]. split. 1: apply H1. rewrite H2. apply Incl.Refl.
+Qed.
+
+Proposition IsOneToOne : forall (f a b:U),
+  Onto f a b                                            ->
+  (forall x y, x :< a -> y :< a -> f!x = f!y -> x = y)  ->
+  OneToOne f.
+Proof.
+  intros f a b H1. apply FunctionOn.IsOneToOne, H1.
 Qed.
 
 (* Two surjections with the same domains and which coincide pointwise are equal.*)
@@ -155,3 +164,4 @@ Proposition RestrictEqual : forall (f a b g c d e:U),
 Proof.
   intros f a b g c d e [H1 _] [H2 _]. apply FunctionOn.RestrictEqual; assumption.
 Qed.
+
