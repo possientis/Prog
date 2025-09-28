@@ -1,11 +1,13 @@
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Range.
@@ -15,23 +17,26 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.OneToOne.
+Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module COC := ZF.Class.Ordinal.Core.
+Module CRO := ZF.Class.Relation.OneToOne.
 Module SOC := ZF.Set.Ordinal.Core.
-
+Module SRO := ZF.Set.Relation.OneToOne.
 
 Proposition WhenFreshValue : forall (F A:Class),
   FunctionOn F On                                 ->
   (forall a, On a -> (A :\: toClass F:[a]:) F!a)  ->
   range F :<=: A                                  /\
-  OneToOne F                                      /\
+  CRO.OneToOne F                                  /\
   Proper A.
 Proof.
   intros F A H1 H2.
   assert (range F :<=: A) as H3. {
     intros b H3. apply (FunctionOn.RangeCharac F On) in H3. 2: assumption.
     destruct H3 as [a [H3 H4]]. subst. apply H2. assumption. }
-  assert (OneToOne F) as H4. {
+  assert (CRO.OneToOne F) as H4. {
     apply FunctionOn.IsOneToOne with On. 1: assumption.
     intros a b H4 H5 H6.
     assert (a = b \/ a :< b \/ b :< a) as H7. {
@@ -53,3 +58,16 @@ Proof.
     revert H7. apply COC.OnIsProper. }
   split. 1: assumption. split; assumption.
 Qed.
+
+Proposition WhenFreshAndSmall : forall (F A:Class),
+  FunctionOn F On                                                         ->
+  Small A                                                                 ->
+  (forall a,
+    On a -> A :\: toClass F:[a]: :<>: :0: -> (A :\: toClass F:[a]:) F!a)  ->
+  exists a,
+  On a                                                                    /\
+  (forall b, b :< a -> A :\: toClass F:[b]: :<>: :0:)                     /\
+  toClass F:[a]: :~: A                                                    /\
+  SRO.OneToOne (F :|: a).
+Proof.
+Admitted.
