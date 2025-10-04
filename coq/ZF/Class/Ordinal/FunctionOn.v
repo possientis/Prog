@@ -35,7 +35,7 @@ Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRO := ZF.Set.Relation.OneToOne.
 
 Proposition WhenFreshValue : forall (F A:Class),
-  CFO.FunctionOn F On                                 ->
+  CFO.FunctionOn F On                             ->
   (forall a, On a -> (A :\: toClass F:[a]:) F!a)  ->
   range F :<=: A                                  /\
   CRO.OneToOne F                                  /\

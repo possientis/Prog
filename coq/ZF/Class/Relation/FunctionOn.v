@@ -109,6 +109,17 @@ Proof.
   - apply ImageIsSmall with A; assumption.
 Qed.
 
+Proposition DomainIsSmall : forall (F A:Class),
+  FunctionOn F A    ->
+  OneToOne F        ->
+  Small (range F)   ->
+  Small A.
+Proof.
+  intros F A H1 H2 H3.
+  apply Small.EquivCompat with (domain F). 1: apply H1.
+  apply Function.DomainIsSmall; assumption.
+Qed.
+
 (* If F defined on A, G defined on B and range F <= B, then G.F defined on A.   *)
 Proposition Compose : forall (F G A B:Class),
   FunctionOn F A ->

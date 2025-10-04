@@ -1,12 +1,14 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
+Require Import ZF.Class.Proper.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
@@ -100,3 +102,12 @@ Proof.
     1: assumption. intros H5. apply H4. exists x. split; assumption.
 Qed.
 
+Proposition MinusASet : forall (A:Class) (a:U),
+  Proper A -> A :\: toClass a :<>: :0:.
+Proof.
+  intros A a H1 H2. apply WhenEmpty in H2.
+  assert (Small A) as H3. {
+    apply Bounded.WhenSmaller with (toClass a). 1: assumption.
+    apply SetIsSmall. }
+  revert H3. assumption.
+Qed.
