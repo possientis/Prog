@@ -3,10 +3,13 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Order.Total.
+Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
@@ -57,12 +60,11 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
-
-Lemma IsFresh : forall (R A F:Class) (x:U),
-  WellFoundedWellOrd R A                ->
-  F :~: SmallestFresh R A               ->
-  (A :\: toClass (range x)) :<>: :0:    ->
-  (A :\: toClass (range x)) F!x.
+Lemma IsMinimal : forall (R A F:Class) (x:U),
+  WellFoundedWellOrd R A                    ->
+  F :~: SmallestFresh R A                   ->
+  (A :\: toClass (range x)) :<>: :0:        ->
+  Minimal R (A :\: toClass (range x)) F!x.
 Proof.
   intros R A F x H1 H2 H3.
   assert (exists y, Minimal R (A :\: toClass (range x)) y) as H4. {
@@ -76,24 +78,35 @@ Proof.
       + apply IsFunction, H1.
     - exists y. apply H2, Charac2. assumption.
     - apply H2, Charac2. assumption. }
-  rewrite H5. apply Minimal.IsIn with R. assumption.
+  rewrite H5. assumption.
 Qed.
 
 Proposition WhenSmallestFreshValue : forall (R A F G:Class),
-  WellFoundedWellOrd R A                ->
-  F :~: SmallestFresh R A               ->
-  FunctionOn G On                       ->
-  (forall a, On a -> G!a = F!(G:|:a))   ->
+  WellFoundedWellOrd R A                  ->
+  F :~: SmallestFresh R A                 ->
+  FunctionOn G On                         ->
+  (forall a, On a -> G!a = F!(G:|:a))     ->
 
   (forall a,
-    On a                                ->
-    (A :\: toClass G:[a]:) :<>: :0:     ->
-    (A :\: toClass G:[a]:) G!a
+    On a                                  ->
+    (A :\: toClass G:[a]:) :<>: :0:       ->
+    Minimal R (A :\: toClass G:[a]:) G!a
   ).
 Proof.
   intros R A F G H1 H2 H3 H4 a H5 H6.
   assert (range (G:|:a) = G:[a]:) as H7. { apply RestrictOfClass.RangeOf, H3. }
   rewrite H4. 2: assumption. rewrite <- H7.
-  apply IsFresh with R; try assumption. rewrite H7. assumption.
+  apply IsMinimal; try assumption. rewrite H7. assumption.
 Qed.
 
+Proposition IsIsom : forall (R A F G:Class),
+  WellFoundedWellOrd R A                ->
+  Proper A                              ->
+  F :~: SmallestFresh R A               ->
+  FunctionOn G On                       ->
+  (forall a, On a -> G!a = F!(G:|:a))   ->
+  Isom G E R On A.
+Proof.
+  intros R A F G H1 H2 H3 H4 H5.
+  assert (forall a, On a -> (A :\: toClass G:[a]:) :<>: :0:) as H6. {
+Admitted.
