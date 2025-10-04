@@ -23,6 +23,14 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
 
+Proposition EquivCompat : forall (F G:Class),
+  F :~: G -> Function F -> Function G.
+Proof.
+  intros F G H1 [H2 H3]. split.
+  - apply Relation.EquivCompat with F; assumption.
+  - apply Functional.EquivCompat with F; assumption.
+Qed.
+
 Proposition IsOneToOne : forall (F:Class),
   Function F                                                    ->
   (forall x y, domain F x -> domain F y -> F!x = F!y -> x = y)  ->
