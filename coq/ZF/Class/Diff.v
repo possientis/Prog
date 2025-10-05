@@ -19,27 +19,66 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.Diff.
 Export ZF.Notation.Diff.
 
-Definition diff (P Q:Class) : Class := P :/\: :¬:Q.
+Definition diff (A B:Class) : Class := A :/\: :¬:B.
 
-(* Notation "P :\: Q" := (diff P Q)                                             *)
+(* Notation "A :\: B" := (diff A B)                                             *)
 Global Instance ClassDiff : Diff Class := { diff := diff }.
 
-Proposition EquivCompat : forall (P Q R S:Class),
-  P :~: R -> Q :~: S -> P :\: Q :~: R :\: S.
+Proposition EquivCompat : forall (A B C D:Class),
+  A :~: C -> B :~: D -> A :\: B :~: C :\: D.
 Proof.
-  intros P Q R S H1 H2. apply Inter2.EquivCompat. 1: assumption.
+  intros A B C D H1 H2. apply Inter2.EquivCompat. 1: assumption.
   apply Complement.EquivCompat. assumption.
 Qed.
 
-Proposition IsSmall : forall (P Q:Class), Small P -> Small (P :\: Q).
+Proposition EquivCompatL : forall (A B C:Class),
+  A :~: C -> A :\: B :~: C :\: B.
 Proof.
-  intros P Q. apply Inter2.IsSmallL.
+  intros A B C H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
 Qed.
 
-Proposition WhenEmpty : forall (P Q:Class),
-  P :\: Q  :~: :0: <-> P :<=: Q.
+Proposition EquivCompatR : forall (A B C:Class),
+  B :~: C -> A :\: B :~: A :\: C.
 Proof.
-  intros P Q. split; intros H1.
+  intros A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
+Proposition InclCompat : forall (A B C D:Class),
+  A :<=: C -> D :<=: B -> A :\: B :<=: C :\: D.
+Proof.
+  intros A B C D H1 H2. apply Inter2.InclCompat. 1: assumption.
+  apply Complement.InclCompat. assumption.
+Qed.
+
+Proposition InclCompatL : forall (A B C:Class),
+  A :<=: C -> A :\: B :<=: C :\: B.
+Proof.
+  intros A B C H1. apply InclCompat.
+  - assumption.
+  - apply Class.Incl.Refl.
+Qed.
+
+Proposition InclCompatR : forall (A B C:Class),
+  C :<=: B -> A :\: B :<=: A :\: C.
+Proof.
+  intros A B C H1. apply InclCompat.
+  - apply Class.Incl.Refl.
+  - assumption.
+Qed.
+
+Proposition IsSmall : forall (A B:Class), Small A -> Small (A :\: B).
+Proof.
+  intros A B. apply Inter2.IsSmallL.
+Qed.
+
+Proposition WhenEmpty : forall (A B:Class),
+  A :\: B  :~: :0: <-> A :<=: B.
+Proof.
+  intros A B. split; intros H1.
   - intros x H2. apply DoubleNegation. intros H3.
     apply Class.Empty.Charac with x, H1. split; assumption.
   - intros x. split; intros H2.
@@ -48,17 +87,17 @@ Proof.
     + apply Class.Empty.Charac in H2. contradiction.
 Qed.
 
-Proposition WhenNotEmpty : forall (P Q:Class),
-  P :\: Q :<>: :0: -> P :<>: Q.
+Proposition WhenNotEmpty : forall (A B:Class),
+  A :\: B :<>: :0: -> A :<>: B.
 Proof.
-  intros P Q H1 H2. apply Class.Empty.HasElem in H1.
+  intros A B H1 H2. apply Class.Empty.HasElem in H1.
   destruct H1 as [x [H1 H3]]. apply H3, H2. assumption.
 Qed.
 
-Proposition WhenIncl : forall (P Q:Class),
-  Q :<=: P -> P :\: Q :<>: :0: <-> P :<>: Q.
+Proposition WhenIncl : forall (A B:Class),
+  B :<=: A -> A :\: B :<>: :0: <-> A :<>: B.
 Proof.
-  intros P Q H1. split; intros H2 H3.
+  intros A B H1. split; intros H2 H3.
   - apply Class.Empty.HasElem in H2. destruct H2 as [x [H2 H4]].
     apply H4, H3. assumption.
   - apply H2, DoubleInclusion. split. 2: assumption.
@@ -66,17 +105,17 @@ Proof.
     apply H3. split; assumption.
 Qed.
 
-Proposition WhenLess : forall (P Q:Class),
-  P :<: Q -> Q :\: P :<>: :0:.
+Proposition WhenLess : forall (A B:Class),
+  B :<: A -> A :\: B :<>: :0:.
 Proof.
-  intros P Q H1. apply Class.Empty.HasElem.
+  intros A B H1. apply Class.Empty.HasElem.
   apply Less.Exists in H1. destruct H1 as [_ H1]. assumption.
 Qed.
 
-Proposition UnionR : forall (P Q R:Class),
-  P :\: (Q:\/:R) :~: (P:\:Q) :/\: P:\:R.
+Proposition UnionR : forall (A B C:Class),
+  A :\: (B:\/:C) :~: (A:\:B) :/\: A:\:C.
 Proof.
-  intros P Q R x. split; intros H1.
+  intros A B C x. split; intros H1.
   - destruct H1 as [H1 H2]. split; split.
     + assumption.
     + intros H3. apply H2. left. assumption.
@@ -88,7 +127,7 @@ Proof.
 Qed.
 
 Proposition Image : forall (F A B:Class),
-  Functional F^:-1: -> F:[B:\:A]: :~: F:[B]: :\: F:[A]:.
+  Functional F^:-1: -> F:[A:\:B]: :~: F:[A]: :\: F:[B]:.
 Proof.
   intros F A B H1 y. split; intros H2.
   - destruct H2 as [x [H2 H3]]. destruct H2 as [H2 H4]. split.
@@ -111,3 +150,4 @@ Proof.
     apply SetIsSmall. }
   revert H3. assumption.
 Qed.
+
