@@ -31,11 +31,13 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Range.
 
+Module SIN := ZF.Set.Incl.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SRR := ZF.Set.Relation.Range.
 
@@ -167,8 +169,18 @@ Proof.
     - apply Equiv.Sym. assumption. }
   assert (forall a b, On a -> On b -> a :< b -> R :(F!a,F!b):) as H15. {
     intros a b H15 H16 H17.
+    assert (A G!a) as G1. {
+      apply H9. exists a. apply CFO.Satisfies with On; assumption. }
+    assert (A G!b) as G2. {
+      apply H9. exists b. apply CFO.Satisfies with On; assumption. }
     assert (G:[a]: :<=: G:[b]:) as H18. {
       apply ImageByClass.InclCompatR. 1: apply H4.
       apply SOC.ElemIsIncl; assumption. }
     assert (A :\: toClass G:[b]: :<=: A :\: toClass G:[a]:) as H19. {
+      apply Diff.InclCompatR. assumption. }
+    assert ((A :\: toClass G:[a]:) G!b) as H20. {
+      apply H19. apply Minimal.IsIn with R. apply H7. assumption. }
+    assert (G!a = G!b \/ R :(G!a,G!b):) as H21. {
+      assert (G!a = G!b \/ R :(G!a,G!b): \/ R :(G!b,G!a):) as H21. {
+        apply H1; assumption. }
 Admitted.
