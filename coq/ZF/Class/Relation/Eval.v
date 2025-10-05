@@ -12,6 +12,14 @@ Require Import ZF.Set.OrdPair.
 (* Predicate expressing the fact that y is the value of F at a.                 *)
 Definition IsValueAt (F:Class) (a y:U) : Prop := F :(a,y): /\ FunctionalAt F a.
 
+Proposition IsValueAtCompat : forall (F G:Class) (a y:U),
+  F :~: G -> IsValueAt F a y -> IsValueAt G a y.
+Proof.
+  intros F G a y H1 [H2 H3]. split.
+  - apply H1. assumption.
+  - apply FunctionalAt.EquivCompat with F; assumption.
+Qed.
+
 (* When F is functional at a, y being a value of F at a reduces to F (a,y).     *)
 Proposition IsValueAtWhenFunctionalAt : forall (F:Class) (a y:U),
   FunctionalAt F a -> IsValueAt F a y <-> F :(a,y):.
@@ -62,6 +70,15 @@ Qed.
 (* Evaluate the class F at a.                                                   *)
 Definition eval (F:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ IsValueAt F a y.
+
+Proposition EquivCompat : forall (F G:Class) (a:U),
+  F :~: G -> eval F a :~: eval G a.
+Proof.
+  intros F G a H1 x. split; intros H2; destruct H2 as [y [H2 H3]]; exists y;
+  split; try assumption.
+  - apply IsValueAtCompat with F; assumption.
+  - apply IsValueAtCompat with G. 2: assumption. apply Equiv.Sym. assumption.
+Qed.
 
 (* If F has a value at a, then y corresponds to a iff eval F a = y.             *)
 Proposition WhenHasValueAt : forall (F:Class) (a y:U),
@@ -181,3 +198,4 @@ Proof.
   (* Which we know is true. *)
     apply Empty.IsSmall.
 Qed.
+

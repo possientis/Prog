@@ -25,6 +25,31 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is a function defined on A.                                                *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
+Proposition EquivCompat : forall (F G A B:Class),
+  F :~: G -> A :~: B -> FunctionOn F A -> FunctionOn G B.
+Proof.
+  intros F G A B H1 H2 [H3 H4]. split.
+  - apply Function.EquivCompat with F; assumption.
+  - apply Equiv.EquivCompat with (domain F) A; try assumption.
+    apply Domain.EquivCompat. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (F G A:Class),
+  F :~: G -> FunctionOn F A -> FunctionOn G A.
+Proof.
+  intros F G A H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatR : forall (F A B:Class),
+  A :~: B -> FunctionOn F A -> FunctionOn F B.
+Proof.
+  intros F G A H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 Proposition IsOneToOne : forall (F A:Class),
   FunctionOn F A                                  ->
   (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->

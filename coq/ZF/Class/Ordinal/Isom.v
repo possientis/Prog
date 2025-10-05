@@ -14,6 +14,7 @@ Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.FunctionOn.
+Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Domain.
@@ -49,6 +50,10 @@ Module SRR := ZF.Set.Relation.Range.
 (* element z of A which has not yet been 'used' by y.                           *)
 Definition SmallestFresh (R A:Class) : Class := fun x =>
   exists y z, x = :(y,z): /\ Minimal R (A :\: toClass (SRR.range y)) z.
+
+(* With appropriate assumptions, the isomorphism between On and A.              *)
+Definition RecurseSmallestFresh (R A:Class) : Class
+  := Recursion (SmallestFresh R A).
 
 Proposition Charac2 : forall (R A:Class) (y z:U),
   SmallestFresh R A :(y,z): <-> Minimal R (A :\: toClass (SRR.range y)) z.
@@ -102,7 +107,7 @@ Proof.
   rewrite H5. assumption.
 Qed.
 
-Proposition WhenSmallestFreshValue : forall (R A F G:Class),
+Lemma WhenRecurseSmallestFresh_ : forall (R A F G:Class),
   WellFoundedWellOrd R A                  ->
   F :~: SmallestFresh R A                 ->
   CFO.FunctionOn G On                     ->
@@ -121,7 +126,7 @@ Proof.
   apply IsMinimal; try assumption. rewrite H7. assumption.
 Qed.
 
-Proposition IsIsom : forall (R A F G:Class),
+Lemma WhenRecurseSmallestFresh : forall (R A F G:Class),
   WellFoundedWellOrd R A                ->
   Proper A                              ->
   F :~: SmallestFresh R A               ->
@@ -133,7 +138,7 @@ Proof.
   assert (forall a, On a -> (A :\: toClass G:[a]:) :<>: :0:) as H6. {
     intros a H6. apply Diff.MinusASet. assumption. }
   assert (forall a, On a -> Minimal R (A :\: toClass G:[a]:) G!a) as H7. {
-    intros a H7. apply WhenSmallestFreshValue with F; try assumption.
+    intros a H7. apply WhenRecurseSmallestFresh_ with F; try assumption.
     apply H6. assumption. }
   assert (forall a, On a -> (A :\: toClass G:[a]:) G!a) as H8. {
     intros a H8. apply Minimal.IsIn with R, H7. assumption. }
@@ -152,7 +157,7 @@ Proof.
       apply CFO.RangeCharac; assumption. }
     destruct H15 as [a [H15 H16]].
     assert (Minimal R (A :\: toClass G:[a]:) G!a) as H17. {
-      apply WhenSmallestFreshValue with F; try assumption.
+      apply WhenRecurseSmallestFresh_ with F; try assumption.
       apply Diff.MinusASet. assumption. }
     destruct H17 as [H17 H18].
     assert (~ (A :\: toClass G:[a]:) x) as H19. {
@@ -211,3 +216,41 @@ Proof.
   - apply E.Charac2 in H21. apply H15; assumption.
   - apply E.Charac2. apply H18; assumption.
 Qed.
+
+Proposition IsFunctionOn : forall (R A G:Class),
+  G :~: RecurseSmallestFresh R A ->
+  CFO.FunctionOn G On.
+Proof.
+  intros R A G H1. apply CFO.EquivCompatL with (RecurseSmallestFresh R A).
+  - apply Equiv.Sym. assumption.
+  - apply Recursion.IsFunctionOn.
+Qed.
+
+Proposition IsRecursive : forall (R A F G:Class),
+  F :~: SmallestFresh R A             ->
+  G :~: RecurseSmallestFresh R A      ->
+  forall a, On a -> G!a = F!(G:|:a).
+Proof.
+  intros R A F G H1 H2 a H3.
+  assert (G!a = (RecurseSmallestFresh R A)!a) as H4. {
+    apply EvalOfClass.EquivCompat. assumption. }
+  assert (G:|:a = (RecurseSmallestFresh R A) :|: a) as H5. {
+    apply RestrictOfClass.EquivCompat. assumption. }
+  assert (F!(G:|:a) = (SmallestFresh R A)!(G:|:a)) as H6. {
+    apply EvalOfClass.EquivCompat. assumption. }
+  rewrite H6, H5, H4. apply Recursion.IsRecursive. assumption.
+Qed.
+
+Proposition IsIsom : forall (R A G:Class),
+  WellFoundedWellOrd R A                    ->
+  Proper A                                  ->
+  G :~: RecurseSmallestFresh R A            ->
+  Isom G E R On A.
+Proof.
+  intros R A G H1 H2 H3.
+  apply WhenRecurseSmallestFresh with (SmallestFresh R A); try assumption.
+  - apply Equiv.Refl.
+  - apply IsFunctionOn with R A. assumption.
+  - apply IsRecursive with R A. 2: assumption. apply Equiv.Refl.
+Qed.
+

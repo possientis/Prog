@@ -22,6 +22,12 @@ Definition eval (F:Class) (a:U) : U :=
 (* Notation "F ! a" := (eval F a)                                               *)
 Global Instance ClassEval : Eval Class := { eval := eval }.
 
+Proposition EquivCompat : forall (F G:Class) (a:U),
+  F :~: G -> F!a = G!a.
+Proof.
+  intros F G a H1. apply FromClass.EquivCompat, Eval.EquivCompat. assumption.
+Qed.
+
 (* If F has a value at a, then y corresponds to a iff F!a = y.                  *)
 Proposition HasValueAtEvalCharac : forall (F:Class) (a y:U),
   HasValueAt F a -> F :(a,y): <-> F!a = y.

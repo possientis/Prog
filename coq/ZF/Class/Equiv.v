@@ -22,6 +22,30 @@ Proof.
   intros P x. split; intros H1; apply H1.
 Qed.
 
+Proposition EquivCompat : forall (A B C D:Class),
+  A :~: C -> B :~: D -> A :~: B -> C :~: D.
+Proof.
+  intros A B C D H1 H2 H3 x. split; intros H4.
+  - apply H2, H3, H1. assumption.
+  - apply H1, H3, H2. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (A B C:Class),
+  A :~: C -> A :~: B -> C :~: B.
+Proof.
+  intros A B C H1. apply EquivCompat.
+  - assumption.
+  - apply Refl.
+Qed.
+
+Proposition EquivCompatR : forall (A B C:Class),
+  B :~: C -> A :~: B -> A :~: C.
+Proof.
+  intros A B C H1. apply EquivCompat.
+  - apply Refl.
+  - assumption.
+Qed.
+
 (* The equivalence between classes is symmetric.                                *)
 Proposition Sym : forall (P Q:Class), P :~: Q ->  Q :~: P.
 Proof.
@@ -80,3 +104,4 @@ Proof.
   - apply Refl.
   - assumption.
 Qed.
+
