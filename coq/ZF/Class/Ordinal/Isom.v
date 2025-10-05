@@ -6,9 +6,11 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Total.
+Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.FunctionOn.
@@ -23,6 +25,7 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
@@ -167,12 +170,12 @@ Proof.
     split.
     - split. 2: apply H4. split. 2: assumption. apply H4.
     - apply Equiv.Sym. assumption. }
-  assert (forall a b, On a -> On b -> a :< b -> R :(F!a,F!b):) as H15. {
+  assert (forall a, On a -> A G!a) as G1. {
+    intros a G1. apply H9. exists a. apply CFO.Satisfies with On; assumption. }
+  assert (forall a b, On a -> On b -> a :< b -> R :(G!a,G!b):) as H15. {
     intros a b H15 H16 H17.
-    assert (A G!a) as G1. {
-      apply H9. exists a. apply CFO.Satisfies with On; assumption. }
-    assert (A G!b) as G2. {
-      apply H9. exists b. apply CFO.Satisfies with On; assumption. }
+    assert (A G!a) as G2. { apply G1. assumption. }
+    assert (A G!b) as G3. { apply G1. assumption. }
     assert (G:[a]: :<=: G:[b]:) as H18. {
       apply ImageByClass.InclCompatR. 1: apply H4.
       apply SOC.ElemIsIncl; assumption. }
@@ -181,5 +184,30 @@ Proof.
     assert ((A :\: toClass G:[a]:) G!b) as H20. {
       apply H19. apply Minimal.IsIn with R. apply H7. assumption. }
     assert (G!a = G!b \/ R :(G!a,G!b):) as H21. {
-
-Admitted.
+      apply Minimal.WhenIn with A (A :\: toClass G:[a]:). 4: assumption.
+      - apply H1.
+      - apply Class.Inter2.IsInclL.
+      - apply H7. assumption. }
+    destruct H21 as [H21|H21]. 2: assumption. exfalso.
+    assert (a = b) as H22. { apply (Bij.EvalInjective G On A); assumption. }
+    subst. revert H17. apply NoElemLoop1. }
+  assert (Irreflexive R A) as H16. {
+    apply WellFoundedWellOrd.IsIrreflexive. assumption. }
+  assert (Transitive R A) as H17. {
+    apply WellFoundedWellOrd.IsTransitive. assumption. }
+  assert (forall a b, On a -> On b -> R :(G!a,G!b): -> a :< b) as H18. {
+    intros a b H18 H19 H20.
+    assert (A G!a) as G2. { apply G1. assumption. }
+    assert (A G!b) as G3. { apply G1. assumption. }
+    assert (a = b \/ a :< b \/ b :< a) as H21. {
+      apply SOC.OrdinalTotal; assumption. }
+    destruct H21 as [H21|[H21|H21]]. 2: assumption.
+    - exfalso. subst. revert H20. apply H16. apply G1. assumption.
+    - exfalso.
+      assert (R :(G!b,G!a):) as H22. { apply H15; assumption. }
+      assert (R :(G!a,G!a):) as H23. { apply H17 with G!b; assumption. }
+      revert H23. apply H16. assumption. }
+  split. 1: assumption. intros a b H19 H20. split; intros H21.
+  - apply E.Charac2 in H21. apply H15; assumption.
+  - apply E.Charac2. apply H18; assumption.
+Qed.
