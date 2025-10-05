@@ -180,8 +180,7 @@ Proof.
 
   (* This contradicts the R-minimality of x in c. *)
       assert (~ R :(y,x):) as H16. 2: contradiction.
-      apply Minimal.NotLess with (toClass c). 2: assumption.
-      apply H8. assumption.
+      apply H11, H8. assumption.
 Qed.
 
 Proposition IsAllOrInitSegment : forall (R A B:Class),
@@ -215,6 +214,5 @@ Proof.
     + apply H10. assumption.
   - apply InitSegment.Charac in H9. destruct H9 as [H9 H10].
     apply DoubleNegation. intros H11. revert H10.
-    apply (Minimal.NotLess R (A:\:B)). 2: assumption. split; assumption.
+    apply H5. split; assumption.
 Qed.
-

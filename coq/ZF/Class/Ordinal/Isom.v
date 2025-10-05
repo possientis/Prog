@@ -181,6 +181,5 @@ Proof.
     assert ((A :\: toClass G:[a]:) G!b) as H20. {
       apply H19. apply Minimal.IsIn with R. apply H7. assumption. }
     assert (G!a = G!b \/ R :(G!a,G!b):) as H21. {
-      assert (G!a = G!b \/ R :(G!a,G!b): \/ R :(G!b,G!a):) as H21. {
-        apply H1; assumption. }
+
 Admitted.

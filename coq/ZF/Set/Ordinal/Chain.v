@@ -55,7 +55,7 @@ Proof.
   assert (range F a) as H4. { apply Minimal.IsIn with R. assumption. }
   apply (Fun.RangeCharac F (toClass :N) A) in H4. 2: assumption.
   destruct H4 as [n [H4 H5]]. exists n. split. 1: assumption.
-  revert H3. rewrite <- H5. apply Minimal.NotLess.
+  rewrite H5. apply H3.
   apply FunctionOn.IsInRange with (toClass :N). 1: apply H1.
   apply Omega.HasSucc. assumption.
 Qed.

@@ -55,10 +55,20 @@ Proof.
   intros R A a H1. apply H1.
 Qed.
 
-Proposition NotMore : forall (R A:Class) (a x:U),
-  A x -> Maximal R A a -> ~ R :(a,x):.
+Proposition WhenIn : forall (R A B:Class) (a b:U),
+  Total R A             ->
+  B :<=: A              ->
+  Maximal R B b         ->
+  B a                   ->
+  a = b \/ R :(a,b):.
 Proof.
-  intros R A a x H1 H2. apply H2. assumption.
+  intros R A B a b H1 H2 H3 H4.
+  assert (a = b \/ R :(a,b): \/ R :(b,a):) as H5. {
+    apply H1; apply H2. 1: assumption. apply IsIn with R. assumption. }
+  destruct H5 as [H5|[H5|H5]].
+  - left. assumption.
+  - right. assumption.
+  - exfalso. revert H5. apply H3. assumption.
 Qed.
 
 Proposition WhenHasNone : forall (R A:Class) (a:U),
@@ -105,7 +115,6 @@ Proof.
   - split. 1: apply H1. intros x H2 H3. apply Converse.Charac2Rev in H3.
     destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
 Qed.
-
 
 Proposition EmptySegment : forall (R A:Class) (a:U),
   Maximal R A a <-> A a /\ finalSegment R A a :~: :0:.

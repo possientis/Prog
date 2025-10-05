@@ -51,10 +51,20 @@ Proof.
   intros R A a H1. apply H1.
 Qed.
 
-Proposition NotLess : forall (R A:Class) (a x:U),
-  A x -> Minimal R A a -> ~ R :(x,a):.
+Proposition WhenIn : forall (R A B:Class) (a b:U),
+  Total R A             ->
+  B :<=: A              ->
+  Minimal R B a         ->
+  B b                   ->
+  a = b \/ R :(a,b):.
 Proof.
-  intros R A a x H1 H2. apply H2. assumption.
+  intros R A B a b H1 H2 H3 H4.
+  assert (a = b \/ R :(a,b): \/ R :(b,a):) as H5. {
+    apply H1; apply H2. 2: assumption. apply IsIn with R. assumption. }
+  destruct H5 as [H5|[H5|H5]].
+  - left. assumption.
+  - right. assumption.
+  - exfalso. revert H5. apply H3. assumption.
 Qed.
 
 Proposition WhenHasNone : forall (R A:Class) (a:U),
@@ -118,10 +128,10 @@ Proof.
   assert (x = y) as X. 2: apply X.
 
   (* x is also an element of A. *)
-  assert (A x) as H5. { apply H2. apply Minimal.IsIn with R. assumption. }
+  assert (A x) as H5. { apply H2. apply IsIn with R. assumption. }
 
   (* And y is an element of A. *)
-  assert (A y) as H6. { apply H2. apply Minimal.IsIn with R. assumption. }
+  assert (A y) as H6. { apply H2. apply IsIn with R. assumption. }
 
   (* From the totality of R on A we see that x = y \/  x R y \/ y R x. *)
   specialize (H1 x y H5 H6).
@@ -140,10 +150,7 @@ Proof.
   - assert (R :(x,y):) as X. { apply H1. } clear X.
 
  (* This contradicts the minimality of y. *)
-    assert (~R :(x,y):) as H7. {
-      apply (Minimal.NotLess _ B). 2: assumption.
-      apply (Minimal.IsIn R). assumption.
-    }
+    assert (~R :(x,y):) as H7. { apply H4. apply IsIn with R. assumption. }
 
     contradiction.
 
@@ -151,8 +158,8 @@ Proof.
   - assert (R :(y,x):) as X. { apply H1. } clear X.
 
  (* This contradicts the minimality of x. *)
-    assert (~R :(y,x):) as H7. {
-      apply (Minimal.NotLess _ B). 2: assumption.
-      apply (Minimal.IsIn R). assumption.
-    } contradiction.
+    assert (~R :(y,x):) as H7. { apply H3. apply IsIn with R. assumption. }
+
+    contradiction.
 Qed.
+

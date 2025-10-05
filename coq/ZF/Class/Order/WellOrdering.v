@@ -39,8 +39,7 @@ Proof.
     - apply ToClassIncl. assumption.
     - apply SingletonIsNotEmpty.
   } destruct H4 as [x H4]. assert (H5 := H4). apply Minimal.IsIn in H5.
-  apply Single.Charac in H5. subst.
-  apply Minimal.NotLess with (toClass :{a}:). 2: assumption. apply Single.IsIn.
+  apply Single.Charac in H5. subst. apply H4, Single.IsIn.
 Qed.
 
 Proposition IsTransitive : forall (R A:Class),
@@ -57,20 +56,12 @@ Proof.
       - apply Tuple3IsNotEmpty.
     } destruct H8 as [u H8]. assert (H9 := H8). apply Minimal.IsIn in H9.
     apply Tuple3Charac in H9. destruct H9 as [H9|[H9|H9]]; subst.
-    + assert (~R :(z,x):) as H9. {
-        apply Minimal.NotLess with (toClass :{x,y,z}:).
-        2: assumption. apply Tuple3In3.
-      } contradiction.
-
-    + assert (~R :(x,y):) as H9. {
-        apply Minimal.NotLess with (toClass :{x,y,z}:).
-        2: assumption. apply Tuple3In1.
-      } contradiction.
-
-    + assert (~R :(y,z):) as H9. {
-        apply Minimal.NotLess with (toClass :{x,y,z}:).
-        2: assumption. apply Tuple3In2.
-      } contradiction.
+    + assert (~R :(z,x):) as H9. { apply H8, Tuple3In3. }
+      contradiction.
+    + assert (~R :(x,y):) as H9. { apply H8, Tuple3In1. }
+      contradiction.
+    + assert (~R :(y,z):) as H9. {apply H8, Tuple3In2. }
+      contradiction.
 Qed.
 
 Proposition IsStrictOrd : forall (R A:Class),
