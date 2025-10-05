@@ -23,15 +23,20 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
+Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Range.
+
+Module SOC := ZF.Set.Ordinal.Core.
 Module SRR := ZF.Set.Relation.Range.
 
 (* With appropriate assumptions, this is the function class which given a       *)
@@ -133,7 +138,7 @@ Proof.
     intros H11.
     assert (Small On) as H12. {
       apply CFO.DomainIsSmall with G; assumption. }
-    revert H12. apply Core.OnIsProper. }
+    revert H12. apply COC.OnIsProper. }
   assert ( A :~: CRR.range G
     \/ exists a, A a /\ CRR.range G :~: initSegment R A a) as H12. {
     apply WellFoundedWellOrd.IsAllOrInitSegment; try assumption.
@@ -160,4 +165,10 @@ Proof.
     split.
     - split. 2: apply H4. split. 2: assumption. apply H4.
     - apply Equiv.Sym. assumption. }
+  assert (forall a b, On a -> On b -> a :< b -> R :(F!a,F!b):) as H15. {
+    intros a b H15 H16 H17.
+    assert (G:[a]: :<=: G:[b]:) as H18. {
+      apply ImageByClass.InclCompatR. 1: apply H4.
+      apply SOC.ElemIsIncl; assumption. }
+    assert (A :\: toClass G:[b]: :<=: A :\: toClass G:[a]:) as H19. {
 Admitted.
