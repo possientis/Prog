@@ -14,9 +14,12 @@ Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.FunctionOn.
+Require Import ZF.Class.Ordinal.Order.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Compose.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
@@ -252,5 +255,37 @@ Proof.
   - apply Equiv.Refl.
   - apply IsFunctionOn with R A. assumption.
   - apply IsRecursive with R A. 2: assumption. apply Equiv.Refl.
+Qed.
+
+Proposition IsUnique : forall (R A G:Class),
+  WellFoundedWellOrd R A          ->
+  Proper A                        ->
+  Isom G E R On A                 ->
+  G :~: RecurseSmallestFresh R A.
+Proof.
+  intros R A G H1 H2 H3.
+  remember (RecurseSmallestFresh R A) as F eqn:H4.
+  assert (Isom F E R On A) as H5. {
+    apply IsIsom; try assumption. rewrite H4. apply Equiv.Refl. }
+  assert (Isom F^:-1: R E A On) as H6. { apply Isom.Converse. assumption. }
+  remember (F^:-1: :.: G) as H eqn:H7.
+  assert (Isom H E E On On) as H8. {
+    rewrite H7. apply Isom.Compose with R A; assumption. }
+  assert (forall a, On a -> H!a = a) as H9. {
+    apply Order.IsId with On; try apply COC.OnIsOrdinal. assumption. }
+  assert (forall a, On a -> G!a = F!a) as H10. {
+    intros a H10.
+    assert (F!(H!a) = G!a) as H11. {
+      rewrite H7. rewrite (Bij.ComposeEval _ _ On A On); try assumption.
+      - rewrite (Bij.EvalOfConverseEval F On A). 1: reflexivity.
+        + apply H5.
+        + apply H3. exists a. apply (Bij.Satisfies _ On A). 2: assumption.
+          apply H3.
+      - apply H3.
+      - apply H6. }
+    rewrite H9 in H11. 2: assumption. symmetry. assumption. }
+  apply (Bij.EqualCharac' G F On A). 3: assumption.
+  - apply H3.
+  - apply H5.
 Qed.
 

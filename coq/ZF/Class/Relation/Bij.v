@@ -55,6 +55,16 @@ Proof.
   intros F A B G C D [H1 _] [H2i _]. apply BijectionOn.EqualCharac; assumption.
 Qed.
 
+Proposition EqualCharac' : forall (F G A B:Class),
+  Bij F A B                     ->
+  Bij G A B                     ->
+  (forall x, A x -> F!x = G!x)  ->
+  F :~: G.
+Proof.
+  intros F G A B H1 H2 H3.
+  apply (EqualCharac F A B G A B H1 H2). split. 2: assumption. apply Equiv.Refl.
+Qed.
+
 Proposition ImageOfDomain : forall (F A B:Class),
   Bij F A B -> F:[A]: :~: B.
 Proof.
