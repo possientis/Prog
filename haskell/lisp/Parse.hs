@@ -100,9 +100,9 @@ simpleChar = do
 octChar :: Parser Char
 octChar = do
   try $ char '#' >> char '\\' >> octDigit >>= \c -> do
-  s <- many1 octDigit  -- at least 2 digits for octal representation of char
-  let list = readOct (c:s)
-  return $ chr $ (fst . head) list
+    s <- many1 octDigit  -- at least 2 digits for octal representation of char
+    let list = readOct (c:s)
+    return $ chr $ (fst . head) list
 
 
 -- parses characters in hexadecimal representation #\xdddd

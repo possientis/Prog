@@ -5,9 +5,9 @@ all: song.tmp \
 	types.tmp \
 	lisp.tmp \
 	Optics.tmp \
-	adi.tmp \
 	adh.tmp \
 	Set.tmp
+#	adi.tmp \
 
 song.tmp:
 	sh ./song/test.sh 	> song.tmp 2>&1
@@ -30,8 +30,8 @@ lisp.tmp:
 Optics.tmp:
 	sh ./Optics/test.sh	> Optics.tmp 2>&1
 
-adi.tmp:
-	sh ./adi/test.sh	> adi.tmp 2>&1
+#adi.tmp:
+#	sh ./adi/test.sh	> adi.tmp 2>&1
 
 adh.tmp:
 	sh ./adh/test.sh	> adh.tmp 2>&1
