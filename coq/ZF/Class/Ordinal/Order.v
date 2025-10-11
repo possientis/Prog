@@ -14,7 +14,7 @@ Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.FunctionOn.
-Require Import ZF.Class.Ordinal.E.
+Require Import ZF.Class.Ordinal.Isom.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Bij.
@@ -272,7 +272,7 @@ Proof.
   assert (Isom H E E On On) as H8. {
     rewrite H7. apply Isom.Compose with R A; assumption. }
   assert (forall a, On a -> H!a = a) as H9. {
-    apply E.IsId with On; try apply COC.OnIsOrdinal. assumption. }
+    apply Isom.IsId with On; try apply COC.OnIsOrdinal. assumption. }
   assert (forall a, On a -> G!a = F!a) as H10. {
     intros a H10.
     assert (F!(H!a) = G!a) as H11. {

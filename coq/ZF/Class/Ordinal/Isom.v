@@ -40,6 +40,7 @@ Proof.
   - apply Inf.WhenOrdinal; assumption.
 Qed.
 
+(* An isomorphism between two ordinal classes is the identity.                  *)
 Proposition IsId : forall (F A B:Class),
   Ordinal A       ->
   Ordinal B       ->
