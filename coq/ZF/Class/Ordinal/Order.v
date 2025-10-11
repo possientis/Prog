@@ -245,6 +245,7 @@ Proof.
   rewrite H6, H5, H4. apply Recursion.IsRecursive. assumption.
 Qed.
 
+(* RecurseSmallestFresh is an isomorphism from On to A.                         *)
 Proposition IsIsom : forall (R A G:Class),
   WellFoundedWellOrd R A                    ->
   Proper A                                  ->
@@ -258,6 +259,7 @@ Proof.
   - apply IsRecursive with R A. 2: assumption. apply Equiv.Refl.
 Qed.
 
+(* RecurseSmallestFresh is the unique isomorphism from On to A.                 *)
 Proposition IsUnique : forall (R A G:Class),
   WellFoundedWellOrd R A          ->
   Proper A                        ->

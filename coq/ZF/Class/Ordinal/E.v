@@ -95,7 +95,7 @@ Proof.
 Qed.
 
 (* The order :< is a well founded well ordering on any class of ordinals.       *)
-Proposition IsWellFoundedOrd : forall (A:Class),
+Proposition IsWellFoundedWellOrd : forall (A:Class),
   A :<=: On -> WellFoundedWellOrd E A.
 Proof.
   intros A H1. split.
