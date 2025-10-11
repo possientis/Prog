@@ -22,12 +22,12 @@ Require Import ZF.Set.Tuple.
 (* R is a well-ordering on A iff it is founded on A and total on A.             *)
 Definition WellOrdering (R A:Class) : Prop :=  Founded R A /\ Total R A.
 
-Proposition WhenIncl : forall (R A B:Class),
-  WellOrdering R A -> B :<=: A -> WellOrdering R B.
+Proposition InclCompat : forall (R A B:Class),
+  A :<=: B -> WellOrdering R B -> WellOrdering R A.
 Proof.
-  intros R A B [H1 H2] H3. split.
-  - apply FoundedIncl with A; assumption.
-  - apply TotalIncl with A; assumption.
+  intros R A B H1 [H2 H3]. split.
+  - apply Founded.InclCompat with B; assumption.
+  - apply TotalIncl with B; assumption.
 Qed.
 
 Proposition IsIrreflexive : forall (R A:Class),
@@ -105,9 +105,9 @@ Proposition WhenIsom : forall (F R S A B:Class),
   Isom F R S A B -> WellOrdering R A <-> WellOrdering S B.
 Proof.
   intros F R S A B H1. split; intros [H2 H3]; split.
-  - apply (FoundedIsom F R S A B); assumption.
+  - apply (Founded.IsomCompat F R S A B); assumption.
   - apply (TotalIsom F R S A B); assumption.
-  - apply (FoundedIsom F R S A B); assumption.
+  - apply (Founded.IsomCompat F R S A B); assumption.
   - apply (TotalIsom F R S A B); assumption.
 Qed.
 

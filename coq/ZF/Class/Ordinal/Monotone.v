@@ -53,7 +53,7 @@ Proof.
       intros b H10. rewrite H8 in H10. apply COC.IsOrdinal with (domain F).
       1: assumption. apply H10. }
     assert (exists b, A b /\ A :/\: toClass b :~: :0:) as H11. {
-      apply COC.HasEMinimal with On; try assumption. apply COC.OnIsOrdinal. }
+      apply COC.HasMinimal with On; try assumption. apply COC.OnIsOrdinal. }
     destruct H11 as [b [H11 H12]]. rewrite H8 in H11. destruct H11 as [H11 H13].
     assert (domain F (F!b)) as H14. {
       assert (Transitive (domain F)) as H14. { apply H2. }
@@ -120,7 +120,7 @@ Proposition FromIsom : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2] H3 H4. split.
   - split.
-    + split; apply H1. 
+    + split; apply H1.
     + split. apply COC.EquivCompat with A. 2: assumption.
       * apply Equiv.Sym, H1.
       * apply Incl.EquivCompatL with B. 2: assumption.

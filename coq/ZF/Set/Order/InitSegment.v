@@ -241,7 +241,7 @@ Proposition IsomImage : forall (F R S A B C:Class) (a:U),
 Proof.
   intros F R S A B C a H1 H2 H3 H4.
   assert (WellFounded S B) as H5. {
-    apply (WellFounded.WhenIsom F R S A B); assumption. }
+    apply (WellFounded.IsomCompat F R S A B); assumption. }
   assert (B (F!a)) as H6. {
     apply Bij.IsInRange with A. 2: assumption. apply H4. }
   assert (F:[C]: :<=: B) as H7. {

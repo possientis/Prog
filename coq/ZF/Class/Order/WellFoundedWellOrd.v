@@ -21,12 +21,12 @@ Require Import ZF.Set.OrdPair.
 Definition WellFoundedWellOrd (R A:Class) : Prop :=
   WellFounded R A /\ WellOrdering R A.
 
-Proposition WhenIncl : forall (R A B:Class),
-  WellFoundedWellOrd R A -> B :<=: A -> WellFoundedWellOrd R B.
+Proposition InclCompat : forall (R A B:Class),
+  A :<=: B -> WellFoundedWellOrd R B -> WellFoundedWellOrd R A.
 Proof.
-  intros R A B [H1 H2] H3. split.
-  - apply WellFounded.WhenIncl with A; assumption.
-  - apply WellOrdering.WhenIncl with A; assumption.
+  intros R A B H1 [H2 H3]. split.
+  - apply WellFounded.InclCompat with B; assumption.
+  - apply WellOrdering.InclCompat with B; assumption.
 Qed.
 
 Proposition IsIrreflexive : forall (R A:Class),
@@ -107,7 +107,7 @@ Proof.
 
   (* R being well-founded on A, it is well-founded on B. *)
     assert (WellFounded R B) as H6. {
-      apply WellFounded.WhenIncl with A; assumption.
+      apply WellFounded.InclCompat with A; assumption.
     }
 
   (* And furthermore C is a small class. *)
@@ -216,3 +216,4 @@ Proof.
     apply DoubleNegation. intros H11. revert H10.
     apply H5. split; assumption.
 Qed.
+

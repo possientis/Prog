@@ -161,7 +161,7 @@ Qed.
 Proposition IsOrdinal : Class.Ordinal.Core.Ordinal :N.
 Proof.
   split. 1: apply IsTransitive. intros a b [H1 _] [H2 _].
-  apply OrdinalTotal; assumption.
+  apply Core.IsTotal; assumption.
 Qed.
 
 (* The class N is in fact small, thanks to the axiom of infinity.               *)

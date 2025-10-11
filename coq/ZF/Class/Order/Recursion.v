@@ -86,7 +86,7 @@ Proof.
     - apply H1.
     - apply Class.Incl.Refl. }
   apply Induction' with R.
-  - apply WellFoundedWellOrd.WhenIncl with A. 1: assumption.
+  - apply WellFoundedWellOrd.InclCompat with A. 2: assumption.
     apply SOI.IsIncl with A. 2: assumption.
     + apply H1.
     + apply Class.Incl.Refl.
@@ -526,7 +526,7 @@ Proof.
   assert (C :<=: A) as H11. {
     rewrite H4. apply COI.IsIncl. }
   assert (WellFoundedWellOrd R C) as H12. {
-    apply WellFoundedWellOrd.WhenIncl with A; assumption. }
+    apply WellFoundedWellOrd.InclCompat with A; assumption. }
   assert (forall b, C b -> B b) as H13. {
     apply Induction' with R. 1: assumption.
     intros c H13 H14.

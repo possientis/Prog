@@ -208,7 +208,7 @@ Proof.
     assert (A G!a) as G2. { apply G1. assumption. }
     assert (A G!b) as G3. { apply G1. assumption. }
     assert (a = b \/ a :< b \/ b :< a) as H21. {
-      apply SOC.OrdinalTotal; assumption. }
+      apply SOC.IsTotal; assumption. }
     destruct H21 as [H21|[H21|H21]]. 2: assumption.
     - exfalso. subst. revert H20. apply H16. apply G1. assumption.
     - exfalso.

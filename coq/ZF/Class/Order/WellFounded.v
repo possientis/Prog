@@ -70,7 +70,7 @@ Qed.
 
 (* If R is founded on a small class A, then it is well-founded on A.            *)
 Proposition WhenSmall : forall (R A:Class),
-  Founded R A -> Small A -> WellFounded R A.
+  Small A -> Founded R A -> WellFounded R A.
 Proof.
   intros R A H1 H2. split. 1: assumption. intros a H3.
   apply Bounded.WhenSmaller with A. 2: assumption. apply InitSegment.IsIncl.
@@ -80,29 +80,29 @@ Qed.
 Proposition WhenSet : forall (R:Class) (a:U),
   Founded R (toClass a) -> WellFounded R (toClass a).
 Proof.
-  intros R a H1. apply WhenSmall. 1: assumption.
+  intros R a H1. apply WhenSmall. 2: assumption.
   apply SetIsSmall.
 Qed.
 
 (* If R is well-founded on A superclass of B, then it is well-founded on B.     *)
-Proposition WhenIncl : forall (R A B:Class),
-  WellFounded R A -> B :<=: A -> WellFounded R B.
+Proposition InclCompat : forall (R A B:Class),
+  A :<=: B -> WellFounded R B -> WellFounded R A.
 Proof.
-  intros R A B [H1 H2] H3. split.
-  - apply FoundedIncl with A; assumption.
-  - intros a H4. apply Bounded.WhenSmaller with (initSegment R A a).
+  intros R A B H1 [H2 H3]. split.
+  - apply Founded.InclCompat with B; assumption.
+  - intros a H4. apply Bounded.WhenSmaller with (initSegment R B a).
     + apply InitSegment.InclCompatR. assumption.
-    + apply H2, H3. assumption.
+    + apply H3, H1. assumption.
 Qed.
 
-Proposition WhenIsom : forall (F R S A B: Class),
+Proposition IsomCompat : forall (F R S A B: Class),
   Isom F R S A B -> WellFounded R A <-> WellFounded S B.
 Proof.
   (* It is sufficient to prove -> *)
   assert (forall (F R S A B:Class),
     Isom F R S A B -> WellFounded R A -> WellFounded S B) as L. {
     intros F R S A B H1 [H2 H3]. assert (H4 := H1). destruct H4 as [H4 _]. split.
-    - apply (FoundedIsom F R S A B); assumption.
+    - apply (Founded.IsomCompat F R S A B); assumption.
     - intros b H5. remember (F^:-1:!b) as a eqn:H6.
       assert (b = F!a) as H7. { rewrite H6. symmetry.
         apply Bij.EvalOfConverseEval with A B; assumption. }

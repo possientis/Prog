@@ -49,7 +49,7 @@ Proof.
     apply CFO.IsOneToOne with On. 1: assumption.
     intros a b H4 H5 H6.
     assert (a = b \/ a :< b \/ b :< a) as H7. {
-      apply SOC.OrdinalTotal; assumption. }
+      apply SOC.IsTotal; assumption. }
     destruct H7 as [H7|[H7|H7]]. 1: assumption.
     - exfalso. specialize (H2 b H5). rewrite <- H6 in H2.
       destruct H2 as [_ H2]. apply H2.
@@ -95,7 +95,7 @@ Proof.
   assert (COC.Ordinal On) as H7. { apply COC.OnIsOrdinal. }
   assert (B :<=: On) as H8. { intros x H8. rewrite H5 in H8. apply H8. }
   assert (exists a, B a /\ B :/\: toClass a :~: :0:) as H9. {
-    apply COC.HasEMinimal with On; assumption. }
+    apply COC.HasMinimal with On; assumption. }
   destruct H9 as [a [H9 H10]].
   assert (On a) as H11. { rewrite H5 in H9. apply H9. }
   assert (A :\: toClass F:[a]: :~: :0:) as H12. { rewrite H5 in H9. apply H9. }
@@ -132,7 +132,7 @@ Proof.
       apply RestrictOfClass.Eval. 1: apply H1. assumption. }
     rewrite H23 in H20. rewrite H24 in H20.
     assert (b = c \/ b :< c \/ c :< b) as H25. {
-      apply SOC.OrdinalTotal; assumption. }
+      apply SOC.IsTotal; assumption. }
     destruct H25 as [H25|[H25|H25]]. 1: assumption.
     - exfalso. specialize (H13 c H19). specialize (H3 c H22 H13).
       rewrite <- H20 in H3. destruct H3 as [_ H3]. apply H3.

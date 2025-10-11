@@ -12,6 +12,8 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Union.
 
+Module COC := ZF.Class.Ordinal.Core.
+
 (* Principle of transfinite induction.                                          *)
 Proposition Induction : forall (A:Class),
   A :<=: On                                   ->
@@ -21,7 +23,7 @@ Proof.
   intros A H1 H2. apply DoubleNegation. intros H3.
   assert (On :\: A :<>: :0:) as H4. { apply Diff.WhenLess. split; assumption. }
   assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
-    apply HasEMinimal with On. 3: assumption.
+    apply COC.HasMinimal with On. 3: assumption.
     - apply OnIsOrdinal.
     - apply Class.Inter2.IsInclL. }
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {

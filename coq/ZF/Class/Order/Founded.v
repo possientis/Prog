@@ -46,14 +46,14 @@ Proof.
 Qed.
 
 (* If R is founded on A superclass of B, then it is founded on B.               *)
-Proposition FoundedIncl : forall (R A B:Class),
-  Founded R A -> B :<=: A -> Founded R B.
+Proposition InclCompat : forall (R A B:Class),
+  A :<=: B -> Founded R B -> Founded R A.
 Proof.
-  intros R A B H1 H2 a H3 H4. apply H1. 2: assumption.
-  apply Class.Incl.Tran with B; assumption.
+  intros R A B H1 H2 a H3 H4. apply H2. 2: assumption.
+  apply Class.Incl.Tran with A; assumption.
 Qed.
 
-Proposition FoundedIsom : forall (F R S A B:Class),
+Proposition IsomCompat : forall (F R S A B:Class),
   Isom F R S A B -> Founded R A <-> Founded S B.
 Proof.
   (* It is sufficient to prove -> *)
@@ -166,3 +166,4 @@ Proof.
   - specialize (H11 a2 (Tuple4In2 a1 a2 a3 a4)). contradiction.
   - specialize (H11 a3 (Tuple4In3 a1 a2 a3 a4)). contradiction.
 Qed.
+

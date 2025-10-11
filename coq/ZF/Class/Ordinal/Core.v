@@ -56,7 +56,7 @@ Proof.
 Qed.
 
 (* E is a total order on every ordinal class.                                   *)
-Proposition EIsTotal : forall (A:Class),
+Proposition IsTotal : forall (A:Class),
   Ordinal A -> Total E A.
 Proof.
   intros A [H1 H2] x y H3 H4. specialize (H2 x y H3 H4). destruct H2 as [H2|[H2|H2]].
@@ -66,18 +66,18 @@ Proof.
 Qed.
 
 (* E is a well-ordering on every ordinal class.                                 *)
-Proposition EWellOrders : forall (A:Class),
+Proposition IsWellOrdering : forall (A:Class),
   Ordinal A -> WellOrdering E A.
 Proof.
   intros A H1. split.
-  - apply FoundedIncl with V.
-    + apply E.IsFoundedOnV.
+  - apply Founded.InclCompat with V.
     + apply V.IsIncl.
-  - apply EIsTotal. assumption.
+    + apply E.IsFounded.
+  - apply IsTotal. assumption.
 Qed.
 
 (* Every non-empty sub-class of an ordinal class has an E-minimal element.      *)
-Proposition HasEMinimal : forall (A B:Class),
+Proposition HasMinimal : forall (A B:Class),
   Ordinal A   ->
   B :<=: A    ->
   B :<>: :0:  ->
@@ -86,9 +86,10 @@ Proof.
   intros A B H1 H2 H3.
   assert (exists x, Minimal E B x) as H4. {
     apply WellFoundedWellOrd.HasMinimal with A; try assumption. split.
-    - apply WellFounded.WhenIncl with V. apply E.IsWellFoundedOnV.
-      apply V.IsIncl.
-    - apply EWellOrders. assumption. }
+    - apply WellFounded.InclCompat with V.
+      + apply V.IsIncl.
+      + apply E.IsWellFounded.
+    - apply IsWellOrdering. assumption. }
   destruct H4 as [x H4]. exists x. apply MinimalEA. assumption.
 Qed.
 
@@ -134,7 +135,7 @@ Proof.
 
   (* We claim that the non-empty class A\B has an :<-minimal element. *)
   assert (exists b, (A :\: B) b /\ (A :\: B) :/\: toClass b :~: :0:) as H4. {
-    apply HasEMinimal with A. 1: assumption.
+    apply HasMinimal with A. 1: assumption.
     - apply Class.Inter2.IsInclL.
     - apply Diff.WhenLess. assumption. }
 
@@ -181,7 +182,7 @@ Proof.
   - assert ( exists x,
      (A :\: toClass a) x /\
      (A :\: toClass a)  :/\: toClass x :~: :0:) as H4. {
-     apply HasEMinimal with A. 1: assumption.
+     apply HasMinimal with A. 1: assumption.
      - apply Class.Inter2.IsInclL.
      - apply Diff.WhenLess. assumption. }
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }

@@ -60,7 +60,7 @@ Proof.
 Qed.
 
 (* The class E is founded on V, i.e. every subset of V has an E-minimal element.*)
-Proposition IsFoundedOnV : Founded E V.
+Proposition IsFounded : Founded E V.
 Proof.
   (* Let a be an arbitrary set. *)
   intros a.
@@ -115,9 +115,9 @@ Proof.
     apply Inter2.Charac. split. 2: assumption. apply Charac2. assumption.
 Qed.
 
-Proposition IsWellFoundedOnV : WellFounded E V.
+Proposition IsWellFounded : WellFounded E V.
 Proof.
-  split. 1: apply IsFoundedOnV. intros a _.
+  split. 1: apply IsFounded. intros a _.
   apply Small.EquivCompat with (toClass a).
   - apply Equiv.Sym, InitSegmentEV.
   - apply SetIsSmall.

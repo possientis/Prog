@@ -49,7 +49,7 @@ Proof.
 Qed.
 
 (* Ordinals are totally ordered by set membership.                              *)
-Proposition OrdinalTotal : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition IsTotal : forall (a b:U), Ordinal a -> Ordinal b ->
   a = b \/ a :< b \/ b :< a.
 Proof.
   intros a b H1 H2. assert (
@@ -83,7 +83,7 @@ Proposition InclOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b \/ b :<=: a.
 Proof.
   intros a b H1 H2. assert (a = b \/ a :< b \/ b :< a) as H3. {
-    apply OrdinalTotal; assumption. }
+    apply IsTotal; assumption. }
   destruct H3 as [H3|[H3|H3]].
   - subst. left. apply Incl.Refl.
   - left. apply LessIsElem in H3; try assumption. apply H3.
@@ -94,7 +94,7 @@ Proposition ElemOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b \/ b :<=: a.
 Proof.
   intros a b H1 H2. assert (a = b \/ a :< b \/ b :< a) as H3. {
-    apply OrdinalTotal; assumption. }
+    apply IsTotal; assumption. }
   destruct H3 as [H3|[H3|H3]].
   - subst. right. apply Incl.Refl.
   - left. assumption.
@@ -170,14 +170,14 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
-    apply HasEMinimal with Ordinal; try assumption. apply OnIsOrdinal. }
+    apply Core.HasMinimal with Ordinal; try assumption. apply OnIsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
     apply Class.Ordinal.Core.IsOrdinal with Ordinal.
     apply OnIsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. {
-    apply OrdinalTotal; assumption. }
+    apply IsTotal; assumption. }
   apply InclIsEqualOrElem; try assumption. destruct H8 as [H8|[H8|H8]].
   - left. assumption.
   - right. assumption.

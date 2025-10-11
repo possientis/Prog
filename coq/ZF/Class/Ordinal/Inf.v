@@ -18,6 +18,8 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
+Module COC := ZF.Class.Ordinal.Core.
+
 (* The infimum of the class A.                                                  *)
 Definition inf (A:Class) : Class := :I(A :/\: On).
 
@@ -59,7 +61,7 @@ Proposition IsLess : forall (A:Class), inf A :<: On.
 Proof.
   intros A.
   assert (inf A :~: On \/ inf A :<: On) as H1. {
-    apply Core.IsOnOrLess, IsOrdinal. }
+    apply COC.IsOnOrLess, IsOrdinal. }
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
   apply OnIsProper. apply Small.EquivCompat with (inf A).
   1: assumption. apply IsSmall.
@@ -120,7 +122,7 @@ Proposition IsIn : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2 H3.
   assert (exists b, A b /\ A :/\: toClass b :~: :0:) as H4. {
-    apply HasEMinimal with On; try assumption. apply OnIsOrdinal. }
+    apply COC.HasMinimal with On; try assumption. apply OnIsOrdinal. }
   destruct H4 as [b [H4 H5]].
   assert (forall c, A c -> b :<=: c) as H6. {
     intros c H6.
