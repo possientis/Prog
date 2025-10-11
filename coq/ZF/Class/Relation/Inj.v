@@ -25,7 +25,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 Definition Inj (F A B: Class) : Prop := BijectionOn F A /\ range F :<=: B.
 
 (* If F is an injection from A to B, then it is a function from A to B.         *)
-Proposition IsFun : forall (F A B:Class), Inj F A B -> F :: A :-> B.
+Proposition IsFun : forall (F A B:Class), Inj F A B -> Fun F A B.
 Proof.
   intros F A B [H1 H2]. split. 2: assumption.
   apply BijectionOn.IsFunctionOn. assumption.

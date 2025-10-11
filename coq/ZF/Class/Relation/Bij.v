@@ -27,7 +27,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
 
 Proposition IsFun : forall (F A B:Class),
-  Bij F A B -> F :: A :-> B.
+  Bij F A B -> Fun F A B.
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
   split. 1: assumption. apply DoubleInclusion, Equiv.Sym. assumption.

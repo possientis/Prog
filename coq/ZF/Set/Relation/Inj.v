@@ -20,7 +20,7 @@ Require Import ZF.Set.Relation.Restrict.
 Definition Inj (f a b:U) : Prop := BijectionOn f a /\ range f :<=: b.
 
 (* If f is an injection from a to b, then it is a function from a to b.         *)
-Proposition IsFun : forall (f a b:U), Inj f a b -> f :: a :-> b.
+Proposition IsFun : forall (f a b:U), Inj f a b -> Fun f a b.
 Proof.
   intros f a b [H1 H2]. split. 2: assumption.
   apply BijectionOn.IsFunctionOn. assumption.

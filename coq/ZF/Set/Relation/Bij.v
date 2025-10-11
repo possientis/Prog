@@ -22,7 +22,7 @@ Require Import ZF.Set.Relation.Restrict.
 Definition Bij (f a b:U) : Prop := BijectionOn f a /\ range f = b.
 
 Proposition IsFun : forall (f a b:U),
-  Bij f a b -> f :: a :-> b.
+  Bij f a b -> Fun f a b.
 Proof.
   intros f a b [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
   split. 1: assumption. subst. apply Incl.Refl.

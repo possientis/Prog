@@ -20,7 +20,7 @@ Require Import ZF.Set.Relation.Restrict.
 Definition Onto (f a b:U) : Prop := FunctionOn f a /\ range f = b.
 
 
-Proposition IsFun : forall (f a b:U), Onto f a b -> f :: a :-> b.
+Proposition IsFun : forall (f a b:U), Onto f a b -> Fun f a b.
 Proof.
   intros f a b [H1 H2]. split. 1: apply H1. rewrite H2. apply Incl.Refl.
 Qed.
