@@ -220,15 +220,16 @@ Proof.
   - apply E.Charac2. apply H18; assumption.
 Qed.
 
+(* RecurseSmallestFresh is a function class defined on the class of ordinals.   *)
 Proposition IsFunctionOn : forall (R A G:Class),
-  G :~: RecurseSmallestFresh R A ->
-  CFO.FunctionOn G On.
+  G :~: RecurseSmallestFresh R A -> CFO.FunctionOn G On.
 Proof.
   intros R A G H1. apply CFO.EquivCompatL with (RecurseSmallestFresh R A).
   - apply Equiv.Sym. assumption.
   - apply Recursion.IsFunctionOn.
 Qed.
 
+(* RecurseSmallestFresh is SmallestFresh-recursive.                             *)
 Proposition IsRecursive : forall (R A F G:Class),
   F :~: SmallestFresh R A             ->
   G :~: RecurseSmallestFresh R A      ->
