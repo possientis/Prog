@@ -1,3 +1,6 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.BijectionOn.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
@@ -16,8 +19,26 @@ Require Import ZF.Set.Relation.InvImage.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CBO := ZF.Class.Relation.BijectionOn.
+Module CRD := ZF.Class.Relation.Domain.
+
 (* f is a bijection defined on a.                                               *)
 Definition BijectionOn (f a:U) : Prop := Bijection f /\ domain f = a.
+
+Proposition ToClass : forall (f a:U),
+  BijectionOn f a <-> CBO.BijectionOn (toClass f) (toClass a).
+Proof.
+  intros f a. split; intros [H1 H2].
+  - split.
+    + apply Bijection.ToClass. assumption.
+    + rewrite <- H2. apply Equiv.Sym, Domain.ToClass.
+  - split.
+    + apply Bijection.ToClass. assumption.
+    + assert (toClass (domain f) :~: toClass a) as H3. {
+        apply Equiv.Tran with (CRD.domain (toClass f)). 2: assumption.
+        apply Domain.ToClass. }
+      apply EqualToClass. assumption.
+Qed.
 
 (* A bijection defined on a is a function defined on a.                         *)
 Proposition IsFunctionOn : forall (f a:U),

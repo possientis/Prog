@@ -9,14 +9,15 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Image.
 
+Module CRR := ZF.Class.Relation.Range.
 
 (* The range of a set.                                                          *)
-Definition range (f:U) : U := fromClass (Range.range(toClass f))
-  (Range.IsSmall (toClass f) (SetIsSmall f)).
+Definition range (f:U) : U := fromClass (CRR.range(toClass f))
+  (CRR.IsSmall (toClass f) (SetIsSmall f)).
 
 (* The class of the range is the range of the class.                            *)
 Proposition ToClass : forall (f:U),
-  toClass (range f) :~: Class.Relation.Range.range (toClass f).
+  toClass (range f) :~: CRR.range (toClass f).
 Proof.
   intros f. apply ToFromClass.
 Qed.

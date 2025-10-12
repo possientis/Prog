@@ -9,13 +9,15 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Union2.
 
+Module CRR := ZF.Class.Relation.Relation.
+
 (* A relation is a set of ordered pairs.                                        *)
 Definition Relation (f:U) : Prop :=
   forall x, x :< f -> exists y, exists z, x = :(y,z):.
 
 (* A set if a relation iff its associated class is a relation class.            *)
 Proposition ToClass : forall (f:U),
-  Relation f <-> Class.Relation.Relation.Relation (toClass f).
+  Relation f <-> CRR.Relation (toClass f).
 Proof.
   intros f. split; intros H1 x H2; specialize (H1 x H2); assumption.
 Qed.

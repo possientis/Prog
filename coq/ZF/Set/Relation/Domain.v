@@ -7,14 +7,15 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 
+Module CRD := ZF.Class.Relation.Domain.
 
 (* The domain of a set.                                                         *)
-Definition domain (f:U) : U := fromClass (Domain.domain (toClass f))
-  (Domain.IsSmall (toClass f) (SetIsSmall f)).
+Definition domain (f:U) : U := fromClass (CRD.domain (toClass f))
+  (CRD.IsSmall (toClass f) (SetIsSmall f)).
 
 (* The class of the domain is the domain of the class.                          *)
 Proposition ToClass : forall (f:U),
-  toClass (domain f) :~: Class.Relation.Domain.domain (toClass f).
+  toClass (domain f) :~: CRD.domain (toClass f).
 Proof.
   intros f. apply ToFromClass.
 Qed.

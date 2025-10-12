@@ -1,3 +1,5 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Bijection.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
@@ -17,8 +19,18 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRB := ZF.Class.Relation.Bijection.
+
 (* A set is a bijection iff it is a relation and it is one-to-one.              *)
 Definition Bijection (f:U) : Prop := Relation f /\ OneToOne f.
+
+Proposition ToClass : forall (f:U),
+  Bijection f <-> CRB.Bijection (toClass f).
+Proof.
+  intros f. split; intros [H1 H2].
+  - split. 1: assumption. apply OneToOne.ToClass. assumption.
+  - split. 1: assumption. apply OneToOne.ToClass. assumption.
+Qed.
 
 (* A bijection is a function.                                                   *)
 Proposition IsFunction : forall (f:U),
@@ -222,3 +234,4 @@ Proposition DiffImage : forall (f a b:U),
 Proof.
   intros f a b H1. apply Diff.Image, H1.
 Qed.
+

@@ -5,19 +5,24 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
+Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
+Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Isom.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Bijection.
+Require Import ZF.Class.Relation.BijectionOn.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -33,19 +38,33 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Bijection.
+Require Import ZF.Set.Relation.BijectionOn.
+Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
+Module COF := ZF.Class.Ordinal.FunctionOn.
+Module CRB := ZF.Class.Relation.Bijection.
+Module CBO := ZF.Class.Relation.BijectionOn.
+Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
+Module CRO := ZF.Class.Relation.OneToOne.
 Module CRR := ZF.Class.Relation.Range.
 
 Module SIN := ZF.Set.Incl.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SRB := ZF.Set.Relation.Bijection.
+Module SBO := ZF.Set.Relation.BijectionOn.
+Module SRD := ZF.Set.Relation.Domain.
+Module SRF := ZF.Set.Relation.Function.
+Module SRO := ZF.Set.Relation.OneToOne.
 Module SRR := ZF.Set.Relation.Range.
 
 (* With appropriate assumptions, this is the function class which given a       *)
@@ -146,7 +165,7 @@ Proof.
   assert (forall a, On a -> (A :\: toClass G:[a]:) G!a) as H8. {
     intros a H8. apply Minimal.IsIn with R, H7. assumption. }
   assert (CRR.range G :<=: A) as H9. { apply WhenFreshValue; assumption. }
-  assert (OneToOne G) as H10. { apply (WhenFreshValue G A); assumption. }
+  assert (CRO.OneToOne G) as H10. { apply (WhenFreshValue G A); assumption. }
   assert (Proper (CRR.range G)) as H11. {
     intros H11.
     assert (Small On) as H12. {
@@ -188,7 +207,7 @@ Proof.
       apply ImageByClass.InclCompatR. 1: apply H4.
       apply SOC.ElemIsIncl; assumption. }
     assert (A :\: toClass G:[b]: :<=: A :\: toClass G:[a]:) as H19. {
-      apply Diff.InclCompatR. assumption. }
+      apply Class.Diff.InclCompatR. assumption. }
     assert ((A :\: toClass G:[a]:) G!b) as H20. {
       apply H19. apply Minimal.IsIn with R. apply H7. assumption. }
     assert (G!a = G!b \/ R :(G!a,G!b):) as H21. {
@@ -292,3 +311,113 @@ Proof.
   - apply H5.
 Qed.
 
+Proposition WhenSmall : forall (R A:Class),
+  Small A           ->
+  WellOrdering R A  ->
+
+  exists a, On a    /\
+    forall (g:U),
+      g = (RecurseSmallestFresh R A :|: a) ->
+      Isom (toClass g) E R (toClass a) A.
+Proof.
+  intros R A H1 H2.
+  assert (WellFoundedWellOrd R A) as H3. {
+    split. 2: assumption. apply WellFounded.WhenSmall. 1: assumption. apply H2. }
+  remember (RecurseSmallestFresh R A) as G eqn:H4.
+  assert (G :~: RecurseSmallestFresh R A) as G1. {
+    rewrite H4. apply Equiv.Refl. }
+  assert (FunctionOn G On) as H5. {
+    rewrite H4. apply IsFunctionOn with R A, Equiv.Refl. }
+  remember (SmallestFresh R A) as F eqn: H6.
+  assert (F :~: SmallestFresh R A) as G2. { rewrite H6. apply Equiv.Refl. }
+  assert (forall a, On a -> G!a = F!(G:|:a)) as H7. {
+    apply IsRecursive with R A; assumption. }
+  assert (forall a,
+    On a                                  ->
+    (A :\: toClass G:[a]:) :<>: :0:       ->
+    Minimal R (A :\: toClass G:[a]:) G!a) as H8. {
+      apply WhenRecurseSmallestFresh_ with F; assumption. }
+  assert (forall a,
+    On a                                  ->
+    (A :\: toClass G:[a]:) :<>: :0:       ->
+    (A :\: toClass G:[a]:) G!a) as H9. {
+      intros a H9 H10. apply Minimal.IsIn with R. apply H8; assumption. }
+  assert (exists a,
+    On a                                                                  /\
+    (forall b, b :< a -> (A :\: toClass G:[b]:) :<>: :0:)                 /\
+    toClass G:[a]: :~: A                                                  /\
+    SRO.OneToOne (G :|: a)) as H10. { apply COF.WhenFreshAndSmall; assumption. }
+  destruct H10 as [a [H10 [H11 [H12 H13]]]].
+  exists a. split. 1: assumption. intros g H14.
+  assert (domain g = a) as H15. {
+    rewrite H14. apply RestrictOfClass.DomainWhenIncl. 1: apply H5.
+    intros b H15. apply H5. apply SOC.IsOrdinal with a; assumption. }
+  assert (SRF.Function g) as H16. {
+    rewrite H14. apply RestrictOfClass.IsFunction. apply H5. }
+  assert (SRB.Bijection g) as H17. {
+    split. 1: apply H16. rewrite H14. assumption. }
+  assert (SBO.BijectionOn g a) as H18. { split; assumption. }
+  assert (CBO.BijectionOn (toClass g) (toClass a)) as H19. {
+    apply SBO.ToClass. assumption. }
+  assert (range g = G:[a]:) as H20. {
+    rewrite H14. apply RestrictOfClass.RangeOf. apply H5. }
+  assert (CRR.range (toClass g) :~: A) as H21. {
+    apply Equiv.Tran with (toClass (SRR.range g)).
+    - apply Equiv.Sym, SRR.ToClass.
+    - rewrite H20. assumption. }
+  assert (Bij (toClass g) (toClass a) A) as H22. { split; assumption. }
+  assert (forall b c, b :< a -> c :< a -> b :< c -> R :(g!b,g!c):) as H23. {
+    intros b c H23 H24 H25.
+    assert (On b) as H26. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On c) as H27. { apply SOC.IsOrdinal with a; assumption. }
+    assert (g!b = G!b) as H28. {
+      rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
+    assert (g!c = G!c) as H29. {
+      rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
+    assert (b :<=: c) as H30. { apply SOC.ElemIsIncl; assumption. }
+    assert (b :<=: a) as H31. { apply SOC.ElemIsIncl; assumption. }
+    assert (c :<=: a) as H32. { apply SOC.ElemIsIncl; assumption. }
+    assert (G:[b]: :<=: G:[c]:) as H33. {
+      apply ImageByClass.InclCompatR. 2: assumption. apply H5. }
+    assert ((A :\: toClass G:[c]:) :<=: (A :\: toClass G:[b]:)) as H34. {
+      apply Class.Diff.InclCompatR. assumption. }
+    assert ((A :\: toClass G:[c]:) G!c) as H35. {
+      apply H9. 1: assumption. apply H11. assumption. }
+    assert ((A :\: toClass G:[b]:) G!c) as H36. { apply H34. assumption. }
+    assert (G!b = G!c \/ R :(G!b,G!c):) as H37. {
+      apply Minimal.WhenIn with A (A :\: toClass G:[b]:). 4: assumption.
+      - apply H2.
+      - apply Class.Inter2.IsInclL.
+      - apply H8. 1: assumption. apply H11. assumption. }
+    destruct H37 as [H37|H37]. 2: { rewrite H28, H29. assumption. } exfalso.
+    assert (b = c) as H38. {
+      apply SBO.EvalInjective with g a; try assumption.
+      rewrite H28, H29. assumption. }
+    revert H25. rewrite H38. apply NoElemLoop1. }
+  assert (Irreflexive R A) as H24. {
+    apply WellOrdering.IsIrreflexive. assumption. }
+  assert (Transitive R A) as H25. {
+    apply WellOrdering.IsTransitive. assumption. }
+  assert (forall b, b :< a -> A g!b) as G3. {
+    intros b G3. apply (Bij.IsInRange (toClass g) (toClass a) A); assumption. }
+  assert (forall b c, b :< a -> c :< a -> R :(g!b,g!c): -> b :< c) as H26. {
+    intros b c H26 H27 H28.
+    assert (On b) as H29. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On c) as H30. { apply SOC.IsOrdinal with a; assumption. }
+    assert (g!b = G!b) as H31. {
+      rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
+    assert (g!c = G!c) as H32. {
+      rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
+    assert (A g!b) as H33. { apply G3. assumption. }
+    assert (A g!c) as H34. { apply G3. assumption. }
+    assert (b = c \/ b :< c \/ c :< b) as H35. {
+      apply SOC.IsTotal; assumption. }
+    destruct H35 as [H35|[H35|H35]]. 2: assumption.
+    - exfalso. rewrite H35 in H28. revert H28. apply H24. assumption.
+    - assert (R :(g!c,g!b):) as H36. { apply H23; assumption. }
+      assert (R :(g!b,g!b):) as H37. { apply H25 with g!c; assumption. }
+      exfalso. revert H37. apply H24. assumption. }
+  split. 1: assumption. intros b c H27 H28. split; intros H29.
+  - apply E.Charac2 in H29. apply H23; assumption.
+  - apply E.Charac2, H26; assumption.
+Qed.

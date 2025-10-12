@@ -15,6 +15,8 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module SRI := ZF.Set.Relation.InvImage.
+
 (* f is a function defined on a.                                                *)
 Definition FunctionOn (f a:U) : Prop := Function f /\ domain f = a.
 
@@ -58,7 +60,7 @@ Qed.
 Proposition InvImageOfRange : forall (f a:U),
   FunctionOn f a -> f^:-1::[range f]: = a.
 Proof.
-  intros f a [H1 H2]. rewrite <- H2. apply InvImage.OfRange.
+  intros f a [H1 H2]. rewrite <- H2. apply SRI.OfRange.
 Qed.
 
 (* If f defined on a, g defined on b and range f <= b, then g.f defined on a.   *)

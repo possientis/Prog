@@ -1,3 +1,7 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Converse.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
@@ -11,9 +15,25 @@ Require Import ZF.Set.Relation.InvImage.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRC := ZF.Class.Relation.Converse.
+Module CRL := ZF.Class.Relation.Functional.
+Module CRO := ZF.Class.Relation.OneToOne.
+Module SRC := ZF.Set.Relation.Converse.
+Module SRL := ZF.Set.Relation.Functional.
+
 (* A set is one-to-one iff both itself and its converse are functional.         *)
 Definition OneToOne (f:U) : Prop := Functional f /\ Functional f^:-1:.
 
+Proposition ToClass : forall (f:U),
+  OneToOne f <-> CRO.OneToOne (toClass f).
+Proof.
+  intros f. split; intros [H1 H2].
+  - split; try assumption. apply CRL.EquivCompat with (toClass f^:-1:).
+    2: assumption. apply SRC.ToClass.
+  - split; try assumption. apply SRL.ToClass.
+    apply CRL.EquivCompat with ((toClass f)^:-1:).
+    2: assumption. apply Equiv.Sym. apply SRC.ToClass.
+Qed.
 
 (* Uniqueness of left coordinate when one-to-one.                               *)
 Proposition CharacL : forall (f:U), OneToOne f ->
