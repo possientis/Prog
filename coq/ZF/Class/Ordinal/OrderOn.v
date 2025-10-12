@@ -11,6 +11,7 @@ Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.FunctionOn.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -67,4 +68,18 @@ Proposition IsUnique : forall (A G:Class),
 Proof.
   intros A G H1 H2 H3. apply COO.IsUnique; try assumption.
   apply COE.IsWellFoundedWellOrd. assumption.
+Qed.
+
+(* A well ordered small class of ordinals is isomorphic to an ordinal.          *)
+Proposition WhenSmall : forall (A:Class),
+  Small A         ->
+  A :<=: On       ->
+
+  exists a, On a  /\
+    forall (g:U),
+      g = (RecurseSmallestFresh A :|: a) ->
+      Isom (toClass g) E E (toClass a) A.
+Proof.
+  intros A H1 H2. apply COO.WhenSmall. 1: assumption.
+  apply COE.IsWellOrdering. assumption.
 Qed.

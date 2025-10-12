@@ -311,6 +311,7 @@ Proof.
   - apply H5.
 Qed.
 
+(* A well ordered small class is isomorphic to an ordinal.                      *)
 Proposition WhenSmall : forall (R A:Class),
   Small A           ->
   WellOrdering R A  ->
