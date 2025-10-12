@@ -82,6 +82,16 @@ Proof.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
+Proposition EqualCharac' : forall (F G A:Class),
+  FunctionOn F A                ->
+  FunctionOn G A                ->
+  (forall x, A x -> F!x = G!x)  ->
+  F :~: G.
+Proof.
+  intros F G A H1 H2 H3.
+  apply (EqualCharac F G A A H1 H2). split. 2: assumption. apply Equiv.Refl.
+Qed.
+
 (* The direct image of the domain is the range.                                 *)
 Proposition ImageOfDomain : forall (F A:Class),
   FunctionOn F A -> F:[A]: :~: range F.

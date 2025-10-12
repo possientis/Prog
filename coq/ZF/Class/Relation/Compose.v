@@ -69,6 +69,20 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+Proposition Assoc : forall (F G H:Class),
+  H :.: (G :.: F) :~: (H :.: G) :.: F.
+Proof.
+  intros F G H u. split; intros H1.
+  - destruct H1 as [x [z [t [H1 [H2 H3]]]]]. apply Charac2 in H2.
+    destruct H2 as [y [H2 H4]].
+    exists x. exists y. exists t. split. 1: assumption. split. 1: assumption.
+    apply Charac2. exists z. split; assumption.
+  - destruct H1 as [x [y [t [H1 [H2 H3]]]]]. apply Charac2 in H3.
+    destruct H3 as [z [H3 H4]].
+    exists x. exists z. exists t. split. 1: assumption. split. 2: assumption.
+    apply Charac2. exists y. split; assumption.
+Qed.
+
 (* The composition of two classes is a relation.                                *)
 Proposition IsRelation : forall (F G:Class), Relation (G :.: F).
 Proof.
@@ -266,3 +280,4 @@ Proof.
     + apply Cmp.IsFunctional.
     + apply Prod.IsSmall; assumption.
 Qed.
+

@@ -33,6 +33,12 @@ Proof.
   split. 1: assumption. apply DoubleInclusion, Equiv.Sym. assumption.
 Qed.
 
+Proposition IsFunctionOn : forall (F A B:Class),
+  Bij F A B -> FunctionOn F A.
+Proof.
+  intros F A B H1. apply IsFun in H1. apply H1.
+Qed.
+
 Proposition IsInj : forall (F A B:Class),
   Bij F A B -> Inj F A B.
 Proof.

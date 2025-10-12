@@ -7,6 +7,7 @@ Require Import ZF.Class.Relation.BijectionOn.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Fun.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.FunctionOn.
@@ -145,6 +146,17 @@ Proof.
   - apply I.Eval.
 Qed.
 
+Proposition EqualCharac : forall (F A:Class),
+  FunctionOn F A              ->
+  (forall x, A x -> F!x = x)  ->
+  F :~: I:|:A.
+Proof.
+  intros F A H1 H2. apply FunctionOn.EqualCharac' with A. 1: assumption.
+  - apply IsFunctionOn.
+  - intros x H3. rewrite H2. 2: assumption. symmetry. apply Eval. assumption.
+Qed.
+
+
 (* I|A is an isomorphism class from A to A w.r to R (and R).                    *)
 Proposition IsIsom : forall (R A:Class), Isom (I:|:A) R R A A.
 Proof.
@@ -182,3 +194,35 @@ Proof.
   - apply Compose.EquivCompatL, Equiv.Sym, Converse.IsIdempotent. assumption.
   - apply IsConverseFF with A. apply Bij.Converse. assumption.
 Qed.
+
+Proposition IdentityL : forall (F A B:Class), Fun F A B ->
+  (I:|:B) :.: F :~: F.
+Proof.
+  intros F A B H1. intros u. split; intros H2.
+  - destruct H2 as [x [y [z [H2 [H3 H4]]]]]. apply Charac2 in H4.
+    destruct H4 as [H4 H5]. subst. assumption.
+  - assert (exists x y, u = :(x,y):) as H3. { apply H1. assumption. }
+    destruct H3 as [x [y H3]]. subst. exists x. exists y. exists y.
+    split. 1: reflexivity. split. 1: assumption.
+    apply Charac2. split. 2: reflexivity. apply H1. exists x. assumption.
+Qed.
+
+Proposition IdentityR : forall (F A B:Class), Fun F A B ->
+  F :.: (I:|:A) :~: F.
+Proof.
+  intros F A B H1. intros u. split; intros H2.
+  - destruct H2 as [x [y [z [H2 [H3 H4]]]]]. apply Charac2 in H3.
+    destruct H3 as [H3 H5]. subst. assumption.
+  - assert (exists x y, u = :(x,y):) as H3. { apply H1. assumption. }
+    destruct H3 as [x [y H3]]. subst. exists x. exists x. exists y.
+    split. 1: reflexivity. split. 2: assumption.
+    apply Charac2. split. 2: reflexivity. apply H1. exists y. assumption.
+Qed.
+
+Proposition ConverseGF : forall (F G A B:Class),
+  Bij F A B                 ->
+  Bij G A B                 ->
+  (G^:-1: :.: F) :~: I:|:A  ->
+  F :~: G.
+Admitted.
+

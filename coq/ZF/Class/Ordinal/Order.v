@@ -422,3 +422,17 @@ Proof.
   - apply E.Charac2 in H29. apply H23; assumption.
   - apply E.Charac2, H26; assumption.
 Qed.
+
+Proposition WhenSmallUnique : forall (R A:Class) (a b f g:U),
+  Small A                             ->
+  WellOrdering R A                    ->
+  On a                                ->
+  On b                                ->
+  Isom (toClass f) E R (toClass a) A  ->
+  Isom (toClass g) E R (toClass b) A  ->
+  a = b /\ f = g.
+Proof.
+  intros R A a b f g H1 H2 H3 H4 H5 H6.
+Admitted.
+
+

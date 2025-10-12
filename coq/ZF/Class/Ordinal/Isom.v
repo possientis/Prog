@@ -16,6 +16,9 @@ Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.I.
+Require Import ZF.Class.Relation.IA.
+Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
@@ -114,33 +117,53 @@ Proof.
   rewrite H4 in H8. destruct H8 as [_ H8]. apply H8. assumption.
 Qed.
 
-(* Two isomorphic ordinal classes are in fact equal.                            *)
+(* Two isomorphic ordinal classes are in fact equal and the isomorphim is id.   *)
 Proposition IsEquiv : forall (F A B:Class),
-  Ordinal A       ->
-  Ordinal B       ->
-  Isom F E E A B  ->
-  A :~: B.
+  Ordinal A                 ->
+  Ordinal B                 ->
+  Isom F E E A B            ->
+  A :~: B /\ F :~: I:|:A.
 Proof.
   intros F A B H1 H2 H3.
   assert (F:[A]: :~: B) as H4. { apply Bij.ImageOfDomain, H3. }
-  intros a. split; intros H5.
-  - apply H4. apply (Bij.ImageCharac F A B). 1: apply H3. exists a.
-    split. 1: assumption. split. 1: assumption. apply IsId with A B; assumption.
-  - apply H4 in H5. apply (Bij.ImageCharac F A B) in H5. 2: apply H3.
-    destruct H5 as [x [H5 [_ H7]]].
+  assert (A :<=: B) as H5. {
+    intros a H5. apply H4. apply (Bij.ImageCharac F A B). 1: apply H3. exists a.
+    split. 1: assumption. split. 1: assumption. apply IsId with A B; assumption. }
+  assert (B :<=: A) as H6. {
+    intros b H6. apply H4 in H6. apply (Bij.ImageCharac F A B) in H6. 2: apply H3.
+    destruct H6 as [x [H6 [_ H7]]].
     assert (F!x = x) as H8. { apply IsId with A B; assumption. }
-    rewrite H7 in H8. rewrite H8. assumption.
+    rewrite H7 in H8. rewrite H8. assumption. }
+  assert (A :~: B) as H7. {
+    apply Class.Incl.DoubleInclusion. split; assumption. }
+  assert (F :~: I:|:A) as H8. {
+    apply IA.EqualCharac.
+    - apply Bij.IsFunctionOn with B, H3.
+    - apply IsId with B; assumption. }
+  split; assumption.
 Qed.
 
 (* An R-ordered class C is isomorphic to at most one ordinal class.             *)
 Proposition IsEquivGen : forall (F G R A B C:Class),
-  Ordinal A       ->
-  Ordinal B       ->
-  Isom F E R A C  ->
-  Isom G E R B C  ->
-  A :~: B.
+  Ordinal A           ->
+  Ordinal B           ->
+  Isom F E R A C      ->
+  Isom G E R B C      ->
+  A :~: B /\ F :~: G.
 Proof.
-  intros F G R A B C H1 H2 H3 H4. apply IsEquiv with (G^:-1: :.: F);
+  intros F G R A B C H1 H2 H3 H4.
+  assert (Isom G^:-1: R E C B) as H5. { apply Isom.Converse. assumption. }
+  remember (G^:-1: :.: F) as H eqn:H6.
+  assert (Isom H E E A B) as H7. {
+    rewrite H6. apply Isom.Compose with R C; assumption. }
+  assert (A :~: B /\ H :~: I:|:A) as H8. { apply IsEquiv; assumption. }
+  destruct H8 as [H8 H9].
+  assert (F :~: G) as H10. {
+  Admitted.
+
+(*
+  apply IsEquiv with (G^:-1: :.: F);
   try assumption. apply Isom.Compose with R C. 1: assumption.
   apply Isom.Converse. assumption.
 Qed.
+*)
