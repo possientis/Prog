@@ -1,3 +1,6 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -15,10 +18,21 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CFO := ZF.Class.Relation.FunctionOn.
+Module CRD := ZF.Class.Relation.Domain.
 Module SRI := ZF.Set.Relation.InvImage.
 
 (* f is a function defined on a.                                                *)
 Definition FunctionOn (f a:U) : Prop := Function f /\ domain f = a.
+
+Proposition ToClass : forall (f a:U),
+  FunctionOn f a <-> CFO.FunctionOn (toClass f) (toClass a).
+Proof.
+  intros f a. split; intros [H1 H2]; split; try assumption.
+  - rewrite <- H2. apply Equiv.Sym, Domain.ToClass.
+  - apply Equiv.EqualToClass, Equiv.Tran with (CRD.domain (toClass f)).
+    2: assumption. apply Domain.ToClass.
+Qed.
 
 Proposition IsOneToOne : forall (f a:U),
   FunctionOn f a                                        ->

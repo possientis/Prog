@@ -1,3 +1,6 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Inj.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
@@ -16,8 +19,24 @@ Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRI := ZF.Class.Relation.Inj.
+Module CRR := ZF.Class.Relation.Range.
+
 (* f is an injective function from a to b.                                      *)
 Definition Inj (f a b:U) : Prop := BijectionOn f a /\ range f :<=: b.
+
+Proposition ToClass : forall (f a b:U),
+  Inj f a b <-> CRI.Inj (toClass f) (toClass a) (toClass b).
+Proof.
+  intros f a b. split; intros [H1 H2]; split.
+  - apply BijectionOn.ToClass; assumption.
+  - apply Incl.EquivCompatL with (toClass (range f)). 2: assumption.
+    apply Range.ToClass.
+  - apply BijectionOn.ToClass; assumption.
+  - apply Incl.ToClass.
+    apply Incl.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
+    apply Equiv.Sym, Range.ToClass.
+Qed.
 
 (* If f is an injection from a to b, then it is a function from a to b.         *)
 Proposition IsFun : forall (f a b:U), Inj f a b -> Fun f a b.

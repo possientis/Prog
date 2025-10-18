@@ -1,3 +1,5 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Function.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -16,10 +18,17 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRF := ZF.Class.Relation.Function.
 Module SRI := ZF.Set.Relation.InvImage.
 
 (* A set is a function iff it is a relation and it is functional.               *)
 Definition Function (f:U) : Prop := Relation f /\ Functional f.
+
+Proposition ToClass : forall (f:U),
+  Function f <-> CRF.Function (toClass f).
+Proof.
+  intros f. split; intros [H1 H2]; split; assumption.
+Qed.
 
 Proposition IsOneToOne : forall (f:U),
   Function f                                                          ->

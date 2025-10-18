@@ -1,3 +1,6 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Fun.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -14,9 +17,23 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRF := ZF.Class.Relation.Fun.
+Module CRR := ZF.Class.Relation.Range.
 
 (* f is a function from a to b.                                                 *)
 Definition Fun (f a b:U) : Prop := FunctionOn f a /\ range f :<=: b.
+
+Proposition ToClass : forall (f a b:U),
+  Fun f a b <-> CRF.Fun (toClass f) (toClass a) (toClass b).
+Proof.
+  intros f a b. split; intros [H1 H2]; split.
+  - apply FunctionOn.ToClass. assumption.
+  - apply Incl.EquivCompatL with (toClass (range f)).
+    2: assumption. apply Range.ToClass.
+  - apply FunctionOn.ToClass. assumption.
+  - apply Incl.ToClass, Incl.EquivCompatL with (CRR.range (toClass f)).
+    2: assumption. apply Equiv.Sym, Range.ToClass.
+Qed.
 
 Proposition IsOneToOne : forall (f a b:U),
   Fun f a b                                             ->

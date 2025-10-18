@@ -1,3 +1,5 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
 Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Set.Core.
 
@@ -9,6 +11,12 @@ Definition Incl (a b:U) : Prop := forall x, x :< a -> x :< b.
 
 (* Notation "a :<=: b" := (Incl a b)                                            *)
 Global Instance SetLeq : Leq U := { leq := Incl }.
+
+Proposition ToClass : forall (a b:U),
+  a :<=: b <-> toClass a :<=: toClass b.
+Proof.
+  intros a b. split; intros H1; assumption.
+Qed.
 
 (* Two sets are equal if and only if they are subsets of each other.            *)
 Proposition DoubleInclusion : forall (a b:U),
@@ -42,3 +50,4 @@ Proposition Tran : forall (a b c:U),
 Proof.
   intros a b c H1 H2 x H3. apply H2, H1, H3.
 Qed.
+

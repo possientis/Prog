@@ -1,3 +1,6 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Onto.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -16,9 +19,23 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRO := ZF.Class.Relation.Onto.
+Module CRR := ZF.Class.Relation.Range.
+
 (* f is a surjective function from a to b.                                      *)
 Definition Onto (f a b:U) : Prop := FunctionOn f a /\ range f = b.
 
+Proposition ToClass : forall (f a b:U),
+  Onto f a b <-> CRO.Onto (toClass f) (toClass a) (toClass b).
+Proof.
+  intros f a b. split; intros [H1 H2]; split.
+  - apply FunctionOn.ToClass. assumption.
+  - rewrite <- H2. apply Equiv.Sym, Range.ToClass.
+  - apply FunctionOn.ToClass. assumption.
+  - apply Equiv.EqualToClass.
+    apply Equiv.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
+    apply Equiv.Sym, Range.ToClass.
+Qed.
 
 Proposition IsFun : forall (f a b:U), Onto f a b -> Fun f a b.
 Proof.

@@ -1,3 +1,6 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
@@ -18,8 +21,23 @@ Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
+Module CRB := ZF.Class.Relation.Bij.
+Module CRR := ZF.Class.Relation.Range.
+
 (* f is a bijection from a to b.                                                *)
 Definition Bij (f a b:U) : Prop := BijectionOn f a /\ range f = b.
+
+Proposition ToClass : forall (f a b:U),
+  Bij f a b <-> CRB.Bij (toClass f) (toClass a) (toClass b).
+Proof.
+  intros f a b. split; intros [H1 H2]; split.
+  - apply BijectionOn.ToClass; assumption.
+  - rewrite <- H2. apply Equiv.Sym, Range.ToClass.
+  - apply BijectionOn.ToClass; assumption.
+  - apply Equiv.EqualToClass.
+    apply Equiv.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
+    apply Equiv.Sym, Range.ToClass.
+Qed.
 
 Proposition IsFun : forall (f a b:U),
   Bij f a b -> Fun f a b.
