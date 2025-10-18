@@ -143,7 +143,7 @@ Proof.
   split; assumption.
 Qed.
 
-(* An R-ordered class C is isomorphic to at most one ordinal class.             *)
+(* A class C is isomorphic to at most one ordinal class and in at most one way. *)
 Proposition IsEquivGen : forall (F G R A B C:Class),
   Ordinal A           ->
   Ordinal B           ->
@@ -161,12 +161,6 @@ Proof.
   assert (F :~: G) as H10. {
     rewrite H6 in H9. apply IA.WhenIsConverseGF with A C. 3: assumption.
     - apply H3.
-    -
-Admitted.
-
-(*
-  apply IsEquiv with (G^:-1: :.: F);
-  try assumption. apply Isom.Compose with R C. 1: assumption.
-  apply Isom.Converse. assumption.
+    - apply Bij.EquivCompatM with B. 2: apply H4. apply Equiv.Sym. assumption. }
+  split; assumption.
 Qed.
-*)

@@ -433,6 +433,7 @@ Proposition WhenSmallUnique : forall (R A:Class) (a b f g:U),
   a = b /\ f = g.
 Proof.
   intros R A a b f g H1 H2 H3 H4 H5 H6.
-Admitted.
-
-
+  assert (toClass a :~: toClass b /\ toClass f :~: toClass g) as H7. {
+    apply Isom.IsEquivGen with R A; assumption. }
+  split; apply Equiv.EqualToClass, H7.
+Qed.
