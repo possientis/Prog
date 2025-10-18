@@ -219,10 +219,39 @@ Proof.
     apply Charac2. split. 2: reflexivity. apply H1. exists y. assumption.
 Qed.
 
-Proposition ConverseGF : forall (F G A B:Class),
+Proposition WhenIsConverseGF : forall (F G A B:Class),
   Bij F A B                 ->
   Bij G A B                 ->
   (G^:-1: :.: F) :~: I:|:A  ->
   F :~: G.
-Admitted.
+Proof.
+  intros F G A B H1 H2 H3.
+  apply Equiv.Tran with ((I:|:B) :.: F).
+    1: { apply Equiv.Sym, IdentityL with A, Bij.IsFun. assumption. }
+  apply Equiv.Tran with ((G :.: G^:-1:) :.: F).
+    1: { apply Compose.EquivCompatL, Equiv.Sym, IsFConverseF with A. assumption. }
+  apply Equiv.Tran with (G :.: (G^:-1: :.: F)).
+    1: { apply Equiv.Sym, Compose.Assoc. }
+  apply Equiv.Tran with (G :.: (I:|:A)).
+    1: { apply Compose.EquivCompatR. assumption. }
+  apply IdentityR with B, Bij.IsFun. assumption.
+Qed.
+
+Proposition WhenIsGConverseF : forall (F G A B:Class),
+  Bij F A B                 ->
+  Bij G A B                 ->
+  (G :.: F^:-1:) :~: I:|:B  ->
+  F :~: G.
+Proof.
+  intros F G A B H1 H2 H3.
+  apply Equiv.Tran with ((I:|:B) :.: F).
+    1: { apply Equiv.Sym, IdentityL with A, Bij.IsFun. assumption. }
+  apply Equiv.Tran with ((G :.: F^:-1:) :.: F).
+    1: { apply Compose.EquivCompatL, Equiv.Sym. assumption. }
+  apply Equiv.Tran with (G :.: (F^:-1: :.: F)).
+    1: { apply Equiv.Sym, Compose.Assoc. }
+  apply Equiv.Tran with (G :.: (I:|:A)).
+    1: { apply Compose.EquivCompatR, IsConverseFF with B. assumption. }
+  apply IdentityR with B, Bij.IsFun. assumption.
+Qed.
 

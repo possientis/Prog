@@ -159,7 +159,10 @@ Proof.
   assert (A :~: B /\ H :~: I:|:A) as H8. { apply IsEquiv; assumption. }
   destruct H8 as [H8 H9].
   assert (F :~: G) as H10. {
-  Admitted.
+    rewrite H6 in H9. apply IA.WhenIsConverseGF with A C. 3: assumption.
+    - apply H3.
+    -
+Admitted.
 
 (*
   apply IsEquiv with (G^:-1: :.: F);
