@@ -24,6 +24,14 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* A class is a bijection iff it is a relation and it is one-to-one.            *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
 
+Proposition EquivCompat : forall (F G:Class),
+  F :~: G -> Bijection F -> Bijection G.
+Proof.
+  intros F G H1 [H2 H3]. split.
+  - apply Relation.EquivCompat with F; assumption.
+  - apply OneToOne.EquivCompat with F; assumption.
+Qed.
+
 (* A bijection class is a function class.                                       *)
 Proposition IsFunction : forall (F:Class),
   Bijection F -> Function F.

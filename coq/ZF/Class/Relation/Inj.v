@@ -24,6 +24,46 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is an injective function class from A to B.                                *)
 Definition Inj (F A B: Class) : Prop := BijectionOn F A /\ range F :<=: B.
 
+Proposition EquivCompat : forall (F G A B C D:Class),
+  F :~: G   ->
+  A :~: C   ->
+  B :~: D   ->
+  Inj F A B ->
+  Inj G C D.
+Proof.
+  intros F G A B C D H1 H2 H3 [H4 H5]. split.
+  - apply BijectionOn.EquivCompat with F A; assumption.
+  - apply Incl.EquivCompat with (range F) B; try assumption.
+    apply Range.EquivCompat. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (F G A B:Class),
+  F :~: G -> Inj F A B -> Inj G A B.
+Proof.
+  intros F G A B H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatM : forall (F A B C:Class),
+  A :~: C -> Inj F A B -> Inj F C B.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatR : forall (F A B C:Class),
+  B :~: C -> Inj F A B -> Inj F A C.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 (* If F is an injection from A to B, then it is a function from A to B.         *)
 Proposition IsFun : forall (F A B:Class), Inj F A B -> Fun F A B.
 Proof.

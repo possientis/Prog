@@ -16,6 +16,15 @@ Require Import ZF.Set.OrdPair.
 (* A class is one-to-one iff both itself and its converse are functional.       *)
 Definition OneToOne (F:Class) : Prop := Functional F /\ Functional F^:-1:.
 
+Proposition EquivCompat : forall (F G:Class),
+  F :~: G -> OneToOne F -> OneToOne G.
+Proof.
+  intros F G H1 [H2 H3]. split.
+  - apply Functional.EquivCompat with F; assumption.
+  - apply Functional.EquivCompat with F^:-1:. 2: assumption.
+    apply Converse.EquivCompat. assumption.
+Qed.
+
 (* Uniqueness of left coordinate when one-to-one.                               *)
 Proposition CharacL : forall (F:Class), OneToOne F ->
   forall x y z, F :(y,x): -> F :(z,x): -> y = z.

@@ -23,6 +23,31 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is a bijection defined on A.                                               *)
 Definition BijectionOn (F A:Class) : Prop := Bijection F /\ domain F :~: A.
 
+Proposition EquivCompat : forall (F G A B:Class),
+  F :~: G -> A :~: B -> BijectionOn F A -> BijectionOn G B.
+Proof.
+  intros F G A B H1 H2 [H3 H4]. split.
+  - apply Bijection.EquivCompat with F; assumption.
+  - apply Equiv.EquivCompat with (domain F) A; try assumption.
+    apply Domain.EquivCompat. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (F G A:Class),
+  F :~: G -> BijectionOn F A -> BijectionOn G A.
+Proof.
+  intros F G A H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatR : forall (F A B:Class),
+  A :~: B -> BijectionOn F A -> BijectionOn F B.
+Proof.
+  intros F G A H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 (* A bijection defined on A is a function defined on A.                         *)
 Proposition IsFunctionOn : forall (F A:Class),
   BijectionOn F A -> FunctionOn F A.

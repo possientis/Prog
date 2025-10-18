@@ -26,6 +26,46 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is a bijection from A to B.                                                *)
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
 
+Proposition EquivCompat : forall (F G A B C D:Class),
+  F :~: G   ->
+  A :~: C   ->
+  B :~: D   ->
+  Bij F A B ->
+  Bij G C D.
+Proof.
+  intros F G A B C D H1 H2 H3 [H4 H5]. split.
+  - apply BijectionOn.EquivCompat with F A; assumption.
+  - apply Equiv.EquivCompat with (range F) B; try assumption.
+    apply Range.EquivCompat. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (F G A B:Class),
+  F :~: G -> Bij F A B -> Bij G A B.
+Proof.
+  intros F G A B H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatM : forall (F A B C:Class),
+  A :~: C -> Bij F A B -> Bij F C B.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatR : forall (F A B C:Class),
+  B :~: C -> Bij F A B -> Bij F A C.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 Proposition IsFun : forall (F A B:Class),
   Bij F A B -> Fun F A B.
 Proof.

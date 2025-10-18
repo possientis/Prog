@@ -24,6 +24,46 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is a surjective function class from A to B.                                *)
 Definition Onto (F A B:Class) : Prop := FunctionOn F A /\ range F :~: B.
 
+Proposition EquivCompat : forall (F G A B C D:Class),
+  F :~: G   ->
+  A :~: C   ->
+  B :~: D   ->
+  Onto F A B ->
+  Onto G C D.
+Proof.
+  intros F G A B C D H1 H2 H3 [H4 H5]. split.
+  - apply FunctionOn.EquivCompat with F A; assumption.
+  - apply Equiv.EquivCompat with (range F) B; try assumption.
+    apply Range.EquivCompat. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (F G A B:Class),
+  F :~: G -> Onto F A B -> Onto G A B.
+Proof.
+  intros F G A B H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatM : forall (F A B C:Class),
+  A :~: C -> Onto F A B -> Onto F C B.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatR : forall (F A B C:Class),
+  B :~: C -> Onto F A B -> Onto F A C.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 Proposition IsFun : forall (F A B:Class), Onto F A B -> Fun F A B.
 Proof.
   intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.

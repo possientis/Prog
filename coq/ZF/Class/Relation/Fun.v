@@ -22,6 +22,46 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* F is a function from A to B.                                                 *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
+Proposition EquivCompat : forall (F G A B C D:Class),
+  F :~: G   ->
+  A :~: C   ->
+  B :~: D   ->
+  Fun F A B ->
+  Fun G C D.
+Proof.
+  intros F G A B C D H1 H2 H3 [H4 H5]. split.
+  - apply FunctionOn.EquivCompat with F A; assumption.
+  - apply Incl.EquivCompat with (range F) B; try assumption.
+    apply Range.EquivCompat. assumption.
+Qed.
+
+Proposition EquivCompatL : forall (F G A B:Class),
+  F :~: G -> Fun F A B -> Fun G A B.
+Proof.
+  intros F G A B H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatM : forall (F A B C:Class),
+  A :~: C -> Fun F A B -> Fun F C B.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompatR : forall (F A B C:Class),
+  B :~: C -> Fun F A B -> Fun F A C.
+Proof.
+  intros F A B C H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 Proposition IsOneToOne : forall (F A B:Class),
   Fun F A B                                       ->
   (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
