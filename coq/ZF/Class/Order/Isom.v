@@ -1,10 +1,12 @@
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
+Require Import ZF.Class.Order.Restrict.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
-Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Image.
-Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
@@ -12,6 +14,40 @@ Require Import ZF.Set.OrdPair.
 (* F is an (R,S)-isomorphism from A to B.                                       *)
 Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y ->
   R :(x,y): <-> S :(F!x,F!y):.
+
+Proposition RestrictL : forall (F R S A B:Class),
+  Isom F R S A B <-> Isom F (R:/:A) S A B.
+Proof.
+  intros F R S A B. split; intros [H1 H2]; split; try assumption;
+  intros x y H3 H4.
+  - split; intros H5.
+    + destruct H5 as [H5 _]. apply H2; assumption.
+    + split.
+      * apply H2; assumption.
+      * apply Prod.Charac2. split; assumption.
+  - split; intros H5.
+    + apply H2; try assumption. split. 1: assumption.
+      apply Prod.Charac2. split; assumption.
+    + apply H2 in H5; try assumption. destruct H5 as [H5 _]. assumption.
+Qed.
+
+Proposition RestrictR : forall (F R S A B:Class),
+  Isom F R S A B <-> Isom F R (S:/:B) A B.
+Proof.
+  intros F R S A B. split; intros [H1 H2]; split; try assumption;
+  intros x y H3 H4.
+  - assert (B (F!x)) as H5. { apply Bij.IsInRange with A; assumption. }
+    assert (B (F!y)) as H6. { apply Bij.IsInRange with A; assumption. }
+    split; intros H7.
+    + split.
+      * apply H2; assumption.
+      * apply Prod.Charac2. split; assumption.
+    + destruct H7 as [H7 _]. apply H2; assumption.
+  - split; intros H5.
+    + apply H2 in H5; try assumption. destruct H5 as [H5 _]. assumption.
+    + apply H2; try assumption. split. 1: assumption.
+      apply Prod.Charac2. split; apply Bij.IsInRange with A; assumption.
+Qed.
 
 (* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorpshism. *)
 Proposition Converse : forall (F R S A B:Class),
