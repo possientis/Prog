@@ -15,6 +15,86 @@ Require Import ZF.Set.OrdPair.
 Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y ->
   R :(x,y): <-> S :(F!x,F!y):.
 
+Proposition EquivCompat : forall (F R S A B F' R' S' A' B':Class),
+  F :~: F'              ->
+  R :~: R'              ->
+  S :~: S'              ->
+  A :~: A'              ->
+  B :~: B'              ->
+  Isom F  R  S  A  B    ->
+  Isom F' R' S' A' B'.
+Proof.
+  intros F R S A B F' R' S' A' B' H1 H2 H3 H4 H5 [H6 H7]. split.
+  - apply Bij.EquivCompat with F A B; assumption.
+  - intros x y H8 H9.
+    assert (F!x = F'!x) as H10. { apply EvalOfClass.EquivCompat. assumption. }
+    assert (F!y = F'!y) as H11. { apply EvalOfClass.EquivCompat. assumption. }
+    split; intros H12.
+    + rewrite <- H10, <- H11. apply H3, H7.
+      * apply H4. assumption.
+      * apply H4. assumption.
+      * apply H2. assumption.
+    + apply H2, H7.
+      * apply H4. assumption.
+      * apply H4. assumption.
+      * rewrite H10, H11. apply H3. assumption.
+Qed.
+
+Proposition EquivCompat1 : forall (F G R S A B:Class),
+  F :~: G -> Isom F R S A B -> Isom G R S A B.
+Proof.
+  intros F G R S A B H1. apply EquivCompat.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompat2 : forall (F R R' S A B:Class),
+  R :~: R' -> Isom F R S A B -> Isom F R' S A B.
+Proof.
+  intros F G R S A B H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompat3 : forall (F R S S' A B:Class),
+  S :~: S' -> Isom F R S A B -> Isom F R S' A B.
+Proof.
+  intros F G R S A B H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompat4 : forall (F R S A A' B:Class),
+  A :~: A' -> Isom F R S A B -> Isom F R S A' B.
+Proof.
+  intros F G R S A B H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+  - apply Equiv.Refl.
+Qed.
+
+Proposition EquivCompat5 : forall (F R S A B B':Class),
+  B :~: B' -> Isom F R S A B -> Isom F R S A B'.
+Proof.
+  intros F G R S A B H1. apply EquivCompat.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - apply Equiv.Refl.
+  - assumption.
+Qed.
+
 Proposition RestrictL : forall (F R S A B:Class),
   Isom F R S A B <-> Isom F (R:/:A) S A B.
 Proof.
