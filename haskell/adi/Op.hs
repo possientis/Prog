@@ -95,6 +95,7 @@ deltaNum :: Op -> [PrimValue] -> Either Error PrimValue
 deltaNum op pvs = PNum . Identity  <$> deltaNum_ op n1 n2 where
     [PNum (Identity n1) , PNum (Identity n2)] = pvs
     
+    
 deltaBool :: Op -> [PrimValue] -> Either Error PrimValue 
 deltaBool op pvs = Right . PBool . Identity $ deltaBool_ op b1 b2 where
     [PBool (Identity b1) , PBool (Identity b2)] = pvs

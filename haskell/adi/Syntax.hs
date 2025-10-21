@@ -41,6 +41,19 @@ data ExprF a
 
 type Expr = Fix ExprF
 
+instance Eq a => Eq (ExprF a) where
+  ENum n           == ENum m            = n == m
+  EBool x          == EBool y           = x == y
+  EVar x           == EVar y            = x == y
+  EOp op1 xs       == EOp op2 ys        = eqOp   (==) op1 op2 xs ys
+  EIf e1 f1 g1     == EIf e2 f2 g2      = eqIf   (==) e1 e2 f1 f2 g1 g2
+  ELam x e1        == ELam y e2         = eqLam  (==) x y e1 e2
+  EApp e1 f1       == EApp e2 f2        = eqApp  (==) e1 e2 f1 f2
+  ERec x e1        == ERec y e2         = eqRec  (==) x y e1 e2
+  EZero            == EZero             = True
+  ESuc e1          == ESuc e2           = e1 == e2
+  ECase e1 f1 x g1 == ECase e2 f2 y g2  = eqCase (==) x y e1 e2 f1 f2 g1 g2
+  _                == _                 = False
 instance Eq1 ExprF where
     liftEq _ (ENum n)           (ENum m)            = n == m
     liftEq _ (EBool x)          (EBool y)           = x == y
@@ -54,6 +67,7 @@ instance Eq1 ExprF where
     liftEq f (ESuc e1)          (ESuc e2)           = f e1 e2
     liftEq f (ECase e1 f1 x g1) (ECase e2 f2 y g2)  = eqCase f x y e1 e2 f1 f2 g1 g2
     liftEq _ _                  _                   = False 
+
 
 eqOp :: (a -> b -> Bool) -> Op -> Op -> [a] -> [b] -> Bool
 eqOp f op1 op2 xs ys 

@@ -43,39 +43,39 @@ s9'= "A2.A1.(A0.0:2 -> A0.0:1)"
 p1 = belong x y   :: Formula V
 p2 = bot          :: Formula V
 p3 = imply p1 p2
-p4 = forall x p1
+p4 = forAll x p1
 p5 = belong z x   :: Formula V
 p6 = belong z y   :: Formula V
 p7 = imply p5 p6
-p8 = forall z p7
+p8 = forAll z p7
 
-p9 = forall x $ forall y $ imply 
-  (forall z (belong z x)) 
-  (forall x (belong x y))
+p9 = forAll x $ forAll y $ imply 
+  (forAll z (belong z x)) 
+  (forAll x (belong x y))
 
 q1 = belong x' y' :: Formula W
 q2 = bot          :: Formula W
 q3 = imply q1 q2
-q4 = forall x' q1
+q4 = forAll x' q1
 q5 = belong z' x' :: Formula W
 q6 = belong z' y' :: Formula W
 q7 = imply q5 q6
-q8 = forall z' q7
+q8 = forAll z' q7
 
 t1 = belong (left x) (left y) :: Formula (Bar V)
 t2 = bot                      :: Formula (Bar V)
 t3 = imply t1 t2
-t4 = forall (right 0) $ belong (right 0) (left y)
+t4 = forAll (right 0) $ belong (right 0) (left y)
 t5 = belong (left z) (left x)
 t6 = belong (left z) (left y)
 t7 = imply t5 t6
-t8 = forall (right 0) $ imply 
+t8 = forAll (right 0) $ imply 
   (belong (right 0) (left x)) 
   (belong (right 0) (left y))  
 
-t9 = forall (right 2) $ forall (right 1) $ imply
-  (forall (right 0) $ belong (right 0) (right 2))
-  (forall (right 0) $ belong (right 0) (right 1)) :: Formula (Bar V)
+t9 = forAll (right 2) $ forAll (right 1) $ imply
+  (forAll (right 0) $ belong (right 0) (right 2))
+  (forAll (right 0) $ belong (right 0) (right 1)) :: Formula (Bar V)
 
 
 var1 = fromList [x,y]   :: Set V

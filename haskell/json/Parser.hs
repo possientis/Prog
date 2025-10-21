@@ -32,11 +32,10 @@ instance Functor (Parser b) where
   fmap = liftM
 
 instance Applicative (Parser b) where
-  pure  = return
+  pure  = pure
   (<*>) = ap
 
 instance Monad (Parser b) where
-  return a  = Parser (\cs -> [(a,cs)])
   m >>= f   = Parser (\cs -> concat [ run (f a) cs' | (a, cs') <- run m cs ]) 
 
 instance Alternative (Parser b) where
