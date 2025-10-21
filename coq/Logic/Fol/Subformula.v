@@ -1,6 +1,6 @@
-Require Import Le.
+Require Import Sets.Integers.
 Require Import List.
-Import Nat.
+Require Import Nat.
 
 Require Import Logic.Class.Eq.
 
@@ -35,11 +35,11 @@ Fixpoint Sub (v:Type) (p:P v) : list (P v) :=
 Arguments Sub {v} _.
 
 (* p is a sub-formula of q if it belongs to the list of sub-formulas of q       *)
-Notation "p <<= q" := (p :: Sub q) 
+Notation "p <<= q" := (p :: Sub q)
     (at level 50, no associativity) : Fol_Subformula_scope.
 
 Open Scope Fol_Subformula_scope.
- 
+
 Lemma Sub_refl : forall (v:Type) (p:P v), p <<= p.
 Proof.
     intros v.
@@ -51,7 +51,7 @@ Lemma Sub_incl : forall (v:Type) (p1 p2:P v),
     Sub p1 <= Sub p2 <-> p1 <<= p2.
 Proof.
     intros v p1 p2. split.
-    - intros H.  apply H. apply Sub_refl. 
+    - intros H.  apply H. apply Sub_refl.
     - revert p1. induction p2 as [|x y|p2 IH2 p2' IH2'|x p1' IH1].
         + simpl. intros p1 [H|H]; intros t.
             { subst. simpl. tauto. }
@@ -61,10 +61,10 @@ Proof.
             { exfalso. assumption. }
         + simpl. intros p1 [H|H]; intros p.
             { subst. simpl. tauto. }
-            { intros H'. right. apply in_or_app. 
+            { intros H'. right. apply in_or_app.
               apply in_app_or in H. destruct H as [H|H].
                 { left.  apply IH2  with p1; assumption. }
-                { right. apply IH2' with p1; assumption. }  
+                { right. apply IH2' with p1; assumption. }
             }
         + simpl. intros p1 [H|H]; intros p.
             { subst. simpl. tauto. }
@@ -75,15 +75,15 @@ Qed.
 Lemma Sub_tran : forall (v:Type) (p q r:P v),
     p <<= q -> q <<= r -> p <<= r.
 Proof.
-    intros v p q r Hpq Hqr. apply Sub_incl. 
+    intros v p q r Hpq Hqr. apply Sub_incl.
     apply incl_tran with (Sub q); apply Sub_incl; assumption.
 Qed.
 
-(* This lemma will allow us to get anti-symmetry                                *) 
+(* This lemma will allow us to get anti-symmetry                                *)
 Lemma ord_monotone : forall (v:Type) (p1 p2:P v),
     p1 <<= p2  -> le (ord p1) (ord p2).
-Proof. 
-    intros v p1 p2. revert p1. 
+Proof.
+    intros v p1 p2. revert p1.
     induction p2 as [|x y|p2 IH2 p2' IH2'|x p1' IH1];
     simpl; intros p1 [H|H].
     - subst. apply le_n.
@@ -106,7 +106,7 @@ Qed.
 Lemma Sub_anti : forall (v:Type) (p1 p2:P v),
     p1 <<= p2 -> p2 <<= p1 -> p1 = p2.
 Proof.
-    intros v p1 p2. revert p1. 
+    intros v p1 p2. revert p1.
     induction p2 as [|x y|p2 IH2 p2' IH2'|x p1' IH1];
     simpl; intros p1 [H|H].
     - subst. tauto.
@@ -115,7 +115,7 @@ Proof.
     - exfalso. assumption.
     - subst. tauto.
     - intros H'. exfalso. apply in_app_or in H. destruct H as [H|H];
-      apply ord_monotone in H; apply ord_monotone in H'; 
+      apply ord_monotone in H; apply ord_monotone in H';
       simpl in H'; apply not_le_Sn_n with (ord p1).
         { apply le_trans with (S (ord p2)).
             { apply le_n_S. assumption. }
@@ -131,13 +131,13 @@ Proof.
                 { assumption. }
             }
         }
-    - subst. tauto. 
+    - subst. tauto.
     - intros H'. exfalso.
       apply ord_monotone in H. apply ord_monotone in H'.
       simpl in H'. apply not_le_Sn_n with (ord p1).
       apply le_trans with (S (ord p1')).
         { apply le_n_S. assumption. }
-        { assumption. } 
+        { assumption. }
 Qed.
 
 (* A set theoretic formulation of the same result is Sub (f p) = f (Sub p)      *)
@@ -196,7 +196,7 @@ Proof.
             { left. right. apply in_or_app. left.  assumption. }
             { left. right. apply in_or_app. left.  assumption. }
             { left. right. apply in_or_app. right. assumption. }
-            { right. intros H. destruct H as [H|H]. 
+            { right. intros H. destruct H as [H|H].
                 { subst. apply E. reflexivity. }
                 { apply in_app_or in H. destruct H as [H|H].
                     { apply E1. assumption. }
@@ -216,13 +216,13 @@ Qed.
 Lemma Sub_var : forall (v:Type) (p q:P v),
     p <<= q -> var p <= var q.
 Proof.
-    intros v p q. revert q p. 
+    intros v p q. revert q p.
     induction q as [|x y|p1 IH1 p2 IH2|x p1 IH1]; intros p [H|H].
     - subst. apply incl_refl.
     - inversion H.
     - subst. apply incl_refl.
     - inversion H.
-    - subst. apply incl_refl. 
+    - subst. apply incl_refl.
     - apply in_app_or in H. destruct H as [H|H].
         + apply incl_tran with (var p1).
             { apply IH1. assumption. }
@@ -231,13 +231,13 @@ Proof.
             { apply IH2. assumption. }
             { apply incl_appr, incl_refl. }
     - subst. apply incl_refl.
-    - apply incl_tl, IH1. assumption. 
+    - apply incl_tl, IH1. assumption.
 Qed.
 
 Lemma Sub_bnd : forall (v:Type) (p q:P v),
     p <<= q -> bnd p <= bnd q.
 Proof.
-    intros v p q. revert q p. 
+    intros v p q. revert q p.
     induction q as [|x y|q1 IH1 q2 IH2|x q1 IH1]; intros p [H|H].
     - subst. apply incl_refl.
     - inversion H.
@@ -252,5 +252,5 @@ Proof.
             { apply IH2. assumption. }
             { apply incl_appr, incl_refl. }
     - subst. apply incl_refl.
-    - apply incl_tl, IH1. assumption. 
+    - apply incl_tl, IH1. assumption.
 Qed.

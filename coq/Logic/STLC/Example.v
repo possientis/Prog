@@ -37,13 +37,13 @@ Qed.
 (* Annotated const applied to identity and variable u reduces to identity       *)
 (* Note that we need the variables x and y to be distinct for this to hold      *)
 Lemma constAnn : forall (b v:Type) (e:Eq v) (x y z u:v) (Ty Ty' : T b),
-    x <> y -> 
-    (const x y :: (Ty' :-> Ty') :-> Ty :-> Ty' :-> Ty') $ (id z) $ `u >>> id z. 
+    x <> y ->
+    (const x y :: (Ty' :-> Ty') :-> Ty :-> Ty' :-> Ty') $ (id z) $ `u >>> id z.
 Proof.
     intros base v e x y z u Ty Ty' H1. apply (EAppL _ (id z) _ _ y).
     - apply VLam, VVar.
     - apply VLam, VVar.
-    - apply (EAppL _ (\y ~> `x) _ _ x). 
+    - apply (EAppL _ (\y ~> `x) _ _ x).
         + apply VLam, VVar.
         + apply VLam, VLam, VVar.
         + constructor.
@@ -53,7 +53,7 @@ Proof.
                 { constructor.
                     { apply VVar. }
                     { constructor. }}}
-        + constructor. 
+        + constructor.
             { apply VLam, VVar. }
             { destruct (in_dec eqDec x (y :: nil)) as [H2|H2].
                 { exfalso. destruct H2 as [H2|H2].
@@ -71,9 +71,9 @@ Qed.
 
 (* An example of valid context.                                                 *)
 Lemma Valid1 : forall (b v:Type) (t t':b) (x:v),
-    Valid   ( O 
-            ; t  ::: * 
-            ; t' ::: * 
+    Valid   ( O
+            ; t  ::: *
+            ; t' ::: *
             ; x  ::: (('t' :-> 't') :-> 't :-> 't' :-> 't')
             ).
 Proof.
@@ -87,7 +87,7 @@ Proof.
 Qed.
 
 Lemma Typing1 : forall (b v:Type)(eq:Eq v)(t:b)(x y:v),
-    O ; t ::: * ; y ::: 't :- (id x :: 't :-> 't) $ `y >: 't.
+    O ; t ::: * ; (y ::: 't) :- (id x :: 't :-> 't) $ `y >: 't.
 Proof.
     intros b v eq t x y. apply JApp with 't.
     - apply JAnn, JLam.
@@ -111,7 +111,7 @@ Qed.
 
 Lemma Typing2 : forall (b v:Type) (eq:Eq v) (t t':b) (x y z u:v),
     x <> y ->
-        O ; t ::: * ; u ::: 't ; t' ::: * 
+        O ; t ::: * ; (u ::: 't) ; t' ::: *
             :-
         (const x y :: ('t' :-> 't') :-> 't :-> 't' :-> 't') $ (id z) $ `u
             >:
@@ -126,7 +126,7 @@ Proof.
             { apply TFun; apply TVar, FindTZ. }
             { apply JLam.
                 { apply ValidV.
-                    { apply ValidT, ValidV. 
+                    { apply ValidT, ValidV.
                         { apply ValidT, ValidO. }
                         { apply TVar, FindTZ. }}
                     { apply TFun; apply TVar, FindTZ. }}
@@ -163,9 +163,9 @@ Qed.
 (* Note in particular that the typing relation is not deterministic: in a given *)
 (* context, an expression is liable to be of more than one type.                *)
 Lemma idTyping : forall (b v:Type) (eq:Eq v) (x:v) (G:Context) (Ty:T b),
-    Valid G -> 
-    G :> Ty -> 
-    G :- id x >: Ty :-> Ty. 
+    Valid G ->
+    G :> Ty ->
+    G :- id x >: Ty :-> Ty.
 Proof.
     intros b v eq x G Ty H1 H2. apply JLam; try assumption. apply JVar.
     - apply ValidV; assumption.
@@ -173,7 +173,7 @@ Proof.
 Qed.
 
 (* Note that id x cannot be of type Ty :-> Ty unless Ty is well-formed and      *)
-(* the given context is valid.                                                  *) 
+(* the given context is valid.                                                  *)
 Lemma idTyping' : forall (b v:Type) (eq:Eq v) (x:v) (G:Context) (Ty:T b),
     G :- id x >: Ty :-> Ty -> Valid G /\ G :> Ty.
 Proof.

@@ -1,7 +1,6 @@
 (* NEXT: ===> Elem                                                              *)
 
-Require Import Le.
-Require Import Plus.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Set.Set.
@@ -19,7 +18,7 @@ Definition incl (xs ys:set) : Prop :=
     let n := order xs + order ys in incl_n n xs ys.
 
 (* This all important inclusion relation deserves an appropriate notation.      *)
-Notation "x <= y" := (incl x y) 
+Notation "x <= y" := (incl x y)
     (at level 70, no associativity) : Set_Incl_scope.
 
 
@@ -47,7 +46,7 @@ Lemma incl_n_incl : forall (xs ys:set) (n:nat),
     incl xs ys.
 Proof.
     intros xs ys n H1 H2. unfold incl.
-    apply incl_n_m with n. 
+    apply incl_n_m with n.
     - assumption.
     - apply le_n.
     - assumption.
@@ -64,7 +63,7 @@ Open Scope Set_Incl_scope.
 (* primitives.                                                                  *)
 Lemma inclNil : forall (x:set), Nil <= x.
 Proof.
-    intros x. unfold incl. apply incl_n_Nil. 
+    intros x. unfold incl. apply incl_n_Nil.
 Qed.
 
 (* The inclusion relation is reflexive.                                         *)

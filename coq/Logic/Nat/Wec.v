@@ -1,4 +1,4 @@
-Require Import Le.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Class.Eq.
@@ -9,7 +9,7 @@ Require Import Logic.Axiom.Wec.
 Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Ord.
 
-Lemma boundedWec : forall (p:nat -> Prop), pWec p -> 
+Lemma boundedWec : forall (p:nat -> Prop), pWec p ->
     forall (n:nat), Wec (exists (m:nat), p m /\ m <= n).
 Proof.
     intros p H1. induction n as [|n IH].
@@ -22,11 +22,11 @@ Proof.
           left. exists m. split; try assumption. apply le_S. assumption.
         + destruct (H1 (S n)) as [H3|H3].
             { left. exists (S n). split; try assumption. apply le_n. }
-            { right. intros [m [H4 H5]].   
+            { right. intros [m [H4 H5]].
               destruct (leqDec m n) as [H6|H6].
                 { apply H2. exists m. split; assumption. }
-                { assert (m = S n) as H7. 
-                    { apply le_antisymm; try assumption. 
+                { assert (m = S n) as H7.
+                    { apply le_antisymm; try assumption.
                       apply not_le_ge. assumption. }
                   subst. apply H3 in H4. contradiction. }}
 Defined.

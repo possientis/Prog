@@ -1,8 +1,7 @@
 (* NEXT: ===> Incl                                                              *)
 
-Require Import Le.
+Require Import Sets.Integers.
 Require Import List.
-Require Import Plus.
 Require Import Compare_dec.
 Import Nat.
 
@@ -36,16 +35,16 @@ Require Import Logic.Set.Order.
 (* where (ii) is expressed as the existence of a set y in (the list of) ys      *)
 (* which is 'equal' to x, i.e. such that the double inclusion holds.            *)
 
-Fixpoint incl_n (n:nat) (xs ys:set) : Prop := 
-    match n with 
+Fixpoint incl_n (n:nat) (xs ys:set) : Prop :=
+    match n with
     | 0     => True
-    | S n   => 
+    | S n   =>
         match xs with
         | Nil                   => True
         | Cons x xs             =>
             incl_n n xs ys    /\
-            exists (y:set), 
-                In y (toList ys) /\ incl_n n x y /\ incl_n n y x 
+            exists (y:set),
+                In y (toList ys) /\ incl_n n x y /\ incl_n n y x
         end
     end
 .
@@ -66,7 +65,7 @@ Proof.
     - intros H. remember (S n) as m eqn:E. split.
         + intros H'. destruct xs as [|x xs].
             { apply I. }
-            { rewrite E in H'. simpl in H'.    
+            { rewrite E in H'. simpl in H'.
               destruct H' as [H1 [y [H2 [H3 H4]]]].
               simpl. split.
                 { apply IH.
@@ -79,7 +78,7 @@ Proof.
                 { exists y. split.
                     { assumption. }
                     { split.
-                        { apply IH. 
+                        { apply IH.
                             { rewrite E in H.
                               apply weaken_l' with (order (Cons x xs)).
                                 { apply weaken_r with (order ys).
@@ -105,15 +104,15 @@ Proof.
                 }
             }
         + intros H'. destruct xs as [|x xs]; rewrite E.
-            { apply I. } 
+            { apply I. }
             { simpl in H'. destruct H' as [H1 [y [H2 [H3 H4]]]]. split.
-                { apply IH. 
+                { apply IH.
                     { apply weaken_l' with (order (Cons x xs)).
                         { rewrite E in H. assumption. }
                         { simpl. apply le_n_S. apply m_le_max. }
                     }
                     { assumption. }
-                } 
+                }
                 { exists y. split.
                     { assumption. }
                     { split.
@@ -151,9 +150,9 @@ Qed.
 (* natural number (assumed to be large enough). In the present case, provided   *)
 (* n is large enough and n <= m, we can go from n to m.                         *)
 Lemma incl_le_n_m : forall (xs ys:set) (n m:nat),
-    order xs + order ys <= n    -> 
-    n <= m                      -> 
-    incl_n n xs ys              -> 
+    order xs + order ys <= n    ->
+    n <= m                      ->
+    incl_n n xs ys              ->
     incl_n m xs ys.
 Proof.
     intros xs ys n m H1 H2. induction H2 as [|m H2 IH].
@@ -167,7 +166,7 @@ Qed.
 
 (* Equally, provided n is large enough and n <= m, we can go from m to n        *)
 Lemma incl_le_m_n : forall (xs ys:set) (n m:nat),
-    order xs + order ys <= n    -> 
+    order xs + order ys <= n    ->
     n <= m                      ->
     incl_n m xs ys              ->
     incl_n n xs ys.
@@ -180,11 +179,11 @@ Proof.
 Qed.
 
 (* As a consequence of the two previous lemmas, provided both n and m are large *)
-(* enough we can go from n to m without making any assumption on whether n <= m.*) 
+(* enough we can go from n to m without making any assumption on whether n <= m.*)
 Lemma incl_n_m : forall (xs ys:set) (n m:nat),
     order xs + order ys <= n    ->
     order xs + order ys <= m    ->
-    incl_n n xs ys              -> 
+    incl_n n xs ys              ->
     incl_n m xs ys.
 Proof.
     intros xs ys n m Hn Hm H. destruct (le_dec n m) as [H'|H'].
@@ -207,21 +206,21 @@ Proof. intros x n. destruct n as [|n]; apply I. Qed.
 Lemma incl_n_Cons : forall (xs ys y:set) (n:nat),
     order xs <= n -> incl_n n xs ys -> incl_n n xs (Cons y ys).
 Proof.
-    intros xs ys y n. revert xs ys y. 
-    induction n as [|n IH]; intros xs ys y H1 H2. 
+    intros xs ys y n. revert xs ys y.
+    induction n as [|n IH]; intros xs ys y H1 H2.
     - apply I.
     - destruct xs as [|x xs].
         + apply I.
         + destruct H2 as [H2 H3]. split.
             { apply IH.
-                { simpl in H1. apply le_S_n in H1. 
+                { simpl in H1. apply le_S_n in H1.
                   apply le_trans with (max (order x) (order xs)).
                     { apply m_le_max. }
                     { assumption. }
                 }
                 { assumption. }
             }
-            { destruct H3 as [z [H3 [H4 H5]]]. 
+            { destruct H3 as [z [H3 [H4 H5]]].
               exists z. split.
                 { right. assumption. }
                 { split; assumption. }
@@ -243,7 +242,7 @@ Proof.
                     { apply m_le_max. }
                     { assumption. }
                 }
-                { apply IH. 
+                { apply IH.
                   simpl in H. apply le_S_n in H.
                   apply le_trans with (max (order x) (order xs)).
                     { apply m_le_max. }

@@ -1,4 +1,4 @@
-Require Import Le.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Axiom.Wec.
@@ -52,7 +52,7 @@ Defined.
 
 (* If A /\ [0,n] is non-empty, being the smallest element of A is the same as   *)
 (* being the smallest element of A /\ [0, n].                                   *)
-Lemma restrictSmallest : forall (A:Subset) (n m:nat), 
+Lemma restrictSmallest : forall (A:Subset) (n m:nat),
     (exists (k:nat), k :: restrict n A) ->
     SmallestOf A m <-> SmallestOf (restrict n A) m.
 Proof.
@@ -69,8 +69,8 @@ Defined.
 
 Lemma nonEmptyFiniteHasSmallest : forall (A:Subset),
     pWec A                   ->     (* A is weakly decidable *)
-    (exists (k:nat), k :: A) -> 
-    Finite A                 -> 
+    (exists (k:nat), k :: A) ->
+    Finite A                 ->
     (exists (k:nat), SmallestOf A k).
 
 Proof.
@@ -78,9 +78,9 @@ Proof.
     induction n as [|n IH]; intros A W H1 [m H2].
     - assert (m = 0) as H3. { apply le_0, H1. assumption. }
       subst. exists 0. split; try assumption. intros m H3. apply le_0_n.
-    - destruct (boundedWec A W n) as [H3|H3]. 
+    - destruct (boundedWec A W n) as [H3|H3].
         + destruct H3 as [m' [H3 H4]].
-          assert (exists (k:nat), SmallestOf (restrict n A) k) as H5. 
+          assert (exists (k:nat), SmallestOf (restrict n A) k) as H5.
             {apply IH.
                 { apply  restrictWec. assumption. }
                 { intros k [H5 H6]. assumption. }
@@ -88,13 +88,13 @@ Proof.
           destruct H5 as [k H5]. exists k. rewrite (restrictSmallest A n k);
           try assumption. exists k. destruct H5 as [H5 H6]. assumption.
         + exists m. split; try assumption. intros k H4.
-          assert (k = S n) as H5. 
+          assert (k = S n) as H5.
             { apply le_antisymm.
                 { apply H1. assumption. }
                 { destruct (leqDec k n) as [H5|H5].
                     { exfalso. apply H3. exists k. split; assumption. }
                     { apply not_le_ge. assumption. }}}
-          rewrite H5. apply H1. assumption. 
+          rewrite H5. apply H1. assumption.
 Defined.
 
 Theorem nonEmptyHasSmallest : forall (A:Subset),
@@ -102,14 +102,14 @@ Theorem nonEmptyHasSmallest : forall (A:Subset),
     (exists (k:nat), k :: A) ->
     (exists (k:nat), SmallestOf A k).
 Proof.
-    intros A W [k H1]. 
+    intros A W [k H1].
     assert (exists (m:nat), SmallestOf (restrict k A) m) as H2.
     { apply nonEmptyFiniteHasSmallest.
         { apply restrictWec. assumption. }
         { exists k. split; try assumption. apply le_n. }
         { apply restrictFinite. }}
-    destruct H2 as [m H2]. exists m. 
-    apply restrictSmallest in H2; try assumption. exists k. 
+    destruct H2 as [m H2]. exists m.
+    apply restrictSmallest in H2; try assumption. exists k.
     split; try assumption. apply le_n.
 Defined.
 
@@ -118,8 +118,8 @@ Defined.
 (* expresses the fact that a natural number is its smallest element.            *)
 Lemma DecSmallest : forall (A:Subset), pDec A -> pDec (SmallestOf A).
 Proof.
-    intros A H1 n. destruct n as [|n]. 
-    - destruct (H1 0) as [H2|H2]. 
+    intros A H1 n. destruct n as [|n].
+    - destruct (H1 0) as [H2|H2].
         + left. split; try assumption. intros m H3. apply le_0_n.
         + right. intros [H3 H4]. apply H2. assumption.
     - remember (boundedDec A H1 n) as H2 eqn:E. clear E. destruct H2 as [H2|H2].
@@ -137,22 +137,22 @@ Defined.
 (* Function which given a subset, a proof of it computational decidability,     *)
 (* a proof of its non-emptiness, returns its smallest element.                  *)
 Definition smallestOf (A:Subset) (p:pDec A) (q:exists (k:nat), k :: A) : nat :=
-    proj1_sig 
-        (witness 
-            (SmallestOf A) 
-            (DecSmallest A p) 
+    proj1_sig
+        (witness
+            (SmallestOf A)
+            (DecSmallest A p)
             (nonEmptyHasSmallest A (pDecWec nat A p) q)).
 
 
-Lemma smallestOfSound : 
+Lemma smallestOfSound :
     forall (A:Subset) (p:pDec A) (q:exists (k:nat), k :: A),
         SmallestOf A (smallestOf A p q).
 Proof.
     intros A p q. exact (
-        proj2_sig 
-            (witness 
-                (SmallestOf A) 
-                (DecSmallest A p) 
+        proj2_sig
+            (witness
+                (SmallestOf A)
+                (DecSmallest A p)
                 (nonEmptyHasSmallest A (pDecWec nat A p) q))).
 Defined.
 

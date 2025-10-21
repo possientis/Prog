@@ -1,4 +1,4 @@
-Require Import Le.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Class.Ord.
@@ -36,4 +36,4 @@ Global Instance OrdNat : Ord nat :=
     ; leqTrans  := le_trans
     ; leqAsym   := le_antisymm
     ; leqTotal  := leqTotal
-    }. 
+    }.

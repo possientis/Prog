@@ -1,4 +1,4 @@
-Require Import Le.
+Require Import Sets.Integers.
 Require Import List.
 Import Nat.
 
@@ -8,9 +8,9 @@ Fixpoint maximum (ns:list nat) : nat :=
     match ns with
     | nil       => 0
     | cons n ns => max n (maximum ns)
-    end.    
+    end.
 
-Lemma maximum_lub : forall (ns:list nat) (N:nat), 
+Lemma maximum_lub : forall (ns:list nat) (N:nat),
     (forall (n:nat), In n ns -> n <= N) -> maximum ns <= N.
 Proof.
     intros ns N. induction ns as [|n ns IH].

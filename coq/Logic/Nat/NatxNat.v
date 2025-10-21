@@ -1,6 +1,4 @@
-Require Import Coq.Arith.Le.
-Require Import Coq.Arith.Plus.
-Require Import Coq.Arith.Mult.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Class.Ord.
@@ -56,11 +54,11 @@ Lemma checkf0_02 : f0 0 2 = (2,2). Proof. reflexivity. Qed.
 (* f1 5 = 20        etc.                                                        *)
 
 (* f1 n = n * (n + 3)/2                                                         *)
-Fixpoint f1 (n:nat) : nat := 
+Fixpoint f1 (n:nat) : nat :=
     match n with
     | 0     => 0
     | S n   => f1 n + S (S n)
-    end.  
+    end.
 
 Lemma checkf1_0 : f1 0 = 0.  Proof. reflexivity. Qed.
 Lemma checkf1_1 : f1 1 = 2.  Proof. reflexivity. Qed.
@@ -72,9 +70,9 @@ Lemma checkf1_5 : f1 5 = 20. Proof. reflexivity. Qed.
 (* f2 can then be defined using f1                                              *)
 Definition f2 (x y:nat) : nat :=
     match x with
-    | 0     => f1 y 
+    | 0     => f1 y
     | S x   => f1 x + S y
-    end. 
+    end.
 
 Lemma checkf2_00 : f2 0 0 = 0. Proof. reflexivity. Qed.
 Lemma checkf2_10 : f2 1 0 = 1. Proof. reflexivity. Qed.
@@ -88,7 +86,7 @@ Lemma checkf2_32 : f2 3 2 = 8. Proof. reflexivity. Qed.
 Lemma checkf2_33 : f2 3 3 = 9. Proof. reflexivity. Qed.
 
 (* Our function toNat is simply f2 composed with our change of variable         *)
-Definition toNat (p:nat * nat) : nat := 
+Definition toNat (p:nat * nat) : nat :=
     match p with
     | (x,y) => f2 (x + y) y
     end.
@@ -104,7 +102,7 @@ Lemma checkToNat_21 : toNat (2,1) = 7. Proof. reflexivity. Qed.
 Lemma checkToNat_12 : toNat (1,2) = 8. Proof. reflexivity. Qed.
 Lemma checkToNat_03 : toNat (0,3) = 9. Proof. reflexivity. Qed.
 
-Definition A1 (n:nat) : Subset := fun k => n <= f1 k. 
+Definition A1 (n:nat) : Subset := fun k => n <= f1 k.
 
 Lemma A1_pDec : forall (n:nat), pDec (A1 n).
 Proof.
@@ -116,7 +114,7 @@ Proof.
     induction n as [|n IH].
     - exists 0. apply le_n.
     - destruct IH as [k H1]. exists (S k). unfold Elem, A1. simpl.
-      rewrite <- plus_n_Sm. apply le_n_S. 
+      rewrite <- plus_n_Sm. apply le_n_S.
       apply le_trans with (f1 k); try assumption.
       apply le_add_r.
 Defined.

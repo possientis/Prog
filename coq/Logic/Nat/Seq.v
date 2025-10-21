@@ -1,12 +1,11 @@
-Require Import Le.
-Require Import Plus.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Nat.Leq.
 
 Lemma noDecreasingSeq : ~ exists (f:nat -> nat), forall (n:nat), f (S n) < f n.
 Proof.
-    intros [f H]. 
+    intros [f H].
     assert (forall (n:nat), n + f n <= f 0) as H'.
         { induction n as [|n IH].
             - apply le_n.
@@ -17,5 +16,5 @@ Proof.
         { apply le_trans with (S (f 0) + f (S (f 0))).
             - apply le_add_r.
             - apply H'. }
-    apply not_le_Sn_n with (f 0). assumption.    
+    apply not_le_Sn_n with (f 0). assumption.
 Qed.

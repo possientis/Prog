@@ -1,4 +1,4 @@
-Require Import Le.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Class.Eq.
@@ -10,7 +10,7 @@ Require Import Logic.Nat.Leq.
 Require Import Logic.Nat.Ord.
 
 
-Lemma boundedDec : forall (p:nat -> Prop), pDec p -> 
+Lemma boundedDec : forall (p:nat -> Prop), pDec p ->
     forall (n:nat), Dec (exists (m:nat), p m /\ m <= n).
 Proof.
     intros p H1. induction n as [|n IH].

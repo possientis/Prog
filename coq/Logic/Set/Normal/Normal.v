@@ -1,5 +1,4 @@
-Require Import Le.
-Require Import Nat.
+Require Import Sets.Integers.
 Require Import List.
 Import Nat.
 
@@ -40,7 +39,7 @@ Qed.
 (* Sorting a nubed set yields a nubed set.                                      *)
 Lemma sortNubed : forall (x:set), Nubed x -> Nubed (sort x).
 Proof.
-    intros x. unfold Nubed, sort. 
+    intros x. unfold Nubed, sort.
     rewrite toListFromList. apply Normal.sortNubed.
 Qed.
 
@@ -55,7 +54,7 @@ Proof.
     apply Normal.sameHead.
 Qed.
 
-(* Two sorted and nubed sets which are equivalent as lists are identical.       *) 
+(* Two sorted and nubed sets which are equivalent as lists are identical.       *)
 Lemma nubedSortedEquivSame : forall (x y:set),
     Nubed x ->
     Nubed y ->
@@ -65,11 +64,11 @@ Lemma nubedSortedEquivSame : forall (x y:set),
     x = y.
 Proof.
     intros x y. unfold Nubed, Sorted, Equiv.
-    intros H1 H2 H3 H4 H5. 
+    intros H1 H2 H3 H4 H5.
     rewrite <- (fromListToList x).
     rewrite <- (fromListToList y).
     assert (toList x = toList y) as H6.
-        { apply (Normal.nubedSortedEquivSame _ _); assumption. } 
+        { apply (Normal.nubedSortedEquivSame _ _); assumption. }
     rewrite H6. reflexivity.
 Qed.
 
@@ -108,10 +107,10 @@ Qed.
 (* A set is in normal form when it has been nubed and sorted,                   *)
 (* and every element of its list is itself in normal form.                      *)
 Inductive Normal (x:set) : Prop :=
-| mkNormal : 
-    Nubed x  -> 
-    Sorted x -> 
-    (forall (z:set), inListOf z x -> Normal z) -> 
+| mkNormal :
+    Nubed x  ->
+    Sorted x ->
+    (forall (z:set), inListOf z x -> Normal z) ->
     Normal x
 .
 
@@ -120,7 +119,7 @@ Lemma normalEqual : forall (x:set), normal x == x.
 Proof.
     induction x as [|x IH1 xs IH2].
     - apply equalRefl.
-    - unfold normal. fold normal. 
+    - unfold normal. fold normal.
       apply sortEqual', nubEqual', consCompatLR; assumption.
 Qed.
 
@@ -155,8 +154,8 @@ Qed.
 Lemma normalNormal : forall (x:set), Normal (normal x).
 Proof.
     (* Setting up induction on rank x.                                          *)
-    intros x. remember (rank x) as n eqn:E. 
-    assert (rank x <= n) as H. { rewrite E. apply le_n. } 
+    intros x. remember (rank x) as n eqn:E.
+    assert (rank x <= n) as H. { rewrite E. apply le_n. }
     clear E. revert H. revert x. revert n.
     (* Actual proof.                                                            *)
     induction n as [|n IH]; intros x H1.
@@ -185,8 +184,8 @@ Proof.
     - inversion Rx as [H1|]. inversion Ry as [H2|].
       apply rankNil in H1. apply rankNil in H2. subst. reflexivity.
     - destruct Nx as [H1 H2 H3]. destruct Ny as [H4 H5 H6].
-      apply nubedSortedEquivSame; try (assumption). 
-      clear H1 H2 H4 H5. rename H3 into H1. rename H6 into H2. 
+      apply nubedSortedEquivSame; try (assumption).
+      clear H1 H2 H4 H5. rename H3 into H1. rename H6 into H2.
       rewrite doubleIncl in E. destruct E as [E1 E2].
       split; intros z H3.
         + assert (z :: y) as H4. { apply toListIncl with x; assumption. }

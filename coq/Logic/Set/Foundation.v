@@ -1,7 +1,6 @@
 (* NEXT: ===> ???                                                               *)
 
-
-Require Import Le.
+Require Import Sets.Integers.
 Import Nat.
 
 Require Import Logic.Nat.Leq.
@@ -17,7 +16,7 @@ Require Import Logic.Set.Equal.
 Require Import Logic.Set.Trans.
 Require Import Logic.Set.Empty.
 Require Import Logic.Set.ElemIncl.
-Require Import Logic.Set.Decidable. 
+Require Import Logic.Set.Decidable.
 Require Import Logic.Set.Extensionality.
 
 (* In this module, we prove that the foundation axiom is satisfied in our       *)
@@ -75,10 +74,10 @@ Qed.
 (* The foundation axiom is true: every non-empty set has a ::-minimal element.  *)
 (* We crucially need to make use of the notion of 'rank' of the Rank module.    *)
 Open Scope nat_scope.
-Theorem foundation : forall (x:set), ~(x == Nil) -> 
+Theorem foundation : forall (x:set), ~(x == Nil) ->
     exists (y:set), minimal y x.
 Proof.
-    intros x H. rewrite emptyIsNil in H. 
+    intros x H. rewrite emptyIsNil in H.
     destruct (rankMinimal x H) as [y [H1 H2]]. exists y. split.
     - assumption.
     - intros H3. destruct H3 as [z [H3 H4]].
@@ -96,7 +95,7 @@ Open Scope Set_Incl_scope.
 (* sequence of sets which form an infinite descent via the membership relation. *)
 Lemma noDescendingSeq : ~ exists (f:nat -> set), forall (n:nat), f (S n) :: f n.
 Proof.
-    intros [f H]. apply noDecreasingSeq. 
-    exists (fun n => rank (f n)). 
+    intros [f H]. apply noDecreasingSeq.
+    exists (fun n => rank (f n)).
     intros n. apply rankElem. apply H.
 Qed.

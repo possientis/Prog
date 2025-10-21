@@ -1,8 +1,7 @@
 (* NEXT: ===> Trans                                                             *)
 
-Require Import Le.
+Require Import Sets.Integers.
 Require Import List.
-Require Import Plus.
 Import Nat.
 
 Require Import Logic.Nat.Max.
@@ -25,7 +24,7 @@ Require Import Logic.Set.Order.
 (* 'In y (toList xs)'. Of course it is not true that if x is an element of xs   *)
 (* then x should be an element of (toList xs). However, there should exists a y *)
 (* in (toList xs) which is 'equivalent' to x in the sense of double inclusion.  *)
-Lemma toListElem : forall (x xs:set), x :: xs <-> 
+Lemma toListElem : forall (x xs:set), x :: xs <->
     exists (y:set), In y (toList xs) /\ (x <= y) /\ (y <= x).
 Proof.
     intros x xs. split.
@@ -44,7 +43,7 @@ Proof.
                     { apply add_le_mono_l. apply orderToList. assumption. }
                     { apply add_le_mono_r. apply n_le_max. }}
                 { assumption. }}
-    - intros [y [H1 [H2 H3]]]. unfold elem. 
+    - intros [y [H1 [H2 H3]]]. unfold elem.
       apply incl_n_incl with (order {x} + order xs).
         + apply le_n.
         + split.
@@ -54,14 +53,14 @@ Proof.
                 { split.
                     { apply incl_incl_n.
                         { apply le_trans with (order x + order xs).
-                            { apply add_le_mono_l. 
+                            { apply add_le_mono_l.
                               apply orderToList. assumption. }
                             { apply add_le_mono_r. apply n_le_max. }}
-                        { assumption. }} 
-                    { apply incl_incl_n. 
+                        { assumption. }}
+                    { apply incl_incl_n.
                         { rewrite add_comm.
                           apply le_trans with (order x + order xs).
-                            { apply add_le_mono_l. 
+                            { apply add_le_mono_l.
                               apply orderToList. assumption. }
                             { apply add_le_mono_r. apply n_le_max. }}
                         { assumption. }}}}
@@ -74,7 +73,7 @@ Qed.
 Lemma toListIncl : forall (xs ys:set), xs <= ys <->
     (forall (z:set), In z (toList xs) -> z :: ys).
 Proof.
-    intros xs. induction xs as [|x _ xs IH]. 
+    intros xs. induction xs as [|x _ xs IH].
     - intros ys. split.
         + intros H1 z H2. inversion H2.
         + intros. apply inclNil.
@@ -85,23 +84,23 @@ Proof.
             { subst. apply toListElem. exists y. split.
                 { assumption. }
                 { split.
-                    { apply incl_n_incl 
+                    { apply incl_n_incl
                       with (max (order z) (order xs) + (order ys)).
                         { apply le_trans with (order z + order ys).
                             { apply add_le_mono_l. apply orderToList.
                               assumption. }
                             { apply add_le_mono_r. apply n_le_max. }}
                         { assumption. }}
-                    { apply incl_n_incl 
+                    { apply incl_n_incl
                       with (max (order z) (order xs) + (order ys)).
                         { rewrite add_comm.
                             apply le_trans with (order z + order ys).
                                 { apply add_le_mono_l. apply orderToList.
                                   assumption. }
-                                { apply add_le_mono_r. apply n_le_max. }}   
+                                { apply add_le_mono_r. apply n_le_max. }}
                         { assumption. }}}}
             { apply IH.
-                { apply incl_n_incl 
+                { apply incl_n_incl
                   with (max (order x) (order xs) + (order ys)).
                     { apply add_le_mono_r. apply m_le_max. }
                     { assumption. }}
@@ -120,7 +119,7 @@ Proof.
                             { apply le_trans with (order x + order ys).
                                 { apply add_le_mono_l. apply orderToList.
                                   assumption. }
-                                { apply add_le_mono_r. apply n_le_max. }}   
+                                { apply add_le_mono_r. apply n_le_max. }}
                             { assumption . }}
                         { apply incl_incl_n.
                             { rewrite add_comm.
@@ -128,5 +127,5 @@ Proof.
                                 { apply add_le_mono_l. apply orderToList.
                                   assumption. }
                                 { apply add_le_mono_r. apply n_le_max. }}
-                            { assumption. }}}}}    
+                            { assumption. }}}}}
 Qed.

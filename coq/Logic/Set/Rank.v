@@ -1,7 +1,6 @@
 (* NEXT: ===> Foundation                                                        *)
 
-
-Require Import Le.
+Require Import Sets.Integers.
 Require Import List.
 Import Nat.
 
@@ -36,13 +35,13 @@ Require Import Logic.Set.Normal.Ord.
 (* things in a more convoluted way. Luckily the lemma 'rankMaximum' below       *)
 (* guarantees that our formal definition satisfies our informal description.    *)
 Fixpoint rank (xs:set) : nat :=
-    match xs with 
+    match xs with
     | Nil       => 0
-    | Cons x xs => 
+    | Cons x xs =>
        match rank xs with
         | 0     => S (rank x)
         | S r   => S (max (rank x) r)
-        end 
+        end
     end.
 
 (* The rank of a set is 0 if and only if the set is empty                       *)
@@ -56,7 +55,7 @@ Proof.
 Qed.
 
 (* When not empty, the rank is 1 + the maximum of the ranks of the elements     *)
-Lemma rankMaximum : forall (x:set), x <> Nil -> 
+Lemma rankMaximum : forall (x:set), x <> Nil ->
     rank x = S (maximum (map rank (toList x))).
 Proof.
     induction x as [|x IH1 xs IH2].
@@ -71,7 +70,7 @@ Qed.
 (* If x lies in the list associated with xs, then it has a lesser rank.         *)
 Lemma rankToList : forall (x xs:set), In x (toList xs) -> rank x < rank xs.
 Proof.
-    intros x xs H. destruct (eqDec xs Nil) as [H'|H']. 
+    intros x xs H. destruct (eqDec xs Nil) as [H'|H'].
     - rewrite H' in H. inversion H.
     - rewrite (rankMaximum xs).
         + unfold lt. apply le_n_S. apply maximum_ubound. apply in_map_iff.
@@ -85,9 +84,9 @@ Qed.
 Open Scope nat_scope.
 Lemma rankEqual : forall (x y:set), x == y -> rank x = rank y.
 Proof.
-    intros x y. remember (rank x) as n eqn:E. 
+    intros x y. remember (rank x) as n eqn:E.
     assert (rank x <= n) as H. { rewrite E. apply le_n. }
-    rewrite E. clear E. revert n x y H.  
+    rewrite E. clear E. revert n x y H.
     induction n as [|n IH]. (* induction on n, rank x <= n *)
     - intros x y H1 H2. apply le_0 in H1. apply rankNil in H1.
       rewrite H1 in H2. apply equalSym in H2. apply emptyIsNil in H2.
@@ -110,7 +109,7 @@ Proof.
                                 { split; apply inclRefl. }}}
                       apply toListElem in H4. destruct H4 as [z' [H4 [H5 H6]]].
                       rewrite <- H2. rewrite (IH z z').
-                        { apply maximum_ubound. apply in_map_iff. 
+                        { apply maximum_ubound. apply in_map_iff.
                           exists z'. split.
                             { reflexivity. }
                             { assumption. }}
@@ -159,7 +158,7 @@ Proof.
     - apply doubleIncl. split; assumption.
 Qed.
 
-(* If x is a subset of y, then its rank is less than or equal to that of y.     *) 
+(* If x is a subset of y, then its rank is less than or equal to that of y.     *)
 (* Notation '<=' for set and nat are conflicting, using 'incl'.                 *)
 Lemma rankIncl : forall (x y:set), incl x y -> rank x <= rank y.
 Proof.
@@ -204,7 +203,7 @@ Proof.
         + assumption.
         + split; apply inclRefl.
     - intros z H6. rewrite H3. apply H4. apply toListElem in H6.
-      destruct H6 as [z' [H6 [H7 H8]]]. rewrite H1. apply in_map_iff. 
+      destruct H6 as [z' [H6 [H7 H8]]]. rewrite H1. apply in_map_iff.
       exists z'. split.
         + apply rankEqual. apply doubleIncl. split; assumption.
         + assumption.

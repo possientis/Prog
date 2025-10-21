@@ -6,7 +6,7 @@ Declare Scope Rel_Initial_scope.
 
 (* The category of relations has an initial object namely 0.                    *)
 
-Inductive Void : Type :=.
+Inductive Void : Prop :=.
 
 Notation "0" := (Void) : Rel_Initial_scope.
 

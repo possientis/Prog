@@ -1,8 +1,7 @@
-(* NEXT: ===> Core                                                              *) 
+(* NEXT: ===> Core                                                              *)
 
-Require Import Le.
+Require Import Sets.Integers.
 Require Import List.
-Import Nat.
 
 Require Import Logic.Nat.Max.
 
@@ -10,7 +9,7 @@ Require Import Logic.Set.Set.
 
 
 (* Now that we have a type to represent our universe of sets, we shall need     *)
-(* to define various notions in relation to it. For example we shall need to    *) 
+(* to define various notions in relation to it. For example we shall need to    *)
 (* define what it means for a set x to belong to a set y (denoted x :: y), or   *)
 (* what it means for a set x to be a subset of y (denoted x <== y), or what it  *)
 (* means for a set x to be equal to y (denoted x == y). These relations can be  *)
