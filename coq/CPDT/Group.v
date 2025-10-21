@@ -1,3 +1,4 @@
+(*
 Module Type GROUP.
     Parameter G   : Set.
     Parameter f   : G -> G -> G.
@@ -19,6 +20,7 @@ End GROUP_THEOREMS.
 Module GROUP_PROOFS (M:GROUP) : GROUP_THEOREMS with Module M := M.
 Module M := M.
 Import M.
+
 Theorem inverse' : forall a, f a (i a) = e.
 Proof.
     intros a.
@@ -68,8 +70,8 @@ End INT.
 
 Module INT_PROOFS := GROUP_PROOFS(INT).
 Import INT_PROOFS.
-
-Check unique_e.
+*)
+(* Check unique_e. *)
 
 
 

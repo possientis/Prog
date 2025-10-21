@@ -1,10 +1,10 @@
-Print prod.
+(* Print prod. *)
 
 (*
 Inductive prod (A B : Type) : Type :=  pair : A -> B -> A * B
 *)
 
-Print and.
+(* Print and. *)
 
 (*
 Inductive and (A B : Prop) : Prop :=  conj : A -> B -> A /\ B

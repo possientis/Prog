@@ -1,11 +1,11 @@
-Print unit.
+(* Print unit. *)
 
 (*
 Inductive unit : Set :=  tt : unit
 *)
 
 
-Print True.
+(* Print True. *)
 
 (*
 Inductive True : Prop :=  I : True

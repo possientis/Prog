@@ -1,6 +1,5 @@
 Require Import List.
-Require Import Arith.Le.
-Require Import Arith.Lt.
+Require Import Arith.
 Import Nat.
 
 Require Import stream.
@@ -19,7 +18,7 @@ Fixpoint merge (a:Type) (le:a -> a -> bool) (xs ys:list a) : list a :=
     match xs with
     | nil       => ys
     | (x :: xs) => insert le x (merge a le xs ys)
-    end. 
+    end.
 
 Arguments merge {a} _ _ _.
 
@@ -72,7 +71,7 @@ Inductive Acc (A : Type) (R : A -> A -> Prop) (x : A) : Prop :=
 (* less than x, then you have an infinite descending chain starting with x      *)
 (* This type needs to be coinductive, it would be void as an inductive type     *)
 CoInductive oo_chain (a:Type) (R:a -> a -> Prop) : Stream a -> Prop :=
-| oo_Cons : forall (x y:a) (s:Stream a), 
+| oo_Cons : forall (x y:a) (s:Stream a),
     oo_chain a R (Cons y s) -> R y x -> oo_chain a R (Cons x (Cons y s)).
 
 Arguments oo_chain {a} _ _.
@@ -83,7 +82,7 @@ Lemma no_oo_chain : forall (a:Type) (R:a -> a -> Prop) (x:a),
     Acc R x -> forall (s:Stream a), ~oo_chain R (Cons x s).
 Proof.
     intros a R x H. induction H as [x H IH]. intros [y s].
-    intros H'. revert H IH. 
+    intros H'. revert H IH.
     remember (Cons x (Cons y s)) as s' eqn:E. revert x y s E.
     destruct H'.
     intros x' y' s' H0. inversion H0. subst.
@@ -109,7 +108,7 @@ Definition lengthOrder (a:Type) (l1 l2 : list a) : Prop :=
 Arguments lengthOrder {a} _ _.
 
 
-Lemma lengthOrder_wf' : forall (a:Type) (n:nat) (l:list a), 
+Lemma lengthOrder_wf' : forall (a:Type) (n:nat) (l:list a),
     length l <= n -> Acc lengthOrder l.
 Proof.
     intros a. induction n as [|n IH].
@@ -118,24 +117,24 @@ Proof.
         +  intros H. inversion H.
     - intros l H. constructor. intros l' H'. apply IH.
       unfold lengthOrder in H'. unfold lt in H'.
-      apply le_S_n. apply le_trans with (length l); assumption.  
+      apply le_S_n. apply le_trans with (length l); assumption.
 Defined. (* not opaque *)
 
-Lemma lengthOrder_wf : forall (a:Type), well_founded (@lengthOrder a). 
+Lemma lengthOrder_wf : forall (a:Type), well_founded (@lengthOrder a).
 Proof.
-    intros a. unfold well_founded. intros l. 
-    apply lengthOrder_wf' with (length l). 
+    intros a. unfold well_founded. intros l.
+    apply lengthOrder_wf' with (length l).
     apply le_n.
 Defined. (* not opaque *)
 
 
 Lemma split_wf1_ : forall (a:Type) (n:nat) (l:list a),
     length l <= n ->
-        forall (l1 l2:list a), (l1,l2) = split l -> 
+        forall (l1 l2:list a), (l1,l2) = split l ->
             length l1 <= length l /\ length l2 <= length l.
 Proof.
     intros a. induction n as [|n IH]; intros l H l1 l2 H'.
-    - inversion H as [E|E]. apply length_zero_iff_nil in E. subst. 
+    - inversion H as [E|E]. apply length_zero_iff_nil in E. subst.
       inversion H'. split; apply le_n.
     - destruct l as [|x l].
         + inversion H'. split; apply le_n.
@@ -154,7 +153,7 @@ Proof.
                 destruct e as (m1,m2).
                 remember (IH l L m1 m2 E) as IH' eqn:C. clear C.
                 destruct IH' as [IH1 IH2].
-                inversion H0. split; 
+                inversion H0. split;
                 simpl; apply le_n_S; apply le_trans with (length l).
                     { assumption. }
                     { apply le_S, le_n. }
@@ -163,7 +162,7 @@ Proof.
             }
 Qed.
 
-Lemma split_wf2_ : forall (a:Type) (l l1 l2:list a), (l1,l2) = split l -> 
+Lemma split_wf2_ : forall (a:Type) (l l1 l2:list a), (l1,l2) = split l ->
     length l1 <= length l /\ length l2 <= length l.
 Proof.
     intros a l l1 l2 H. apply split_wf1_ with (length l).
@@ -174,14 +173,14 @@ Qed.
 Lemma split_wf : forall (a:Type) (l l1 l2:list a), (l1,l2) = split l ->
     2 <= length l -> lengthOrder l1 l /\ lengthOrder l2 l.
 Proof.
-    intros a l l1 l2 H1 H2.  
+    intros a l l1 l2 H1 H2.
     destruct l as [|x l].
     - inversion H2.
     - destruct l as [|y l].
-        +  simpl in H2. apply le_S_n in H2. inversion H2. 
+        +  simpl in H2. apply le_S_n in H2. inversion H2.
         + clear H2. simpl in H1.
-          remember (split l) as e eqn:E. 
-          destruct e as (m1,m2). 
+          remember (split l) as e eqn:E.
+          destruct e as (m1,m2).
           remember (split_wf2_ a l m1 m2 E) as H0 eqn:C. clear C.
           destruct H0.
           inversion H1. split;
@@ -208,12 +207,12 @@ Definition mergeSort (a:Type) (le:a -> a -> bool) : list a -> list a.
             | x :: ys   =>
                 match ys with
                 | nil       => x :: nil
-                | y :: zs   => 
+                | y :: zs   =>
                     match (split zs) with
-                    | (l1, l2)  => merge le (mergeSort (x :: l1) _) (mergeSort (y :: l2) _) 
+                    | (l1, l2)  => merge le (mergeSort (x :: l1) _) (mergeSort (y :: l2) _)
                     end
                 end
-            end) 
+            end)
 
 ).
 

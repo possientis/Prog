@@ -1,6 +1,7 @@
-Require Import Arith.Le.
+Require Import Arith.
+Import Nat.
 
-Print ex.
+(* Print ex. *)
 
 (*
 Inductive ex (a : Type) (P : a -> Prop) : Prop :=
@@ -18,7 +19,7 @@ Arguments ex2_intro {a} {P} _ _.
 Lemma test1 : ex2 (fun (n:nat) => n + 3 = 5).
 Proof. apply ex2_intro with 2. reflexivity. Qed.
 
-Check ex2_intro.
+(*  Check ex2_intro. *)
 
 Lemma test2 : ex2 (fun (n:nat) => n + 3 = 5).
 Proof. apply (ex2_intro 2). reflexivity. Qed.

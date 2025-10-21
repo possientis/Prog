@@ -1,6 +1,6 @@
 Require Import List.
 
-Inductive binop : Set := 
+Inductive binop : Set :=
 | Plus  : binop
 | Times : binop
 .
@@ -11,13 +11,13 @@ Inductive exp : Set :=
 .
 
 Definition binopDenote (b:binop) : nat -> nat -> nat :=
-    match b with 
+    match b with
     | Plus  => plus
     | Times => mult
     end.
 
-(* type inference at play *) 
-Definition binopDenote' := fun b => 
+(* type inference at play *)
+Definition binopDenote' := fun b =>
     match b with
     | Plus  => plus
     | Times => mult
@@ -40,7 +40,7 @@ Definition stack : Set := list nat.
 Definition instrDenote (i:instr) (s:stack) : option stack :=
     match i with
     | iConst n  => Some (n :: s)
-    | iBinop b  => 
+    | iBinop b  =>
         match s with
         | x1 :: x2 :: s'    => Some ((binopDenote b) x1 x2 :: s')
         | _                 => None
@@ -50,7 +50,7 @@ Definition instrDenote (i:instr) (s:stack) : option stack :=
 Fixpoint progDenote (p:prog) (s:stack) : option stack :=
     match p with
     | nil       => Some s
-    | i :: q    => 
+    | i :: q    =>
         match instrDenote i s with
         | None      => None
         | Some s'   => progDenote q s'
@@ -75,8 +75,8 @@ Lemma compile_correct' : forall (e:exp) (p:prog) (s:stack),
 Proof.
     intros e. induction e as [n|b e1 H1 e2 H2]; intros p s; simpl.
     - reflexivity.
-    - rewrite app_assoc_reverse. rewrite H2. 
-      rewrite app_assoc_reverse. rewrite H1.
+    - rewrite <- app_assoc. rewrite H2.
+      rewrite <- app_assoc. rewrite H1.
       reflexivity.
 Qed.
 

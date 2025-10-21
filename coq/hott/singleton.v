@@ -1,10 +1,10 @@
 Require Import set.
 Require Import empty.
 
-Inductive Unit : Type := unit.
+Inductive Unit : Prop := unit.
 
 
-Definition singleton (x:set) : set := mkset Unit (fun _ => x). 
+Definition singleton (x:set) : set := mkset Unit (fun _ => x).
 
 Notation "{ x }" := (singleton x).
 

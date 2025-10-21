@@ -1,11 +1,9 @@
-Require Import Le.
-Require Import Nat.
-Require Import Compare_dec.
+Require Import Arith.
 Import Nat.
 
 Fixpoint blt_nat (n m:nat) : bool :=
     match n with
-    | 0 => 
+    | 0 =>
         match m with
         | 0     => false
         | S _   => true
@@ -45,7 +43,7 @@ Proof.
     - rewrite max_l.
         + assumption.
         + apply not_le in H. unfold gt in H. unfold lt in H.
-          apply le_trans with (S m). 
+          apply le_trans with (S m).
             { apply le_S, le_n. }
             { assumption. }
 Qed.

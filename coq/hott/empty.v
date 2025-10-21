@@ -1,6 +1,6 @@
 Require Import set.
 
-Inductive Void : Type :=.
+Inductive Void : Prop :=.
 
 Definition absurd (x:Void) : set :=
     match x with
@@ -8,6 +8,6 @@ Definition absurd (x:Void) : set :=
 
 Definition zero : set := mkset Void absurd.
 
-Notation "0" := (zero). 
+Notation "0" := (zero).
 
 

@@ -1,8 +1,4 @@
-Require Import Nat.
-Require Import Min.
-Require Import Max.
-Require Import Plus.
-Require Import Mult.
+Require Import Arith.
 
 Import Nat.
 Require Import Utils.nat.
@@ -11,7 +7,7 @@ Inductive Color : Set := Red | Black.
 
 Inductive RBTree : Color -> nat -> Set :=
 | Leaf      : RBTree Black 0
-| RedNode   : forall (n:nat), 
+| RedNode   : forall (n:nat),
     RBTree Black n -> nat -> RBTree Black n -> RBTree Red n
 | BlackNode : forall (c1 c2:Color) (n:nat),
     RBTree c1 n -> nat -> RBTree c2 n -> RBTree Black (S n)
@@ -28,14 +24,14 @@ Arguments depth {c} {n}.
 
 Theorem depth_min : forall (c:Color) (n:nat) (t:RBTree c n), n <= depth min t.
 Proof.
-    intros c n t. 
+    intros c n t.
     induction t as [|n t1 IH1 m t2 IH2|c1 c2 n t1 IH1 m t2 IH2].
     - apply le_n.
-    - simpl. 
-      destruct (min_dec (depth min t1) (depth min t2)) as [H|H]; 
+    - simpl.
+      destruct (min_dec (depth min t1) (depth min t2)) as [H|H];
       rewrite H; apply le_S; assumption.
     - simpl.
-      destruct (min_dec (depth min t1) (depth min t2)) as [H|H]; 
+      destruct (min_dec (depth min t1) (depth min t2)) as [H|H];
       rewrite H; apply le_n_S; assumption.
 Qed.
 
@@ -51,13 +47,13 @@ Proof.
     - simpl. rewrite <- plus_n_Sm. apply le_n_S.
       rewrite <- plus_n_O, <- plus_n_O. rewrite plus_n_n.
       apply max_lub; assumption.
-    - destruct c1, c2. 
+    - destruct c1, c2.
         + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm.
           rewrite plus_n_n.
           rewrite <- plus_n_Sm in IH1. rewrite <- plus_n_O in IH1.
           rewrite <- plus_n_Sm in IH2. rewrite <- plus_n_O in IH2.
           apply max_lub; assumption.
-        + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm. 
+        + simpl. apply le_n_S. rewrite <- plus_n_O. rewrite <- plus_n_Sm.
           rewrite plus_n_n.
           rewrite <- plus_n_Sm in IH1. rewrite <- plus_n_O in IH1.
           apply max_lub.
@@ -74,17 +70,17 @@ Proof.
           apply max_lub; apply le_S; assumption.
 Qed.
 
-Theorem depth_max : forall (c:Color) (n:nat) (t:RBTree c n), 
+Theorem depth_max : forall (c:Color) (n:nat) (t:RBTree c n),
     depth max t <= 2*n + 1.
 Proof.
-    intros c n t. destruct c. 
-    - apply (depth_max' Red). 
+    intros c n t. destruct c.
+    - apply (depth_max' Red).
     - rewrite <- plus_n_Sm. rewrite <- plus_n_O. apply le_S.
       apply (depth_max' Black).
 Qed.
 
 
-Theorem balanced : forall (c:Color) (n:nat) (t:RBTree c n), 
+Theorem balanced : forall (c:Color) (n:nat) (t:RBTree c n),
     depth max t <= 2 * (depth min t) + 1.
 Proof.
     intros c n t. apply le_trans with (2 * n + 1).
