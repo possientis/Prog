@@ -1,5 +1,4 @@
 Require Import Arith.
-Require Import Arith.Max.
 
 
 (* '(Cons x y)' should be thought of '{x}Uy' *)
@@ -28,22 +27,22 @@ Definition N : eset := from Empty.
   (iv)  {x} <= yUz      <-> {x} <= y \/ {x} <= z
   (iv)' {x} <= Cons y z <-> {x} <= {y}Uz
   (v)   xUy <= z        <-> x <= z /\ y <= z
-  (vi)  Cons x y <= z   <-> {x} <= z /\ y <= z  
+  (vi)  Cons x y <= z   <-> {x} <= z /\ y <= z
 
 *)
 
 Fixpoint esubset_n (n:nat) : eset -> eset -> Prop :=
-  match n with 
+  match n with
     | 0   => (fun _ _     => True)
     | S p => (fun a b     =>
       match a with
         | Empty           => True
-        | Singleton x     => 
+        | Singleton x     =>
           match b with
             | Empty       => False
             | Singleton y => esubset_n p x y /\ esubset_n p y x
             | Union y z   => esubset_n p (Singleton x) y \/
-                             esubset_n p (Singleton x) z 
+                             esubset_n p (Singleton x) z
             | Cons y z    => esubset_n p (Singleton x) (Union (Singleton y) z)
           end
         | Union x y       => esubset_n p x b /\ esubset_n p y b

@@ -1,5 +1,4 @@
 Require Import Arith.
-Require Import Arith.Max.
 Import Nat.
 
 Require Import set.
@@ -18,10 +17,10 @@ Require Import set.
  *)
 
 Fixpoint order (s:set) : nat :=
-  match s with 
+  match s with
     | Empty         => 0
     | Singleton x   => 1 + order x
-    | Union x y     => 1 + max (order x) (order y) 
+    | Union x y     => 1 + max (order x) (order y)
   end.
 
 (*  order(a) = 0  =>  a = 0  *)
@@ -36,7 +35,7 @@ Qed.
 Lemma order_sum_eq_0_l : forall (a b:set),
   order a + order b = 0 -> a = Empty.
 Proof.
-  intros a b H. apply order_eq_0. 
+  intros a b H. apply order_eq_0.
   apply and_ind with (A:= order a = 0)(B:= order b = 0). trivial.
   apply eq_add_0. exact H.
 Qed.
@@ -62,13 +61,13 @@ Qed.
 Lemma order_sum_singleton_r : forall (n:nat) (a y:set),
   order a + order (Singleton y) <= S n ->
   order a + order y <= n.
-Proof. 
+Proof.
   intros n a y H. rewrite add_comm. apply order_sum_singleton_l.
   rewrite add_comm in H. exact H.
 Qed.
 
 
-(* order({x}) + order({y}) <= n+1  =>  order(x) + order(y) < n *)  
+(* order({x}) + order({y}) <= n+1  =>  order(x) + order(y) < n *)
 Lemma order_sum_singleton_strong : forall (n:nat) (x y:set),
   order (Singleton x) + order (Singleton y) <= S n ->
   order x + order y < n.
@@ -99,7 +98,7 @@ Proof.
   (m:= order (Union x y) + order b). simpl. apply le_n_S.
   apply add_le_mono_r. simpl. apply le_max_l. exact H.
 Qed.
-  
+
 (* same proof, but use le_max_r instead of le_max_l *)
 Lemma order_sum_union_Lr : forall (n:nat) (x y b:set),
   order (Union x y) + order b <= S n ->
