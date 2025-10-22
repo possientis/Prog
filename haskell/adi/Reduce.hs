@@ -71,19 +71,27 @@ reduceOp op es = case es of
     _       -> error "reduceOp: unexpected primitive call with 3 arguments"
 
 reduceIf :: Expr -> Expr -> Expr -> Expr
-reduceIf e e1 e2 = if irreducible e
-    then let Fix (EBool b) = e in if b then e1  else e2
-    else eIf (reduce e) e1 e2
+reduceIf e e1 e2 
+  | irreducible e , Fix (EBool b) <- e 
+    = if b then e1  else e2  
+  | irreducible e 
+    = error "reduceIf: illegal argument"
+  | otherwise 
+    = eIf (reduce e) e1 e2
 
 reduceLam :: Var -> Expr -> Expr
 reduceLam = error "reduce: attempting to reduce a lambda abstraction"
 
 reduceApp :: Expr -> Expr -> Expr
-reduceApp e1 e2 = if irreducible e1
-    then if irreducible e2
-        then let Fix (ELam x e) = e1 in subst (e2 <-: x) e
-        else eApp e1 (reduce e2)
-    else eApp (reduce e1) e2
+reduceApp e1 e2 
+  | irreducible e1, irreducible e2, Fix (ELam x e) <- e1 
+    = subst (e2 <-: x) e
+  | irreducible e1, irreducible e2 
+    = error "reduceApp: illegal arguments"
+  | irreducible e1 
+    = eApp e1 (reduce e2)
+  | otherwise 
+    = eApp (reduce e1) e2 
 
 reduceRec :: Var -> Expr -> Expr
 reduceRec x e1 = subst (Fix (ERec x e1) <-: x) e1
@@ -109,16 +117,16 @@ reduceCase e e1 x e2 = if irreducible e
 -- Arguments are irreducible
 reduceOp_ :: Op -> [Expr] -> Expr
 reduceOp_  op es
-    | op == oAdd = let [Fix(ENum n1), Fix(ENum n2)] = es in eNum (n1 + n2)
-    | op == oMul = let [Fix(ENum n1), Fix(ENum n2)] = es in eNum (n1 * n2)
-    | op == oSub = let [Fix(ENum n1), Fix(ENum n2)] = es in eNum (n1 - n2)
-    | op == oDiv = let [Fix(ENum n1), Fix(ENum n2)] = es in eNum (n1 `div` n2)
-    | op == oAnd = let [Fix(EBool b1), Fix(EBool b2)] = es in eBool (b1 && b2)
-    | op == oOr  = let [Fix(EBool b1), Fix(EBool b2)] = es in eBool (b1 || b2)
-    | op == oImp = let [Fix(EBool b1), Fix(EBool b2)] = es in eBool (imp b1 b2)
-    | op == oNot = let [Fix(EBool b1)]                = es in eBool (not b1)
-    | op == oLe  = let [Fix(ENum n1), Fix(ENum n2)] = es in eBool (n1 <= n2)
-    | op == oEq  = let [Fix(ENum n1), Fix(ENum n2)] = es in eBool (n1 == n2)
+    | op == oAdd, [Fix(ENum n1), Fix(ENum n2)] <- es = eNum (n1 + n2)
+    | op == oMul, [Fix(ENum n1), Fix(ENum n2)] <- es = eNum (n1 * n2)
+    | op == oSub, [Fix(ENum n1), Fix(ENum n2)] <- es = eNum (n1 - n2)
+    | op == oDiv, [Fix(ENum n1), Fix(ENum n2)] <- es = eNum (n1 `div` n2)
+    | op == oAnd, [Fix(EBool b1), Fix(EBool b2)] <- es = eBool (b1 && b2)
+    | op == oOr , [Fix(EBool b1), Fix(EBool b2)] <- es = eBool (b1 || b2)
+    | op == oImp, [Fix(EBool b1), Fix(EBool b2)] <- es = eBool (imp b1 b2)
+    | op == oNot, [Fix(EBool b1)]                <- es = eBool (not b1)
+    | op == oLe , [Fix(ENum n1), Fix(ENum n2)] <- es = eBool (n1 <= n2)
+    | op == oEq , [Fix(ENum n1), Fix(ENum n2)] <- es = eBool (n1 == n2)
     | otherwise  = undefined
     where
         imp :: Bool -> Bool -> Bool

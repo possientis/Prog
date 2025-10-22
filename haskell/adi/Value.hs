@@ -60,7 +60,7 @@ checkArg v = case v of
     Num n   -> Right . PNum  . Identity $ n
     Bool b  -> Right . PBool . Identity $ b
     Zero    -> Left $ mkError $ "Nat zero encountered in primitive call"
-    Suc _   -> Left $ mkError $"Nat encountered in primitive call: " ++ show v
+    Suc _   -> Left $ mkError $ "Nat encountered in primitive call: " ++ show v
 
 mkValue :: PrimValue -> Value
 mkValue = \case

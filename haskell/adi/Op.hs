@@ -92,21 +92,32 @@ opData = \case
     OpEq  -> OpData [tNum, tNum]   (deltaComp OpEq)
 
 deltaNum :: Op -> [PrimValue] -> Either Error PrimValue
-deltaNum op pvs = PNum . Identity  <$> deltaNum_ op n1 n2 where
-    [PNum (Identity n1) , PNum (Identity n2)] = pvs
-    
-    
+deltaNum op pvs
+  | [PNum (Identity n1) , PNum (Identity n2)] <- pvs 
+  = PNum . Identity  <$> deltaNum_ op n1 n2
+  | otherwise 
+  = Left $ mkError "deltaNum: illegal arguments"
+
 deltaBool :: Op -> [PrimValue] -> Either Error PrimValue 
-deltaBool op pvs = Right . PBool . Identity $ deltaBool_ op b1 b2 where
-    [PBool (Identity b1) , PBool (Identity b2)] = pvs
+deltaBool op pvs 
+  | [PBool (Identity b1) , PBool (Identity b2)] <- pvs
+  = Right . PBool . Identity $ deltaBool_ op b1 b2
+  | otherwise 
+  = Left $ mkError "deltaBool: illegal arguments"
 
 deltaNot :: Op -> [PrimValue] -> Either Error PrimValue
-deltaNot op pvs = Right . PBool . Identity $ deltaNot_ op b where
-    [PBool (Identity b)] = pvs
+deltaNot op pvs 
+  | [PBool (Identity b)] <- pvs
+  = Right . PBool . Identity $ deltaNot_ op b 
+  | otherwise 
+  = Left $ mkError "deltaNot: illegal arguments"
 
 deltaComp :: Op -> [PrimValue] -> Either Error PrimValue
-deltaComp op pvs = Right . PBool . Identity $ deltaComp_ op n1 n2 where
-    [PNum (Identity n1) , PNum (Identity n2)] = pvs
+deltaComp op pvs 
+  | [PNum (Identity n1) , PNum (Identity n2)] <- pvs
+  = Right . PBool . Identity $ deltaComp_ op n1 n2
+  | otherwise 
+  = Left $ mkError "deltaComp: illegal arguments"
 
 checkArgs :: Op -> [PrimValue] -> Either Error [PrimValue]
 checkArgs op pvs = if n /= m then

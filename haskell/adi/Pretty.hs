@@ -43,11 +43,13 @@ pprVar = text . show
 
 pprOp :: Int -> Op -> [Expr] -> Doc
 pprOp p op es
-    | op == oNot    = let [e] = es in text (show op) <> ppr (p + 1) e  
-    | otherwise     = parensIf (p > 0) $ let [e1,e2] = es in
-        ppr (p + 1) e1 
+    | op == oNot, [e] <- es = text (show op) <> ppr (p + 1) e  
+    | [e1,e2] <-es 
+      = parensIf (p > 0) 
+      $ ppr (p + 1) e1 
     <+> text (show op) 
     <+> ppr (p + 1) e2
+    | otherwise = undefined
 
 pprIf :: Int -> Expr -> Expr -> Expr -> Doc
 pprIf p b e1 e2 = parensIf (p > 0) $ 

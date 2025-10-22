@@ -34,11 +34,10 @@ instance (Monad m) => Functor (EvalT m) where
             Right (s,(a,w)) -> Right (s,(f a,w)) 
 
 instance (Monad m) => Applicative (EvalT m) where
-    pure  = return
+    pure a = EvalT $ \_env heap -> pure . Right $ (heap, (a, mempty))
     (<*>) f k = (>>=) f (<$> k)
 
 instance (Monad m) => Monad (EvalT m) where
-    return a = EvalT $ \_env heap -> return . Right $ (heap, (a, mempty))
     k >>= f = EvalT $ \env heap -> do
         res <- runEvalT k env heap 
         case res of 
