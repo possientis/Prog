@@ -40,6 +40,10 @@
     ansible.builtin.apt:
       name: tree
 
+  - name: General - Install fastfetch
+    ansible.builtin.apt:
+      name: fastfetch
+
   - name: General - Install screen
     ansible.builtin.apt:
       name: screen
