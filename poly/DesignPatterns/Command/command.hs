@@ -75,7 +75,6 @@ newTelevision = Television 10 False
 data TV a = TV { run :: Television -> IO (a, Television) }
 
 instance Monad TV where
-  return a = TV (\state -> return (a, state))
   k >>= f  = TV (\state -> do   (x, newState) <- run k state 
                                 run (f x) newState) 
 -- needed to compile
@@ -83,7 +82,7 @@ instance Functor TV where
   fmap = liftM
 -- needed to compile
 instance Applicative TV where
-  pure = return
+  pure a = TV (\state -> pure (a, state))
   (<*>) = ap
 
 

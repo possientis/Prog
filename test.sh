@@ -1,73 +1,47 @@
 #!/bin/bash
 
+set -euo pipefail
 
 PROG=${HOME}/Prog
 POLY=${PROG}/poly
 PATTERNS=${POLY}/DesignPatterns
 BITCOIN=${POLY}/Bitcoin
+LOGFILE="test.log"
 
-echo 'Testing log file\n' > test.log
+echo -e "Testing log file\n" > "$LOGFILE"
 
-function testing () {
-    echo "Testing $1 ..."
-    ${DIR}/${1}/test.sh >> test.log 2>&1
-    if [ $? -ne 0 ]
-    then
-        echo 'TESTING FAILED'
+testing () {
+    local name="$1"
+    echo "Testing $name ..."
+    "${DIR}/${name}/test.sh" >> "$LOGFILE" 2>&1 || {
+        echo "❌ TESTING FAILED in ${DIR}/${name}"
+        echo "See $LOGFILE for details."
         exit 1
-    fi
+    }
 }
 
 DIR=${PROG}
-testing c
-testing asm
-testing make
-testing c++
-testing java
-testing ant
-testing maven
-testing gradle
-testing c#
-testing haskell
-testing coq
-#testing agda
-#testing lean
-testing idris
-testing scheme
-testing python
-testing ruby
-testing js
-testing php
-testing scala
-testing clojure
-testing sed
-testing tex
-testing bison
+for target in c asm make c++ java ant maven gradle \
+  c# haskell coq idris scheme python ruby js php scala clojure sed tex bison
+do
+  testing "$target"
+done
 
 DIR=${POLY}
-testing Pascal
-testing Primes
+for target in Pascal Primes
+do
+  testing "$target"
+done
 
 DIR=${BITCOIN}
 testing Number
 
 DIR=${PATTERNS}
-testing AbstractFactory
-testing Adapter
-testing Bridge
-testing Builder
-testing ChainOfResp
-testing Command
-testing Composite
-testing Decorator
-testing Facade
-testing Factory
-testing Filter
-testing Flyweight
-testing Interpreter
-testing Prototype
-testing Proxy
-testing Singleton
+for target in AbstractFactory Adapter Bridge Builder ChainOfResp Command Composite \
+    Decorator Facade Factory Filter Flyweight Interpreter Prototype Proxy Singleton
+do
+  testing "$target"
+done
 
-echo 'All tests completed successfully'
+echo "✅ All tests completed successfully"
 

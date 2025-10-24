@@ -13,9 +13,7 @@ module Rand
   ) where
 
 import Crypto.Random
-import Data.Word
 import Data.ByteString
-import Control.Applicative (Applicative(..))
 import Control.Monad (liftM, ap)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 
@@ -45,7 +43,7 @@ fromGenError e = case e of
   GenErrorOther msg      -> RE "GenErrorOther"         msg
 
 throw :: RandException -> Rand a
-throw e = state $ \s -> return $ Left e 
+throw e = state $ \_ -> return $ Left e 
 
 try :: Rand a -> (RandException -> Rand a) -> Rand a
 try action catch = state $ \s -> do -- inside the IO monad
@@ -72,7 +70,6 @@ state = Rand
 
 -- Rand can be turned into a monad
 instance Monad Rand where
-  return a = state $ \s -> return $ Right (a, s)  -- action never throws
   m >>= f  = state $ \s -> do -- inside IO monad
     first <- runRand m s
     case first of
@@ -89,7 +86,7 @@ instance Functor Rand where
   fmap = liftM
 -- needed to compile
 instance Applicative Rand where
-  pure = return
+  pure a = state $ \s -> pure $ Right (a, s)  -- action never throws
   (<*>) = ap
 
 instance MonadIO Rand where
@@ -116,7 +113,7 @@ toIO m = do                   -- newGenIO :: CryptoRandomGen g => IO g
   result <- runRand m g       -- running Rand action from initial state
   case result of
     Left e        -> error (show e)
-    Right (a, g') -> return a -- throwing final state away, simply returning value
+    Right (a, _)  -> return a -- throwing final state away, simply returning value
 
 
 -- main API function

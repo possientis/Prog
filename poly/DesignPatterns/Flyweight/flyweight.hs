@@ -1,7 +1,6 @@
 -- Flyweight Design Pattern
 import qualified Data.Map as Map
 import Control.Monad (liftM, ap)
-import Control.Applicative (Applicative(..))
 
 -- The main idea of the flyweight design pattern is to store objects
 -- in a dictionary so they can be reused, rather than new objects be
@@ -100,7 +99,8 @@ data SetManager = SetManager {
 }
 
 -- new manager has Zero saved in object dictionary with hash code of 0
-newManager = SetManager 1 Map.empty Map.empty (Map.insert 0 Zero Map.empty)
+newManager :: SetManager
+newManager  = SetManager 1 Map.empty Map.empty (Map.insert 0 Zero Map.empty)
 
 -- the type constructors have side effects (as they modify the state of 
 -- the set manager. Hence, contrary to the implementation in other languages
@@ -116,8 +116,8 @@ newManager = SetManager 1 Map.empty Map.empty (Map.insert 0 Zero Map.empty)
 -- zero
 zero :: SM Set
 zero = do 
-  maybe <- getObject 0
-  case maybe of 
+  mObj <- getObject 0
+  case mObj of 
     Just z  -> return z
     Nothing -> error "The set manager has not been properly initialized"
 
@@ -178,7 +178,6 @@ apply :: SM a -> SetManager -> (a, SetManager)
 apply (SM f) manager = f manager
 
 instance Monad SM where 
-  return x = SM (\manager -> (x, manager))
   m >>= k  = SM (\manager -> let (x, tempManager) = apply m manager 
                              in apply (k x) tempManager)
 -- needed to compile
@@ -186,7 +185,7 @@ instance Functor SM where
   fmap = liftM
 -- needed to compile
 instance Applicative SM where
-  pure = return
+  pure a = SM (\manager -> (a, manager))
   (<*>) = ap
 
 
@@ -257,14 +256,15 @@ flyweight = do
   two   <- successor one
   three <- successor two
   four  <- successor three
-  five  <- successor four
+  _five <- successor four
   debug
 
 run :: SM String -> IO()
 run m = do
-  let (str, manager) = apply m newManager in
+  let (str, _manager) = apply m newManager in
     putStrLn str
 
+main :: IO ()
 main = run flyweight
 
 
