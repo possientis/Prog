@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # need to install ghc
 
 set -e 
@@ -9,4 +9,4 @@ make -j$(( $(nproc --all) - 1))
 cat *.tmp
 ./clean.sh
 
-echo '\nAll haskell tests completed successfully\n'
+echo -e "All haskell tests completed successfully\n"
