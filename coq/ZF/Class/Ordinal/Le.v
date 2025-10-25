@@ -1,11 +1,16 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.Minimal.
+Require Import ZF.Class.Order.Total.
+Require Import ZF.Class.Order.WellFounded.
+Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
@@ -13,6 +18,7 @@ Require Import ZF.Set.OrdPair.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
+Module SEM := ZF.Set.Empty.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* Lexicographical order on On x On.                                            *)
@@ -45,6 +51,7 @@ Proof.
     split. 1: reflexivity. split. 1: reflexivity. assumption.
 Qed.
 
+(* A non-empty subclass of On x On has an Le-minimal element.                   *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: On :x: On          ->
   A :<>: :0:                ->
@@ -85,3 +92,45 @@ Proof.
       + subst. apply NoElemLoop1 with z. apply H13; assumption. }
   exists a. exists b. split. 1: assumption. split; assumption.
 Qed.
+
+(* Le is founded on On x On.                                                    *)
+Proposition IsFounded : Founded Le (On :x: On).
+Proof.
+  intros x H1 H2.
+  assert (exists a b, On a /\ On b /\ Minimal Le (toClass x) :(a,b):) as H3. {
+    apply HasMinimal. 1: assumption. apply SEM.NotEmptyToClass. assumption. }
+  destruct H3 as [a [b [H3 [H4 H5]]]].
+  exists :(a,b):. assumption.
+Qed.
+
+(* Le is total om On x On.                                                      *)
+Proposition IsTotal : Total Le (On :x: On).
+Proof.
+  intros x y H1 H2.
+  destruct H1 as [a [b [H1 [H3 H4]]]]. destruct H2 as [c [d [H2 [H5 H6]]]]. subst.
+  assert (a = c \/ a :< c \/ c :< a) as H7. { apply SOC.IsTotal; assumption. }
+  assert (b = d \/ b :< d \/ d :< b) as H8. { apply SOC.IsTotal; assumption. }
+  destruct H7 as [H7|[H7|H7]].
+  - destruct H8 as [H8|[H8|H8]].
+    + subst. left. reflexivity.
+    + subst. right. left.
+      apply Charac4. right. split. 1: reflexivity. assumption.
+    + subst. right. right.
+      apply Charac4. right. split. 1: reflexivity. assumption.
+  - right. left. apply Charac4. left. assumption.
+  - right. right. apply Charac4. left. assumption.
+Qed.
+
+(* Le is a well-ordering on On x On.                                            *)
+Proposition IsWellOrdering : WellOrdering Le (On :x: On).
+Proof.
+  split.
+  - apply IsFounded.
+  - apply IsTotal.
+Qed.
+
+(* Le is not well-founded on On x On.                                           *)
+Proposition IsNotWellFounded : ~ WellFounded Le (On :x: On).
+Proof.
+Admitted.
+
