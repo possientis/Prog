@@ -3,7 +3,7 @@ Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Restrict.
 Require Import ZF.Class.Order.WellOrdering.
-Require Import ZF.Class.Ordinal.Order.
+Require Import ZF.Class.Ordinal.Order.WFWO.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Order.Isom.
@@ -14,7 +14,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module COI := ZF.Class.Order.Isom.
 Module COW := ZF.Class.Order.WellOrdering.
-Module COO := ZF.Class.Ordinal.Order.
+Module COO := ZF.Class.Ordinal.Order.WFWO.
 
 Module SOI := ZF.Set.Order.Isom.
 Module SOW := ZF.Set.Order.WellOrdering.

@@ -5,8 +5,8 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.E.
-Require Import ZF.Class.Ordinal.Order.
+Require Import ZF.Class.Ordinal.Order.E.
+Require Import ZF.Class.Ordinal.Order.WFWO.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Function.
@@ -16,11 +16,11 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
-Module COO := ZF.Class.Ordinal.Order.
-Module COE := ZF.Class.Ordinal.E.
+Module COE := ZF.Class.Ordinal.Order.E.
+Module COW := ZF.Class.Ordinal.Order.WFWO.
 
 (* The class A is intended to be a class of ordinals.                           *)
-Definition SmallestFresh (A:Class) : Class := COO.SmallestFresh E A.
+Definition SmallestFresh (A:Class) : Class := COW.SmallestFresh E A.
 
 (* With appropriate assumptions, the isomorphism between On and A.              *)
 Definition RecurseSmallestFresh (A:Class) : Class := Recursion (SmallestFresh A).
@@ -29,14 +29,14 @@ Definition RecurseSmallestFresh (A:Class) : Class := Recursion (SmallestFresh A)
 Proposition IsFunction : forall (A:Class),
   A :<=: On -> Function (SmallestFresh A).
 Proof.
-  intros A H1. apply COO.IsFunction, COE.IsTotal. assumption.
+  intros A H1. apply COW.IsFunction, COE.IsTotal. assumption.
 Qed.
 
 (* RecurseSmallestFresh is a function class defined on the class of ordinals.   *)
 Proposition IsFunctionOn : forall (A G:Class),
   G :~: RecurseSmallestFresh A  -> FunctionOn G On.
 Proof.
-  intros A G H1. apply COO.IsFunctionOn with E A. assumption.
+  intros A G H1. apply COW.IsFunctionOn with E A. assumption.
 Qed.
 
 (* RecurseSmallestFresh is SmallestFresh-recursive.                             *)
@@ -45,7 +45,7 @@ Proposition IsRecursive : forall (A F G:Class),
   G :~: RecurseSmallestFresh A        ->
   forall a, On a -> G!a = F!(G:|:a).
 Proof.
-  intros A F G H1 H2. apply COO.IsRecursive with E A; assumption.
+  intros A F G H1 H2. apply COW.IsRecursive with E A; assumption.
 Qed.
 
 (* RecurseSmallestFresh is an isomorphism from On to A.                         *)
@@ -55,7 +55,7 @@ Proposition IsIsom : forall (A G:Class),
   G :~: RecurseSmallestFresh A  ->
   Isom G E E On A.
 Proof.
-  intros A G H1 H2 H3. apply COO.IsIsom; try assumption.
+  intros A G H1 H2 H3. apply COW.IsIsom; try assumption.
   apply COE.IsWellFoundedWellOrd. assumption.
 Qed.
 
@@ -66,7 +66,7 @@ Proposition IsUnique : forall (A G:Class),
   Isom G E E On A                 ->
   G :~: RecurseSmallestFresh A.
 Proof.
-  intros A G H1 H2 H3. apply COO.IsUnique; try assumption.
+  intros A G H1 H2 H3. apply COW.IsUnique; try assumption.
   apply COE.IsWellFoundedWellOrd. assumption.
 Qed.
 
@@ -80,6 +80,6 @@ Proposition WhenSmall : forall (A:Class),
       g = (RecurseSmallestFresh A :|: a) ->
       Isom (toClass g) E E (toClass a) A.
 Proof.
-  intros A H1 H2. apply COO.WhenSmall. 1: assumption.
+  intros A H1 H2. apply COW.WhenSmall. 1: assumption.
   apply COE.IsWellOrdering. assumption.
 Qed.
