@@ -2,19 +2,29 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Founded.
+Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Function.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.OneToOne.
+Require Import ZF.Class.Relation.Range.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Single.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
@@ -132,5 +142,65 @@ Qed.
 (* Le is not well-founded on On x On.                                           *)
 Proposition IsNotWellFounded : ~ WellFounded Le (On :x: On).
 Proof.
-Admitted.
+  intros [_ H1].
+  assert ((On :x: On) :(:1:,:0:):) as H2. {
+    apply Prod.Charac2. split.
+    - apply Natural.OneIsOrdinal.
+    - apply Natural.ZeroIsOrdinal. }
+  specialize (H1 :(:1:,:0:): H2). clear H2.
+  remember (fun x => exists a, On a /\ x = :(:0:,a):) as A eqn:H2.
+  assert (forall y z, A :(y,z): <-> y = :0: /\ On z) as H3. {
+    intros y z. split; intros H3.
+    - rewrite H2 in H3. destruct H3 as [a [H3 H4]].
+      apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H5]. subst.
+      split. 2: assumption. reflexivity.
+    - destruct H3 as [H3 H4]. subst. exists z.
+      split. 1: assumption. reflexivity. }
+  assert (A :~: initSegment Le (On :x: On) :(:1:,:0:):) as H4. {
+    intros x. split; intros H4.
+    - rewrite H2 in H4. destruct H4 as [a [H4 H5]].
+      apply InitSegment.Charac. split.
+      + subst. apply Prod.Charac2. split. 2: assumption.
+        apply Natural.ZeroIsOrdinal.
+      + subst. apply Charac4. left. apply Succ.IsIn.
+    - apply InitSegment.Charac in H4. destruct H4 as [[a [b [H4 [H5 H6]]]] H7].
+      subst. apply Charac4 in H7. destruct H7 as [H7|[H7 H8]].
+      + rewrite Natural.OneExtension in H7. apply Single.Charac in H7. subst.
+        exists b. split. 1: assumption. reflexivity.
+      + apply SEM.Charac in H8. contradiction. }
+  remember (fun x => exists a, On a /\ x = :(a,:(:0:,a):):) as F eqn:H5.
+  assert (forall y z, F :(y,z): <-> On y /\ z = :(:0:,y):) as H6. {
+    intros y z. split; intros H6.
+    - rewrite H5 in H6. destruct H6 as [a [H6 H7]].
+      apply OrdPair.WhenEqual in H7. destruct H7 as [H7 H8]. subst.
+      split. 1: assumption. reflexivity.
+    - destruct H6 as [H6 H7]. subst. exists y. split. 1: assumption. reflexivity. }
+  assert (OneToOne F) as H7. {
+    split.
+    - intros x y z H7 H8. apply H6 in H7. apply H6 in H8.
+      destruct H7 as [H7 H9]. destruct H8 as [H8 H10]. subst. reflexivity.
+    - intros x y z H7 H8.
+      apply Converse.Charac2 in H7. apply Converse.Charac2 in H8.
+      apply H6 in H7. apply H6 in H8.
+      destruct H7 as [H7 H9]. destruct H8 as [H8 H10]. rewrite H9 in H10.
+      apply OrdPair.WhenEqual in H10. apply H10. }
+  assert (domain F :~: On) as H8. {
+    intros a. split; intros H8.
+    - destruct H8 as [b H8]. apply H6 in H8. apply H8.
+    - exists :(:0:,a):. apply H6. split. 1: assumption. reflexivity. }
+  assert (range F :~: A) as H9. {
+    intros b. split; intros H9.
+    - destruct H9 as [a H9]. apply H6 in H9. destruct H9 as [H9 H10].
+      rewrite H2. exists a. split; assumption.
+    - rewrite H2 in H9. destruct H9 as [a [H9 H10]].
+      exists a. apply H6. split; assumption. }
+  assert (Small (range F)) as H10. {
+    apply Small.EquivCompat with (initSegment Le (On :x: On) :(:1:,:0:):).
+    2: assumption. apply Equiv.Tran with A; apply Equiv.Sym; assumption. }
+  assert (Small On) as H11. {
+    apply Small.EquivCompat with (domain F). 1: assumption.
+    apply Function.DomainIsSmall; assumption. }
+  revert H11. apply COC.OnIsProper.
+Qed.
+
 
