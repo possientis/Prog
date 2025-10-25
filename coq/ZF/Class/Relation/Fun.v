@@ -126,6 +126,17 @@ Proof.
   intros F A B H1. apply FunctionOn.RangeIsSmall, H1.
 Qed.
 
+Proposition DomainIsSmall : forall (F A B:Class),
+  Fun F A B   ->
+  OneToOne F  ->
+  Small B     ->
+  Small A.
+Proof.
+  intros F A B [H1 H2] H3 H4.
+  apply FunctionOn.DomainIsSmall with F; try assumption.
+  apply Bounded.WhenSmaller with B; assumption.
+Qed.
+
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)
 Proposition Compose : forall (F G A B C: Class),
   Fun F A B             ->

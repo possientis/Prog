@@ -135,6 +135,15 @@ Proof.
   - apply FunctionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
+Proposition DomainIsSmall : forall (F A B:Class),
+  Onto F A B  ->
+  OneToOne F  ->
+  Small B     ->
+  Small A.
+Proof.
+  intros F A B H1. apply Fun.DomainIsSmall, IsFun. assumption.
+Qed.
+
 (* If F and G are surjections then so is the composition G.F.                   *)
 Proposition Compose : forall (F G A B C:Class),
   Onto F A B ->

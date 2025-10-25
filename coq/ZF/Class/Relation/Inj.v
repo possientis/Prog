@@ -120,6 +120,14 @@ Proof.
   intros F A B H1. apply BijectionOn.RangeIsSmall, H1.
 Qed.
 
+Proposition DomainIsSmall : forall (F A B:Class),
+  Inj F A B -> Small B -> Small A.
+Proof.
+  intros F A B H1. apply Fun.DomainIsSmall with F.
+  - apply IsFun. assumption.
+  - apply H1.
+Qed.
+
 (* If F and G are injections then so is the composition G.F.                    *)
 Proposition Compose : forall (F G A B C:Class),
   Inj F A B ->

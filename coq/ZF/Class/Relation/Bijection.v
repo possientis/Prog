@@ -89,6 +89,12 @@ Proof.
   intros F H1. apply Function.RangeIsSmall, IsFunction. assumption.
 Qed.
 
+Proposition DomainIsSmall : forall (F:Class),
+  Bijection F -> Small (range F) -> Small (domain F).
+Proof.
+  intros F H1. apply Function.DomainIsSmall, H1.
+Qed.
+
 (* The composition of two one-to-one classes is a bijection class.              *)
 Proposition OneToOneCompose : forall (F G:Class),
   OneToOne F -> OneToOne G -> Bijection (G :.: F).

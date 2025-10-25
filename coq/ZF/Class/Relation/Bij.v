@@ -154,6 +154,14 @@ Proof.
   - apply BijectionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
+Proposition DomainIsSmall : forall (F A B:Class),
+  Bij F A B -> Small B -> Small A.
+Proof.
+  intros F A B H1. apply Fun.DomainIsSmall with F.
+  - apply IsFun. assumption.
+  - apply H1.
+Qed.
+
 Proposition Compose : forall (F G A B C:Class),
   Bij F A B -> Bij G B C -> Bij (G :.: F) A C.
 Proof.

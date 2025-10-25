@@ -109,6 +109,14 @@ Proof.
   - apply ImageIsSmall with A; assumption.
 Qed.
 
+Proposition DomainIsSmall : forall (F A:Class),
+  BijectionOn F A -> Small (range F)  -> Small A.
+Proof.
+  intros F A H1. apply FunctionOn.DomainIsSmall.
+  - apply IsFunctionOn. assumption.
+  - apply H1.
+Qed.
+
 Proposition Compose : forall (F G A B:Class),
   BijectionOn F A ->
   BijectionOn G B ->
