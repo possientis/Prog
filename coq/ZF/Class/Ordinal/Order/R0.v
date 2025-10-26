@@ -1,21 +1,36 @@
-Require Import ZF.Class.Incl.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
+Require Import ZF.Class.Order.Founded.
+Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
+Require Import ZF.Class.Order.Total.
+Require Import ZF.Class.Order.WellFounded.
+Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Order.Le.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Max.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Prod.
 Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
+Module CPR := ZF.Class.Prod.
+Module SEM := ZF.Set.Empty.
+Module SIN := ZF.Set.Incl.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SOS := ZF.Set.Ordinal.Succ.
+Module SPR := ZF.Set.Prod.
 
 (* Class to be used as order on On x On.                                        *)
 Definition R0 : Class := fun x =>
@@ -69,7 +84,7 @@ Proof.
   remember (fun c => exists a b, c = a :\/: b /\ A :(a,b):) as B eqn:H3.
   assert (B :<=: On) as H4. {
     intros x H4. rewrite H3 in H4. destruct H4 as [a [b [H4 H5]]].
-    subst. apply H1 in H5. apply Prod.Charac2 in H5. destruct H5 as [H5 H6].
+    subst. apply H1 in H5. apply CPR.Charac2 in H5. destruct H5 as [H5 H6].
     apply Max.IsOrdinal; assumption. }
   assert (B :<>: :0:) as H5. {
     apply CEM.HasElem in H2. destruct H2 as [x H2].
@@ -126,3 +141,73 @@ Proof.
   exists a. exists b. split. 1: assumption. split; assumption.
 Qed.
 
+(* R0 is founded on On x On.                                                    *)
+Proposition IsFounded : Founded R0 (On :x: On).
+Proof.
+  intros x H1 H2.
+  assert (exists a b, On a /\ On b /\ Minimal R0 (toClass x) :(a,b):) as H3. {
+    apply HasMinimal. 1: assumption. apply SEM.NotEmptyToClass. assumption. }
+  destruct H3 as [a [b [H3 [H4 H5]]]].
+  exists :(a,b):. assumption.
+Qed.
+
+(* R0 is total om On x On.                                                      *)
+Proposition IsTotal : Total R0 (On :x: On).
+Proof.
+  intros x y H1 H2.
+  destruct H1 as [a [b [H1 [H3 H4]]]]. destruct H2 as [c [d [H2 [H5 H6]]]]. subst.
+  assert (On (a :\/: b)) as H7. { apply Max.IsOrdinal; assumption. }
+  assert (On (c :\/: d)) as H8. { apply Max.IsOrdinal; assumption. }
+  assert (
+    a :\/: b  = c :\/: d  \/
+    a :\/: b :< c :\/: d  \/
+    c :\/: d :< a :\/: b) as H9. { apply SOC.IsTotal; assumption. }
+  destruct H9 as [H9|[H9|H9]].
+  - assert (
+    :(a,b): = :(c,d):       \/
+    Le :(:(a,b):,:(c,d):):  \/
+    Le :(:(c,d):,:(a,b):):) as H10. {
+    apply Le.IsTotal; apply CPR.Charac2; split; assumption. }
+    destruct H10 as [H10|[H10|H10]].
+    + left. assumption.
+    + right. left.  apply Charac4. right. split; assumption.
+    + right. right. apply Charac4. right. split. 2: assumption.
+      symmetry. assumption.
+  - right. left.  apply Charac4. left. assumption.
+  - right. right. apply Charac4. left. assumption.
+Qed.
+
+(* R0 is a well-ordering on On x On.                                            *)
+Proposition IsWellOrdering : WellOrdering R0 (On :x: On).
+Proof.
+  split.
+  - apply IsFounded.
+  - apply IsTotal.
+Qed.
+
+
+(* R0 is a well-founded on On x On.                                            *)
+Proposition IsWellFounded : WellFounded R0 (On :x: On).
+Proof.
+  split. 1: apply IsFounded. intros x H1.
+  destruct H1 as [a [b [H1 [H2 H3]]]]. subst.
+  remember (succ (a :\/: b)) as c eqn:H4.
+  assert (On (a :\/:b)) as G1. { apply Max.IsOrdinal; assumption. }
+  assert (On (succ (a :\/: b))) as G2. { apply Succ.IsOrdinal. assumption. }
+  assert (initSegment R0 (On :x: On) :(a,b): :<=: toClass (c :x: c)) as H5. {
+    intros x H5. apply InitSegment.Charac in H5.
+    destruct H5 as [[y [z [H5 [H6 H7]]]] H8]. subst.
+    apply Charac4 in H8. apply SPR.Charac2.
+    assert (y :\/: z :<=: a :\/: b) as H9. {
+      destruct H8 as [H8|[H8 _]].
+      - apply SOC.ElemIsIncl; assumption.
+      - rewrite H8. apply SIN.Refl. }
+    assert (y :<=: a :\/: b) as H10. {
+      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.InclL. }
+    assert (z :<=: a :\/: b) as H11. {
+      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.InclR. }
+    split; apply SOC.InclElemTran with (a :\/: b); try assumption;
+    apply Succ.IsIn. }
+  apply Bounded.WhenSmaller with (toClass (c :x: c)). 1: assumption.
+  apply Small.SetIsSmall.
+Qed.
