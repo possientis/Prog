@@ -2,15 +2,20 @@ Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
+Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFounded.
+Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Order.Le.
+Require Import ZF.Class.Ordinal.Order.WFWO.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -37,6 +42,9 @@ Definition R0 : Class := fun x =>
   exists a b c d, x = :( :(a,b): , :(c,d): ):                 /\
     (a :\/: b :< c :\/: d                                     \/
     (a :\/: b  = c :\/: d /\ Le :( :(a,b): , :(c,d): ): )).
+
+(* Will be seen to be an order isomorpshism from On x On to On.                 *)
+Definition J0 : Class := (WFWO.RecurseSmallestFresh R0 (On :x: On))^:-1:.
 
 Proposition Charac2 : forall (x y:U),
   R0 :(x,y): <->
@@ -186,7 +194,7 @@ Proof.
 Qed.
 
 
-(* R0 is a well-founded on On x On.                                            *)
+(* R0 is well-founded on On x On.                                               *)
 Proposition IsWellFounded : WellFounded R0 (On :x: On).
 Proof.
   split. 1: apply IsFounded. intros x H1.
@@ -210,4 +218,20 @@ Proof.
     apply Succ.IsIn. }
   apply Bounded.WhenSmaller with (toClass (c :x: c)). 1: assumption.
   apply Small.SetIsSmall.
+Qed.
+
+(* R0 is a well-founded well-ordering on On x On.                               *)
+Proposition IsWellFoundedWellOrd : WellFoundedWellOrd R0 (On :x: On).
+Proof.
+  split.
+  - apply IsWellFounded.
+  - apply IsWellOrdering.
+Qed.
+
+(* J0 is an order isomorphism from On x On to On.                               *)
+Proposition IsIsom : Isom J0 R0 E (On :x: On) On.
+Proof.
+  apply Isom.Converse, WFWO.IsIsom. 3: apply Equiv.Refl.
+  - apply IsWellFoundedWellOrd.
+  - apply Core.OnSquaredIsProper.
 Qed.

@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
@@ -15,10 +16,18 @@ Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Transitive.
+Require Import ZF.Class.Prod.
 Require Import ZF.Class.Proper.
+Require Import ZF.Class.Relation.Converse.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Function.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.OneToOne.
+Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
@@ -385,3 +394,42 @@ Proof.
     rewrite H6 in H2. assumption.
 Qed.
 
+(* On x On is a proper class.                                                   *)
+Proposition OnSquaredIsProper : Proper (On :x: On).
+Proof.
+  intros H1.
+  remember (fun x => exists a, On a /\ x = :(a, :(a,:0:):):) as F eqn:H2.
+  assert (forall x y, F :(x,y): <-> On x /\ y = :(x,:0:):) as H3. {
+    intros x y. split; intros H3.
+    - rewrite H2 in H3. destruct H3 as [a [H3 H4]].
+      apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H5]. subst.
+      split. 1: assumption. reflexivity.
+    - destruct H3 as [H3 H4]. rewrite H2. exists x. split. 1: assumption.
+      subst. reflexivity. }
+  assert (On :0:) as H4. {
+    apply EquivCompat with :0:.
+    - apply Equiv.Sym, Empty.ToClass.
+    - apply ZeroIsOrdinal. }
+  assert (range F :<=: On :x: On) as H5. {
+    intros y [x H5]. apply H3 in H5. destruct H5 as [H5 H6]. subst.
+    apply Prod.Charac2. split; assumption. }
+  assert (Small (range F)) as H6. {
+    apply Bounded.WhenSmaller with (On :x: On); assumption. }
+  assert (domain F :~: On) as H7. {
+    intros x. split; intros H7.
+    - destruct H7 as [y H7]. apply H3 in H7. apply H7.
+    - exists :(x,:0:):. apply H3. split. 1: assumption. reflexivity. }
+  assert (OneToOne F) as H8. {
+    split.
+    - intros x y z H8 H9. apply H3 in H8. apply H3 in H9.
+      destruct H8 as [_ H8]. destruct H9 as [_ H9]. subst. reflexivity.
+    - intros y u v H8 H9.
+      apply Converse.Charac2 in H8. apply Converse.Charac2 in H9.
+      apply H3 in H8. apply H3 in H9.
+      destruct H8 as [_ H8]. destruct H9 as [_ H9].
+      rewrite H8 in H9. apply OrdPair.WhenEqual in H9. apply H9. }
+  assert (Small (domain F)) as H9. { apply Function.DomainIsSmall; assumption. }
+  assert (Small On) as H10. {
+    apply Small.EquivCompat with (domain F); assumption. }
+  revert H10. apply OnIsProper.
+Qed.
