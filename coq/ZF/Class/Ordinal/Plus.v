@@ -1,5 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Ordinal.Succ.
 Require Import ZF.Class.Relation.FunctionOn.
@@ -7,6 +8,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -15,6 +17,7 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
+Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
 Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* The function class (a + .) when a is an ordinal.                             *)
@@ -32,6 +35,7 @@ Proof.
   intros a. apply Recursion2.WhenZero.
 Qed.
 
+(* a + (succ b) = succ (a + b).                                                 *)
 Proposition WhenSucc : forall (a b:U), On b ->
   (Plus a)!(succ b) = succ ((Plus a)!b).
 Proof.
@@ -41,6 +45,7 @@ Proof.
   rewrite H2. apply Succ.Eval.
 Qed.
 
+(* a + b = \/_{c :< b} a + c when b is a limit ordinal.                         *)
 Proposition WhenLimit : forall (a b:U), Limit b ->
   (Plus a)!b = :\/:_{b} (Plus a).
 Proof.
@@ -63,4 +68,3 @@ Proposition RestrictIsFunctionOn : forall (a b:U), On b ->
 Proof.
   intros a b. apply Recursion2.RestrictIsFunctionOn.
 Qed.
-

@@ -19,6 +19,9 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 Export ZF.Notation.N.
 
+Module COT := ZF.Class.Ordinal.Transitive.
+Module COO := ZF.Class.Ordinal.Omega.
+
 (* The set defined by the small class N. The set of natural numbers 0,1,2,...   *)
 Definition omega : U := fromClass :N Omega.IsSmall.
 
@@ -45,21 +48,21 @@ Proposition Charac2 : forall (n:U), Ordinal n ->
   n :< :N <-> forall (a:U), Ordinal a -> a :<=: n -> NonLimit a.
 Proof.
   intros n H1. split; intros H2.
-  - apply FromClass.Charac in H2. apply Class.Ordinal.Omega.Charac; assumption.
-  - apply FromClass.Charac. apply Class.Ordinal.Omega.Charac; assumption.
+  - apply FromClass.Charac in H2. apply COO.Charac; assumption.
+  - apply FromClass.Charac. apply COO.Charac; assumption.
 Qed.
 
 (* 0 is a natural number.                                                       *)
 Proposition HasZero : :0: :< :N.
 Proof.
-  apply FromClass.Charac, Class.Ordinal.Omega.HasZero.
+  apply FromClass.Charac, COO.HasZero.
 Qed.
 
 (* The successor of a natural number is a natural number.                       *)
 Proposition HasSucc : forall (n:U), n :< :N -> succ n :< :N.
 Proof.
   intros n H1. apply FromClass.Charac in H1. apply FromClass.Charac.
-  apply Class.Ordinal.Omega.HasSucc. assumption.
+  apply COO.HasSucc. assumption.
 Qed.
 
 (* The set N is not empty.                                                      *)
@@ -73,9 +76,9 @@ Qed.
 (* N is a transitive set.                                                       *)
 Proposition IsTransitive : Transitive :N.
 Proof.
-  apply Transitive.EquivCompat with :N.
+  apply Transitive.ToClass, COT.EquivCompat with :N.
   - apply Equiv.Sym, ToClass.
-  - apply Class.Ordinal.Omega.IsTransitive.
+  - apply COO.IsTransitive.
 Qed.
 
 (* The set N is an ordinal.                                                     *)
@@ -83,7 +86,7 @@ Proposition IsOrdinal : Ordinal :N.
 Proof.
   apply Core.EquivCompat with :N.
   - apply Equiv.Sym, ToClass.
-  - apply Class.Ordinal.Omega.IsOrdinal.
+  - apply COO.IsOrdinal.
 Qed.
 
 (* Every element of N is an ordinal.                                            *)
@@ -129,7 +132,7 @@ Proposition IsIncl : forall (a:U),
 Proof.
   intros a H1 H2. apply Incl.EquivCompatR with :N.
   - apply Equiv.Sym, ToClass.
-  - apply Class.Ordinal.Omega.IsIncl; assumption.
+  - apply COO.IsIncl; assumption.
 Qed.
 
 (* Principle of induction over the natural numbers.                             *)
@@ -140,7 +143,7 @@ Proposition Induction : forall (A:Class),
 Proof.
   intros A H1 H2. apply Incl.EquivCompatL with :N.
   - apply Equiv.Sym, ToClass.
-  - apply Class.Ordinal.Omega.Induction. 1: assumption.
+  - apply COO.Induction. 1: assumption.
     intros n H3. apply H2. apply FromClass.Charac. assumption.
 Qed.
 
@@ -152,7 +155,7 @@ Proposition FiniteInduction : forall (A:Class),
   A :~: toClass :N.
 Proof.
   intros A H1 H2 H3. apply Equiv.Tran with :N. 2: { apply Equiv.Sym, ToClass. }
-  apply Class.Ordinal.Omega.FiniteInduction; try assumption.
+  apply COO.FiniteInduction; try assumption.
   apply Incl.EquivCompatR with (toClass :N). 2: assumption. apply ToClass.
 Qed.
 
