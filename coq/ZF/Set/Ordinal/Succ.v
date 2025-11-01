@@ -12,6 +12,8 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 
+Module COC := ZF.Class.Ordinal.Core.
+
 Definition succ (a:U) : U := a :\/: :{a}:.
 
 (* A set (ordinal or not) belongs to its successor.                             *)
@@ -30,6 +32,20 @@ Qed.
 Proposition IsIncl : forall (a:U), a :<=: succ a.
 Proof.
   intros a.  apply Union2.InclL.
+Qed.
+
+(* The successor of an ordinal is an ordinal.                                   *)
+Proposition IsOrdinal : forall (a:U), Ordinal a ->
+  Ordinal (succ a).
+Proof.
+  apply COC.Succ.
+Qed.
+
+Proposition HasZero : forall (a:U), Ordinal a -> :0: :< succ a.
+Proof.
+  intros a H1. apply Core.HasZero.
+  - apply IsOrdinal. assumption.
+  - apply IsNotEmpty.
 Qed.
 
 (* The successor operation is injective.                                        *)
@@ -56,12 +72,6 @@ Proof.
   - apply Single.Charac in H2. subst. apply NoElemLoop1 with a. assumption.
 Qed.
 
-(* The successor of an ordinal is an ordinal.                                   *)
-Proposition IsOrdinal : forall (a:U), Ordinal a ->
-  Ordinal (succ a).
-Proof.
-  apply Class.Ordinal.Core.Succ.
-Qed.
 
 Proposition IsOrdinalRev : forall (a:U),
   Ordinal (succ a) -> Ordinal a.

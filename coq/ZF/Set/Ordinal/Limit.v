@@ -5,6 +5,7 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
@@ -70,6 +71,20 @@ Proof.
   - apply HasSucc; assumption.
 Qed.
 
+Proposition InclIsElem : forall (a b:U),
+  Limit a -> Ordinal b -> succ b :<=: a -> succ b :< a.
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal a) as H4. { apply H1. }
+  assert (Ordinal (succ b)) as H5. { apply Succ.IsOrdinal. assumption. }
+  assert (succ b = a \/ succ b :< a \/ a :< succ b) as H6. {
+    apply Core.IsTotal; assumption. }
+  destruct H6 as [H6|[H6|H6]]. 2: assumption.
+  - exfalso. apply NotBoth with a. 1: assumption. right.
+    exists b. split. 1: assumption. symmetry. assumption.
+  - exfalso. apply NoElemLoop1 with a. apply H3. assumption.
+Qed.
+
 Proposition ThreeWay : forall (a:U), Ordinal a ->
   a = :0: \/ a = succ :U(a) \/ Limit a.
 Proof.
@@ -96,3 +111,4 @@ Proposition HasOne : forall (a:U),
 Proof.
   intros a H1. apply HasSucc. 1: assumption. apply HasZero. assumption.
 Qed.
+

@@ -27,11 +27,15 @@ Proof.
 Qed.
 
 Proposition Induction2' : forall (A:Class) (b:U),
-  On b                                                                ->
-  :0: :< b                                                            ->
-  A b                                                                 ->
-  (forall a, On a -> b :<=: a -> A a -> A (succ a))                   ->
-  (forall a, Limit a -> (forall x, b :<=: x -> x :< a -> A x) -> A a) ->
+  On b                                                                    ->
+  :0: :< b                                                                ->
+  A b                                                                     ->
+  (forall a, On a -> b :<=: a -> A a -> A (succ a))                       ->
+  (forall a,
+    Limit a                               ->
+    b :<=: a                              ->
+    (forall x, b :<=: x -> x :< a -> A x) ->
+    A a                                    )                              ->
   forall a, On a -> b :<=: a -> A a.
 Proof.
   intros A b H1 H2 H3 H4 H5.
@@ -59,7 +63,7 @@ Proof.
       assert (On a) as G1. { apply H7. }
       assert (a :< b \/ b :<=: a) as H9. { apply Core.ElemOrIncl; assumption. }
       destruct H9 as [H9|H9]. 1: { left. assumption. }
-      right. apply H5. 1: assumption. intros x H10 H11.
+      right. apply H5; try assumption. intros x H10 H11.
       assert (x :< b \/ A x) as H12. { apply H8. assumption. }
       destruct H12 as [H12|H12]. 2: assumption.
       exfalso. apply NoElemLoop1 with x. apply H10. assumption. }

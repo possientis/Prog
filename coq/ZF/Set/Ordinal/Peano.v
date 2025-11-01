@@ -10,13 +10,13 @@ Require Import ZF.Set.Ordinal.Succ.
 (* 0 belongs to N.                                                              *)
 Proposition Peano1 : :0: :< :N.
 Proof.
-  apply HasZero.
+  apply Omega.HasZero.
 Qed.
 
 (* Every element has a successor.                                               *)
 Proposition Peano2 : forall (n:U), n :< :N -> succ n :< :N.
 Proof.
-  apply HasSucc.
+  apply Omega.HasSucc.
 Qed.
 
 (* 0 is a not a successor.                                                      *)

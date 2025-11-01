@@ -3,6 +3,7 @@ Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Plus.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
@@ -69,4 +70,28 @@ Proof.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     rewrite <- SOU.WhenLimit. 2: assumption.
     apply SUC.EqualCharac. intros x. rewrite I.Eval. apply H2.
+Qed.
+
+Proposition ElemCompatL : forall (a b c:U),
+  Ordinal a                     ->
+  Ordinal b                     ->
+  Ordinal c                     ->
+  a :< b -> c :+: a :< c :+: b.
+Proof.
+  intros a b c H1 H2 H3 H4. apply Succ.ElemIsIncl in H4; try assumption.
+  assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
+  revert b H2 H4.
+  apply Induction2'. 1: assumption.
+  - apply Succ.HasZero. assumption.
+  - rewrite WhenSucc. 2: assumption. apply Succ.IsIn.
+  - intros b H6 H7 H8. rewrite WhenSucc. 2: assumption.
+    assert (Ordinal (c :+: a)) as H9.  { apply IsOrdinal; assumption. }
+    assert (Ordinal (c :+: b)) as H10. { apply IsOrdinal; assumption. }
+    apply ElemElemTran with (c :+: b); try assumption.
+    + apply Succ.IsOrdinal. assumption.
+    + apply Succ.IsIn.
+  - intros b H6 H7 H8. rewrite (WhenLimit c b). 2: assumption.
+    apply Limit.InclIsElem in H7; try assumption.
+    apply UnionGenOfClass.Charac. exists (succ a). split. 1: assumption.
+    apply H8. 2: assumption. apply Incl.Refl.
 Qed.
