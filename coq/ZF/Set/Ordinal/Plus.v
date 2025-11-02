@@ -3,6 +3,7 @@ Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Plus.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
@@ -76,9 +77,9 @@ Qed.
 (* Unless you know that alpha < beta (so there is a delta in between), the last *)
 (* step of the proof cannot be justified.                                       *)
 Proposition ElemCompatR : forall (a b c:U),
-  Ordinal a                     ->
-  Ordinal b                     ->
-  Ordinal c                     ->
+  Ordinal a                       ->
+  Ordinal b                       ->
+  Ordinal c                       ->
   a :< b -> c :+: a :< c :+: b.
 Proof.
   intros a b c H1 H2 H3 H4. apply Succ.ElemIsIncl in H4; try assumption.
@@ -98,3 +99,21 @@ Proof.
     apply UnionGenOfClass.Charac. exists (succ a). split. 1: assumption.
     apply H8. 2: assumption. apply Incl.Refl.
 Qed.
+
+Proposition CancelL : forall (a b c:U),
+  Ordinal a           ->
+  Ordinal b           ->
+  Ordinal c           ->
+  c :+: a = c :+: b   ->
+  a = b.
+Proof.
+  intros a b c H1 H2 H3 H4.
+  assert (Ordinal (c :+: a)) as H5. { apply IsOrdinal; assumption. }
+  assert (Ordinal (c :+: b)) as H6. { apply IsOrdinal; assumption. }
+  assert (a = b \/ a :< b \/ b :< a) as H7. { apply Core.IsTotal; assumption. }
+  destruct H7 as [H7|[H7|H7]]; try assumption; exfalso;
+  apply (ElemCompatR _ _ c) in H7; try assumption; rewrite H4 in H7; revert H7;
+  apply NoElemLoop1.
+Qed.
+
+
