@@ -134,5 +134,6 @@ Proof.
     apply Succ.InclCompat; assumption.
   - intros c H5 H6.
     rewrite WhenLimit. 2: assumption. rewrite WhenLimit. 2: assumption.
-    intros d H7. apply UnionGenOfClass.Charac in H7.
-Admitted.
+    apply UnionGenOfClass.InclCompatR. assumption.
+Qed.
+
