@@ -69,3 +69,29 @@ Proof.
     subst. reflexivity.
 Qed.
 
+Proposition InclCompat : forall (A B C D:Class),
+  A :<=: C                        ->
+  (forall x, A x -> B!x :<=: D!x) ->
+  :\/:_{A} B :<=: :\/:_{C} D.
+Proof.
+  intros A B C D H1 H2 y H3.
+  apply Charac in H3. destruct H3 as [x [H3 H4]].
+  apply Charac. exists x. split.
+  - apply H1. assumption.
+  - apply H2; assumption.
+Qed.
+
+Proposition InclCompatL : forall (A B C:Class),
+  A :<=: C  -> :\/:_{A} B :<=: :\/:_{C} B.
+Proof.
+  intros A B C H1. apply InclCompat. 1: assumption.
+  intros x _. apply Incl.Refl.
+Qed.
+
+Proposition InclCompatR : forall (A B C:Class),
+  (forall x, A x -> B!x :<=: C!x) -> :\/:_{A} B :<=: :\/:_{A} C.
+Proof.
+  intros A B C H1. apply InclCompat. 2: assumption.
+  apply Class.Incl.Refl.
+Qed.
+

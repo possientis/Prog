@@ -34,3 +34,29 @@ Proposition IsIncl : forall (a b x:U),
 Proof.
   intros a b. apply UnionGenOfClass.IsIncl.
 Qed.
+
+Proposition InclCompat : forall (a b c d:U),
+  a :<=: c                            ->
+  (forall x, x :< a -> b!x :<=: d!x)  ->
+  :\/:_{a} b  :<=: :\/:_{c} d.
+Proof.
+  intros a b c d H1 H2 y H3.
+  apply Charac in H3. destruct H3 as [x [H3 H4]].
+  apply Charac. exists x. split.
+  - apply H1. assumption.
+  - apply H2; assumption.
+Qed.
+
+Proposition InclCompatL : forall (a b c:U),
+  a :<=: c -> :\/:_{a} b :<=: :\/:_{c} b.
+Proof.
+  intros a b c H1. apply InclCompat. 1: assumption.
+  intros x _. apply Incl.Refl.
+Qed.
+
+Proposition InclCompatR : forall (a b c:U),
+  (forall x, x :< a -> b!x :<=: c!x)  -> :\/:_{a} b :<=: :\/:_{a} c.
+Proof.
+  intros a b c H1. apply InclCompat. 2: assumption.
+  apply Class.Incl.Refl.
+Qed.

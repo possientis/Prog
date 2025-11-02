@@ -39,3 +39,29 @@ Proposition IsIncl : forall (A:Class) (a x:U),
 Proof.
   intros A a x H1 y H2. apply Charac. exists x. split; assumption.
 Qed.
+
+Proposition InclCompat : forall (A B:Class) (a b:U),
+  a :<=: b                            ->
+  (forall x, x :< a -> A!x :<=: B!x)  ->
+  :\/:_{a} A  :<=: :\/:_{b} B.
+Proof.
+  intros A B a b H1 H2 y H3.
+  apply Charac in H3. destruct H3 as [x [H3 H4]].
+  apply Charac. exists x. split.
+  - apply H1. assumption.
+  - apply H2; assumption.
+Qed.
+
+Proposition InclCompatL : forall (A:Class) (a b:U),
+  a :<=: b -> :\/:_{a} A :<=: :\/:_{b} A.
+Proof.
+  intros A B C H1. apply InclCompat. 1: assumption.
+  intros x _. apply Incl.Refl.
+Qed.
+
+Proposition InclCompatR : forall (A B:Class) (a:U),
+  (forall x, x :< a -> A!x :<=: B!x)  -> :\/:_{a} A :<=: :\/:_{a} B.
+Proof.
+  intros A B C H1. apply InclCompat. 2: assumption.
+  apply Class.Incl.Refl.
+Qed.

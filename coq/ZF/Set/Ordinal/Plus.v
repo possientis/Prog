@@ -77,10 +77,11 @@ Qed.
 (* Unless you know that alpha < beta (so there is a delta in between), the last *)
 (* step of the proof cannot be justified.                                       *)
 Proposition ElemCompatR : forall (a b c:U),
-  Ordinal a                       ->
-  Ordinal b                       ->
-  Ordinal c                       ->
-  a :< b -> c :+: a :< c :+: b.
+  Ordinal a             ->
+  Ordinal b             ->
+  Ordinal c             ->
+  a :< b                ->
+  c :+: a :< c :+: b.
 Proof.
   intros a b c H1 H2 H3 H4. apply Succ.ElemIsIncl in H4; try assumption.
   assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
@@ -116,4 +117,22 @@ Proof.
   apply NoElemLoop1.
 Qed.
 
-
+Proposition InclCompatL : forall (a b c:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Ordinal c               ->
+  a :<=: b                ->
+  a :+: c :<=: b :+: c.
+Proof.
+  intros a b c H1 H2 H3 H4. revert c H3.
+  apply Induction2.
+  - rewrite WhenZeroR, WhenZeroR. assumption.
+  - intros c H5 H6.
+    assert (Ordinal (a :+: c)) as H7. { apply IsOrdinal; assumption. }
+    assert (Ordinal (b :+: c)) as H8. { apply IsOrdinal; assumption. }
+    rewrite WhenSucc. 2: assumption. rewrite WhenSucc. 2: assumption.
+    apply Succ.InclCompat; assumption.
+  - intros c H5 H6.
+    rewrite WhenLimit. 2: assumption. rewrite WhenLimit. 2: assumption.
+    intros d H7. apply UnionGenOfClass.Charac in H7.
+Admitted.
