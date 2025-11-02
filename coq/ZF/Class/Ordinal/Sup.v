@@ -103,3 +103,12 @@ Proof.
   - apply Equiv.Sym, WhenOrdinalElem, Class.Incl.Refl.
   - apply Ordinal.Union.IsOn.
 Qed.
+
+Proposition Compare : forall (A B:Class),
+  (forall a, On a -> A a -> exists b, On b /\ B b /\ a :<=: b) ->
+  sup A :<=: sup B.
+Proof.
+  intros A B H1 c H2. destruct H2 as [a [H2 [H3 H4]]].
+  specialize (H1 a H4 H3). destruct H1 as [b [H1 [H5 H6]]].
+  exists b. split. 2: { split; assumption. } apply H6. assumption.
+Qed.

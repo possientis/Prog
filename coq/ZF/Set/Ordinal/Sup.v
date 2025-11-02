@@ -11,6 +11,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
+Module COS := ZF.Class.Ordinal.Sup.
 
 (* The supremum of the set a.                                                   *)
 Definition sup (a:U) : U := :U( :{ a | Ordinal }: ).
@@ -29,13 +30,13 @@ Qed.
 
 (* The supremum of the class is the class of the supremum.                      *)
 Proposition ToClass : forall (a:U),
-  Class.Ordinal.Sup.sup (toClass a) :~: toClass (sup a).
+   toClass (sup a) :~: COS.sup (toClass a).
 Proof.
   intros a x. split; intros H1.
-  - destruct H1 as [y [H1 [H2 H3]]]. apply Charac. exists y.
-    split. 1: assumption. split; assumption.
   - apply Charac in H1. destruct H1 as [y [H1 [H2 H3]]].
     exists y. split. 1: assumption. split; assumption.
+  - destruct H1 as [y [H1 [H2 H3]]]. apply Charac. exists y.
+    split. 1: assumption. split; assumption.
 Qed.
 
 (* The supremum of an ordinal is simply its union.                              *)
@@ -127,3 +128,18 @@ Proof.
   intros a H1. rewrite WhenOrdinal. 2: assumption.
   apply UnionOf.IsIncl. assumption.
 Qed.
+
+Proposition Compare : forall (a b:U),
+  (forall x,
+    Ordinal x                                   ->
+    x :< a                                      ->
+    exists y, y :< b /\ Ordinal y /\ x :<=: y)  ->
+  sup a :<=: sup b.
+Proof.
+  intros a b H1 c H2. apply Charac in H2. destruct H2 as [x [H2 [H3 H4]]].
+  specialize (H1 x H4 H3). destruct H1 as [y [H1 [H5 H6]]].
+  apply Charac. exists y. split. 2: { split; assumption. } apply H6. assumption.
+Qed.
+
+
+
