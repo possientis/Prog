@@ -1,3 +1,4 @@
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Plus.
@@ -9,15 +10,18 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Plus.
 Export ZF.Notation.Plus.
 
 Module COP := ZF.Class.Ordinal.Plus.
-Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
+Module SOO := ZF.Set.Ordinal.UnionOf.
+Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 Module SUC := ZF.Set.UnionGenOfClass.
 
 (* The sum of two ordinals when a is an ordinal.                                *)
@@ -59,7 +63,7 @@ Proof.
   - intros b H2 H3. rewrite WhenSucc. 2: assumption.
     apply Succ.IsOrdinal. assumption.
   - intros b H2 H3. rewrite WhenLimit. 2: assumption.
-    apply SOU.IsOrdinal. intros c H4. apply H3. assumption.
+    apply SOG.IsOrdinal. intros c H4. apply H3. assumption.
 Qed.
 
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
@@ -69,7 +73,7 @@ Proof.
   - apply WhenZeroR.
   - intros a H1 H2. rewrite WhenSucc. 2: assumption. rewrite H2. reflexivity.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
-    rewrite <- SOU.WhenLimit. 2: assumption.
+    rewrite <- SOG.WhenLimit. 2: assumption.
     apply SUC.EqualCharac. intros x. rewrite I.Eval. apply H2.
 Qed.
 
@@ -135,5 +139,49 @@ Proof.
   - intros c H5 H6.
     rewrite WhenLimit. 2: assumption. rewrite WhenLimit. 2: assumption.
     apply UnionGenOfClass.InclCompatR. assumption.
+Qed.
+
+Proposition CompleteR : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b -> exists c, Ordinal c /\ a :+: c = b.
+Proof.
+  intros a b H1 H2 H3.
+  remember (fun c => Ordinal c /\ b :<=: a :+: c) as A eqn:H4.
+  assert (A :<=: Ordinal) as H5. { intros c H5. rewrite H4 in H5. apply H5. }
+  assert (A :<>: :0:) as H6. {
+    apply Class.Empty.HasElem. exists b. rewrite H4. split. 1: assumption.
+    assert (:0: :+: b :<=: a :+: b) as H6. {
+      apply InclCompatL; try assumption.
+      - apply Natural.ZeroIsOrdinal.
+      - intros x H6. apply Empty.Charac in H6. contradiction. }
+    rewrite WhenZeroL in H6. 2: assumption. assumption. }
+  assert (exists c, Ordinal c /\ A c /\ forall d, A d -> c :<=: d) as H7. {
+    apply Core.HasMinimal; assumption. }
+  destruct H7 as [c [H7 [H8 H9]]].
+  rewrite H4 in H8. destruct H8 as [_ H8]. rewrite H4 in H9.
+  exists c. split. 1: assumption. apply DoubleInclusion. split. 2: assumption.
+  assert (c = :0: \/ c = succ :U(c) \/ Limit c) as H10. {
+    apply Limit.ThreeWay. assumption. }
+  assert (forall d, Ordinal d -> d :< c -> a :+: d :< b) as G1. {
+    intros d H11 H12.
+    assert (Ordinal (a :+: d)) as H13. { apply IsOrdinal; assumption. }
+    assert (a :+: d :< b \/ b :<=: a :+: d) as H14. {
+      apply Core.ElemOrIncl; assumption. }
+    destruct H14 as [H14|H14]. 1: assumption.
+    exfalso. apply NoElemLoop1 with d. apply H9. 2: assumption.
+    split; assumption. }
+  destruct H10 as [H10|[H10|H10]].
+  - rewrite H10. rewrite WhenZeroR. assumption.
+  - remember (:U(c)) as d eqn:H11.
+    assert (Ordinal d) as H12. { rewrite H11. apply SOO.IsOrdinal. assumption. }
+    assert (Ordinal (a :+: d)) as H13. { apply IsOrdinal; assumption. }
+    assert (a :+: d :< b) as H14. {
+      apply G1. 1: assumption. rewrite H10. apply Succ.IsIn. }
+    apply ElemIsIncl in H14; try assumption. rewrite H10.
+    rewrite WhenSucc; assumption.
+  - rewrite WhenLimit. 2: assumption. apply UnionGenOfClass.WhenBounded.
+    intros d H15.
+    assert (Ordinal d) as H16. { apply Core.IsOrdinal with c; assumption. }
+    assert (Ordinal (a :+: d)) as H17. { apply IsOrdinal; assumption. }
+    apply Core.ElemIsIncl. 1: assumption. apply G1; assumption.
 Qed.
 

@@ -6,13 +6,16 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Union.
 
+Module COC := ZF.Class.Ordinal.Core.
+Module COU := ZF.Class.Ordinal.Union.
+
 (* The union of a set of ordinals is an ordinal.                                *)
 Proposition IsOrdinal : forall (a:U),
   toClass a :<=: Ordinal -> Ordinal :U(a).
 Proof.
-  intros a H1. apply Class.Ordinal.Core.EquivCompat with :U(toClass a).
+  intros a H1. apply COC.EquivCompat with :U(toClass a).
   - apply Union.ToClass.
-  - apply Class.Ordinal.Union.IsOrdinal. assumption.
+  - apply COU.IsOrdinal. assumption.
 Qed.
 
 (* The union of a set of ordinals is an 'upper-bound' of the set.               *)
@@ -23,7 +26,7 @@ Proposition IsUpperBound : forall (a b:U),
 Proof.
   intros a b H1 H2. apply Incl.EquivCompatR with :U(toClass a).
   - apply Union.ToClass.
-  - apply Class.Ordinal.Union.IsUpperBound; assumption.
+  - apply COU.IsUpperBound; assumption.
 Qed.
 
 (* The union of a set of ordinals is the smallest 'upper-bound'.                *)
@@ -34,5 +37,6 @@ Proposition IsSmallest : forall (a b:U),
 Proof.
   intros a b H1 H2. apply Incl.EquivCompatL with :U(toClass a).
   - apply Union.ToClass.
-  - apply Class.Ordinal.Union.IsSmallest; assumption.
+  - apply COU.IsSmallest; assumption.
 Qed.
+

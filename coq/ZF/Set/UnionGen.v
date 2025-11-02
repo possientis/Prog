@@ -60,3 +60,11 @@ Proof.
   intros a b c H1. apply InclCompat. 2: assumption.
   apply Class.Incl.Refl.
 Qed.
+
+Proposition WhenBounded : forall (a b c:U),
+  (forall x, x :< a -> b!x :<=: c) -> :\/:_{a} b :<=: c.
+Proof.
+  intros a b c H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
+  apply (H1 x); assumption.
+Qed.
+

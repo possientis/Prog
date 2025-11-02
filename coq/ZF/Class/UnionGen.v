@@ -95,3 +95,9 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
+Proposition WhenBounded : forall (A B C:Class),
+  (forall x, A x -> toClass B!x :<=: C) -> :\/:_{A} B :<=: C.
+Proof.
+  intros A B C H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
+  apply (H1 x); assumption.
+Qed.
