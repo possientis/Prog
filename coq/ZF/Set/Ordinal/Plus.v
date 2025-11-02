@@ -72,7 +72,10 @@ Proof.
     apply SUC.EqualCharac. intros x. rewrite I.Eval. apply H2.
 Qed.
 
-Proposition ElemCompatL : forall (a b c:U),
+(* ERROR: See page 58, proposition 8.4. Proof is wrong in my opinion.           *)
+(* Unless you know that alpha < beta (so there is a delta in between), the last *)
+(* step of the proof cannot be justified.                                       *)
+Proposition ElemCompatR : forall (a b c:U),
   Ordinal a                     ->
   Ordinal b                     ->
   Ordinal c                     ->
