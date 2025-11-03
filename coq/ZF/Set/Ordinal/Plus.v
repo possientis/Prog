@@ -9,6 +9,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
@@ -22,7 +23,7 @@ Export ZF.Notation.Plus.
 Module COP := ZF.Class.Ordinal.Plus.
 Module SOO := ZF.Set.Ordinal.UnionOf.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
-Module SUC := ZF.Set.UnionGenOfClass.
+Module SUG := ZF.Set.UnionGenOfClass.
 
 (* The sum of two ordinals when a is an ordinal.                                *)
 Definition plus (a b:U) : U := (COP.Plus a)!b.
@@ -74,7 +75,7 @@ Proof.
   - intros a H1 H2. rewrite WhenSucc. 2: assumption. rewrite H2. reflexivity.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     rewrite <- SOG.WhenLimit. 2: assumption.
-    apply SUC.EqualCharac. intros x. rewrite I.Eval. apply H2.
+    apply SUG.EqualCharac. intros x. rewrite I.Eval. apply H2.
 Qed.
 
 (* ERROR: See page 58, proposition 8.4. Proof is wrong in my opinion.           *)
@@ -91,7 +92,6 @@ Proof.
   assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
   revert b H2 H4.
   apply Induction2'. 1: assumption.
-  - apply Succ.HasZero. assumption.
   - rewrite WhenSucc. 2: assumption. apply Succ.IsIn.
   - intros b H6 H7 H8. rewrite WhenSucc. 2: assumption.
     assert (Ordinal (c :+: a)) as H9.  { apply IsOrdinal; assumption. }
@@ -101,7 +101,7 @@ Proof.
     + apply Succ.IsIn.
   - intros b H6 H7 H8. rewrite (WhenLimit c b). 2: assumption.
     apply Limit.InclIsElem in H7; try assumption.
-    apply UnionGenOfClass.Charac. exists (succ a). split. 1: assumption.
+    apply SUG.Charac. exists (succ a). split. 1: assumption.
     apply H8. 2: assumption. apply Incl.Refl.
 Qed.
 
@@ -138,9 +138,30 @@ Proof.
     apply Succ.InclCompat; assumption.
   - intros c H5 H6.
     rewrite WhenLimit. 2: assumption. rewrite WhenLimit. 2: assumption.
-    apply UnionGenOfClass.InclCompatR. assumption.
+    apply SUG.InclCompatR. assumption.
 Qed.
 
+Proposition InclCompatR : forall (a b c:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Ordinal c               ->
+  a :<=: b                ->
+  c :+: a :<=: c :+: b.
+Proof.
+  intros a b c H1 H2 H3. revert b H2.
+  apply Induction2'. 1: assumption.
+  - apply Incl.Refl.
+  - intros b H4 H5 H6.
+    rewrite WhenSucc. 2: assumption.
+    apply Incl.Tran with (c :+: b). 1: assumption.
+    apply Succ.IsIncl.
+  - intros b H4 H5 H6.
+    rewrite  (WhenLimit c b). 2: assumption.
+    intros x H7. apply SUG.Charac.
+Admitted.
+
+(* ERROR: see page 59 proposition 8.8. Typo in big union: 'delta <  beta'       *)
+(* should be 'delta < gamma'.                                                   *)
 Proposition CompleteR : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> exists c, Ordinal c /\ a :+: c = b.
 Proof.
@@ -178,10 +199,61 @@ Proof.
       apply G1. 1: assumption. rewrite H10. apply Succ.IsIn. }
     apply ElemIsIncl in H14; try assumption. rewrite H10.
     rewrite WhenSucc; assumption.
-  - rewrite WhenLimit. 2: assumption. apply UnionGenOfClass.WhenBounded.
+  - rewrite WhenLimit. 2: assumption. apply SUG.WhenBounded.
     intros d H15.
     assert (Ordinal d) as H16. { apply Core.IsOrdinal with c; assumption. }
     assert (Ordinal (a :+: d)) as H17. { apply IsOrdinal; assumption. }
     apply Core.ElemIsIncl. 1: assumption. apply G1; assumption.
 Qed.
 
+Proposition InOmega : forall (n m:U),
+  n :< :N -> m :< :N -> n :+: m :< :N.
+Proof.
+  intros n m H1. revert m. apply FiniteInduction'.
+  - rewrite WhenZeroR. assumption.
+  - intros m H2 H3.
+    assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal (n :+: m)) as H6. { apply IsOrdinal; assumption. }
+    rewrite WhenSucc. 2: assumption. apply Omega.HasSucc. assumption.
+Qed.
+
+Proposition InOmegaL : forall (n m:U), Ordinal n -> Ordinal m ->
+  n :+: m :< :N -> n :< :N.
+Proof.
+  intros n m H1 H2 H3.
+  apply Core.InclElemTran with (n :+: m); try assumption.
+  - apply IsOrdinal; assumption.
+  - apply Omega.IsOrdinal.
+  - assert (n :+: :0: :<=: n :+: m) as H4. {
+Admitted.
+
+Proposition WhenNaturalL : forall (n a:U), Ordinal a ->
+  n :< :N -> :N :<=: a -> n :+: a = a.
+Proof.
+  intros n a H1 H2. revert a H1.
+  apply Induction2'.
+  - apply Omega.IsOrdinal.
+  - apply DoubleInclusion. split.
+    + rewrite WhenLimit. 2: apply Omega.IsLimit.
+      apply SUG.WhenBounded. intros m H1.
+      apply Core.ElemIsIncl. 1: apply Omega.IsOrdinal.
+      apply InOmega; assumption.
+    + rewrite WhenLimit. 2: apply Omega.IsLimit. intros m H1. apply SUG.Charac.
+      assert (Ordinal n) as H3. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal m) as H4. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal (succ m)) as H5. { apply Succ.IsOrdinal. assumption. }
+      assert (succ m :< n \/ n :<=: succ m) as H6. {
+        apply Core.ElemOrIncl; assumption. }
+      destruct H6 as [H6|H6].
+      * exists :0:. split. 1: apply Omega.HasZero.
+        assert (m :< n :+: :0:) as X. 2: apply X. rewrite WhenZeroR.
+        apply Core.ElemElemTran with (succ m); try assumption.
+        apply Succ.IsIn.
+      * assert (exists p, Ordinal p /\ n :+: p = succ m) as H7. {
+          apply CompleteR; assumption. }
+        destruct H7 as [p [H7 H8]]. exists p.
+        assert (p :< :N) as H9. {
+          apply Core.InclElemTran with (succ m); try assumption.
+          - apply Omega.IsOrdinal.
+          Admitted.

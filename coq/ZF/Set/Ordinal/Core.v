@@ -5,6 +5,7 @@ Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.Empty.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
@@ -157,6 +158,15 @@ Proof.
   destruct H3 as [H3|H3]. 1: assumption. exfalso.
   apply Empty.HasElem in H2. destruct H2 as [x H2].
   apply Empty.Charac with x. apply H3. assumption.
+Qed.
+
+Proposition IsIncl : forall (a:U), Ordinal a ->
+  :0: :<=: a.
+Proof.
+  intros a H1.
+  assert (a :< :0: \/ :0: :<=: a) as H2. {
+    apply ElemOrIncl. 1: assumption. apply ZeroIsOrdinal. }
+  destruct H2 as [H2|H2]. 2: assumption. apply Empty.Charac in H2. contradiction.
 Qed.
 
 (* An non-empty class of ordinals has a minimal ordinal.                        *)

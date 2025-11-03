@@ -101,3 +101,4 @@ Proof.
   intros A B C H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
   apply (H1 x); assumption.
 Qed.
+
