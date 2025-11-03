@@ -40,7 +40,7 @@ Proposition WhenOneR : forall (a:U), a :+: :1: = succ a.
 Proof.
   intros a.
   assert (a :+: :1: = succ (a :+: :0:)) as H1. {
-    apply COP.WhenSucc, Natural.ZeroIsOrdinal. }
+    apply COP.WhenSucc, Core.ZeroIsOrdinal. }
   rewrite H1. rewrite WhenZeroR. reflexivity.
 Qed.
 
@@ -81,6 +81,7 @@ Qed.
 (* ERROR: See page 58, proposition 8.4. Proof is wrong in my opinion.           *)
 (* Unless you know that alpha < beta (so there is a delta in between), the last *)
 (* step of the proof cannot be justified.                                       *)
+(* Note: 0 + N = 1 + N despite the fact that 0 < 1. So no 'ElemCompatL'         *)
 Proposition ElemCompatR : forall (a b c:U),
   Ordinal a             ->
   Ordinal b             ->
@@ -105,6 +106,7 @@ Proof.
     apply H8. 2: assumption. apply Incl.Refl.
 Qed.
 
+(* 0 + N = 1 + N so we cannot hope to have a 'CancelR'                          *)
 Proposition CancelL : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -148,20 +150,18 @@ Proposition InclCompatR : forall (a b c:U),
   a :<=: b                ->
   c :+: a :<=: c :+: b.
 Proof.
-  intros a b c H1 H2 H3. revert b H2.
-  apply Induction2'. 1: assumption.
-  - apply Incl.Refl.
-  - intros b H4 H5 H6.
-    rewrite WhenSucc. 2: assumption.
-    apply Incl.Tran with (c :+: b). 1: assumption.
-    apply Succ.IsIncl.
-  - intros b H4 H5 H6.
-    rewrite  (WhenLimit c b). 2: assumption.
-    intros x H7. apply SUG.Charac.
-Admitted.
+  intros a b c H1 H2 H3 H4.
+  apply Core.InclIsEqualOrElem in H4; try assumption.
+  assert (Ordinal (c :+: b)) as G1. { apply IsOrdinal; assumption. }
+  destruct H4 as [H4|H4].
+  - subst. apply Incl.Refl.
+  - apply Core.ElemIsIncl. 1: assumption. apply ElemCompatR; assumption.
+Qed.
 
 (* ERROR: see page 59 proposition 8.8. Typo in big union: 'delta <  beta'       *)
 (* should be 'delta < gamma'.                                                   *)
+(* Note: 1 <= N, yet there is no c such that c + 1 = N since N is a limit       *)
+(* ordinal and not a successor. Hence we cannot hope to have a 'CompleteL'.     *)
 Proposition CompleteR : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> exists c, Ordinal c /\ a :+: c = b.
 Proof.
@@ -172,7 +172,7 @@ Proof.
     apply Class.Empty.HasElem. exists b. rewrite H4. split. 1: assumption.
     assert (:0: :+: b :<=: a :+: b) as H6. {
       apply InclCompatL; try assumption.
-      - apply Natural.ZeroIsOrdinal.
+      - apply Core.ZeroIsOrdinal.
       - intros x H6. apply Empty.Charac in H6. contradiction. }
     rewrite WhenZeroL in H6. 2: assumption. assumption. }
   assert (exists c, Ordinal c /\ A c /\ forall d, A d -> c :<=: d) as H7. {
@@ -226,7 +226,38 @@ Proof.
   - apply IsOrdinal; assumption.
   - apply Omega.IsOrdinal.
   - assert (n :+: :0: :<=: n :+: m) as H4. {
-Admitted.
+      apply InclCompatR; try assumption.
+      - apply Core.ZeroIsOrdinal.
+      - apply Core.IsIncl. assumption. }
+    rewrite WhenZeroR in H4. assumption.
+Qed.
+
+Proposition InOmegaR : forall (n m:U), Ordinal n -> Ordinal m ->
+  n :+: m :< :N -> m :< :N.
+Proof.
+  intros n m H1 H2 H3.
+  apply Core.InclElemTran with (n :+: m); try assumption.
+  - apply IsOrdinal; assumption.
+  - apply Omega.IsOrdinal.
+  - assert (:0: :+: m :<=: n :+: m) as H4. {
+      apply InclCompatL; try assumption.
+      - apply Core.ZeroIsOrdinal.
+      - apply Core.IsIncl. assumption. }
+    rewrite WhenZeroL in H4; assumption.
+Qed.
+
+Proposition CompleteOmegaR : forall (n m:U), n :< :N -> m :< :N ->
+  n :<=: m -> exists p, p :< :N /\ n :+: p = m.
+Proof.
+  intros n m H1 H2 H3.
+  assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
+  assert (exists p, Ordinal p /\ n :+: p = m) as H6. {
+    apply CompleteR; assumption. }
+  destruct H6 as [p [H6 H7]].
+  exists p. split. 2: assumption. apply InOmegaR with n; try assumption.
+  rewrite H7. assumption.
+Qed.
 
 Proposition WhenNaturalL : forall (n a:U), Ordinal a ->
   n :< :N -> :N :<=: a -> n :+: a = a.
@@ -234,7 +265,8 @@ Proof.
   intros n a H1 H2. revert a H1.
   apply Induction2'.
   - apply Omega.IsOrdinal.
-  - apply DoubleInclusion. split.
+  - assert (n :+: :N = :N) as X. 2: apply X.
+    apply DoubleInclusion. split.
     + rewrite WhenLimit. 2: apply Omega.IsLimit.
       apply SUG.WhenBounded. intros m H1.
       apply Core.ElemIsIncl. 1: apply Omega.IsOrdinal.
@@ -250,10 +282,34 @@ Proof.
         assert (m :< n :+: :0:) as X. 2: apply X. rewrite WhenZeroR.
         apply Core.ElemElemTran with (succ m); try assumption.
         apply Succ.IsIn.
-      * assert (exists p, Ordinal p /\ n :+: p = succ m) as H7. {
-          apply CompleteR; assumption. }
-        destruct H7 as [p [H7 H8]]. exists p.
-        assert (p :< :N) as H9. {
-          apply Core.InclElemTran with (succ m); try assumption.
-          - apply Omega.IsOrdinal.
-          Admitted.
+      * assert (exists p, p :< :N /\ n :+: p = succ m) as H7. {
+          apply CompleteOmegaR; try assumption.
+          apply Omega.HasSucc. assumption. }
+        destruct H7 as [p [H7 H8]].
+        exists p. split. 1: assumption.
+        assert (m :< n :+: p) as X. 2: apply X. (* rewrite failing *)
+        rewrite H8. apply Succ.IsIn.
+  - intros a H1 H3 H4.
+    rewrite WhenSucc. 2: assumption. rewrite H4. reflexivity.
+  - intros a H1 H3 H4.
+    assert (Ordinal a) as G1. { apply H1. }
+    rewrite WhenLimit. 2: assumption. apply DoubleInclusion. split; intros y H5.
+    + apply SUG.Charac in H5. destruct H5 as [x [H5 H6]].
+      assert (Ordinal x) as H7. { apply Core.IsOrdinal with a; assumption. }
+      assert (x :< :N \/ :N :<=: x) as H8. {
+        apply Core.ElemOrIncl. 1: assumption. apply Omega.IsOrdinal. }
+      assert (y :< n :+: x) as G2. { assumption. }
+      destruct H8 as [H8|H8].
+      * assert (n :+: x :< :N) as H10. { apply InOmega; assumption. }
+        assert (Ordinal (n :+: x)) as H11. {
+          apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal y) as H12. {
+          apply Core.IsOrdinal with (n :+: x); assumption. }
+        apply H3. apply Core.ElemElemTran with (n :+: x); try assumption.
+        apply Omega.IsOrdinal.
+      * assert (n :+: x = x) as H10. { apply H4; assumption. }
+        rewrite H10 in G2.
+        assert (Ordinal y) as H11. { apply Core.IsOrdinal with x; assumption. }
+        apply Core.ElemElemTran with x; assumption.
+    + apply SUG.Charac.
+Admitted.
