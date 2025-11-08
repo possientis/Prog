@@ -4,5 +4,5 @@ Open    Scope ZF_Notation_Pipe_scope.
 Class Pipe (v w u:Type) := { pipe : v -> w -> u }.
 
 Notation "a :|: b" := (pipe a b)
-  (at level 13, left associativity) : ZF_Notation_Pipe_scope.
+  (at level 36, left associativity) : ZF_Notation_Pipe_scope.
 

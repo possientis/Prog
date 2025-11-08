@@ -19,7 +19,7 @@ Global Instance SetOr : Or U := { or := union2 }.
 
 (* Characterisation of the elements of the union of two sets.                   *)
 Proposition Charac : forall (a b:U),
-  forall x, x :< a:\/:b <-> x :< a \/ x :< b.
+  forall x, x :< a :\/: b <-> x :< a \/ x :< b.
 Proof.
   intros a b x. unfold or, SetOr, union2. split; intros H1.
   - apply FromClass.Charac in H1. apply H1.

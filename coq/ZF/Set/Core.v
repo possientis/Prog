@@ -8,4 +8,4 @@ Axiom U : Type.
 Axiom Elem : U -> U -> Prop.
 
 Notation "x :< y" := (Elem x y)
-  (at level 20, no associativity) : ZF_Set_scope.
+  (at level 69, no associativity) : ZF_Set_scope.

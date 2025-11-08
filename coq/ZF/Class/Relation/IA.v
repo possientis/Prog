@@ -231,7 +231,7 @@ Proof.
   apply Equiv.Tran with ((G :.: G^:-1:) :.: F).
     1: { apply Compose.EquivCompatL, Equiv.Sym, IsFConverseF with A. assumption. }
   apply Equiv.Tran with (G :.: (G^:-1: :.: F)).
-    1: { apply Equiv.Sym, Compose.Assoc. }
+    1: { apply Compose.Assoc. }
   apply Equiv.Tran with (G :.: (I:|:A)).
     1: { apply Compose.EquivCompatR. assumption. }
   apply IdentityR with B, Bij.IsFun. assumption.
@@ -249,7 +249,7 @@ Proof.
   apply Equiv.Tran with ((G :.: F^:-1:) :.: F).
     1: { apply Compose.EquivCompatL, Equiv.Sym. assumption. }
   apply Equiv.Tran with (G :.: (F^:-1: :.: F)).
-    1: { apply Equiv.Sym, Compose.Assoc. }
+    1: { apply Compose.Assoc. }
   apply Equiv.Tran with (G :.: (I:|:A)).
     1: { apply Compose.EquivCompatR, IsConverseFF with B. assumption. }
   apply IdentityR with B, Bij.IsFun. assumption.

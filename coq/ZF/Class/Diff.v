@@ -113,7 +113,7 @@ Proof.
 Qed.
 
 Proposition UnionR : forall (A B C:Class),
-  A :\: (B:\/:C) :~: (A:\:B) :/\: A:\:C.
+  A :\: (B:\/:C) :~: (A:\:B) :/\: (A:\:C).
 Proof.
   intros A B C x. split; intros H1.
   - destruct H1 as [H1 H2]. split; split.

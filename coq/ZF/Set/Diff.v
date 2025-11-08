@@ -103,7 +103,7 @@ Proof.
   destruct H1 as [_ [x H1]]. exists x. apply Charac. assumption.
 Qed.
 
-Proposition UnionR : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.
+Proposition UnionR : forall (a b c:U), a :\: (b:\/:c) = (a:\:b) :/\: (a:\:c).
 Proof.
 intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter2.Charac.
@@ -118,7 +118,7 @@ intros a b c. apply Extensionality. intros x. split; intros H1.
 Qed.
 
 Proposition InterR : forall (a b c:U),
-  a :\: (b:/\:c) = a:\:b :\/: a:\:c.
+  a :\: (b:/\:c) = (a:\:b) :\/: (a:\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
@@ -159,19 +159,19 @@ Proof.
 Qed.
 
 Proposition InterAssoc : forall (a b c:U),
-  a :/\: (b :\: c) = (a :/\: b) :\: c.
+  (a :/\: b) :\: c = a :/\: (b :\: c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
-  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
-    apply Charac in H2. destruct H2 as [H2 H3].
-    apply Charac. split.
-    + apply Inter2.Charac. split; assumption.
-    + apply H3.
   - apply Charac in H1. destruct H1 as [H1 H2].
     apply Inter2.Charac in H1. destruct H1 as [H1 H3].
     apply Inter2.Charac. split.
     + apply H1.
     + apply Charac. split; assumption.
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
+    apply Charac in H2. destruct H2 as [H2 H3].
+    apply Charac. split.
+    + apply Inter2.Charac. split; assumption.
+    + apply H3.
 Qed.
 
 Proposition Image : forall (f a b:U),
