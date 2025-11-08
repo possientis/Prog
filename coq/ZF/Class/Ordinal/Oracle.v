@@ -10,6 +10,7 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.
+Require Import ZF.Set.Ordinal.SupOf.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
@@ -82,7 +83,7 @@ Proof.
     rewrite H4. apply RestrictOfClass.DomainWhenIncl; assumption. }
   assert (NonLimit (succ b)) as H6. { apply NonLimit.HasSucc. assumption. }
   assert (succ b <> :0:) as H7. { apply Succ.IsNotEmpty. }
-  assert (sup (succ b) = b) as H8. { apply Sup.WhenSucc. assumption. }
+  assert (sup (succ b) = b) as H8. { apply SupOf.WhenSucc. assumption. }
   assert (g <> :0:) as H9. {
     intros H9. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
   assert (g!b = G!b) as H10. {

@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Single.
@@ -31,6 +32,14 @@ Proof.
     split; assumption.
 Qed.
 
+Proposition WhenEmpty : :U(:0:) = :0:.
+Proof.
+  apply DoubleInclusion. split; intros x H1.
+  - apply Charac in H1. destruct H1 as [y [_ H1]].
+    apply Empty.Charac in H1. contradiction.
+  - apply Empty.Charac in H1. contradiction.
+Qed.
+
 Proposition WhenSingleton : forall (a:U),
   :U(:{a}:) = a.
 Proof.
@@ -39,5 +48,4 @@ Proof.
     apply Single.Charac in H2. subst. assumption.
   - apply Charac. exists a. split. 1: assumption. apply Single.IsIn.
 Qed.
-
 
