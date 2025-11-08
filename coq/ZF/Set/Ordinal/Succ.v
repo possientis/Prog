@@ -147,6 +147,18 @@ Proof.
     apply H4, H3, IsIn.
 Qed.
 
+Proposition InclIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b <-> a :< succ b.
+Proof.
+  intros a b H1 H2. split; intros H3.
+  - apply Core.InclElemTran with b; try assumption.
+    + apply IsOrdinal. assumption.
+    + apply IsIn.
+  - apply Charac in H3. destruct H3 as [H3|H3].
+    + apply Core.ElemIsIncl; assumption.
+    + apply Single.Charac in H3. subst. apply Incl.Refl.
+Qed.
+
 (* The successor of a set is not equal to the set in question.                  *)
 Proposition NotEqual : forall (a:U), succ a <> a.
 Proof.

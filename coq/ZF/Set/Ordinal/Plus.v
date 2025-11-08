@@ -440,6 +440,5 @@ Proposition Destruct : forall (a:U), Ordinal a ->
   :N :<=: a -> exists b n, Limit b /\ n :< :N /\ a = b :+: n.
 Proof.
   intros a H1 H2.
-  remember (fun c => Limit c /\ c :=:
 Admitted.
 
