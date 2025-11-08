@@ -326,3 +326,48 @@ Proof.
         rewrite H4; try assumption. apply Core.ElemIsIncl. 1: assumption.
         apply Core.InclElemTran with y; assumption.
 Qed.
+
+Proposition IsLimit : forall (a b:U), Ordinal a ->
+  Limit b -> Limit (a :+: b).
+Proof.
+  intros a b H1 H2.
+  assert (Ordinal b) as H3. { apply H2. }
+  assert (Ordinal (a :+: b)) as H4. { apply IsOrdinal; assumption. }
+  assert (a :+: b <> :0:) as H5. {
+    assert (:0: :<=: a) as H5. { apply Core.IsIncl. assumption. }
+    assert (Ordinal :0:) as H6. { apply Core.ZeroIsOrdinal. }
+    assert (:0: :+: b :<=: a :+: b) as H7. { apply InclCompatL; assumption. }
+    assert (b :<=: a :+: b) as H8. { rewrite WhenZeroL in H7; assumption. }
+    assert (:0: :< b) as H9. { apply Limit.HasZero. assumption. }
+    apply Empty.HasElem. exists :0:. apply H8. assumption. }
+  assert (a :+: b <> succ :U(a :+: b)) as H6. {
+    remember (:U(a :+: b)) as d eqn:H6.
+    assert (a :+: b <> succ d) as X. 2: apply X. (* emphasis only *)
+    assert (a :+: b = :\/:_{b} (COP.Plus a)) as H8. {
+      apply WhenLimit. assumption. }
+    intros H7. (* assume a + b = d + 1, need a contradiction *)
+    assert (d :< :\/:_{b} (COP.Plus a)) as H9. {
+      rewrite <- H8, H7. apply Succ.IsIn. }
+    assert (exists c, Ordinal c /\ c :< b /\ d :< a :+: c) as H10. {
+      apply SUG.Charac in H9. destruct H9 as [c [H9 H10]].
+      exists c. split.
+      - apply Core.IsOrdinal with b; assumption.
+      - split; assumption. }
+    destruct H10 as [c [H10 [H11 H12]]].
+    assert (Ordinal (a :+: c)) as H13. { apply IsOrdinal; assumption. }
+    assert (Ordinal d) as H14. {
+      apply Core.IsOrdinal with (a :+: c); assumption. }
+    assert (succ d :< succ (a :+: c)) as H15. {
+      apply Succ.ElemCompat; assumption. }
+    assert (succ c :< b) as H16. { apply Limit.HasSucc; assumption. }
+    assert (succ d :< :\/:_{b} (COP.Plus a)) as H17. {
+      apply SUG.Charac. exists (succ c). split. 1: assumption.
+      assert (succ d :< a :+: (succ c)) as X. 2: apply X. (* failing rewrite *)
+      rewrite WhenSucc; assumption. }
+    assert (succ d :< succ d) as H18. { (* our contradicton *)
+      rewrite <- H8 in H17. rewrite H7 in H17. assumption. }
+    revert H18. apply NoElemLoop1. }
+  assert (a :+: b = :0: \/ a :+: b = succ :U(a :+: b) \/ Limit (a :+: b)) as H7. {
+    apply Limit.ThreeWay. assumption. }
+  destruct H7 as [H7|[H7|H7]]; try contradiction. assumption.
+Qed.
