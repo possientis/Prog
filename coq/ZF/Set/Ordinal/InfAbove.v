@@ -72,7 +72,6 @@ Proof.
   rewrite H4. apply SIN.WhenEmpty.
 Qed.
 
-(* ERROR: See after Definition 7.37 Exercises (2) page 45.                      *)
 Proposition IsEqual : forall (a b:U), Ordinal a -> Ordinal b ->
   b :< a -> inf(>: b) a = b.
 Proof.

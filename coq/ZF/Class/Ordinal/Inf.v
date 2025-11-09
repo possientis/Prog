@@ -112,7 +112,6 @@ Proof.
     + intros b [H3 H4]. apply H2; assumption.
 Qed.
 
-(* ERROR: See after Definition 7.37 Exercises (4) page 45.                      *)
 (* The set of the infimum of a non-empty class of ordinals belongs to the class.*)
 Proposition IsIn : forall (A:Class) (a:U),
   A :<=: On         ->

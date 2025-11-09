@@ -81,9 +81,6 @@ Proof.
     apply SUG.EqualCharac. intros x. rewrite I.Eval. apply H2.
 Qed.
 
-(* ERROR: See page 58, proposition 8.4. Proof is wrong in my opinion.           *)
-(* Unless you know that alpha < beta (so there is a delta in between), the last *)
-(* step of the proof cannot be justified.                                       *)
 (* Note: 0 + N = 1 + N despite the fact that 0 < 1. So no 'ElemCompatL'         *)
 Proposition ElemCompatR : forall (a b c:U),
   Ordinal a             ->
@@ -109,7 +106,7 @@ Proof.
     apply H8. 2: assumption. apply Incl.Refl.
 Qed.
 
-(* 0 + N = 1 + N so we cannot hope to have a 'CancelR'                          *)
+(* Note: 0 + N = 1 + N so we cannot hope to have a 'CancelR'                    *)
 Proposition CancelL : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -183,10 +180,16 @@ Proof.
   rewrite WhenZeroR in H3. assumption.
 Qed.
 
-(* ERROR: see page 59 proposition 8.8. Typo in big union: 'delta <  beta'       *)
-(* should be 'delta < gamma'.                                                   *)
-(* Note: 1 <= N, yet there is no c such that c + 1 = N since N is a limit       *)
-(* ordinal and not a successor. Hence we cannot hope to have a 'CompleteL'.     *)
+Proposition IsElemAddR : forall (a b:U), Ordinal a -> Ordinal b ->
+  b <> :0: -> a :< a :+: b.
+Proof.
+  intros a b H1 H2 H3.
+  assert (:0: :< b) as H4. { apply Core.HasZero; assumption. }
+  assert (a :+: :0: :< a :+: b) as H5. {
+    apply ElemCompatR; try assumption. apply Core.ZeroIsOrdinal. }
+  rewrite WhenZeroR in H5. assumption.
+Qed.
+
 Proposition CompleteR : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> exists c, Ordinal c /\ a :+: c = b.
 Proof.
@@ -284,8 +287,7 @@ Proof.
   rewrite H7. assumption.
 Qed.
 
-(* ERROR: see page 60 proposition 8.9. Many technical details to prove final    *)
-(* equality between the two big unions appear to have been omitted.             *)
+(* Adding a natural number to a non-integer ordinal yields the same ordinal.    *)
 Proposition WhenNaturalL : forall (n a:U), Ordinal a ->
   n :< :N -> :N :<=: a -> n :+: a = a.
 Proof.
@@ -352,6 +354,7 @@ Proof.
         apply Core.InclElemTran with y; assumption.
 Qed.
 
+(* The sum of an ordinal and a limit ordinal is a limit ordinal.                *)
 Proposition IsLimit : forall (a b:U), Ordinal a ->
   Limit b -> Limit (a :+: b).
 Proof.
@@ -397,6 +400,7 @@ Proof.
   destruct H7 as [H7|[H7|H7]]; try contradiction. assumption.
 Qed.
 
+(* The addition of ordinals is associative.                                     *)
 Proposition Assoc : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
   (a :+: b) :+: c = a :+: (b :+: c).
 Proof.
@@ -461,6 +465,7 @@ Proof.
   apply Induction2; assumption.
 Qed.
 
+(* An non-integer ordinal is the sum of a limit ordinal and a natural number.   *)
 Proposition Destruct : forall (a:U), Ordinal a ->
   :N :<=: a -> exists b n, Limit b /\ n :< :N /\ a = b :+: n.
 Proof.
@@ -514,5 +519,9 @@ Proof.
     assert (b :+: :N :< l) as H21. {
       rewrite H3. apply Specify.Charac. split. 2: assumption.
       apply Succ.InclIsElem; try assumption. apply H19. }
-Admitted.
+    assert (b :< b :+: :N) as H22. {
+      apply IsElemAddR; try assumption. apply Omega.IsNotEmpty. }
+    revert H21 H22. rewrite H4. apply Sup.Contradict. 1: assumption.
+    rewrite <- H4. apply H19.
+Qed.
 

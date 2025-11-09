@@ -30,9 +30,6 @@ Proof.
   - apply H3; assumption.
 Qed.
 
-(* ERROR: see page 58 what is claimed to be needed to prove for (c) is too      *)
-(* strong (and there is also a typo '/\ phi(beta)' should be '-> phi (beta)').  *)
-(* The book forgets to have 'b <= a' in last hypothesis of proposition below.   *)
 Proposition Induction2' : forall (A:Class) (b:U),
   On b                                                                    ->
   A b                                                                     ->

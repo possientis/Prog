@@ -64,8 +64,6 @@ Proof.
     apply H12 in H16. contradiction.
 Qed.
 
-(* ERROR: See page 50, exercise (2). The assumption a :< F!a is necessary.      *)
-(* The condition b :< F!b for all b appears to be sufficient.                   *)
 Proposition FromRecursion : forall (F:Class) (a:U),
   On a                            ->
   (forall b, On b ->  b :< F!b)   ->

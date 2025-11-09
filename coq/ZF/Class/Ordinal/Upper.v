@@ -105,7 +105,6 @@ Proof.
   - apply Sup.IsUpperBoundOrd; assumption.
 Qed.
 
-(* ERROR: See after Definition 7.38, Exercises (2).                             *)
 (* The supremum is the infimum of all ordinal upper-bounds (when these exist).  *)
 Proposition IsInf : forall (A:Class), upper A :<>: :0: ->
   sup A :~: inf (upper A).
