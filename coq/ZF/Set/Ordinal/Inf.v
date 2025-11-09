@@ -1,4 +1,5 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
@@ -9,6 +10,10 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inter.
 Require Import ZF.Set.Specify.
 
+Module CIN := ZF.Class.Inter.
+Module COI := ZF.Class.Ordinal.Inf.
+Module SIN := ZF.Set.Inter.
+
 (* The infimum of the set a.                                                    *)
 Definition inf (a:U) : U := :I( :{ a | Ordinal }: ).
 
@@ -18,7 +23,7 @@ Proposition Charac : forall (a x y:U),
   Ordinal y   ->
   x :< y.
 Proof.
-  intros a x y H1 H2 H3. apply Inter.Charac with :{a | Ordinal}:.
+  intros a x y H1 H2 H3. apply SIN.Charac with :{a | Ordinal}:.
   1: assumption. apply Specify.Charac. split; assumption.
 Qed.
 
@@ -27,26 +32,26 @@ Proposition CharacRev : forall (a x:U),
   (forall y, y :< a -> Ordinal y -> x :< y) ->
   x :< inf a.
 Proof.
-  intros a x H1 H2. apply Inter.CharacRev. 1: assumption.
+  intros a x H1 H2. apply SIN.CharacRev. 1: assumption.
   intros y H3. apply Specify.Charac in H3. destruct H3 as [H3 H4].
   apply H2; assumption.
 Qed.
 
 (* The infimum of the class is the class of the infimum.                        *)
 Proposition ToClass : forall (a:U),
-  Class.Ordinal.Inf.inf (toClass a) :~: toClass (inf a).
+  toClass (inf a) :~: COI.inf (toClass a).
 Proof.
   intros a x. split; intros H1.
+ - apply FromClass.Charac in H1.
+    apply CIN.EquivCompat with (toClass :{a|Ordinal}:). 2: assumption.
+    intros y. split; intros H2.
+    + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
+    + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.
   - apply FromClass.Charac.
-    apply Class.Inter.EquivCompat with (toClass a :/\: Ordinal). 2: assumption.
+    apply CIN.EquivCompat with (toClass a :/\: Ordinal). 2: assumption.
     intros y. split; intros H2.
     + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.
     + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
-  - apply FromClass.Charac in H1.
-    apply Class.Inter.EquivCompat with (toClass :{a|Ordinal}:). 2: assumption.
-    intros y. split; intros H2.
-    + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
-    + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.
 Qed.
 
 (* The infimum of an ordinal is simply its intersection.                        *)

@@ -1,5 +1,6 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Plus.
 Require Import ZF.Set.Core.
@@ -11,9 +12,11 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Sup.
 Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
@@ -156,6 +159,28 @@ Proof.
   destruct H4 as [H4|H4].
   - subst. apply Incl.Refl.
   - apply Core.ElemIsIncl. 1: assumption. apply ElemCompatR; assumption.
+Qed.
+
+Proposition IsInclAddL : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b :+: a.
+Proof.
+  intros a b H1 H2.
+  assert (:0: :+: a :<=: b :+: a) as H3. {
+    apply InclCompatL; try assumption.
+    - apply Core.ZeroIsOrdinal.
+    - apply Core.IsIncl. assumption. }
+  rewrite WhenZeroL in H3; assumption.
+Qed.
+
+Proposition IsInclAddR : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: a :+: b.
+Proof.
+  intros a b H1 H2.
+  assert (a :+: :0: :<=: a :+: b) as H3. {
+    apply InclCompatR; try assumption.
+    - apply Core.ZeroIsOrdinal.
+    - apply Core.IsIncl. assumption. }
+  rewrite WhenZeroR in H3. assumption.
 Qed.
 
 (* ERROR: see page 59 proposition 8.8. Typo in big union: 'delta <  beta'       *)
@@ -440,5 +465,54 @@ Proposition Destruct : forall (a:U), Ordinal a ->
   :N :<=: a -> exists b n, Limit b /\ n :< :N /\ a = b :+: n.
 Proof.
   intros a H1 H2.
+  remember :{succ a | Limit}: as l eqn:H3.
+  remember (sup l) as b eqn:H4.
+  assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
+  assert (Limit :N) as G2. { apply Omega.IsLimit. }
+  assert (toClass l :<=: Ordinal) as H5. {
+    intros c H5. rewrite H3 in H5. apply Specify.IsInP in H5. apply H5. }
+  assert (Ordinal b) as H6. { rewrite H4. apply Sup.IsOrdinal. assumption. }
+  assert (b :<=: a) as H7. {
+    rewrite H4. apply Sup.IsSmallest. 1: assumption.
+    intros c H7. rewrite H3 in H7. apply Specify.IsInA in H7.
+    apply Succ.InclIsElem; try assumption.
+    apply Core.IsOrdinal with (succ a). 2: assumption.
+    apply Succ.IsOrdinal. assumption. }
+  assert (:N :< l) as H8. {
+    rewrite H3. apply Specify.Charac. split. 2: assumption.
+    apply Succ.InclIsElem; assumption. }
+  assert (:N :<=: b) as H9. {
+    rewrite H4. apply Sup.IsUpperBound; assumption. }
+  assert (b <> :0:) as H10. {
+    apply Empty.HasElem. exists :0:. apply H9, Omega.HasZero. }
+  assert (Limit b) as H12. {
+    apply Limit.WhenHasSucc; try assumption.
+    intros d H12. rewrite H4 in H12. apply Sup.Charac in H12.
+    destruct H12 as [c [H12 [H13 H14]]].
+    assert (H15 := H13).
+    rewrite H3 in H13. apply Specify.Charac in H13. destruct H13 as [H13 H16].
+    assert (Ordinal d) as H17. { apply Core.IsOrdinal with c; assumption. }
+    rewrite H4. apply Sup.Charac. exists c. split. 2: { split; assumption. }
+    apply Limit.HasSucc; assumption. }
+  assert (exists c, Ordinal c /\ b :+: c = a) as H13. {
+    apply CompleteR; assumption. }
+  destruct H13 as [c [H13 H14]].
+  assert (c :< :N \/ :N :<=: c) as H15. {
+    apply Core.ElemOrIncl; assumption. }
+  destruct H15 as [H15|H15].
+  - exists b. exists c. split. 1: assumption. split. 1: assumption.
+    symmetry. assumption.
+  - exfalso.
+    assert (exists d, Ordinal d /\ :N :+: d = c) as H16. {
+      apply CompleteR; assumption. }
+    destruct H16 as [d [H16 H17]].
+    assert (a = (b :+: :N) :+: d) as H18. {
+      rewrite Assoc; try assumption. rewrite H17. symmetry. assumption. }
+    assert (Limit (b :+: :N)) as H19. { apply IsLimit; assumption. }
+    assert (b :+: :N :<=: a) as H20. {
+      rewrite H18. apply IsInclAddR. 2: assumption. apply H19. }
+    assert (b :+: :N :< l) as H21. {
+      rewrite H3. apply Specify.Charac. split. 2: assumption.
+      apply Succ.InclIsElem; try assumption. apply H19. }
 Admitted.
 

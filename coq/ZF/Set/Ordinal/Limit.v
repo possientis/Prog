@@ -46,6 +46,15 @@ Proof.
     + destruct H4 as [b [H4 H5]]. apply IfUnionThenNotSucc with a b; assumption.
 Qed.
 
+Proposition HasZero : forall (a:U),
+  Limit a -> :0: :< a.
+Proof.
+  intros a H1.
+  assert (Ordinal a) as H2. { apply H1. }
+  apply Charac in H1. 2: assumption.
+  apply Core.HasZero. 1: assumption. apply H1.
+Qed.
+
 Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
 
@@ -61,6 +70,12 @@ Proposition HasSucc : forall (a b:U),
   apply InclElemTran with c; try assumption.
   - apply Succ.IsOrdinal. assumption.
   - apply Succ.ElemIsIncl; assumption.
+Qed.
+
+Proposition HasOne : forall (a:U),
+  Limit a -> :1: :< a.
+Proof.
+  intros a H1. apply HasSucc. 1: assumption. apply HasZero. assumption.
 Qed.
 
 Proposition InBetween : forall (a b:U),
@@ -97,18 +112,16 @@ Proof.
   - right. right. split; assumption.
 Qed.
 
-Proposition HasZero : forall (a:U),
-  Limit a -> :0: :< a.
+Proposition WhenHasSucc : forall (a:U), Ordinal a ->
+  a <> :0:                          ->
+  (forall b, b :< a -> succ b :< a) ->
+  Limit a.
 Proof.
-  intros a H1.
-  assert (Ordinal a) as H2. { apply H1. }
-  apply Charac in H1. 2: assumption.
-  apply Core.HasZero. 1: assumption. apply H1.
+  intros a H1 H2 H3.
+  assert (a = :0: \/ a = succ :U(a) \/ Limit a) as H4. {
+    apply ThreeWay. assumption. }
+  destruct H4 as [H4|[H4|H4]]. 3: assumption. 1: contradiction. exfalso.
+  assert (succ :U(a) :< succ :U(a)) as H5. { (* contradiction *)
+  rewrite H4 in H3. apply H3, Succ.IsIn. }
+  revert H5. apply NoElemLoop1.
 Qed.
-
-Proposition HasOne : forall (a:U),
-  Limit a -> :1: :< a.
-Proof.
-  intros a H1. apply HasSucc. 1: assumption. apply HasZero. assumption.
-Qed.
-

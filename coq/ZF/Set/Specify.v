@@ -24,14 +24,14 @@ Proof.
 Qed.
 
 (* Every element of the specification set of P and a is an element of a.        *)
-Proposition InA : forall (P:Class) (a:U),
+Proposition IsInA : forall (P:Class) (a:U),
   forall x, x :< :{a | P}: -> x :< a.
 Proof.
   intros P a x H1. apply Charac in H1. destruct H1 as [H1 _]. apply H1.
 Qed.
 
 (* Every element of the specification set of P and a lies in the class P.       *)
-Proposition InP : forall (P:Class) (a:U),
+Proposition IsInP : forall (P:Class) (a:U),
   forall x, x :< :{a | P}: -> P x.
 Proof.
   intros P a x H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
@@ -42,8 +42,8 @@ Proposition IsA : forall (P:Class) (a:U),
 Proof.
   intros P a. split; intros H1.
   - apply DoubleInclusion. split; intros x H2.
-    + apply InA with P. assumption.
+    + apply IsInA with P. assumption.
     + apply Charac. split. 1: assumption. apply H1. assumption.
-  - intros x H2. apply InP with a. rewrite H1. assumption.
+  - intros x H2. apply IsInP with a. rewrite H1. assumption.
 Qed.
 

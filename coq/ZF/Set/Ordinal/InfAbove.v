@@ -45,7 +45,7 @@ Proposition ToClass : forall (a b:U),
 Proof.
   intros a b. apply Equiv.Tran with (Class.Ordinal.Inf.inf (toClass (a :\: b))).
   - apply Inf.EquivCompat, Equiv.Sym, Diff.ToClass.
-  - apply Inf.ToClass.
+  - apply Equiv.Sym, Inf.ToClass.
 Qed.
 
 (* When ordinals, the infimum of a above b is the intersection of a\b.          *)

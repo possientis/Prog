@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.NonLimit.
@@ -114,4 +115,17 @@ Proof.
   intros a b H1 c H2. apply Sup.Charac in H2. destruct H2 as [x [H2 [H3 H4]]].
   specialize (H1 x H4 H3). destruct H1 as [y [H1 [H5 H6]]].
   apply Sup.Charac. exists y. split. 2: { split; assumption. } apply H6. assumption.
+Qed.
+
+Proposition Contradict : forall (a b:U),
+  Ordinal a   ->
+  Ordinal b   ->
+  b :< a      ->
+  sup a :< b  ->
+  False.
+Proof.
+  intros a b H1 H2 H3 H4.
+  assert (b :<=: sup a) as H5. { apply IsUpperBound; assumption. }
+  assert (sup a :< sup a) as H6. { apply H5. assumption. }
+  revert H6. apply NoElemLoop1.
 Qed.
