@@ -1,14 +1,18 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Minimal.
+Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inter.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Specify.
 
 Module CIN := ZF.Class.Inter.
@@ -105,4 +109,33 @@ Proof.
   assert (inf a :<=: b) as H5. { apply IsLowerBound; assumption. }
   assert (b :< b) as H6. { apply H5. assumption. }
   revert H6. apply NoElemLoop1.
+Qed.
+
+Proposition IsMinimal : forall (a:U),
+  toClass a :<=: Ordinal      ->
+  a <> :0:                    ->
+  Minimal (E:/:a) a (inf a).
+Proof.
+  intros a H1 H2.
+  assert (exists b,
+    Ordinal b                   /\
+    b :< a                      /\
+    forall c , c :< a -> b :<=: c) as H3. {
+      apply Core.HasMinimal. 1: assumption.
+      apply Empty.NotEmptyToClass. assumption. }
+  destruct H3 as [b [H3 [H4 H5]]].
+  assert (Minimal (E:/:a) a b) as H6. {
+    split. 1: assumption.
+    intros c H6 H7.
+    assert (Ordinal c) as H8. { apply H1. assumption. }
+    apply RestrictOfClass.Charac2 in H7. destruct H7 as [H7 [H9 H10]].
+    apply E.Charac2 in H10.
+    assert (c :< c) as H11. { apply H5; assumption. }
+    revert H11. apply NoElemLoop1. }
+  assert (Ordinal (inf a)) as H7. { apply IsOrdinal. }
+  assert (inf a = b) as H8. {
+    apply DoubleInclusion. split.
+    - apply IsLowerBound; assumption.
+    - apply IsLargest; assumption. }
+  rewrite H8. assumption.
 Qed.

@@ -593,7 +593,7 @@ Proof.
   assert (Ordinal b) as H8. { apply H3. }
   assert (a :<=: b \/ b :<=: a) as H9. { apply Core.InclOrIncl; assumption. }
   destruct H9 as [H9|H9].
-  - apply H1; try assumption.
+  - apply H1; assumption.
   - assert (b = a /\ m = n) as H10. {
       apply H1; try assumption. symmetry. assumption. }
     destruct H10 as [H10 H11]. split; symmetry; assumption.
