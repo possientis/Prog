@@ -10,6 +10,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.
@@ -354,6 +355,28 @@ Proof.
         apply Core.InclElemTran with y; assumption.
 Qed.
 
+Proposition LimitWithNat : forall (a n:U),
+  Limit a           ->
+  n :< :N           ->
+  Limit (a :+: n)   ->
+  n = :0:.
+Proof.
+  intros a n H1 H2 H3.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (Ordinal :N) as H4. { apply Omega.IsOrdinal. }
+  assert (Ordinal n) as H5. { apply HasOrdinalElem. assumption. }
+  assert (n = :0: \/ :0: :< n) as H6. { apply Core.ZeroOrElem. assumption. }
+  destruct H6 as [H6|H6]. 1: assumption. exfalso.
+  assert (exists m, m :< :N /\ n = succ m) as H7. {
+    apply Omega.IsSucc; assumption. }
+  destruct H7 as [m [H7 H8]].
+  assert (Ordinal m) as H9. { apply HasOrdinalElem. assumption. }
+  apply Limit.NotBoth with (a :+: n). 1: assumption. right.
+  exists (a :+: m). split.
+  - apply IsOrdinal; assumption.
+  - rewrite H8. apply WhenSucc. assumption.
+Qed.
+
 (* The sum of an ordinal and a limit ordinal is a limit ordinal.                *)
 Proposition IsLimit : forall (a b:U), Ordinal a ->
   Limit b -> Limit (a :+: b).
@@ -523,5 +546,56 @@ Proof.
       apply IsElemAddR; try assumption. apply Omega.IsNotEmpty. }
     revert H21 H22. rewrite H4. apply Sup.Contradict. 1: assumption.
     rewrite <- H4. apply H19.
+Qed.
+
+Proposition DestructUnique : forall (a b n m:U),
+  Limit a             ->
+  Limit b             ->
+  n :< :N             ->
+  m :< :N             ->
+  a :+: n = b :+: m   ->
+  a = b /\ n = m.
+Proof.
+  assert (forall (a b n m:U),
+    Limit a             ->
+    Limit b             ->
+    a :<=: b            ->
+    n :< :N             ->
+    m :< :N             ->
+    a :+: n = b :+: m   ->
+    a = b /\ n = m) as H1. {
+      intros a b n m H1 H2 H3 H4 H5 H6.
+      assert (Ordinal a) as H7. { apply H1. }
+      assert (Ordinal b) as H8. { apply H2. }
+      assert (Ordinal :N) as H9. { apply Omega.IsOrdinal. }
+      assert (Ordinal n) as H10. { apply HasOrdinalElem; assumption. }
+      assert (Ordinal m) as H11. { apply HasOrdinalElem; assumption. }
+      assert (exists c, Ordinal c /\ a :+: c = b) as H12. {
+        apply CompleteR; assumption. }
+      destruct H12 as [c [H12 H13]].
+      assert (a :+: n = a :+: (c :+: m)) as H14. {
+        rewrite <- Assoc; try assumption. rewrite H13. assumption. }
+      assert (n = c :+: m) as H15. {
+        apply CancelL with a; try assumption. apply IsOrdinal; assumption. }
+      assert (c :<=: c :+: m) as H16. { apply IsInclAddR; assumption. }
+      assert (c :< :N) as H17. {
+        apply Core.InclElemTran with n; try assumption.
+        rewrite H15. assumption. }
+      assert (c = :0:) as H18. {
+        revert H2. rewrite <- H13. apply LimitWithNat; assumption. }
+      assert (n = m) as H19. {
+        rewrite H18 in H15. rewrite WhenZeroL in H15; assumption. }
+      assert (a = b) as H20. {
+        rewrite H18 in H13. rewrite WhenZeroR in H13; assumption. }
+      split; assumption. }
+  intros a b n m H2 H3 H4 H5 H6.
+  assert (Ordinal a) as H7. { apply H2. }
+  assert (Ordinal b) as H8. { apply H3. }
+  assert (a :<=: b \/ b :<=: a) as H9. { apply Core.InclOrIncl; assumption. }
+  destruct H9 as [H9|H9].
+  - apply H1; try assumption.
+  - assert (b = a /\ m = n) as H10. {
+      apply H1; try assumption. symmetry. assumption. }
+    destruct H10 as [H10 H11]. split; symmetry; assumption.
 Qed.
 

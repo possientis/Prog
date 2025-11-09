@@ -101,6 +101,32 @@ Proof.
   intros n H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1, Succ.IsIn.
 Qed.
 
+Proposition HasSuccRev : forall (n:U), succ n :< :N -> n :< :N.
+Proof.
+  intros n H1.
+  assert (Ordinal (succ n)) as H2. {
+    apply Core.IsOrdinal with :N. 2: assumption. apply IsOrdinal. }
+  assert (Ordinal n) as H3. { apply Succ.IsOrdinalRev. assumption. }
+  apply Charac. split. 1: assumption.
+  intros m H4.
+  assert (Ordinal m) as H5. { apply Core.IsOrdinal with (succ n); assumption. }
+  apply HasNonLimitElem, Core.ElemElemTran with (succ n); try assumption.
+  apply IsOrdinal.
+Qed.
+
+Proposition IsSucc : forall (n:U),
+  n :< :N                             ->
+  :0: :< n                            ->
+  exists m, m :< :N /\ n = succ m.
+Proof.
+  intros n H1 H2.
+  assert (NonLimit n) as H3. { apply HasNonLimitElem. assumption. }
+  destruct H3 as [H3|H3].
+  - subst. exfalso. revert H2. apply NoElemLoop1.
+  - destruct H3 as [m [H3 H4]]. exists m. split. 2: assumption.
+    apply HasSuccRev. rewrite <- H4. assumption.
+Qed.
+
 (* The set N is a limit ordinal.                                                *)
 Proposition IsLimit : Limit :N.
 Proof.

@@ -175,6 +175,18 @@ Proof.
   destruct H2 as [H2|H2]. 2: assumption. apply Empty.Charac in H2. contradiction.
 Qed.
 
+Proposition ZeroOrElem : forall (a:U), Ordinal a ->
+  a = :0: \/ :0: :< a.
+Proof.
+  intros a H1.
+  assert (:0: :<=: a)  as H2. { apply IsIncl. assumption. }
+  apply InclIsEqualOrElem in H2. 3: assumption.
+  - destruct H2 as [H2|H2].
+    + left. symmetry. assumption.
+    + right. assumption.
+  - apply ZeroIsOrdinal.
+Qed.
+
 (* An non-empty class of ordinals has a minimal ordinal.                        *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: Ordinal  ->
