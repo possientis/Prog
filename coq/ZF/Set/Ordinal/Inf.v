@@ -4,6 +4,7 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
@@ -13,6 +14,7 @@ Require Import ZF.Set.Specify.
 Module CIN := ZF.Class.Inter.
 Module COI := ZF.Class.Ordinal.Inf.
 Module SIN := ZF.Set.Inter.
+Module SOI := ZF.Set.Ordinal.Inter.
 
 (* The infimum of the set a.                                                    *)
 Definition inf (a:U) : U := :I( :{ a | Ordinal }: ).
@@ -54,19 +56,53 @@ Proof.
     + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
 Qed.
 
-(* The infimum of an ordinal is simply its intersection.                        *)
-Proposition WhenOrdinal : forall (a:U), Ordinal a ->
-  inf a = :I(a).
+Proposition WhenOrdinals : forall (a:U),
+  toClass a :<=: Ordinal -> inf a = :I(a).
 Proof.
-  intros a H1. unfold inf.
-  assert (:{a | Ordinal}: = a) as H2. {
-    apply Specify.IsA. intros x H2. apply Core.IsOrdinal with a; assumption. }
-  rewrite H2. reflexivity.
+  intros a H1. apply Specify.IsA in H1. unfold inf. rewrite H1. reflexivity.
 Qed.
 
-Proposition IsZero : forall (a:U), Ordinal a ->
-  inf a = :0:.
+Proposition WhenEmpty : inf :0: = :0:.
 Proof.
-  intros a H1. rewrite WhenOrdinal. 2: assumption.
-  apply Inter.IsZero. assumption.
+  rewrite WhenOrdinals.
+  - apply SIN.WhenEmpty.
+  - intros x H1. apply Empty.Charac in H1. contradiction.
+Qed.
+
+Proposition IsOrdinal : forall (a:U), Ordinal (inf a).
+Proof.
+  intros a. apply SOI.IsOrdinal. intros x H1.
+  apply Specify.IsInP in H1. assumption.
+Qed.
+
+Proposition IsLowerBound : forall (a b:U),
+  toClass a :<=: Ordinal ->
+  b :< a                 ->
+  inf a :<=: b.
+Proof.
+  intros a b H1 H2. rewrite WhenOrdinals. 2: assumption.
+  apply SOI.IsLowerBound; assumption.
+Qed.
+
+Proposition IsLargest : forall (a b:U),
+  toClass a :<=: Ordinal          ->
+  a <> :0:                        ->
+  (forall c, c :< a -> b :<=: c)  ->
+  b :<=: inf a.
+Proof.
+  intros a b H1 H2 H3. rewrite WhenOrdinals. 2: assumption.
+  apply SOI.IsLargest; assumption.
+Qed.
+
+Proposition Contradict : forall (a b:U),
+  toClass a :<=: Ordinal ->
+  Ordinal b              ->
+  b :< a                 ->
+  b :< inf a             ->
+  False.
+Proof.
+  intros a b H1 H2 H3 H4.
+  assert (inf a :<=: b) as H5. { apply IsLowerBound; assumption. }
+  assert (b :< b) as H6. { apply H5. assumption. }
+  revert H6. apply NoElemLoop1.
 Qed.

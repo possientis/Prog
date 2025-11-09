@@ -12,6 +12,9 @@ Require Import ZF.Set.Specify.
 
 Export ZF.Notation.InfAbove.
 
+Module SIN := ZF.Set.Inter.
+Module SOI := ZF.Set.Ordinal.Inter.
+
 (* The infimum of the set a above b.                                            *)
 Definition infAbove (b a:U) : U := inf (a :\: b).
 
@@ -66,7 +69,7 @@ Proof.
   intros a b H1 H2 H3.
   rewrite WhenOrdinal; try assumption.
   assert (a :\: b = :0:) as H4. { apply Diff.WhenEmpty. assumption. }
-  rewrite H4. apply ZF.Set.Inter.IsZero.
+  rewrite H4. apply SIN.WhenEmpty.
 Qed.
 
 (* ERROR: See after Definition 7.37 Exercises (2) page 45.                      *)
@@ -75,11 +78,11 @@ Proposition IsEqual : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2 H3. rewrite WhenOrdinal; try assumption.
   apply DoubleInclusion. split.
-  - apply Ordinal.Inter.IsLowerBound.
+  - apply SOI.IsLowerBound.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Core.IsOrdinal with a; assumption.
     + apply Diff.Charac. split. 1: assumption. apply NoElemLoop1.
-  - apply Ordinal.Inter.IsLargest.
+  - apply SOI.IsLargest.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Core.IsOrdinal with a; assumption.
     + intros H4. apply Diff.WhenEmpty in H4. apply NoElemLoop1 with b.

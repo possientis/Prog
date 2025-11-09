@@ -22,10 +22,9 @@ Proof.
 Qed.
 
 (* The supremum of an ordinal is an ordinal.                                    *)
-Proposition IsOrdinal : forall (a:U), Ordinal a ->
-  Ordinal (sup a).
+Proposition IsOrdinal : forall (a:U), Ordinal (sup a).
 Proof.
-  intros a H1. apply Sup.IsOrdinal, Core.WhenOrdinal. assumption.
+  intros a. apply Sup.IsOrdinal.
 Qed.
 
 Proposition WhenZero : sup :0: = :0:.

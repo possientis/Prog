@@ -471,7 +471,7 @@ Proof.
   assert (Limit :N) as G2. { apply Omega.IsLimit. }
   assert (toClass l :<=: Ordinal) as H5. {
     intros c H5. rewrite H3 in H5. apply Specify.IsInP in H5. apply H5. }
-  assert (Ordinal b) as H6. { rewrite H4. apply Sup.IsOrdinal. assumption. }
+  assert (Ordinal b) as H6. { rewrite H4. apply Sup.IsOrdinal. }
   assert (b :<=: a) as H7. {
     rewrite H4. apply Sup.IsSmallest. 1: assumption.
     intros c H7. rewrite H3 in H7. apply Specify.IsInA in H7.

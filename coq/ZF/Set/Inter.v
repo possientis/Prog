@@ -51,7 +51,7 @@ Proof.
 Qed.
 
 (* The intersection of the empty set is the empty set.                          *)
-Proposition IsZero : :I(:0:) = :0:.
+Proposition WhenEmpty : :I(:0:) = :0:.
 Proof.
   apply DoubleInclusion. split; intros x H1.
   - apply FromClass.Charac in H1. apply (Inter.EquivCompat :0:) in H1.

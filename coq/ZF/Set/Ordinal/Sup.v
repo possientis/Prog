@@ -51,12 +51,11 @@ Proof.
   - intros x H1. apply Empty.Charac in H1. contradiction.
 Qed.
 
-(* The supremum of a set of ordinals is an ordinal.                             *)
-Proposition IsOrdinal : forall (a:U),
-  toClass a :<=: Ordinal -> Ordinal (sup a).
+(* The supremum is an ordinal.                                                  *)
+Proposition IsOrdinal : forall (a:U), Ordinal (sup a).
 Proof.
-  intros a H1. rewrite WhenOrdinals. 2: assumption.
-  apply SOU.IsOrdinal. assumption.
+  intros a. apply SOU.IsOrdinal. intros x H1.
+  apply Specify.IsInP in H1. assumption.
 Qed.
 
 (* The supremum of a set of ordinals is an upper-bound of that set.             *)
@@ -90,3 +89,4 @@ Proof.
   assert (sup a :< sup a) as H6. { apply H5. assumption. }
   revert H6. apply NoElemLoop1.
 Qed.
+
