@@ -338,7 +338,31 @@
       name: libsqlite3-dev
 
   # GUI
-  
+
+  - name: GUI - Install qt6-wayland
+    ansible.builtin.apt:
+      name: qt6-wayland
+
+  - name: GUI - Install libgl-dev
+    ansible.builtin.apt:
+      name: libgl-dev
+
+  - name: GUI - Install qt6-tools-dev-tools
+    ansible.builtin.apt:
+      name: qt6-tools-dev-tools
+ 
+  - name: GUI - Install qt6-l10n-tools
+    ansible.builtin.apt:
+      name: qt6-l10n-tools
+ 
+  - name: GUI - Install qt6-tools-dev
+    ansible.builtin.apt:
+      name: qt6-tools-dev
+
+  - name: GUI - Install qt6-base-dev
+    ansible.builtin.apt:
+      name: qt6-base-dev
+ 
   - name: GUI - Install libqt5gui5
     ansible.builtin.apt:
       name: libqt5gui5
@@ -417,9 +441,9 @@
 
   # Bitcoin core dependencies
 
-  - name: Bitcoin - Install libboost-all-dev
+  - name: Bitcoin - Install libboost-dev
     ansible.builtin.apt:
-      name: libboost-all-dev
+      name: libboost-dev
 
   - name: Bitcoin - Install bsdmainutils
     ansible.builtin.apt:
@@ -449,6 +473,13 @@
     ansible.builtin.apt:
       name: libqrencode-dev
 
+  - name: Bitcoin - Install libcapnp-dev
+    ansible.builtin.apt:
+      name: libcapnp-dev
+
+  - name: Bitcoin - Install capnproto
+    ansible.builtin.apt:
+      name: capnproto
 
   # Monero dependencies
 
