@@ -441,6 +441,10 @@
 
   # Bitcoin core dependencies
 
+  - name: Bitcoin - Install libboost-all-dev
+    ansible.builtin.apt:
+      name: libboost-all-dev
+
   - name: Bitcoin - Install libboost-dev
     ansible.builtin.apt:
       name: libboost-dev
