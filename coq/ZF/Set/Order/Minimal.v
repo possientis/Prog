@@ -15,3 +15,9 @@ Proposition ToClass : forall (r a b:U),
 Proof.
   intros r a b. split; intros [H1 H2]; split; assumption.
 Qed.
+
+Proposition IsIn : forall (r a b:U),
+  Minimal r a b -> b :< a.
+Proof.
+  intros r a b H1. apply H1.
+Qed.

@@ -139,3 +139,13 @@ Proof.
     - apply IsLargest; assumption. }
   rewrite H8. assumption.
 Qed.
+
+Proposition IsIn : forall (a:U),
+  toClass a :<=: Ordinal ->
+  a <> :0:               ->
+  inf a :< a.
+Proof.
+  intros a H1 H2.
+  assert (Minimal (E:/:a) a (inf a)) as H3. { apply IsMinimal; assumption. }
+  apply H3.
+Qed.
