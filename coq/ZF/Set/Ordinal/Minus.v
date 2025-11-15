@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -63,3 +64,24 @@ Proof.
   apply DoubleInclusion. split; assumption.
 Qed.
 
+Proposition IsZero : forall (a b:U), Ordinal a -> Ordinal b ->
+  b :<=: a -> b :-: a = :0:.
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal (b :-: a)) as H4. { apply IsOrdinal; assumption. }
+  assert (Ordinal :0:) as H5. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal (succ b)) as H6. { apply Succ.IsOrdinal. assumption. }
+  remember (:{ succ b | fun c => b :<=: a :+: c}:) as G eqn:H7.
+  assert (b :-: a = inf G) as H8. { rewrite H7. reflexivity. }
+  assert (:0: :< G) as H9. {
+    rewrite H7. apply Specify.Charac. split.
+    - apply Succ.HasZero. assumption.
+    - rewrite Plus.WhenZeroR. assumption. }
+  assert (b :-: a :<=: :0:) as H10. {
+    rewrite H8. apply Inf.IsLowerBound. 2: assumption.
+    intros c H10. rewrite H7 in H10.
+    apply Specify.Charac in H10. destruct H10 as [H10 _].
+    apply Core.IsOrdinal with (succ b); assumption. }
+  assert (:0: :<=: b :-: a) as H11. { apply Core.IsIncl. assumption. }
+  apply DoubleInclusion. split; assumption.
+Qed.
