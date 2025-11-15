@@ -136,6 +136,26 @@ Proof.
   apply NoElemLoop1.
 Qed.
 
+(* Cancelling a natural number from the right is fine.                          *)
+Proposition CancelR : forall (a b n:U),
+  Ordinal a           ->
+  Ordinal b           ->
+  n :< :N             ->
+  a :+: n = b :+: n   ->
+  a = b.
+Proof.
+  intros a b n H1 H2. revert n.
+  remember (fun n => a :+: n = b :+: n -> a = b) as A eqn:H3.
+  assert (forall n, n :< :N -> A n) as H4. {
+    apply Omega.FiniteInduction'; rewrite H3.
+    - intros H4. rewrite WhenZeroR, WhenZeroR in H4. assumption.
+    - intros n H4 IH H6.
+      assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
+      rewrite WhenSuccR, WhenSuccR in H6; try assumption.
+      apply Succ.Injective in H6. apply IH. assumption. }
+  rewrite H3 in H4. assumption.
+Qed.
+
 Proposition InclCompatL : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
