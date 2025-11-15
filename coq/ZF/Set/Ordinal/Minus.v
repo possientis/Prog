@@ -2,9 +2,11 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inf.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
@@ -58,8 +60,8 @@ Proof.
       apply Succ.IsOrdinal. assumption.
     - apply Specify.Charac. split.
       + apply InclElemTran with b; try assumption.
-        { rewrite <- H5. apply Plus.IsInclAddL; assumption. }
-        { apply Succ.IsIn. }
+        * rewrite <- H5. apply Plus.IsInclAddL; assumption.
+        * apply Succ.IsIn.
       + rewrite H5. apply Incl.Refl. }
   apply DoubleInclusion. split; assumption.
 Qed.
@@ -83,5 +85,48 @@ Proof.
     apply Specify.Charac in H10. destruct H10 as [H10 _].
     apply Core.IsOrdinal with (succ b); assumption. }
   assert (:0: :<=: b :-: a) as H11. { apply Core.IsIncl. assumption. }
+  apply DoubleInclusion. split; assumption.
+Qed.
+
+Proposition IsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
+  b :-: a :<=: b.
+Proof.
+  intros a b H1 H2. apply Inf.IsLowerBound.
+  - intros c H3. apply Specify.Charac in H3. destruct H3 as [H3 _].
+    apply Core.IsOrdinal with (succ b). 2: assumption.
+    apply Succ.IsOrdinal. assumption.
+  - apply Specify.Charac. split.
+    + apply Succ.IsIn.
+    + apply Plus.IsInclAddL; assumption.
+Qed.
+
+Proposition OmegaNatural : forall (n:U),
+  n :< :N -> :N :-: n = :N.
+Proof.
+  intros n H1.
+  assert (:N :-: n :<=: :N) as H2. {
+    apply IsIncl.
+    - apply Omega.HasOrdinalElem. assumption.
+    - apply Omega.IsOrdinal. }
+  assert (:N :<=: :N :-: n) as H3. {
+    apply Inf.IsLargest.
+    - intros c H3.
+      apply Specify.Charac in H3. destruct H3 as [H3 _].
+      apply Core.IsOrdinal with (succ :N). 2: assumption.
+      apply Succ.IsOrdinal, Omega.IsOrdinal.
+    - apply Empty.HasElem. exists :N.
+      apply Specify.Charac. split.
+      + apply Succ.IsIn.
+      + apply Plus.IsInclAddL.
+        * apply Omega.IsOrdinal.
+        * apply Omega.HasOrdinalElem. assumption.
+    - intros c H3.
+      apply Specify.Charac in H3. destruct H3 as [H3 H4].
+      apply Succ.Charac in H3. destruct H3 as [H3|H3].
+      + subst. apply Incl.Refl.
+      + exfalso.
+        assert (n :+: c :< n :+: c) as H5. { (* contradiction *)
+          apply H4. apply Plus.InOmega; assumption. }
+        revert H5. apply NoElemLoop1. }
   apply DoubleInclusion. split; assumption.
 Qed.

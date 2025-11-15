@@ -16,6 +16,18 @@ Module COC := ZF.Class.Ordinal.Core.
 
 Definition succ (a:U) : U := a :\/: :{a}:.
 
+Definition Charac : forall (a x:U),
+  x :< succ a <-> x = a \/ x :< a.
+Proof.
+  intros a x. split; intros H1.
+  - apply Union2.Charac in H1. destruct H1 as [H1|H1].
+    + right. assumption.
+    + apply Single.Charac in H1. left. assumption.
+  - destruct H1 as [H1|H1]; apply Union2.Charac.
+    + right. apply Single.Charac. assumption.
+    + left. assumption.
+Qed.
+
 (* A set (ordinal or not) belongs to its successor.                             *)
 Proposition IsIn : forall (a:U), a :< succ a.
 Proof.
@@ -155,8 +167,8 @@ Proof.
     + apply IsOrdinal. assumption.
     + apply IsIn.
   - apply Charac in H3. destruct H3 as [H3|H3].
+    + subst. apply Incl.Refl.
     + apply Core.ElemIsIncl; assumption.
-    + apply Single.Charac in H3. subst. apply Incl.Refl.
 Qed.
 
 (* The successor of a set is not equal to the set in question.                  *)
