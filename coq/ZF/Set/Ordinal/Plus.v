@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
@@ -223,6 +224,24 @@ Proof.
   rewrite WhenZeroR in H5. assumption.
 Qed.
 
+Proposition WhenZero : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :+: b = :0: -> a = :0: /\ b = :0:.
+Proof.
+  intros a b H1 H2 H3. split.
+  - assert (a :<=: :0:) as H4. {
+      apply Incl.Tran with (a :+: b).
+      - apply IsInclAddR; assumption.
+      - rewrite H3. apply Incl.Refl. }
+    apply DoubleInclusion. split. 1: assumption.
+    apply Core.IsIncl. assumption.
+  - assert (b :<=: :0:) as H4. {
+      apply Incl.Tran with (a :+: b).
+      - apply IsInclAddL; assumption.
+      - rewrite H3. apply Incl.Refl. }
+    apply DoubleInclusion. split. 1: assumption.
+    apply Core.IsIncl. assumption.
+Qed.
+
 Proposition CompleteR : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> exists c, Ordinal c /\ a :+: c = b.
 Proof.
@@ -321,7 +340,7 @@ Proof.
 Qed.
 
 (* Adding a natural number to a non-integer ordinal yields the same ordinal.    *)
-Proposition WhenNaturalL : forall (n a:U), Ordinal a ->
+Proposition WhenNatL : forall (n a:U), Ordinal a ->
   n :< :N -> :N :<=: a -> n :+: a = a.
 Proof.
   intros n a H1 H2. revert a H1.
@@ -642,5 +661,48 @@ Proof.
   - assert (b = a /\ m = n) as H10. {
       apply H1; try assumption. symmetry. assumption. }
     destruct H10 as [H10 H11]. split; symmetry; assumption.
+Qed.
+
+Proposition LimitCharac : forall (a b:U), Ordinal a -> Ordinal b  ->
+  Limit (a :+: b) <-> Limit b \/ (b = :0: /\ Limit a).
+Proof.
+  intros a b H1 H2.
+  assert (Limit b \/ (b = :0: /\ Limit a) -> Limit (a :+: b)) as H3. {
+    intros [H3|[H3 H4]].
+    - apply IsLimit;assumption.
+    - rewrite H3, WhenZeroR. assumption. }
+  assert (Limit (a :+: b) -> Limit b \/ (b = :0: /\ Limit a)) as H4. {
+    intros H4.
+    assert (b :< :N \/ :N :<=: b) as H5. {
+      apply Core.ElemOrIncl. 1: assumption. apply Omega.IsOrdinal. }
+    destruct H5 as [H5|H5].
+    - assert (a :< :N \/ :N :<=: a) as H6. {
+      apply Core.ElemOrIncl. 1: assumption. apply Omega.IsOrdinal. }
+      destruct H6 as [H6|H6].
+      + exfalso. apply Limit.NotBoth with (a :+: b). 1: assumption.
+        apply Omega.HasNonLimitElem, InOmega; assumption.
+      + assert (exists c n, Limit c /\ n :< :N /\ a = c :+: n) as H7. {
+          apply Destruct; assumption. }
+        destruct H7 as [c [n [H7 [H8 H9]]]].
+        assert (Ordinal c) as H10. { apply H7. }
+        assert (Ordinal n) as H11. { apply Omega.HasOrdinalElem. assumption. }
+        assert (n :+: b = :0:) as H12. {
+          apply LimitWithNat with c. 1: assumption.
+          - apply InOmega; assumption.
+          - rewrite <- Assoc, <- H9; assumption. }
+        apply WhenZero in H12; try assumption. destruct H12 as [H12 H13].
+        rewrite H13, WhenZeroR in H4. right. split; assumption.
+    - assert (exists c n, Limit c /\ n :< :N /\ b = c :+: n) as H6. {
+        apply Destruct; assumption. }
+      destruct H6 as [c [n [H6 [H7 H8]]]].
+      assert (Ordinal c) as H9. { apply H6. }
+      assert (Ordinal n) as H10. { apply Omega.HasOrdinalElem. assumption. }
+      assert (n = :0:) as H11. {
+        apply LimitWithNat with (a :+: c). 2: assumption.
+        - apply IsLimit; assumption.
+        - rewrite Assoc, <- H8; assumption. }
+      rewrite H11 in H8. rewrite WhenZeroR in H8. rewrite <- H8 in H6.
+      left. assumption. }
+  split; assumption.
 Qed.
 
