@@ -48,10 +48,22 @@ Proof.
   rewrite H1. rewrite WhenZeroR. reflexivity.
 Qed.
 
-Proposition WhenSucc : forall (a b:U), Ordinal b ->
+Proposition WhenSuccR : forall (a b:U), Ordinal b ->
   a :+: (succ b) = succ (a :+: b).
 Proof.
   apply COP.WhenSucc.
+Qed.
+
+Proposition WhenSuccL : forall (a n:U), Ordinal a -> n :< :N ->
+  succ a :+: n = succ (a :+: n).
+Proof.
+  intros a n H1. revert n.
+  apply Omega.FiniteInduction'.
+  - rewrite WhenZeroR, WhenZeroR. reflexivity.
+  - intros n H2 IH.
+    assert (Ordinal n) as H3. { apply Omega.HasOrdinalElem.  assumption. }
+    rewrite WhenSuccR. 2: assumption. rewrite IH, WhenSuccR.
+    2: assumption. reflexivity.
 Qed.
 
 Proposition WhenLimit : forall (a b:U), Limit b ->
@@ -65,7 +77,7 @@ Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1. revert b. apply Induction2.
   - rewrite WhenZeroR. assumption.
-  - intros b H2 H3. rewrite WhenSucc. 2: assumption.
+  - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
     apply Succ.IsOrdinal. assumption.
   - intros b H2 H3. rewrite WhenLimit. 2: assumption.
     apply SOG.IsOrdinal. intros c H4. apply H3. assumption.
@@ -76,7 +88,7 @@ Proposition WhenZeroL : forall (a:U), Ordinal a ->
 Proof.
   apply Induction2.
   - apply WhenZeroR.
-  - intros a H1 H2. rewrite WhenSucc. 2: assumption. rewrite H2. reflexivity.
+  - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2. reflexivity.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     rewrite <- SOG.WhenLimit. 2: assumption.
     apply SUG.EqualCharac. intros x. rewrite I.Eval. apply H2.
@@ -94,8 +106,8 @@ Proof.
   assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
   revert b H2 H4.
   apply Induction2'. 1: assumption.
-  - rewrite WhenSucc. 2: assumption. apply Succ.IsIn.
-  - intros b H6 H7 H8. rewrite WhenSucc. 2: assumption.
+  - rewrite WhenSuccR. 2: assumption. apply Succ.IsIn.
+  - intros b H6 H7 H8. rewrite WhenSuccR. 2: assumption.
     assert (Ordinal (c :+: a)) as H9.  { apply IsOrdinal; assumption. }
     assert (Ordinal (c :+: b)) as H10. { apply IsOrdinal; assumption. }
     apply ElemElemTran with (c :+: b); try assumption.
@@ -137,7 +149,7 @@ Proof.
   - intros c H5 H6.
     assert (Ordinal (a :+: c)) as H7. { apply IsOrdinal; assumption. }
     assert (Ordinal (b :+: c)) as H8. { apply IsOrdinal; assumption. }
-    rewrite WhenSucc. 2: assumption. rewrite WhenSucc. 2: assumption.
+    rewrite WhenSuccR. 2: assumption. rewrite WhenSuccR. 2: assumption.
     apply Succ.InclCompat; assumption.
   - intros c H5 H6.
     rewrite WhenLimit. 2: assumption. rewrite WhenLimit. 2: assumption.
@@ -227,7 +239,7 @@ Proof.
     assert (a :+: d :< b) as H14. {
       apply G1. 1: assumption. rewrite H10. apply Succ.IsIn. }
     apply ElemIsIncl in H14; try assumption. rewrite H10.
-    rewrite WhenSucc; assumption.
+    rewrite WhenSuccR; assumption.
   - rewrite WhenLimit. 2: assumption. apply SUG.WhenBounded.
     intros d H15.
     assert (Ordinal d) as H16. { apply Core.IsOrdinal with c; assumption. }
@@ -244,7 +256,7 @@ Proof.
     assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
     assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
     assert (Ordinal (n :+: m)) as H6. { apply IsOrdinal; assumption. }
-    rewrite WhenSucc. 2: assumption. apply Omega.HasSucc. assumption.
+    rewrite WhenSuccR. 2: assumption. apply Omega.HasSucc. assumption.
 Qed.
 
 Proposition InOmegaL : forall (n m:U), Ordinal n -> Ordinal m ->
@@ -321,7 +333,7 @@ Proof.
   - apply Omega.IsOrdinal.
   - assumption.
   - intros a H1 H3 H4.
-    rewrite WhenSucc. 2: assumption. rewrite H4. reflexivity.
+    rewrite WhenSuccR. 2: assumption. rewrite H4. reflexivity.
   - intros a H1 H3 H4.
     assert (Ordinal a) as G1. { apply H1. }
     assert (Ordinal :N) as G3. { apply Omega.IsOrdinal. }
@@ -374,7 +386,7 @@ Proof.
   apply Limit.NotBoth with (a :+: n). 1: assumption. right.
   exists (a :+: m). split.
   - apply IsOrdinal; assumption.
-  - rewrite H8. apply WhenSucc. assumption.
+  - rewrite H8. apply WhenSuccR. assumption.
 Qed.
 
 (* The sum of an ordinal and a limit ordinal is a limit ordinal.                *)
@@ -414,7 +426,7 @@ Proof.
     assert (succ d :< :\/:_{b} (COP.Plus a)) as H17. {
       apply SUG.Charac. exists (succ c). split. 1: assumption.
       assert (succ d :< a :+: (succ c)) as X. 2: apply X. (* failing rewrite *)
-      rewrite WhenSucc; assumption. }
+      rewrite WhenSuccR; assumption. }
     assert (succ d :< succ d) as H18. { (* our contradicton *)
       rewrite <- H8 in H17. rewrite H7 in H17. assumption. }
     revert H18. apply NoElemLoop1. }
@@ -436,7 +448,7 @@ Proof.
     (a :+: b) :+: succ c = a :+: (b :+: succ c)) as H4. {
       intros c H4 H5.
       assert (Ordinal (b :+: c)) as H6. { apply IsOrdinal; assumption. }
-      rewrite WhenSucc, WhenSucc, WhenSucc, H5; try assumption. reflexivity. }
+      rewrite WhenSuccR, WhenSuccR, WhenSuccR, H5; try assumption. reflexivity. }
   assert (forall c,
     Limit c                                                 ->
     (forall d, d :< c -> (a :+: b) :+: d = a :+: (b :+: d)) ->
@@ -486,6 +498,19 @@ Proof.
           exists d. split; assumption. }
       apply DoubleInclusion. split; assumption. }
   apply Induction2; assumption.
+Qed.
+
+(* The addition of natural numbers is commutative.                              *)
+Proposition Comm : forall (n m:U), n :< :N -> m :< :N ->
+  n :+: m = m :+: n.
+Proof.
+  intros n m H1 H2. revert n H1.
+  assert (Ordinal m) as H3. { apply Omega.HasOrdinalElem. assumption. }
+  apply Omega.FiniteInduction'.
+  - rewrite WhenZeroL, WhenZeroR. 2: assumption. reflexivity.
+  - intros n H4 IH.
+    assert (Ordinal n) as H5. { apply Omega.HasOrdinalElem. assumption. }
+    rewrite WhenSuccL, WhenSuccR, IH; try assumption. reflexivity.
 Qed.
 
 (* An non-integer ordinal is the sum of a limit ordinal and a natural number.   *)
