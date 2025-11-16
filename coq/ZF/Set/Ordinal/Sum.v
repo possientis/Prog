@@ -1,8 +1,10 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Ordinal.Order.Le.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
@@ -14,6 +16,7 @@ Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
@@ -22,11 +25,18 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union2.
 
+Require Import ZF.Notation.Eval. (* TODO: already exported by Eval so why ? *)
+
+Module COR := ZF.Set.Order.RestrictOfClass.
+
 (* Will be shown to be isomorphic to a + b when endowed with lexic order.       *)
 Definition sum (a b:U) : U := :{ :0: }: :x: a :\/: :{ :1: }: :x: b.
 
 (* Lexicographic order on sum a b.                                              *)
 Definition le (a b:U) : U := Le :/: (sum a b).
+
+(* The order induced by :< on the ordinal a + b.                                *)
+Definition r (a b:U) : U := E :/: (a :+: b).
 
 (* Helper class to define isomorphism from sum a b to a + b.                    *)
 (* F(0,c) = c     when c :< a                                                   *)
@@ -59,6 +69,7 @@ Proposition Charac2 : forall (a b x y:U), Ordinal a -> Ordinal b ->
     (c :< a /\ x = :( :0: , c ): /\ y = c)          \/
     (c :< b /\ x = :( :1: , c ): /\ y = a :+: c).
 Proof.
+
   intros a b x y G1 G2. split; intros H1.
   - apply Specify.Charac in H1. destruct H1 as [H1 H2].
     apply FCharac2 in H2. assumption.
@@ -206,3 +217,39 @@ Proof.
   - apply RangeOf; assumption.
 Qed.
 
+
+Proposition Eval0 : forall (a b c:U), Ordinal a -> Ordinal b ->
+  c :< a -> (f a b)!(:(:0:,c):) = c.
+Proof.
+  intros a b c H1 H2 H3. apply Eval.Charac.
+  - apply IsFunctional; assumption.
+  - rewrite DomainOf; try assumption. apply Union2.Charac. left.
+    apply Prod.Charac2. split. 2: assumption. apply Single.Charac. reflexivity.
+  - apply Charac2; try assumption. exists c. left.
+    split. 1: assumption. split; reflexivity.
+Qed.
+
+Proposition Eval1 : forall (a b c:U), Ordinal a -> Ordinal b ->
+  c :< b -> (f a b)!(:(:1:,c):) = a :+: c.
+Proof.
+  intros a b c H1 H2 H3. apply Eval.Charac.
+  - apply IsFunctional; assumption.
+  - rewrite DomainOf; try assumption. apply Union2.Charac. right.
+    apply Prod.Charac2. split. 2: assumption. apply Single.Charac. reflexivity.
+  - apply Charac2; try assumption. exists c. right.
+    split. 1: assumption. split; reflexivity.
+Qed.
+
+(* f a b is an order isomorphism from sum a b to a + b.                         *)
+Proposition IsIsom : forall (a b:U), Ordinal a -> Ordinal b ->
+  Isom (f a b) (le a b) (r a b) (sum a b) (a :+: b).
+Proof.
+  intros a b H1 H2. split. 1: { apply IsBij; assumption. }
+  intros x y H3 H4. apply Union2.Charac in H3. apply Union2.Charac in H4.
+  destruct H3 as [H3|H3]; destruct H4 as [H4|H4];
+  apply Prod.Charac in H3; apply Prod.Charac in H4;
+  destruct H3 as [x1 [c [H3 [H5 H6]]]]; apply Single.Charac in H5;
+  destruct H4 as [x2 [d [H4 [H7 H8]]]]; apply Single.Charac in H7;
+  subst; split; intros H9.
+  - rewrite Eval0, Eval0; try assumption.
+Admitted.
