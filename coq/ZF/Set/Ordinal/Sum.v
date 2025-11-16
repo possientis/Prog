@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Order.Le.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
@@ -8,10 +9,13 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Bijection.
+Require Import ZF.Set.Relation.BijectionOn.
+Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
-Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Functional.
-Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Single.
@@ -98,12 +102,42 @@ Proof.
   - destruct H7 as [_ H7]. subst. reflexivity.
 Qed.
 
-Proposition IsFunction : forall (a b:U), Ordinal a -> Ordinal b ->
-  Function (f a b).
+Proposition IsOneToOne : forall (a b:U), Ordinal a -> Ordinal b ->
+  OneToOne (f a b).
+Proof.
+  intros a b H1 H2. split. 1: { apply IsFunctional; assumption. }
+  intros y x1 x2 H3 H4.
+  apply Converse.Charac2, Charac2 in H3; try assumption.
+  apply Converse.Charac2, Charac2 in H4; try assumption.
+  destruct H3 as [c [[H3 [H5 H6]]|[H3 [H5 H6]]]];
+  destruct H4 as [d [[H4 [H7 H8]]|[H4 [H7 H8]]]];
+  subst.
+  - reflexivity.
+  - exfalso.
+    assert (a :< a) as H9. {
+      assert (Ordinal d) as H9. { apply Core.IsOrdinal with b; assumption. }
+      apply Core.InclElemTran with (a :+: d); try assumption.
+      - apply Plus.IsOrdinal; assumption.
+      - apply Plus.IsInclAddR; assumption. }
+    revert H9. apply NoElemLoop1.
+  - exfalso.
+    assert (a :< a) as H9. {
+      assert (Ordinal c) as H9. { apply Core.IsOrdinal with b; assumption. }
+      apply Core.InclElemTran with (a :+: c); try assumption.
+      - apply Plus.IsOrdinal; assumption.
+      - apply Plus.IsInclAddR; assumption. }
+    revert H9. apply NoElemLoop1.
+  - assert (Ordinal c) as H9.  { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal d) as H10. { apply Core.IsOrdinal with b; assumption. }
+    apply Plus.CancelL in H8; try assumption. subst. reflexivity.
+Qed.
+
+Proposition IsBijection : forall (a b:U), Ordinal a -> Ordinal b ->
+  Bijection (f a b).
 Proof.
   intros a b H1 H2. split.
   - apply IsRelation.
-  - apply IsFunctional; assumption.
+  - apply IsOneToOne; assumption.
 Qed.
 
 Proposition DomainOf : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -126,11 +160,11 @@ Proof.
       split. 1: assumption. split; reflexivity.
 Qed.
 
-Proposition IsFunctionOn : forall (a b:U), Ordinal a -> Ordinal b ->
-  FunctionOn (f a b) (sum a b).
+Proposition IsBijectionOn : forall (a b:U), Ordinal a -> Ordinal b ->
+  BijectionOn (f a b) (sum a b).
 Proof.
   intros a b H1 H2. split.
-  - apply IsFunction; assumption.
+  - apply IsBijection; assumption.
   - apply DomainOf; assumption.
 Qed.
 
@@ -158,4 +192,17 @@ Proof.
         apply Plus.CompleteR; assumption. }
       destruct H9 as [c [H9 H10]].
       exists :(:1:,c):. apply Charac2; try assumption. exists c. right.
-Admitted.
+      split; subst.
+      * apply Plus.ElemCompatRevR with a; assumption.
+      * split; reflexivity.
+Qed.
+
+(* f a b is a bijection from sum a b to a + b.                                  *)
+Proposition IsBij : forall (a b:U), Ordinal a -> Ordinal b ->
+  Bij (f a b) (sum a b) (a :+: b).
+Proof.
+  intros a b H1 H2. split.
+  - apply IsBijectionOn; assumption.
+  - apply RangeOf; assumption.
+Qed.
+
