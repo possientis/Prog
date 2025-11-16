@@ -57,7 +57,7 @@ Proof.
   assert (exists b, forall x, x :< b <-> Ru x) as A. 2: apply A.
 
   (* Consider the set b = {x :< a | Ru x } *)
-  remember :{a|Ru}: as b eqn:Eb.
+  remember :{ x :< a | Ru }: as b eqn:Eb.
 
   (* We claim that b has the desired property *)
   exists b.

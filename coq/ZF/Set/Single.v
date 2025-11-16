@@ -7,9 +7,9 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Pair.
 
 (* The singleton set {a} is defined as the pair {a,a}.                          *)
-Definition singleton (a:U) : U := :{a,a}:.
+Definition single (a:U) : U := :{a,a}:.
 
-Notation ":{ a }:" := (singleton a)
+Notation ":{ a }:" := (single a)
   (at level 1, no associativity) : ZF_Set_Single_scope.
 
 (* Characterisation of the elements of {a}.                                     *)

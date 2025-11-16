@@ -12,7 +12,7 @@ Export ZF.Notation.Slash.
 Module CPR := ZF.Class.Prod.
 
 (* The restriction of a class (viewed as relation) to a set.                    *)
-Definition restrict (R:Class) (a:U) : U := :{ a :x: a | R }:.
+Definition restrict (R:Class) (a:U) : U := :{ x :< a :x: a | R }:.
 
 (* Notation "R :/: a" := (restrict R a)                                         *)
 Global Instance ClassSetSlash : Slash Class U := { slash := restrict }.

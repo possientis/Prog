@@ -156,3 +156,8 @@ Proof.
   unfold tuple4. rewrite <- ThreeExtension. reflexivity.
 Qed.
 
+Proposition ZeroIsNotOne : :0: <> :1:.
+Proof.
+  intros H1. symmetry in H1. revert H1. apply Succ.NotEqual.
+Qed.
+

@@ -33,7 +33,7 @@ Proof.
   assert (exists b, forall x, x :< b <-> False) as A. 2: apply A.
 
   (* Consider the set b = { x | x :< a /\ ~ x :< a } *)
-  remember :{a | fun x => ~ x :< a }: as b eqn:H2.
+  remember :{ x :< a | fun x => ~ x :< a }: as b eqn:H2.
 
   (* We claim this set b has the required property *)
   exists b.

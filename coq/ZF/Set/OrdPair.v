@@ -49,7 +49,7 @@ Proof.
       assert (:{a,d}: :< :(a,a):) as H1.
         { rewrite H. unfold ordPair. apply Pair.IsInR. }
       unfold ordPair in H1. apply Pair.Charac in H1.
-      fold singleton in H1. destruct H1 as [H1|H1].
+      fold single in H1. destruct H1 as [H1|H1].
       * symmetry. apply Single.Charac. rewrite <- H1. apply Pair.IsInR.
       * symmetry in H1. apply ABC in H1. destruct H1 as [H1 H2]. apply H2.
     + assert (b :< :{a,d}:) as H2.

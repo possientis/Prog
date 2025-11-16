@@ -38,7 +38,7 @@ Proof.
   assert (exists b, forall x, x :< b <-> A x) as X. 2: apply X.
 
   (* Consider the set b = { x :< a | P x }. *)
-  remember :{a|A}: as b eqn:Eb.
+  remember :{ x :< a | A }: as b eqn:Eb.
 
   (* We claim that b has the desired property. *)
   exists b.

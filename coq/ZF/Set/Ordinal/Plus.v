@@ -3,6 +3,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Induction2.
+Require Import ZF.Class.Ordinal.Order.Le.
 Require Import ZF.Class.Ordinal.Plus.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -120,6 +121,21 @@ Proof.
     apply H8. 2: assumption. apply Incl.Refl.
 Qed.
 
+Proposition InclCompatRevR : forall (a b c:U),
+  Ordinal a             ->
+  Ordinal b             ->
+  Ordinal c             ->
+  c :+: a :<=: c :+: b  ->
+  a :<=: b.
+Proof.
+  intros a b c H1 H2 H3 H4.
+  assert (b :< a \/ a :<=: b) as H5. { apply Core.ElemOrIncl; assumption. }
+  destruct H5 as [H5|H5]. 2: assumption. exfalso.
+  assert (c :+: b :< c :+: a) as H6. { apply ElemCompatR; assumption. }
+  assert (c :+: b  :< c :+: b) as H7. { apply H4. assumption. }
+  revert H7. apply NoElemLoop1.
+Qed.
+
 (* Note: 0 + N = 1 + N so we cannot hope to have a 'CancelR'                    *)
 Proposition CancelL : forall (a b c:U),
   Ordinal a           ->
@@ -177,6 +193,21 @@ Proof.
     apply SUG.InclCompatR. assumption.
 Qed.
 
+Proposition ElemCompatRevL : forall (a b c:U),
+  Ordinal a           ->
+  Ordinal b           ->
+  Ordinal c           ->
+  a :+: c :< b :+: c  ->
+  a :< b.
+Proof.
+  intros a b c H1 H2 H3 H4.
+  assert (a :< b \/ b :<=: a) as H5. { apply Core.ElemOrIncl; assumption. }
+  destruct H5 as [H5|H5]. 1: assumption. exfalso.
+  assert (b :+: c :<=: a :+: c) as H6. { apply InclCompatL; assumption. }
+  assert (a :+: c :< a :+: c) as H7. { apply H6. assumption. }
+  revert H7. apply NoElemLoop1.
+Qed.
+
 Proposition InclCompatR : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -190,6 +221,21 @@ Proof.
   destruct H4 as [H4|H4].
   - subst. apply Incl.Refl.
   - apply Core.ElemIsIncl. 1: assumption. apply ElemCompatR; assumption.
+Qed.
+
+Proposition ElemCompatRevR : forall (a b c:U),
+  Ordinal a          ->
+  Ordinal b          ->
+  Ordinal c          ->
+  c :+: a :< c :+: b ->
+  a :< b.
+Proof.
+  intros a b c H1 H2 H3 H4.
+  assert (a :< b \/ b :<=: a) as H5. { apply Core.ElemOrIncl; assumption. }
+  destruct H5 as [H5|H5]. 1: assumption. exfalso.
+  assert (c :+: b :<=: c :+: a) as H6. { apply InclCompatR; assumption. }
+  assert (c :+: a :< c :+: a) as H7. { apply H6. assumption. }
+  revert H7. apply NoElemLoop1.
 Qed.
 
 Proposition IsInclAddL : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -557,7 +603,7 @@ Proposition Destruct : forall (a:U), Ordinal a ->
   :N :<=: a -> exists b n, Limit b /\ n :< :N /\ a = b :+: n.
 Proof.
   intros a H1 H2.
-  remember :{succ a | Limit}: as l eqn:H3.
+  remember :{ x :< succ a | Limit }: as l eqn:H3.
   remember (sup l) as b eqn:H4.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   assert (Limit :N) as G2. { apply Omega.IsLimit. }
@@ -704,5 +750,19 @@ Proof.
       rewrite H11 in H8. rewrite WhenZeroR in H8. rewrite <- H8 in H6.
       left. assumption. }
   split; assumption.
+Qed.
+
+Proposition HasAllSucc : forall (a b n:U),
+  Limit a       ->
+  b :< a        ->
+  n :< :N       ->
+  b :+: n :< a.
+Proof.
+  intros a b n H1 H2. revert n.
+  apply Omega.FiniteInduction'.
+  - rewrite WhenZeroR. assumption.
+  - intros n H3 IH.
+    assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
+    rewrite WhenSuccR. 2: assumption. apply Limit.HasSucc; assumption.
 Qed.
 

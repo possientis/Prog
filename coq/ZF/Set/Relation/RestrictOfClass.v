@@ -111,7 +111,7 @@ Qed.
 
 (* The domain of the restriction F|a is the intersection of a and domain F.     *)
 Proposition DomainOf : forall (F:Class) (a:U), CFL.Functional F ->
-  SRD.domain (F:|:a) = :{ a | CRD.domain F }:.
+  SRD.domain (F:|:a) = :{ x :< a | CRD.domain F }:.
 Proof.
   intros F a H1. apply DoubleInclusion. split; intros x H2.
   - apply SRD.Charac in H2. destruct H2 as [y H2]. apply Charac2 in H2.
