@@ -47,7 +47,7 @@ Definition F (a b:U) : Class := fun x =>
     (x = :( :( :1: , c ): , a :+: c ): /\ c :< b).
 
 (* Our isomorphism candidate.                                                   *)
-Definition f (a b:U) : U := :{ x :< (sum a b) :x: (a :+: b) | F a b }:.
+Definition f (a b:U) : U := {{ x :< (sum a b) :x: (a :+: b) | F a b }}.
 
 Proposition FCharac2 : forall (a b x y:U),
   F a b :(x,y): <-> exists c,

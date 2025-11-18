@@ -10,7 +10,7 @@ Proposition IsInter : forall (a:U), Ordinal a ->
   inf a = :I(a).
 Proof.
   intros a H1. unfold inf.
-  assert (:{ x:< a | Ordinal }: = a) as H2. {
+  assert ({{ x:< a | Ordinal }} = a) as H2. {
     apply Specify.IsA. intros x H2. apply Core.IsOrdinal with a; assumption. }
   rewrite H2. reflexivity.
 Qed.

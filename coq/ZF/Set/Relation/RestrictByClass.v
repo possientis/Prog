@@ -85,7 +85,7 @@ Proof.
 Qed.
 
 Proposition DomainOf : forall (A:Class) (f:U),
-  domain (f:|:A) = :{ x :< domain f | A }:.
+  domain (f:|:A) = {{ x :< domain f | A }}.
 Proof.
   intros A f. apply DoubleInclusion. split; intros x H1.
   - apply Domain.Charac in H1. destruct H1 as [y H1].

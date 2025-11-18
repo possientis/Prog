@@ -15,7 +15,7 @@ Require Import ZF.Notation.Minus.
 Export ZF.Notation.Minus.
 
 (* b - a is the smallest ordinal c such that b <= a + c.                        *)
-Definition minus (b a:U) : U := inf :{ x :< succ b | fun c => b :<=: a :+: c }:.
+Definition minus (b a:U) : U := inf {{ x :< succ b | fun c => b :<=: a :+: c }}.
 
 (* Notation "b :-: a" := (minus b a)                                            *)
 Global Instance SetMinus : Minus U := { minus := minus }.
@@ -34,7 +34,7 @@ Proof.
     apply Plus.CompleteR; assumption. }
   destruct H4 as [c [H4 H5]].
   assert (b :<=: a :+: (b :-: a)) as H6. {
-    remember (:{ x :< succ b | fun c => b :<=: a :+: c }:) as G eqn:H6.
+    remember ({{ x :< succ b | fun c => b :<=: a :+: c }}) as G eqn:H6.
     assert (b :-: a = inf G) as H7. { rewrite H6. reflexivity. }
     assert (toClass G :<=: Ordinal) as H8. {
       intros d H8. rewrite H6 in H8. apply Specify.Charac in H8.
@@ -73,7 +73,7 @@ Proof.
   assert (Ordinal (b :-: a)) as H4. { apply IsOrdinal; assumption. }
   assert (Ordinal :0:) as H5. { apply Core.ZeroIsOrdinal. }
   assert (Ordinal (succ b)) as H6. { apply Succ.IsOrdinal. assumption. }
-  remember (:{ x :< succ b | fun c => b :<=: a :+: c}:) as G eqn:H7.
+  remember ({{ x :< succ b | fun c => b :<=: a :+: c}}) as G eqn:H7.
   assert (b :-: a = inf G) as H8. { rewrite H7. reflexivity. }
   assert (:0: :< G) as H9. {
     rewrite H7. apply Specify.Charac. split.

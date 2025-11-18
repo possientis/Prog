@@ -33,7 +33,7 @@ Proof.
 Qed.
 
 Proposition CharacRev : forall (a b x:U),
-  :{ x :< a :\: b | Ordinal }:  <> :0:                      ->
+  {{ x :< a :\: b | Ordinal }}  <> :0:                      ->
   (forall y, y :< a -> ~ y :< b -> Ordinal y -> x :< y) ->
   x :< inf(>: b) a.
 Proof.
@@ -57,7 +57,7 @@ Proposition WhenOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2. unfold Notation.InfAbove.infAbove, infAbove, SetInfAbove.
   unfold infAbove, inf.
-  assert (:{ x :< a :\: b | Ordinal }: = a :\: b) as H3. {
+  assert ({{ x :< a :\: b | Ordinal }} = a :\: b) as H3. {
     apply Specify.IsA. intros x H3. apply Core.IsOrdinal with a.
     1: assumption. apply Diff.Charac in H3. apply H3. }
   rewrite H3. reflexivity.

@@ -7,7 +7,7 @@ Require Import ZF.Set.Specify.
 Module COE := ZF.Class.Order.E.
 
 (* The binary relation on a induced by :<.                                      *)
-Definition E (a:U) : U := :{ x :< a :x: a | COE.E }:.
+Definition E (a:U) : U := {{ x :< a :x: a | COE.E }}.
 
 Proposition Charac : forall (a x:U),
   x :< (E a) <-> exists y z, x = :(y,z): /\ y :< a /\ z :< a /\ y :< z.

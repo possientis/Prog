@@ -21,7 +21,7 @@ Module SIN := ZF.Set.Inter.
 Module SOI := ZF.Set.Ordinal.Inter.
 
 (* The infimum of the set a.                                                    *)
-Definition inf (a:U) : U := :I( :{ x :< a | Ordinal }: ).
+Definition inf (a:U) : U := :I( {{ x :< a | Ordinal }} ).
 
 Proposition Charac : forall (a x y:U),
   x :< inf a  ->
@@ -29,12 +29,12 @@ Proposition Charac : forall (a x y:U),
   Ordinal y   ->
   x :< y.
 Proof.
-  intros a x y H1 H2 H3. apply SIN.Charac with :{ x :< a | Ordinal }:.
+  intros a x y H1 H2 H3. apply SIN.Charac with {{ x :< a | Ordinal }}.
   1: assumption. apply Specify.Charac. split; assumption.
 Qed.
 
 Proposition CharacRev : forall (a x:U),
-  :{ x:< a | Ordinal }:  <> :0:             ->
+  {{ x:< a | Ordinal }}  <> :0:             ->
   (forall y, y :< a -> Ordinal y -> x :< y) ->
   x :< inf a.
 Proof.
@@ -49,7 +49,7 @@ Proposition ToClass : forall (a:U),
 Proof.
   intros a x. split; intros H1.
  - apply FromClass.Charac in H1.
-    apply CIN.EquivCompat with (toClass :{ x :< a | Ordinal }:). 2: assumption.
+    apply CIN.EquivCompat with (toClass {{ x :< a | Ordinal }}). 2: assumption.
     intros y. split; intros H2.
     + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
     + apply Specify.Charac in H2. destruct H2 as [H2 H3]. split; assumption.

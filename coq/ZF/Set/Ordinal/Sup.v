@@ -13,7 +13,7 @@ Module COS := ZF.Class.Ordinal.Sup.
 Module SOU := ZF.Set.Ordinal.Union.
 
 (* The supremum of the set a.                                                   *)
-Definition sup (a:U) : U := :U( :{ x :< a | Ordinal }: ).
+Definition sup (a:U) : U := :U( {{ x :< a | Ordinal }} ).
 
 Proposition Charac : forall (a:U),
   forall x, x :< sup a <-> exists y, x :< y /\ y :< a /\ Ordinal y.

@@ -603,7 +603,7 @@ Proposition Destruct : forall (a:U), Ordinal a ->
   :N :<=: a -> exists b n, Limit b /\ n :< :N /\ a = b :+: n.
 Proof.
   intros a H1 H2.
-  remember :{ x :< succ a | Limit }: as l eqn:H3.
+  remember {{ x :< succ a | Limit }} as l eqn:H3.
   remember (sup l) as b eqn:H4.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   assert (Limit :N) as G2. { apply Omega.IsLimit. }

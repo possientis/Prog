@@ -10,7 +10,7 @@ Require Import ZF.Set.Union.
 Export ZF.Notation.SupBelow.
 
 (* The supremum of the set a below b.                                           *)
-Definition supBelow (b a:U) : U := :U( :{ x :< a :/\: b | Ordinal }: ).
+Definition supBelow (b a:U) : U := :U( {{ x :< a :/\: b | Ordinal }} ).
 
 (* Notation "sup(:< b ) a" := (supBelow b a)                                    *)
 Global Instance SetSupBelow : SupBelow U := { supBelow := supBelow }.
@@ -47,7 +47,7 @@ Proposition WhenOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2.
   unfold Notation.SupBelow.supBelow, SetSupBelow, supBelow.
-  assert (:{ x :< a :/\: b | Ordinal }: = a :/\: b) as H3. {
+  assert ({{ x :< a :/\: b | Ordinal }} = a :/\: b) as H3. {
     apply Specify.IsA. intros x H3. apply Inter2.Charac in H3.
     destruct H3 as [H3 _]. apply Core.IsOrdinal with a; assumption. }
   rewrite H3. reflexivity.
