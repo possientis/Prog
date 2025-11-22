@@ -34,7 +34,7 @@ Module SUG := ZF.Set.UnionGenOfClass.
 (* The sum of two ordinals when a is an ordinal.                                *)
 Definition plus (a b:U) : U := (COP.Plus a)!b.
 
-(* Notation "a :+: b" := ((plus a)!b)                                           *)
+(* Notation "a :+: b" := (plus a b)                                           *)
 Global Instance SetPlus : Plus U := { plus := plus }.
 
 Proposition WhenZeroR : forall (a:U), a :+: :0: = a.
@@ -82,7 +82,7 @@ Proof.
   - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
     apply Succ.IsOrdinal. assumption.
   - intros b H2 H3. rewrite WhenLimit. 2: assumption.
-    apply SOG.IsOrdinal. intros c H4. apply H3. assumption.
+    apply SOG.IsOrdinal. apply H3.
 Qed.
 
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
