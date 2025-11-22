@@ -1,14 +1,13 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.Induction2.
+Require Import ZF.Class.Ordinal.PlusA.
 Require Import ZF.Class.Ordinal.Recursion2.
-Require Import ZF.Class.Ordinal.Succ.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
-Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -19,51 +18,51 @@ Require Import ZF.Notation.Eval.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SFO := ZF.Set.Relation.FunctionOn.
 
-(* The function class (a + .) when a is an ordinal.                             *)
-Definition Plus (a:U) : Class := Recursion Succ a.
+(* The function class (a * .) when a is an ordinal.                             *)
+Definition Mult (a:U) : Class := Recursion (PlusA a) :0:.
 
 (* Plus a is a function class defined on the class of ordinals.                 *)
-Proposition IsFunctionOn : forall (a:U), CFO.FunctionOn (Plus a) On.
+Proposition IsFunctionOn : forall (a:U), CFO.FunctionOn (Mult a) On.
 Proof.
   intros a. apply Recursion2.IsFunctionOn.
 Qed.
 
-(* Plus a evaluated at 0 is a.                                                  *)
-Proposition WhenZero : forall (a:U), (Plus a)!:0: = a.
+(* Mutl a evaluated at 0 is 0.                                                  *)
+Proposition WhenZero : forall (a:U), (Mult a)!:0: = :0:.
 Proof.
   intros a. apply Recursion2.WhenZero.
 Qed.
 
-(* a + (succ b) = succ (a + b).                                                 *)
+(* a * (succ b) = a * b + a                                                     *)
 Proposition WhenSucc : forall (a b:U), On b ->
-  (Plus a)!(succ b) = succ ((Plus a)!b).
+  (Mult a)!(succ b) = (Mult a)!b :+: a.
 Proof.
   intros a b H1.
-  assert ((Plus a)!(succ b) = Succ!((Plus a)!b)) as H2. {
+  assert ((Mult a)!(succ b) = (PlusA a)!((Mult a)!b)) as H2. {
     apply Recursion2.WhenSucc. assumption. }
-  rewrite H2. apply Succ.Eval.
+    rewrite H2. apply PlusA.Eval.
 Qed.
 
-(* a + b = \/_{c :< b} a + c when b is a limit ordinal.                         *)
+(* a * b = \/_{c :< b} a * c when b is a limit ordinal.                         *)
 Proposition WhenLimit : forall (a b:U), Limit b ->
-  (Plus a)!b = :\/:_{b} (Plus a).
+  (Mult a)!b = :\/:_{b} (Mult a).
 Proof.
   intros a b H1. apply Recursion2.WhenLimit. assumption.
 Qed.
 
 Proposition IsUnique : forall (G:Class) (a:U),
   CFO.FunctionOn G On                         ->
-  G!:0: = a                                   ->
-  (forall b, On b -> G!(succ b) = succ (G!b)) ->
+  G!:0: = :0:                                 ->
+  (forall b, On b -> G!(succ b) = G!b :+: a)  ->
   (forall b, Limit b -> G!b = :\/:_{b} G)     ->
-  G :~: Plus a.
+  G :~: Mult a.
 Proof.
   intros G a H1 H2 H3. apply Recursion2.IsUnique; try assumption.
-  intros b H4. symmetry. rewrite H3. 2: assumption. apply Succ.Eval.
+  intros b H4. symmetry. rewrite H3. 2: assumption. apply PlusA.Eval.
 Qed.
 
 Proposition RestrictIsFunctionOn : forall (a b:U), On b ->
-  SFO.FunctionOn ((Plus a) :|: b) b.
+  SFO.FunctionOn ((Mult a) :|: b) b.
 Proof.
   intros a b. apply Recursion2.RestrictIsFunctionOn.
 Qed.

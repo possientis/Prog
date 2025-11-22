@@ -6,7 +6,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
-(* The successor function class.                                                *)
+(* The successor function class. Needed to define ordinal addition.             *)
 Definition Succ : Class := fun x => exists a, x = :(a,succ a):.
 
 Proposition Charac2 : forall (x y:U), Succ :(x,y): <-> y = succ x.
