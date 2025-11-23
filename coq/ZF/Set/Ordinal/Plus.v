@@ -34,7 +34,7 @@ Module SUG := ZF.Set.UnionGenOfClass.
 (* The sum of two ordinals when a is an ordinal.                                *)
 Definition plus (a b:U) : U := (COP.Plus a)!b.
 
-(* Notation "a :+: b" := (plus a b)                                           *)
+(* Notation "a :+: b" := (plus a b)                                             *)
 Global Instance SetPlus : Plus U := { plus := plus }.
 
 Proposition WhenZeroR : forall (a:U), a :+: :0: = a.
@@ -42,6 +42,7 @@ Proof.
   apply COP.WhenZero.
 Qed.
 
+(* 1 + N = N, so we cannot hope to have a WhenOneL.                             *)
 Proposition WhenOneR : forall (a:U), a :+: :1: = succ a.
 Proof.
   intros a.
@@ -74,17 +75,6 @@ Proof.
   apply COP.WhenLimit.
 Qed.
 
-Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
-  Ordinal (a :+: b).
-Proof.
-  intros a b H1. revert b. apply Induction2.
-  - rewrite WhenZeroR. assumption.
-  - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
-    apply Succ.IsOrdinal. assumption.
-  - intros b H2 H3. rewrite WhenLimit. 2: assumption.
-    apply SOG.IsOrdinal. apply H3.
-Qed.
-
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :+: a = a.
 Proof.
@@ -94,6 +84,17 @@ Proof.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     rewrite <- SOG.WhenLimit. 2: assumption.
     apply SUG.EqualCharac. intros x. rewrite I.Eval. apply H2.
+Qed.
+
+Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
+  Ordinal (a :+: b).
+Proof.
+  intros a b H1. revert b. apply Induction2.
+  - rewrite WhenZeroR. assumption.
+  - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
+    apply Succ.IsOrdinal. assumption.
+  - intros b H2 H3. rewrite WhenLimit. 2: assumption.
+    apply SOG.IsOrdinal. apply H3.
 Qed.
 
 (* Note: 0 + N = 1 + N despite the fact that 0 < 1. So no 'ElemCompatL'         *)
