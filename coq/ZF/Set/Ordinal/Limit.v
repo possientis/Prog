@@ -125,3 +125,10 @@ Proof.
   rewrite H4 in H3. apply H3, Succ.IsIn. }
   revert H5. apply NoElemLoop1.
 Qed.
+
+Proposition NotZero : ~ Limit :0:.
+Proof.
+  intros H1.
+  assert (:0: :< :0:) as H2. { apply HasZero. assumption. }
+  apply Empty.Charac in H2. contradiction.
+Qed.

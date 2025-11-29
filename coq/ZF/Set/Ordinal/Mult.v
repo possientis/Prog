@@ -13,6 +13,7 @@ Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Mult.
@@ -233,4 +234,104 @@ Proof.
     + apply Core.ElemIsIncl.
       * apply IsOrdinal; assumption.
       * apply ElemCompatR; assumption.
+Qed.
+
+Proposition CancelL : forall (a b c:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Ordinal c               ->
+  :0: :< c                ->
+  c :*: a = c :*: b       ->
+  a = b.
+Proof.
+  intros a b c H1 H2 H3 H4 H5.
+  assert (a = b \/ a :< b \/ b :< a) as H6. { apply Core.IsTotal; assumption. }
+  destruct H6 as [H6|[H6|H6]]. 1: assumption.
+  - assert (c :*: a :< c :*: b) as H7. { apply ElemCompatR; assumption. }
+    exfalso. rewrite H5 in H7. revert H7. apply NoElemLoop1.
+  - assert (c :*: b :< c :*: a) as H7. { apply ElemCompatR; assumption. }
+    exfalso. rewrite H5 in H7. revert H7. apply NoElemLoop1.
+Qed.
+
+Proposition InclCompatL : forall (a b c:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Ordinal c               ->
+  a :<=: b                ->
+  a :*: c :<=: b :*: c.
+Proof.
+  intros a b c H1 H2 H3 H4. revert c H3.
+  apply Induction2.
+  - rewrite WhenZeroR, WhenZeroR. apply Incl.Refl.
+  - intros c H3 IH.
+    rewrite WhenSuccR, WhenSuccR; try assumption.
+    apply Plus.InclCompat; try assumption; apply IsOrdinal; assumption.
+  - intros c H3 IH.
+    rewrite WhenLimit, WhenLimit; try assumption. intros y H5.
+    apply SUG.Charac in H5. destruct H5 as [x [H5 H6]].
+    apply SUG.Charac. exists x. split. 1: assumption.
+    apply IH; assumption.
+Qed.
+
+Proposition WhenZero : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :*: b = :0: <-> a = :0: \/ b = :0:.
+Proof.
+  intros a b H1 H2. split; intros H3.
+  - assert (a = :0: \/ :0: :< a) as H4. { apply Core.ZeroOrElem. assumption. }
+    assert (b = :0: \/ :0: :< b) as H5. { apply Core.ZeroOrElem. assumption. }
+    assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+    destruct H4 as [H4|H4]; destruct H5 as [H5|H5].
+    + left.  assumption.
+    + left.  assumption.
+    + right. assumption.
+    + assert (:1: :<=: a) as H6. { apply Succ.ElemIsIncl; assumption. }
+      assert (:1: :<=: b) as H7. { apply Succ.ElemIsIncl; assumption. }
+      assert (a :*: :1: :<=: a :*: b) as H8. {
+        apply InclCompatR; try assumption. apply Natural.OneIsOrdinal. }
+      rewrite WhenOneR in H8; try assumption. rewrite H3 in H8.
+      assert (:0: :< :0:) as H9. { apply H8. assumption. }
+      apply Empty.Charac in H9. contradiction.
+  - destruct H3 as [H3|H3]; rewrite H3.
+    + rewrite WhenZeroL. 2: assumption. reflexivity.
+    + rewrite WhenZeroR. reflexivity.
+Qed.
+
+Proposition IsLimit : forall (a b:U), Ordinal a -> Ordinal b ->
+  :0: :< a -> Limit b -> Limit (a :*: b).
+Proof.
+  intros a b H1 H2 H3 H4.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal (a :*: b)) as H5. { apply IsOrdinal; assumption. }
+  assert (
+    a :*: b = :0:              \/
+    a :*: b = succ :U(a :*: b) \/
+    Limit (a :*: b)) as H6. { apply Limit.ThreeWay. assumption. }
+  destruct H6 as [H6|[H6|H6]]. 3: assumption.
+  - exfalso. apply WhenZero in H6; try assumption. destruct H6 as [H6|H6].
+    + rewrite H6 in H3. apply Empty.Charac in H3. contradiction.
+    + rewrite H6 in H4. apply Limit.NotZero. assumption.
+  - exfalso. remember (:U(a :*: b)) as c eqn:H7.
+    assert (c :< a :*: b) as H8. { rewrite H6. apply Succ.IsIn. }
+    rewrite WhenLimit in H8. 2: assumption.
+    apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
+    assert (c :< a :*: d) as H10. { assumption. }
+    assert (Ordinal d) as H11. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal (a :*: d)) as H12. { apply IsOrdinal; assumption. }
+    assert (Ordinal c) as H13. {
+      apply Core.IsOrdinal with (a :*: d); assumption. }
+    assert (succ c :< a :*: d :+: :1:) as H14. {
+      rewrite Plus.WhenOneR. apply Succ.ElemCompat; assumption. }
+    assert (:1: :<=: a) as H15. { apply Succ.ElemIsIncl; assumption. }
+    assert (succ c :< a :*: succ d) as H16. {
+      apply Core.ElemInclTran with (a :*: d :+: :1:); try assumption.
+      - apply Succ.IsOrdinal. assumption.
+      - apply Plus.IsOrdinal; assumption.
+      - apply IsOrdinal. 1: assumption. apply Succ.IsOrdinal. assumption.
+      - rewrite WhenSuccR. 2: assumption. apply Plus.InclCompatR; assumption. }
+    assert (succ c :< a :*: b) as H17. {
+      rewrite WhenLimit. 2: assumption.
+      apply SUG.Charac. exists (succ d). split. 2: assumption.
+      apply Limit.HasSucc; assumption. }
+    rewrite H6 in H17. revert H17. apply NoElemLoop1.
 Qed.
