@@ -44,7 +44,7 @@ Proof.
       apply Empty.HasElem. exists c. rewrite H6.
       apply Specify.Charac. split.
       - apply Core.InclElemTran with b; try assumption. 2: apply Succ.IsIn.
-        rewrite <- H5. apply Plus.IsInclAddL; assumption.
+        rewrite <- H5. apply Plus.IsInclPlusL; assumption.
       - rewrite H5. apply Incl.Refl. }
     assert (b :-: a :< G) as H10. {
       rewrite H7. apply Inf.IsIn; assumption. }
@@ -60,7 +60,7 @@ Proof.
       apply Succ.IsOrdinal. assumption.
     - apply Specify.Charac. split.
       + apply InclElemTran with b; try assumption.
-        * rewrite <- H5. apply Plus.IsInclAddL; assumption.
+        * rewrite <- H5. apply Plus.IsInclPlusL; assumption.
         * apply Succ.IsIn.
       + rewrite H5. apply Incl.Refl. }
   apply DoubleInclusion. split; assumption.
@@ -97,7 +97,7 @@ Proof.
     apply Succ.IsOrdinal. assumption.
   - apply Specify.Charac. split.
     + apply Succ.IsIn.
-    + apply Plus.IsInclAddL; assumption.
+    + apply Plus.IsInclPlusL; assumption.
 Qed.
 
 Proposition OmegaNatural : forall (n:U),
@@ -117,7 +117,7 @@ Proof.
     - apply Empty.HasElem. exists :N.
       apply Specify.Charac. split.
       + apply Succ.IsIn.
-      + apply Plus.IsInclAddL.
+      + apply Plus.IsInclPlusL.
         * apply Omega.IsOrdinal.
         * apply Omega.HasOrdinalElem. assumption.
     - intros c H3.

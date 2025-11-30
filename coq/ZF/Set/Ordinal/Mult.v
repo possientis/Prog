@@ -588,7 +588,7 @@ Proof.
       rewrite H18. symmetry. assumption. }
     assert (Ordinal (b :*: succ c)) as H20. { apply IsOrdinal; assumption. }
     assert (b :*: succ c :<=: a) as H21. {
-      rewrite H19. apply IsInclAddR; assumption. }
+      rewrite H19. apply IsInclPlusR; assumption. }
     assert (succ c :< A) as H22. {
       rewrite H5. apply Specify.Charac. split. 2: assumption.
       apply G6; assumption. }
@@ -643,7 +643,7 @@ Proof.
           rewrite H16.
           apply Incl.Tran with (b :*: e).
           - apply IsInclMultR; assumption.
-          - apply IsInclAddR; assumption. }
+          - apply IsInclPlusR; assumption. }
         assert (d1 :< d1) as H19. { apply H18. assumption. }
         revert H19. apply NoElemLoop1. }
   intros b c1 c2 d1 d2 H1 H2 H3 H4 H5 H6 H7 H8.

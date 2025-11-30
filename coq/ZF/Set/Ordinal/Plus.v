@@ -254,7 +254,7 @@ Proof.
   revert H7. apply NoElemLoop1.
 Qed.
 
-Proposition IsInclAddL : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition IsInclPlusL : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b :+: a.
 Proof.
   intros a b H1 H2.
@@ -265,7 +265,7 @@ Proof.
   rewrite WhenZeroL in H3; assumption.
 Qed.
 
-Proposition IsInclAddR : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition IsInclPlusR : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: a :+: b.
 Proof.
   intros a b H1 H2.
@@ -292,13 +292,13 @@ Proof.
   intros a b H1 H2 H3. split.
   - assert (a :<=: :0:) as H4. {
       apply Incl.Tran with (a :+: b).
-      - apply IsInclAddR; assumption.
+      - apply IsInclPlusR; assumption.
       - rewrite H3. apply Incl.Refl. }
     apply DoubleInclusion. split. 1: assumption.
     apply Core.IsIncl. assumption.
   - assert (b :<=: :0:) as H4. {
       apply Incl.Tran with (a :+: b).
-      - apply IsInclAddL; assumption.
+      - apply IsInclPlusL; assumption.
       - rewrite H3. apply Incl.Refl. }
     apply DoubleInclusion. split. 1: assumption.
     apply Core.IsIncl. assumption.
@@ -664,7 +664,7 @@ Proof.
       rewrite Assoc; try assumption. rewrite H17. symmetry. assumption. }
     assert (Limit (b :+: :N)) as H19. { apply IsLimit; assumption. }
     assert (b :+: :N :<=: a) as H20. {
-      rewrite H18. apply IsInclAddR. 2: assumption. apply H19. }
+      rewrite H18. apply IsInclPlusR. 2: assumption. apply H19. }
     assert (b :+: :N :< l) as H21. {
       rewrite H3. apply Specify.Charac. split. 2: assumption.
       apply Succ.InclIsElem; try assumption. apply H19. }
@@ -703,7 +703,7 @@ Proof.
         rewrite <- Assoc; try assumption. rewrite H13. assumption. }
       assert (n = c :+: m) as H15. {
         apply CancelL with a; try assumption. apply IsOrdinal; assumption. }
-      assert (c :<=: c :+: m) as H16. { apply IsInclAddR; assumption. }
+      assert (c :<=: c :+: m) as H16. { apply IsInclPlusR; assumption. }
       assert (c :< :N) as H17. {
         apply Core.InclElemTran with n; try assumption.
         rewrite H15. assumption. }
