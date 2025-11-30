@@ -161,3 +161,10 @@ Proof.
   intros H1. symmetry in H1. revert H1. apply Succ.NotEqual.
 Qed.
 
+Proposition OneNotLessThanZero : ~ :1: :<=: :0:.
+Proof.
+  intros H1.
+  assert (:0: :< :0:) as H2. { apply H1, Succ.IsIn. }
+  apply Empty.Charac in H2. contradiction.
+Qed.
+

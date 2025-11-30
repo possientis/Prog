@@ -11,8 +11,10 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Sup.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
@@ -460,4 +462,116 @@ Proof.
         assert (a :*: e :<=: a :*: (b :*: d)) as H14. {
           apply InclCompatR; assumption. }
         apply H14. assumption.
+Qed.
+
+Proposition Euclid : forall (a b:U),
+  Ordinal a             ->
+  Ordinal b             ->
+  :0: :< b              ->
+  exists c d,
+    Ordinal c           /\
+    Ordinal d           /\
+    a = b :*: c :+: d   /\
+    d :< b.
+Proof.
+  intros a b H1 H2 H3.
+  assert (a :< b \/ b :<=: a) as H4. { apply Core.ElemOrIncl; assumption. }
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal (succ a)) as G3. { apply Succ.IsOrdinal. assumption. }
+  destruct H4 as [H4|H4].
+  - exists :0:. exists a. split. 1: assumption. split. 1: assumption.
+    split. 2: assumption. rewrite WhenZeroR, Plus.WhenZeroL. 2: assumption.
+    reflexivity.
+  - remember {{x :< succ a | fun d => b :*: d :<=: a}} as A eqn:H5.
+    remember (sup A) as c eqn:H6.
+    assert (toClass A :<=: Ordinal) as G4. {
+      intros d G4.
+      rewrite H5 in G4. apply Specify.Charac in G4. destruct G4 as [G4 G5].
+      apply Core.IsOrdinal with (succ a); assumption. }
+    assert (Ordinal c) as H7. { rewrite H6. apply Sup.IsOrdinal. }
+    assert (Ordinal (succ c)) as G5. { apply Succ.IsOrdinal. assumption. }
+    assert (:1: :<=: b) as H8. { apply Succ.ElemIsIncl; assumption. }
+    assert (:1: :< A) as H9. {
+      rewrite H5. apply Specify.Charac. split.
+      - apply Succ.InclIsElem; try assumption.
+        apply Incl.Tran with b; assumption.
+      - rewrite WhenOneR; assumption. }
+    assert (:1: :<=: c) as H10. {
+      rewrite H6. apply Sup.IsUpperBound; assumption. }
+    assert (forall d, Ordinal d -> b :*: d :<=: a -> d :< succ a) as G6. {
+      intros d G6 G7.
+      assert (d :< succ a \/ succ a :<=: d) as G8. {
+        apply Core.ElemOrIncl; assumption. }
+      destruct G8 as [G8|G8]. 1: assumption. exfalso.
+      apply Succ.ElemIsIncl in G8; try assumption.
+      assert (b :*: a :< a) as G9. {
+        apply Core.ElemInclTran with (b :*: d); try assumption.
+        - apply IsOrdinal; assumption.
+        - apply IsOrdinal; assumption.
+        - apply ElemCompatR; assumption. }
+      assert (:1: :*: a :<=: b :*: a) as G10. { apply InclCompatL; assumption. }
+      rewrite WhenOneL in G10. 2: assumption.
+      assert (b :*: a :< b :*: a) as G11. { apply G10. assumption. }
+      revert G11. apply NoElemLoop1. }
+    assert (forall d, Ordinal d -> d :< c -> b :*: d :<=: a) as H11. {
+      intros d H11 H12.
+      assert (Ordinal (b :*: d)) as H13. { apply IsOrdinal; assumption. }
+      assert (a :< b :*: d \/ b :*: d :<=: a) as H14. {
+        apply Core.ElemOrIncl; assumption. }
+      destruct H14 as [H14|H14]. 2: assumption. exfalso.
+      assert (c :<=: d) as H15. {
+        rewrite H6. apply Sup.IsSmallest. 1: assumption.
+        intros e H15. rewrite H5 in H15.
+        apply Specify.Charac in H15. destruct H15 as [H15 H16].
+        apply InclCompatRevR with b; try assumption.
+        - apply Core.IsOrdinal with (succ a); assumption.
+        - apply Incl.Tran with a. 1: assumption.
+          apply Core.ElemIsIncl; assumption. }
+      assert (d :< d) as H17. { apply H15. assumption. }
+      revert H17. apply NoElemLoop1. }
+    assert (b :*: c :<=: a) as H12. {
+      assert (c = :0: \/ c = succ :U(c) \/ Limit c) as H12. {
+        apply Limit.ThreeWay. assumption. }
+      destruct H12 as [H12|[H12|H12]].
+      - exfalso. rewrite H12 in H10. apply OneNotLessThanZero. assumption.
+      - remember :U(c) as e eqn:H13.
+        assert (Ordinal e) as H14. {
+          apply Succ.IsOrdinalRev. rewrite <- H12. assumption. }
+        assert (e :< c) as H15. { rewrite H12. apply Succ.IsIn. }
+        assert (exists f, Ordinal f /\ f :< A /\ e :< f) as H16. {
+          rewrite H6 in H15. apply Sup.WhenLess; assumption. }
+        destruct H16 as [f [H16 [H17 H18]]].
+        assert (f = c) as H19. {
+          rewrite H12. apply Succ.InBetween; try assumption.
+          rewrite <- H12, H6. apply Sup.IsUpperBound; assumption. }
+        rewrite H19 in H17. rewrite H5 in H17. apply Specify.Charac in H17.
+        apply H17.
+      - rewrite WhenLimit. 2: assumption. intros y H13.
+        apply SUG.Charac in H13. destruct H13 as [d [H13 H14]].
+        assert (Ordinal d) as H16. { apply Core.IsOrdinal with c; assumption. }
+        apply H11 with d; assumption. }
+    assert (Ordinal (b :*: c)) as H13. { apply IsOrdinal; assumption. }
+    assert (exists d, Ordinal d /\ b :*: c :+: d = a) as H14. {
+      apply Plus.CompleteR; assumption. }
+    destruct H14 as [d [H14 H15]]. exists c. exists d. split. 1: assumption.
+    split. 1: assumption. split. 1: { symmetry. assumption. }
+    assert (d :< b \/ b :<=: d) as H16. { apply Core.ElemOrIncl; assumption. }
+    destruct H16 as [H16|H16]. 1: assumption. exfalso.
+    assert (exists e, Ordinal e /\ b :+: e = d) as H17. {
+      apply Plus.CompleteR; assumption. }
+    destruct H17 as [e [H17 H18]].
+    assert (a = b :*: (succ c) :+: e) as H19. {
+      rewrite WhenSuccR, Plus.Assoc; try assumption.
+      rewrite H18. symmetry. assumption. }
+    assert (Ordinal (b :*: succ c)) as H20. { apply IsOrdinal; assumption. }
+    assert (b :*: succ c :<=: a) as H21. {
+      rewrite H19. apply IsInclAddR; assumption. }
+    assert (succ c :< A) as H22. {
+      rewrite H5. apply Specify.Charac. split. 2: assumption.
+      apply G6; assumption. }
+    assert (succ c :<=: sup A) as H23. { apply Sup.IsUpperBound; assumption. }
+    rewrite <- H6 in H23.
+    assert (c :< c) as H24. { apply H23, Succ.IsIn. }
+    revert H24. apply NoElemLoop1.
 Qed.

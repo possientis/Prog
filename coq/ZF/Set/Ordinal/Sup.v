@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Sup.
@@ -90,3 +91,21 @@ Proof.
   revert H6. apply NoElemLoop1.
 Qed.
 
+Proposition WhenLess : forall (a b:U),
+  toClass a :<=: Ordinal                    ->
+  Ordinal b                                 ->
+  b :< sup a                                ->
+  exists c, Ordinal c /\ c :< a /\ b :< c.
+Proof.
+  intros a b H1 H2 H3.
+  apply NotForAllNot. intros H4.
+  assert (forall x, x :< a -> x :<=: b) as H5. {
+    intros c H5.
+    assert (Ordinal c) as H6. { apply H1. assumption. }
+    assert (b :< c \/ c :<=: b) as H7. { apply Core.ElemOrIncl; assumption. }
+    destruct H7 as [H7|H7]. 2: assumption. exfalso.
+    apply H4 with c. split. 1: assumption. split; assumption. }
+  assert (sup a :<=: b) as H6. { apply IsSmallest; assumption. }
+  assert (b :< b) as H7. { apply H6. assumption. }
+  revert H7. apply NoElemLoop1.
+Qed.

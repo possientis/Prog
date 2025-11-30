@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Inter2.
@@ -148,4 +149,24 @@ Proof.
   intros a H1 H2.
   assert (Minimal (E:/:a) a (inf a)) as H3. { apply IsMinimal; assumption. }
   apply H3.
+Qed.
+
+Proposition WhenMore : forall (a b:U),
+  toClass a :<=: Ordinal                    ->
+  a <> :0:                                  ->
+  Ordinal b                                 ->
+  inf a :< b                                ->
+  exists c, Ordinal c /\ c :< a /\ c :< b.
+Proof.
+  intros a b H1 H2 H3 H4.
+  apply NotForAllNot. intros H5.
+  assert (forall x, x :< a -> b :<=: x) as H6. {
+    intros c H6.
+    assert (Ordinal c) as H7. { apply H1. assumption. }
+    assert (c :< b \/ b :<=: c) as H8. { apply Core.ElemOrIncl; assumption. }
+    destruct H8 as [H8|H8]. 2: assumption. exfalso.
+    apply H5 with c. split. 1: assumption. split; assumption. }
+  assert (b :<=: inf a) as H7. { apply IsLargest; assumption. }
+  assert (inf a :< inf a) as H8. { apply H7. assumption. }
+  revert H8. apply NoElemLoop1.
 Qed.

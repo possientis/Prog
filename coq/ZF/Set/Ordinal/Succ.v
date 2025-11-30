@@ -84,6 +84,17 @@ Proof.
   - apply Single.Charac in H2. subst. apply NoElemLoop1 with a. assumption.
 Qed.
 
+Proposition InBetween : forall (a b:U), Ordinal b ->
+  a :< b -> b :<=: succ a -> b = succ a.
+Proof.
+  intros a b H1 H2 H3.
+  apply DoubleInclusion. split. 1: assumption.
+  intros x H4. apply Charac in H4. destruct H4 as [H4|H4].
+  - subst. assumption.
+  - assert (Ordinal a) as H5. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal x) as H6. { apply Core.IsOrdinal with a; assumption. }
+    apply Core.ElemElemTran with a; assumption.
+Qed.
 
 Proposition IsOrdinalRev : forall (a:U),
   Ordinal (succ a) -> Ordinal a.
