@@ -296,12 +296,13 @@ Proof.
     + rewrite WhenZeroR. reflexivity.
 Qed.
 
-Proposition IsLimit : forall (a b:U), Ordinal a -> Ordinal b ->
+Proposition IsLimit : forall (a b:U), Ordinal a ->
   :0: :< a -> Limit b -> Limit (a :*: b).
 Proof.
-  intros a b H1 H2 H3 H4.
+  intros a b H1 H2 H3.
   assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
   assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal b) as G3. { apply H3. }
   assert (Ordinal (a :*: b)) as H5. { apply IsOrdinal; assumption. }
   assert (
     a :*: b = :0:              \/
@@ -309,8 +310,8 @@ Proof.
     Limit (a :*: b)) as H6. { apply Limit.ThreeWay. assumption. }
   destruct H6 as [H6|[H6|H6]]. 3: assumption.
   - exfalso. apply WhenZero in H6; try assumption. destruct H6 as [H6|H6].
-    + rewrite H6 in H3. apply Empty.Charac in H3. contradiction.
-    + rewrite H6 in H4. apply Limit.NotZero. assumption.
+    + rewrite H6 in H2. apply Empty.Charac in H2. contradiction.
+    + rewrite H6 in H3. apply Limit.NotZero. assumption.
   - exfalso. remember (:U(a :*: b)) as c eqn:H7.
     assert (c :< a :*: b) as H8. { rewrite H6. apply Succ.IsIn. }
     rewrite WhenLimit in H8. 2: assumption.
@@ -336,6 +337,7 @@ Proof.
     rewrite H6 in H17. revert H17. apply NoElemLoop1.
 Qed.
 
+(* Note that (N+1)*2 = (N+1)+(N+1) = N*2+1 <> N*2+2 so there is no DistribR.    *)
 Proposition DistribL : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
   a :*: (b :+: c) = a :*: b :+: a :*: c.
 Proof.
@@ -410,3 +412,52 @@ Proof.
           { apply IsOrdinal. 1: assumption. apply Plus.IsOrdinal; assumption. }
 Qed.
 
+Proposition Assoc : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
+  (a :*: b) :*: c = a :*: (b :*: c).
+Proof.
+  intros a b c H1 H2. revert c.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  apply Induction2.
+  - rewrite WhenZeroR, WhenZeroR, WhenZeroR. reflexivity.
+  - intros c H3 IH.
+    rewrite WhenSuccR, IH, <- DistribL, <- WhenSuccR; try assumption.
+    + reflexivity.
+    + apply IsOrdinal; assumption.
+  - intros c H3 IH.
+    assert (Ordinal c) as G2. { apply H3. }
+    assert (Ordinal (b :*: c)) as G3. { apply IsOrdinal; assumption. }
+    assert (a = :0: \/ :0: :< a) as H4. { apply Core.ZeroOrElem. assumption. }
+    assert (b = :0: \/ :0: :< b) as H5. { apply Core.ZeroOrElem. assumption. }
+    destruct H4 as [H4|H4]; destruct H5 as [H5|H5].
+    + subst. rewrite WhenZeroR, WhenZeroL, WhenZeroR; try assumption.
+      reflexivity.
+    + subst. rewrite WhenZeroL, WhenZeroL, WhenZeroL; try assumption.
+      reflexivity.
+    + subst. rewrite WhenZeroR, WhenZeroL, WhenZeroR; try assumption.
+      reflexivity.
+    + assert (Limit (b :*: c)) as H6. { apply IsLimit; assumption. }
+      rewrite (WhenLimit (a :*: b) c). 2: assumption.
+      rewrite (WhenLimit a (b :*: c)). 2: assumption.
+      apply DoubleInclusion. split; intros y H7;
+      apply SUG.Charac in H7; apply SUG.Charac.
+      * destruct H7 as [d [H7 H8]]. exists (b :*: d).
+        assert (Ordinal d) as H9. { apply Core.IsOrdinal with c; assumption. }
+        split.
+          { apply ElemCompatR; assumption. }
+          { assert (y :< a :*: (b :*: d)) as X. 2: apply X.
+            rewrite <- IH; assumption. }
+      * destruct H7 as [e [H7 H8]].
+        rewrite WhenLimit in H7. 2: assumption.
+        apply SUG.Charac in H7. destruct H7 as [d [H7 H9]].
+        assert (Ordinal d) as H10. { apply Core.IsOrdinal with c; assumption. }
+        assert (Ordinal (b :*: d)) as H11. { apply IsOrdinal; assumption. }
+        assert (Ordinal e) as H12. {
+          apply Core.IsOrdinal with (b :*: d); assumption. }
+        exists d. split. 1: assumption.
+        assert (y :< (a :*: b) :*: d) as X. 2: apply X.
+        rewrite IH. 2: assumption.
+        assert (e :<=: b :*: d) as H13. { apply Core.ElemIsIncl; assumption. }
+        assert (a :*: e :<=: a :*: (b :*: d)) as H14. {
+          apply InclCompatR; assumption. }
+        apply H14. assumption.
+Qed.
