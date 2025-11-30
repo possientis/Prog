@@ -464,6 +464,28 @@ Proof.
         apply H14. assumption.
 Qed.
 
+Proposition IsInclMultL : forall (a b:U), Ordinal a -> Ordinal b  ->
+  :0: :< b -> a :<=: b :*: a.
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal :0:) as H4. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as H5. { apply Natural.OneIsOrdinal. }
+  assert (:1: :<=: b) as H6. { apply Succ.ElemIsIncl; assumption. }
+  assert (:1: :*: a :<=: b :*: a) as H7. { apply InclCompatL; assumption. }
+  rewrite WhenOneL in H7; assumption.
+Qed.
+
+Proposition IsInclMultR : forall (a b:U), Ordinal a -> Ordinal b  ->
+  :0: :< b -> a :<=: a :*: b.
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal :0:) as H4. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as H5. { apply Natural.OneIsOrdinal. }
+  assert (:1: :<=: b) as H6. { apply Succ.ElemIsIncl; assumption. }
+  assert (a :*: :1: :<=: a :*: b) as H7. { apply InclCompatR; assumption. }
+  rewrite WhenOneR in H7; assumption.
+Qed.
+
 Proposition Euclid : forall (a b:U),
   Ordinal a             ->
   Ordinal b             ->
@@ -575,3 +597,61 @@ Proof.
     assert (c :< c) as H24. { apply H23, Succ.IsIn. }
     revert H24. apply NoElemLoop1.
 Qed.
+
+Proposition EuclidUnique : forall (b c1 c2 d1 d2:U),
+  Ordinal b                           ->
+  Ordinal c1                          ->
+  Ordinal c2                          ->
+  Ordinal d1                          ->
+  Ordinal d2                          ->
+  d1 :< b                             ->
+  d2 :< b                             ->
+  b :*: c1 :+: d1 = b :*: c2 :+: d2   ->
+  c1 = c2 /\ d1 = d2.
+Proof.
+  assert (forall b c1 c2 d1 d2,
+    Ordinal b                           ->
+    Ordinal c1                          ->
+    Ordinal c2                          ->
+    Ordinal d1                          ->
+    Ordinal d2                          ->
+    d1 :< b                             ->
+    d2 :< b                             ->
+    b :*: c1 :+: d1 = b :*: c2 :+: d2   ->
+    c1 :<=: c2                          ->
+    c1 = c2 /\ d1 = d2) as G1. {
+      intros b c1 c2 d1 d2 H1 H2 H3 H4 H5 H6 H7 H8 H9.
+      assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+      assert (exists e, Ordinal e /\ c1 :+: e = c2) as H10. {
+        apply Plus.CompleteR; assumption. }
+      destruct H10 as [e [H10 H11]].
+      assert (b :*: c1 :+: d1 = b :*: c1 :+: b :*: e :+: d2) as H12. {
+        rewrite <- DistribL, H11; assumption. }
+      assert (Ordinal (b :*: e)) as H13. { apply IsOrdinal; assumption. }
+      assert (Ordinal (b :*: e :+: d2)) as H14. {
+        apply Plus.IsOrdinal; assumption. }
+      assert (Ordinal (b :*: c1)) as H15. { apply IsOrdinal; assumption. }
+      assert (d1 = b :*: e :+: d2) as H16. {
+        apply Plus.CancelL with (b :*: c1); try assumption.
+        rewrite <- Plus.Assoc; assumption. }
+      assert (e = :0: \/ :0: :< e) as H17. { apply Core.ZeroOrElem. assumption. }
+      destruct H17 as [H17|H17].
+      - subst. rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroL. 2: assumption.
+        split; reflexivity.
+      - exfalso.
+        assert (b :<=: d1) as H18. {
+          rewrite H16.
+          apply Incl.Tran with (b :*: e).
+          - apply IsInclMultR; assumption.
+          - apply IsInclAddR; assumption. }
+        assert (d1 :< d1) as H19. { apply H18. assumption. }
+        revert H19. apply NoElemLoop1. }
+  intros b c1 c2 d1 d2 H1 H2 H3 H4 H5 H6 H7 H8.
+  assert (c1 :<=: c2 \/ c2 :<=: c1) as H9. { apply Core.InclOrIncl; assumption. }
+  destruct H9 as [H9|H9].
+  - apply G1 with b; assumption.
+  - assert (c2 = c1 /\ d2 = d1) as H10. {
+      apply G1 with b; try assumption. symmetry. assumption. }
+    split; symmetry; apply H10.
+Qed.
+
