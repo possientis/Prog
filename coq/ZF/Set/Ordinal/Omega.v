@@ -81,6 +81,12 @@ Proof.
   - apply COO.IsTransitive.
 Qed.
 
+Proposition IsIn : forall (n m:U),
+  m :< n -> n :< :N -> m :< :N.
+Proof.
+  intros n m. apply IsTransitive.
+Qed.
+
 (* The set N is an ordinal.                                                     *)
 Proposition IsOrdinal : Ordinal :N.
 Proof.

@@ -108,18 +108,6 @@ Proof.
     apply SOG.IsOrdinal. apply H3.
 Qed.
 
-Proposition InOmega : forall (n m:U),
-  n :< :N -> m :< :N -> n :*: m :< :N.
-Proof.
-  intros n m H1. revert m. apply Omega.FiniteInduction'.
-  - rewrite WhenZeroR. apply Omega.HasZero.
-  - intros m H2 H3.
-    assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
-    assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
-    assert (Ordinal (n :*: m)) as H6. { apply IsOrdinal; assumption. }
-    rewrite WhenSuccR. 2: assumption. apply Plus.InOmega; assumption.
-Qed.
-
 Proposition ElemCompatR : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -273,6 +261,46 @@ Proof.
     apply SUG.Charac in H5. destruct H5 as [x [H5 H6]].
     apply SUG.Charac. exists x. split. 1: assumption.
     apply IH; assumption.
+Qed.
+
+Proposition InOmega : forall (n m:U),
+  n :< :N -> m :< :N -> n :*: m :< :N.
+Proof.
+  intros n m H1. revert m. apply Omega.FiniteInduction'.
+  - rewrite WhenZeroR. apply Omega.HasZero.
+  - intros m H2 H3.
+    assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal (n :*: m)) as H6. { apply IsOrdinal; assumption. }
+    rewrite WhenSuccR. 2: assumption. apply Plus.InOmega; assumption.
+Qed.
+
+Proposition InOmegaL : forall (n m:U), Ordinal n -> Ordinal m ->
+  :0: :< m -> n :*: m :< :N -> n :< :N.
+Proof.
+  intros n m H1 H2 H3 H4.
+  assert (Ordinal :0:) as H5. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as H6. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal :N) as H7. { apply Omega.IsOrdinal. }
+  assert (:1: :<=: m) as H8. { apply Succ.ElemIsIncl; assumption. }
+  assert (n :*: :1: :<=: n :*: m) as H9. { apply InclCompatR; assumption. }
+  assert (Ordinal (n :*: m)) as H10. { apply IsOrdinal; assumption. }
+  rewrite WhenOneR in H9. 2: assumption.
+  apply InclElemTran with (n :*: m); assumption.
+Qed.
+
+Proposition InOmegaR : forall (n m:U), Ordinal n -> Ordinal m ->
+  :0: :< n -> n :*: m :< :N -> m :< :N.
+Proof.
+  intros n m H1 H2 H3 H4.
+  assert (Ordinal :0:) as H5. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as H6. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal :N) as H7. { apply Omega.IsOrdinal. }
+  assert (:1: :<=: n) as H8. { apply Succ.ElemIsIncl; assumption. }
+  assert (:1: :*: m :<=: n :*: m) as H9. { apply InclCompatL; assumption. }
+  assert (Ordinal (n :*: m)) as H10. { apply IsOrdinal; assumption. }
+  rewrite WhenOneL in H9. 2: assumption.
+  apply InclElemTran with (n :*: m); assumption.
 Qed.
 
 Proposition WhenZero : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -655,3 +683,47 @@ Proof.
     split; symmetry; apply H10.
 Qed.
 
+Proposition EuclidN : forall (n m:U),
+  n :< :N               ->
+  m :< :N               ->
+  :0: :< m              ->
+  exists q r,
+    q :< :N             /\
+    r :< :N             /\
+    n = m :*: q :+: r   /\
+    r :< m.
+Proof.
+  intros n m H1 H2 H3.
+  assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
+  assert (exists q r,
+    Ordinal q /\ Ordinal r /\ n = m :*: q :+: r /\ r :< m) as H6. {
+      apply Euclid; assumption. }
+  destruct H6 as [q [r [H6 [H7 [H8 H9]]]]]. exists q. exists r.
+  assert (r :< :N) as H10. { apply Omega.IsIn with m; assumption. }
+  assert (Ordinal (m :*: q)) as H11. { apply IsOrdinal; assumption. }
+  assert (m :*: q :< :N) as H12. {
+    apply Plus.InOmegaL with r; try assumption. rewrite <- H8. assumption. }
+  assert (q :< :N) as H13. { apply InOmegaR with m; assumption. }
+  split. 1: assumption. split. 1: assumption. split; assumption.
+Qed.
+
+Proposition EuclidUniqueN : forall (m q1 q2 r1 r2:U),
+  m  :< :N                            ->
+  q1 :< :N                            ->
+  q2 :< :N                            ->
+  r1 :< :N                            ->
+  r2 :< :N                            ->
+  r1 :< m                             ->
+  r2 :< m                             ->
+  m :*: q1 :+: r1 = m :*: q2 :+: r2   ->
+  q1 = q2 /\ r1 = r2.
+Proof.
+  intros m q1 q2 r1 r2 H1 H2 H3 H4 H5.
+  assert (Ordinal m)  as H6.  { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal q1) as H7.  { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal q2) as H8.  { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal r1) as H9.  { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal r2) as H10. { apply Omega.HasOrdinalElem. assumption. }
+  apply EuclidUnique; assumption.
+Qed.
