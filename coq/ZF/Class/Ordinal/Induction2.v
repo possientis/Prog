@@ -31,14 +31,14 @@ Proof.
 Qed.
 
 Proposition Induction2' : forall (A:Class) (b:U),
-  On b                                                                    ->
-  A b                                                                     ->
-  (forall a, On a -> b :<=: a -> A a -> A (succ a))                       ->
+  On b                                                       ->
+  A b                                                        ->
+  (forall a, On a -> b :<=: a -> A a -> A (succ a))          ->
   (forall a,
     Limit a                               ->
     b :<=: a                              ->
     (forall x, b :<=: x -> x :< a -> A x) ->
-    A a                                    )                              ->
+    A a                                    )                 ->
   forall a, On a -> b :<=: a -> A a.
 Proof.
   intros A b H1 H3 H4 H5.
