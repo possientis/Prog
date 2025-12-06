@@ -23,6 +23,13 @@ Proof.
   intros a [H1 H2] H3. apply H2. assumption.
 Qed.
 
+Proposition NotSucc : forall (a b:U),
+  Limit a -> Ordinal b -> a = succ b  -> False.
+Proof.
+  intros a b H1 H2 H3. apply NotBoth with a. 1: assumption.
+  right. exists b. split; assumption.
+Qed.
+
 (* Limit is a class of ordinals.                                                *)
 Proposition HasOrdinalElem : Limit :<=: Ordinal.
 Proof.
@@ -53,6 +60,13 @@ Proof.
   assert (Ordinal a) as H2. { apply H1. }
   apply Charac in H1. 2: assumption.
   apply Core.HasZero. 1: assumption. apply H1.
+Qed.
+
+Proposition NotZero : ~ Limit :0:.
+Proof.
+  intros H1.
+  assert (:0: :< :0:) as H2. { apply HasZero. assumption. }
+  apply Empty.Charac in H2. contradiction.
 Qed.
 
 Proposition HasSucc : forall (a b:U),
@@ -124,11 +138,4 @@ Proof.
   assert (succ :U(a) :< succ :U(a)) as H5. { (* contradiction *)
   rewrite H4 in H3. apply H3, Succ.IsIn. }
   revert H5. apply NoElemLoop1.
-Qed.
-
-Proposition NotZero : ~ Limit :0:.
-Proof.
-  intros H1.
-  assert (:0: :< :0:) as H2. { apply HasZero. assumption. }
-  apply Empty.Charac in H2. contradiction.
 Qed.

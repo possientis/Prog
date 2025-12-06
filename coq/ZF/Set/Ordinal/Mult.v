@@ -727,3 +727,111 @@ Proof.
   assert (Ordinal r2) as H10. { apply Omega.HasOrdinalElem. assumption. }
   apply EuclidUnique; assumption.
 Qed.
+
+Proposition LimitWithNat : forall (n m c:U),
+  n :< :N   ->
+  m :< :N   ->
+  Limit c   ->
+  :0: :< m  ->
+  m :*: (c :+: n) = c :+: m :*: n.
+Proof.
+  intros n m c H1 H2 H3 H4. revert n c H1 H3.
+  assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
+  assert (Limit :N) as G2. { apply Omega.IsLimit. }
+  assert (:0: :< :N) as G3. { apply Omega.HasZero. }
+  assert (Ordinal m) as G4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal :0:) as G10. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as G12. { apply Natural.OneIsOrdinal. }
+  remember (fun a => forall n c,
+    n :< :N                   ->
+    Limit c                   ->
+    a = c :+: n               ->
+    m :*: a = c :+: m :*: n) as A eqn:H1.
+  assert (forall a, Ordinal a -> :N :<=: a -> A a) as H3. {
+    apply Induction2'. 1: assumption.
+    - rewrite H1. intros n c H3 H5 H6.
+      assert (:N = c /\ :0: = n) as H7. {
+       apply Plus.DestructUnique; try assumption.
+        rewrite Plus.WhenZeroR. assumption. }
+      destruct H7 as [H7 H8]. subst. clear H6. rewrite WhenZeroR, Plus.WhenZeroR.
+      rewrite WhenLimit. 2: assumption. apply DoubleInclusion.
+      split; intros y H6.
+      + apply SUG.Charac in H6. destruct H6 as [x [H6 H9]].
+        apply Omega.IsIn with (m :*: x). 1: assumption.
+        apply InOmega; assumption.
+      + apply SUG.Charac.
+        assert (exists q r,
+          q :< :N /\ r :< :N /\ y = m :*: q :+: r /\ r :< m) as H10. {
+            apply EuclidN; assumption. }
+        destruct H10 as [q [r [H10 [H11 [H12 H13]]]]].
+        assert (Ordinal q) as H14. { apply Omega.HasOrdinalElem. assumption. }
+        exists (succ q). split.
+        * apply Omega.HasSucc. assumption.
+        * assert (y :< m :*: succ q) as X. 2: apply X.
+          rewrite WhenSuccR. 2: assumption. rewrite H12.
+          apply Plus.ElemCompatR; try assumption.
+          { apply Omega.HasOrdinalElem. assumption. }
+          { apply IsOrdinal; assumption. }
+    - rewrite H1. intros a H3 H5 IH n c H6 H7 H8.
+      assert (Ordinal n) as H9. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal c) as G5. { apply H7. }
+      assert (exists p, p :< :N /\ n = succ p) as H10. {
+        apply Omega.IsSucc. 1: assumption.
+        assert (n = :0: \/ :0: :< n) as H10. {
+          apply Core.ZeroOrElem. assumption. }
+        destruct H10 as [H10|H10]. 2: assumption. exfalso. subst.
+        rewrite Plus.WhenZeroR in H8. symmetry in H8. revert H8.
+        apply Limit.NotSucc; assumption. }
+      destruct H10 as [p [H10 H11]].
+      assert (Ordinal p) as H12. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal (m :*: p)) as H13. { apply IsOrdinal; assumption. }
+      assert (a = c :+: p) as H14. {
+        rewrite H11 in H8. rewrite Plus.WhenSuccR in H8. 2: assumption.
+        apply Succ.Injective. assumption. }
+        rewrite WhenSuccR. 2: assumption.
+        rewrite IH with p c; try assumption.
+        rewrite Plus.Assoc; try assumption.
+        rewrite <- WhenSuccR. 2: assumption. rewrite <- H11. reflexivity.
+    - rewrite H1. intros a H3 H5 IH n c H6 H7 H8.
+      assert (Ordinal c) as G6. { apply H7. }
+      assert (a = c /\ :0: = n) as H9. {
+        apply Plus.DestructUnique; try assumption.
+        rewrite Plus.WhenZeroR. assumption. }
+      destruct H9 as [H9 H10]. subst. clear H3 H9. rewrite Plus.WhenZeroR in H5.
+      rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroR.
+      apply DoubleInclusion. split.
+      + rewrite WhenLimit. 2: assumption. intros y H8.
+        apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
+        assert (Ordinal d) as H10. { apply Core.IsOrdinal with c; assumption. }
+        assert (Ordinal (m :*: d)) as G7. { apply IsOrdinal; assumption. }
+        assert (Ordinal y) as G8. {
+          apply Core.IsOrdinal with (m :*: d); assumption. }
+        assert (d :< :N \/ :N :<=: d) as H11. {
+          apply Core.ElemOrIncl; assumption. }
+        destruct H11 as [H11|H11].
+        * apply H5. apply Omega.IsIn with (m :*: d). 1: assumption.
+          apply InOmega; assumption.
+        * assert (exists b n, Limit b /\ n :< :N /\ d = b :+: n) as H12. {
+            apply Plus.Destruct; assumption. }
+          destruct H12 as [b [n [H12 [H13 H14]]]].
+          assert (Ordinal b) as G9. { apply H12. }
+          assert (Ordinal n) as G11. { apply Omega.HasOrdinalElem. assumption. }
+          assert (m :*: d = b :+: m :*: n) as H15. {
+            apply IH; try assumption. rewrite Plus.WhenZeroR. assumption. }
+          apply ElemElemTran with (m :*: d); try assumption. rewrite H15.
+          apply Plus.HasAllSucc. 1: assumption.
+          { apply InclElemTran with d; try assumption. rewrite H14.
+            apply Plus.IsInclPlusR; assumption. }
+          { apply InOmega; assumption. }
+      + assert (:1: :<=: m) as H8. { apply Succ.ElemIsIncl; assumption. }
+        assert (:1: :*: c :<=: m :*: c) as H9. { apply InclCompatL; assumption. }
+        rewrite WhenOneL in H9; assumption. }
+  intros n c H5 H6. rewrite H1 in H3.
+  assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal c) as H8. { apply H6. }
+  apply H3; try assumption. 3: reflexivity.
+  - apply Plus.IsOrdinal; assumption.
+  - apply Incl.Tran with c.
+    + apply Omega.IsInclInLimit. assumption.
+    + apply Plus.IsInclPlusR; assumption.
+Qed.
