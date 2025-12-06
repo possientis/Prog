@@ -40,3 +40,37 @@ au BufRead,BufNewFile *.lean set filetype=lean
 au! Syntax lean source /usr/share/vim/vim91/syntax/lean.vim
 
 autocmd BufWritePre *.v %s/\s\+$//e
+
+augroup coq_folding
+  autocmd!
+  autocmd FileType coq setlocal foldmethod=expr
+  autocmd FileType coq setlocal foldexpr=CoqFold(v:lnum)
+  autocmd FileType coq setlocal foldtext=CoqFoldText()
+  autocmd FileType coq setlocal fillchars+=fold:\ 
+  autocmd FileType coq highlight Folded term=NONE cterm=NONE gui=NONE
+  autocmd FileType coq highlight link Folded Normal
+  autocmd FileType coq setlocal foldminlines=0
+augroup END
+
+function! CoqFold(lnum)
+  let line = getline(a:lnum)
+  let prev = a:lnum > 1 ? getline(a:lnum - 1) : ''
+
+  " Keep 'Proof.' visible
+  if line =~ '^\s*Proof'
+    return 0
+  " Keep 'Qed.' visible
+  elseif line =~ '^\s*Qed\.'
+    return 0
+  " First line AFTER 'Proof.' starts a fold (level 1)
+  elseif prev =~ '^\s*Proof'
+    return 1
+  " Other lines inherit previous fold level
+  else
+    return '='
+  endif
+endfunction
+
+function! CoqFoldText()
+  return '+'
+endfunction
