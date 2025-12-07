@@ -263,6 +263,21 @@ Proof.
     apply IH; assumption.
 Qed.
 
+Proposition ElemCompatRevL : forall (a b c:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Ordinal c               ->
+  a :*: c :< b :*: c      ->
+  a :< b.
+Proof.
+  intros a b c H1 H2 H3 H4.
+  assert (a :< b \/ b :<=: a) as H5. { apply Core.ElemOrIncl; assumption. }
+  destruct H5 as [H5|H5]. 1: assumption. exfalso.
+  assert (b :*: c :<=: a :*: c) as H6. { apply InclCompatL; assumption. }
+  assert (a :*: c :< a :*: c) as H7. { apply H6. assumption. }
+  revert H7. apply NoElemLoop1.
+Qed.
+
 Proposition InOmega : forall (n m:U),
   n :< :N -> m :< :N -> n :*: m :< :N.
 Proof.
@@ -901,5 +916,50 @@ Proof.
   rewrite DistribL; try assumption.
   rewrite WhenOneR. 2: assumption. rewrite H5.
   rewrite <- Plus.Assoc; try assumption. reflexivity.
+Qed.
+
+(* The multiplication of natural numbers is commutative.                        *)
+Proposition Comm : forall (n m:U), n :< :N -> m :< :N ->
+  n :*: m = m :*: n.
+Proof.
+  intros n m H1 H2. revert n H1.
+  assert (Ordinal :1:) as G1. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal m) as H3. { apply Omega.HasOrdinalElem. assumption. }
+  apply Omega.FiniteInduction'.
+  - rewrite WhenZeroL, WhenZeroR. 2: assumption. reflexivity.
+  - intros n H1 IH1.
+    assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal (n :+: :1:)) as G3. { apply Plus.IsOrdinal; assumption. }
+    assert (forall p, p :< :N -> succ n :*: p = n :*: p :+: p) as H4. {
+      apply Omega.FiniteInduction'.
+      - rewrite WhenZeroR, WhenZeroR, Plus.WhenZeroR. reflexivity.
+      - intros p H4 IH2.
+        assert (Ordinal p) as H5. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal (n :*: p)) as G4. { apply IsOrdinal; assumption. }
+        assert (Ordinal (succ p)) as G5. { apply Succ.IsOrdinal. assumption. }
+        rewrite (WhenSuccR (succ n)). 2: assumption. rewrite IH2.
+        rewrite <- (Plus.WhenOneR n).
+        rewrite (Plus.Assoc (n :*: p) p); try assumption.
+        rewrite <- (Plus.Assoc p n); try assumption.
+        rewrite (Plus.Comm p n); try assumption.
+        rewrite (Plus.Assoc n p); try assumption.
+        rewrite (Plus.WhenOneR p).
+        rewrite <- Plus.Assoc; try assumption.
+        rewrite <- WhenSuccR. 2: assumption. reflexivity. }
+    rewrite H4, IH1, <- WhenSuccR; try assumption. reflexivity.
+Qed.
+
+(* The multiplication of natural numbers is right-distributive (w.r. to +)      *)
+Proposition DistribR : forall (n m p:U), n :< :N -> m :< :N -> p :< :N ->
+  (n :+: m) :*: p = n :*: p :+: m :*: p.
+Proof.
+  intros n m p H1 H2 H3.
+  assert (n :+: m :< :N) as H4. { apply Plus.InOmega; assumption. }
+  assert (Ordinal n) as H5. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal m) as H6. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal p) as H7. { apply Omega.HasOrdinalElem. assumption. }
+  rewrite (Comm (n :+: m)); try assumption.
+  rewrite DistribL; try assumption.
+  rewrite (Comm n p), (Comm m p); try assumption. reflexivity.
 Qed.
 
