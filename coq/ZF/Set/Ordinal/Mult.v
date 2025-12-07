@@ -835,3 +835,71 @@ Proof.
     + apply Omega.IsInclInLimit. assumption.
     + apply Plus.IsInclPlusR; assumption.
 Qed.
+
+Proposition SuccNSquared :
+  (:N :+: :1: ) :*: (:N :+: :1:) = :N :*: :N :+: :N :+: :1:.
+Proof.
+  assert (Ordinal :N) as H1. { apply Omega.IsOrdinal. }
+  assert (Ordinal :1:) as H2. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal (:N :+: :1:)) as H3. { apply Plus.IsOrdinal; assumption. }
+  assert (Ordinal (:N :*: :N)) as H4. { apply IsOrdinal; assumption. }
+  assert (:1: :+: :N = :N) as G1. {
+    apply Plus.WhenNatL. 1: assumption.
+    - apply Omega.HasOne.
+    - apply Incl.Refl. }
+  assert (Limit :N) as G2. { apply Omega.IsLimit. }
+  assert ((:N :+: :1:) :*: :N = :N :*: :N) as H5. {
+    assert (forall n,
+      n :< :N                               ->
+      :0: :< n                              ->
+      (:N :+: :1:) :*: n = :N :*: n :+: :1:  ) as H5. {
+        remember (fun n =>
+          :0: :< n -> (:N :+: :1:) :*: n = :N :*: n :+: :1:) as A eqn:H5.
+        assert (forall n, n :< :N -> A n) as H6. {
+          apply FiniteInduction'; rewrite H5.
+          - intros H6. apply Empty.Charac in H6. contradiction.
+          - intros n H6 IH _.
+            assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
+            rewrite WhenSuccR, WhenSuccR; try assumption.
+            assert (n = :0: \/ :0: :< n) as H8. {
+              apply Core.ZeroOrElem. assumption. }
+            destruct H8 as [H8|H8].
+            + subst.
+              rewrite WhenZeroR, WhenZeroR, Plus.WhenZeroL, Plus.WhenZeroL;
+              try assumption. reflexivity.
+            + rewrite IH. 2: assumption.
+              assert (Ordinal (:N :*: n)) as H9. { apply IsOrdinal; assumption. }
+              rewrite (Plus.Assoc (:N :*: n) :1:); try assumption.
+              rewrite <- (Plus.Assoc :1: :N), G1; try assumption.
+              rewrite <- Plus.Assoc; try assumption. reflexivity. }
+        rewrite H5 in H6. assumption. }
+    apply DoubleInclusion. split.
+    - intros y H6.
+      rewrite WhenLimit in H6. 2: assumption.
+      apply SUG.Charac in H6. destruct H6 as [n [H6 H7]].
+      assert (Ordinal n) as H8. { apply Omega.HasOrdinalElem. assumption. }
+      assert (n = :0: \/ :0: :< n) as H9. { apply Core.ZeroOrElem. assumption. }
+      assert (y :< (:N :+: :1:) :*: n) as H10. { assumption. }
+      assert (Ordinal (:N :*: n)) as G3. { apply IsOrdinal; assumption. }
+      assert (Ordinal (succ n)) as G4. { apply Succ.IsOrdinal. assumption. }
+      destruct H9 as [H9|H9].
+      + subst. rewrite WhenZeroR in H10.
+        apply Empty.Charac in H10. contradiction.
+      + rewrite H5 in H10; try assumption.
+        assert (:N :*: n :+: :1: :<=: :N :*: :N) as H11. {
+          apply Incl.Tran with (:N :*: succ n).
+          - rewrite WhenSuccR. 2: assumption.
+            apply Plus.InclCompatR; try assumption.
+            apply Core.ElemIsIncl. 1: assumption.
+            apply Omega.HasOne.
+          - apply InclCompatR; try assumption.
+            apply Core.ElemIsIncl. 1: assumption.
+            apply Omega.HasSucc. assumption. }
+        apply H11. assumption.
+    - apply InclCompatL; try assumption.
+      apply IsInclPlusR; assumption. }
+  rewrite DistribL; try assumption.
+  rewrite WhenOneR. 2: assumption. rewrite H5.
+  rewrite <- Plus.Assoc; try assumption. reflexivity.
+Qed.
+

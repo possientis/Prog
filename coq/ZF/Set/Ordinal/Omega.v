@@ -65,6 +65,12 @@ Proof.
   apply COO.HasSucc. assumption.
 Qed.
 
+(* 1 is a natural number.                                                       *)
+Proposition HasOne : :1: :< :N.
+Proof.
+  apply HasSucc, HasZero.
+Qed.
+
 (* The set N is not empty.                                                      *)
 Proposition IsNotEmpty : :N <> :0:.
 Proof.
