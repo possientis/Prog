@@ -30,6 +30,15 @@ Proof.
   right. exists b. split; assumption.
 Qed.
 
+Proposition NotSucc' : forall (a:U),
+  ~ Limit (succ a).
+Proof.
+  intros a H1.
+  assert (Ordinal (succ a)) as H2. { apply H1. }
+  assert (Ordinal a) as H3. {  apply IsOrdinalRev. assumption. }
+  apply NotSucc with (succ a) a; try assumption. reflexivity.
+Qed.
+
 (* Limit is a class of ordinals.                                                *)
 Proposition HasOrdinalElem : Limit :<=: Ordinal.
 Proof.
@@ -71,7 +80,7 @@ Qed.
 
 Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
-
+Proof.
   intros a b H1 H2. assert (Ordinal a) as H3. {
     apply HasOrdinalElem. assumption. }
     apply Charac in H1; try assumption.
@@ -126,6 +135,16 @@ Proof.
   - right. right. split; assumption.
 Qed.
 
+Proposition TwoWay : forall (a:U), Ordinal a ->
+  :0: :< a -> a = succ :U(a) \/ Limit a.
+Proof.
+  intros a H1 H2.
+  assert (a = :0: \/ a = succ :U(a) \/ Limit a) as H3. {
+    apply ThreeWay. assumption. }
+  destruct H3 as [H3|H3]. 2: assumption. exfalso. subst.
+  apply Empty.Charac in H2. contradiction.
+Qed.
+
 Proposition WhenHasSucc : forall (a:U), Ordinal a ->
   a <> :0:                          ->
   (forall b, b :< a -> succ b :< a) ->
@@ -139,3 +158,4 @@ Proof.
   rewrite H4 in H3. apply H3, Succ.IsIn. }
   revert H5. apply NoElemLoop1.
 Qed.
+

@@ -12,6 +12,7 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.
+Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Specify.
@@ -24,6 +25,7 @@ Export ZF.Notation.Mult.
 Module COM := ZF.Class.Ordinal.Mult.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 Module SUG := ZF.Set.UnionGenOfClass.
+Module SOU := ZF.Set.Ordinal.UnionOf.
 
 
 (* The product of two ordinals when a is an ordinal.                            *)
@@ -963,3 +965,41 @@ Proof.
   rewrite (Comm n p), (Comm m p); try assumption. reflexivity.
 Qed.
 
+Proposition LimitCharac : forall (a b:U), Ordinal a -> Ordinal b ->
+  Limit (a :*: b) <-> :0: :< a /\ :0: :< b /\ (Limit a \/ Limit b).
+Proof.
+  intros a b H1 H2.
+  assert (Ordinal :U(a)) as G1. { apply SOU.IsOrdinal. assumption. }
+  assert (Ordinal :U(b)) as G2. { apply SOU.IsOrdinal. assumption. }
+  split; intros H3.
+  - assert (:0: :< a) as H4. {
+      assert (a = :0: \/ :0: :< a) as H4. { apply Core.ZeroOrElem. assumption. }
+      destruct H4 as [H4|H4]. 2: assumption. exfalso. subst.
+      rewrite WhenZeroL in H3. 2: assumption. revert H3. apply Limit.NotZero. }
+    assert (:0: :< b) as H5. {
+      assert (b = :0: \/ :0: :< b) as H5. { apply Core.ZeroOrElem. assumption. }
+      destruct H5 as [H5|H5]. 2: assumption. exfalso. subst.
+      rewrite WhenZeroR in H3. revert H3. apply Limit.NotZero. }
+    assert (a = succ :U(a) \/ Limit a) as H6. {
+      apply Limit.TwoWay; assumption. }
+    assert (b = succ :U(b) \/ Limit b) as H7. {
+      apply Limit.TwoWay; assumption. }
+    assert (Limit a \/ Limit b) as H8. {
+      destruct H6 as [H6|H6]; destruct H7 as [H7|H7].
+      - exfalso. rewrite H6 in H3. rewrite H7 in H3.
+        rewrite WhenSuccR in H3. 2: assumption.
+        rewrite Plus.WhenSuccR in H3. 2: assumption.
+        revert H3. apply Limit.NotSucc'.
+      - right. assumption.
+      - left.  assumption.
+      - left.  assumption. }
+    split. 1: assumption. split; assumption.
+  - destruct H3 as [H3 [H4 [H5|H5]]].
+    + assert (b = succ :U(b) \/ Limit b) as H6. { apply Limit.TwoWay; assumption. }
+      destruct H6 as [H6|H6].
+      * rewrite H6, WhenSuccR. 2: assumption.
+        apply Plus.IsLimit. 2: assumption.
+        apply IsOrdinal; assumption.
+      * apply IsLimit; assumption.
+    + apply IsLimit; assumption.
+Qed.
