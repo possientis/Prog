@@ -24,8 +24,8 @@ Proof.
   - apply FromClass.Charac. assumption.
 Qed.
 
-Proposition Charac2 : forall (a b:U),
-  forall y, forall z, :(y,z): :< a :x: b <-> y :< a /\ z :< b.
+Proposition Charac2 : forall (a b y z:U),
+  :(y,z): :< a :x: b <-> y :< a /\ z :< b.
 Proof.
   intros a b y z. split; intros H1.
   - apply Charac in H1. destruct H1 as [y' [z' [H1 [Hya Hzb]]]].
