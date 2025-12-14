@@ -168,7 +168,7 @@ Proof.
       * subst. apply Core.ElemInclTran with a; try assumption.
         { apply Core.IsOrdinal with a; assumption. }
         { apply Plus.IsOrdinal; assumption. }
-        { apply Plus.IsInclPlusR; assumption. }
+        { apply Plus.IsInclR; assumption. }
     + split. 2: { apply FCharac2. exists c. right. assumption. }
       destruct H1 as [H1 [H2 H3]]. apply Prod.Charac2. split.
       * apply Union2.Charac. right. subst. apply Prod.Charac2.
@@ -216,14 +216,14 @@ Proof.
       assert (Ordinal d) as H9. { apply Core.IsOrdinal with b; assumption. }
       apply Core.InclElemTran with (a :+: d); try assumption.
       - apply Plus.IsOrdinal; assumption.
-      - apply Plus.IsInclPlusR; assumption. }
+      - apply Plus.IsInclR; assumption. }
     revert H9. apply NoElemLoop1.
   - exfalso.
     assert (a :< a) as H9. {
       assert (Ordinal c) as H9. { apply Core.IsOrdinal with b; assumption. }
       apply Core.InclElemTran with (a :+: c); try assumption.
       - apply Plus.IsOrdinal; assumption.
-      - apply Plus.IsInclPlusR; assumption. }
+      - apply Plus.IsInclR; assumption. }
     revert H9. apply NoElemLoop1.
   - assert (Ordinal c) as H9.  { apply Core.IsOrdinal with b; assumption. }
     assert (Ordinal d) as H10. { apply Core.IsOrdinal with b; assumption. }
@@ -276,7 +276,7 @@ Proof.
     + apply Core.ElemInclTran with a; try assumption.
       * apply Core.IsOrdinal with a; assumption.
       * apply Plus.IsOrdinal; assumption.
-      * apply Plus.IsInclPlusR; assumption.
+      * apply Plus.IsInclR; assumption.
     + apply Plus.ElemCompatR; try assumption.
       apply Core.IsOrdinal with b; assumption.
   - assert (Ordinal (a :+: b)) as H6. { apply Plus.IsOrdinal; assumption. }
@@ -339,18 +339,18 @@ Proof.
   subst; split; intros H9.
   - apply le00Charac2 in H9. destruct H9 as [H9 [H10 H11]].
     rewrite Eval0, Eval0; try assumption. apply E.Charac2. split.
-    + apply Plus.IsInclPlusR; assumption.
-    + split. 2: assumption. apply Plus.IsInclPlusR; assumption.
+    + apply Plus.IsInclR; assumption.
+    + split. 2: assumption. apply Plus.IsInclR; assumption.
   - rewrite Eval0, Eval0 in H9; try assumption.
     apply E.Charac2 in H9. destruct H9 as [H9 [H10 H11]].
     apply le00Charac2. split. 1: assumption. split; assumption.
   - apply le01Charac2 in H9. destruct H9 as [H9 H10].
     rewrite Eval0, Eval1; try assumption. apply E.Charac2. split.
-    + apply Plus.IsInclPlusR; assumption.
+    + apply Plus.IsInclR; assumption.
     + assert (Ordinal d) as H11. { apply Core.IsOrdinal with b; assumption. }
       split.
       * apply Plus.ElemCompatR; assumption.
-      * apply Plus.IsInclPlusR; assumption.
+      * apply Plus.IsInclR; assumption.
   - apply le01Charac2. split; assumption.
   - apply le10Charac2 in H9. contradiction.
   - exfalso. rewrite Eval0, Eval1 in H9; try assumption. apply E.Charac2 in H9.
@@ -359,7 +359,7 @@ Proof.
     assert (Ordinal d) as H13. { apply Core.IsOrdinal with a; assumption. }
     assert (Ordinal (a :+: c)) as H14. { apply Plus.IsOrdinal; assumption. }
     assert (a :+: c :< a :+: c) as H15. {
-      apply Plus.IsInclPlusR; try assumption.
+      apply Plus.IsInclR; try assumption.
       apply Core.ElemElemTran with d; assumption. }
     revert H15. apply NoElemLoop1.
   - apply le11Charac2 in H9. destruct H9 as [H9 [H10 H11]].

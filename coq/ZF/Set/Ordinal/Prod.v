@@ -214,7 +214,7 @@ Proof.
         assert (a :*: b :<=: y) as H10. {
           apply Incl.Tran with (a :*: c).
           - apply Mult.InclCompatR; assumption.
-          - rewrite H7. apply Plus.IsInclPlusR; assumption. }
+          - rewrite H7. apply Plus.IsInclR; assumption. }
         assert (y :< y) as H11. { apply H10. assumption. }
         revert H11. apply NoElemLoop1.
 Qed.
@@ -271,7 +271,7 @@ Proof.
         { apply Incl.Tran with (a :*: c').
           - apply Mult.InclCompatR; try assumption.
             apply Succ.ElemIsIncl; assumption.
-          - apply Plus.IsInclPlusR; assumption. }
+          - apply Plus.IsInclR; assumption. }
       * subst. apply Plus.ElemCompatR; assumption.
   - rewrite Eval, Eval in H9; try assumption. apply E.Charac2 in H9.
     destruct H9 as [H9 [H10 H11]].
@@ -292,7 +292,7 @@ Proof.
         - apply Incl.Tran with (a :*: c).
           + apply Mult.InclCompatR; try assumption.
             apply Succ.ElemIsIncl; assumption.
-          + apply Plus.IsInclPlusR; assumption. }
+          + apply Plus.IsInclR; assumption. }
       assert (a :*: c :+: d :< a :*: c :+: d) as H14. { apply H13. assumption. }
       revert H14. apply NoElemLoop1.
 Qed.

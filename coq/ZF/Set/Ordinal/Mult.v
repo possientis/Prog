@@ -509,7 +509,7 @@ Proof.
         apply H14. assumption.
 Qed.
 
-Proposition IsInclMultL : forall (a b:U), Ordinal a -> Ordinal b  ->
+Proposition IsInclL : forall (a b:U), Ordinal a -> Ordinal b  ->
   :0: :< b -> a :<=: b :*: a.
 Proof.
   intros a b H1 H2 H3.
@@ -520,7 +520,7 @@ Proof.
   rewrite WhenOneL in H7; assumption.
 Qed.
 
-Proposition IsInclMultR : forall (a b:U), Ordinal a -> Ordinal b  ->
+Proposition IsInclR : forall (a b:U), Ordinal a -> Ordinal b  ->
   :0: :< b -> a :<=: a :*: b.
 Proof.
   intros a b H1 H2 H3.
@@ -633,7 +633,7 @@ Proof.
       rewrite H18. symmetry. assumption. }
     assert (Ordinal (b :*: succ c)) as H20. { apply IsOrdinal; assumption. }
     assert (b :*: succ c :<=: a) as H21. {
-      rewrite H19. apply IsInclPlusR; assumption. }
+      rewrite H19. apply Plus.IsInclR; assumption. }
     assert (succ c :< A) as H22. {
       rewrite H5. apply Specify.Charac. split. 2: assumption.
       apply G6; assumption. }
@@ -687,8 +687,8 @@ Proof.
         assert (b :<=: d1) as H18. {
           rewrite H16.
           apply Incl.Tran with (b :*: e).
-          - apply IsInclMultR; assumption.
-          - apply IsInclPlusR; assumption. }
+          - apply IsInclR; assumption.
+          - apply Plus.IsInclR; assumption. }
         assert (d1 :< d1) as H19. { apply H18. assumption. }
         revert H19. apply NoElemLoop1. }
   intros b c1 c2 d1 d2 H1 H2 H3 H4 H5 H6 H7 H8.
@@ -838,7 +838,7 @@ Proof.
           apply ElemElemTran with (m :*: d); try assumption. rewrite H15.
           apply Plus.HasAllSucc. 1: assumption.
           { apply InclElemTran with d; try assumption. rewrite H14.
-            apply Plus.IsInclPlusR; assumption. }
+            apply Plus.IsInclR; assumption. }
           { apply InOmega; assumption. }
       + assert (:1: :<=: m) as H8. { apply Succ.ElemIsIncl; assumption. }
         assert (:1: :*: c :<=: m :*: c) as H9. { apply InclCompatL; assumption. }
@@ -850,7 +850,7 @@ Proof.
   - apply Plus.IsOrdinal; assumption.
   - apply Incl.Tran with c.
     + apply Omega.IsInclInLimit. assumption.
-    + apply Plus.IsInclPlusR; assumption.
+    + apply Plus.IsInclR; assumption.
 Qed.
 
 Proposition SuccNSquared :
@@ -914,7 +914,7 @@ Proof.
             apply Omega.HasSucc. assumption. }
         apply H11. assumption.
     - apply InclCompatL; try assumption.
-      apply IsInclPlusR; assumption. }
+      apply Plus.IsInclR; assumption. }
   rewrite DistribL; try assumption.
   rewrite WhenOneR. 2: assumption. rewrite H5.
   rewrite <- Plus.Assoc; try assumption. reflexivity.
