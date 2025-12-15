@@ -33,28 +33,26 @@ Definition OnZero : Class := fun x => exists y z,
 Definition Exp (a:U) : Class := fun x =>
   (a = :0: /\ OnZero x) \/ (a <> :0: /\ Exp' a x).
 
-Proposition OnZeroCharac2 : forall (y z:U),
-  OnZero :(y,z): <-> On y /\ ((y = :0: /\ z = :1:) \/ (:0: :< y /\ z = :0:)).
+Proposition OnZeroCharac2 : forall (x y:U),
+  OnZero :(x,y): <-> On x /\ ((x = :0: /\ y = :1:) \/ (:0: :< x /\ y = :0:)).
 Proof.
-  intros y z. split; intros H1.
-  - destruct H1 as [y' [z' [H1 [H2 H3]]]].
+  intros x y. split; intros H1.
+  - destruct H1 as [x' [y' [H1 [H2 H3]]]].
     apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4]. subst.
     split; assumption.
   - destruct H1 as [H1 [[H2 H3]|[H2 H3]]]; subst.
     + exists :0:. exists :1:. split. 1: reflexivity. split. 1: assumption.
       left. split; reflexivity.
-    + exists y. exists :0:. split. 1: reflexivity. split. 1: assumption.
+    + exists x. exists :0:. split. 1: reflexivity. split. 1: assumption.
       right. split. 1: assumption. reflexivity.
 Qed.
 
-Proposition WhenZeroCharac2 : forall (y z:U),
-  Exp :0: :(y,z): <-> On y /\ ((y = :0: /\ z = :1:) \/ (:0: :< y /\ z = :0:)).
+Proposition WhenZeroCharac2 : forall (a y z:U), a = :0: ->
+  Exp a :(y,z): <-> OnZero :(y, z):.
 Proof.
-  intros y z. split; intros H1.
-  - destruct H1 as [[_ H1]|[H1 _]].
-    + apply OnZeroCharac2 in H1. assumption.
-    + exfalso. apply H1. reflexivity.
-  - left. split. 1: reflexivity. apply OnZeroCharac2. assumption.
+  intros a y z H1. split; intros H2.
+  - destruct H2 as [[_ H2]|[H2 _]]. 1: assumption. contradiction.
+  - left. split; assumption.
 Qed.
 
 Proposition WhenNotZeroCharac2 : forall (a y z:U), a <> :0: ->
@@ -81,16 +79,14 @@ Qed.
 Proposition IsFunctional : forall (a:U), Functional (Exp a).
 Proof.
   intros a x y1 y2 H1 H2.
-  assert (a = :0: \/ a <> :0:) as H3. { apply LawExcludedMiddle. }
-  destruct H3 as [H3|H3].
-  - subst. apply WhenZeroCharac2 in H1. apply WhenZeroCharac2 in H2.
-    destruct H1 as [_ [[H1i H3]|[H1 H3]]]; destruct H2 as [_ [[H2 H4]|[H2 H4]]];
-    subst; try reflexivity.
-    + apply Empty.Charac in H2. contradiction.
-    + apply Empty.Charac in H1. contradiction.
-  - apply WhenNotZeroCharac2 in H1. 2: assumption.
-    apply WhenNotZeroCharac2 in H2. 2: assumption.
-    assert (Functional (Exp' a)) as H5. { apply IsFunctionOn'. }
+  destruct H1 as [[H1 H3]|[H1 H3]];
+  destruct H2 as [[H2 H4]|[H2 H4]]; try contradiction.
+  - apply OnZeroCharac2 in H3. apply OnZeroCharac2 in H4.
+    destruct H3 as [H3 [[H5 H6]|[H5 H6]]];
+    destruct H4 as [H4 [[H7 H8]|[H7 H8]]]; subst; try reflexivity.
+    + apply Empty.Charac in H7. contradiction.
+    + apply Empty.Charac in H5. contradiction.
+  - assert (Functional (Exp' a)) as H5. { apply IsFunctionOn'. }
     apply H5 with x; assumption.
 Qed.
 
@@ -107,13 +103,16 @@ Proof.
   assert (a = :0: \/ a <> :0:) as H1. { apply LawExcludedMiddle. }
   destruct H1 as [H1|H1]; intros x.
   - subst. split; intros H2.
-    + destruct H2 as [y H2]. apply WhenZeroCharac2 in H2. apply H2.
+    + destruct H2 as [y H2].
+      apply WhenZeroCharac2 in H2. 2: reflexivity.
+      apply OnZeroCharac2 in H2. apply H2.
     + assert (x = :0: \/ :0: :< x) as H3. { apply Core.ZeroOrElem. assumption. }
       destruct H3 as [H3|H3].
-      * subst. exists :1:. apply WhenZeroCharac2. split. 1: assumption.
-        left. split; reflexivity.
-      * exists :0:. apply WhenZeroCharac2. split. 1: assumption.
-        right. split. 1: assumption. reflexivity.
+      * subst. exists :1:. apply WhenZeroCharac2. 1: reflexivity.
+        apply OnZeroCharac2. split. 1: assumption. left. split; reflexivity.
+      * exists :0:. apply WhenZeroCharac2. 1: reflexivity.
+        apply OnZeroCharac2. split. 1: assumption. right.
+        split. 1: assumption. reflexivity.
   - assert (domain (Exp' a) :~: On) as H3. { apply IsFunctionOn'. }
     split; intros H2.
     + destruct H2 as [ y H2]. apply WhenNotZeroCharac2 in H2. 2: assumption.
@@ -128,3 +127,4 @@ Proof.
   - apply IsFunction.
   - apply DomainOf.
 Qed.
+
