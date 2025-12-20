@@ -34,6 +34,14 @@ Proof.
   - rewrite H1; assumption.
 Qed.
 
+Proposition EquivCompat : forall (A B:Class) (a:U),
+  A :~: B -> :\/:_{a} A = :\/:_{a} B.
+Proof.
+  intros A B a H1.
+  apply EqualCharac. intros x H2.
+  apply EvalOfClass.EquivCompat. assumption.
+Qed.
+
 Proposition IsIncl : forall (A:Class) (a x:U),
   x :< a -> A!x :<=: :\/:_{a} A.
 Proof.
@@ -72,3 +80,4 @@ Proof.
   intros A a b H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
   apply (H1 x); assumption.
 Qed.
+

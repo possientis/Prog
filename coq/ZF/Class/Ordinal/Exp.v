@@ -10,11 +10,19 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.UnionGenOfClass.
+
+Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SUG := ZF.Set.UnionGenOfClass.
 
 (* Not quite the function class (a ^ .) when a is an ordinal: because 0^0 is    *)
 (* defined as 1, setting a^b = \/_{c :< b} a^c for limit ordinal b implies that *)
@@ -63,6 +71,22 @@ Proof.
   - right. split; assumption.
 Qed.
 
+Proposition WhenZeroL : forall (a:U),
+  a = :0: -> Exp a :~: OnZero.
+Proof.
+  intros a H1 x. split; intros H2.
+  - destruct H2 as [[H2 H3]|[H2 H3]]. 1: assumption. contradiction.
+  - left. split; assumption.
+Qed.
+
+Proposition WhenNotZeroL : forall (a:U),
+  a <> :0: -> Exp a :~: Exp' a.
+Proof.
+  intros a H1 x. split; intros H2.
+  - destruct H2 as [[H2 H3]|[H2 H3]]. 2: assumption. contradiction.
+  - right. split; assumption.
+Qed.
+
 Proposition IsFunctionOn' : forall (a:U), CFO.FunctionOn (Exp' a) On.
 Proof.
   intros a. apply Recursion2.IsFunctionOn.
@@ -74,6 +98,17 @@ Proof.
   - destruct H2 as [y [z [H2 _]]]. exists y. exists z. assumption.
   - assert (Relation (Exp' a)) as H3. { apply IsFunctionOn'. }
     apply H3. assumption.
+Qed.
+
+Proposition OnZeroIsFunctional : Functional OnZero.
+Proof.
+  intros x y1 y2 H1 H2.
+  apply OnZeroCharac2 in H1. apply OnZeroCharac2 in H2.
+  destruct H1 as [H1 H3]. destruct H2 as [_ H2].
+  destruct H3 as [[H3 H4]|[H3 H4]]; destruct H2 as [[H2 H5]|[H2 H5]]; subst;
+  try reflexivity.
+  - apply Empty.Charac in H2. contradiction.
+  - apply Empty.Charac in H3. contradiction.
 Qed.
 
 Proposition IsFunctional : forall (a:U), Functional (Exp a).
@@ -128,3 +163,71 @@ Proof.
   - apply DomainOf.
 Qed.
 
+Proposition WhenZero : forall (a:U), (Exp a)!:0: = :1:.
+Proof.
+  intros a.
+  assert (a = :0: \/ a <> :0:) as H1. { apply LawExcludedMiddle. }
+  destruct H1 as [H1|H1].
+  - assert (Exp a :~: OnZero) as H2. { apply WhenZeroL. assumption. }
+    rewrite (EvalOfClass.EquivCompat (Exp a) OnZero). 2: assumption.
+    apply EvalOfClass.Charac.
+    + apply OnZeroIsFunctional.
+    + exists :1:. apply OnZeroCharac2. split.
+      * apply SOC.ZeroIsOrdinal.
+      * left. split; reflexivity.
+    + apply OnZeroCharac2. split.
+      * apply SOC.ZeroIsOrdinal.
+      * left. split; reflexivity.
+  - assert (Exp a :~: Exp' a) as H2. { apply WhenNotZeroL. assumption. }
+    rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
+    apply Recursion2.WhenZero.
+Qed.
+
+Proposition WhenSucc : forall (a b:U), On b ->
+  (Exp a)!(succ b) = (Exp a)!b :*: a.
+Proof.
+  intros a b H1.
+  assert (a = :0: \/ a <> :0:) as H2. { apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - assert (Exp a :~: OnZero) as H3. { apply WhenZeroL. assumption. }
+    rewrite (EvalOfClass.EquivCompat (Exp a) OnZero). 2: assumption.
+    rewrite (EvalOfClass.EquivCompat (Exp a) OnZero). 2: assumption.
+    subst. rewrite Mult.WhenZeroR. apply EvalOfClass.Charac.
+    + apply OnZeroIsFunctional.
+    + exists :0:. apply OnZeroCharac2. split.
+      * apply Succ.IsOrdinal. assumption.
+      * right. split. 2: reflexivity. apply Succ.HasZero. assumption.
+    + apply OnZeroCharac2. split.
+      * apply Succ.IsOrdinal. assumption.
+      * right. split. 2: reflexivity. apply Succ.HasZero. assumption.
+  - assert (Exp a :~: Exp' a) as H3. { apply WhenNotZeroL. assumption. }
+    rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
+    rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
+    rewrite <- MultA.Eval. apply Recursion2.WhenSucc. assumption.
+Qed.
+
+Proposition WhenLimitZero : forall (a b:U), Limit b ->
+  a = :0: -> (Exp a)!b = :0:.
+Proof.
+  intros a b H1 H2.
+  assert (Exp a :~: OnZero) as H3. { apply WhenZeroL. assumption. }
+  rewrite (EvalOfClass.EquivCompat (Exp a) OnZero). 2: assumption.
+  apply EvalOfClass.Charac.
+  - apply OnZeroIsFunctional.
+  - exists :0:. apply OnZeroCharac2. split.
+    + apply H1.
+    + right. split. 2: reflexivity. apply Limit.HasZero. assumption.
+  - apply OnZeroCharac2. split.
+    + apply H1.
+    + right. split. 2: reflexivity. apply Limit.HasZero. assumption.
+Qed.
+
+Proposition WhenLimit : forall (a b:U), Limit b ->
+  a <> :0: -> (Exp a)!b = :\/:_{b} (Exp a).
+Proof.
+  intros a b H1 H2.
+  assert (Exp a :~: Exp' a) as H3. { apply WhenNotZeroL. assumption. }
+  rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
+  rewrite (SUG.EquivCompat (Exp a) (Exp' a)). 2: assumption.
+  apply Recursion2.WhenLimit. assumption.
+Qed.
