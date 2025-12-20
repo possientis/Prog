@@ -104,10 +104,10 @@ Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1. revert b. apply Induction2.
   - rewrite WhenZeroR. apply Core.ZeroIsOrdinal.
-  - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
+  - intros b H2 IH. rewrite WhenSuccR. 2: assumption.
     apply Plus.IsOrdinal; assumption.
-  - intros b H2 H3. rewrite WhenLimit. 2: assumption.
-    apply SOG.IsOrdinal. apply H3.
+  - intros b H2 IH. rewrite WhenLimit. 2: assumption.
+    apply SOG.IsOrdinal. apply IH.
 Qed.
 
 Proposition ElemCompatR : forall (a b c:U),

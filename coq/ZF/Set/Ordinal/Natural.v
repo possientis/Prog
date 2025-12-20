@@ -167,4 +167,3 @@ Proof.
   assert (:0: :< :0:) as H2. { apply H1, Succ.IsIn. }
   apply Empty.Charac in H2. contradiction.
 Qed.
-
