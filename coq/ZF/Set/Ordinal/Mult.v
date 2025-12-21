@@ -265,6 +265,21 @@ Proof.
     apply IH; assumption.
 Qed.
 
+Proposition InclCompat : forall (a b c d:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Ordinal c               ->
+  Ordinal d               ->
+  a :<=: c                ->
+  b :<=: d                ->
+  a :*: b :<=: c :*: d.
+Proof.
+  intros a b c d H1 H2 H3 H4 H5 H6.
+  apply Incl.Tran with (c :*: b).
+  - apply InclCompatL; assumption.
+  - apply InclCompatR; assumption.
+Qed.
+
 Proposition ElemCompatRevL : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -1003,3 +1018,4 @@ Proof.
       * apply IsLimit; assumption.
     + apply IsLimit; assumption.
 Qed.
+
