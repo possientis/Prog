@@ -123,3 +123,49 @@ Proof.
     + assert (x :< a :^: :0:) as X. 2: apply X.
       rewrite WhenZeroR. assumption.
 Qed.
+
+Proposition ElemCompatR : forall (a b c:U),
+  Ordinal a           ->
+  Ordinal b           ->
+  Ordinal c           ->
+  :1: :< c            ->
+  a :< b              ->
+  c :^: a :< c :^: b.
+Proof.
+  intros a b c H1 H2 H3 H4 H5. revert b H2 H5.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal (succ a)) as G3. { apply Succ.IsOrdinal. assumption. }
+  assert (:0: :< c) as G4. {
+    apply Succ.ElemIsIncl; try assumption.
+    apply Core.ElemIsIncl; assumption. }
+  remember (fun b => c :^: a :< c :^: b) as A eqn:H6.
+  assert (forall (d:U), Ordinal d -> c :^: d :< c :^: (succ d)) as H7. {
+    intros d H7.
+    assert (Ordinal (c :^: d)) as H8. { apply IsOrdinal; assumption. }
+    assert (c :^: d :*: :1: :< c :^: d :*: c) as H9. {
+      apply Mult.ElemCompatR; try assumption.
+      apply Succ.ElemIsIncl; try assumption.
+      apply OneIsIncl; try assumption.
+      apply Core.ElemIsIncl; assumption. }
+    rewrite Mult.WhenOneR in H9. 2: assumption.
+    rewrite WhenSuccR; assumption. }
+  assert (forall b, Ordinal b -> succ a :<=: b -> A b) as H8. {
+    apply Induction2'. 1: assumption.
+    - rewrite H6. apply H7. assumption.
+    - rewrite H6. intros b H8 H9 IH.
+      assert (Ordinal (succ b)) as G5. { apply Succ.IsOrdinal. assumption. }
+      assert (Ordinal (c :^: a)) as G6. { apply IsOrdinal; assumption. }
+      assert (Ordinal (c :^: b)) as G7. { apply IsOrdinal; assumption. }
+      assert (Ordinal (c :^: succ b)) as G8. { apply IsOrdinal; assumption. }
+      apply Core.ElemElemTran with (c :^: b); try assumption.
+      apply H7. assumption.
+    - rewrite H6. intros b H8 H9 IH.
+      rewrite (WhenLimit c b); try assumption.
+      apply SUG.Charac. exists (succ a). split.
+      + apply Limit.HasSucc. 1: assumption.
+        apply Succ.ElemIsIncl; try assumption. apply H8.
+      + apply H7. assumption. }
+  rewrite H6 in H8. intros b H9 H10. apply H8. 1: assumption.
+  apply Succ.ElemIsIncl; assumption.
+Qed.
