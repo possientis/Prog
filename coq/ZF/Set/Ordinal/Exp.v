@@ -125,11 +125,11 @@ Proof.
 Qed.
 
 Proposition ElemCompatR : forall (a b c:U),
-  Ordinal a           ->
-  Ordinal b           ->
-  Ordinal c           ->
-  :1: :< c            ->
-  a :< b              ->
+  Ordinal a             ->
+  Ordinal b             ->
+  Ordinal c             ->
+  :1: :< c              ->
+  a :< b                ->
   c :^: a :< c :^: b.
 Proof.
   intros a b c H1 H2 H3 H4 H5. revert b H2 H5.
@@ -168,4 +168,25 @@ Proof.
       + apply H7. assumption. }
   rewrite H6 in H8. intros b H9 H10. apply H8. 1: assumption.
   apply Succ.ElemIsIncl; assumption.
+Qed.
+
+Proposition InclCompatR : forall (a b c:U),
+  Ordinal a             ->
+  Ordinal b             ->
+  Ordinal c             ->
+  :0: :< c              ->
+  a :<=: b              ->
+  c :^: a :<=: c :^: b.
+Proof.
+  intros a b c H1 H2 H3 H4 H5.
+  assert (Ordinal (c :^: b)) as G1. { apply IsOrdinal; assumption. }
+  assert (c = :1: \/ :1: :< c) as H6. {
+    apply Natural.OneOrElem; assumption. }
+  destruct H6 as [H6|H6].
+  - subst. rewrite WhenOneL, WhenOneL; try assumption. apply Incl.Refl.
+  - apply Core.InclIsEqualOrElem in H5; try assumption.
+    destruct H5 as [H5|H5].
+    + subst. apply Incl.Refl.
+    + apply Core.ElemIsIncl; try assumption.
+      apply ElemCompatR; assumption.
 Qed.

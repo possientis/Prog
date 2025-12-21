@@ -167,3 +167,17 @@ Proof.
   assert (:0: :< :0:) as H2. { apply H1, Succ.IsIn. }
   apply Empty.Charac in H2. contradiction.
 Qed.
+
+Proposition OneOrElem : forall (a:U), Ordinal a ->
+  :0: :< a -> a = :1: \/ :1: :< a.
+Proof.
+  intros a H1 H2.
+  assert (:1: :< a \/ a :<=: :1:) as H3. {
+    apply Core.ElemOrIncl. 2: assumption. apply OneIsOrdinal. }
+  destruct H3 as [H3|H3].
+  - right. assumption.
+  - left. apply DoubleInclusion. split. 1: assumption.
+    intros x H4. apply Succ.Charac in H4. destruct H4 as [H4|H4].
+    + subst. assumption.
+    + apply Empty.Charac in H4. contradiction.
+Qed.
