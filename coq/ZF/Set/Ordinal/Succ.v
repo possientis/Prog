@@ -16,6 +16,9 @@ Module COC := ZF.Class.Ordinal.Core.
 
 Definition succ (a:U) : U := a :\/: :{a}:.
 
+Definition Successor (a:U) : Prop := Ordinal a /\ exists b, a = succ b.
+
+
 Definition Charac : forall (a x:U),
   x :< succ a <-> x = a \/ x :< a.
 Proof.
@@ -51,6 +54,14 @@ Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ a).
 Proof.
   apply COC.Succ.
+Qed.
+
+Proposition IsSuccessor : forall (a:U), Ordinal a ->
+  Successor (succ a).
+Proof.
+  intros a H1. split.
+  - apply IsOrdinal. assumption.
+  - exists a. reflexivity.
 Qed.
 
 Proposition HasZero : forall (a:U), Ordinal a -> :0: :< succ a.
@@ -211,5 +222,16 @@ Proof.
   assert (:U(succ b) = b) as H5. { apply UnionOfSucc. assumption. }
   rewrite <- H4 in H5. assert (a = b) as H6. { rewrite <- H5. assumption. }
   rewrite <- H6 in H4. symmetry. assumption.
+Qed.
+
+(* An ordinal is a successor iff it is the successor of its union.              *)
+Proposition WhenSuccessor : forall (a:U), Ordinal a ->
+  Successor a <-> a = succ :U(a).
+Proof.
+  intros a H1. split; intros H2.
+  - destruct H2 as [H2 [b H3]]. subst.
+    assert (Ordinal b) as H4. { apply IsOrdinalRev. assumption. }
+    rewrite UnionOfSucc. 2: assumption. reflexivity.
+  - split. 1: assumption. exists :U(a). assumption.
 Qed.
 

@@ -23,20 +23,21 @@ Proof.
   intros a [H1 H2] H3. apply H2. assumption.
 Qed.
 
-Proposition NotSucc : forall (a b:U),
-  Limit a -> Ordinal b -> a = succ b  -> False.
+Proposition NotSucc : forall (a:U),
+  Limit a -> ~ Successor a.
 Proof.
-  intros a b H1 H2 H3. apply NotBoth with a. 1: assumption.
-  right. exists b. split; assumption.
+  intros a H1 [H2 [b H3]]. apply NotBoth with a. 1: assumption.
+  right. split. 1: assumption. exists b. assumption.
 Qed.
 
-Proposition NotSucc' : forall (a:U),
+Proposition SuccIsNot : forall (a:U),
   ~ Limit (succ a).
 Proof.
   intros a H1.
   assert (Ordinal (succ a)) as H2. { apply H1. }
   assert (Ordinal a) as H3. {  apply IsOrdinalRev. assumption. }
-  apply NotSucc with (succ a) a; try assumption. reflexivity.
+  apply NotSucc with (succ a). 1: assumption.
+  apply Succ.IsSuccessor. assumption.
 Qed.
 
 (* Limit is a class of ordinals.                                                *)
@@ -55,11 +56,12 @@ Proof.
     + assert (a = :U(a) \/ a = succ :U(a)) as H3. {
         apply UnionOrSuccOfUnion. assumption. }
       destruct H3 as [H3|H3]. 1: assumption. exfalso. apply H2. right.
-      exists :U(a). split. 2: assumption. apply UnionOf.IsOrdinal.
-      assumption.
+      split. 1: assumption. exists :U(a). assumption.
   - destruct H2 as [H2 H3]. split. 1: assumption. intros [H4|H4].
     + contradiction.
-    + destruct H4 as [b [H4 H5]]. apply IfUnionThenNotSucc with a b; assumption.
+    + destruct H4 as [H4 [b H5]].
+      apply IfUnionThenNotSucc with a b; try assumption.
+      apply Succ.IsOrdinalRev. subst. assumption.
 Qed.
 
 Proposition HasZero : forall (a:U),
@@ -119,7 +121,8 @@ Proof.
     apply Core.IsTotal; assumption. }
   destruct H6 as [H6|[H6|H6]]. 2: assumption.
   - exfalso. apply NotBoth with a. 1: assumption. right.
-    exists b. split. 1: assumption. symmetry. assumption.
+    split. 1: assumption.
+    exists b. symmetry. assumption.
   - exfalso. apply NoElemLoop1 with a. apply H3. assumption.
 Qed.
 

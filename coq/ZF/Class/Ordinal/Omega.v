@@ -58,9 +58,8 @@ Proof.
   - apply Succ.IsOrdinal. assumption.
   - intros b H3. apply Union2.Charac in H3. destruct H3 as [H3|H3].
     + apply H2. assumption.
-    + apply Single.Charac in H3. subst. right. exists a. split.
-      * assumption.
-      * reflexivity.
+    + apply Single.Charac in H3. subst. right.
+      apply Succ.IsSuccessor. assumption.
 Qed.
 
 (* N is not an empty class.                                                     *)
@@ -124,9 +123,11 @@ Proof.
   assert (n <> :0:) as H9. { intros H9. subst. contradiction. }
   assert (NonLimit n) as H10. { apply HasNonLimitElem. assumption. }
   destruct H10 as [H10|H10]. 1: contradiction.
-  destruct H10 as [b [H10 H11]]. assert (H12 := H6). destruct H12 as [_ H12].
-  assert ((:N : Class) b) as H13. { split. 1: assumption.
-    apply Class.Incl.Tran with (toClass (succ n)). 2: assumption.
+  destruct H10 as [H10 [b H11]]. assert (H12 := H6). destruct H12 as [_ H12].
+  assert ((:N : Class) b) as H13. {
+    split.
+    - apply Succ.IsOrdinalRev. subst. assumption.
+    - apply Class.Incl.Tran with (toClass (succ n)). 2: assumption.
       rewrite <- H11. apply Succ.IsIncl. }
   assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
     apply NoElemLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
@@ -210,3 +211,4 @@ Proof.
   (* Which is also true. *)
     intros i _. apply H2.
 Qed.
+

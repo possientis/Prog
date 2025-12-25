@@ -135,7 +135,7 @@ Proof.
   assert (NonLimit n) as H3. { apply HasNonLimitElem. assumption. }
   destruct H3 as [H3|H3].
   - subst. exfalso. revert H2. apply NoElemLoop1.
-  - destruct H3 as [m [H3 H4]]. exists m. split. 2: assumption.
+  - destruct H3 as [H3 [m H4]]. exists m. split. 2: assumption.
     apply HasSuccRev. rewrite <- H4. assumption.
 Qed.
 

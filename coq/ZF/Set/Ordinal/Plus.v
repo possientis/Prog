@@ -485,9 +485,7 @@ Proof.
   destruct H7 as [m [H7 H8]].
   assert (Ordinal m) as H9. { apply HasOrdinalElem. assumption. }
   apply Limit.NotBoth with (a :+: n). 1: assumption. right.
-  exists (a :+: m). split.
-  - apply IsOrdinal; assumption.
-  - rewrite H8. apply WhenSuccR. assumption.
+  split. 1: apply H3. exists (a :+: m). subst. apply WhenSuccR. assumption.
 Qed.
 
 (* The sum of an ordinal and a limit ordinal is a limit ordinal.                *)

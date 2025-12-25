@@ -812,8 +812,9 @@ Proof.
         assert (n = :0: \/ :0: :< n) as H10. {
           apply Core.ZeroOrElem. assumption. }
         destruct H10 as [H10|H10]. 2: assumption. exfalso. subst.
-        rewrite Plus.WhenZeroR in H8. symmetry in H8. revert H8.
-        apply Limit.NotSucc; assumption. }
+        rewrite Plus.WhenZeroR in H8. symmetry in H8.
+        apply Limit.NotSucc with c. 1: assumption. subst.
+        apply Succ.IsSuccessor. assumption. }
       destruct H10 as [p [H10 H11]].
       assert (Ordinal p) as H12. { apply Omega.HasOrdinalElem. assumption. }
       assert (Ordinal (m :*: p)) as H13. { apply IsOrdinal; assumption. }
@@ -1004,7 +1005,7 @@ Proof.
       - exfalso. rewrite H6 in H3. rewrite H7 in H3.
         rewrite WhenSuccR in H3. 2: assumption.
         rewrite Plus.WhenSuccR in H3. 2: assumption.
-        revert H3. apply Limit.NotSucc'.
+        revert H3. apply Limit.SuccIsNot.
       - right. assumption.
       - left.  assumption.
       - left.  assumption. }
