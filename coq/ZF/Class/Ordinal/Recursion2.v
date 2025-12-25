@@ -84,14 +84,14 @@ Proof.
   - apply COR.IsFunctionOn.
   - split. 1: apply Equiv.Refl. apply Induction'.
     intros b H5 H6.
-    assert (b = :0: \/ b = succ :U(b) \/ Limit b) as H7. {
+    assert (b = :0: \/ Successor b \/ Limit b) as H7. {
       apply Limit.ThreeWay. assumption. }
     destruct H7 as [H7|[H7|H7]].
     + rewrite H7, H2, WhenZero. reflexivity.
-    + assert (Ordinal :U(b)) as H8. {
-        apply Succ.IsOrdinalRev. rewrite <- H7. assumption. }
-      rewrite H7, H3, WhenSucc, H6; try assumption. 1: reflexivity.
-      remember (:U(b)) as c eqn:H9. rewrite H7. apply Succ.IsIn.
+    + destruct H7 as [H7 [c H8]].
+      assert (Ordinal c) as H9. { apply Succ.IsOrdinalRev. subst. assumption. }
+      rewrite H8, H3, WhenSucc, H6; try assumption. 1: reflexivity.
+      rewrite H8. apply Succ.IsIn.
     + assert (:\/:_{b} G = :\/:_{b} (Recursion F a)) as H8. {
         apply DoubleInclusion. split; intros y H8;
         apply UnionGenOfClass.Charac in H8; destruct H8 as [x [H8 H9]].
@@ -107,3 +107,4 @@ Proposition RestrictIsFunctionOn : forall (F:Class) (a b:U), On b ->
 Proof.
   intros F a b. apply COR.RestrictIsFunctionOn.
 Qed.
+

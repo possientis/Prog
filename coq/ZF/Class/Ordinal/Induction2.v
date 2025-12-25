@@ -20,13 +20,13 @@ Proposition Induction2 : forall (A:Class),
   forall a, On a -> A a.
 Proof.
   intros A H1 H2 H3. apply Induction'. intros a H4 H5.
-  assert (a = :0: \/ a = succ :U(a) \/ Limit a) as H6. {
+  assert (a = :0: \/ Successor a \/ Limit a) as H6. {
     apply Limit.ThreeWay. assumption. }
   destruct H6 as [H6|[H6|H6]].
   - rewrite H6. assumption.
-  - rewrite H6. apply H2.
-    + apply Succ.IsOrdinalRev. rewrite <- H6. assumption.
-    + remember :U(a) as b eqn:H7. apply H5. rewrite H6, H7. apply Succ.IsIn.
+  - destruct H6 as [H6 [b H7]]. subst. apply H2.
+    + apply Succ.IsOrdinalRev. assumption.
+    + apply H5, Succ.IsIn.
   - apply H3; assumption.
 Qed.
 

@@ -366,16 +366,14 @@ Proof.
   assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
   assert (Ordinal b) as G3. { apply H3. }
   assert (Ordinal (a :*: b)) as H5. { apply IsOrdinal; assumption. }
-  assert (
-    a :*: b = :0:              \/
-    a :*: b = succ :U(a :*: b) \/
-    Limit (a :*: b)) as H6. { apply Limit.ThreeWay. assumption. }
+  assert (a :*: b = :0: \/ Successor (a :*: b) \/ Limit (a :*: b)) as H6. {
+    apply Limit.ThreeWay. assumption. }
   destruct H6 as [H6|[H6|H6]]. 3: assumption.
   - exfalso. apply WhenZero in H6; try assumption. destruct H6 as [H6|H6].
     + rewrite H6 in H2. apply Empty.Charac in H2. contradiction.
     + rewrite H6 in H3. apply Limit.NotZero. assumption.
-  - exfalso. remember (:U(a :*: b)) as c eqn:H7.
-    assert (c :< a :*: b) as H8. { rewrite H6. apply Succ.IsIn. }
+  - exfalso. destruct H6 as [H6 [c H7]].
+    assert (c :< a :*: b) as H8. { rewrite H7. apply Succ.IsIn. }
     rewrite WhenLimit in H8. 2: assumption.
     apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
     assert (c :< a :*: d) as H10. { assumption. }
@@ -396,7 +394,7 @@ Proof.
       rewrite WhenLimit. 2: assumption.
       apply SUG.Charac. exists (succ d). split. 2: assumption.
       apply Limit.HasSucc; assumption. }
-    rewrite H6 in H17. revert H17. apply NoElemLoop1.
+    rewrite H7 in H17. revert H17. apply NoElemLoop1.
 Qed.
 
 (* Note that (N+1)*2 = (N+1)+(N+1) = N*2+1 <> N*2+2 so there is no DistribR.    *)
@@ -613,20 +611,20 @@ Proof.
       assert (d :< d) as H17. { apply H15. assumption. }
       revert H17. apply NoElemLoop1. }
     assert (b :*: c :<=: a) as H12. {
-      assert (c = :0: \/ c = succ :U(c) \/ Limit c) as H12. {
+      assert (c = :0: \/ Successor c \/ Limit c) as H12. {
         apply Limit.ThreeWay. assumption. }
       destruct H12 as [H12|[H12|H12]].
       - exfalso. rewrite H12 in H10. apply OneNotLessThanZero. assumption.
-      - remember :U(c) as e eqn:H13.
+      - destruct H12 as [H12 [e H13]].
         assert (Ordinal e) as H14. {
-          apply Succ.IsOrdinalRev. rewrite <- H12. assumption. }
-        assert (e :< c) as H15. { rewrite H12. apply Succ.IsIn. }
+          apply Succ.IsOrdinalRev. rewrite <- H13. assumption. }
+        assert (e :< c) as H15. { rewrite H13. apply Succ.IsIn. }
         assert (exists f, Ordinal f /\ f :< A /\ e :< f) as H16. {
           rewrite H6 in H15. apply Sup.WhenLess; assumption. }
         destruct H16 as [f [H16 [H17 H18]]].
         assert (f = c) as H19. {
-          rewrite H12. apply Succ.InBetween; try assumption.
-          rewrite <- H12, H6. apply Sup.IsUpperBound; assumption. }
+          rewrite H13. apply Succ.InBetween; try assumption.
+          rewrite <- H13, H6. apply Sup.IsUpperBound; assumption. }
         rewrite H19 in H17. rewrite H5 in H17. apply Specify.Charac in H17.
         apply H17.
       - rewrite WhenLimit. 2: assumption. intros y H13.
@@ -985,8 +983,6 @@ Proposition LimitCharac : forall (a b:U), Ordinal a -> Ordinal b ->
   Limit (a :*: b) <-> :0: :< a /\ :0: :< b /\ (Limit a \/ Limit b).
 Proof.
   intros a b H1 H2.
-  assert (Ordinal :U(a)) as G1. { apply SOU.IsOrdinal. assumption. }
-  assert (Ordinal :U(b)) as G2. { apply SOU.IsOrdinal. assumption. }
   split; intros H3.
   - assert (:0: :< a) as H4. {
       assert (a = :0: \/ :0: :< a) as H4. { apply Core.ZeroOrElem. assumption. }
@@ -996,13 +992,13 @@ Proof.
       assert (b = :0: \/ :0: :< b) as H5. { apply Core.ZeroOrElem. assumption. }
       destruct H5 as [H5|H5]. 2: assumption. exfalso. subst.
       rewrite WhenZeroR in H3. revert H3. apply Limit.NotZero. }
-    assert (a = succ :U(a) \/ Limit a) as H6. {
-      apply Limit.TwoWay; assumption. }
-    assert (b = succ :U(b) \/ Limit b) as H7. {
-      apply Limit.TwoWay; assumption. }
+    assert (Successor a \/ Limit a) as H6. { apply Limit.TwoWay; assumption. }
+    assert (Successor b \/ Limit b) as H7. { apply Limit.TwoWay; assumption. }
     assert (Limit a \/ Limit b) as H8. {
       destruct H6 as [H6|H6]; destruct H7 as [H7|H7].
-      - exfalso. rewrite H6 in H3. rewrite H7 in H3.
+      - exfalso. destruct H6 as [H6 [c H8]]. destruct H7 as [H7 [d H9]]. subst.
+        assert (Ordinal c) as H10. { apply Succ.IsOrdinalRev. assumption. }
+        assert (Ordinal d) as H11. { apply Succ.IsOrdinalRev. assumption. }
         rewrite WhenSuccR in H3. 2: assumption.
         rewrite Plus.WhenSuccR in H3. 2: assumption.
         revert H3. apply Limit.SuccIsNot.
@@ -1011,12 +1007,13 @@ Proof.
       - left.  assumption. }
     split. 1: assumption. split; assumption.
   - destruct H3 as [H3 [H4 [H5|H5]]].
-    + assert (b = succ :U(b) \/ Limit b) as H6. { apply Limit.TwoWay; assumption. }
+    + assert (Successor b \/ Limit b) as H6. { apply Limit.TwoWay; assumption. }
       destruct H6 as [H6|H6].
-      * rewrite H6, WhenSuccR. 2: assumption.
+      * destruct H6 as [H6 [c H7]]. subst.
+        assert (Ordinal c) as H10. { apply Succ.IsOrdinalRev. assumption. }
+        rewrite WhenSuccR. 2: assumption.
         apply Plus.IsLimit. 2: assumption.
         apply IsOrdinal; assumption.
       * apply IsLimit; assumption.
     + apply IsLimit; assumption.
 Qed.
-

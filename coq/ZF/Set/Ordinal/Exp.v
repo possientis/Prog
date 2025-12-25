@@ -57,10 +57,11 @@ Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :< a -> :0: :^: a = :0:.
 Proof.
   intros a H1 H2.
-  assert (a = succ :U(a) \/ Limit a) as H3. { apply Limit.TwoWay; assumption. }
+  assert (Successor a \/ Limit a) as H3. { apply Limit.TwoWay; assumption. }
   destruct H3 as [H3|H3].
-  - rewrite H3, WhenSuccR, Mult.WhenZeroR. 1: reflexivity.
-    apply UnionOf.IsOrdinal. assumption.
+  - destruct H3 as [H [b H4]].
+    rewrite H4, WhenSuccR, Mult.WhenZeroR. 1: reflexivity.
+    subst. apply Succ.IsOrdinalRev. assumption.
   - rewrite WhenLimitZero; try reflexivity. assumption.
 Qed.
 
@@ -260,3 +261,4 @@ Proof.
   assert (a :^: c :< a :^: c) as H7. { apply H6. assumption. }
   revert H7. apply NoElemLoop1.
 Qed.
+

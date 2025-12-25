@@ -322,7 +322,7 @@ Proof.
   destruct H7 as [c [H7 [H8 H9]]].
   rewrite H4 in H8. destruct H8 as [_ H8]. rewrite H4 in H9.
   exists c. split. 1: assumption. apply DoubleInclusion. split. 2: assumption.
-  assert (c = :0: \/ c = succ :U(c) \/ Limit c) as H10. {
+  assert (c = :0: \/ Successor c \/ Limit c) as H10. {
     apply Limit.ThreeWay. assumption. }
   assert (forall d, Ordinal d -> d :< c -> a :+: d :< b) as G1. {
     intros d H11 H12.
@@ -334,12 +334,12 @@ Proof.
     split; assumption. }
   destruct H10 as [H10|[H10|H10]].
   - rewrite H10. rewrite WhenZeroR. assumption.
-  - remember (:U(c)) as d eqn:H11.
-    assert (Ordinal d) as H12. { rewrite H11. apply SOO.IsOrdinal. assumption. }
+  - destruct H10 as [H10 [d H11]].
+    assert (Ordinal d) as H12. { apply Succ.IsOrdinalRev. subst. assumption. }
     assert (Ordinal (a :+: d)) as H13. { apply IsOrdinal; assumption. }
     assert (a :+: d :< b) as H14. {
-      apply G1. 1: assumption. rewrite H10. apply Succ.IsIn. }
-    apply ElemIsIncl in H14; try assumption. rewrite H10.
+      apply G1. 1: assumption. rewrite H11. apply Succ.IsIn. }
+    apply ElemIsIncl in H14; try assumption. rewrite H11.
     rewrite WhenSuccR; assumption.
   - rewrite WhenLimit. 2: assumption. apply SUG.WhenBounded.
     intros d H15.
@@ -529,9 +529,10 @@ Proof.
     assert (succ d :< succ d) as H18. { (* our contradicton *)
       rewrite <- H8 in H17. rewrite H7 in H17. assumption. }
     revert H18. apply NoElemLoop1. }
-  assert (a :+: b = :0: \/ a :+: b = succ :U(a :+: b) \/ Limit (a :+: b)) as H7. {
+  assert (a :+: b = :0: \/ Successor (a :+: b) \/ Limit (a :+: b)) as H7. {
     apply Limit.ThreeWay. assumption. }
-  destruct H7 as [H7|[H7|H7]]; try contradiction. assumption.
+  destruct H7 as [H7|[H7|H7]]; try contradiction. 2: assumption.
+  exfalso. apply H6. apply Succ.WhenSuccessor; assumption.
 Qed.
 
 (* The addition of ordinals is associative.                                     *)

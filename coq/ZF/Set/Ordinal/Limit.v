@@ -12,6 +12,7 @@ Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.SuccOf.
 Require Import ZF.Set.Ordinal.Union.
+Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.Union.
 
 (* The class of limit ordinals.                                                 *)
@@ -127,25 +128,26 @@ Proof.
 Qed.
 
 Proposition ThreeWay : forall (a:U), Ordinal a ->
-  a = :0: \/ a = succ :U(a) \/ Limit a.
+  a = :0: \/ Successor a \/ Limit a.
 Proof.
   intros a H1.
   assert (NonLimit a \/ ~NonLimit a) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply NonLimit.Charac in H2. 2: assumption. destruct H2 as [H2|H2].
     + left. assumption.
-    + right. left. assumption.
+    + right. left. rewrite H2.
+      apply Succ.IsSuccessor, UnionOf.IsOrdinal. assumption.
   - right. right. split; assumption.
 Qed.
 
 Proposition TwoWay : forall (a:U), Ordinal a ->
-  :0: :< a -> a = succ :U(a) \/ Limit a.
+  :0: :< a -> Successor a \/ Limit a.
 Proof.
   intros a H1 H2.
-  assert (a = :0: \/ a = succ :U(a) \/ Limit a) as H3. {
+  assert (a = :0: \/ Successor a \/ Limit a) as H3. {
     apply ThreeWay. assumption. }
-  destruct H3 as [H3|H3]. 2: assumption. exfalso. subst.
-  apply Empty.Charac in H2. contradiction.
+  destruct H3 as [H3|H3]. 2: assumption.
+  exfalso. subst. apply Empty.Charac in H2. contradiction.
 Qed.
 
 Proposition WhenHasSucc : forall (a:U), Ordinal a ->
@@ -154,11 +156,12 @@ Proposition WhenHasSucc : forall (a:U), Ordinal a ->
   Limit a.
 Proof.
   intros a H1 H2 H3.
-  assert (a = :0: \/ a = succ :U(a) \/ Limit a) as H4. {
+  assert (a = :0: \/ Successor a \/ Limit a) as H4. {
     apply ThreeWay. assumption. }
   destruct H4 as [H4|[H4|H4]]. 3: assumption. 1: contradiction. exfalso.
   assert (succ :U(a) :< succ :U(a)) as H5. { (* contradiction *)
-  rewrite H4 in H3. apply H3, Succ.IsIn. }
+    apply Succ.WhenSuccessor in H4.
+    rewrite H4 in H3. 2: assumption.
+    apply H3, Succ.IsIn. }
   revert H5. apply NoElemLoop1.
 Qed.
-
