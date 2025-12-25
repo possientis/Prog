@@ -82,7 +82,7 @@ Proof.
   assert (domain g = succ b) as H5. {
     rewrite H4. apply RestrictOfClass.DomainWhenIncl; assumption. }
   assert (NonLimit (succ b)) as H6. { apply NonLimit.HasSucc. assumption. }
-  assert (succ b <> :0:) as H7. { apply Succ.IsNotEmpty. }
+  assert (succ b <> :0:) as H7. { apply Succ.NotZero. }
   assert (sup (succ b) = b) as H8. { apply SupOf.WhenSucc. assumption. }
   assert (g <> :0:) as H9. {
     intros H9. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }

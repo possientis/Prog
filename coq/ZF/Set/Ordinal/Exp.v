@@ -126,6 +126,17 @@ Proof.
       rewrite WhenZeroR. assumption.
 Qed.
 
+Proposition HasZero : forall (a b:U), Ordinal a -> Ordinal b ->
+  :0: :< a -> :0: :< a :^: b.
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal (a :^: b)) as G2. { apply IsOrdinal; assumption. }
+  apply Succ.ElemIsIncl; try assumption.
+  apply OneIsIncl; try assumption.
+  apply Succ.ElemIsIncl; assumption.
+Qed.
+
 Proposition ElemCompatR : forall (a b c:U),
   Ordinal a             ->
   Ordinal b             ->
@@ -262,3 +273,27 @@ Proof.
   revert H7. apply NoElemLoop1.
 Qed.
 
+Proposition ElemCompatL : forall (a b c:U),
+  Ordinal a             ->
+  Ordinal b             ->
+  Successor c           ->
+  a :< b                ->
+  a :^: c :< b :^: c.
+Proof.
+  intros a b c H1 H2 H3 H4.
+  assert (Ordinal c) as H5. { apply H3. }
+  destruct H3 as [H3 [d H6]]. subst.
+  assert (Ordinal d) as H7. { apply Succ.IsOrdinalRev. assumption. }
+  assert (Ordinal (a :^: succ d)) as G1. { apply IsOrdinal; assumption. }
+  assert (Ordinal (b :^: succ d)) as G2. { apply IsOrdinal; assumption. }
+  assert (Ordinal (b :^: d)) as G3. { apply IsOrdinal; assumption. }
+  assert (Ordinal (a :^: d)) as G4. { apply IsOrdinal; assumption. }
+  assert (Ordinal (b :^: d :*: a)) as G5. { apply Mult.IsOrdinal; assumption. }
+  assert (a :^: d :<=: b :^: d) as H8. {
+    apply InclCompatL; try assumption. apply Core.ElemIsIncl; assumption. }
+  apply InclElemTran with (b :^: d :*: a); try assumption.
+  - rewrite WhenSuccR. 2: assumption. apply Mult.InclCompatL; assumption.
+  - rewrite WhenSuccR. 2: assumption. apply Mult.ElemCompatR; try assumption.
+    apply HasZero; try assumption. apply Core.HasZero. 1: assumption.
+    apply Empty.HasElem. exists a. assumption.
+Qed.

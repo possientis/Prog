@@ -38,7 +38,7 @@ Proof.
 Qed.
 
 (* A successor is not the empty set.                                            *)
-Proposition IsNotEmpty : forall (a:U), succ a <> :0:.
+Proposition NotZero : forall (a:U), succ a <> :0:.
 Proof.
   intros a H1. apply Empty.Charac with a. rewrite <- H1. apply IsIn.
 Qed.
@@ -68,7 +68,7 @@ Proposition HasZero : forall (a:U), Ordinal a -> :0: :< succ a.
 Proof.
   intros a H1. apply Core.HasZero.
   - apply IsOrdinal. assumption.
-  - apply IsNotEmpty.
+  - apply NotZero.
 Qed.
 
 (* The successor operation is injective.                                        *)
