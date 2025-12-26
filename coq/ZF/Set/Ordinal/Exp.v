@@ -10,6 +10,7 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Ordinal.UnionOf.
@@ -389,3 +390,120 @@ Proof.
     revert H20. apply NoElemLoop1. }
   exists d. split. 1: assumption. split; assumption.
 Qed.
+
+Proposition IsLimitR : forall (a b:U), Ordinal a ->
+  :1: :< a -> Limit b -> Limit (a :^: b).
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal b) as G1. { apply H3. }
+  assert (Ordinal (a :^: b)) as G2. { apply IsOrdinal; assumption. }
+  assert (a :^: b = :0: \/ Successor (a :^: b) \/ Limit (a :^: b)) as H4. {
+    apply Limit.ThreeWay. assumption. }
+  destruct H4 as [H4|[H4|H4]]. 3: assumption.
+  - exfalso.
+    assert (:1: :<=: a :^: b) as H5. {
+      apply OneIsIncl; try assumption. apply Core.ElemIsIncl; assumption. }
+    assert (:0: :< :0:) as H6. { rewrite H4 in H5. apply H5. apply Succ.IsIn. }
+    revert H6. apply NoElemLoop1.
+  - exfalso. destruct H4 as [H4 [d H5]].
+    assert (Ordinal d) as G3. {
+      apply Succ.IsOrdinalRev. rewrite <- H5. assumption. }
+    assert (Ordinal :0:) as G4. { apply Core.ZeroIsOrdinal. }
+    assert (Ordinal :1:) as G5. { apply Natural.OneIsOrdinal. }
+    assert (:0: :< a) as G6. {
+      apply Core.ElemElemTran with :1:; try assumption. apply Succ.IsIn. }
+    assert (d :< a :^: b) as H6. { rewrite H5. apply Succ.IsIn. }
+    rewrite WhenLimit in H6; try assumption.
+    apply SUG.Charac in H6. destruct H6 as [c [H6 H7]].
+    assert (Ordinal c) as G7. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal (succ d)) as G8. { rewrite <- H5. assumption. }
+    assert (Ordinal (a :^: c)) as G9. { apply IsOrdinal; assumption. }
+    assert (a :^: c :< a :^: b) as H8. { apply ElemCompatR; assumption. }
+    assert (succ d :< succ d) as H9. {
+      apply Core.InclElemTran with (a :^: c); try assumption.
+      - apply Succ.ElemIsIncl; assumption.
+      - rewrite <- H5. assumption. }
+    revert H9. apply NoElemLoop1.
+Qed.
+
+Proposition IsLimitL : forall (a b:U), Ordinal b ->
+  :0: :< b -> Limit a -> Limit (a :^: b).
+Proof.
+  intros a b H1 H2 H3.
+  assert (Ordinal a) as G1. { apply H3. }
+  assert (Successor b \/ Limit b) as H4. { apply Limit.TwoWay; assumption. }
+  destruct H4 as [H4|H4].
+  - destruct H4 as [H4 [d H5]]. subst.
+    assert (Ordinal d) as G2. { apply Succ.IsOrdinalRev. assumption. }
+    assert (Ordinal (a :^: d)) as G3. { apply IsOrdinal; assumption. }
+    assert (Ordinal :0:) as G4. { apply Core.ZeroIsOrdinal. }
+    assert (Ordinal :1:) as G5. { apply Natural.OneIsOrdinal. }
+    rewrite WhenSuccR. 2: assumption.
+    apply Mult.IsLimit; try assumption.
+    apply Core.ElemInclTran with :1:; try assumption. 1: apply Succ.IsIn.
+    apply OneIsIncl; try assumption.
+    apply Core.ElemIsIncl. 1: assumption.
+    apply Limit.HasOne. assumption.
+  - apply IsLimitR; try assumption. apply Limit.HasOne. assumption.
+Qed.
+
+(* Not quite a distributivity property of course.                               *)
+Proposition DistribL : forall (a b c:U),
+  Ordinal a                               ->
+  Ordinal b                               ->
+  Ordinal c                               ->
+  a :^: (b :+: c) = a :^: b :*: a :^: c.
+Proof.
+  intros a b c H1 H2. revert c.
+  assert (Ordinal (a :^: b)) as G1. { apply IsOrdinal; assumption. }
+  apply Induction2.
+  - rewrite Plus.WhenZeroR, WhenZeroR, Mult.WhenOneR. 2: assumption. reflexivity.
+  - intros c H3 IH.
+    assert (Ordinal (a :^: c)) as G2. { apply IsOrdinal; assumption. }
+    assert (Ordinal (b :+: c)) as G3. { apply Plus.IsOrdinal; assumption. }
+    rewrite WhenSuccR, <- Mult.Assoc, <- IH, Plus.WhenSuccR; try assumption.
+    apply WhenSuccR. assumption.
+  - intros c H3 IH.
+    assert (Limit (b :+: c)) as H4. { apply Plus.IsLimit; assumption. }
+    assert (Ordinal c) as G4. { apply H3. }
+    assert (Ordinal (b :+: c)) as G5. { apply H4. }
+    assert (:0: :< c) as G6. { apply Limit.HasZero. assumption. }
+    assert (:0: :< b :+: c) as G7. { apply Limit.HasZero. assumption. }
+    assert (a = :0: \/ :0: :< a) as H5. { apply Core.ZeroOrElem. assumption. }
+    destruct H5 as [H5|H5].
+    + subst. rewrite WhenZeroL, (WhenZeroL c), Mult.WhenZeroR; try assumption.
+      reflexivity.
+    + assert (a = :1: \/ :1: :< a) as H6. {
+        apply Natural.OneOrElem; assumption. }
+      destruct H6 as [H6|H6].
+      * subst. rewrite WhenOneL, WhenOneL, WhenOneL, Mult.WhenOneR;
+        try assumption. reflexivity.
+      * assert (Limit (a :^: c)) as H7. { apply IsLimitR; assumption. }
+        rewrite WhenLimit; try assumption.
+        rewrite Mult.WhenLimit. 2: assumption.
+        apply DoubleInclusion. split; intros y H8;
+        apply SUG.Charac; apply SUG.Charac in H8.
+        { destruct H8 as [e [H8 H9]].
+          assert (Ordinal e) as G8. {
+            apply Core.IsOrdinal with (b :+: c); assumption. }
+          assert (y :< a :^: e) as H10. { assumption. } clear H9.
+          assert (e :<=: b \/ b :<=: e) as H11. { apply Core.InclOrIncl; assumption. }
+          destruct H11 as [H11|H11].
+          - exists :1:. split.
+            + apply Limit.HasOne. assumption.
+            + assert (y :< a :^: b :*: :1:) as X. 2: apply X.
+              assert (a :^: e :<=: a :^: b) as H12. { apply InclCompatR; assumption. }
+              rewrite Mult.WhenOneR. 2: assumption. apply H12. assumption.
+          - assert (exists f, Ordinal f /\ b :+: f = e) as H12. {
+              apply Plus.CompleteR; assumption. }
+            destruct H12 as [f [H12 H13]].
+            assert (f :< c) as H14. {
+              apply Plus.ElemCompatRevR with b; try assumption.
+              rewrite H13. assumption. }
+            assert (a :^: (b :+: f) = a :^: b :*: a :^: f) as H15. {
+              apply IH. assumption. }
+            exists (a :^: f). split.
+            + apply ElemCompatR; assumption.
+            + assert (y :< a :^: b :*: a :^: f) as X. 2: apply X.
+              rewrite <- H15, H13. assumption. }
+Admitted.
