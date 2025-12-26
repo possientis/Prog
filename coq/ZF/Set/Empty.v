@@ -22,6 +22,12 @@ Proof.
   apply FromClass.Charac.
 Qed.
 
+(* The empty set is a subset of all sets.                                       *)
+Proposition IsIncl : forall (a:U), :0: :<=: a.
+Proof.
+  intros a x H1. apply Charac in H1. contradiction.
+Qed.
+
 (* The empty set has no element.                                                *)
 Proposition NoElem : forall x, ~ x :< :0:.
 Proof.
