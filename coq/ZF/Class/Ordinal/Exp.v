@@ -1,12 +1,12 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.MultA.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Relation.
+Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
@@ -28,7 +28,7 @@ Module SUG := ZF.Set.UnionGenOfClass.
 (* defined as 1, setting a^b = \/_{c :< b} a^c for limit ordinal b implies that *)
 (* 0^b = 1 for b limit ordinal since 0 :< b. This is not what we want. We want  *)
 (* 0^b = 0 whenever 1 <= b.                                                     *)
-Definition Exp' (a:U) : Class := Recursion (MultA a) :1:.
+Definition Exp' (a:U) : Class := Recursion :[fun b => b :*: a]: :1:.
 
 (* The function class F such that F(0) = 1 and F(x) = 0 for 0 < x.              *)
 Definition OnZero : Class := fun x => exists y z,
@@ -203,7 +203,8 @@ Proof.
   - assert (Exp a :~: Exp' a) as H3. { apply WhenNotZeroL. assumption. }
     rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
     rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
-    rewrite <- MultA.Eval. apply Recursion2.WhenSucc. assumption.
+    rewrite <- (ToFun.Eval (fun b => b :*: a)).
+    apply Recursion2.WhenSucc. assumption.
 Qed.
 
 Proposition WhenLimitZero : forall (a b:U), Limit b ->

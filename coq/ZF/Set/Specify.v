@@ -14,7 +14,7 @@ Definition specify (P:Class) (a:U) : U := fromClass (toClass a :/\: P)
   (Inter2.IsSmallL (toClass a) P (SetIsSmall a)).
 
 Notation "{{ x :< a | P }}" := (specify (fun x => P x) a)
-  (at level 1, x ident, a at level 0, P at level 200).
+  (at level 1, x ident, a at level 0, P at level 200) : ZF_Set_Specify_scope.
 (*  (at level 1, no associativity) : ZF_Set_Specify_scope. *)
 
 (* Characterisation of the elements of { x :< a | P x}.                         *)

@@ -1,8 +1,8 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.PlusA.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.FunctionOn.
+Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Limit.
@@ -19,7 +19,7 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* The function class (a * .) when a is an ordinal.                             *)
-Definition Mult (a:U) : Class := Recursion (PlusA a) :0:.
+Definition Mult (a:U) : Class := Recursion :[fun b => b :+: a]: :0:.
 
 (* Plus a is a function class defined on the class of ordinals.                 *)
 Proposition IsFunctionOn : forall (a:U), CFO.FunctionOn (Mult a) On.
@@ -38,9 +38,10 @@ Proposition WhenSucc : forall (a b:U), On b ->
   (Mult a)!(succ b) = (Mult a)!b :+: a.
 Proof.
   intros a b H1.
-  assert ((Mult a)!(succ b) = (PlusA a)!((Mult a)!b)) as H2. {
+  assert ((Mult a)!(succ b) = :[fun b => b :+: a]:!((Mult a)!b)) as H2. {
     apply Recursion2.WhenSucc. assumption. }
-    rewrite H2. apply PlusA.Eval.
+    rewrite H2.
+    apply (ToFun.Eval (fun b => b :+: a)).
 Qed.
 
 (* a * b = \/_{c :< b} a * c when b is a limit ordinal.                         *)
@@ -58,7 +59,8 @@ Proposition IsUnique : forall (G:Class) (a:U),
   G :~: Mult a.
 Proof.
   intros G a H1 H2 H3. apply Recursion2.IsUnique; try assumption.
-  intros b H4. symmetry. rewrite H3. 2: assumption. apply PlusA.Eval.
+  intros b H4. symmetry. rewrite H3. 2: assumption.
+  apply (ToFun.Eval (fun b => b :+: a)).
 Qed.
 
 Proposition RestrictIsFunctionOn : forall (a b:U), On b ->
