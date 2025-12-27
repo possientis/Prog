@@ -526,3 +526,64 @@ Proof.
               apply Core.ElemIsIncl; assumption. }
             apply H13. assumption. }
 Qed.
+
+(* Not quite an associativity property of course.                               *)
+Proposition Assoc : forall (a b c:U),
+  Ordinal a                               ->
+  Ordinal b                               ->
+  Ordinal c                               ->
+  (a :^: b) :^: c = a :^: (b :*: c).
+Proof.
+  intros a b c H1 H2. revert c.
+  apply Induction2.
+  - rewrite WhenZeroR, Mult.WhenZeroR, WhenZeroR. reflexivity.
+  - intros c H3 IH.
+    assert (Ordinal (b :*: c)) as G1. { apply Mult.IsOrdinal; assumption. }
+    rewrite WhenSuccR, IH, <- DistribL, <- Mult.WhenSuccR; try assumption.
+    reflexivity.
+  - intros c H3 IH.
+    assert (Ordinal c) as G1. { apply H3. }
+    assert (Ordinal (b :*: c)) as G2. { apply Mult.IsOrdinal; assumption. }
+    assert (:0: :< c) as G3. { apply Limit.HasZero. assumption. }
+    assert (b = :0: \/ :0: :< b) as H4. { apply Core.ZeroOrElem. assumption. }
+    destruct H4 as [H4|H4].
+    + subst. rewrite WhenZeroR, WhenOneL, Mult.WhenZeroL, WhenZeroR;
+      try assumption. reflexivity.
+    + assert (Limit (b :*: c)) as H5. { apply Mult.IsLimit; assumption. }
+      assert (:0: :< b :*: c) as G4. { apply Limit.HasZero. assumption. }
+      assert (a = :0: \/ :0: :< a) as H6. { apply Core.ZeroOrElem. assumption. }
+      destruct H6 as [H6|H6].
+      * subst. rewrite WhenZeroL, WhenZeroL, WhenZeroL; try assumption.
+        reflexivity.
+      * assert (Ordinal (a :^: b)) as G5. { apply IsOrdinal; assumption. }
+        assert (:0: :< a :^: b) as G6. { apply HasZero; assumption. }
+        apply DoubleInclusion. split; intros y H7;
+        rewrite WhenLimit in H7; try assumption;
+        rewrite WhenLimit; try assumption;
+        apply SUG.Charac in H7;
+        apply SUG.Charac.
+        { destruct H7 as [d [H7 H8]]. exists (b :*: d). split.
+          assert (Ordinal d) as G7. { apply Core.IsOrdinal with c; assumption. }
+          - apply Mult.ElemCompatR; assumption.
+          - assert (y :< (a :^: b) :^: d) as H9. { assumption. } clear H8.
+            assert (y :< a :^: (b :*: d)) as X. 2: apply X.
+            rewrite <- IH; assumption. }
+        { destruct H7 as [e [H7 H8]].
+          assert (Ordinal e) as G7. {
+            apply Core.IsOrdinal with (b :*: c); assumption. }
+          assert (y :< a :^: e) as H9. { assumption. } clear H8.
+          rewrite Mult.WhenLimit in H7. 2: assumption.
+          apply SUG.Charac in H7. destruct H7 as [d [H7 H8]].
+          assert (Ordinal d) as G8. { apply Core.IsOrdinal with c; assumption. }
+          assert (Ordinal (b :*: d)) as G9. { apply Mult.IsOrdinal; assumption. }
+          assert (e :< b :*: d) as H10. { assumption. } clear H8.
+          exists d. split. 1: assumption.
+          assert (y :< (a :^: b) :^: d) as X. 2: apply X.
+          rewrite IH. 2: assumption.
+          assert (a :^: e :<=: a :^: (b :*: d)) as H11. {
+            apply InclCompatR; try assumption.
+            apply Core.ElemIsIncl; assumption. }
+          apply H11. assumption. }
+Qed.
+
+
