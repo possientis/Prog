@@ -479,6 +479,7 @@ Proof.
       * subst. rewrite WhenOneL, WhenOneL, WhenOneL, Mult.WhenOneR;
         try assumption. reflexivity.
       * assert (Limit (a :^: c)) as H7. { apply IsLimitR; assumption. }
+        assert (Ordinal (a :^: c)) as G9. { apply IsOrdinal; assumption. }
         rewrite WhenLimit; try assumption.
         rewrite Mult.WhenLimit. 2: assumption.
         apply DoubleInclusion. split; intros y H8;
@@ -506,4 +507,22 @@ Proof.
             + apply ElemCompatR; assumption.
             + assert (y :< a :^: b :*: a :^: f) as X. 2: apply X.
               rewrite <- H15, H13. assumption. }
-Admitted.
+        { destruct H8 as [d [H8 H9]].
+          assert (Ordinal d) as G8. {
+            apply Core.IsOrdinal with (a :^: c); assumption. }
+          rewrite WhenLimit in H8; try assumption.
+          apply SUG.Charac in H8.
+          destruct H8 as [f [H8 H10]].
+          assert (Ordinal f) as G10. { apply Core.IsOrdinal with c; assumption. }
+          assert (Ordinal (a :^: f)) as G11. { apply IsOrdinal; assumption. }
+          exists (b :+: f). split.
+          - apply Plus.ElemCompatR; assumption.
+          - assert (y :< a :^: (b :+: f)) as X. 2: apply X.
+            rewrite IH. 2: assumption.
+            assert (d :< a :^: f) as H11. { assumption. } clear H10.
+            assert (y :< a :^: b :*: d) as H12. { assumption. } clear H9.
+            assert (a :^: b :*: d :<=: a :^: b :*: a :^: f) as H13. {
+              apply Mult.InclCompatR; try assumption.
+              apply Core.ElemIsIncl; assumption. }
+            apply H13. assumption. }
+Qed.
