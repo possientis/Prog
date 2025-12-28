@@ -57,8 +57,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
-Proposition Eval : forall (f:U -> U) (a:U),
-  :[f]:!a = f a.
+Proposition Eval : forall (f:U -> U) (a:U), :[f]:!a = f a.
 Proof.
   intros f a. apply EvalOfClass.Charac.
   - apply IsFunctional.
