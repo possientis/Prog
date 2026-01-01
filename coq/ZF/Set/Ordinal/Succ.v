@@ -43,6 +43,11 @@ Proof.
   intros a H1. apply Empty.Charac with a. rewrite <- H1. apply IsIn.
 Qed.
 
+Proposition IsNotZero : forall (a:U), Successor a -> a <> :0:.
+Proof.
+  intros a [H1 [b H2]]. subst. apply NotZero.
+Qed.
+
 (* A set (ordinal or not) is a subset of its successor.                         *)
 Proposition IsIncl : forall (a:U), a :<=: succ a.
 Proof.

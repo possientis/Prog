@@ -81,6 +81,11 @@ Proof.
   apply Empty.Charac in H2. contradiction.
 Qed.
 
+Proposition IsNotZero : forall (a:U), Limit a -> a <> :0:.
+Proof.
+  intros a H1 H2. subst. apply NotZero. assumption.
+Qed.
+
 Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
 Proof.
@@ -165,3 +170,4 @@ Proof.
     apply H3, Succ.IsIn. }
   revert H5. apply NoElemLoop1.
 Qed.
+
