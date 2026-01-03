@@ -53,3 +53,19 @@ Proposition IsOrdinal : forall (F:Class) (a:U),
 Proof.
   apply COS.IsOrdinal.
 Qed.
+
+Proposition EqualCharac : forall (F G:Class) (a:U),
+  Ordinal a                       ->
+  (forall x, x :< a -> F!x = G!x) ->
+  :sum:_{a} F = :sum:_{a} G.
+Proof.
+  apply COS.EqualCharac.
+Qed.
+
+Proposition EtaReduce : forall (F:Class) (a:U), Ordinal a ->
+  :sum:_{a} (:[fun x => F!x]:) = :sum:_{a} F.
+Proof.
+  intros F a H1. apply EqualCharac. 1: assumption.
+  intros x H2. apply ToFun.Eval.
+Qed.
+
