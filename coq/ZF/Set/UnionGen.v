@@ -11,7 +11,7 @@ Export ZF.Notation.UnionGen.
 Definition unionGen (a b:U) : U := :\/:_{a} (toClass b).
 
 (* Notation ":\/:_{ a } b" := (unionGen a b)                                    *)
-Global Instance SetUnionGen : UnionGen U U := {unionGen := unionGen }.
+Global Instance SetUnionGen : UnionGen U U := { unionGen := unionGen }.
 
 Proposition Charac : forall (a b y:U),
   y :< :\/:_{a} b <-> exists x, x :< a /\ y :< b!x.

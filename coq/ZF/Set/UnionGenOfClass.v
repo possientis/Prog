@@ -1,4 +1,5 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.
@@ -79,5 +80,11 @@ Proposition WhenBounded : forall (A:Class) (a b:U),
 Proof.
   intros A a b H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
   apply (H1 x); assumption.
+Qed.
+
+Proposition EtaReduce : forall (A:Class) (a:U),
+  :\/:_{a} (:[fun x => A!x]:) = :\/:_{a} A.
+Proof.
+  intros A a. apply EqualCharac. intros x H1. apply ToFun.Eval.
 Qed.
 
