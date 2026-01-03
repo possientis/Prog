@@ -1,5 +1,7 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Sum.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -41,4 +43,13 @@ Proof.
   assert (:\/:_{a} (:[fun b => :sum:_{b} F]:) = :\/:_{a} (COS.sum F)) as H2. {
     apply SUG.EtaReduce. }
   rewrite H2. apply COS.WhenLimit. assumption.
+Qed.
+
+Proposition IsOrdinal : forall (F:Class) (a:U),
+  OrdFun F                          ->
+  Ordinal a                         ->
+  (forall x, x :< a -> domain F x)  ->
+  Ordinal (:sum:_{a} F).
+Proof.
+  apply COS.IsOrdinal.
 Qed.
