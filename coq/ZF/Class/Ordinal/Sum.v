@@ -146,3 +146,31 @@ Proof.
       apply SOC.ElemElemTran with x; assumption. }
   rewrite H2 in H3. assumption.
 Qed.
+
+Proposition EqualCharac : forall (F G:Class) (a:U),
+  On a                            ->
+  (forall x, x :< a -> F!x = G!x) ->
+  (sum F)!a = (sum G)!a.
+Proof.
+  intros F G.
+  remember (fun a =>
+    (forall x, x :< a -> F!x = G!x) -> (sum F)!a = (sum G)!a) as A eqn:H1.
+  assert (forall a, On a -> A a) as H2. {
+    apply Induction2; rewrite H1.
+    - intros _. rewrite WhenZero, WhenZero. reflexivity.
+    - intros a H2 IH H3.
+      rewrite WhenSucc, WhenSucc; try assumption.
+      assert ((sum F)!a = (sum G)!a) as H4. {
+        apply IH. intros x H4. apply H3. apply Succ.IsIncl. assumption. }
+      assert (F!a = G!a) as H5. { apply H3. apply Succ.IsIn. }
+      rewrite H4, H5. reflexivity.
+    - intros a H2 IH H3.
+      rewrite WhenLimit, WhenLimit; try assumption.
+      apply SUG.EqualCharac. intros x H4.
+      apply IH. 1: assumption. intros y H5. apply H3.
+      assert (Ordinal a) as G1. { apply H2. }
+      assert (Ordinal x) as G2. { apply SOC.IsOrdinal with a; assumption. }
+      assert (Ordinal y) as G3. { apply SOC.IsOrdinal with x; assumption. }
+      apply SOC.ElemElemTran with x; assumption. }
+  rewrite H1 in H2. assumption.
+Qed.
