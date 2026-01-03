@@ -1,5 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdFun.
+Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion3.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
@@ -10,6 +12,7 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -21,6 +24,7 @@ Module COC := ZF.Class.Ordinal.Core.
 Module COR := ZF.Class.Ordinal.Recursion3.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SUG := ZF.Set.Ordinal.UnionGenOfClass.
 
 Definition Oracle (F:Class) : Class := fun x => exists c a,
   x = :(:(c,a):, a :+: F!c):.
@@ -115,4 +119,30 @@ Proposition RestrictIsFunctionOn : forall (F:Class) (b:U), On b ->
   SFO.FunctionOn (sum F :|: b) b.
 Proof.
   intros F. apply COR.RestrictIsFunctionOn.
+Qed.
+
+Proposition IsOrdinal : forall (F:Class) (a:U),
+  OrdFun F                          ->
+  On a                              ->
+  (forall x, x :< a -> domain F x)  ->
+  On (sum F)!a.
+Proof.
+  intros F a H1. revert a.
+  remember (fun a => (forall x, x :< a -> domain F x) -> On (sum F)!a) as A eqn:H2.
+  assert (forall a, On a -> A a) as H3. {
+    apply Induction2; rewrite H2.
+    - intros _. rewrite WhenZero. apply SOC.ZeroIsOrdinal.
+    - intros a H3 IH H4. rewrite WhenSucc. 2: assumption.
+      apply Plus.IsOrdinal.
+      + apply IH. intros x H5. apply H4. apply Succ.IsIncl. assumption.
+      + apply OrdFun.IsOrdinal. 1: assumption. apply H4. apply Succ.IsIn.
+    - intros a H3 IH H4.
+      assert (On a) as H5. { apply H3. }
+      rewrite WhenLimit. 2: assumption. apply SUG.IsOrdinal.
+      intros x H6. apply IH. 1: assumption.
+      intros y H7. apply H4.
+      assert (On x) as H8. { apply SOC.IsOrdinal with a; assumption. }
+      assert (On y) as H9. { apply SOC.IsOrdinal with x; assumption. }
+      apply SOC.ElemElemTran with x; assumption. }
+  rewrite H2 in H3. assumption.
 Qed.

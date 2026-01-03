@@ -14,6 +14,8 @@ Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
+
+Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 
 (* An ordinal function is a function with ordinal domain and ordinal values.    *)
@@ -48,3 +50,15 @@ Proof.
       * apply H5. assumption.
 Qed.
 
+Proposition WhenInDomain : forall (F:Class) (a:U), OrdFun F ->
+  domain F a -> On a.
+Proof.
+  intros F a [H1 [H2 H3]] H4.
+  apply COC.IsOrdinal with (domain F); assumption.
+Qed.
+
+Proposition IsOrdinal : forall (F:Class) (a:U), OrdFun F ->
+  domain F a -> On (F!a).
+Proof.
+  intros F a [H1 [H2 H3]] H4. apply H3. apply CRF.IsInRange; assumption.
+Qed.
