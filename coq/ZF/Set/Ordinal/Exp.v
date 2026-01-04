@@ -2,6 +2,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Exp.
 Require Import ZF.Class.Ordinal.Induction2.
+Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
@@ -10,8 +11,11 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.OrdFunOn.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.SumOfClass.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -586,4 +590,39 @@ Proof.
           apply H11. assumption. }
 Qed.
 
+Proposition IsLess : forall (a b c d n:U),
+  Ordinal a                                             ->
+  Ordinal b                                             ->
+  n :< :N                                               ->
+  OrdFunOn c n                                          ->
+  OrdFunOn d n                                          ->
+  Decreasing d                                          ->
+  :1: :< a                                              ->
+  (forall i, i :< n -> c!i :< a)                        ->
+  (forall i, i :< n -> b!i :< b)                        ->
+  :sum:_{n} (:[fun i => a :^: b!i :*: c!i]:) :< a :^: b.
+Proof.
+  intros a b c d n H1 H2 H3 H4 H5 H6 H7.
+  revert n H3 b c d H2 H4 H5 H6.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
+  assert (:0: :< a) as G3. {
+    apply Core.ElemElemTran with :1:; try assumption.
+    apply Succ.IsIn. }
+  remember (fun n =>
+    forall b c d: U,
+    Ordinal b ->
+    OrdFunOn c n ->
+    OrdFunOn d n ->
+    Decreasing d ->
+    (forall i : U, i :< n -> (c) ! (i) :< a) ->
+    (forall i : U, i :< n -> (b) ! (i) :< b) ->
+    :sum:_{ n} (:[ fun i : U => a :^: (b) ! (i) :*: (c) ! (i) ]:) :< a :^: b)
+    as A eqn:H8.
+  assert (forall n, n :< :N -> A n) as H9. {
+    apply Omega.FiniteInduction'; rewrite H8.
+    - intros b c d H2 _ _ _ _ _.
+      rewrite SumOfClass.WhenZero. apply HasZero; assumption.
+    - intros n H3 IH b c d H2 H4 H5 H6 H9 H10.
+Admitted.
 
