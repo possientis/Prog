@@ -217,7 +217,7 @@ Proposition InclCompatR : forall (a b c:U),
   c :+: a :<=: c :+: b.
 Proof.
   intros a b c H1 H2 H3 H4.
-  apply Core.InclIsEqualOrElem in H4; try assumption.
+  apply Core.EqualOrElem in H4; try assumption.
   assert (Ordinal (c :+: b)) as G1. { apply IsOrdinal; assumption. }
   destruct H4 as [H4|H4].
   - subst. apply Incl.Refl.

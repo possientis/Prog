@@ -72,7 +72,7 @@ Proof.
       apply Less.ToClass. assumption.
 Qed.
 
-Proposition InclIsEqualOrElem : forall (a b:U),
+Proposition EqualOrElem : forall (a b:U),
   Ordinal a ->
   Ordinal b ->
   a :<=: b <-> a = b \/ a :< b.
@@ -180,7 +180,7 @@ Proposition ZeroOrElem : forall (a:U), Ordinal a ->
 Proof.
   intros a H1.
   assert (:0: :<=: a)  as H2. { apply IsIncl. assumption. }
-  apply InclIsEqualOrElem in H2. 3: assumption.
+  apply EqualOrElem in H2. 3: assumption.
   - destruct H2 as [H2|H2].
     + left. symmetry. assumption.
     + right. assumption.
@@ -206,7 +206,7 @@ Proof.
   assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. {
     apply IsTotal; assumption. }
-  apply InclIsEqualOrElem; try assumption. destruct H8 as [H8|[H8|H8]].
+  apply EqualOrElem; try assumption. destruct H8 as [H8|[H8|H8]].
   - left. assumption.
   - right. assumption.
   - exfalso. apply Class.Empty.Charac with b. apply H4. split; assumption.

@@ -46,7 +46,7 @@ Proof.
   assert (forall a, On a -> B a) as H7. {
     apply Induction2.
     - rewrite H6. assert (:0: :<=: b) as H7. { apply SOC.IsIncl. assumption. }
-      apply SOC.InclIsEqualOrElem in H7. 3: assumption.
+      apply SOC.EqualOrElem in H7. 3: assumption.
       + destruct H7 as [H7|H7]. 2: { left. assumption. }
         right. subst. assumption.
       + apply SOC.ZeroIsOrdinal.
@@ -54,7 +54,7 @@ Proof.
       assert (On (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
       destruct H8 as [H8|H8].
       + apply Succ.ElemIsIncl in H8; try assumption.
-        apply Core.InclIsEqualOrElem in H8; try assumption.
+        apply Core.EqualOrElem in H8; try assumption.
         destruct H8 as [H8|H8].
         * right. rewrite H8. assumption.
         * left. assumption.

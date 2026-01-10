@@ -204,7 +204,7 @@ Proof.
   assert (a :<=: b) as H6. {
     apply InclCompatRevR with c; try assumption.
     apply Core.ElemIsIncl; assumption. }
-  assert (a = b \/ a :< b) as H7. { apply Core.InclIsEqualOrElem; assumption. }
+  assert (a = b \/ a :< b) as H7. { apply Core.EqualOrElem; assumption. }
   destruct H7 as [H7|H7]. 2: assumption. subst. exfalso.
   revert H4. apply NoElemLoop1.
 Qed.
@@ -220,7 +220,7 @@ Proof.
   assert (c = :0: \/ :0: :< c) as H5. { apply Core.ZeroOrElem. assumption. }
   destruct H5 as [H5|H5].
   - subst. rewrite WhenZeroL, WhenZeroL; try assumption. apply Incl.Refl.
-  - assert (a = b \/ a :< b) as H6. { apply Core.InclIsEqualOrElem; assumption. }
+  - assert (a = b \/ a :< b) as H6. { apply Core.EqualOrElem; assumption. }
     destruct H6 as [H6|H6].
     + subst. apply Incl.Refl.
     + apply Core.ElemIsIncl.

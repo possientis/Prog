@@ -206,7 +206,7 @@ Proof.
     apply Natural.OneOrElem; assumption. }
   destruct H6 as [H6|H6].
   - subst. rewrite WhenOneL, WhenOneL; try assumption. apply Incl.Refl.
-  - apply Core.InclIsEqualOrElem in H5; try assumption.
+  - apply Core.EqualOrElem in H5; try assumption.
     destruct H5 as [H5|H5].
     + subst. apply Incl.Refl.
     + apply Core.ElemIsIncl; try assumption.

@@ -130,7 +130,7 @@ Proof.
     apply H8 in H24.
     assert (On c) as H25. { rewrite H16. apply Max.IsOrdinal; assumption. }
     assert (On d) as H26. { rewrite H23. apply Max.IsOrdinal; assumption. }
-    apply SOC.InclIsEqualOrElem in H24; try assumption.
+    apply SOC.EqualOrElem in H24; try assumption.
     destruct H24 as [H24|H24].
     - rewrite H20 in H19. apply Charac4 in H19. destruct H19 as [H19|H19].
       + apply NoElemLoop1 with c. rewrite <- H24 in H23. rewrite <- H23 in H19.

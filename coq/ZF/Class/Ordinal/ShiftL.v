@@ -94,7 +94,7 @@ Proof.
     assert (Ordinal (succ x)) as H6. { apply Succ.IsOrdinal. assumption. }
     assert (succ x :<=: y) as H7. { apply Succ.ElemIsIncl; assumption. }
     assert (succ x = y \/ succ x :< y) as H8. {
-      apply SOC.InclIsEqualOrElem; assumption. }
+      apply SOC.EqualOrElem; assumption. }
     destruct H8 as [H8|H8].
     + subst. assumption.
     + assert (Transitive (domain F)) as H9. { apply H1. }

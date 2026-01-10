@@ -127,7 +127,7 @@ Proof.
     destruct H4 as [H4|H4].
     + left. apply H3. assumption.
     + apply Single.Charac in H4. subst.
-      apply InclIsEqualOrElem in H3; try assumption. destruct H3 as [H3|H3].
+      apply EqualOrElem in H3; try assumption. destruct H3 as [H3|H3].
       * subst. right. apply Single.IsIn.
       * left. assumption.
 Qed.
