@@ -78,7 +78,7 @@ Qed.
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :+: a = a.
 Proof.
-  apply Induction2.Induction2.
+  apply Induction2.Induction.
   - apply WhenZeroR.
   - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2. reflexivity.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
@@ -89,7 +89,7 @@ Qed.
 Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
   Ordinal (a :+: b).
 Proof.
-  intros a b H1. revert b. apply Induction2.Induction2.
+  intros a b H1. revert b. apply Induction2.Induction.
   - rewrite WhenZeroR. assumption.
   - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
     apply Succ.IsOrdinal. assumption.
@@ -182,7 +182,7 @@ Proposition InclCompatL : forall (a b c:U),
   a :+: c :<=: b :+: c.
 Proof.
   intros a b c H1 H2 H3 H4. revert c H3.
-  apply Induction2.Induction2.
+  apply Induction2.Induction.
   - rewrite WhenZeroR, WhenZeroR. assumption.
   - intros c H5 H6.
     assert (Ordinal (a :+: c)) as H7. { apply IsOrdinal; assumption. }
@@ -597,7 +597,7 @@ Proof.
           assert (x :< (a :+: b) :+: d) as H18. { rewrite H6, H16; assumption. }
           exists d. split; assumption. }
       apply DoubleInclusion. split; assumption. }
-  apply Induction2.Induction2; assumption.
+  apply Induction2.Induction; assumption.
 Qed.
 
 (* The addition of natural numbers is commutative.                              *)

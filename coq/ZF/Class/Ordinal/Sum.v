@@ -130,7 +130,7 @@ Proof.
   intros F a H1. revert a.
   remember (fun a => (forall x, x :< a -> domain F x) -> On (sum F)!a) as A eqn:H2.
   assert (forall a, On a -> A a) as H3. {
-    apply Induction2; rewrite H2.
+    apply Induction2.Induction; rewrite H2.
     - intros _. rewrite WhenZero. apply SOC.ZeroIsOrdinal.
     - intros a H3 IH H4. rewrite WhenSucc. 2: assumption.
       apply Plus.IsOrdinal.
@@ -156,7 +156,7 @@ Proof.
   remember (fun a =>
     (forall x, x :< a -> F!x = G!x) -> (sum F)!a = (sum G)!a) as A eqn:H1.
   assert (forall a, On a -> A a) as H2. {
-    apply Induction2; rewrite H1.
+    apply Induction2.Induction; rewrite H1.
     - intros _. rewrite WhenZero, WhenZero. reflexivity.
     - intros a H2 IH H3.
       rewrite WhenSucc, WhenSucc; try assumption.

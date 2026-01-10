@@ -86,7 +86,7 @@ Proof.
   intros F G a H1 H2 H3 H4.
   apply (CFO.EqualCharac _ _ On On). 1: assumption.
   - apply COR.IsFunctionOn.
-  - split. 1: apply Equiv.Refl. apply Induction'.
+  - split. 1: apply Equiv.Refl. apply Induction.Induction.
     intros b H5 H6.
     assert (b = :0: \/ Successor b \/ Limit b) as H7. {
       apply Limit.ThreeWay. assumption. }

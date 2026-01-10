@@ -15,7 +15,7 @@ Require Import ZF.Set.Union.
 Module COC := ZF.Class.Ordinal.Core.
 
 (* Principle of transfinite induction.                                          *)
-Proposition Induction : forall (A:Class),
+Proposition Induction1 : forall (A:Class),
   A :<=: On                                   ->
   (forall a, On a -> toClass a :<=: A -> A a) ->
   A :~: On.
@@ -35,14 +35,14 @@ Proof.
   apply H6, H2; assumption.
 Qed.
 
-Proposition Induction' : forall (A:Class),
+Proposition Induction : forall (A:Class),
   (forall a, On a -> (forall x, x :< a -> A x) -> A a) ->
    forall a, On a -> A a.
 Proof.
   intros A H1.
   remember (fun x => On x /\ A x) as B eqn:H2.
   assert (B :~: On) as H3. {
-    apply Induction.
+    apply Induction1.
     - intros x H3. rewrite H2 in H3. apply H3.
     - intros a H3 H4. rewrite H2. split. 1: assumption.
       apply H1. 1: assumption. intros x H5.

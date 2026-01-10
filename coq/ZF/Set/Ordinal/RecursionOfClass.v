@@ -100,7 +100,7 @@ Proof.
   - apply IsFunctionOn. assumption.
   - remember (fun x => x :< a -> f!x = (recursion F a)!x) as A eqn:H4.
     assert (forall x, Ordinal x -> A x) as H5. {
-      apply Induction'. intros b H5 H6. rewrite H4 in H6. rewrite H4.
+      apply Induction.Induction. intros b H5 H6. rewrite H4 in H6. rewrite H4.
       intros H7. rewrite H3. 2: assumption. rewrite IsRecursive; try assumption.
     assert (b :<=: a) as H8. { apply Core.ElemIsIncl; assumption. }
     assert (f:|:b = (recursion F a) :|: b) as H9. {

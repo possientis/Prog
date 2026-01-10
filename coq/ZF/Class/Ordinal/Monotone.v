@@ -80,7 +80,7 @@ Proof.
   remember (fun c => forall b, On b ->
     b :< c -> (Recursion F a)!b :< (Recursion F a)!c) as A eqn:H10.
   assert (forall c, On c -> A c) as H11. {
-    apply Induction2; rewrite H10.
+    apply Induction2.Induction; rewrite H10.
     - intros b H11 H12. apply Empty.Charac in H12. contradiction.
     - intros c H11 H12 b H13 H14. rewrite Recursion2.WhenSucc. 2: assumption.
       assert (Ordinal (Recursion F a)!b) as H15. {

@@ -96,7 +96,7 @@ Proof.
     revert c H7 H6.
     remember (fun c => c :< b -> f!c = (recursion F a b)!c) as A eqn:H6.
     assert (forall c, Ordinal c -> A c) as H7. {
-      apply Induction2.
+      apply Induction2.Induction.
       - rewrite H6. intros H7. rewrite H3. symmetry. apply WhenZero. 1: assumption.
         apply Empty.HasElem. exists :0:. assumption.
       - rewrite H6. intros c H7 H8 H9. rewrite H4; try assumption. rewrite H8.

@@ -37,7 +37,7 @@ Proof.
     + apply Core.EquivCompat with On. apply Equiv.Sym.
       1: assumption. apply Core.OnIsOrdinal.
     + assert (forall x, On x -> On (Recursion F a)!x) as H6. {
-        apply Induction2.
+        apply Induction2.Induction.
         - rewrite Recursion2.WhenZero. assumption.
         - intros b H6 H7. rewrite Recursion2.WhenSucc. 2: assumption.
           apply H3. apply CRF.IsInRange. 1: assumption. apply H4. assumption.

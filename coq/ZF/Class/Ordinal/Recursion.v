@@ -75,7 +75,7 @@ Proof.
   intros F f g a b H1 H2 H3 H4 H5 H6 H7.
   remember (fun x => On x /\ (x :< a -> f!x = g!x)) as A eqn:H8.
   assert (A :~: On) as H9. {
-    apply Induction.
+    apply Induction.Induction1.
     - intros x H9. rewrite H8 in H9. apply H9.
     - intros c H9 H10. rewrite H8. split. 1: assumption. intros H11.
       assert (f:|:c = g:|:c) as H12. {
@@ -371,7 +371,7 @@ Proof.
   intros F G H1 H2.
   apply (CFO.EqualCharac _ _ On On). 1: assumption.
   - apply IsFunctionOn.
-  - split. 1: apply Equiv.Refl. apply Induction'.
+  - split. 1: apply Equiv.Refl. apply Induction.Induction.
     intros a H3 H4.
     assert (SRD.domain (G:|:a) = a) as H6. {
       apply RestrictOfClass.DomainWhenIncl. 1: apply H1. destruct H1 as [_ H1].

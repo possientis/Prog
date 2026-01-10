@@ -13,13 +13,13 @@ Require Import ZF.Set.Union.
 Module COC := ZF.Class.Ordinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 
-Proposition Induction2 : forall (A:Class),
+Proposition Induction : forall (A:Class),
   A :0:                                                     ->
   (forall a, On a    -> A a -> A (succ a))                  ->
   (forall a, Limit a -> (forall x, x :< a -> A x) -> A a)   ->
   forall a, On a -> A a.
 Proof.
-  intros A H1 H2 H3. apply Induction'. intros a H4 H5.
+  intros A H1 H2 H3. apply Induction.Induction. intros a H4 H5.
   assert (a = :0: \/ Successor a \/ Limit a) as H6. {
     apply Limit.ThreeWay. assumption. }
   destruct H6 as [H6|[H6|H6]].
@@ -44,7 +44,7 @@ Proof.
   intros A b H1 H3 H4 H5.
   remember (fun a => a :< b \/ A a) as B eqn:H6.
   assert (forall a, On a -> B a) as H7. {
-    apply Induction2.
+    apply Induction.
     - rewrite H6. assert (:0: :<=: b) as H7. { apply SOC.IsIncl. assumption. }
       apply SOC.EqualOrElem in H7. 3: assumption.
       + destruct H7 as [H7|H7]. 2: { left. assumption. }
