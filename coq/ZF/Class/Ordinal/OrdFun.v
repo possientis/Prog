@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
+Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Range.
@@ -62,3 +63,13 @@ Proposition IsOrdinal : forall (F:Class) (a:U), OrdFun F ->
 Proof.
   intros F a [H1 [H2 H3]] H4. apply H3. apply CRF.IsInRange; assumption.
 Qed.
+
+Proposition InDomain : forall (F:Class) (a b:U), OrdFun F ->
+  a :< b  -> domain F b -> domain F a.
+Proof.
+  intros F a b H1 H2 H3.
+  assert (Transitive (domain F)) as H4. { apply H1. }
+  assert (toClass b :<=: domain F) as H5. { apply H4. assumption. }
+  apply H5. assumption.
+Qed.
+

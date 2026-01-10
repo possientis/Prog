@@ -1,12 +1,15 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.OrdFun.
+Require Import ZF.Class.Ordinal.ShiftL.
 Require Import ZF.Class.Ordinal.Sum.
 Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -69,3 +72,38 @@ Proof.
   intros x H2. apply ToFun.Eval.
 Qed.
 
+Proposition ShiftL : forall (F:Class) (n:U),
+  OrdFun F                                            ->
+  n :< :N                                             ->
+  domain F n                                          ->
+  :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F).
+Proof.
+  intros F n H1. revert n.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Functional F) as G2. { apply H1. }
+  remember (fun n =>
+    domain F n ->  :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F)) as A eqn:H2.
+  assert (forall n, n :< :N -> A n) as H3. {
+    apply Omega.FiniteInduction'; rewrite H2.
+    - intros H3.
+      rewrite WhenSucc, WhenZero, Plus.WhenZeroL, WhenZero, Plus.WhenZeroR.
+      3: assumption. 1: reflexivity. apply OrdFun.IsOrdinal; assumption.
+    - intros n H3 IH H4.
+      assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal (succ n)) as G4. { apply Succ.IsOrdinal. assumption. }
+      rewrite WhenSucc, IH, WhenSucc, ShiftL.Eval; try assumption.
+      + apply Plus.Assoc.
+        * apply OrdFun.IsOrdinal. 1: assumption.
+          apply OrdFun.InDomain with (succ n); try assumption.
+          apply Succ.HasZero. assumption.
+        * apply IsOrdinal. 2: assumption.
+          { apply ShiftL.IsOrdFun. assumption. }
+          { intros i H5.
+            apply ShiftL.DomainOf.
+            apply OrdFun.InDomain with (succ n); try assumption.
+            apply Succ.ElemCompat; try assumption.
+            apply Core.IsOrdinal with n; assumption. }
+        * apply OrdFun.IsOrdinal; assumption.
+      + apply OrdFun.InDomain with (succ n); try assumption. apply Succ.IsIn. }
+  rewrite H2 in H3. assumption.
+Qed.

@@ -104,7 +104,7 @@ Qed.
 
 (* An element of an ordinal class defines an ordinal class.                     *)
 Proposition IsOrdinal : forall (A:Class) (a:U),
-  Ordinal A -> A a -> Ordinal (toClass a).
+  Ordinal A -> A a -> On a.
 Proof.
   intros A a [H1 H2] H3. split.
   - intros x H4 y H5.
