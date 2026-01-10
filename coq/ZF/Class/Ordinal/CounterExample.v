@@ -123,7 +123,7 @@ Qed.
 (* F(n) = n + 1 for all n :< N.                                                 *)
 Lemma Fn : forall (n:U), n :< :N -> F!n = succ n.
 Proof.
-  apply Omega.FiniteInduction'.
+  apply Omega.Induction.
   - apply FWhenZero.
   - intros n H1 H2.  rewrite FWhenSucc.
     + rewrite H2. reflexivity.
@@ -209,7 +209,7 @@ Qed.
 (* G(n) = n for all n :< N.                                                     *)
 Lemma Gn : forall (n:U), n :< :N -> G!n = n.
 Proof.
-  apply Omega.FiniteInduction'.
+  apply Omega.Induction.
   - apply GWhenZero.
   - intros b H1 H2. rewrite GWhenSucc.
     + rewrite H2, Fn. 2: assumption. reflexivity.

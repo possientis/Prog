@@ -64,7 +64,7 @@ Qed.
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :*: a = :0:.
 Proof.
-  apply Induction2.
+  apply Induction2.Induction2.
   - apply WhenZeroR.
   - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2.
     apply Plus.WhenZeroR.
@@ -79,7 +79,7 @@ Qed.
 Proposition WhenOneL : forall (a:U), Ordinal a ->
   :1: :*: a = a.
 Proof.
-  apply Induction2.
+  apply Induction2.Induction2.
   - apply WhenZeroR.
   - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2.
     apply Plus.WhenOneR.
@@ -102,7 +102,7 @@ Qed.
 Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
   Ordinal (a :*: b).
 Proof.
-  intros a b H1. revert b. apply Induction2.
+  intros a b H1. revert b. apply Induction2.Induction2.
   - rewrite WhenZeroR. apply Core.ZeroIsOrdinal.
   - intros b H2 IH. rewrite WhenSuccR. 2: assumption.
     apply Plus.IsOrdinal; assumption.
@@ -253,7 +253,7 @@ Proposition InclCompatL : forall (a b c:U),
   a :*: c :<=: b :*: c.
 Proof.
   intros a b c H1 H2 H3 H4. revert c H3.
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR, WhenZeroR. apply Incl.Refl.
   - intros c H3 IH.
     rewrite WhenSuccR, WhenSuccR; try assumption.
@@ -298,7 +298,7 @@ Qed.
 Proposition InOmega : forall (n m:U),
   n :< :N -> m :< :N -> n :*: m :< :N.
 Proof.
-  intros n m H1. revert m. apply Omega.FiniteInduction'.
+  intros n m H1. revert m. apply Omega.Induction.
   - rewrite WhenZeroR. apply Omega.HasZero.
   - intros m H2 H3.
     assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
@@ -402,7 +402,7 @@ Proposition DistribL : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
   a :*: (b :+: c) = a :*: b :+: a :*: c.
 Proof.
   intros a b c H1 H2. revert c.
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroR. reflexivity.
   - intros c H3 IH.
     assert (Ordinal (b :+: c)) as H4. { apply Plus.IsOrdinal; assumption. }
@@ -477,7 +477,7 @@ Proposition Assoc : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
 Proof.
   intros a b c H1 H2. revert c.
   assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR, WhenZeroR, WhenZeroR. reflexivity.
   - intros c H3 IH.
     rewrite WhenSuccR, IH, <- DistribL, <- WhenSuccR; try assumption.
@@ -887,7 +887,7 @@ Proof.
         remember (fun n =>
           :0: :< n -> (:N :+: :1:) :*: n = :N :*: n :+: :1:) as A eqn:H5.
         assert (forall n, n :< :N -> A n) as H6. {
-          apply FiniteInduction'; rewrite H5.
+          apply Omega.Induction; rewrite H5.
           - intros H6. apply Empty.Charac in H6. contradiction.
           - intros n H6 IH _.
             assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
@@ -941,13 +941,13 @@ Proof.
   intros n m H1 H2. revert n H1.
   assert (Ordinal :1:) as G1. { apply Natural.OneIsOrdinal. }
   assert (Ordinal m) as H3. { apply Omega.HasOrdinalElem. assumption. }
-  apply Omega.FiniteInduction'.
+  apply Omega.Induction.
   - rewrite WhenZeroL, WhenZeroR. 2: assumption. reflexivity.
   - intros n H1 IH1.
     assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
     assert (Ordinal (n :+: :1:)) as G3. { apply Plus.IsOrdinal; assumption. }
     assert (forall p, p :< :N -> succ n :*: p = n :*: p :+: p) as H4. {
-      apply Omega.FiniteInduction'.
+      apply Omega.Induction.
       - rewrite WhenZeroR, WhenZeroR, Plus.WhenZeroR. reflexivity.
       - intros p H4 IH2.
         assert (Ordinal p) as H5. { apply Omega.HasOrdinalElem. assumption. }

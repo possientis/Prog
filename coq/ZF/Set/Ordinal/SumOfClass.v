@@ -84,7 +84,7 @@ Proof.
   remember (fun n =>
     domain F n ->  :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F)) as A eqn:H2.
   assert (forall n, n :< :N -> A n) as H3. {
-    apply Omega.FiniteInduction'; rewrite H2.
+    apply Omega.Induction; rewrite H2.
     - intros H3.
       rewrite WhenSucc, WhenZero, Plus.WhenZeroL, WhenZero, Plus.WhenZeroR.
       3: assumption. 1: reflexivity. apply OrdFun.IsOrdinal; assumption.

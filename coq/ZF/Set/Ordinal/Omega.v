@@ -174,7 +174,7 @@ Proof.
 Qed.
 
 (* Principle of induction over the natural numbers.                             *)
-Proposition Induction : forall (A:Class),
+Proposition Induction1 : forall (A:Class),
   A :0:                                     ->
   (forall n, n :< :N -> A n -> A (succ n))  ->
   toClass :N :<=: A.
@@ -186,7 +186,7 @@ Proof.
 Qed.
 
 (* Principle of induction over the natural numbers.                             *)
-Proposition FiniteInduction : forall (A:Class),
+Proposition Induction2 : forall (A:Class),
   A :<=: toClass :N             ->
   A :0:                         ->
   (forall n, A n -> A (succ n)) ->
@@ -197,7 +197,8 @@ Proof.
   apply Incl.EquivCompatR with (toClass :N). 2: assumption. apply ToClass.
 Qed.
 
-Proposition FiniteInduction' : forall (A:Class),
+(* Principle of induction over the natural numbers.                             *)
+Proposition Induction : forall (A:Class),
   A :0:                                     ->
   (forall n, n :< :N -> A n -> A (succ n))  ->
    forall n, n :< :N -> A n.
@@ -205,7 +206,7 @@ Proof.
   intros A H1 H2.
   remember (fun n => n :< :N /\ A n) as B eqn:H3.
   assert (B :~: toClass :N) as H4. {
-    apply FiniteInduction; rewrite H3.
+    apply Induction2; rewrite H3.
     - intros n H4. apply H4.
     - split. 2: assumption. apply HasZero.
     - intros n [H4 H5]. split.

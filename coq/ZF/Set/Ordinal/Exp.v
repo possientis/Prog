@@ -79,7 +79,7 @@ Proposition IsOrdinal : forall (a b :U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1. revert b.
   assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR. apply Natural.OneIsOrdinal.
   - intros b H2 IH. rewrite WhenSuccR. 2: assumption.
     apply Mult.IsOrdinal; assumption.
@@ -95,7 +95,7 @@ Proposition WhenOneL : forall (a:U), Ordinal a ->
 Proof.
   assert (Ordinal :1:) as G1. { apply Natural.OneIsOrdinal. }
   assert (:0: :< :1:) as G2. { apply Succ.IsIn. }
-  apply Induction2.
+  apply Induction2.Induction2.
   - apply WhenZeroR.
   - intros a H1 IH.
     assert (Ordinal (:1: :^: a)) as G3. { apply IsOrdinal; assumption. }
@@ -120,7 +120,7 @@ Proof.
   assert (Ordinal :0:) as G2. { apply Core.ZeroIsOrdinal. }
   remember (fun b => :1: :<=: a -> :1: :<=: a :^: b) as A eqn:H2.
   assert (forall b, Ordinal b -> A b) as X. 2: { rewrite H2 in X. assumption. }
-  apply Induction2; rewrite H2.
+  apply Induction2.Induction2; rewrite H2.
   - intros _. rewrite WhenZeroR. apply Incl.Refl.
   - intros b H3 IH H4. rewrite WhenSuccR. 2: assumption.
     assert (Ordinal (a :^: b)) as G3. { apply IsOrdinal; assumption. }
@@ -242,7 +242,7 @@ Proposition InclCompatL : forall (a b c:U),
   a :^: c :<=: b :^: c.
 Proof.
   intros a b c H1 H2 H3 H4. revert c H3.
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR, WhenZeroR. apply Incl.Refl.
   - intros c H3 IH.
     assert (Ordinal (a :^: c)) as G1. { apply IsOrdinal; assumption. }
@@ -315,7 +315,7 @@ Proof.
   assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
   assert (:0: :< a) as G3. {
     apply Core.ElemElemTran with :1:; try assumption. apply Succ.IsIn. }
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR. apply Empty.IsIncl.
   - intros b H2 IH.
     assert (Ordinal (a :^: b)) as G4. { apply IsOrdinal; assumption. }
@@ -460,7 +460,7 @@ Proposition DistribL : forall (a b c:U),
 Proof.
   intros a b c H1 H2. revert c.
   assert (Ordinal (a :^: b)) as G1. { apply IsOrdinal; assumption. }
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite Plus.WhenZeroR, WhenZeroR, Mult.WhenOneR. 2: assumption. reflexivity.
   - intros c H3 IH.
     assert (Ordinal (a :^: c)) as G2. { apply IsOrdinal; assumption. }
@@ -539,7 +539,7 @@ Proposition Assoc : forall (a b c:U),
   (a :^: b) :^: c = a :^: (b :*: c).
 Proof.
   intros a b c H1 H2. revert c.
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR, Mult.WhenZeroR, WhenZeroR. reflexivity.
   - intros c H3 IH.
     assert (Ordinal (b :*: c)) as G1. { apply Mult.IsOrdinal; assumption. }
@@ -620,7 +620,7 @@ Proof.
     :sum:_{ n} (:[ fun i : U => a :^: (b) ! (i) :*: (c) ! (i) ]:) :< a :^: b)
     as A eqn:H8.
   assert (forall n, n :< :N -> A n) as H9. {
-    apply Omega.FiniteInduction'; rewrite H8.
+    apply Omega.Induction; rewrite H8.
     - intros b c d H2 _ _ _ _ _.
       rewrite SumOfClass.WhenZero. apply HasZero; assumption.
     - intros n H3 IH b c d H2 H4 H5 H6 H9 H10.

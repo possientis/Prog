@@ -37,6 +37,6 @@ Proposition Peano5 : forall (A:Class),
   (forall n, n :< :N -> A n -> A (succ n)) ->
   toClass :N :<=: A.
 Proof.
-  apply Induction.
+  apply Induction1.
 Qed.
 

@@ -61,7 +61,7 @@ Proposition WhenSuccL : forall (a n:U), Ordinal a -> n :< :N ->
   succ a :+: n = succ (a :+: n).
 Proof.
   intros a n H1. revert n.
-  apply Omega.FiniteInduction'.
+  apply Omega.Induction.
   - rewrite WhenZeroR, WhenZeroR. reflexivity.
   - intros n H2 IH.
     assert (Ordinal n) as H3. { apply Omega.HasOrdinalElem.  assumption. }
@@ -78,7 +78,7 @@ Qed.
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :+: a = a.
 Proof.
-  apply Induction2.
+  apply Induction2.Induction2.
   - apply WhenZeroR.
   - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2. reflexivity.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
@@ -89,7 +89,7 @@ Qed.
 Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
   Ordinal (a :+: b).
 Proof.
-  intros a b H1. revert b. apply Induction2.
+  intros a b H1. revert b. apply Induction2.Induction2.
   - rewrite WhenZeroR. assumption.
   - intros b H2 H3. rewrite WhenSuccR. 2: assumption.
     apply Succ.IsOrdinal. assumption.
@@ -165,7 +165,7 @@ Proof.
   intros a b n H1 H2. revert n.
   remember (fun n => a :+: n = b :+: n -> a = b) as A eqn:H3.
   assert (forall n, n :< :N -> A n) as H4. {
-    apply Omega.FiniteInduction'; rewrite H3.
+    apply Omega.Induction; rewrite H3.
     - intros H4. rewrite WhenZeroR, WhenZeroR in H4. assumption.
     - intros n H4 IH H6.
       assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
@@ -182,7 +182,7 @@ Proposition InclCompatL : forall (a b c:U),
   a :+: c :<=: b :+: c.
 Proof.
   intros a b c H1 H2 H3 H4. revert c H3.
-  apply Induction2.
+  apply Induction2.Induction2.
   - rewrite WhenZeroR, WhenZeroR. assumption.
   - intros c H5 H6.
     assert (Ordinal (a :+: c)) as H7. { apply IsOrdinal; assumption. }
@@ -351,7 +351,7 @@ Qed.
 Proposition InOmega : forall (n m:U),
   n :< :N -> m :< :N -> n :+: m :< :N.
 Proof.
-  intros n m H1. revert m. apply FiniteInduction'.
+  intros n m H1. revert m. apply Omega.Induction.
   - rewrite WhenZeroR. assumption.
   - intros m H2 H3.
     assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
@@ -597,7 +597,7 @@ Proof.
           assert (x :< (a :+: b) :+: d) as H18. { rewrite H6, H16; assumption. }
           exists d. split; assumption. }
       apply DoubleInclusion. split; assumption. }
-  apply Induction2; assumption.
+  apply Induction2.Induction2; assumption.
 Qed.
 
 (* The addition of natural numbers is commutative.                              *)
@@ -606,7 +606,7 @@ Proposition Comm : forall (n m:U), n :< :N -> m :< :N ->
 Proof.
   intros n m H1 H2. revert n H1.
   assert (Ordinal m) as H3. { apply Omega.HasOrdinalElem. assumption. }
-  apply Omega.FiniteInduction'.
+  apply Omega.Induction.
   - rewrite WhenZeroL, WhenZeroR. 2: assumption. reflexivity.
   - intros n H4 IH.
     assert (Ordinal n) as H5. { apply Omega.HasOrdinalElem. assumption. }
@@ -774,7 +774,7 @@ Proposition HasAllSucc : forall (a b n:U),
   b :+: n :< a.
 Proof.
   intros a b n H1 H2. revert n.
-  apply Omega.FiniteInduction'.
+  apply Omega.Induction.
   - rewrite WhenZeroR. assumption.
   - intros n H3 IH.
     assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
