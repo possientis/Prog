@@ -1,5 +1,4 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.ShiftL.
 Require Import ZF.Class.Ordinal.Sum.
 Require Import ZF.Class.Relation.Domain.
@@ -49,9 +48,8 @@ Proof.
 Qed.
 
 Proposition IsOrdinal : forall (F:Class) (a:U),
-  OrdFun F                          ->
-  Ordinal a                         ->
-  (forall x, x :< a -> domain F x)  ->
+  Ordinal a                           ->
+  (forall x, x :< a -> Ordinal F!x)   ->
   Ordinal (:sum:_{a} F).
 Proof.
   apply COS.IsOrdinal.
@@ -73,37 +71,45 @@ Proof.
 Qed.
 
 Proposition ShiftL : forall (F:Class) (n:U),
-  OrdFun F                                            ->
+  Functional F                                        ->
   n :< :N                                             ->
-  domain F n                                          ->
+  (forall i, i :< succ n -> domain F i)               ->
+  (forall i, i :< succ n -> Ordinal F!i)              ->
   :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F).
 Proof.
   intros F n H1. revert n.
   assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
-  assert (Functional F) as G2. { apply H1. }
   remember (fun n =>
-    domain F n ->  :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F)) as A eqn:H2.
+    (forall i, i :< succ n -> domain F i)  ->
+    (forall i, i :< succ n -> Ordinal F!i) ->
+    :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F)) as A eqn:H2.
   assert (forall n, n :< :N -> A n) as H3. {
     apply Omega.Induction; rewrite H2.
-    - intros H3.
+    - intros H3 H4.
       rewrite WhenSucc, WhenZero, Plus.WhenZeroL, WhenZero, Plus.WhenZeroR.
-      3: assumption. 1: reflexivity. apply OrdFun.IsOrdinal; assumption.
-    - intros n H3 IH H4.
-      assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
-      assert (Ordinal (succ n)) as G4. { apply Succ.IsOrdinal. assumption. }
+      3: assumption. 1: reflexivity. apply H4. apply Succ.IsIn.
+    - intros n H3 IH H4 H5.
+      assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal (succ n)) as G3. { apply Succ.IsOrdinal. assumption. }
       rewrite WhenSucc, IH, WhenSucc, ShiftL.Eval; try assumption.
       + apply Plus.Assoc.
-        * apply OrdFun.IsOrdinal. 1: assumption.
-          apply OrdFun.InDomain with (succ n); try assumption.
-          apply Succ.HasZero. assumption.
-        * apply IsOrdinal. 2: assumption.
-          { apply ShiftL.IsOrdFun. assumption. }
-          { intros i H5.
-            apply ShiftL.DomainOf.
-            apply OrdFun.InDomain with (succ n); try assumption.
-            apply Succ.ElemCompat; try assumption.
-            apply Core.IsOrdinal with n; assumption. }
-        * apply OrdFun.IsOrdinal; assumption.
-      + apply OrdFun.InDomain with (succ n); try assumption. apply Succ.IsIn. }
+        * apply H5. apply Succ.HasZero; assumption.
+        * apply IsOrdinal. 1: assumption.
+          intros i H6.
+          assert (Ordinal i) as G4. { apply SOC.IsOrdinal with n; assumption. }
+          assert (Ordinal (succ i)) as G5. { apply Succ.IsOrdinal. assumption. }
+          rewrite ShiftL.Eval. 2: assumption.
+         { apply H5, Succ.ElemCompat; try assumption.
+            apply SOC.ElemElemTran with n; try assumption.
+            apply Succ.IsIn. }
+         { apply H4, Succ.ElemCompat; try assumption.
+            apply SOC.ElemElemTran with n; try assumption.
+            apply Succ.IsIn. }
+        * apply H5, Succ.IsIn.
+      + apply H4, Succ.IsIn.
+      + intros i H6. apply H4. apply Succ.IsIncl. assumption.
+      + intros i H6. apply H5. apply Succ.IsIncl. assumption. }
   rewrite H2 in H3. assumption.
 Qed.
+
+

@@ -1,6 +1,5 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
-Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion3.
 Require Import ZF.Class.Relation.Domain.
@@ -122,27 +121,29 @@ Proof.
 Qed.
 
 Proposition IsOrdinal : forall (F:Class) (a:U),
-  OrdFun F                          ->
-  On a                              ->
-  (forall x, x :< a -> domain F x)  ->
+  On a                            ->
+  (forall x, x :< a -> On F!x)    ->
   On (sum F)!a.
 Proof.
-  intros F a H1. revert a.
-  remember (fun a => (forall x, x :< a -> domain F x) -> On (sum F)!a) as A eqn:H2.
+  intros F.
+  remember (fun a =>
+    (forall x, x :< a -> On F!x)     ->
+    On (sum F)!a) as A eqn:H2.
   assert (forall a, On a -> A a) as H3. {
     apply Induction2.Induction; rewrite H2.
     - intros _. rewrite WhenZero. apply SOC.ZeroIsOrdinal.
     - intros a H3 IH H4. rewrite WhenSucc. 2: assumption.
       apply Plus.IsOrdinal.
       + apply IH. intros x H5. apply H4. apply Succ.IsIncl. assumption.
-      + apply OrdFun.IsOrdinal. 1: assumption. apply H4. apply Succ.IsIn.
+      + apply H4, Succ.IsIn.
     - intros a H3 IH H4.
       assert (On a) as H5. { apply H3. }
       rewrite WhenLimit. 2: assumption. apply SUG.IsOrdinal.
-      intros x H6. apply IH. 1: assumption.
-      intros y H7. apply H4.
-      assert (On x) as H8. { apply SOC.IsOrdinal with a; assumption. }
-      assert (On y) as H9. { apply SOC.IsOrdinal with x; assumption. }
+      intros x H6.
+      assert (On x) as H7. { apply SOC.IsOrdinal with a; assumption. }
+      apply IH. 1: assumption.
+      intros y H9. apply H4.
+      assert (On y) as H10. { apply SOC.IsOrdinal with x; assumption. }
       apply SOC.ElemElemTran with x; assumption. }
   rewrite H2 in H3. assumption.
 Qed.
@@ -174,3 +175,5 @@ Proof.
       apply SOC.ElemElemTran with x; assumption. }
   rewrite H1 in H2. assumption.
 Qed.
+
+

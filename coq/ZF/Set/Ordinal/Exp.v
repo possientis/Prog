@@ -2,6 +2,9 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Exp.
 Require Import ZF.Class.Ordinal.Induction2.
+Require Import ZF.Class.Ordinal.ShiftL.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -25,6 +28,8 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Exp.
 Export ZF.Notation.Exp.
+
+Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
 Module COE := ZF.Class.Ordinal.Exp.
@@ -599,8 +604,8 @@ Proposition IsLess : forall (a b c d n:U),
   Decreasing d                                          ->
   :1: :< a                                              ->
   (forall i, i :< n -> c!i :< a)                        ->
-  (forall i, i :< n -> b!i :< b)                        ->
-  :sum:_{n} (:[fun i => a :^: b!i :*: c!i]:) :< a :^: b.
+  (forall i, i :< n -> d!i :< b)                        ->
+  :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:) :< a :^: b.
 Proof.
   intros a b c d n H1 H2 H3 H4 H5 H6 H7.
   revert n H3 b c d H2 H4 H5 H6.
@@ -615,14 +620,29 @@ Proof.
     OrdFunOn c n ->
     OrdFunOn d n ->
     Decreasing d ->
-    (forall i : U, i :< n -> (c) ! (i) :< a) ->
-    (forall i : U, i :< n -> (b) ! (i) :< b) ->
-    :sum:_{ n} (:[ fun i : U => a :^: (b) ! (i) :*: (c) ! (i) ]:) :< a :^: b)
+    (forall i : U, i :< n -> c!i :< a) ->
+    (forall i : U, i :< n -> d!i :< b) ->
+    :sum:_{ n} (:[ fun i => a :^: d!i :*: c!i ]:) :< a :^: b)
     as A eqn:H8.
   assert (forall n, n :< :N -> A n) as H9. {
     apply Omega.Induction; rewrite H8.
     - intros b c d H2 _ _ _ _ _.
       rewrite SumOfClass.WhenZero. apply HasZero; assumption.
     - intros n H3 IH b c d H2 H4 H5 H6 H9 H10.
+      assert (Functional :[fun i => a :^: d!i :*: c!i]:) as H11. {
+        apply ToFun.IsFunctional. }
+      assert (forall i,
+        i :< succ n -> domain :[fun i => a :^: d!i :*: c!i]: i) as H12. {
+          intros i _. apply ToFun.DomainOf. }
+      assert (forall i, i :< succ n -> Ordinal c!i) as H13. {
+        intros i H13. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+      assert (forall i, i :< succ n -> Ordinal d!i) as H14. {
+        intros i H14. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+      assert (forall i : U,
+        i :< succ n -> Ordinal (:[fun i => a :^: d!i :*: c!i]:!i)) as H15. {
+          intros i H15. rewrite ToFun.Eval.
+          apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption. apply H14. assumption.
+          - apply H13. assumption. }
+      rewrite SumOfClass.ShiftL, ToFun.Eval; try assumption.
 Admitted.
-
