@@ -18,10 +18,13 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.OrdFunOn.
 Require Import ZF.Set.Ordinal.Plus.
+Require Import ZF.Set.Ordinal.ShiftL.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.SumOfClass.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Ordinal.UnionOf.
+Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
@@ -34,8 +37,14 @@ Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
 Module COE := ZF.Class.Ordinal.Exp.
+Module COS := ZF.Class.Ordinal.ShiftL.
+Module CRD := ZF.Class.Relation.Domain.
+Module CRL := ZF.Class.Relation.Functional.
 Module SEM := ZF.Set.Empty.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
+Module SOS := ZF.Set.Ordinal.ShiftL.
+Module SRD := ZF.Set.Relation.Domain.
+Module SRL := ZF.Set.Relation.Functional.
 
 (* The exponentiation of two ordinals when a is an ordinal.                     *)
 Definition exp (a b:U) : U := (COE.Exp a)!b.
@@ -621,8 +630,8 @@ Proof.
     OrdFunOn c n ->
     OrdFunOn d n ->
     Decreasing d ->
-    (forall i : U, i :< n -> c!i :< a) ->
-    (forall i : U, i :< n -> d!i :< b) ->
+    (forall i, i :< n -> c!i :< a) ->
+    (forall i, i :< n -> d!i :< b) ->
     :sum:_{ n} (:[ fun i => a :^: d!i :*: c!i ]:) :< a :^: b)
     as A eqn:H8.
   assert (forall n, n :< :N -> A n) as H9. {
@@ -630,9 +639,14 @@ Proof.
     - intros b c d H2 _ _ _ _ _.
       rewrite SumOfClass.WhenZero. apply HasZero; assumption.
     - intros n H3 IH b c d H2 H4 H5 H6 H9 H10.
+      assert (Ordinal n) as G4. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Functional c) as G5. { apply H4. }
+      assert (Functional d) as G6. { apply H5. }
+      assert (domain c = succ n) as G7. { apply H4. }
+      assert (domain d = succ n) as G8. { apply H5. }
       remember (fun i => a :^: d!i :*: c!i) as F eqn:E.
-      assert (Functional :[F]:) as H11. { apply ToFun.IsFunctional. }
-      assert (forall i, i :< succ n -> domain :[F]: i) as H12. {
+      assert (CRL.Functional :[F]:) as H11. { apply ToFun.IsFunctional. }
+      assert (forall i, i :< succ n -> CRD.domain :[F]: i) as H12. {
           intros i _. apply ToFun.DomainOf. }
       assert (forall i, i :< succ n -> Ordinal c!i) as H13. {
         intros i H13. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
@@ -644,4 +658,44 @@ Proof.
           - apply IsOrdinal. 1: assumption. apply H14. assumption.
           - apply H13. assumption. }
       rewrite SumOfClass.ShiftL, ToFun.Eval; try assumption.
+      remember (shiftL c) as c' eqn:H16.
+      remember (shiftL d) as d' eqn:H17.
+      assert (OrdFunOn c' n) as H18. {
+        rewrite H16. apply SOS.OnSucc. assumption. }
+      assert (OrdFunOn d' n) as H19. {
+        rewrite H17. apply SOS.OnSucc. assumption. }
+      assert (Decreasing d') as H20. {
+        rewrite H17. apply SOS.IsDecreasing. 2: assumption. apply H5. }
+      assert (Ordinal d!:0:) as H21. {
+        apply OrdFunOn.IsOrdinal with (succ n). 1: assumption.
+        apply Succ.HasZero. assumption. }
+      assert (forall i, i :< n -> c'!i :< a) as H22. {
+        intros i H22.
+        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+        rewrite H16, SOS.Eval. 2: assumption.
+        - apply H9, Succ.ElemCompat; assumption.
+        - rewrite G7. apply Succ.ElemCompat; assumption. }
+      assert (forall i, i :< n -> d'!i :< d!:0:) as H23. {
+        intros i H23.
+        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+        rewrite H17, SOS.Eval. 2: assumption.
+        - apply H6.
+          + rewrite G8. apply Succ.HasZero. assumption.
+          + rewrite G8. apply Succ.ElemCompat; assumption.
+          + apply Succ.HasZero. assumption.
+        - rewrite G8. apply Succ.ElemCompat; assumption. }
+      remember (fun i => a :^: d'!i :*: c'!i) as G eqn:E'.
+      assert (:sum:_{n} (COS.shiftL :[F]:) = :sum:_{n} :[G]:) as H24. {
+        apply SumOfClass.EqualCharac. 1: assumption.
+        intros i H24.
+        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+        rewrite
+          COS.Eval, ToFun.Eval, ToFun.Eval, E, E', H16, H17, SOS.Eval, SOS.Eval;
+        try assumption. 1: reflexivity.
+        - rewrite G7. apply Succ.ElemCompat; assumption.
+        - rewrite G8. apply Succ.ElemCompat; assumption.
+        - apply ToFun.DomainOf. }
+      assert ((:sum:_{n} :[G]:) :< a :^: d!:0:) as H25. {
+        rewrite E'. apply IH; assumption. }
+      rewrite H24.
 Admitted.

@@ -4,6 +4,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Decreasing.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Ordinal.OrdFunOn.
 Require Import ZF.Set.Ordinal.Succ.
@@ -151,3 +152,19 @@ Proof.
   rewrite G3 in H3. assumption.
 Qed.
 
+Proposition IsDecreasing : forall (f:U), OrdFun f ->
+  Decreasing f -> Decreasing (shiftL f).
+Proof.
+  intros f H1 H2. intros x y H3 H4 H5.
+  assert (Functional f) as G1. { apply H1. }
+  assert (Ordinal (domain f)) as G2. { apply OrdFun.DomainOf. assumption. }
+  apply DomainOf in H3. apply DomainOf in H4.
+  assert (Ordinal (succ x)) as G3. {
+    apply Core.IsOrdinal with (domain f); assumption. }
+  assert (Ordinal (succ y)) as G4. {
+    apply Core.IsOrdinal with (domain f); assumption. }
+  assert (Ordinal x) as G5. { apply Succ.IsOrdinalRev. assumption. }
+  assert (Ordinal y) as G6. { apply Succ.IsOrdinalRev. assumption. }
+  rewrite Eval, Eval; try assumption. apply H2; try assumption.
+  apply Succ.ElemCompat; assumption.
+Qed.
