@@ -629,18 +629,16 @@ Proof.
     - intros b c d H2 _ _ _ _ _.
       rewrite SumOfClass.WhenZero. apply HasZero; assumption.
     - intros n H3 IH b c d H2 H4 H5 H6 H9 H10.
-      assert (Functional :[fun i => a :^: d!i :*: c!i]:) as H11. {
-        apply ToFun.IsFunctional. }
-      assert (forall i,
-        i :< succ n -> domain :[fun i => a :^: d!i :*: c!i]: i) as H12. {
+      remember (fun i => a :^: d!i :*: c!i) as F eqn:E.
+      assert (Functional :[F]:) as H11. { apply ToFun.IsFunctional. }
+      assert (forall i, i :< succ n -> domain :[F]: i) as H12. {
           intros i _. apply ToFun.DomainOf. }
       assert (forall i, i :< succ n -> Ordinal c!i) as H13. {
         intros i H13. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
       assert (forall i, i :< succ n -> Ordinal d!i) as H14. {
         intros i H14. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-      assert (forall i : U,
-        i :< succ n -> Ordinal (:[fun i => a :^: d!i :*: c!i]:!i)) as H15. {
-          intros i H15. rewrite ToFun.Eval.
+      assert (forall i : U, i :< succ n -> Ordinal (:[F]:!i)) as H15. {
+          intros i H15. rewrite ToFun.Eval. rewrite E.
           apply Mult.IsOrdinal.
           - apply IsOrdinal. 1: assumption. apply H14. assumption.
           - apply H13. assumption. }
