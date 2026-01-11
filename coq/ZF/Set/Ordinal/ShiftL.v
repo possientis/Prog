@@ -4,7 +4,10 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.OrdFun.
+Require Import ZF.Set.Ordinal.OrdFunOn.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Relation.Domain.
@@ -18,6 +21,8 @@ Require Import ZF.Set.Union.
 Require Import ZF.Notation.Eval.
 
 Module COS := ZF.Class.Ordinal.ShiftL.
+Module SOU := ZF.Set.Ordinal.UnionOf.
+
 
 (* Shifting a function to the left. shiftL f = { (x,y) | (succ x, y) :< f }     *)
 Definition shiftL (f:U) : U := fromClass (COS.shiftL (toClass f))
@@ -112,3 +117,37 @@ Proof.
     + subst. assumption.
     + apply Core.ElemElemTran with y; assumption.
 Qed.
+
+Proposition IsOrdFun : forall (f:U),
+  OrdFun f -> OrdFun (shiftL f).
+Proof.
+  intros f H1. split.
+  - apply IsFunction. apply H1.
+  - split.
+    + rewrite WhenOrdinalDomain.
+      * apply SOU.IsOrdinal, OrdFun.DomainOf. assumption.
+      * apply OrdFun.DomainOf. assumption.
+    + intros y H2. apply RangeOf in H2. revert H2. apply H1.
+Qed.
+
+Proposition IsOrdFunOn : forall (f a:U),
+  OrdFunOn f a -> OrdFunOn (shiftL f) :U(a).
+Proof.
+  intros f a [H1 H2]. split.
+  - apply IsOrdFun. assumption.
+  - subst. apply WhenOrdinalDomain, OrdFun.DomainOf. assumption.
+Qed.
+
+Proposition OnSucc : forall (f a:U),
+  OrdFunOn f (succ a) -> OrdFunOn (shiftL f) a.
+Proof.
+  intros f a H1.
+  assert (Ordinal (succ a)) as G1. {
+    apply OrdFunOn.DomainOf with f. assumption. }
+  assert (Ordinal a) as G2. { apply Succ.IsOrdinalRev. assumption. }
+  assert (:U(succ a) = a) as G3. { apply Succ.UnionOf.  assumption. }
+  assert (OrdFunOn (shiftL f) :U(succ a)) as H3. {
+    apply IsOrdFunOn. assumption. }
+  rewrite G3 in H3. assumption.
+Qed.
+

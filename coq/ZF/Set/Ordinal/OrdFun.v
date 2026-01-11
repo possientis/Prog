@@ -21,3 +21,9 @@ Proof.
   assert (f!x = y) as H6. { apply Eval.Charac; try assumption. apply H1. }
   rewrite H6. apply H3. apply Range.Charac. exists x. assumption.
 Qed.
+
+Proposition DomainOf : forall (f:U),
+  OrdFun f -> Ordinal (domain f).
+Proof.
+  intros f [_ [H1 _]]. assumption.
+Qed.

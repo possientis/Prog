@@ -207,7 +207,7 @@ Proof.
 Qed.
 
 (* The union of the successor of an ordinal is the ordinal.                     *)
-Proposition UnionOfSucc : forall (a:U), Ordinal a ->
+Proposition UnionOf : forall (a:U), Ordinal a ->
   :U(succ a) = a.
 Proof.
   intros a H1. apply DoubleInclusion. split; intros x H2.
@@ -224,7 +224,7 @@ Proposition IfUnionThenNotSucc : forall (a b:U), Ordinal a -> Ordinal b ->
   a = :U(a) -> a <> succ b.
 Proof.
   intros a b H1 H2 H3 H4. apply NotEqual with a.
-  assert (:U(succ b) = b) as H5. { apply UnionOfSucc. assumption. }
+  assert (:U(succ b) = b) as H5. { apply UnionOf. assumption. }
   rewrite <- H4 in H5. assert (a = b) as H6. { rewrite <- H5. assumption. }
   rewrite <- H6 in H4. symmetry. assumption.
 Qed.
@@ -236,7 +236,7 @@ Proof.
   intros a H1. split; intros H2.
   - destruct H2 as [H2 [b H3]]. subst.
     assert (Ordinal b) as H4. { apply IsOrdinalRev. assumption. }
-    rewrite UnionOfSucc. 2: assumption. reflexivity.
+    rewrite UnionOf. 2: assumption. reflexivity.
   - split. 1: assumption. exists :U(a). assumption.
 Qed.
 

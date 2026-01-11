@@ -37,7 +37,7 @@ Proposition WhenSucc : forall (a:U), Ordinal a ->
   sup (succ a) = a.
 Proof.
   intros a H1. rewrite WhenOrdinal.
-  - apply UnionOfSucc. assumption.
+  - apply Succ.UnionOf. assumption.
   - apply Succ.IsOrdinal. assumption.
 Qed.
 

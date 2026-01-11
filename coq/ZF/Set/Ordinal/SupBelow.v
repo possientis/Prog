@@ -64,7 +64,7 @@ Proof.
     - apply Inter2.Charac in H4. destruct H4 as [_ H4]. assumption.
     - apply Inter2.Charac. split. 2: assumption. apply H3. assumption. }
   rewrite WhenOrdinal. 2: assumption.
-  - rewrite H4. apply UnionOfSucc. assumption.
+  - rewrite H4. apply Succ.UnionOf. assumption.
   - apply Succ.IsOrdinal. assumption.
 Qed.
 
