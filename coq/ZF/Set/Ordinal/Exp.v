@@ -11,6 +11,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Decreasing.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
