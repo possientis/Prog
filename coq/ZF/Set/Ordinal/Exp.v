@@ -1,6 +1,7 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Exp.
+Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.ShiftL.
 Require Import ZF.Class.Relation.Domain.
@@ -749,3 +750,71 @@ Proof.
           apply InclCompatR; assumption. }
   rewrite H8 in H9. assumption.
 Qed.
+
+Proposition Decomp : forall (a b:U),
+  Ordinal a                                             ->
+  Ordinal b                                             ->
+  :1: :< a                                              ->
+  :0: :< b                                              ->
+  exists n c d,
+    n :< :N                                             /\
+    OrdFunOn c n                                        /\
+    OrdFunOn d n                                        /\
+    Decreasing d                                        /\
+    (forall i, i :< n -> :0: :< c!i)                    /\
+    (forall i, i :< n -> c!i :< a)                      /\
+    b = :sum:_{n} :[fun i => a :^: d!i :*: c!i]:.
+Proof.
+  intros a b H1 H2 H3. revert b H2.
+  remember (fun b =>
+    :0: :< b                                                    ->
+    exists n c d,
+      n :< :N                                                   /\
+      OrdFunOn c n                                              /\
+      OrdFunOn d n                                              /\
+      Decreasing d                                              /\
+      (forall i, i :< n -> :0: :< c!i)                          /\
+      (forall i, i :< n -> c!i :< a)                            /\
+      b = :sum:_{n} :[fun i => a :^: d!i :*: c!i]:) as A eqn:E.
+  assert (forall b, Ordinal b -> A b) as H4. {
+    apply Induction.Induction. intros b H2 IH. rewrite E. intros H4.
+    assert (exists e,
+      Ordinal e /\ a :^: e :<=: b /\ b :< a :^: succ e) as H5. {
+        apply InBetween; assumption. }
+      destruct H5 as [e [H5 [H6 H7]]].
+    assert (Ordinal (a :^: e)) as G1. { apply IsOrdinal; assumption. }
+    assert (Ordinal :0:) as G2. { apply Core.ZeroIsOrdinal. }
+    assert (Ordinal :1:) as G3. { apply Natural.OneIsOrdinal. }
+    assert (:0: :< a) as G4. {
+      apply ElemElemTran with :1:; try assumption.
+      apply Succ.IsIn. }
+    assert (exists q r,
+      Ordinal q                 /\
+      Ordinal r                 /\
+      b = a :^: e :*: q :+: r   /\
+      r :< a :^: e) as H8. {
+        apply Mult.Euclid; try assumption.
+        apply HasZero; assumption. }
+    destruct H8 as [q [r [H8 [H9 [H10 H11]]]]].
+    assert (Ordinal (a :^: e :*: q)) as G5. {
+      apply Mult.IsOrdinal; assumption. }
+    assert (:0: :< q) as H12. {
+      assert (q = :0: \/ :0: :< q) as H12. { apply Core.ZeroOrElem. assumption. }
+      destruct H12 as [H12|H12]. 2: assumption. subst. exfalso.
+      rewrite Mult.WhenZeroR, Plus.WhenZeroL in H6. 2: assumption.
+      assert (r :< r) as H13. { apply H6. assumption. }
+      revert H13. apply NoElemLoop1. }
+    assert (q :< a) as H13. {
+      assert (q :< a \/ a :<=: q) as H13. { apply Core.ElemOrIncl; assumption. }
+      destruct H13 as [H13|H13]. 1: assumption. exfalso.
+      assert (a :^: succ e :<=: b) as H14. {
+        rewrite WhenSuccR, H10. 2: assumption.
+        apply Incl.Tran with (a :^: e :*: q).
+      - apply Mult.InclCompatR; assumption.
+      - apply Plus.IsInclR; assumption. }
+      assert (b :< b) as H15. { apply H14. assumption. }
+      revert H15. apply NoElemLoop1. }
+    assert (r = :0: \/ :0: :< r) as H14. { apply Core.ZeroOrElem. assumption. }
+    destruct H14 as [H14|H14].
+Admitted.
+
