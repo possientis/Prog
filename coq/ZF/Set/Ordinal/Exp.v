@@ -698,4 +698,54 @@ Proof.
       assert ((:sum:_{n} :[G]:) :< a :^: d!:0:) as H25. {
         rewrite E'. apply IH; assumption. }
       rewrite H24.
-Admitted.
+      assert (Ordinal (a :^: b)) as G9. { apply IsOrdinal; assumption. }
+      assert (Ordinal (a :^: d!:0:)) as G10. { apply IsOrdinal; assumption. }
+      assert (Ordinal (F :0:)) as G11. {
+        rewrite E. apply Mult.IsOrdinal. 1: assumption.
+        apply H13, Succ.HasZero. assumption. }
+      assert (forall i, i :< n -> Ordinal c'!i) as G12. {
+        intros i G12. apply Core.IsOrdinal with a. 1: assumption.
+        apply H22. assumption. }
+      assert (forall i, i :< n -> Ordinal d'!i) as G13. {
+        intros i G13. apply Core.IsOrdinal with d!:0:. 1: assumption.
+        apply H23. assumption. }
+      assert (forall i, i :< n -> Ordinal (a :^: d'!i)) as G14. {
+        intros i G14. apply IsOrdinal. 1: assumption.
+        apply G13. assumption. }
+      assert (forall i, i :< n -> Ordinal (G i)) as G15. {
+        rewrite E'. intros i G15. apply Mult.IsOrdinal.
+        - apply G14. assumption.
+        - apply G12. assumption. }
+      assert (Ordinal (:sum:_{n} :[G]:)) as G16. {
+        apply SumOfClass.IsOrdinal. 1: assumption.
+        intros i G16. rewrite ToFun.Eval. apply G15. assumption. }
+      assert (Ordinal (F :0: :+: :sum:_{n} :[G]:)) as G17. {
+        apply Plus.IsOrdinal; assumption. }
+      assert (Ordinal (F :0: :+: a :^: d!:0:)) as G18. {
+        apply Plus.IsOrdinal; assumption. }
+      apply Core.ElemInclTran with (F :0: :+: a :^: d!:0:); try assumption.
+      + apply Plus.ElemCompatR; assumption.
+      + rewrite E.
+        assert (
+          a :^: d!:0: :*: (c!:0: :+: :1:)
+        = a :^: d!:0: :*: c!:0: :+: a :^: d!:0:) as H26. {
+          rewrite Mult.DistribL, Mult.WhenOneR; try assumption. 1: reflexivity.
+          apply H13, Succ.HasZero. assumption. }
+        rewrite <- H26, Plus.WhenOneR.
+        assert (succ c!:0: :<=: a) as H27. {
+          apply Succ.ElemIsIncl. 2: assumption.
+          - apply H13, Succ.HasZero. assumption.
+          - apply H9, Succ.HasZero. assumption. }
+        assert (Ordinal (succ c!:0:)) as G19. {
+          apply Succ.IsOrdinal. apply H13, Succ.HasZero. assumption. }
+        apply Incl.Tran with (a :^: d!:0: :*: a).
+        * apply Mult.InclCompatR; assumption.
+        * rewrite <- WhenSuccR. 2: assumption.
+          assert (Ordinal (succ d!:0:)) as G20. {
+            apply Succ.IsOrdinal. assumption. }
+          assert (succ d!:0: :<=: b) as H28. {
+            apply Succ.ElemIsIncl; try assumption.
+            apply H10, Succ.HasZero. assumption. }
+          apply InclCompatR; assumption. }
+  rewrite H8 in H9. assumption.
+Qed.
