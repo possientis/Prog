@@ -8,6 +8,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Single.
 
 Module CRR := ZF.Class.Relation.Range.
 
@@ -62,3 +63,25 @@ Proof.
   intros f a y H1. apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
   apply Charac. exists x. assumption.
 Qed.
+
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> range f = :0:.
+Proof.
+  intros f H1. apply DoubleInclusion. split; intros y H2; exfalso.
+  - apply Charac in H2. destruct H2 as [x H2].
+    subst. apply Empty.Charac in H2. contradiction.
+  - apply Empty.Charac in H2. contradiction.
+Qed.
+
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> range f = :{y}:.
+Proof.
+  intros x y f H1. apply DoubleInclusion. split; intros v H2.
+  - apply Charac in H2. destruct H2 as [u H2]. subst.
+    apply Single.Charac in H2.
+    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H3]. subst.
+    apply Single.Charac. reflexivity.
+  - apply Single.Charac in H2. subst.
+    apply Charac. exists x. apply Single.Charac. reflexivity.
+Qed.
+

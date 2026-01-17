@@ -6,6 +6,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Single.
 
 Module CRD := ZF.Class.Relation.Domain.
 
@@ -44,3 +45,16 @@ Proof.
     apply Empty.Charac in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.
 Qed.
+
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> domain f = :{x}:.
+Proof.
+  intros x y f H1. apply DoubleInclusion. split; intros u H2.
+  - apply Charac in H2. destruct H2 as [v H2]. subst.
+    apply Single.Charac in H2.
+    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H3]. subst.
+    apply Single.Charac. reflexivity.
+  - apply Single.Charac in H2. subst.
+    apply Charac. exists y. apply Single.Charac. reflexivity.
+Qed.
+

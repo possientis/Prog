@@ -1,9 +1,11 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.FunctionalAt.
+Require Import ZF.Set.Single.
 
 Module CRL := ZF.Class.Relation.Functional.
 
@@ -33,3 +35,19 @@ Proof.
   - intros x. apply H1.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> Functional f.
+Proof.
+  intros f H1 x y1 y2 H2 H3. exfalso. subst.
+  apply Empty.Charac in H2. contradiction.
+Qed.
+
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> Functional f.
+Proof.
+  intros x y f H1 u y1 y2 H2 H3. subst.
+  apply Single.Charac in H2. apply Single.Charac in H3.
+  apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
+  apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+  subst. reflexivity.
+Qed.

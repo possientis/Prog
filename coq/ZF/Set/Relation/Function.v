@@ -17,6 +17,7 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Single.
 
 Module CRF := ZF.Class.Relation.Function.
 Module SRI := ZF.Set.Relation.InvImage.
@@ -195,3 +196,18 @@ Proof.
     + apply H1.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> Function f.
+Proof.
+  intros f H1. split.
+  - apply Relation.WhenEmpty. assumption.
+  - apply Functional.WhenEmpty. assumption.
+Qed.
+
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> Function f.
+Proof.
+  intros x y f H1. split.
+  - apply Relation.WhenSingle with x y. assumption.
+  - apply Functional.WhenSingle with x y. assumption.
+Qed.

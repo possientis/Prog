@@ -8,6 +8,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Single.
 
 Export ZF.Notation.Eval.
 
@@ -16,11 +17,11 @@ Definition eval (f a:U) : U := (toClass f)!a.
 (* Notation "f ! a" := (eval f a)                                               *)
 Global Instance SetEval : Eval U := { eval := eval }.
 
-Proposition WhenNotInDomain : forall (f x:U), 
+Proposition WhenNotInDomain : forall (f x:U),
   ~ x :< domain f -> f!x = :0:.
 Proof.
   intros f x H1. apply EvalOfClass.WhenNotInDomain. intros H2.
-  apply H1. apply ZF.Set.Relation.Domain.ToClass. assumption. 
+  apply H1. apply ZF.Set.Relation.Domain.ToClass. assumption.
 Qed.
 
 (* If f is functional and a lies in domain of f then (a,y) :< f iff f!a = y.    *)
@@ -57,3 +58,12 @@ Proof.
     split. 1: assumption. apply Charac; assumption.
 Qed.
 
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> f!x = y.
+Proof.
+  intros x y f H1. apply Charac.
+  - apply Functional.WhenSingle with x y. assumption.
+  - rewrite Domain.WhenSingle with x y f. 2: assumption.
+    apply Single.Charac. reflexivity.
+  - subst. apply Single.Charac. reflexivity.
+Qed.

@@ -24,6 +24,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.SumOfClass.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Ordinal.UnionOf.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -815,6 +816,37 @@ Proof.
       assert (b :< b) as H15. { apply H14. assumption. }
       revert H15. apply NoElemLoop1. }
     assert (r = :0: \/ :0: :< r) as H14. { apply Core.ZeroOrElem. assumption. }
+    assert (:1: :< :N) as G6. { apply Omega.HasOne. }
+    assert (:1: = succ :0:) as G7. { reflexivity. }
+    assert (Ordinal :0:) as G8. { apply Core.ZeroIsOrdinal. }
     destruct H14 as [H14|H14].
-Admitted.
+    - remember :{ :(:0:,q): }: as c eqn:H15.
+      remember :{ :(:0:,e): }: as d eqn:H16.
+      assert (OrdFunOn c :1:) as H17. {
+        rewrite H15. apply OrdFunOn.WhenSingle with q.
+        1: assumption. reflexivity. }
+      assert (OrdFunOn d :1:) as H18. {
+        rewrite H16. apply OrdFunOn.WhenSingle with e.
+        1: assumption. reflexivity. }
+      assert (Decreasing d) as H19. {
+        rewrite H16. apply Decreasing.WhenSingle with :0: e. reflexivity. }
+      assert (forall i, i :< :1: -> :0: :< c!i) as H20. {
+        intros i H20. rewrite Natural.OneExtension in H20.
+        apply Single.Charac in H20. rewrite H20. clear H20.
+        rewrite (Eval.WhenSingle :0: q c); assumption. }
+      assert (forall i, i :< :1: -> c!i :< a) as H21. {
+        intros i H21. rewrite Natural.OneExtension in H21.
+        apply Single.Charac in H21. rewrite H21. clear H21.
+        rewrite (Eval.WhenSingle :0: q c); assumption. }
+      exists :1:, c, d. split. 1: assumption. split. 1: assumption.
+      split. 1: assumption. split. 1: assumption. split. 1: assumption.
+      split. 1: assumption.
+      rewrite G7, SumOfClass.WhenSucc, SumOfClass.WhenZero, Plus.WhenZeroL;
+      try assumption.
+      rewrite ToFun.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
+      try assumption.
+      + rewrite H14, Plus.WhenZeroR in H10. assumption.
+      + rewrite ToFun.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
+        assumption.
+    - Admitted.
 

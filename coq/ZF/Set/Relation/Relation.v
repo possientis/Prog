@@ -2,11 +2,13 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Module CRR := ZF.Class.Relation.Relation.
@@ -50,3 +52,14 @@ Proof.
     apply Domain.Charac. exists z. assumption.
 Qed.
 
+Proposition WhenEmpty : forall (f:U), f = :0: -> Relation f.
+Proof.
+  intros f H1 x H2. exfalso. subst. apply Empty.Charac in H2. contradiction.
+Qed.
+
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> Relation f.
+Proof.
+  intros x y f H1 u H2.
+  rewrite H1 in H2. apply Single.Charac in H2. exists x, y. assumption.
+Qed.

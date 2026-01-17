@@ -1,11 +1,15 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.OrdFun.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Single.
 
 Definition OrdFunOn (f a:U) : Prop := OrdFun f /\ domain f = a.
 
@@ -22,5 +26,14 @@ Qed.
 Proposition DomainOf : forall (f a:U), OrdFunOn f a -> Ordinal a.
 Proof.
   intros f a [[H1 [H2 H3]] H4]. subst. assumption.
+Qed.
+
+Proposition WhenSingle : forall (a f:U), Ordinal a ->
+  f = :{ :(:0:,a): }: -> OrdFunOn f :1:.
+Proof.
+  intros a f H1 H2. split.
+  - apply OrdFun.WhenSingle with a; assumption.
+  - rewrite Domain.WhenSingle with :0: a f. 2: assumption.
+    symmetry. apply Natural.OneExtension.
 Qed.
 
