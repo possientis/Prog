@@ -358,6 +358,19 @@ Proof.
     + rewrite WhenZeroR. reflexivity.
 Qed.
 
+Proposition HasZero : forall (a b:U), Ordinal a -> Ordinal b ->
+  :0: :< a -> :0: :< b -> :0: :< a :*: b.
+Proof.
+  intros a b H1 H2 H3 H4.
+  assert (Ordinal (a :*: b)) as G1. { apply IsOrdinal; assumption. }
+  assert (a :*: b = :0: \/ :0: :< a :*: b) as H5. {
+    apply Core.ZeroOrElem. assumption. }
+  destruct H5 as [H5|H5]. 2: assumption. exfalso.
+  apply WhenZero in H5; try assumption. destruct H5 as [H5|H5]; subst.
+  - apply Empty.Charac in H3. contradiction.
+  - apply Empty.Charac in H4. contradiction.
+Qed.
+
 Proposition IsLimit : forall (a b:U), Ordinal a ->
   :0: :< a -> Limit b -> Limit (a :*: b).
 Proof.
@@ -806,7 +819,7 @@ Proof.
       assert (Ordinal n) as H9. { apply Omega.HasOrdinalElem. assumption. }
       assert (Ordinal c) as G5. { apply H7. }
       assert (exists p, p :< :N /\ n = succ p) as H10. {
-        apply Omega.IsSucc. 1: assumption.
+        apply Omega.HasPred. 1: assumption.
         assert (n = :0: \/ :0: :< n) as H10. {
           apply Core.ZeroOrElem. assumption. }
         destruct H10 as [H10|H10]. 2: assumption. exfalso. subst.
@@ -1017,3 +1030,4 @@ Proof.
       * apply IsLimit; assumption.
     + apply IsLimit; assumption.
 Qed.
+

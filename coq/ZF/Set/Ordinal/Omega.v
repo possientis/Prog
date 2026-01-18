@@ -126,17 +126,27 @@ Proof.
   apply IsOrdinal.
 Qed.
 
-Proposition IsSucc : forall (n:U),
-  n :< :N                             ->
-  :0: :< n                            ->
-  exists m, m :< :N /\ n = succ m.
+Proposition IsSuccessor : forall (n:U), n :< :N ->
+  :0: :< n <-> Successor n.
+Proof.
+  intros n H1.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (NonLimit n) as H3. { apply HasNonLimitElem. assumption. }
+  split; intros H2.
+  - assert (Successor n \/ Limit n) as H4. { apply Limit.TwoWay; assumption. }
+    destruct H4 as [H4|H4]. 1: assumption. exfalso.
+    revert H3. apply Limit.NotBoth. assumption.
+  - destruct H2 as [_ [m H2]]. subst. apply Succ.HasZero.
+    apply Succ.IsOrdinalRev. assumption.
+Qed.
+
+Proposition HasPred : forall (n:U), n :< :N ->
+  :0: :< n -> exists m, m :< :N /\ n = succ m.
 Proof.
   intros n H1 H2.
-  assert (NonLimit n) as H3. { apply HasNonLimitElem. assumption. }
-  destruct H3 as [H3|H3].
-  - subst. exfalso. revert H2. apply NoElemLoop1.
-  - destruct H3 as [H3 [m H4]]. exists m. split. 2: assumption.
-    apply HasSuccRev. rewrite <- H4. assumption.
+  assert (Successor n) as H3. { apply IsSuccessor; assumption. }
+  destruct H3 as [H3 [m H4]]. exists m. split. 2: assumption.
+  apply HasSuccRev. rewrite <- H4. assumption.
 Qed.
 
 (* The set N is a limit ordinal.                                                *)

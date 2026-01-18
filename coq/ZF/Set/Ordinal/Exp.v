@@ -848,5 +848,17 @@ Proof.
       + rewrite H14, Plus.WhenZeroR in H10. assumption.
       + rewrite ToFun.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
         assumption.
-    - Admitted.
+    - assert (a :^: e :*: :1: :<=: a :^: e :*: q) as H15. {
+        apply Mult.InclCompatR; try assumption.
+        apply Succ.ElemIsIncl; assumption. }
+      rewrite Mult.WhenOneR in H15. 2: assumption.
+      assert (a :^: e :<=: b) as H16. {
+        apply Incl.Tran with (a :^: e :*: q). 1: assumption.
+        rewrite H10. apply Plus.IsInclR; assumption. }
+      assert (r :< b) as H17. { apply H16. assumption. }
+      assert (A r) as H18. { apply IH. assumption. }
+      rewrite E in H18. specialize (H18 H14).
+      destruct H18 as [n [c [d [H18 [H19 [H20 [H21 [H22 [H23 H24]]]]]]]]].
+Admitted.
+
 

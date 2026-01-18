@@ -480,10 +480,10 @@ Proof.
   assert (Ordinal n) as H5. { apply HasOrdinalElem. assumption. }
   assert (n = :0: \/ :0: :< n) as H6. { apply Core.ZeroOrElem. assumption. }
   destruct H6 as [H6|H6]. 1: assumption. exfalso.
-  assert (exists m, m :< :N /\ n = succ m) as H7. {
-    apply Omega.IsSucc; assumption. }
-  destruct H7 as [m [H7 H8]].
-  assert (Ordinal m) as H9. { apply HasOrdinalElem. assumption. }
+  assert (Successor n) as H7. { apply Omega.IsSuccessor; assumption. }
+  destruct H7 as [H7 [m H8]].
+  assert (Ordinal m) as H9. {
+    apply Succ.IsOrdinalRev. rewrite <- H8. assumption. }
   apply Limit.NotBoth with (a :+: n). 1: assumption. right.
   split. 1: apply H3. exists (a :+: m). subst. apply WhenSuccR. assumption.
 Qed.
