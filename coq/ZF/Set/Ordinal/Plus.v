@@ -532,7 +532,7 @@ Proof.
   assert (a :+: b = :0: \/ Successor (a :+: b) \/ Limit (a :+: b)) as H7. {
     apply Limit.ThreeWay. assumption. }
   destruct H7 as [H7|[H7|H7]]; try contradiction. 2: assumption.
-  exfalso. apply H6. apply Succ.WhenSuccessor; assumption.
+  exfalso. apply H6. symmetry. apply Succ.OfUnion; assumption.
 Qed.
 
 (* The addition of ordinals is associative.                                     *)

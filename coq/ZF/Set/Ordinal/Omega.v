@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
@@ -15,12 +16,16 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Transitive.
+Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
+Require Import ZF.Set.Union.
 Export ZF.Notation.N.
 
 Module COT := ZF.Class.Ordinal.Transitive.
 Module COO := ZF.Class.Ordinal.Omega.
+Module CIN := ZF.Class.Incl.
+
 
 (* The set defined by the small class N. The set of natural numbers 0,1,2,...   *)
 Definition omega : U := fromClass :N Omega.IsSmall.
@@ -149,6 +154,35 @@ Proof.
   apply HasSuccRev. rewrite <- H4. assumption.
 Qed.
 
+Proposition UnionOfSucc : forall (n:U), n :< :N ->
+  :U(succ n) = n.
+Proof.
+  intros n H1.
+  assert (Ordinal n) as H2. { apply HasOrdinalElem. assumption. }
+  apply Succ.UnionOf. assumption.
+Qed.
+
+Proposition SuccOfUnion : forall (n:U), n :< :N ->
+  :0: :< n -> succ :U(n) = n.
+Proof.
+  intros n H1 H2. apply Succ.OfUnion.
+  - apply HasOrdinalElem. assumption.
+  - apply IsSuccessor; assumption.
+Qed.
+
+Proposition HasUnion : forall (n:U), n :< :N ->
+  :U(n) :< :N.
+Proof.
+  intros n H1.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal :N) as G2. { apply IsOrdinal. }
+  assert (Ordinal :U(n)) as G3. { apply UnionOf.IsOrdinal. assumption. }
+  assert (n = :0: \/ :0: :< n) as H2. { apply Core.ZeroOrElem. assumption. }
+  destruct H2 as [H2|H2].
+  - subst. rewrite Union.WhenEmpty. assumption.
+  - apply HasSuccRev. rewrite SuccOfUnion; assumption.
+Qed.
+
 (* The set N is a limit ordinal.                                                *)
 Proposition IsLimit : Limit :N.
 Proof.
@@ -249,4 +283,46 @@ Proof.
   intros a H1 H2. apply HasMinimal. 1: assumption.
   apply NotEmptyToClass. assumption.
 Qed.
+
+Proposition OrdinalSubclass : forall (A:Class),
+  COC.Ordinal A                                               ->
+  A :<=: toClass :N                                           ->
+  A :~: toClass :N  \/ exists n, n :< :N /\ A :~: toClass n.
+Proof.
+  intros A H1 H2.
+  assert (A :~: toClass :N \/ A :<>: toClass :N) as H3. {
+    apply LawExcludedMiddle. }
+  destruct H3 as [H3|H3]. 1: { left. assumption. } right.
+  remember (fun n => n :< :N /\ ~ A n) as B eqn:H4.
+  assert (B :<=: toClass :N) as H5. {
+    intros n H5. rewrite H4 in H5. apply H5. }
+  assert (B :<>: :0:) as H6. {
+    intros H6. apply H3, CIN.DoubleInclusion. split. 1: assumption.
+    intros n H7. apply DoubleNegation. intros H8.
+    assert (B n) as H9. { rewrite H4. split; assumption. }
+    apply H6 in H9. contradiction. }
+  assert (exists m, B m /\ forall n, B n -> m :<=: n) as H10. {
+    apply HasMinimal; assumption. }
+  destruct H10 as [n [H10 H11]]. rewrite H4 in H10.
+  destruct H10 as [H10 H12].
+  exists n. split. 1: assumption. apply CIN.DoubleInclusion.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  split; intros m H13.
+  - assert (m :< :N) as G2. { apply H2. assumption. }
+    assert (Ordinal m) as G3. { apply HasOrdinalElem. assumption. }
+    assert (n = m \/ n :< m \/ m :< n) as H14. {
+      apply Core.IsTotal; assumption. }
+    destruct H14 as [H14|[H14|H14]]. 3: assumption.
+    + subst. contradiction.
+    + exfalso. apply H12.
+      assert (COT.Transitive A) as H15. { apply H1. }
+      apply H15 with m; assumption.
+  - assert (m :< :N) as H14. { apply IsIn with n; assumption. }
+    apply DoubleNegation. intros H15.
+    assert (B m) as H16. { rewrite H4. split; assumption. }
+    assert (n :<=: m) as H17. { apply H11. assumption. }
+    assert (m :< m) as H18. { apply H17. assumption. }
+    revert H18. apply NoElemLoop1.
+Qed.
+
 

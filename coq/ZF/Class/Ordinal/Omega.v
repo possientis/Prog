@@ -22,6 +22,9 @@ Require Import ZF.Set.Union2.
 Require Import ZF.Notation.N.
 Export ZF.Notation.N.
 
+Module COC := ZF.Class.Ordinal.Core.
+
+
 (* The class natural numbers.                                                   *)
 Definition omega : Class := fun a =>
   Ordinal a /\ toClass (succ a) :<=: NonLimit.
@@ -159,7 +162,7 @@ Proof.
 Qed.
 
 (* N is an ordinal class.                                                       *)
-Proposition IsOrdinal : Class.Ordinal.Core.Ordinal :N.
+Proposition IsOrdinal : COC.Ordinal :N.
 Proof.
   split. 1: apply IsTransitive. intros a b [H1 _] [H2 _].
   apply Core.IsTotal; assumption.

@@ -107,7 +107,7 @@ Proposition IsOrdFun : forall (F:Class),
   OrdFun F  -> OrdFun (shiftL F).
 Proof.
   intros F H1. split.
-  - apply IsFunction. apply H1.
+  - apply IsFunction, H1.
   - split.
     + apply COC.EquivCompat with :U(domain F).
       * apply Equiv.Sym, WhenOrdinalDomain, H1.

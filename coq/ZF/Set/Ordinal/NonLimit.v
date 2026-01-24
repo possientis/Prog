@@ -28,10 +28,10 @@ Proof.
   intros a H1. split; intros H2.
   - destruct H2 as [H2|H2].
     + left. assumption.
-    + right. apply Succ.WhenSuccessor in H2; assumption.
+    + right. apply Succ.OfUnion in H2. 2: assumption. symmetry. assumption.
   - destruct H2 as [H2|H2].
     + left. assumption.
-    + right. apply Succ.WhenSuccessor in H2; assumption.
+    + right. symmetry in H2. apply Succ.OfUnion in H2; assumption.
 Qed.
 
 (* A successor ordinal is a non-limit ordinal.                                  *)

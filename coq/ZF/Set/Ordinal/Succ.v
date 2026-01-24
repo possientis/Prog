@@ -230,13 +230,13 @@ Proof.
 Qed.
 
 (* An ordinal is a successor iff it is the successor of its union.              *)
-Proposition WhenSuccessor : forall (a:U), Ordinal a ->
-  Successor a <-> a = succ :U(a).
+Proposition OfUnion : forall (a:U), Ordinal a ->
+  Successor a <-> succ :U(a) = a.
 Proof.
   intros a H1. split; intros H2.
   - destruct H2 as [H2 [b H3]]. subst.
     assert (Ordinal b) as H4. { apply IsOrdinalRev. assumption. }
     rewrite UnionOf. 2: assumption. reflexivity.
-  - split. 1: assumption. exists :U(a). assumption.
+  - split. 1: assumption. exists :U(a). symmetry. assumption.
 Qed.
 

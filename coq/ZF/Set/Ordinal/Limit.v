@@ -165,9 +165,7 @@ Proof.
     apply ThreeWay. assumption. }
   destruct H4 as [H4|[H4|H4]]. 3: assumption. 1: contradiction. exfalso.
   assert (succ :U(a) :< succ :U(a)) as H5. { (* contradiction *)
-    apply Succ.WhenSuccessor in H4.
-    rewrite H4 in H3. 2: assumption.
-    apply H3, Succ.IsIn. }
+    apply (Succ.OfUnion a H1) in H4. symmetry in H4.
+    rewrite H4 in H3. apply H3, Succ.IsIn. }
   revert H5. apply NoElemLoop1.
 Qed.
-
