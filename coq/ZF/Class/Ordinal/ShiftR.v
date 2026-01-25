@@ -96,7 +96,8 @@ Proof.
 Qed.
 
 Proposition DomainOf : forall (F:Class) (a x:U), domain F :<=: toClass :N ->
-  domain (shiftR a F) x <-> x = :0: \/ (:0: :< x /\ x :< :N /\ domain F :U(x)).
+  domain (shiftR a F) x <->
+  x = :0: \/ (:0: :< x /\ x :< :N /\ domain F :U(x)).
 Proof.
   intros F a x H1. split; intros H2.
   - destruct H2 as [y H2]. apply Charac2 in H2. 2: assumption.
@@ -126,7 +127,7 @@ Proposition Eval : forall (F:Class) (a x:U),
   :0: :< x                    ->
   x :< :N                     ->
   domain F :U(x)              ->
-  (shiftR a F)! x = F!:U(x).
+  (shiftR a F)!x = F!:U(x).
 Proof.
   intros F a x H1 H2 H3 H4 H5.
   apply EvalOfClass.Charac.
@@ -178,7 +179,7 @@ Proof.
     assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4]. 1: { left. assumption. } right.
     split. 1: assumption. split. 1: assumption. apply H2.
-    assert (Ordinal :U(x)) as G8. { apply UnionOf.IsOrdinal. assumption. }
+    assert (On :U(x)) as G8. { apply UnionOf.IsOrdinal. assumption. }
     apply Succ.ElemCompatRev; try assumption.
     rewrite Omega.SuccOfUnion; assumption.
 Qed.
@@ -189,7 +190,8 @@ Proof.
   intros F a H1 x.
   assert (domain F :<=: toClass :N) as H2. { intros u H2. apply H1. assumption. }
   split; intros H3.
-  - apply DomainOf in H3. 2: assumption. destruct H3 as [H3|[H3 [H4 H5]]]. 2: assumption.
+  - apply DomainOf in H3. 2: assumption.
+    destruct H3 as [H3|[H3 [H4 H5]]]. 2: assumption.
     subst. apply Omega.HasZero.
   - apply DomainOf. 1: assumption.
     assert (On x) as G1. { apply Omega.HasOrdinalElem. assumption. }
