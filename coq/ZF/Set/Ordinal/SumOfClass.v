@@ -1,5 +1,7 @@
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.ShiftL.
+Require Import ZF.Class.Ordinal.ShiftR.
 Require Import ZF.Class.Ordinal.Sum.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
@@ -111,5 +113,26 @@ Proof.
       + intros i H6. apply H5. apply Succ.IsIncl. assumption. }
   rewrite H2 in H3. assumption.
 Qed.
+
+Proposition ShiftR : forall (F:Class) (a n:U),
+  Functional F                                        ->
+  Ordinal a                                           ->
+  n :< :N                                             ->
+  (forall i, i :< n -> domain F i)                    ->
+  (forall i, i :< n -> Ordinal F!i)                   ->
+  :sum:_{succ n} (shiftR a F) = a :+: :sum:_{n} F.
+Proof.
+  intros F a n H1 H2. revert n.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  remember (fun n =>
+    (forall i, i :< n -> domain F i)                ->
+    (forall i, i :< n -> Ordinal F!i)               ->
+    :sum:_{succ n} (shiftR a F) = a :+: :sum:_{n} F) as A eqn:H3.
+  assert (forall n, n :< :N -> A n) as H4. {
+    apply Omega.Induction; rewrite H3.
+    - intros H4 H5.
+      rewrite WhenSucc, WhenZero, WhenZero, ShiftR.EvalZero.
+Admitted.
+
 
 
