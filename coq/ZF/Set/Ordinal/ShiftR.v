@@ -272,14 +272,14 @@ Proof.
 Qed.
 
 Proposition IsDecreasing : forall (f a:U),
-  Ordinal a               ->
-  f!:0: :< a              ->
-  domain f :< :N          ->
-  OrdFun f                ->
-  Decreasing f            ->
+  OrdFun f                                ->
+  domain f :< :N                          ->
+  Ordinal a                               ->
+  (forall i, i :< domain f -> f!i :< a)   ->
+  Decreasing f                            ->
   Decreasing (shiftR a f).
 Proof.
-  intros f a H1 H2 H3 [H4 [H5 H6]] H7 x y H8 H9 H10.
+  intros f a [H1 [H2 H3]] H4 H5 H6 H7 x y H8 H9 H10.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   assert (domain f :<=: :N) as G2. { apply Core.ElemIsIncl; assumption. }
   rewrite WhenDomainIsNat in H8. 2: assumption.
@@ -292,7 +292,7 @@ Proof.
   assert (y :< :N) as G7. { apply Omega.IsIn with (succ n); assumption. }
   assert (Ordinal x) as G8. { apply Omega.HasOrdinalElem. assumption. }
   assert (Ordinal y) as G9. { apply Omega.HasOrdinalElem. assumption. }
-  assert (Functional f) as G10. { apply H4. }
+  assert (Functional f) as G10. { apply H1. }
   assert (domain f :<=: :N) as G11. { rewrite H11. assumption. }
   assert (x = :0: \/ :0: :< x) as H12. { apply Core.ZeroOrElem. assumption. }
   assert (y = :0: \/ :0: :< y) as H13. { apply Core.ZeroOrElem. assumption. }
@@ -303,8 +303,6 @@ Proof.
     assert (Ordinal :U(i)) as G14. { apply UnionOf.IsOrdinal. assumption. }
     apply Succ.ElemCompatRev; try assumption.
     rewrite Omega.SuccOfUnion; assumption. }
-  assert (Ordinal f!:0:) as G16. { apply OrdFun.IsOrdinal.
-(*
   destruct H12 as [H12|H12]; destruct H13 as [H13|H13].
   - exfalso. subst. apply Empty.Charac in H10. contradiction.
   - assert (:U(y) :< domain f) as H15. { apply H14; assumption. }
@@ -312,6 +310,19 @@ Proof.
     assert (Ordinal :U(y)) as G15. {
       apply Core.IsOrdinal with (domain f). 2: assumption.
       rewrite H11. assumption. }
-*)
-Admitted.
+    apply H6. rewrite <- H11. assumption.
+  - exfalso. rewrite H13 in H10. apply Empty.Charac in H10. contradiction.
+  - assert (:U(x) :< domain f) as H15. { apply H14; assumption. }
+    assert (:U(y) :< domain f) as H16. { apply H14; assumption. }
+    rewrite Eval, Eval; try assumption.
+    assert (Ordinal :U(x)) as G15. {
+      apply Core.IsOrdinal with (domain f). 2: assumption.
+      rewrite H11. assumption. }
+    assert (Ordinal :U(y)) as G16. {
+      apply Core.IsOrdinal with (domain f). 2: assumption.
+      rewrite H11. assumption. }
+    apply H7; try assumption.
+    apply Succ.ElemCompatRev; try assumption.
+    rewrite Omega.SuccOfUnion, Omega.SuccOfUnion; assumption.
+Qed.
 
