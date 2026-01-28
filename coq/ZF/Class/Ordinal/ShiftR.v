@@ -111,32 +111,44 @@ Proof.
 Qed.
 
 Proposition EvalZero : forall (F:Class) (a:U),
-  domain F :<=: toClass :N  ->
-  Functional F              ->
-  (shiftR a F)!:0: = a.
+  Functional F -> (shiftR a F)!:0: = a.
 Proof.
-  intros F a H1 H2. apply EvalOfClass.Charac.
+  intros F a H1. apply EvalOfClass.Charac.
   - apply IsFunctional. assumption.
-  - apply DomainOf. 1: assumption. left. reflexivity.
-  - apply Charac2. 1: assumption. left. split; reflexivity.
+  - exists a. left. reflexivity.
+  - left. reflexivity.
 Qed.
 
-Proposition Eval : forall (F:Class) (a x:U),
-  domain F :<=: toClass :N    ->
+Proposition Eval : forall (F:Class) (a n:U),
   Functional F                ->
-  :0: :< x                    ->
-  x :< :N                     ->
-  domain F :U(x)              ->
-  (shiftR a F)!x = F!:U(x).
+  :0: :< n                    ->
+  n :< :N                     ->
+  domain F :U(n)              ->
+  (shiftR a F)!n = F!:U(n).
 Proof.
-  intros F a x H1 H2 H3 H4 H5.
+  intros F a n H1 H2 H3 H4.
   apply EvalOfClass.Charac.
   - apply IsFunctional. assumption.
-  - apply DomainOf. 1: assumption.
-    right. split. 1: assumption. split; assumption.
-  - apply Charac2. 1: assumption.
-    right. split. 1: assumption. split. 1: assumption.
-    apply EvalOfClass.Satisfies; assumption.
+  - exists F!:U(n). right. exists :U(n), F!:U(n). split.
+    + rewrite Omega.SuccOfUnion; try assumption. reflexivity.
+    + apply EvalOfClass.Satisfies; assumption.
+  - right. exists :U(n), F!:U(n). split.
+    + rewrite Omega.SuccOfUnion; try assumption. reflexivity.
+    + apply EvalOfClass.Satisfies; assumption.
+Qed.
+
+Proposition EvalSucc : forall (F:Class) (a n:U),
+  Functional F                ->
+  n :< :N                     ->
+  domain F n                  ->
+  (shiftR a F)!(succ n) = F!n.
+Proof.
+  intros F a n H1 H2 H3.
+  assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+  rewrite Eval, Omega.UnionOfSucc; try assumption. 1: reflexivity.
+  - apply Succ.HasZero. assumption.
+  - apply Omega.HasSucc. assumption.
+  - rewrite Omega.UnionOfSucc; assumption.
 Qed.
 
 Proposition RangeOf : forall (F:Class) (a y:U),

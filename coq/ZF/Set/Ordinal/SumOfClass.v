@@ -131,8 +131,24 @@ Proof.
   assert (forall n, n :< :N -> A n) as H4. {
     apply Omega.Induction; rewrite H3.
     - intros H4 H5.
-      rewrite WhenSucc, WhenZero, WhenZero, ShiftR.EvalZero.
-Admitted.
-
-
-
+      rewrite WhenSucc, WhenZero, WhenZero, ShiftR.EvalZero; try assumption.
+      rewrite Plus.WhenZeroL, Plus.WhenZeroR. 2: assumption. reflexivity.
+    - intros n H4 IH H5 H6.
+      assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal (succ n)) as G3. { apply Succ.IsOrdinal. assumption. }
+      rewrite WhenSucc. 2: assumption.
+      assert (:sum:_{ succ n} (shiftR a F) = a :+: :sum:_{ n} F) as H7. {
+        apply IH.
+        - intros i H7. apply H5, Succ.IsIncl. assumption.
+        - intros i H7. apply H6, Succ.IsIncl. assumption. }
+      assert (:sum:_{ succ n} (shiftR a F) :+: (shiftR a F)!(succ n)
+        = a :+: :sum:_{ succ n} F) as X. 2: apply X. (* rewrite failure *)
+      assert (Ordinal (:sum:_{n} F)) as H8. {
+        apply IsOrdinal. 1: assumption.
+        intros i H8. apply H6, Succ.IsIncl. assumption. }
+      rewrite H7, ShiftR.EvalSucc, Plus.Assoc, <- WhenSucc;
+      try assumption. 1: reflexivity.
+      + apply H6, Succ.IsIn.
+      + apply H5, Succ.IsIn. }
+  rewrite H3 in H4. assumption.
+Qed.
