@@ -28,6 +28,14 @@ Proof.
   intros f a [[H1 [H2 H3]] H4]. subst. assumption.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> OrdFunOn f :0:.
+Proof.
+  intros f H1. split.
+  - apply OrdFun.WhenEmpty. assumption.
+  - apply Domain.WhenEmpty. assumption.
+Qed.
+
 Proposition WhenSingle : forall (a f:U), Ordinal a ->
   f = :{ :(:0:,a): }: -> OrdFunOn f :1:.
 Proof.
@@ -36,4 +44,3 @@ Proof.
   - rewrite Domain.WhenSingle with :0: a f. 2: assumption.
     symmetry. apply Natural.OneExtension.
 Qed.
-

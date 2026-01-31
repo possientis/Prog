@@ -1,4 +1,5 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
@@ -43,4 +44,12 @@ Proof.
   destruct H9 as [H9|H9].
   - subst. apply Incl.Refl.
   - apply Core.ElemIsIncl. 1: assumption. apply H2; assumption.
+Qed.
+
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> Decreasing f.
+Proof.
+  intros f H1 x y H2. exfalso.
+  rewrite Domain.WhenEmpty in H2. 2: assumption.
+  apply Empty.Charac in H2. contradiction.
 Qed.

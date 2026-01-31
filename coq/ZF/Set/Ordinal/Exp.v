@@ -760,7 +760,6 @@ Proposition Decomp : forall (a b:U),
   Ordinal a                                             ->
   Ordinal b                                             ->
   :1: :< a                                              ->
-  :0: :< b                                              ->
   exists n c d,
     n :< :N                                             /\
     OrdFunOn c n                                        /\
@@ -951,7 +950,7 @@ Proof.
       split. 1: assumption. split. 1: assumption. split. 1: assumption.
       remember (fun i => a :^: d!i :*: c!i) as F eqn:H33.
       remember (fun i => a :^: d'!i :*: c'!i) as G eqn:H34.
-      remember (COR.shiftR (a :^: e :*: q) :[F]: : Class) as H eqn:H35.
+      remember (COR.shiftR (a :^: e :*: q) :[F]:) as H eqn:H35.
       assert (:sum:_{succ n} (:[G]:) = :sum:_{succ n} H) as H36. {
         apply SumOfClass.EqualCharac. 1: assumption. intros i H36.
         rewrite H34, H35, ToFun.Eval, H25, H26.
@@ -988,7 +987,20 @@ Proof.
             + apply OrdFunOn.IsOrdinal with n; assumption. }
       assert (b = :sum:_{succ n} (COS.shiftR (a :^: e :*: q) :[F]:)) as X. 2: apply X.
       rewrite H37, H10, H24. reflexivity. }
-  rewrite E in H4. assumption.
+  intros b H2.
+  assert (b = :0: \/ :0: :< b) as H5. { apply Core.ZeroOrElem. assumption. }
+  destruct H5 as [H5|H5].
+  - exists :0:, :0:, :0:.
+    assert (:0: :< :N) as H6. { apply Omega.HasZero. }
+    assert (OrdFunOn :0: :0:) as H7. { apply OrdFunOn.WhenEmpty. reflexivity. }
+    assert (Decreasing :0:) as H8. { apply Decreasing.WhenEmpty. reflexivity. }
+    assert (forall i, i :< :0: -> :0: :< :0:!i) as H9. {
+      intros i H9. apply Empty.Charac in H9. contradiction. }
+    assert (forall i, i :< :0: -> :0:!i :< a) as H10. {
+      intros i H10. apply Empty.Charac in H10. contradiction. }
+    split. 1: assumption. split. 1: assumption. split. 1: assumption.
+    split. 1: assumption. split. 1: assumption. split. 1: assumption.
+    rewrite H5, SumOfClass.WhenZero. reflexivity.
+  - rewrite E in H4. apply H4; assumption.
 Qed.
-
 
