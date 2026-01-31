@@ -1004,3 +1004,20 @@ Proof.
   - rewrite E in H4. apply H4; assumption.
 Qed.
 
+Proposition IsUnique : forall (a n m c d e f:U),
+  Ordinal a                                       ->
+  :1: :< a                                        ->
+  n :< :N                                         ->
+  m :< :N                                         ->
+  OrdFunOn c n                                    ->
+  OrdFunOn d n                                    ->
+  OrdFunOn e m                                    ->
+  OrdFunOn f m                                    ->
+  Decreasing d                                    ->
+  Decreasing f                                    ->
+  :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:) =
+  :sum:_{m} (:[fun i => a :^: f!i :*: e!i]:)      ->
+  n = m /\ c = e /\ d = f.
+Proof.
+Admitted.
+
