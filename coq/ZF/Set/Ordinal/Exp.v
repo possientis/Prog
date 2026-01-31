@@ -17,9 +17,11 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Ordinal.OrdFunOn.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.ShiftL.
+Require Import ZF.Set.Ordinal.ShiftR.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.SumOfClass.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
@@ -39,12 +41,14 @@ Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
 Module COE := ZF.Class.Ordinal.Exp.
-Module COS := ZF.Class.Ordinal.ShiftL.
+Module COL := ZF.Class.Ordinal.ShiftL.
+Module COR := ZF.Class.Ordinal.ShiftR.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module SEM := ZF.Set.Empty.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
-Module SOS := ZF.Set.Ordinal.ShiftL.
+Module SOL := ZF.Set.Ordinal.ShiftL.
+Module SOR := ZF.Set.Ordinal.ShiftR.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRL := ZF.Set.Relation.Functional.
 
@@ -663,36 +667,36 @@ Proof.
       remember (shiftL c) as c' eqn:H16.
       remember (shiftL d) as d' eqn:H17.
       assert (OrdFunOn c' n) as H18. {
-        rewrite H16. apply SOS.OnSucc. assumption. }
+        rewrite H16. apply SOL.OnSucc. assumption. }
       assert (OrdFunOn d' n) as H19. {
-        rewrite H17. apply SOS.OnSucc. assumption. }
+        rewrite H17. apply SOL.OnSucc. assumption. }
       assert (Decreasing d') as H20. {
-        rewrite H17. apply SOS.IsDecreasing. 2: assumption. apply H5. }
+        rewrite H17. apply SOL.IsDecreasing. 2: assumption. apply H5. }
       assert (Ordinal d!:0:) as H21. {
         apply OrdFunOn.IsOrdinal with (succ n). 1: assumption.
         apply Succ.HasZero. assumption. }
       assert (forall i, i :< n -> c'!i :< a) as H22. {
         intros i H22.
         assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
-        rewrite H16, SOS.Eval. 2: assumption.
+        rewrite H16, SOL.Eval. 2: assumption.
         - apply H9, Succ.ElemCompat; assumption.
         - rewrite G7. apply Succ.ElemCompat; assumption. }
       assert (forall i, i :< n -> d'!i :< d!:0:) as H23. {
         intros i H23.
         assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
-        rewrite H17, SOS.Eval. 2: assumption.
+        rewrite H17, SOL.Eval. 2: assumption.
         - apply H6.
           + rewrite G8. apply Succ.HasZero. assumption.
           + rewrite G8. apply Succ.ElemCompat; assumption.
           + apply Succ.HasZero. assumption.
         - rewrite G8. apply Succ.ElemCompat; assumption. }
       remember (fun i => a :^: d'!i :*: c'!i) as G eqn:E'.
-      assert (:sum:_{n} (COS.shiftL :[F]:) = :sum:_{n} :[G]:) as H24. {
+      assert (:sum:_{n} (COL.shiftL :[F]:) = :sum:_{n} :[G]:) as H24. {
         apply SumOfClass.EqualCharac. 1: assumption.
         intros i H24.
-        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+       assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
         rewrite
-          COS.Eval, ToFun.Eval, ToFun.Eval, E, E', H16, H17, SOS.Eval, SOS.Eval;
+          COL.Eval, ToFun.Eval, ToFun.Eval, E, E', H16, H17, SOL.Eval, SOL.Eval;
         try assumption. 1: reflexivity.
         - rewrite G7. apply Succ.ElemCompat; assumption.
         - rewrite G8. apply Succ.ElemCompat; assumption.
@@ -859,6 +863,132 @@ Proof.
       assert (A r) as H18. { apply IH. assumption. }
       rewrite E in H18. specialize (H18 H14).
       destruct H18 as [n [c [d [H18 [H19 [H20 [H21 [H22 [H23 H24]]]]]]]]].
-Admitted.
+      assert (Ordinal n) as G23. { apply Omega.HasOrdinalElem. assumption. }
+      remember (shiftR e d) as d' eqn:H25.
+      remember (shiftR q c) as c' eqn:H26.
+      exists (succ n), c', d'.
+      assert (succ n :< :N) as G9. { apply Omega.HasSucc. assumption. }
+      assert (OrdFunOn c' (succ n)) as H27. {
+        rewrite H26. apply SOR.IsOrdFunOnNat; assumption. }
+      assert (OrdFunOn d' (succ n)) as H28. {
+        rewrite H25. apply SOR.IsOrdFunOnNat; assumption. }
+      assert (forall i, i :< n -> d!i :< e) as H29. {
+        intros i H29.
+        assert (Ordinal d!i) as G10. {
+          apply OrdFunOn.IsOrdinal with n; assumption. }
+        assert (Ordinal (a :^: d!i)) as G11. { apply IsOrdinal; assumption. }
+        apply ElemCompatRevR with a; try assumption.
+        apply Core.InclElemTran with r; try assumption.
+        apply Incl.Tran with (a :^: d!i :*: c!i).
+        - apply Mult.IsInclR. 1: assumption.
+          + apply OrdFunOn.IsOrdinal with n; assumption.
+          + apply H22. assumption.
+        - rewrite H24.
+          assert (a :^: d!i :*: c!i
+            = :[fun i => a :^: d!i :*: c!i]:!i) as H30. {
+            symmetry. apply (ToFun.Eval (fun i => a :^: d!i :*: c!i)). }
+          rewrite H30. apply SumOfClass.IsIncl; try assumption.
+          + intros j H31. exists (a :^: d!j :*: c!j).
+            apply ToFun.Charac2. reflexivity.
+          + intros j H31. rewrite ToFun.Eval.
+            apply Mult.IsOrdinal.
+            * apply IsOrdinal. 1: assumption.
+              apply OrdFunOn.IsOrdinal with n; assumption.
+            * apply OrdFunOn.IsOrdinal with n; assumption. }
+      assert (OrdFun c) as G10. { apply H19. }
+      assert (OrdFun d) as G11. { apply H20. }
+      assert (domain c = n) as G12. { apply H19. }
+      assert (domain d = n) as G13. { apply H20. }
+      assert (Functional c) as G14. { apply H19. }
+      assert (Functional d) as G15. { apply H20. }
+      assert (Ordinal :N) as G16. { apply Omega.IsOrdinal. }
+      assert (domain c :<=: :N) as G17. {
+        rewrite G12. apply Core.ElemIsIncl; assumption. }
+      assert (domain d :<=: :N) as G18. {
+        rewrite G13. apply Core.ElemIsIncl; assumption. }
+      assert (Ordinal (succ n)) as G19. {
+        apply Omega.HasOrdinalElem. assumption. }
+      assert (Decreasing d') as H30. {
+        rewrite H25. apply SOR.IsDecreasing; try assumption;
+        rewrite G13;assumption. }
+      assert (forall i, i :< succ n -> :0: :< c'!i) as H31. {
+        intros i H31.
+        assert (i :< :N) as G20. {
+          apply Omega.IsIn with (succ n); assumption. }
+        assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
+        assert (i = :0: \/ :0: :< i) as H32. {
+          apply Core.ZeroOrElem. assumption. }
+        destruct H32 as [H32|H32].
+        - rewrite H26, H32, SOR.EvalZero; assumption.
+        - apply Omega.HasPred in H32. 2: assumption.
+          destruct H32 as [j [H32 H33]].
+          assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
+          assert (j :< n) as G24. {
+            apply Succ.ElemCompatRev; try assumption.
+            rewrite <- H33. assumption. }
+          rewrite H26, H33, SOR.EvalSucc; try assumption.
+          + apply H22. assumption.
+          + rewrite G12. assumption. }
+      assert (forall i, i :< succ n -> c'!i :< a) as H32. {
+        intros i H32.
+        assert (i :< :N) as G20. {
+          apply Omega.IsIn with (succ n); assumption. }
+        assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
+        assert (i = :0: \/ :0: :< i) as H33. {
+          apply Core.ZeroOrElem. assumption. }
+        destruct H33 as [H33|H33].
+        - rewrite H26, H33, SOR.EvalZero; assumption.
+        - apply Omega.HasPred in H33. 2: assumption.
+          destruct H33 as [j [H33 H34]].
+          assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
+          assert (j :< n) as G24. {
+            apply Succ.ElemCompatRev; try assumption.
+            rewrite <- H34. assumption. }
+          rewrite H26, H34, SOR.EvalSucc; try assumption.
+          + apply H23. assumption.
+          + rewrite G12. assumption. }
+      split. 1: assumption. split. 1: assumption. split. 1: assumption.
+      split. 1: assumption. split. 1: assumption. split. 1: assumption.
+      remember (fun i => a :^: d!i :*: c!i) as F eqn:H33.
+      remember (fun i => a :^: d'!i :*: c'!i) as G eqn:H34.
+      remember (COR.shiftR (a :^: e :*: q) :[F]: : Class) as H eqn:H35.
+      assert (:sum:_{succ n} (:[G]:) = :sum:_{succ n} H) as H36. {
+        apply SumOfClass.EqualCharac. 1: assumption. intros i H36.
+        rewrite H34, H35, ToFun.Eval, H25, H26.
+        assert (i :< :N) as G20. {
+          apply Omega.IsIn with (succ n); assumption. }
+        assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
+        assert (i = :0: \/ :0: :< i) as H37. {
+          apply Core.ZeroOrElem. assumption. }
+        destruct H37 as [H37|H37].
+        - rewrite H37, SOR.EvalZero, SOR.EvalZero, COR.EvalZero; try assumption.
+          1: reflexivity. apply ToFun.IsFunctional.
+        - apply Omega.HasPred in H37. 2: assumption.
+          destruct H37 as [j [H37 H38]].
+          assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
+          assert (j :< n) as G24. {
+            apply Succ.ElemCompatRev; try assumption.
+            rewrite <- H38. assumption. }
+          assert (j :< domain c) as G25. { rewrite G12. assumption. }
+          assert (j :< domain d) as G26. { rewrite G13. assumption. }
+          rewrite H38, SOR.EvalSucc, SOR.EvalSucc, COR.EvalSucc, H33, ToFun.Eval;
+          try assumption. 1: reflexivity.
+          + apply ToFun.IsFunctional.
+          + apply ToFun.DomainOf. }
+      rewrite H36, H35.
+      assert (:sum:_{succ n} (COS.shiftR (a :^: e :*: q) :[F]:)
+        = a :^: e :*: q :+: :sum:_{n} :[F]:) as H37. {
+          apply SumOfClass.ShiftR; try assumption.
+          - apply ToFun.IsFunctional.
+          - intros j H37. apply ToFun.DomainOf.
+          - intros j H37. rewrite ToFun.Eval, H33.
+            apply Mult.IsOrdinal.
+            + apply IsOrdinal. 1: assumption.
+              apply OrdFunOn.IsOrdinal with n; assumption.
+            + apply OrdFunOn.IsOrdinal with n; assumption. }
+      assert (b = :sum:_{succ n} (COS.shiftR (a :^: e :*: q) :[F]:)) as X. 2: apply X.
+      rewrite H37, H10, H24. reflexivity. }
+  rewrite E in H4. assumption.
+Qed.
 
 

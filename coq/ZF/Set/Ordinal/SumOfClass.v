@@ -14,7 +14,9 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.UnionGenOfClass.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 
@@ -152,3 +154,42 @@ Proof.
       + apply H5, Succ.IsIn. }
   rewrite H3 in H4. assumption.
 Qed.
+
+Proposition IsIncl : forall (F:Class) (n i:U),
+  n :< :N                                             ->
+  i :< n                                              ->
+  (forall i, i :< n -> domain F i)                    ->
+  (forall i, i :< n -> Ordinal F!i)                   ->
+  F!i :<=: :sum:_{n} F.
+Proof.
+  intros F.
+  remember (fun n => forall (i:U),
+    i :< n                             ->
+    (forall i, i :< n -> domain F i)   ->
+    (forall i, i :< n -> Ordinal F!i)  ->
+    F!i :<=: :sum:_{n} F) as A eqn:E.
+  assert (forall n, n :< :N -> A n) as H1. {
+    apply Omega.Induction; rewrite E.
+    - intros i H1. apply Empty.Charac in H1. contradiction.
+    - intros n H1 IH i H2 H3 H4.
+      assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+      assert (forall j, j :< n -> domain F j) as G2. {
+        intros j G2. apply H3, Succ.IsIncl. assumption. }
+      assert (forall j, j :< n -> Ordinal (F!j)) as G3. {
+        intros j G3. apply H4, Succ.IsIncl. assumption. }
+      assert (Ordinal (:sum:_{n} F)) as G4. {
+        apply IsOrdinal; assumption. }
+      assert (Ordinal F!n) as G5. { apply H4, Succ.IsIn. }
+      apply Union2.Charac in H2. destruct H2 as [H2|H2].
+      + apply Incl.Tran with (:sum:_{n} F).
+        * apply IH. 1: assumption.
+          { intros j H5. apply H3, Succ.IsIncl. assumption. }
+          { intros j H5. apply H4, Succ.IsIncl. assumption. }
+        * rewrite WhenSucc. 2: assumption. apply Plus.IsInclR; assumption.
+      + apply Single.Charac in H2. rewrite H2, WhenSucc. 2: assumption.
+        apply Plus.IsInclL; assumption. }
+  rewrite E in H1.
+  intros n i H2. apply H1. assumption.
+Qed.
+
+

@@ -134,21 +134,37 @@ Proof.
   - apply Charac2. 1: assumption. left. split; reflexivity.
 Qed.
 
-Proposition Eval : forall (f a x:U),
+Proposition Eval : forall (f a n:U),
   domain f :<=: :N            ->
   Functional f                ->
-  :0: :< x                    ->
-  x :< :N                     ->
-  :U(x) :< domain f           ->
-  (shiftR a f)!x = f!:U(x).
+  :0: :< n                    ->
+  n :< :N                     ->
+  :U(n) :< domain f           ->
+  (shiftR a f)!n = f!:U(n).
 Proof.
-  intros f a x H1 H2 H3 H4 H5. apply Eval.Charac.
+  intros f a n H1 H2 H3 H4 H5. apply Eval.Charac.
   - apply IsFunctional; assumption.
   - apply DomainOf. 1: assumption. right.
     split. 1: assumption. split; assumption.
   - apply Charac2. 1: assumption. right.
     split. 1: assumption. split. 1: assumption.
     apply Eval.Satisfies; assumption.
+Qed.
+
+Proposition EvalSucc : forall (f a n:U),
+  domain f :<=: :N            ->
+  Functional f                ->
+  n :< :N                     ->
+  n :< domain f               ->
+  (shiftR a f)!(succ n) = f!n.
+Proof.
+  intros f a n H1 H2 H3 H4.
+  assert (succ n :< :N) as G1. { apply Omega.HasSucc. assumption. }
+  assert (:U(succ n) = n) as G2. { apply Omega.UnionOfSucc. assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  rewrite Eval, G2; try assumption. 1: reflexivity.
+  - apply Succ.HasZero. assumption.
+  - rewrite G2. assumption.
 Qed.
 
 Proposition RangeOf : forall (f a:U), domain f :<=: :N ->
