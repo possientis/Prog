@@ -756,7 +756,7 @@ Proof.
   rewrite H8 in H9. assumption.
 Qed.
 
-Proposition Decomp : forall (a b:U),
+Proposition Polynomial : forall (a b:U),
   Ordinal a                                             ->
   Ordinal b                                             ->
   :1: :< a                                              ->
@@ -1004,7 +1004,7 @@ Proof.
   - rewrite E in H4. apply H4; assumption.
 Qed.
 
-Proposition DecompUnique : forall (a n m c d e f:U),
+Proposition PolynomialUnique : forall (a n m c d e f:U),
   Ordinal a                                       ->
   :1: :< a                                        ->
   n :< :N                                         ->
@@ -1132,6 +1132,27 @@ Proof.
         assert (:0: :< :0:) as H19. { apply H17. assumption. }
         apply Empty.Charac in H19. contradiction.
       + apply Omega.HasPred in H16. 2: assumption. destruct H16 as [k [H16 H17]].
-        rewrite H17 in H15.
+        assert (forall i, i :< m -> Ordinal (F2 i)) as G5. {
+          intros i G5. rewrite E2. apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption.
+            apply OrdFunOn.IsOrdinal with m; assumption.
+          - apply OrdFunOn.IsOrdinal with m; assumption. }
+        assert (forall i, i :< succ n -> Ordinal (F1 i)) as G6. {
+          intros i G6. rewrite E1. apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption.
+            apply OrdFunOn.IsOrdinal with (succ n); assumption.
+          - apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (F1 :0: :+: (:sum:_{n} (COL.shiftL :[F1]:))
+          = F2 :0: :+: (:sum:_{k} (COL.shiftL :[F2]:))) as H18. {
+            rewrite H17, SumOfClass.ShiftL, SumOfClass.ShiftL,
+            ToFun.Eval, ToFun.Eval in H15; try assumption.
+            - apply ToFun.IsFunctional.
+            - intros i H18. apply ToFun.DomainOf.
+            - intros i H18. rewrite ToFun.Eval. apply G5.
+              rewrite H17. assumption.
+            - apply ToFun.IsFunctional.
+            - intros i H18. apply ToFun.DomainOf.
+            - intros i H18. rewrite ToFun.Eval. apply G6. assumption. }
+        clear H15.
 Admitted.
 
