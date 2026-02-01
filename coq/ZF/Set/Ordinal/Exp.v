@@ -766,7 +766,7 @@ Proposition Decomp : forall (a b:U),
     OrdFunOn d n                                        /\
     Decreasing d                                        /\
     (forall i, i :< n -> :0: :< c!i)                    /\
-    (forall i, i :< n -> c!i :< a)                      /\
+    (forall i, i :< n -> c!i :< a  )                    /\
     b = :sum:_{n} :[fun i => a :^: d!i :*: c!i]:.
 Proof.
   intros a b H1 H2 H3. revert b H2.
@@ -1004,7 +1004,7 @@ Proof.
   - rewrite E in H4. apply H4; assumption.
 Qed.
 
-Proposition IsUnique : forall (a n m c d e f:U),
+Proposition DecompUnique : forall (a n m c d e f:U),
   Ordinal a                                       ->
   :1: :< a                                        ->
   n :< :N                                         ->
@@ -1015,9 +1015,123 @@ Proposition IsUnique : forall (a n m c d e f:U),
   OrdFunOn f m                                    ->
   Decreasing d                                    ->
   Decreasing f                                    ->
+  (forall i, i :< n -> :0: :< c!i)                ->
+  (forall i, i :< n -> c!i :< a  )                ->
+  (forall i, i :< m -> :0: :< e!i)                ->
+  (forall i, i :< m -> e!i  :< a )                ->
   :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:) =
   :sum:_{m} (:[fun i => a :^: f!i :*: e!i]:)      ->
   n = m /\ c = e /\ d = f.
 Proof.
+  intros a n m c d e f H1 H2 H3. revert n H3 m c d e f.
+  assert (Ordinal :0:) as K1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :1:) as K2. { apply Natural.OneIsOrdinal. }
+  assert (:0: :< a) as K3. { apply Natural.HasZero; assumption. }
+  remember (fun n =>
+    forall m c d e f : U,
+    m :< :N                                                             ->
+    OrdFunOn c n                                                        ->
+    OrdFunOn d n                                                        ->
+    OrdFunOn e m                                                        ->
+    OrdFunOn f m                                                        ->
+    Decreasing d                                                        ->
+    Decreasing f                                                        ->
+    (forall i, i :< n -> :0: :< c!i)                                    ->
+    (forall i, i :< n -> c!i :< a  )                                    ->
+    (forall i, i :< m -> :0: :< e!i)                                    ->
+    (forall i, i :< m -> e!i  :< a )                                    ->
+    :sum:_{ n} (:[ fun i : U => a :^: (d) ! (i) :*: (c) ! (i) ]:) =
+      :sum:_{ m} (:[ fun i : U => a :^: (f) ! (i) :*: (e) ! (i) ]:)     ->
+    n = m /\ c = e /\ d = f) as A eqn:E.
+  assert (forall n, n :< :N -> A n) as H3. {
+    apply Omega.Induction; rewrite E.
+    - intros m c d e f H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
+      remember (fun i => a :^: d!i :*: c!i) as F1 eqn:E1.
+      remember (fun i => a :^: f!i :*: e!i) as F2 eqn:E2.
+      assert (Ordinal m) as G1. { apply Omega.HasOrdinalElem. assumption. }
+      rewrite SumOfClass.WhenZero in H14.
+      assert (:0: = m) as H15. {
+        assert (m = :0: \/ :0: :< m) as H15. {
+          apply Core.ZeroOrElem. assumption. }
+        destruct H15 as [H15|H15]. 1: { symmetry. assumption. } exfalso.
+        apply Omega.HasPred in H15. 2: assumption.
+        destruct H15 as [k [H15 H16]].
+        assert (Ordinal k) as G2. { apply Omega.HasOrdinalElem. assumption. }
+        rewrite H16, SumOfClass.WhenSucc, ToFun.Eval in H14. 2: assumption.
+        assert (k :< m) as G3. { rewrite H16. apply Succ.IsIn. }
+        assert (Ordinal (e!k)) as G4. {
+          apply OrdFunOn.IsOrdinal with m; assumption. }
+        assert (Ordinal (f!k)) as G5. {
+          apply OrdFunOn.IsOrdinal with m; assumption. }
+        assert (forall i, i :< m -> Ordinal (F2 i)) as G6. {
+          intros i G6. rewrite E2. apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption.
+            apply OrdFunOn.IsOrdinal with m; assumption.
+          - apply OrdFunOn.IsOrdinal with m; assumption. }
+        assert (Ordinal (F2 k)) as G7. { apply G6. assumption. }
+        assert (Ordinal (:sum:_{k} :[F2]:)) as G8. {
+          apply SumOfClass.IsOrdinal. 1: assumption.
+          intros i G8. rewrite ToFun.Eval. apply G6.
+          apply Core.ElemElemTran with k; try assumption.
+            apply Omega.HasOrdinalElem, Omega.IsIn with k; assumption. }
+        assert (F2 k :<=: (:sum:_{k} :[F2]:) :+: F2 k) as H17. {
+          apply Plus.IsInclL; assumption. }
+        rewrite <- H14 in H17.
+        assert (:0: :< F2 k) as H18. {
+          rewrite E2. apply Mult.HasZero. 2: assumption.
+          - apply IsOrdinal; assumption.
+          - apply HasZero; assumption.
+          - apply H12. assumption. }
+        assert (:0: :< :0:) as H19. { apply H17. assumption. }
+        apply Empty.Charac in H19. contradiction. }
+        rewrite <- H15 in H6. rewrite <- H15 in H7.
+        assert (c = :0:) as H20. { apply OrdFunOn.WhenEmpty. assumption. }
+        assert (d = :0:) as H21. { apply OrdFunOn.WhenEmpty. assumption. }
+        assert (e = :0:) as H22. { apply OrdFunOn.WhenEmpty. assumption. }
+        assert (f = :0:) as H23. { apply OrdFunOn.WhenEmpty. assumption. }
+        assert (c = e) as H24. { subst. reflexivity. }
+        assert (d = f) as H25. { subst. reflexivity. }
+        split. 1: assumption. split; assumption.
+    - intros n H3 IH m c d e f H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14 H15.
+      remember (fun i => a :^: d!i :*: c!i) as F1 eqn:E1.
+      remember (fun i => a :^: f!i :*: e!i) as F2 eqn:E2.
+      assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal m) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      assert (succ n :< :N) as G3. { apply Omega.HasSucc. assumption. }
+      assert (Ordinal (succ n)) as G4. {
+        apply Omega.HasOrdinalElem. assumption. }
+      assert (m =:0: \/ :0: :< m) as H16. { apply Core.ZeroOrElem. assumption. }
+      destruct H16 as [H16|H16].
+      + exfalso.
+        rewrite H16, SumOfClass.WhenZero, SumOfClass.WhenSucc, ToFun.Eval in H15.
+        2: assumption.
+        assert (n :< succ n) as G5. { apply Succ.IsIn. }
+        assert (Ordinal (c!n)) as G6. {
+          apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (Ordinal (d!n)) as G7. {
+          apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (forall i, i :< succ n -> Ordinal (F1 i)) as G8. {
+          intros i G8. rewrite E1. apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption.
+            apply OrdFunOn.IsOrdinal with (succ n); assumption.
+          - apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (Ordinal (F1 n)) as G9. { apply G8. assumption. }
+        assert (Ordinal (:sum:_{n} :[F1]:)) as G10. {
+          apply SumOfClass.IsOrdinal. 1: assumption.
+          intros i G10. rewrite ToFun.Eval. apply G8.
+          apply Core.ElemElemTran with n; try assumption.
+            apply Omega.HasOrdinalElem, Omega.IsIn with n; assumption. }
+        assert (F1 n :<=: (:sum:_{n} :[F1]:) :+: F1 n) as H17. {
+          apply Plus.IsInclL; assumption. }
+        rewrite H15 in H17.
+        assert (:0: :< F1 n) as H18. {
+          rewrite E1. apply Mult.HasZero. 2: assumption.
+          - apply IsOrdinal; assumption.
+          - apply HasZero; assumption.
+          - apply H11. assumption. }
+        assert (:0: :< :0:) as H19. { apply H17. assumption. }
+        apply Empty.Charac in H19. contradiction.
+      + apply Omega.HasPred in H16. 2: assumption. destruct H16 as [k [H16 H17]].
+        rewrite H17 in H15.
 Admitted.
 
