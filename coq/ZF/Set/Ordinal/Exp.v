@@ -1142,6 +1142,15 @@ Proof.
           - apply IsOrdinal. 1: assumption.
             apply OrdFunOn.IsOrdinal with (succ n); assumption.
           - apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (Functional c) as G7. { apply H5. }
+        assert (Functional d) as G8. { apply H6. }
+        assert (Functional e) as G9. { apply H7. }
+        assert (Functional f) as G10. { apply H8. }
+        assert (domain c = succ n) as G11. { apply H5. }
+        assert (domain d = succ n) as G12. { apply H6. }
+        assert (domain e = m) as G13. { apply H7. }
+        assert (domain f = m) as G14. { apply H8. }
+        assert (Ordinal k) as G15. { apply Omega.HasOrdinalElem. assumption. }
         assert (F1 :0: :+: (:sum:_{n} (COL.shiftL :[F1]:))
           = F2 :0: :+: (:sum:_{k} (COL.shiftL :[F2]:))) as H18. {
             rewrite H17, SumOfClass.ShiftL, SumOfClass.ShiftL,
@@ -1154,5 +1163,30 @@ Proof.
             - intros i H18. apply ToFun.DomainOf.
             - intros i H18. rewrite ToFun.Eval. apply G6. assumption. }
         clear H15.
+        remember (SOL.shiftL c) as c' eqn:H19.
+        remember (SOL.shiftL d) as d' eqn:H20.
+        remember (SOL.shiftL e) as e' eqn:H21.
+        remember (SOL.shiftL f) as f' eqn:H22.
+        remember (fun i => a :^: d'!i :*: c'!i) as F1' eqn:E1'.
+        remember (fun i => a :^: f'!i :*: e'!i) as F2' eqn:E2'.
+        assert (:sum:_{n} (COS.shiftL :[F1]:) = :sum:_{n} :[F1']:) as H23. {
+          apply SumOfClass.EqualCharac. 1: assumption. intros i H23.
+          assert (Ordinal i) as G16. { apply Core.IsOrdinal with n; assumption. }
+          rewrite COL.Eval, ToFun.Eval, ToFun.Eval, E1, E1', H19, H20,
+            SOL.Eval, SOL.Eval; try assumption. 1: reflexivity.
+          - rewrite G11. apply Succ.ElemCompat; assumption.
+          - rewrite G12. apply Succ.ElemCompat; assumption.
+          - apply ToFun.IsFunctional.
+          - apply ToFun.DomainOf. }
+        assert (:sum:_{k} (COS.shiftL :[F2]:) = :sum:_{k} :[F2']:) as H24. {
+          apply SumOfClass.EqualCharac. 1: assumption. intros i H24.
+          assert (Ordinal i) as G16. { apply Core.IsOrdinal with k; assumption. }
+          rewrite COL.Eval, ToFun.Eval, ToFun.Eval, E2, E2', H21, H22,
+            SOL.Eval, SOL.Eval; try assumption. 1: reflexivity.
+          - rewrite G13, H17. apply Succ.ElemCompat; assumption.
+          - rewrite G14, H17. apply Succ.ElemCompat; assumption.
+          - apply ToFun.IsFunctional.
+          - apply ToFun.DomainOf. }
+        rewrite H23, H24 in H18. clear H23 H24.
 Admitted.
 
