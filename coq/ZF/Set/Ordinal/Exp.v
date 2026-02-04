@@ -1188,5 +1188,27 @@ Proof.
           - apply ToFun.IsFunctional.
           - apply ToFun.DomainOf. }
         rewrite H23, H24 in H18. clear H23 H24.
+        assert (Ordinal d!:0:) as G16. {
+          apply OrdFunOn.IsOrdinal with (succ n). 1: assumption.
+          apply Succ.HasZero. assumption. }
+        assert (Ordinal f!:0:) as G17. {
+          apply OrdFunOn.IsOrdinal with m. 1: assumption.
+          rewrite H17. apply Succ.HasZero. assumption. }
+        assert (OrdFunOn c' n) as G18. {
+          rewrite H19. apply SOL.OnSucc. assumption. }
+        assert (OrdFunOn d' n) as G19. {
+          rewrite H20. apply SOL.OnSucc. assumption. }
+        assert (OrdFunOn e' k) as G20. {
+          rewrite H21. apply SOL.OnSucc. rewrite <- H17. assumption. }
+        assert (OrdFunOn f' k) as G21. {
+          rewrite H22. apply SOL.OnSucc. rewrite <- H17. assumption. }
+        assert (Decreasing d') as G22. {
+          rewrite H20. apply SOL.IsDecreasing. 2: assumption. apply H6. }
+        assert (Decreasing f') as G23. {
+          rewrite H22. apply SOL.IsDecreasing. 2: assumption. apply H8. }
+
+        assert ((:sum:_{n} :[F1']:) :< a :^: d!:0:) as H23. {
+          rewrite E1'. apply IsLess.
+
 Admitted.
 
