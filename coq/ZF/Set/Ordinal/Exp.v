@@ -1206,9 +1206,76 @@ Proof.
           rewrite H20. apply SOL.IsDecreasing. 2: assumption. apply H6. }
         assert (Decreasing f') as G23. {
           rewrite H22. apply SOL.IsDecreasing. 2: assumption. apply H8. }
-
+        assert (forall i, i :< n -> c'!i :< a) as G24. {
+          rewrite H19. intros i G24.
+          assert (Ordinal i) as G25. { apply Core.IsOrdinal with n; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply H12. apply Succ.ElemCompat; assumption.
+          - rewrite G11. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< k -> e'!i :< a) as G25. {
+          rewrite H21. intros i G25.
+          assert (Ordinal i) as G26. { apply Core.IsOrdinal with k; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply H14. rewrite H17. apply Succ.ElemCompat; assumption.
+          - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< n -> d'!i :< d!:0:) as G26. {
+          rewrite H20. intros i G26.
+          assert (Ordinal i) as G27. { apply Core.IsOrdinal with n; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply H9.
+            + rewrite G12. apply Succ.HasZero. assumption.
+            + rewrite G12. apply Succ.ElemCompat; assumption.
+            + apply Succ.HasZero. assumption.
+          - rewrite G12. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< k -> f'!i :< f!:0:) as G27. {
+          rewrite H22. intros i G27.
+          assert (Ordinal i) as G28. { apply Core.IsOrdinal with k; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply H10.
+            + rewrite G14, H17. apply Succ.HasZero. assumption.
+            + rewrite G14, H17. apply Succ.ElemCompat; assumption.
+            + apply Succ.HasZero. assumption.
+          - rewrite G14, H17. apply Succ.ElemCompat; assumption. }
         assert ((:sum:_{n} :[F1']:) :< a :^: d!:0:) as H23. {
-          rewrite E1'. apply IsLess.
+          rewrite E1'. apply IsLess; assumption. }
+        assert ((:sum:_{k} :[F2']:) :< a :^: f!:0:) as H24. {
+          rewrite E2'. apply IsLess; assumption. }
+        assert (forall i, i :< succ n -> Ordinal c!i) as G29. {
+          intros i G29. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (forall i, i :< m -> Ordinal e!i) as G30. {
+          intros i G30. apply OrdFunOn.IsOrdinal with m; assumption. }
+        assert (forall i, i :< succ n -> Ordinal d!i) as G31. {
+          intros i G31. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+        assert (forall i, i :< m -> Ordinal f!i) as G32. {
+          intros i G32. apply OrdFunOn.IsOrdinal with m; assumption. }
+        assert (forall i, i :< n -> Ordinal c'!i) as G33. {
+          rewrite H19. intros i G33.
+          assert (Ordinal i) as G34. { apply Core.IsOrdinal with n; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply G29. apply Succ.ElemCompat; assumption.
+          - rewrite G11. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< n -> Ordinal d'!i) as G34. {
+          rewrite H20. intros i G34.
+          assert (Ordinal i) as G35. { apply Core.IsOrdinal with n; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply G31. apply Succ.ElemCompat; assumption.
+          - rewrite G12. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< k -> Ordinal e'!i) as G35. {
+          rewrite H21. intros i G35.
+          assert (Ordinal i) as G36. { apply Core.IsOrdinal with k; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply G30. rewrite H17. apply Succ.ElemCompat; assumption.
+          - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< k -> Ordinal f'!i) as G36. {
+          rewrite H22. intros i G36.
+          assert (Ordinal i) as G37. { apply Core.IsOrdinal with k; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply G32. rewrite H17. apply Succ.ElemCompat; assumption.
+          - rewrite G14, H17. apply Succ.ElemCompat; assumption. }
+
+
+        assert (Ordinal (:sum:_{n} :[F1']:)) as G37. {
+          apply SumOfClass.IsOrdinal. 1: assumption.
+          intros i G37. rewrite ToFun.Eval, E1'.
 
 Admitted.
-
