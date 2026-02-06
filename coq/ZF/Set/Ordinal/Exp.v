@@ -133,6 +133,15 @@ Proof.
         apply Limit.HasZero. assumption.
 Qed.
 
+Proposition WhenOneR : forall (a:U), Ordinal a ->
+  a :^: :1: = a.
+Proof.
+  intros a H1.
+  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (a :^: (succ :0:) = a) as X. 2: apply X.
+  rewrite WhenSuccR, WhenZeroR, Mult.WhenOneL; try assumption. reflexivity.
+Qed.
+
 Proposition OneIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   :1: :<=: a -> :1: :<=: a :^: b.
 Proof.
@@ -1004,6 +1013,59 @@ Proof.
   - rewrite E in H4. apply H4; assumption.
 Qed.
 
+Proposition ExponentFirst : forall (a b c q1 q2 r1 r2:U),
+  Ordinal a                                           ->
+  Ordinal b                                           ->
+  Ordinal c                                           ->
+  Ordinal q1                                          ->
+  Ordinal q2                                          ->
+  Ordinal r1                                          ->
+  Ordinal r2                                          ->
+  :1: :< a                                            ->
+  q1  :< a                                            ->
+  r1  :< a :^: b                                      ->
+  :0: :< q2                                           ->
+  b   :< c                                            ->
+  a :^: b :*: q1 :+: r1 :< a :^: c :*: q2 :+: r2.
+Proof.
+  intros a b c q1 q2 r1 r2 H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12.
+  assert (Ordinal (succ b)) as G1. { apply Succ.IsOrdinal. assumption. }
+  assert (:0: :< a) as G2. { apply Natural.HasZero; assumption. }
+  assert (Ordinal (a :^: c)) as G3. { apply IsOrdinal; assumption. }
+  assert (Ordinal (a :^: c :*: q2)) as G4. { apply Mult.IsOrdinal; assumption. }
+  assert (Ordinal (a :^: b)) as G5. { apply IsOrdinal; assumption. }
+  assert (Ordinal (a :^: b :*: q1)) as G6. { apply Mult.IsOrdinal; assumption. }
+  assert (succ q1 :<=: a) as G7. { apply Succ.ElemIsIncl; assumption. }
+  assert (succ b :<=: c) as G8. { apply Succ.ElemIsIncl; assumption. }
+  assert (Ordinal :1:) as G9. { apply Natural.OneIsOrdinal. }
+  assert (Ordinal (a :^: b :*: q1 :+: r1)) as G10. {
+    apply Plus.IsOrdinal; assumption. }
+  assert (Ordinal (succ q1)) as G11. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal (a :^: b :*: (succ q1))) as G12. {
+    apply Mult.IsOrdinal; assumption. }
+  assert (Ordinal (a :^: b :*: a)) as G13. {
+    apply Mult.IsOrdinal; assumption. }
+  assert (Ordinal (a :^: (succ b))) as G14. { apply IsOrdinal; assumption. }
+  assert (Ordinal (a :^: c :*: q2 :+: r2)) as G15. {
+    apply Plus.IsOrdinal; assumption. }
+  assert (a :^: succ b :<=: a :^: c) as H13. { apply InclCompatR; assumption. }
+  assert (a :^: succ b :<=: a :^: c :*: q2) as H14. {
+    apply Incl.Tran with (a :^: c). 1: assumption.
+    apply Mult.IsInclR; assumption. }
+  assert (a :^: succ b :<=: a :^: c :*: q2 :+: r2) as H15. {
+    apply Incl.Tran with (a :^: c :*: q2). 1: assumption.
+    apply Plus.IsInclR; assumption. }
+  assert (a :^: b :*: q1 :+: r1 :< a :^: b :*: q1 :+: a :^: b) as H16. {
+    apply Plus.ElemCompatR; assumption. }
+  assert (a :^: b :*: q1 :+: r1 :< a :^: b :*: (succ q1)) as H17. {
+    rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR; assumption. }
+  assert (a :^: b :*: q1 :+: r1 :< a :^: (succ b)) as H18. {
+    rewrite <- Plus.WhenOneR, DistribL, WhenOneR; try assumption.
+    apply Core.ElemInclTran with (a :^: b :*: (succ q1)); try assumption.
+    apply Mult.InclCompatR; assumption. }
+  apply Core.ElemInclTran with (a :^: (succ b)); assumption.
+Qed.
+
 Proposition PolynomialUnique : forall (a n m c d e f:U),
   Ordinal a                                       ->
   :1: :< a                                        ->
@@ -1272,10 +1334,46 @@ Proof.
           rewrite SOL.Eval. 2: assumption.
           - apply G32. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G14, H17. apply Succ.ElemCompat; assumption. }
-
-
         assert (Ordinal (:sum:_{n} :[F1']:)) as G37. {
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G37. rewrite ToFun.Eval, E1'.
-
+          apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption. apply G34. assumption.
+          - apply G33. assumption. }
+        assert (Ordinal (:sum:_{k} :[F2']:)) as G38. {
+          apply SumOfClass.IsOrdinal. 1: assumption.
+          intros i G38. rewrite ToFun.Eval, E2'.
+          apply Mult.IsOrdinal.
+          - apply IsOrdinal. 1: assumption. apply G36. assumption.
+          - apply G35. assumption. }
+        assert (Ordinal c!:0:) as G39. {
+          apply OrdFunOn.IsOrdinal with (succ n). 1: assumption.
+          apply Succ.HasZero. assumption. }
+        assert (Ordinal e!:0:) as G40. {
+          apply OrdFunOn.IsOrdinal with m. 1: assumption.
+          rewrite H17. apply Succ.HasZero. assumption. }
+        remember (:sum:_{n} :[F1']:) as r1 eqn:H25.
+        remember (:sum:_{k} :[F2']:) as r2 eqn:H26.
+        rewrite E1, E2 in H18.
+        remember (a :^: d!:0: :*: c!:0: :+: r1) as s1 eqn:H27.
+        remember (a :^: f!:0: :*: e!:0: :+: r2) as s2 eqn:H28.
+        assert (d!:0: = f!:0:) as H29. {
+          assert (d!:0: = f!:0: \/ d!:0: :< f!:0: \/ f!:0: :< d!:0:) as H29. {
+            apply Core.IsTotal; assumption. }
+          destruct H29 as [H29|[H29|H29]]. 1: assumption.
+          - exfalso.
+            assert (s1 :< s2) as H30. {
+            rewrite H27, H28. apply ExponentFirst; try assumption.
+            + apply H12, Succ.HasZero. assumption.
+            + apply H13. rewrite H17. apply Succ.HasZero. assumption. }
+            assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
+            revert H31. apply NoElemLoop1.
+          - exfalso.
+            assert (s2 :< s1) as H30. {
+            rewrite H27, H28. apply ExponentFirst; try assumption.
+            + apply H14. rewrite H17. apply Succ.HasZero. assumption.
+            + apply H11, Succ.HasZero. assumption. }
+            assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
+            revert H31. apply NoElemLoop1. }
 Admitted.
+
