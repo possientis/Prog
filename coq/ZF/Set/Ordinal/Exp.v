@@ -1410,3 +1410,83 @@ Proof.
   rewrite E in H3. assumption.
 Qed.
 
+Proposition SunReduceHighExponent : forall (a d n b c:U),
+  Ordinal a                                                       ->
+  Ordinal d                                                       ->
+  n :< :N                                                         ->
+  OrdFunOn b (succ n)                                             ->
+  OrdFunOn c (succ n)                                             ->
+  :1: :< a                                                        ->
+  Decreasing b                                                    ->
+  (forall i, i :< succ n -> :0: :< c!i)                           ->
+  (forall i, i :< succ n -> c!i :< a )                            ->
+  :N :<=: d                                                       ->
+  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d =
+  a :^: (b!:0: :+: d).
+Proof.
+  intros a d n b c H1 H2 H3 H4 H5 Ha H6 H7 H8 H9.
+  remember (fun i => a :^: b!i :*: c!i) as F eqn:H10.
+  remember (:sum:_{succ n} :[F]:) as s eqn:H11.
+  assert (forall i, i :< succ n -> Ordinal b!i) as G1. {
+    intros i G1. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+  assert (forall i, i :< succ n -> Ordinal c!i) as G2. {
+    intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
+  assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
+  assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
+    intros i G6. rewrite ToFun.Eval, H10.
+    apply Mult.IsOrdinal.
+    - apply IsOrdinal. 1: assumption. apply G1. assumption.
+    - apply G2. assumption. }
+  assert (domain b = succ n) as G7. { apply H4. }
+  assert (domain c = succ n) as G8. { apply H5. }
+  assert (Ordinal (a :^: d)) as G9. { apply IsOrdinal; assumption. }
+  assert (Ordinal (succ n)) as G10. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal s) as G11. {
+    rewrite H11. apply SumOfClass.IsOrdinal. 1: assumption.
+    intros i G11. apply G6. assumption. }
+  assert (Ordinal b!:0:) as G12. { apply G1. assumption. }
+  assert (Ordinal (succ b!:0:)) as G13. {
+    apply Succ.IsOrdinal. apply G1. assumption. }
+  assert (:1: :< :N) as G14. { apply Omega.HasOne. }
+  assert (Ordinal :1:) as G15. { apply Natural.OneIsOrdinal. }
+  assert (a :^: b!:0: :<=: a :^: b!:0: :*: c!:0:) as H12. {
+    apply Mult.IsInclR.
+    - apply IsOrdinal. 1: assumption. apply G1. assumption.
+    - apply G2. assumption.
+    - apply H7. assumption. }
+  assert (a :^: b!:0: :<=: s) as H13. {
+    apply Incl.Tran with (a :^: b!:0: :*: c!:0:). 1: assumption.
+    assert (:[F]:!:0: :<=: :sum:_{succ n} :[F]:) as H13. {
+      apply SumOfClass.IsIncl; try assumption.
+      intros i H13. apply ToFun.DomainOf. }
+    rewrite ToFun.Eval, H10 in H13. rewrite H11, H10. assumption. }
+  assert (s :< a :^: succ b!:0:) as H14. {
+    rewrite H11, H10. apply IsLess; try assumption.
+    intros i H14.
+    assert (i :< :N) as K1. { apply Omega.IsIn with (succ n); assumption. }
+    assert (i = :0: \/ :0: :< i) as H15. { apply Omega.ZeroOrElem. assumption. }
+    destruct H15 as [H15|H15].
+    - subst. apply Succ.IsIn.
+    - apply ElemElemTran with b!:0:.
+      + apply G1. assumption.
+      + apply G1. assumption.
+      + apply Succ.IsOrdinal, G1. assumption.
+      + apply H6; try assumption; rewrite G7; assumption.
+      + apply Succ.IsIn. }
+  assert (s :*: a :^: d :<=: a :^: (succ b!:0: :+: d)) as H15. {
+    rewrite DistribL; try assumption.
+    apply Mult.InclCompatL; try assumption.
+    - apply IsOrdinal; assumption.
+    - apply Core.ElemIsIncl. 2: assumption. apply IsOrdinal; assumption. }
+  assert (s :*: a :^: d :<=: a :^: (b!:0: :+: d)) as H16. {
+    rewrite <- Plus.WhenOneR, Plus.Assoc, (Plus.WhenNatL :1: d) in H15;
+    assumption. }
+  assert (a :^: (b!:0: :+: d) :<=: s :*: a :^: d) as H17. {
+    rewrite DistribL; try assumption.
+    apply Mult.InclCompatL; try assumption.
+    apply IsOrdinal; assumption. }
+  apply Incl.DoubleInclusion. split; assumption.
+Qed.
+
