@@ -2,9 +2,11 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.ShiftL.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Decreasing.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Ordinal.OrdFunOn.
 Require Import ZF.Set.Ordinal.Succ.
@@ -167,4 +169,32 @@ Proof.
   assert (Ordinal y) as G6. { apply Succ.IsOrdinalRev. assumption. }
   rewrite Eval, Eval; try assumption. apply H2; try assumption.
   apply Succ.ElemCompat; assumption.
+Qed.
+
+Proposition IsEqual : forall (f g n:U),
+  n :< :N               ->
+  OrdFunOn f (succ n)   ->
+  OrdFunOn g (succ n)   ->
+  f!:0: = g!:0:         ->
+  shiftL f = shiftL g   ->
+  f = g.
+Proof.
+  intros f g n H1 [H2 H3] [H4 H5] H6 H7.
+  apply Function.EqualCharac.
+  - apply H2.
+  - apply H4.
+  - rewrite H3, H5. reflexivity.
+  - intros m H8. rewrite H3 in H8.
+    assert (succ n :< :N) as G1. { apply Omega.HasSucc. assumption. }
+    assert (m :< :N) as G2. { apply Omega.IsIn with (succ n); assumption. }
+    assert (m = :0: \/ :0: :< m) as H9. { apply Omega.ZeroOrElem. assumption. }
+    destruct H9 as [H9|H9].
+    + subst. assumption.
+    + apply Omega.HasPred in H9. 2: assumption.
+      destruct H9 as [k [H9 H10]]. subst.
+      rewrite <- Eval, <- Eval, H7. 1: reflexivity.
+      * apply H4.
+      * rewrite H5. assumption.
+      * apply H2.
+      * rewrite H3. assumption.
 Qed.

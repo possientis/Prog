@@ -1080,7 +1080,7 @@ Proposition PolynomialUnique : forall (a n m c d e f:U),
   (forall i, i :< n -> :0: :< c!i)                ->
   (forall i, i :< n -> c!i :< a  )                ->
   (forall i, i :< m -> :0: :< e!i)                ->
-  (forall i, i :< m -> e!i  :< a )                ->
+  (forall i, i :< m -> e!i :< a  )                ->
   :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:) =
   :sum:_{m} (:[fun i => a :^: f!i :*: e!i]:)      ->
   n = m /\ c = e /\ d = f.
@@ -1375,5 +1375,38 @@ Proof.
             + apply H11, Succ.HasZero. assumption. }
             assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
             revert H31. apply NoElemLoop1. }
-Admitted.
+        assert (c!:0: = e!:0: /\ r1 = r2) as H30. {
+          apply Mult.EuclidUnique with (a :^: f!:0:); try assumption.
+          - apply IsOrdinal; assumption.
+          - rewrite <- H29. assumption.
+          - rewrite H27, H28, H29 in H18. assumption. }
+        destruct H30 as [H30 H31].
+        assert (forall i, i :< n -> :0: :< c'!i) as G41. {
+          rewrite H19. intros i G41.
+          assert (Ordinal i) as G42. { apply Core.IsOrdinal with n; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply H11. apply Succ.ElemCompat; assumption.
+          - rewrite G11. apply Succ.ElemCompat; assumption. }
+        assert (forall i, i :< k -> :0: :< e'!i) as G42. {
+          rewrite H21. intros i G42.
+          assert (Ordinal i) as G43. { apply Core.IsOrdinal with k; assumption. }
+          rewrite SOL.Eval. 2: assumption.
+          - apply H13. rewrite H17. apply Succ.ElemCompat; assumption.
+          - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
+        assert (n = k /\ c' = e' /\ d' = f') as H32. {
+          apply IH; try assumption.
+          rewrite H25, H26, E1', E2' in H31. assumption. }
+        destruct H32 as [H32 [H33 H34]].
+        assert (succ n = m) as H35. { rewrite H32. symmetry. assumption. }
+        assert (c = e) as H36. {
+          apply SOL.IsEqual with n; try assumption.
+          - rewrite <- H35 in H7. assumption.
+          - rewrite H19, H21 in H33. assumption. }
+        assert (d = f) as H37. {
+          apply SOL.IsEqual with n; try assumption.
+          - rewrite <- H35 in H8. assumption.
+          - rewrite H20, H22 in H34. assumption. }
+        split. 1: assumption. split; assumption. }
+  rewrite E in H3. assumption.
+Qed.
 

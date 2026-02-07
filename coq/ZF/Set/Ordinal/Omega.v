@@ -170,6 +170,14 @@ Proof.
   - apply IsSuccessor; assumption.
 Qed.
 
+Proposition ZeroOrElem : forall (n:U), n :< :N ->
+  n = :0: \/ :0: :< n.
+Proof.
+  intros n H1.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  apply Core.ZeroOrElem. assumption.
+Qed.
+
 Proposition HasUnion : forall (n:U), n :< :N ->
   :U(n) :< :N.
 Proof.
@@ -324,5 +332,3 @@ Proof.
     assert (m :< m) as H18. { apply H17. assumption. }
     revert H18. apply NoElemLoop1.
 Qed.
-
-
