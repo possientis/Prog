@@ -876,9 +876,22 @@ Proof.
   apply H3; try assumption. 3: reflexivity.
   - apply Plus.IsOrdinal; assumption.
   - apply Incl.Tran with c.
-    + apply Omega.IsInclInLimit. assumption.
+    + apply Omega.InLimitIncl. assumption.
     + apply Plus.IsInclR; assumption.
 Qed.
+
+Proposition LimitWithNatSimple : forall (n c:U),
+  n :< :N   ->
+  Limit c   ->
+  :0: :< n  ->
+  n :*: c = c.
+Proof.
+  intros n c H1 H2 H3.
+  assert (n :*: (c :+: :0:) = c :+: n :*: :0:) as H4. {
+    apply LimitWithNat; try assumption. apply Omega.HasZero. }
+  rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroR in H4. assumption.
+Qed.
+
 
 Proposition SuccNSquared :
   (:N :+: :1: ) :*: (:N :+: :1:) = :N :*: :N :+: :N :+: :1:.
