@@ -1629,5 +1629,22 @@ Proof.
   apply Incl.DoubleInclusion. split; assumption.
 Qed.
 
-
-
+Lemma LimitWithNat : forall (a b c n:U),
+  Limit a     ->
+  Ordinal b   ->
+  Ordinal c   ->
+  n :< :N     ->
+  :0: :< b    ->
+  :0: :< c    ->
+  Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
+  Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c).
+Proof.
+  intros a b c n H1 H2 H3 H4 H5. revert c H3.
+  remember (fun c => :0: :< c ->
+    Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
+    Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as A eqn:E.
+  assert (forall c, Ordinal c -> A c) as H6. {
+    apply Induction2.Induction; rewrite E.
+    - intros H6. apply Empty.Charac in H6. contradiction.
+    - intros c H3 IH _. left. split. 1: { apply Succ.IsSuccessor. assumption. }
+Admitted.
