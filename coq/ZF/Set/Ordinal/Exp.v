@@ -1575,7 +1575,6 @@ Proof.
     - apply G2. assumption. }
   assert (Ordinal c!:0:) as G27. { apply G2. assumption. }
   assert (Ordinal (a :^: b!:0:)) as G28. { apply IsOrdinal; assumption. }
-
   assert (s = :[F]:!:0: :+: :sum:_{n} (COL.shiftL :[F]:)) as H16. {
     rewrite H11. apply SumOfClass.ShiftL; try assumption.
     - apply ToFun.IsFunctional.
@@ -1635,16 +1634,37 @@ Lemma LimitWithNat : forall (a b c n:U),
   Ordinal c   ->
   n :< :N     ->
   :0: :< b    ->
+  :0: :< n    ->
   :0: :< c    ->
   Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
   Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c).
 Proof.
-  intros a b c n H1 H2 H3 H4 H5. revert c H3.
+  intros a b c n H1 H2 H3 H4 H5 H6. revert c H3.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal (a :^: b)) as G3. { apply IsOrdinal; assumption. }
+  assert (Ordinal (a :^: b :*: n)) as G4. { apply Mult.IsOrdinal; assumption. }
+  assert (Limit (a :^: b)) as G5. { apply IsLimitL; assumption. }
+  assert (n :*: a :^: b = a :^: b) as G6. {
+    apply Mult.LimitWithNatSimple; assumption. }
+
   remember (fun c => :0: :< c ->
     Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
     Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as A eqn:E.
-  assert (forall c, Ordinal c -> A c) as H6. {
+  assert (forall c, Ordinal c -> A c) as H7. {
     apply Induction2.Induction; rewrite E.
-    - intros H6. apply Empty.Charac in H6. contradiction.
+    - intros H7. apply Empty.Charac in H7. contradiction.
     - intros c H3 IH _. left. split. 1: { apply Succ.IsSuccessor. assumption. }
+      assert (Ordinal (b :*: c)) as K1. { apply Mult.IsOrdinal; assumption. }
+      assert (Ordinal (a :^: (b :*: c))) as K2. { apply IsOrdinal; assumption. }
+      assert (c = :0: \/ :0: :< c) as H7. { apply Core.ZeroOrElem. assumption. }
+      destruct H7 as [H7|H7].
+      + subst. rewrite WhenOneR, Mult.WhenOneR; try assumption. reflexivity.
+      + specialize (IH H7). destruct IH as [[H8 IH]|[H8 IH]].
+        * rewrite WhenSuccR, IH, Mult.Assoc, <- (Mult.Assoc n (a :^: b)), G6,
+          <- Mult.Assoc, <- DistribL, <- Mult.WhenSuccR; try assumption.
+          reflexivity.
+        * rewrite WhenSuccR, IH, <- Mult.Assoc, <- DistribL, <- Mult.WhenSuccR;
+          try assumption. reflexivity.
+    - intros c H3 IH _. right. split. 1: assumption.
 Admitted.
