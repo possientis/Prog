@@ -51,6 +51,7 @@ Module SOL := ZF.Set.Ordinal.ShiftL.
 Module SOR := ZF.Set.Ordinal.ShiftR.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRL := ZF.Set.Relation.Functional.
+Module SUG := ZF.Set.UnionGenOfClass.
 
 (* The exponentiation of two ordinals when a is an ordinal.                     *)
 Definition exp (a b:U) : U := (COE.Exp a)!b.
@@ -1647,7 +1648,12 @@ Proof.
   assert (Limit (a :^: b)) as G5. { apply IsLimitL; assumption. }
   assert (n :*: a :^: b = a :^: b) as G6. {
     apply Mult.LimitWithNatSimple; assumption. }
-
+  assert (:0: :< a) as G7. { apply Limit.HasZero. assumption. }
+  assert (:0: :< a :^: b) as G8. { apply HasZero; assumption. }
+  assert (:0: :< a :^: b :*: n) as G9. { apply Mult.HasZero; assumption. }
+  assert (Ordinal :0:) as G10. { apply Core.ZeroIsOrdinal. }
+  assert (n :< a :^: b) as G11. { apply Omega.InLimitIncl; assumption. }
+  assert (Ordinal :1:) as G12. { apply Natural.OneIsOrdinal. }
   remember (fun c => :0: :< c ->
     Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
     Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as A eqn:E.
@@ -1667,4 +1673,43 @@ Proof.
         * rewrite WhenSuccR, IH, <- Mult.Assoc, <- DistribL, <- Mult.WhenSuccR;
           try assumption. reflexivity.
     - intros c H3 IH _. right. split. 1: assumption.
-Admitted.
+      assert (Ordinal c) as K1. { apply H3. }
+      assert (Ordinal (b :*: c)) as K2. { apply Mult.IsOrdinal; assumption. }
+      assert (Ordinal (a :^: (b :*: c))) as K3. { apply IsOrdinal; assumption. }
+      assert (a :^: (b :*: c) :<=: (a :^: b :*: n) :^: c) as H7. {
+        rewrite <- Assoc; try assumption.
+        apply InclCompatL; try assumption.
+        apply Mult.IsInclR; assumption. }
+      assert ((a :^: b :*: n) :^: c :<=: a :^: (b :*: c)) as H8. {
+        intros x H8.
+        rewrite WhenLimit in H8; try assumption.
+        apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
+        assert (Ordinal d) as L1. { apply Core.IsOrdinal with c; assumption. }
+        assert (Ordinal (b :*: d)) as L2. { apply Mult.IsOrdinal; assumption. }
+        assert (Ordinal (a :^: (b :*: d))) as L3. {
+          apply IsOrdinal; assumption. }
+        assert (Ordinal (succ d)) as L4. { apply Succ.IsOrdinal. assumption. }
+        assert (x :< (a :^: b :*: n) :^: d) as H10. { assumption. } clear H9.
+        assert ((a :^: b :*: n) :^: d :<=: (a :^: (b :*: d) :*: n)) as H11. {
+          assert (d = :0: \/ :0: :< d) as H11. {
+            apply Core.ZeroOrElem. assumption. }
+          destruct H11 as [H11|H11].
+          - subst. rewrite WhenZeroR, Mult.WhenZeroR, WhenZeroR, Mult.WhenOneL.
+            2: assumption. apply Succ.ElemIsIncl; assumption.
+          - specialize (IH d H8 H11).
+            destruct IH as [[H9 IH]|[H9 IH]]; rewrite IH.
+            + apply Incl.Refl.
+            + apply Mult.IsInclR; assumption. }
+        assert (a :^: (b :*: d) :*: n :<=: a :^: (b :*: succ d)) as H12. {
+          rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR, DistribL;
+          try assumption. apply Mult.InclCompatR; try assumption.
+          apply Core.ElemIsIncl; assumption. }
+        apply H11, H12 in H10.
+        rewrite <- Assoc, WhenLimit; try assumption.
+        apply SUG.Charac. exists (succ d). split.
+        - apply Limit.HasSucc; assumption.
+        - assert (x :< (a :^: b) :^: (succ d)) as X. 2: apply X. (* rewrite *)
+          rewrite Assoc; assumption. }
+      apply Incl.DoubleInclusion. split; assumption. }
+  rewrite E in H7. assumption.
+Qed.
