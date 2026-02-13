@@ -1630,13 +1630,13 @@ Proof.
 Qed.
 
 Lemma LimitWithNat : forall (a b c n:U),
-  Limit a     ->
-  Ordinal b   ->
-  Ordinal c   ->
-  n :< :N     ->
-  :0: :< b    ->
-  :0: :< n    ->
-  :0: :< c    ->
+  Limit a                                                         ->
+  Ordinal b                                                       ->
+  Ordinal c                                                       ->
+  n :< :N                                                         ->
+  :0: :< b                                                        ->
+  :0: :< n                                                        ->
+  :0: :< c                                                        ->
   Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
   Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c).
 Proof.
@@ -1712,4 +1712,73 @@ Proof.
           rewrite Assoc; assumption. }
       apply Incl.DoubleInclusion. split; assumption. }
   rewrite E in H7. assumption.
+Qed.
+
+Proposition LimitWithNatSucc : forall (a b c n:U),
+  Limit a                                                         ->
+  Ordinal b                                                       ->
+  Successor c                                                     ->
+  n :< :N                                                         ->
+  :0: :< b                                                        ->
+  :0: :< n                                                        ->
+  (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n.
+Proof.
+  intros a b c n H1 H2 H3 H4 H5 H6.
+  assert (Ordinal c) as G1. { apply H3. }
+  assert (
+    Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
+    Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as H7. {
+      apply LimitWithNat; try assumption.
+      apply Succ.HasZero'. assumption. }
+  destruct H7 as [[H7 H8]|[H7 H8]]. 1: assumption. exfalso.
+  revert H3. apply Limit.NotSucc. assumption.
+Qed.
+
+Proposition LimitWithNatLimit : forall (a b c n:U),
+  Limit a                                                         ->
+  Ordinal b                                                       ->
+  Limit c                                                         ->
+  n :< :N                                                         ->
+  :0: :< b                                                        ->
+  :0: :< n                                                        ->
+  (a :^: b :*: n) :^: c = a :^: (b :*: c).
+Proof.
+  intros a b c n H1 H2 H3 H4 H5 H6.
+  assert (Ordinal c) as G1. { apply H3. }
+  assert (
+    Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
+    Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as H7. {
+      apply LimitWithNat; try assumption.
+      apply Limit.HasZero. assumption. }
+  destruct H7 as [[H7 H8]|[H7 H8]]. 2: assumption. exfalso.
+  revert H7. apply Limit.NotSucc. assumption.
+Qed.
+
+Proposition LimitWithNatIncl : forall (a b c n:U),
+  Limit a                                                         ->
+  Ordinal b                                                       ->
+  Ordinal c                                                       ->
+  n :< :N                                                         ->
+  :0: :< b                                                        ->
+  :0: :< n                                                        ->
+  (a :^: b :*: n) :^: c :<=: a :^: (b :*: c) :*: n.
+Proof.
+  intros a b c n H1 H2 H3 H4 H5 H6.
+  assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal :0:) as G2. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal a) as G3. { apply H1. }
+  assert (Ordinal (b :*: c)) as G4. { apply Mult.IsOrdinal; assumption. }
+  assert (Ordinal (a :^: (b :*: c))) as G5. { apply IsOrdinal; assumption. }
+  assert (c = :0: \/ :0: :< c) as H7. { apply Core.ZeroOrElem. assumption. }
+  destruct H7 as [H7|H7].
+  - subst.
+    rewrite WhenZeroR, Mult.WhenZeroR, WhenZeroR, Mult.WhenOneL. 2: assumption.
+    apply Succ.ElemIsIncl; assumption.
+  - assert (
+      Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
+      Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as H8. {
+        apply LimitWithNat; assumption. }
+    destruct H8 as [[H8 H9]|[H8 H9]]; rewrite H9.
+    + apply Incl.Refl.
+    + apply Mult.IsInclR; assumption.
 Qed.

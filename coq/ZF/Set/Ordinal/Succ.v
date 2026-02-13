@@ -118,6 +118,11 @@ Proof.
   intros a H1. apply Core.IsOrdinal with (succ a). 1: assumption. apply IsIn.
 Qed.
 
+Proposition HasZero' : forall (a:U), Successor a -> :0: :< a.
+Proof.
+  intros a [H1 [b H2]]. subst. apply HasZero, IsOrdinalRev. assumption.
+Qed.
+
 (* The successor operation is compatible with set inclusion for ordinals.       *)
 Proposition InclCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> succ a :<=: succ b.
