@@ -1491,20 +1491,18 @@ Proof.
   apply Incl.DoubleInclusion. split; assumption.
 Qed.
 
-Proposition SumReduceLimitL : forall (a d n b c:U),
-  Limit a                                                         ->
-  Ordinal d                                                       ->
-  n :< :N                                                         ->
-  OrdFunOn b (succ n)                                             ->
-  OrdFunOn c (succ n)                                             ->
-  Decreasing b                                                    ->
-  :0: :< c!:0:                                                    ->
-  (forall i, i :< succ n -> c!i :< :N)                            ->
-  :0: :< d                                                        ->
-  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d =
-  a :^: (b!:0: :+: d).
+Proposition  SumNatElem : forall (a n b c:U),
+  Limit a                                                           ->
+  n :< :N                                                           ->
+  OrdFunOn b (succ n)                                               ->
+  OrdFunOn c (succ n)                                               ->
+  Decreasing b                                                      ->
+  (forall i, i :< succ n -> c!i :< :N)                              ->
+  :sum:_{succ n} (:[fun i => a :^: b!i :*: c!i]:)
+  :<
+  a :^: b!:0: :*: succ c!:0:.
 Proof.
-  intros a d n b c H1 H2 H3 H4 H5 H6 H7 H8 h9.
+  intros a n b c H1 H2 H3 H4 H5 H7.
   remember (fun i => a :^: b!i :*: c!i) as F eqn:H10.
   remember (:sum:_{succ n} :[F]:) as s eqn:H11.
   assert (Ordinal a) as G0. { apply H1. }
@@ -1520,9 +1518,8 @@ Proof.
     apply Mult.IsOrdinal.
     - apply IsOrdinal. 1: assumption. apply G1. assumption.
     - apply G2. assumption. }
-  assert (domain b = succ n) as G7. { apply H4. }
-  assert (domain c = succ n) as G8. { apply H5. }
-  assert (Ordinal (a :^: d)) as G9. { apply IsOrdinal; assumption. }
+  assert (domain b = succ n) as G7. { apply H3. }
+  assert (domain c = succ n) as G8. { apply H4. }
   assert (Ordinal (succ n)) as G10. { apply Succ.IsOrdinal. assumption. }
   assert (Ordinal s) as G11. {
     rewrite H11. apply SumOfClass.IsOrdinal. 1: assumption.
@@ -1538,25 +1535,25 @@ Proof.
   assert (OrdFunOn b' n) as G16. { rewrite H12. apply SOL.OnSucc. assumption. }
   assert (OrdFunOn c' n) as G17. { rewrite H13. apply SOL.OnSucc. assumption. }
   assert (Decreasing b') as G18. {
-    rewrite H12. apply SOL.IsDecreasing. 2: assumption. apply H4. }
+    rewrite H12. apply SOL.IsDecreasing. 2: assumption. apply H3. }
   assert (:1: :< a) as G19. { apply Limit.HasOne. assumption. }
   assert (forall i, i :< n -> c'!i :< a) as G20. {
     intros i G20.
     assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
     apply Omega.InLimitIncl. 1: assumption.
     rewrite H13, SOL.Eval.
-    - apply H8. apply Succ.ElemCompat; assumption.
-    - apply H5.
+    - apply H7. apply Succ.ElemCompat; assumption.
+    - apply H4.
     - rewrite G8. apply Succ.ElemCompat; assumption. }
   assert (forall i, i :< n -> b'!i :< b!:0:) as G21. {
     intros i G21.
     assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
     rewrite H12, SOL.Eval.
-    - apply H6.
+    - apply H5.
       + rewrite G7. apply Succ.HasZero. assumption.
       + rewrite G7. apply Succ.ElemCompat; assumption.
       + apply Succ.HasZero. assumption.
-    - apply H4.
+    - apply H3.
     - rewrite G7. apply Succ.ElemCompat; assumption. }
   remember (:sum:_{n} :[F']:) as s' eqn:H15.
   assert (forall i, i :< n -> Ordinal b'!i) as G22. {
@@ -1587,15 +1584,68 @@ Proof.
     assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
     rewrite ToFun.Eval, COL.Eval, ToFun.Eval,
     H14, H10, H12, H13, SOL.Eval, SOL.Eval. 1: reflexivity.
-    - apply H5.
-    - rewrite G8. apply Succ.ElemCompat; assumption.
     - apply H4.
+    - rewrite G8. apply Succ.ElemCompat; assumption.
+    - apply H3.
     - rewrite G7. apply Succ.ElemCompat; assumption.
     - apply ToFun.IsFunctional.
     - apply ToFun.DomainOf. }
   assert (s = F :0: :+: s') as H18. { rewrite H17. assumption. }
   assert (s' :< a :^: b!:0:) as H19. {
     rewrite H15, H14. apply IsLess; assumption. }
+  rewrite H18, H10, <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR;
+  try assumption. apply Plus.ElemCompatR; try assumption.
+  apply Mult.IsOrdinal; assumption.
+Qed.
+
+Proposition SumReduceLimitL : forall (a d n b c:U),
+  Limit a                                                         ->
+  Ordinal d                                                       ->
+  n :< :N                                                         ->
+  OrdFunOn b (succ n)                                             ->
+  OrdFunOn c (succ n)                                             ->
+  Decreasing b                                                    ->
+  :0: :< c!:0:                                                    ->
+  (forall i, i :< succ n -> c!i :< :N)                            ->
+  :0: :< d                                                        ->
+  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d =
+  a :^: (b!:0: :+: d).
+Proof.
+  intros a d n b c H1 H2 H3 H4 H5 H6 H7 H8 H9.
+  remember (fun i => a :^: b!i :*: c!i) as F eqn:H10.
+  remember (:sum:_{succ n} :[F]:) as s eqn:H11.
+  assert (Ordinal a) as G0. { apply H1. }
+  assert (forall i, i :< succ n -> Ordinal b!i) as G1. {
+    intros i G1. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+  assert (forall i, i :< succ n -> Ordinal c!i) as G2. {
+    intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
+  assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
+  assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
+    intros i G6. rewrite ToFun.Eval, H10.
+    apply Mult.IsOrdinal.
+    - apply IsOrdinal. 1: assumption. apply G1. assumption.
+    - apply G2. assumption. }
+  assert (domain b = succ n) as G7. { apply H4. }
+  assert (domain c = succ n) as G8. { apply H5. }
+  assert (Ordinal (a :^: d)) as G9. { apply IsOrdinal; assumption. }
+  assert (Ordinal (succ n)) as G10. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal s) as G11. {
+    rewrite H11. apply SumOfClass.IsOrdinal. 1: assumption.
+    intros i G11. apply G6. assumption. }
+  assert (Ordinal b!:0:) as G12. { apply G1. assumption. }
+  assert (Ordinal (succ b!:0:)) as G13. {
+    apply Succ.IsOrdinal. apply G1. assumption. }
+  assert (:1: :< :N) as G14. { apply Omega.HasOne. }
+  assert (Ordinal :1:) as G15. { apply Natural.OneIsOrdinal. }
+  assert (:1: :< a) as G19. { apply Limit.HasOne. assumption. }
+  assert (Ordinal (F :0:)) as G26. {
+    rewrite H10. apply Mult.IsOrdinal.
+    - apply IsOrdinal; assumption.
+    - apply G2. assumption. }
+  assert (Ordinal c!:0:) as G27. { apply G2. assumption. }
+  assert (Ordinal (a :^: b!:0:)) as G28. { apply IsOrdinal; assumption. }
   assert (a :^: b!:0: :<=: a :^: b!:0: :*: c!:0:) as H20. {
     apply Mult.IsInclR. 3: assumption.
     - apply IsOrdinal; assumption.
@@ -1603,12 +1653,12 @@ Proof.
   assert (a :^: b!:0: :<=: s) as H21. {
     apply Incl.Tran with  (F :0:).
     - rewrite H10. assumption.
-    - rewrite H18. apply Plus.IsInclR; assumption. }
-  assert (s :< F :0: :+: a :^: b!:0:) as H22. {
-    rewrite H18. apply Plus.ElemCompatR; assumption. }
+    - assert (:[F]:!:0: :<=: s) as H21. {
+        rewrite H11. apply SumOfClass.IsIncl; try assumption.
+        intros i H21. apply ToFun.DomainOf. }
+      rewrite ToFun.Eval in H21. assumption. }
   assert (s :< a :^: b!:0: :*: succ c!:0:) as H23. {
-    rewrite H10 in H22.
-    rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR; assumption. }
+    rewrite H11, H10. apply SumNatElem; assumption. }
   assert (a :^: (b!:0: :+: d) :<=: s :*: a :^: d) as H24. {
     rewrite DistribL; try assumption.
     apply Mult.InclCompatL; assumption. }
@@ -1782,3 +1832,32 @@ Proof.
     + apply Incl.Refl.
     + apply Mult.IsInclR; assumption.
 Qed.
+
+Proposition SumReduceIncl : forall (a d n b c:U),
+  Limit a                                                         ->
+  Ordinal d                                                       ->
+  n :< :N                                                         ->
+  OrdFunOn b (succ n)                                             ->
+  OrdFunOn c (succ n)                                             ->
+  Decreasing b                                                    ->
+  (forall i, i :< succ n -> c!i :< :N)                            ->
+  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :^: d :<=:
+  a :^: (b!:0: :*: d) :*: (succ c!:0:).
+Proof.
+  intros a d n b c H1 H2 H3 H4 H5 H6 H7.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (forall i, i :< succ n -> Ordinal b!i) as G2. {
+    intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+  assert (forall i, i :< succ n -> Ordinal c!i) as G3. {
+    intros i G3. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
+  assert (Ordinal n) as G4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal b!:0:) as G5. { apply G2. apply Succ.HasZero. assumption. }
+  assert (Ordinal c!:0:) as G6. { apply G3. apply Succ.HasZero. assumption. }
+  assert (Ordinal (succ c!:0:)) as G7. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal (a :^: b!:0:)) as G8. { apply IsOrdinal; assumption. }
+  assert (Ordinal (a :^: b!:0: :*: succ c!:0:)) as G9. {
+    apply Mult.IsOrdinal; assumption. }
+  remember (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) as s eqn:H8.
+  assert (s :<=: a :^: b!:0: :*: succ c!:0:) as H9. {
+    apply Core.ElemIsIncl. 1: assumption. rewrite H8.
+Admitted.
