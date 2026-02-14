@@ -1082,7 +1082,7 @@ Proposition PolynomialUnique : forall (a n m c d e f:U),
   (forall i, i :< n -> c!i :< a  )                ->
   (forall i, i :< m -> :0: :< e!i)                ->
   (forall i, i :< m -> e!i :< a  )                ->
-  :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:) =
+  :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:)      =
   :sum:_{m} (:[fun i => a :^: f!i :*: e!i]:)      ->
   n = m /\ c = e /\ d = f.
 Proof.
@@ -1422,7 +1422,7 @@ Proposition SumReduceNonNatR : forall (a d n b c:U),
   (forall i, i :< succ n -> :0: :< c!i)                           ->
   (forall i, i :< succ n -> c!i :< a )                            ->
   :N :<=: d                                                       ->
-  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d =
+  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d     =
   a :^: (b!:0: :+: d).
 Proof.
   intros a d n b c H1 H2 H3 H4 H5 Ha H6 H7 H8 H9.
@@ -1498,8 +1498,7 @@ Proposition  SumNatElem : forall (a n b c:U),
   OrdFunOn c (succ n)                                               ->
   Decreasing b                                                      ->
   (forall i, i :< succ n -> c!i :< :N)                              ->
-  :sum:_{succ n} (:[fun i => a :^: b!i :*: c!i]:)
-  :<
+  :sum:_{succ n} (:[fun i => a :^: b!i :*: c!i]:)                   :<
   a :^: b!:0: :*: succ c!:0:.
 Proof.
   intros a n b c H1 H2 H3 H4 H5 H7.
@@ -1608,7 +1607,7 @@ Proposition SumReduceLimitL : forall (a d n b c:U),
   :0: :< c!:0:                                                    ->
   (forall i, i :< succ n -> c!i :< :N)                            ->
   :0: :< d                                                        ->
-  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d =
+  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :*: a :^: d     =
   a :^: (b!:0: :+: d).
 Proof.
   intros a d n b c H1 H2 H3 H4 H5 H6 H7 H8 H9.
@@ -1687,7 +1686,7 @@ Lemma LimitWithNat : forall (a b c n:U),
   :0: :< b                                                        ->
   :0: :< n                                                        ->
   :0: :< c                                                        ->
-  Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
+  Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n    \/
   Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c).
 Proof.
   intros a b c n H1 H2 H3 H4 H5 H6. revert c H3.
@@ -1840,11 +1839,12 @@ Proposition SumReduceIncl : forall (a d n b c:U),
   OrdFunOn b (succ n)                                             ->
   OrdFunOn c (succ n)                                             ->
   Decreasing b                                                    ->
+  :0: :< b!:0:                                                    ->
   (forall i, i :< succ n -> c!i :< :N)                            ->
-  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :^: d :<=:
+  (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) :^: d         :<=:
   a :^: (b!:0: :*: d) :*: (succ c!:0:).
 Proof.
-  intros a d n b c H1 H2 H3 H4 H5 H6 H7.
+  intros a d n b c H1 H2 H3 H4 H5 H6 H7 H8.
   assert (Ordinal a) as G1. { apply H1. }
   assert (forall i, i :< succ n -> Ordinal b!i) as G2. {
     intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
@@ -1857,7 +1857,27 @@ Proof.
   assert (Ordinal (a :^: b!:0:)) as G8. { apply IsOrdinal; assumption. }
   assert (Ordinal (a :^: b!:0: :*: succ c!:0:)) as G9. {
     apply Mult.IsOrdinal; assumption. }
-  remember (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) as s eqn:H8.
-  assert (s :<=: a :^: b!:0: :*: succ c!:0:) as H9. {
-    apply Core.ElemIsIncl. 1: assumption. rewrite H8.
-Admitted.
+  remember (:sum:_{succ n} :[fun i => a :^: b!i :*: c!i]:) as s eqn:H9.
+  assert (Ordinal (succ n)) as G10. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal s) as G11. {
+    rewrite H9. apply SumOfClass.IsOrdinal; try assumption.
+    intros i G11. rewrite ToFun.Eval.
+    apply Mult.IsOrdinal.
+    - apply IsOrdinal. 1: assumption. apply G2. assumption.
+    - apply G3. assumption. }
+  assert (succ c!:0: :< :N) as G12. {
+    apply Omega.HasSucc, H8, Succ.HasZero. assumption. }
+
+  assert (s :<=: a :^: b!:0: :*: succ c!:0:) as H10. {
+    apply Core.ElemIsIncl. 1: assumption.
+    rewrite H9. apply SumNatElem; assumption. }
+  assert (s :^: d :<=: (a :^: b!:0: :*: succ c!:0:) :^: d) as H11. {
+    apply InclCompatL; assumption. }
+  assert (
+    (a :^: b!:0: :*: succ c!:0:) :^: d
+    :<=:
+    a :^: (b!:0: :*: d) :*: succ c!:0:) as H12. {
+      apply LimitWithNatIncl; try assumption.
+      apply Succ.HasZero. assumption. }
+  apply Incl.Tran with ((a :^: b!:0: :*: succ c!:0:) :^: d); assumption.
+Qed.
