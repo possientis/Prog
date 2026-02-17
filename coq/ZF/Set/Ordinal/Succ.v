@@ -51,7 +51,7 @@ Qed.
 (* A set (ordinal or not) is a subset of its successor.                         *)
 Proposition IsIncl : forall (a:U), a :<=: succ a.
 Proof.
-  intros a.  apply Union2.InclL.
+  intros a.  apply Union2.IsInclL.
 Qed.
 
 (* The successor of an ordinal is an ordinal.                                   *)

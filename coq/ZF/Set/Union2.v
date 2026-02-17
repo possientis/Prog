@@ -89,12 +89,12 @@ Proof.
       * apply H2.
 Qed.
 
-Proposition InclL : forall (a b:U), a :<=: a:\/:b.
+Proposition IsInclL : forall (a b:U), a :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Charac. left. apply H1.
 Qed.
 
-Proposition InclR : forall (a b:U), b :<=: a:\/:b.
+Proposition IsInclR : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Charac. right. apply H1.
 Qed.

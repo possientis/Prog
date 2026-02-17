@@ -211,9 +211,9 @@ Proof.
       - apply SOC.ElemIsIncl; assumption.
       - rewrite H8. apply SIN.Refl. }
     assert (y :<=: a :\/: b) as H10. {
-      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.InclL. }
+      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclL. }
     assert (z :<=: a :\/: b) as H11. {
-      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.InclR. }
+      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
     split; apply SOC.InclElemTran with (a :\/: b); try assumption;
     apply Succ.IsIn. }
   apply Bounded.WhenSmaller with (toClass (c :x: c)). 1: assumption.
