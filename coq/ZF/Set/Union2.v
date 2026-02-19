@@ -125,3 +125,11 @@ Proposition IdentityR : forall (a:U),
 Proof.
   intros a. rewrite Comm. apply IdentityL.
 Qed.
+
+Proposition IsIncl : forall (a b c:U),
+  a :<=: c -> b :<=: c -> a :\/: b :<=: c.
+Proof.
+  intros a b c H1 H2 x H3. apply Charac in H3. destruct H3 as [H3|H3].
+  - apply H1. assumption.
+  - apply H2. assumption.
+Qed.
