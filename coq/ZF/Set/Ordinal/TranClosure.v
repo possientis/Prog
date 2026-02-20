@@ -58,4 +58,5 @@ Proof.
       rewrite H7. 2: assumption. apply Union2.IsIncl; assumption. }
   intros x H14. rewrite H3 in H14. apply UnionGen.Charac in H14.
   destruct H14 as [n [H14 H15]].
-Admitted.
+  specialize (H13 n H14). apply H13. assumption.
+Qed.
