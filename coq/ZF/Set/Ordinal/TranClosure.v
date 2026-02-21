@@ -1,7 +1,10 @@
+Require Import ZF.Class.Empty.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.InterOfClass.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
@@ -13,6 +16,7 @@ Require Import ZF.Set.UnionGen.
 
 Require Import ZF.Notation.Eval.
 
+Module CEM := ZF.Class.Empty.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 
 (* Every set has a smallest transitive superset.                                *)
@@ -60,3 +64,54 @@ Proof.
   destruct H14 as [n [H14 H15]].
   specialize (H13 n H14). apply H13. assumption.
 Qed.
+
+(* The transitive closure of a set a.                                           *)
+Definition closure (a:U) : U := inter (fun x => a :<=: x /\ Transitive x).
+
+(* The class underlying the transitive closure of a set a is non-empty.         *)
+Lemma IsNonEmpty : forall (a:U), (fun x => a :<=: x /\ Transitive x) :<>: :0:.
+Proof.
+  intros a.
+  assert (exists b,
+    a :<=: b                                          /\
+    Transitive b                                      /\
+    (forall c, a :<=: c -> Transitive c -> b :<=: c)) as H2. {
+      apply Exists. }
+    destruct H2 as [b [H2 [H3 _]]].
+    apply CEM.HasElem. exists b. split; assumption.
+Qed.
+
+(* All sets are subsets of their transitive closure.                            *)
+Proposition IsIncl : forall (a:U), a :<=: closure a.
+Proof.
+  intros a x H1. apply InterOfClass.CharacRev.
+  - apply IsNonEmpty.
+  - intros y [H2 H3]. apply H2. assumption.
+Qed.
+
+(* The transitive closure of a set is transitive.                               *)
+Proposition IsTransitive : forall (a:U), Transitive (closure a).
+Proof.
+  intros a x y H1 H2.
+  apply InterOfClass.CharacRev. 1: apply IsNonEmpty.
+  intros z [H3 H4]. apply H4 with y. 1: assumption.
+  apply InterOfClass.Charac with (fun u => a :<=: u /\ Transitive u).
+  1: assumption. split; assumption.
+Qed.
+
+(* The transitive closure is the smallest transitive superset.                  *)
+Proposition IsSmallest : forall (a b:U),
+  a :<=: b  -> Transitive b -> closure a :<=: b.
+Proof.
+  intros a b H1 H2 y H3.
+  assert (exists c,
+    a :<=: c                                          /\
+    Transitive c                                      /\
+    (forall b, a :<=: b -> Transitive b -> c :<=: b)) as H4. {
+      apply Exists. }
+  destruct H4 as [c [H4 [H5 H6]]]. specialize (H6 b H1 H2). apply H6.
+  apply InterOfClass.Charac with (fun u => a :<=: u /\ Transitive u).
+  1: assumption. split; assumption.
+Qed.
+
+
