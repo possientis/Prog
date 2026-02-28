@@ -17,6 +17,7 @@ Require Import ZF.Set.Relation.InvImage.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Single.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRD := ZF.Class.Relation.Domain.
@@ -186,3 +187,10 @@ Proof.
   intros f H1. split. 1: assumption. reflexivity.
 Qed.
 
+Proposition WhenSingle : forall (x y f:U),
+  f = :{ :(x,y): }: -> FunctionOn f :{x}:.
+Proof.
+  intros x y f H1. split.
+  - apply Function.WhenSingle with x y. assumption.
+  - apply Domain.WhenSingle with y. assumption.
+Qed.

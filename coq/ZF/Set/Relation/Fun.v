@@ -16,6 +16,7 @@ Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Single.
 
 Module CRF := ZF.Class.Relation.Fun.
 Module CRR := ZF.Class.Relation.Range.
@@ -184,5 +185,14 @@ Proposition RestrictEqual : forall (f a b g c d e:U),
 Proof.
   intros f a b g c d e [H1 H2] [H3 H4].
   apply FunctionOn.RestrictEqual; assumption.
+Qed.
+
+Proposition WhenSingle : forall (x y f b:U),
+  y :< b -> f = :{ :(x,y): }: -> Fun f :{x}: b.
+Proof.
+  intros x y f b H1 H2. split.
+  - apply FunctionOn.WhenSingle with y. assumption.
+  - rewrite Range.WhenSingle with x y f. 2: assumption.
+    intros z H3. apply Single.Charac in H3. subst. assumption.
 Qed.
 
