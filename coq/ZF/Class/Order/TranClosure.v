@@ -242,5 +242,18 @@ Proof.
         split; assumption. }
   - intros x H26. apply G4 in H26. destruct H26 as [n [H26 H27]].
     rewrite E in H25. apply H25 with n; assumption.
-  - Admitted.
+  - intros c H25 H26 H27 x H28.
+    assert (forall n, n :< :N -> f!n :<=: c) as H29. {
+      apply Omega.Induction.
+      - rewrite <- H15. assumption.
+      - intros n H29 IH u H30. rewrite H16 in H30. 2: assumption.
+        apply Union2.Charac in H30. destruct H30 as [H30|H30].
+        + apply IH. assumption.
+        + apply H11 in H30. 2: { apply H19. assumption. }
+          rewrite H10 in H30. destruct H30 as [H30 [v [H31 H32]]].
+          apply CRC.Charac2 in H32. apply H27 with v; try assumption.
+          apply IH. assumption. }
+    apply G4 in H28. destruct H28 as [n [H28 H30]].
+    apply H29 with n; assumption.
+Qed.
 
