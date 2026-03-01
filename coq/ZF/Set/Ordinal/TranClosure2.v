@@ -185,5 +185,11 @@ Proof.
         rewrite H28. rewrite <- H15 in H25. assumption. }
       split. 1: assumption. split. 1: assumption. split. 1: assumption.
       intros i H30. apply Empty.Charac in H30. contradiction.
-    - intros n H25 IH.
+    - intros n H25 IH x H26. rewrite H16 in H26. 2: assumption.
+      apply Union2.Charac in H26. destruct H26 as [H26|H26].
+      + apply IH. assumption.
+      + apply H11 in H26. 2: { apply H19. assumption. }
+        rewrite H10 in H26. destruct H26 as [H26 H27].
+        destruct H27 as [u [H27 H28]]. apply CRC.Charac2 in H28.
+        specialize (IH u H27). destruct IH as [m [g [H29 [H30 [H31 H32]]]]].
 Admitted.
