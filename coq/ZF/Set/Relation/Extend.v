@@ -103,9 +103,10 @@ Proof.
 Qed.
 
 Proposition IsFun : forall (f a b x y:U),
-  ~ x :< a  ->
-  y :< b    ->
-  Fun f a b -> Fun (extend f x y) (a :\/: :{x}:) b.
+  ~ x :< a                             ->
+  y :< b                               ->
+  Fun f a b                            ->
+  Fun (extend f x y) (a :\/: :{x}:) b.
 Proof.
   intros f a b x y H1 H2 [H3 H4]. split.
   - apply IsFunctionOn; assumption.

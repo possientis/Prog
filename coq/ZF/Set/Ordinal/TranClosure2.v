@@ -11,8 +11,10 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
@@ -21,6 +23,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Extend.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
@@ -53,6 +56,7 @@ Proposition Exists : forall (R A:Class) (a:U),
     toClass b :<=: A                                      /\
     Transitive R A b                                      /\
     (forall x, x :< b -> exists n g,
+      n :< :N                                     /\
       Fun g (succ n) b                            /\
       g!:0: :< a                                  /\
       g!n = x                                     /\
@@ -64,6 +68,7 @@ Proposition Exists : forall (R A:Class) (a:U),
       b :<=: c).
 Proof.
   intros R A a H1 H2.
+  assert (:0: :< :N) as G0. { apply Omega.HasZero. }
   assert (A :<=: A) as G1. { apply CIN.Refl. }
   remember (fun y => exists x, A x /\ y = :(x,initSegment R A x):) as B eqn:H3.
   assert (forall x y, B :(x,y): <-> A x /\ y = initSegment R A x) as H4. {
@@ -168,9 +173,10 @@ Proof.
   split. 1: assumption. split. 1: assumption. split. 1: assumption. split.
   remember (fun n =>
     forall x : U, x :< (f) ! (n) -> exists m g : U,
+      m :< :N          /\
       Fun g (succ m) b /\
-      eval g :0: :< a /\
-      (g) ! (m) = x /\
+      eval g :0: :< a  /\
+      (g) ! (m) = x    /\
       (forall i : U, i :< m -> R :( eval g (succ i), (g) ! (i) ):))
   as C eqn:E.
   assert (forall n, n :< :N -> C n) as H25. {
@@ -184,12 +190,57 @@ Proof.
       assert (g!:0: :< a) as H29. {
         rewrite H28. rewrite <- H15 in H25. assumption. }
       split. 1: assumption. split. 1: assumption. split. 1: assumption.
+      split. 1: assumption.
       intros i H30. apply Empty.Charac in H30. contradiction.
-    - intros n H25 IH x H26. rewrite H16 in H26. 2: assumption.
+    - intros n H25 IH x H26.
+      assert (succ n :< :N) as G6. { apply Omega.HasSucc. assumption. }
+      assert (x :< b) as G7. { apply G5 with (succ n); assumption. }
+      rewrite H16 in H26. 2: assumption.
       apply Union2.Charac in H26. destruct H26 as [H26|H26].
       + apply IH. assumption.
       + apply H11 in H26. 2: { apply H19. assumption. }
         rewrite H10 in H26. destruct H26 as [H26 H27].
         destruct H27 as [u [H27 H28]]. apply CRC.Charac2 in H28.
-        specialize (IH u H27). destruct IH as [m [g [H29 [H30 [H31 H32]]]]].
-Admitted.
+        specialize (IH u H27). destruct IH as [m [g [H29 [H30 [H31 [H32 H33]]]]]].
+        remember (extend g (succ m) x) as h eqn:H34. exists (succ m), h.
+        assert (domain g = succ m) as G8. { apply H30. }
+        assert (Functional g) as G9. { apply H30. }
+        assert (Ordinal m) as G10. { apply Omega.HasOrdinalElem. assumption. }
+        assert (succ m :< :N) as G11. { apply Omega.HasSucc. assumption. }
+        assert (h!m = u) as G12. {
+          rewrite H34, Extend.Evalf; try assumption; rewrite G8.
+          - apply NoElemLoop1.
+          - apply Succ.IsIn. }
+        assert (Ordinal (succ m)) as G13. { apply Succ.IsOrdinal. assumption. }
+        assert (Fun h (succ (succ m)) b) as H35. {
+          rewrite H34. apply Extend.IsFun; try assumption. apply NoElemLoop1. }
+        assert (h!:0: :< a) as H36. {
+          rewrite H34, Extend.Evalf; try assumption; rewrite G8.
+          - apply NoElemLoop1.
+          - apply Succ.HasZero. assumption. }
+        assert (h!(succ m) = x) as H37. {
+          rewrite H34. apply Extend.Evalx. 2: assumption.
+          rewrite G8. apply NoElemLoop1. }
+        assert (forall i, i :< succ m -> R :(h!(succ i), h!i):) as H38. {
+          intros i H38.
+          assert (i :< :N) as K1. {
+            apply Omega.IsIn with (succ m); assumption. }
+          assert (Ordinal i) as K2. { apply Omega.HasOrdinalElem. assumption. }
+          apply Succ.Charac in H38. destruct H38 as [H38|H38].
+          - rewrite H38, H37, G12. assumption.
+          - assert (forall j, j :< succ m -> h!j = g!j) as H39. {
+              intros j H39. rewrite H34, Extend.Evalf; try assumption.
+              - reflexivity.
+              - rewrite G8. apply NoElemLoop1.
+              - rewrite G8. assumption. }
+            rewrite H39, H39.
+            + apply H33. assumption.
+            + apply Core.ElemElemTran with m; try assumption.
+              apply Succ.IsIn.
+            + apply Succ.ElemCompat; assumption. }
+        split. 1: assumption. split. 1: assumption. split. 1: assumption.
+        split; assumption. }
+  - intros x H26. apply G4 in H26. destruct H26 as [n [H26 H27]].
+    rewrite E in H25. apply H25 with n; assumption.
+  - Admitted.
+
