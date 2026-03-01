@@ -1,6 +1,8 @@
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -256,4 +258,15 @@ Proof.
     apply G4 in H28. destruct H28 as [n [H28 H30]].
     apply H29 with n; assumption.
 Qed.
+
+Proposition HasMinimal : forall (R A B:Class),
+  WellFounded R A             ->
+  B :<=: A                    ->
+  B :<>: :0:                  ->
+  exists x, Minimal R B x.
+Proof.
+Admitted.
+
+
+
 
