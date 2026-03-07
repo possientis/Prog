@@ -297,18 +297,17 @@ Proof.
     apply Specify.Charac. split. 2: assumption. apply H4. apply Single.IsIn. }
   assert (exists d, Minimal R (toClass c) d) as H10. { apply H1; assumption. }
   destruct H10 as [d H10].
-  assert (toClass c :<=: B) as H11. {
-
-(*
-  assert (B d) as H12. {
-*)
-(*
-  exists d. split.
-  -
-*)
-
-Admitted.
-
-
-
-
+  assert (toClass c :<=: B) as H11. { rewrite H7. apply Specify.IsInclR. }
+  assert (B d) as H12. { apply H11. apply Minimal.IsIn with R. assumption. }
+  assert (c :<=: b) as H13. { rewrite H7. apply Specify.IsInclL. }
+  assert (d :< b) as H14. {
+    apply H13. apply (Minimal.IsIn R (toClass c)). assumption. }
+  assert (forall x, B x -> ~ R :( x, d ):) as H15. {
+    intros x H15 H16.
+    assert (x :< b) as H17. {
+      apply H6 with d; try assumption. apply H2. assumption. }
+    assert (x :< c) as H18. {
+      rewrite H7. apply Specify.Charac. split; assumption. }
+    revert H16. apply H10. assumption. }
+  exists d. split; assumption.
+Qed.
