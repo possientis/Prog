@@ -56,7 +56,7 @@ Qed.
 Proposition IsOrdinal : forall (a:U), Ordinal (sup a).
 Proof.
   intros a. apply SOU.IsOrdinal. intros x H1.
-  apply Specify.IsInP in H1. assumption.
+  apply Specify.IsInclR in H1. assumption.
 Qed.
 
 (* The supremum of a set of ordinals is an upper-bound of that set.             *)

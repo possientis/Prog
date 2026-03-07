@@ -77,7 +77,7 @@ Qed.
 Proposition IsOrdinal : forall (a:U), Ordinal (inf a).
 Proof.
   intros a. apply SOI.IsOrdinal. intros x H1.
-  apply Specify.IsInP in H1. assumption.
+  apply Specify.IsInclR in H1. assumption.
 Qed.
 
 Proposition IsLowerBound : forall (a b:U),

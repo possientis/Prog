@@ -623,11 +623,11 @@ Proof.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   assert (Limit :N) as G2. { apply Omega.IsLimit. }
   assert (toClass l :<=: Ordinal) as H5. {
-    intros c H5. rewrite H3 in H5. apply Specify.IsInP in H5. apply H5. }
+    intros c H5. rewrite H3 in H5. apply Specify.IsInclR in H5. apply H5. }
   assert (Ordinal b) as H6. { rewrite H4. apply Sup.IsOrdinal. }
   assert (b :<=: a) as H7. {
     rewrite H4. apply Sup.IsSmallest. 1: assumption.
-    intros c H7. rewrite H3 in H7. apply Specify.IsInA in H7.
+    intros c H7. rewrite H3 in H7. apply Specify.IsInclL in H7.
     apply Succ.InclIsElem; try assumption.
     apply Core.IsOrdinal with (succ a). 2: assumption.
     apply Succ.IsOrdinal. assumption. }
