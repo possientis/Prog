@@ -10,6 +10,7 @@ Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Single.
 
+Require Import ZF.Notation.Eval.
 Export ZF.Notation.Eval.
 
 Definition eval (f a:U) : U := (toClass f)!a.
