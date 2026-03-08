@@ -12,6 +12,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Max.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
@@ -20,6 +21,7 @@ Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
+Require Import ZF.Set.Union2.
 Export ZF.Notation.N.
 
 Module COT := ZF.Class.Ordinal.Transitive.
@@ -110,6 +112,17 @@ Qed.
 Proposition HasOrdinalElem : toClass :N :<=: Ordinal.
 Proof.
   intros n H1. apply Charac in H1. destruct H1 as [H1 _]. assumption.
+Qed.
+
+Proposition HasMax : forall (n m:U),
+  n :< :N -> m :< :N -> n :\/: m :< :N.
+Proof.
+  intros n m H1 H2.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  assert (n :\/: m = n \/ n :\/: m = m) as G3. {
+    apply Max.IsLeftOrRight; assumption. }
+  destruct G3 as [G3|G3]; rewrite G3; assumption.
 Qed.
 
 (* Every element of N is a non-limit ordinal.                                   *)
@@ -368,3 +381,4 @@ Proof.
     assert (m :< m) as H18. { apply H17. assumption. }
     revert H18. apply NoElemLoop1.
 Qed.
+

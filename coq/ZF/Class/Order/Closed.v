@@ -7,6 +7,7 @@ Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Ordinal.Max.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
@@ -86,9 +87,11 @@ Proof.
   assert (forall n, n :< :N -> f!n :<=: f!(succ n)) as G9. {
     intros n G9. rewrite G6. 2: assumption.  apply Union2.IsInclL. }
   assert (forall n m, n :< :N -> m :< :N -> n :<=: m -> f!n :<=: f!m) as G10. {
+    intros n m G10. revert m. apply Omega.Induction'. 1: assumption.
+    - apply Incl.Refl.
+    - intros m G11 G12 G13. apply Incl.Tran with f!m. 1: assumption.
+      apply G9. assumption. }
 
-
-(*
   assert (forall n, n :< :N -> R' f!n :\/: S' f!n :<=: f!(succ n)) as H16. {
     intros n H16. rewrite G6. 2: assumption.  apply Union2.IsInclR. }
   assert (forall n, n :< :N -> R' f!n :<=: f!(succ n)) as H17. {
@@ -128,7 +131,20 @@ Proof.
     destruct H24 as [u [v [H24 [H26 H27]]]].
     apply G3 in H26. destruct H26 as [n [H26 H28]].
     apply G3 in H27. destruct H27 as [m [H27 H29]].
-
-*)
-Admitted.
+    remember (n :\/: m) as r eqn:H30.
+    assert (r :< :N) as K1. { rewrite H30. apply Omega.HasMax; assumption. }
+    assert (succ r :< :N) as K2. { apply Omega.HasSucc. assumption. }
+    assert (n :<=: r) as H31. { rewrite H30. apply Union2.IsInclL. }
+    assert (m :<=: r) as H32. { rewrite H30. apply Union2.IsInclR. }
+    assert (u :< f!r) as H33. { apply (G10 n r); assumption. }
+    assert (v :< f!r) as H34. { apply (G10 m r); assumption. }
+    apply G4 with (succ r). 1: assumption. rewrite G6. 2: assumption.
+    apply Union2.Charac3. right. right. rewrite H11.
+    apply UnionGenOfClass.Charac. exists i. split. 1: assumption.
+    rewrite ToFun.Eval, H9. apply Truncate.Charac. split.
+    - apply H7. 1: assumption. apply H20. assumption.
+    - exists x. split. 2: assumption. rewrite H24.
+      apply Prod.Charac2. split; assumption. }
+  split. 1: assumption. split. 1: assumption. split; assumption.
+Qed.
 
