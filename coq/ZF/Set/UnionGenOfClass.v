@@ -1,3 +1,4 @@
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Class.Small.
@@ -75,10 +76,17 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
-Proposition WhenBounded : forall (A:Class) (a b:U),
+Proposition WhenSetBounded : forall (A:Class) (a b:U),
   (forall x, x :< a -> A!x :<=: b) -> :\/:_{a} A :<=: b.
 Proof.
   intros A a b H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
+  apply (H1 x); assumption.
+Qed.
+
+Proposition WhenClassBounded : forall (A B:Class) (a:U),
+  (forall x, x :< a -> toClass A!x :<=: B) -> toClass (:\/:_{a} A) :<=: B.
+Proof.
+  intros A B a H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
   apply (H1 x); assumption.
 Qed.
 

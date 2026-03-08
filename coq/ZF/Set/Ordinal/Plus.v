@@ -341,7 +341,7 @@ Proof.
       apply G1. 1: assumption. rewrite H11. apply Succ.IsIn. }
     apply ElemIsIncl in H14; try assumption. rewrite H11.
     rewrite WhenSuccR; assumption.
-  - rewrite WhenLimit. 2: assumption. apply SUG.WhenBounded.
+  - rewrite WhenLimit. 2: assumption. apply SUG.WhenSetBounded.
     intros d H15.
     assert (Ordinal d) as H16. { apply Core.IsOrdinal with c; assumption. }
     assert (Ordinal (a :+: d)) as H17. { apply IsOrdinal; assumption. }
@@ -410,7 +410,7 @@ Proof.
   assert (n :+: :N = :N) as G0. {
     apply DoubleInclusion. split.
     - rewrite WhenLimit. 2: apply Omega.IsLimit.
-      apply SUG.WhenBounded. intros m H1.
+      apply SUG.WhenSetBounded. intros m H1.
       apply Core.ElemIsIncl. 1: apply Omega.IsOrdinal.
       apply InOmega; assumption.
     - rewrite WhenLimit. 2: apply Omega.IsLimit. intros m H1. apply SUG.Charac.

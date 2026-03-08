@@ -1,3 +1,5 @@
+Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Truncate.
@@ -49,3 +51,11 @@ Proof.
   - apply Charac in H2. destruct H2 as [_ H2]. apply H1 in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.
 Qed.
+
+Proposition IsIncl : forall (A B:Class),
+  A :<=: B -> toClass (truncate A) :<=: B.
+Proof.
+  intros A B H1 x H2. apply Charac in H2. destruct H2 as [H2 H3].
+  apply H1. assumption.
+Qed.
+

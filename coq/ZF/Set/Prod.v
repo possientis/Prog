@@ -15,6 +15,12 @@ Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
 (* Notation "a :x: b" := (prod a b)                                             *)
 Global Instance SetProd : Prod U := { prod := prod }.
 
+Proposition ToClass : forall (a b:U),
+  toClass (a :x: b) :~: toClass a :x: toClass b.
+Proof.
+  intros a b. apply ToFromClass.
+Qed.
+
 (* Characterisation of the elements of the product axb *)
 Proposition Charac : forall (a b:U),
   forall x, x :< a :x: b <-> exists y, exists z, x = :(y,z): /\ y :< a /\ z :< b.

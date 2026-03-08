@@ -133,3 +133,17 @@ Proof.
   - apply H1. assumption.
   - apply H2. assumption.
 Qed.
+
+Proposition Charac3 : forall (a b c x:U),
+  x :< a :\/: b :\/: c <-> x :< a \/ x :< b \/ x :< c.
+Proof.
+  intros a b c x. split; intros H1.
+  - apply Charac in H1. destruct H1 as [H1|H1]. 1: { left. assumption. }
+    apply Charac in H1. destruct H1 as [H1|H2]; right.
+    + left. assumption.
+    + right. assumption.
+  - destruct H1 as [H1|[H1|H1]]; apply Charac.
+    + left. assumption.
+    + right. apply Charac. left . assumption.
+    + right. apply Charac. right. assumption.
+Qed.
