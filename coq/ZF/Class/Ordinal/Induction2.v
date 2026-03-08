@@ -30,7 +30,7 @@ Proof.
   - apply H3; assumption.
 Qed.
 
-Proposition Induction2' : forall (A:Class) (b:U),
+Proposition Induction' : forall (A:Class) (b:U),
   On b                                                       ->
   A b                                                        ->
   (forall a, On a -> b :<=: a -> A a -> A (succ a))          ->

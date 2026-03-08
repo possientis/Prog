@@ -108,7 +108,7 @@ Proof.
   intros a b c H1 H2 H3 H4. apply Succ.ElemIsIncl in H4; try assumption.
   assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
   revert b H2 H4.
-  apply Induction2'. 1: assumption.
+  apply Induction2.Induction'. 1: assumption.
   - rewrite WhenSuccR. 2: assumption. apply Succ.IsIn.
   - intros b H6 H7 H8. rewrite WhenSuccR. 2: assumption.
     assert (Ordinal (c :+: a)) as H9.  { apply IsOrdinal; assumption. }
@@ -430,7 +430,7 @@ Proof.
         exists p. split. 1: assumption.
         assert (m :< n :+: p) as X. 2: apply X. (* rewrite failing *)
         rewrite H8. apply Succ.IsIn. }
-  apply Induction2'.
+  apply Induction2.Induction'.
   - apply Omega.IsOrdinal.
   - assumption.
   - intros a H1 H3 H4.

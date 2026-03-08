@@ -123,7 +123,7 @@ Proof.
     forall c : U, Ordinal c -> :0: :< c -> c :*: a :< c :*: b) as A eqn:H6.
   assert (Ordinal (succ a)) as H7. { apply Succ.IsOrdinal. assumption. }
   assert (forall b, Ordinal b -> succ a :<=: b -> A b) as H8. {
-    apply Induction2'. 1: assumption.
+    apply Induction2.Induction'. 1: assumption.
     - rewrite H6. intros c H8 H9. rewrite WhenSuccR. 2: assumption.
       apply Plus.IsElemAddR. 2: assumption.
       + apply IsOrdinal; assumption.
@@ -791,7 +791,7 @@ Proof.
     a = c :+: n               ->
     m :*: a = c :+: m :*: n) as A eqn:H1.
   assert (forall a, Ordinal a -> :N :<=: a -> A a) as H3. {
-    apply Induction2'. 1: assumption.
+    apply Induction2.Induction'. 1: assumption.
     - rewrite H1. intros n c H3 H5 H6.
       assert (:N = c /\ :0: = n) as H7. {
        apply Plus.DestructUnique; try assumption.

@@ -191,7 +191,7 @@ Proof.
     rewrite Mult.WhenOneR in H9. 2: assumption.
     rewrite WhenSuccR; assumption. }
   assert (forall b, Ordinal b -> succ a :<=: b -> A b) as H8. {
-    apply Induction2'. 1: assumption.
+    apply Induction2.Induction'. 1: assumption.
     - rewrite H6. apply H7. assumption.
     - rewrite H6. intros b H8 H9 IH.
       assert (Ordinal (succ b)) as G5. { apply Succ.IsOrdinal. assumption. }
