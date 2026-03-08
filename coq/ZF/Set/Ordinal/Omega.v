@@ -275,6 +275,34 @@ Proof.
   intros n H5. apply H4 in H5. rewrite H3 in H5. apply H5.
 Qed.
 
+Proposition Induction' : forall (A:Class) (m:U),
+  m :< :N                                               ->
+  A m                                                   ->
+  (forall n, n :< :N -> m :<=: n -> A n -> A (succ n))  ->
+  forall n, n :< :N -> m :<=: n -> A n.
+Proof.
+  intros A m H1 H2 H3.
+  assert (Ordinal m) as G1. { apply HasOrdinalElem. assumption. }
+  assert (m = :0: \/ :0: :< m) as G2. { apply Core.ZeroOrElem. assumption. }
+  remember (fun n => m :<=: n -> A n) as B eqn:H4.
+  assert (forall n, n :< :N -> B n) as H5. {
+    apply Induction; rewrite H4.
+    - intros H5. destruct G2 as [G2|G2].
+      + subst. assumption.
+      + apply H5 in G2. apply Empty.Charac in G2. contradiction.
+    - intros n H5 IH H6.
+      assert (Ordinal n) as G3. { apply HasOrdinalElem. assumption. }
+      assert (Ordinal (succ n)) as G4. { apply Succ.IsOrdinal. assumption. }
+      assert (m = succ n \/ m :< succ n) as H7. {
+        apply Core.EqualOrElem; assumption. }
+      destruct H7 as [H7|H7].
+      + rewrite <- H7. assumption.
+      + apply Succ.ElemIsIncl in H7; try assumption.
+        apply Succ.InclCompatRev in H7; try assumption.
+        apply H3; try assumption. apply IH. assumption. }
+  rewrite H4 in H5. assumption.
+Qed.
+
 (* A non-empty subclass of N has a minimal element.                             *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: toClass :N   ->
@@ -340,4 +368,3 @@ Proof.
     assert (m :< m) as H18. { apply H17. assumption. }
     revert H18. apply NoElemLoop1.
 Qed.
-
