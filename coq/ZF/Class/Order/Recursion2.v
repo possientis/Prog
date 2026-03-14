@@ -14,6 +14,10 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Restrict.
 
 Require Import ZF.Notation.Eval.
+Require Import ZF.Notation.Image.
+
+Module CIN := ZF.Class.Incl.
+Module CRC := ZF.Class.Relation.Converse.
 
 
 (* The recursion class associated with R A F. In other words, when R is well    *)
@@ -44,18 +48,38 @@ Qed.
 Lemma Coincide : forall (R A F:Class) (f g a b:U),
   WellFounded R A                                         ->
   toClass a :<=: A                                        ->
-  toClass b :<=: A                                        ->
   Closed R^:-1: (toClass a)                               ->
-  Closed R^:-1: (toClass b)                               ->
   a :<=: b                                                ->
   FunctionOn f a                                          ->
   FunctionOn g b                                          ->
   (forall x, x :< a -> f!x = F!(f:|:initSegment R A x))   ->
-  (forall x, x :< b -> g!x = F!(g:|:initSegment R A x))   ->
+  (forall x, x :< a -> g!x = F!(g:|:initSegment R A x))   ->
   (forall x, x :< a -> f!x = g!x).
 Proof.
-  intros R A F f g a b H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11.
+  intros R A F f g a b H1 H2 H4 H6 H7 H8 H9 H10.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
   remember (fun x => x :< a -> f!x = g!x) as B eqn:H12.
   assert (forall x, A x -> B x) as H13. {
-    apply Induction.Induction with R. 1: assumption.
-Admitted.
+    apply Induction.Induction with R. 1: assumption. rewrite H12.
+    intros c H13 IH H14.
+    assert (initSegment R A c :<=: a) as H15. {
+      intros u H15.
+      assert (R :(u,c):) as H16. {
+        apply (InitSegment.IsLess R A A); assumption. }
+      apply H4. exists c. split. 1: assumption.
+      apply CRC.Charac2Rev. assumption. }
+    assert (initSegment R A c :<=: b) as H16. {
+      apply Incl.Tran with a; assumption. }
+    assert (forall x, x :< initSegment R A c -> f!x = g!x) as H17. {
+      intros x H17. apply IH. 1: assumption. apply H15. assumption. }
+    assert (f:|:initSegment R A c = g :|: initSegment R A c) as H18. {
+      apply FunctionOn.RestrictEqual with a b; assumption. }
+    assert (f!c = F!(f:|:initSegment R A c)) as H19. {
+      apply H9. assumption. }
+    assert (g!c = F!(g:|:initSegment R A c)) as H20. {
+      apply H10. assumption. }
+    rewrite H19, H20, H18. reflexivity. }
+    rewrite H12 in H13. intros x H14. apply H13. 2: assumption.
+    apply H2. assumption.
+Qed.
+
