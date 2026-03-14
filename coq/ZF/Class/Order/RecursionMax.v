@@ -22,6 +22,8 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
+Require Import ZF.Notation.Eval.
+
 Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
 Module COR := ZF.Class.Order.Recursion.
@@ -386,10 +388,10 @@ Proof.
         assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H14. {
           apply RestrictOfClass.Eval. 2: assumption.
           apply IsFunction with max; assumption. }
-        rewrite H13, H14. apply H8. apply (SOI.ToClass R A A); try assumption.
-        rewrite H9 in H12. assumption. }
+        rewrite H13, H14. apply H8. assumption. }
     assert (G!a = F!(G:|:b)) as H15. { rewrite H9. apply H4. assumption. }
     assert ((Recursion R A F)!a = F!((Recursion R A F) :|: b)) as H16. {
        rewrite H9. apply IsRecursive with max; assumption. }
     rewrite H15, H16, H12. reflexivity.
 Qed.
+

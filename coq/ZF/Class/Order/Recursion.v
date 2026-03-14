@@ -26,6 +26,9 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
+Require Import ZF.Notation.Eval.
+
+Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
@@ -81,10 +84,10 @@ Lemma Coincide : forall (R A F:Class) (f g a b:U),
   (forall x, x :< initSegment R A a -> f!x = g!x).
 Proof.
   intros R A F f g a b H1 H2 H3 H4 H5 H6 H7 H8. apply ReflClosure.Charac2 in H4.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
   assert (forall x c, A c -> x :< initSegment R A c -> A x) as H9. {
     intros x c H9 H10. apply (SOI.IsIncl R A A c) in H10; try assumption.
-    - apply H1.
-    - apply Class.Incl.Refl. }
+    apply H1. }
   apply Induction.Induction with R.
   - apply WellFoundedWellOrd.InclCompat with A. 2: assumption.
     apply SOI.IsIncl with A. 2: assumption.
@@ -95,29 +98,28 @@ Proof.
       apply WellFoundedWellOrd.IsTransitive. assumption. }
     assert (WellFounded R A) as H13. { apply H1. }
     assert (A c) as H14. {
-      apply (SOI.IsIncl R A A) in H10; try assumption. apply Class.Incl.Refl. }
+      apply (SOI.IsIncl R A A) in H10; assumption. }
     assert (initSegment R A a :<=: initSegment R A b) as H15. {
       destruct H4 as [H4|H4].
       - subst. apply Incl.Refl.
-      - apply SOI.WhenLess with A; try assumption. apply Class.Incl.Refl. }
+      - apply SOI.WhenLess with A; assumption. }
     assert (c :< initSegment R A b) as H16. { apply H15. assumption. }
     specialize (H7 c H10). specialize (H8 c H16).
     assert (f :|: initSegment R A c = g :|: initSegment R A c) as H17. {
       apply FunctionOn.RestrictEqual with (initSegment R A a) (initSegment R A b);
       try assumption.
       - apply SOI.WhenLess with A; try assumption.
-        + apply Class.Incl.Refl.
-        + apply SOI.IsLess with A A; try assumption. apply Class.Incl.Refl.
+        apply SOI.IsLess with A A; assumption.
       - apply SOI.WhenLess with A; try assumption.
-        + apply Class.Incl.Refl.
-        + apply SOI.IsLess with A A; try assumption. apply Class.Incl.Refl.
-      - intros x H17. apply H11. apply COI.Charac. split.
-        + assert (initSegment R A c :<=: initSegment R A a) as H18. {
-            apply SOI.WhenLess with A; try assumption.
-            * apply Class.Incl.Refl.
-            * apply SOI.IsLess with A A; try assumption. apply Class.Incl.Refl. }
-          apply H18. assumption.
-        + apply SOI.IsLess with A A; try assumption. apply Class.Incl.Refl. }
+        apply SOI.IsLess with A A; assumption.
+      - intros x H17. apply H11.
+        assert (initSegment R A c :<=: initSegment R A a) as H18. {
+          apply SOI.WhenLess with A; try assumption.
+          apply SOI.IsLess with A A; assumption. }
+        apply SOI.CharacRev with A; try assumption.
+        + intros u H19. apply (SOI.IsIn R A A a); try assumption.
+        + apply H18. assumption.
+        + apply SOI.IsLess with A A; assumption. }
     rewrite H7, H8, H17. reflexivity.
 Qed.
 
@@ -347,8 +349,7 @@ Proof.
     remember (Recursion R A F :|: initSegment R A c) as f eqn:H9.
     assert (K R A F f c) as H10. {
       apply Restrict_; try assumption.
-      intros b H10. rewrite <- H3. apply H8.
-      apply (SOI.ToClass R A A) in H10; assumption. }
+      intros b H10. rewrite <- H3. apply H8. assumption. }
     remember (f :\/: :{ :(c,F!f): }:) as g eqn:H11.
     assert (KExt R A F g c) as H12. { apply Extend with f; assumption. }
     assert (~ Maximal R A c) as H13. {
@@ -488,8 +489,7 @@ Proof.
         assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H14. {
           apply RestrictOfClass.Eval. 2: assumption.
           apply IsFunction. assumption. }
-        rewrite H13, H14. apply H8. apply (SOI.ToClass R A A); try assumption.
-        rewrite H9 in H12. assumption. }
+        rewrite H13, H14. apply H8. assumption. }
     assert (G!a = F!(G:|:b)) as H15. { rewrite H9. apply H4. assumption. }
     assert ((Recursion R A F)!a = F!((Recursion R A F) :|: b)) as H16. {
        rewrite H9. apply IsRecursive; assumption. }
@@ -546,8 +546,7 @@ Proof.
         apply COI.IsIn with R a. rewrite <- H4. assumption. }
     assert (K R A F f c) as H19. {
       apply Restrict_; try assumption.
-      intros b H19. rewrite <- H3. apply H14.
-      apply (SOI.ToClass R A C); try assumption. rewrite <- H18. assumption. }
+      intros b H19. rewrite <- H3. apply H14. rewrite <- H18. assumption. }
     remember (f :\/: :{ :(c,F!f): }:) as g eqn:H20.
     assert (KExt R A F g c) as H21. { apply Extend with f; assumption. }
     assert (~Maximal R A c) as H22. {
