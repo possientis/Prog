@@ -10,7 +10,7 @@ Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
-Proposition Induction : forall (R A B:Class),
+Proposition Induction1 : forall (R A B:Class),
   WellFoundedWellOrd R A                              ->
   B :<=: A                                            ->
   (forall x, A x -> initSegment R A x :<=: B -> B x)  ->
@@ -68,14 +68,14 @@ Proof.
   apply Minimal.IsIn in H6. destruct H6 as [_ H6]. contradiction.
 Qed.
 
-Proposition Induction' : forall (R A B:Class),
+Proposition Induction : forall (R A B:Class),
   WellFoundedWellOrd R A                                            ->
   (forall a, A a -> (forall x, initSegment R A a x -> B x) -> B a)  ->
    forall a, A a -> B a.
 Proof.
   intros R A B H1 H2.
   assert (A :~: A :/\: B) as H3. {
-    apply Induction with R. 1: assumption.
+    apply Induction1 with R. 1: assumption.
     - apply Inter2.IsInclL.
     - intros a H3 H4. split. 1: assumption. apply H2. 1: assumption.
       intros x H5. apply H4. assumption. }

@@ -64,8 +64,8 @@ Definition KExt (R A F:Class) : U -> U -> Prop := fun f a =>
 Lemma Charac2 : forall (R A F:Class) (x y:U),
   Recursion R A F :(x,y): <-> exists f a, :(x,y): :< f /\ K R A F f a.
 Proof.
-  intros R A F x y. split; intros H1; destruct H1 as [f [a [H1 H2]]];
-  exists f; exists a; split; assumption.
+  intros R A F x y. split; intros [f [a [H1 H2]]];
+  exists f, a; split; assumption.
 Qed.
 
 (* Two recursive functions coincide on their common domain.                     *)
@@ -85,7 +85,7 @@ Proof.
     intros x c H9 H10. apply (SOI.IsIncl R A A c) in H10; try assumption.
     - apply H1.
     - apply Class.Incl.Refl. }
-  apply Induction' with R.
+  apply Induction.Induction with R.
   - apply WellFoundedWellOrd.InclCompat with A. 2: assumption.
     apply SOI.IsIncl with A. 2: assumption.
     + apply H1.
@@ -342,7 +342,7 @@ Proof.
       apply SRD.Charac. exists y. assumption. }
     rewrite H8 in H9. apply SOI.IsIn with R A a; assumption. }
   assert (forall a, A a -> B a) as H7. {
-    apply Induction' with R. 1: assumption.
+    apply Induction.Induction with R. 1: assumption.
     intros c H7 H8.
     remember (Recursion R A F :|: initSegment R A c) as f eqn:H9.
     assert (K R A F f c) as H10. {
@@ -465,7 +465,7 @@ Proof.
   assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
   apply (CFO.EqualCharac _ _ A A). 1: assumption.
   - apply IsFunctionOn; assumption.
-  - split. 1: apply Equiv.Refl. apply Induction' with R. 1: assumption.
+  - split. 1: apply Equiv.Refl. apply Induction.Induction with R. 1: assumption.
     intros a H7 H8.
     remember (initSegment R A a) as b eqn:H9.
     assert (SRD.domain (G:|:b) = b) as H10. {
@@ -528,7 +528,7 @@ Proof.
   assert (WellFoundedWellOrd R C) as H12. {
     apply WellFoundedWellOrd.InclCompat with A; assumption. }
   assert (forall b, C b -> B b) as H13. {
-    apply Induction' with R. 1: assumption.
+    apply Induction.Induction with R. 1: assumption.
     intros c H13 H14.
     remember (Recursion R A F :|: initSegment R A c) as f eqn:H15.
     assert (A c) as H16. { apply H11. assumption. }

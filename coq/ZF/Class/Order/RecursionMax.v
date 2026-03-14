@@ -363,7 +363,7 @@ Proof.
   assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
   apply (CFO.EqualCharac _ _ A A). 1: assumption.
   - apply IsFunctionOn with max; assumption.
-  - split. 1: apply Equiv.Refl. apply Induction' with R. 1: assumption.
+  - split. 1: apply Equiv.Refl. apply Induction.Induction with R. 1: assumption.
     intros a H7 H8.
     remember (initSegment R A a) as b eqn:H9.
     assert (SRD.domain (G:|:b) = b) as H10. {
