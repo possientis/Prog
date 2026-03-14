@@ -6,12 +6,16 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Order.WellFoundedWellOrd.
+Require Import ZF.Class.Order.TranClosure.
+Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
+Module CIT := ZF.Class.Inter2.
+Module COI := ZF.Class.Order.InitSegment.
+
 Proposition Induction1 : forall (R A B:Class),
-  WellFoundedWellOrd R A                              ->
+  WellFounded R A                                     ->
   B :<=: A                                            ->
   (forall x, A x -> initSegment R A x :<=: B -> B x)  ->
   A :~: B.
@@ -21,7 +25,7 @@ Proof.
   intros R A B.
 
   (* We assume that R is a well-founded well-ordering on A. *)
-  intros H1. assert (WellFoundedWellOrd R A) as X. apply H1. clear X.
+  intros H1. assert (WellFounded R A) as X. apply H1. clear X.
 
   (* We assume that B is a subclass of A. *)
   intros H2. assert (B :<=: A) as X. apply H2. clear X.
@@ -44,7 +48,7 @@ Proof.
 
   (* Then A\B has an R-minimal element. *)
   assert (exists a, Minimal R (A:\:B) a) as H6. {
-    apply HasMinimal with A.
+    apply TranClosure.HasMinimal with A.
     - assumption.
     - apply Class.Inter2.IsInclL.
     - assumption.
@@ -55,7 +59,7 @@ Proof.
 
   (* So the initial segment in A at a must be inside B. *)
   assert (initSegment R A a :<=: B) as H7. {
-    intros x H7. apply InitSegment.Charac in H7. destruct H7 as [H7 H8].
+    intros x H7. apply COI.Charac in H7. destruct H7 as [H7 H8].
     apply DoubleNegation. intros H9. revert H8.
     apply H6. split; assumption. }
 
@@ -68,16 +72,18 @@ Proof.
   apply Minimal.IsIn in H6. destruct H6 as [_ H6]. contradiction.
 Qed.
 
+
 Proposition Induction : forall (R A B:Class),
-  WellFoundedWellOrd R A                                            ->
+  WellFounded R A                                                   ->
   (forall a, A a -> (forall x, initSegment R A a x -> B x) -> B a)  ->
    forall a, A a -> B a.
 Proof.
   intros R A B H1 H2.
   assert (A :~: A :/\: B) as H3. {
     apply Induction1 with R. 1: assumption.
-    - apply Inter2.IsInclL.
+    - apply CIT.IsInclL.
     - intros a H3 H4. split. 1: assumption. apply H2. 1: assumption.
       intros x H5. apply H4. assumption. }
   intros a H4. apply H3. assumption.
 Qed.
+

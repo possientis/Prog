@@ -527,6 +527,7 @@ Proof.
     rewrite H4. apply COI.IsIncl. }
   assert (WellFoundedWellOrd R C) as H12. {
     apply WellFoundedWellOrd.InclCompat with A; assumption. }
+  assert (WellFounded R C) as G1. { apply H12. }
   assert (forall b, C b -> B b) as H13. {
     apply Induction.Induction with R. 1: assumption.
     intros c H13 H14.
@@ -612,3 +613,4 @@ Proof.
     + apply (Maximal.InitRefl R A c) in H2; try assumption.
       apply COI.IsLess with A. assumption.
 Qed.
+
