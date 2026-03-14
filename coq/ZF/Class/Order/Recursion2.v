@@ -1,6 +1,7 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Closed.
+Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Set.Core.
@@ -11,6 +12,8 @@ Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Restrict.
+
+Require Import ZF.Notation.Eval.
 
 
 (* The recursion class associated with R A F. In other words, when R is well    *)
@@ -51,5 +54,8 @@ Lemma Coincide : forall (R A F:Class) (f g a b:U),
   (forall x, x :< b -> g!x = F!(g:|:initSegment R A x))   ->
   (forall x, x :< a -> f!x = g!x).
 Proof.
+  intros R A F f g a b H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11.
+  remember (fun x => x :< a -> f!x = g!x) as B eqn:H12.
+  assert (forall x, A x -> B x) as H13. {
+    apply Induction.Induction with R. 1: assumption.
 Admitted.
-
