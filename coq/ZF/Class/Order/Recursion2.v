@@ -11,12 +11,16 @@ Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Extend.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Restrict.
+Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -97,7 +101,7 @@ Proof.
   intros R A F x [f [a [H1 [H2 [H3 [H4 H5]]]]]]. apply H4. assumption.
 Qed.
 
-Lemma Restrict_ : forall (R A F:Class) (f g a b:U),
+Lemma Restrict1 : forall (R A F:Class) (f g a b:U),
   WellFounded R A                                         ->
   toClass a :<=: A                                        ->
   Closed R^:-1: (toClass a)                               ->
@@ -144,7 +148,7 @@ Proof.
   assert (FunctionOn f a) as H18. {
     rewrite G3. apply FunctionOn.Restrict with a1; assumption. }
   assert (forall x, x :< a -> f!x = F!(f:|:initSegment R A x)) as H19. {
-    apply Restrict_ with f1 a1; assumption. }
+    apply Restrict1 with f1 a1; assumption. }
   assert (forall u, u :< a -> f!u = f1!u) as H20. {
     apply Coincide with R A F a1; assumption. }
   assert (forall u, u :< a -> f!u = f2!u) as H21. {
@@ -170,3 +174,48 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+
+Proposition Restrict2 : forall (R A F:Class) (a f:U),
+  WellFounded R A                                                         ->
+  A a                                                                     ->
+  (forall x,  x :< initSegment R A a -> CRD.domain (Recursion R A F) x)   ->
+  f = (Recursion R A F) :|: initSegment R A a                             ->
+  K R A F f (initSegment R A a).
+Proof.
+  intros R A F a f H1 H2 H3 H4. split.
+  - admit.
+  - split.
+    + admit.
+    + split.
+      * admit.
+      * admit.
+Admitted.
+
+Proposition Extend : forall (R A F:Class) (a b f g:U),
+  WellFounded R A                   ->
+  K R A F f (initSegment R A a)     ->
+  g = extend f a F!f                ->
+  b = initSegment R A a :\/: :{a}:  ->
+  K R A F g b.
+Proof.
+Admitted.
+
+Proposition DomainOf : forall (R A F:Class), WellFounded R A ->
+  CRD.domain (Recursion R A F) :~: A.
+Proof.
+  intros R A F G1 x. split.
+  - intros [y H1]. apply (proj1 (Charac2 R A F _ _)) in H1.
+    destruct H1 as [f [a [H2 [H3 [H4 [H5 H6]]]]]].
+    assert (domain f = a) as H7. { apply H5. }
+    apply H3. rewrite <- H7. apply Domain.Charac. exists y. assumption.
+  - revert x. apply Induction.Induction with R. 1: assumption.
+    intros a H2 IH.
+    remember (Recursion R A F :|: initSegment R A a) as f eqn:H8.
+    assert (K R A F f (initSegment R A a)) as H9. {
+      apply Restrict2; assumption. }
+    remember (extend f a F!f) as g eqn:H10.
+    remember (initSegment R A a :\/: :{a}:) as b eqn:H11.
+    assert (K R A F g b) as H12. { apply Extend with a f; assumption. }
+    exists F!f. apply Charac2. exists g, b. split. 2: assumption.
+    rewrite H10. apply Union2.Charac. right. apply Single.IsIn.
+Qed.
