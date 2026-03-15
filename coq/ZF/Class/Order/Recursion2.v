@@ -13,10 +13,10 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Extend.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
@@ -175,23 +175,24 @@ Proof.
 Qed.
 
 
-Proposition Restrict2 : forall (R A F:Class) (a f:U),
+Lemma Restrict2 : forall (R A F:Class) (a f:U),
   WellFounded R A                                                         ->
   A a                                                                     ->
   (forall x,  x :< initSegment R A a -> CRD.domain (Recursion R A F) x)   ->
   f = (Recursion R A F) :|: initSegment R A a                             ->
   K R A F f (initSegment R A a).
 Proof.
-  intros R A F a f H1 H2 H3 H4. split.
-  - admit.
-  - split.
-    + admit.
-    + split.
-      * admit.
-      * admit.
+  intros R A F a f H1 H2 H3 H4. unfold K.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
+  assert (toClass (initSegment R A a) :<=: A) as H5. {
+    intros x H5. apply (InitSegment.IsIn R A A) with a; assumption. }
+  assert (Closed R^:-1: (toClass (initSegment R A a))) as H6. {
+    intros y [x [H6 H7]]. apply CRC.Charac2 in H7.
+    apply InitSegment.CharacRev with A.
 Admitted.
 
-Proposition Extend : forall (R A F:Class) (a b f g:U),
+(*
+Lemma Extend : forall (R A F:Class) (a b f g:U),
   WellFounded R A                   ->
   K R A F f (initSegment R A a)     ->
   g = extend f a F!f                ->
@@ -219,3 +220,4 @@ Proof.
     exists F!f. apply Charac2. exists g, b. split. 2: assumption.
     rewrite H10. apply Union2.Charac. right. apply Single.IsIn.
 Qed.
+*)
