@@ -252,7 +252,7 @@ Proof.
 Qed.
 
 (* The recursion class associated with R A F has domain A.                      *)
-Proposition DomainIsA  : forall (R A F:Class) (a:U),
+Proposition DomainOf  : forall (R A F:Class) (a:U),
   WellFoundedWellOrd R A                ->
   Maximal R A a                         ->
   CRD.domain (Recursion R A F) :~: A.
@@ -286,7 +286,7 @@ Proposition IsFunctionOn  : forall (R A F:Class) (a:U),
 Proof.
   intros R A F a H1 H2. split.
   - apply IsFunction with a; assumption.
-  - apply DomainIsA with a; assumption.
+  - apply DomainOf with a; assumption.
 Qed.
 
 (* The recursion class associated with R A F is F-recursive.                    *)
@@ -312,7 +312,7 @@ Proof.
   assert (forall x, A x -> (Recursion R A F)!x = g!x) as H10. {
     intros x H10. apply EvalOfClass.Charac.
     - apply IsFunction with a; assumption.
-    - apply DomainIsA with a; assumption.
+    - apply DomainOf with a; assumption.
     - apply H7, SFO.Satisfies with (initSegment R^:=: A a). 1: assumption.
     apply (SOI.ToClassRefl R A A); try assumption.
     apply Maximal.InitRefl; assumption. }
@@ -375,7 +375,7 @@ Proof.
     assert (SRD.domain ((Recursion R A F) :|: b) = b) as H11. {
       apply RestrictOfClass.DomainWhenIncl.
       - apply IsFunction with max; assumption.
-      - intros x H11. apply DomainIsA with max; try assumption.
+      - intros x H11. apply DomainOf with max; try assumption.
         rewrite H9 in H11. apply (SOI.IsIn R A A a); assumption. }
     assert (G:|:b = (Recursion R A F) :|: b) as H12. {
       apply SRF.EqualCharac.

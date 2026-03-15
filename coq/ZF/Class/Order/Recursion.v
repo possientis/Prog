@@ -327,7 +327,7 @@ Proof.
 Qed.
 
 (* The recursion class associated with R A F has domain A.                      *)
-Proposition DomainIsA : forall (R A F:Class),
+Proposition DomainOf : forall (R A F:Class),
   WellFoundedWellOrd R A              ->
   HasNoMaximal R A                    ->
   CRD.domain (Recursion R A F) :~: A.
@@ -375,7 +375,7 @@ Proposition IsFunctionOn : forall (R A F:Class),
 Proof.
   intros R A F H1 H2. split.
   - apply IsFunction. assumption.
-  - apply DomainIsA; assumption.
+  - apply DomainOf; assumption.
 Qed.
 
 Lemma RestrictIsFunctionOn : forall (R A F:Class) (a b:U),
@@ -393,7 +393,7 @@ Proof.
   - apply RestrictOfClass.DomainWhenIncl.
     + apply IsFunction. assumption.
     + apply Class.Incl.EquivCompatR with A.
-      * apply Equiv.Sym, DomainIsA; assumption.
+      * apply Equiv.Sym, DomainOf; assumption.
       * intros x H7. apply (SOI.IsIn R A A) with a; try assumption.
         rewrite H4 in H7. assumption.
 Qed.
@@ -476,7 +476,7 @@ Proof.
     assert (SRD.domain ((Recursion R A F) :|: b) = b) as H11. {
       apply RestrictOfClass.DomainWhenIncl.
       - apply IsFunction. assumption.
-      - intros x H11. apply DomainIsA; try assumption.
+      - intros x H11. apply DomainOf; try assumption.
         rewrite H9 in H11. apply (SOI.IsIn R A A a); assumption. }
     assert (G:|:b = (Recursion R A F) :|: b) as H12. {
       apply SRF.EqualCharac.
@@ -602,7 +602,7 @@ Proof.
     apply LawExcludedMiddle. }
   assert (A b) as H6. { apply (InitSegment.IsIn R A A a); assumption. }
   destruct H5 as [H5|H5].
-  - apply DomainIsA; assumption.
+  - apply DomainOf; assumption.
   - apply DoubleNegation in H5. destruct H5 as [c H5].
     apply (DomainWhenMax R A F c); try assumption.
     apply COI.Charac. split. 1: assumption.

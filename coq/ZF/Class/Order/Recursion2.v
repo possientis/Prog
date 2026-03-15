@@ -11,6 +11,7 @@ Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -22,6 +23,7 @@ Require Import ZF.Notation.Image.
 
 Module CIN := ZF.Class.Incl.
 Module CRC := ZF.Class.Relation.Converse.
+Module CRF := ZF.Class.Relation.Function.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRR := ZF.Class.Relation.Relation.
 
@@ -119,6 +121,7 @@ Proof.
     rewrite H12, H10. assumption.
 Qed.
 
+(* The recursion class associated with R A F is a functional class.             *)
 Proposition IsFunctional : forall (R A F:Class), WellFounded R A ->
   CRL.Functional (Recursion R A F).
 Proof.
@@ -158,3 +161,12 @@ Proof.
   assert (f2!x = y2) as H28. { apply Eval.Charac; try assumption. apply H11. }
   rewrite <- H27, <- H28, <- H20, <- H21; try assumption. reflexivity.
 Qed.
+
+Proposition IsFunction : forall (R A F:Class), WellFounded R A ->
+  CRF.Function (Recursion R A F).
+Proof.
+  intros R A F H1. split.
+  - apply IsRelation.
+  - apply IsFunctional. assumption.
+Qed.
+
