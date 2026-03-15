@@ -6,8 +6,8 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Order.TranClosure.
 Require Import ZF.Class.Order.WellFounded.
+Require Import ZF.Class.Order.WellFounded2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.OrdPair.
@@ -51,7 +51,7 @@ Proof.
 
   (* Then A\B has an R-minimal element. *)
   assert (exists a, Minimal R (A:\:B) a) as H6. {
-    apply TranClosure.HasMinimal with A.
+    apply WellFounded2.HasMinimal with A.
     - assumption.
     - apply Class.Inter2.IsInclL.
     - assumption.
