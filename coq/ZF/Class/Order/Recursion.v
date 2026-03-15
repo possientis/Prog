@@ -126,7 +126,7 @@ Qed.
 (* The recursion class associated with R A F is a relation class.               *)
 Proposition IsRelation : forall (R A F:Class), CRR.Relation (Recursion R A F).
 Proof.
-  intros R A F x H1. destruct H1 as [f [a [H1 [_ [[[H2 _] _] _]]]]].
+  intros R A F x [f [a [H1 [_ [[[H2 _] _] _]]]]].
   specialize (H2 x H1). assumption.
 Qed.
 
