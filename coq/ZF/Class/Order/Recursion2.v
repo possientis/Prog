@@ -95,32 +95,36 @@ Proof.
   intros R A F x [f [a [H1 [H2 [H3 [H4 H5]]]]]]. apply H4. assumption.
 Qed.
 
-
-(*
-Lemma Restrict1 : forall (R A F:Class) (f g a b:U),
-  WellFounded R A                                         ->
-  toClass a :<=: A                                        ->
-  Closed R^:-1: (toClass a)                               ->
-  a :<=: b                                                ->
-  FunctionOn f b                                          ->
-  g = f:|:a                                               ->
-  (forall x, x :< b -> f!x = F!(f:|:initSegment R A x))   ->
-  (forall x, x :< a -> g!x = F!(g:|:initSegment R A x)).
+(* The restriction of a recursive function to transitive set is recursive.      *)
+Lemma Restrict1 : forall (R A F:Class) (f a b:U),
+  WellFounded R A   ->
+  K R A F f a       ->
+  b :<=: a          ->
+  Transitive R A b  ->
+  K R A F (f:|:b) b.
 Proof.
-  intros R A F f g a b H1 H2 H3 H4 H5 H6 H7 c H8.
-  assert (A :<=: A) as G1. { apply CIN.Refl. }
-  assert (A c) as G2. { apply H2. assumption. }
-  assert (f!c = F!(f:|:initSegment R A c)) as H9. { apply H7, H4. assumption. }
-  assert (g!c = f!c) as H10. {
-    rewrite H6. apply Restrict.Eval. 2: assumption. apply H5. }
-  assert (initSegment R A c :<=: a) as H11. {
-    intros x H11. apply H3. exists c. split. 1: assumption.
-    apply CRC.Charac2Rev, (InitSegment.IsLess R A A); assumption. }
-  assert (g:|:initSegment R A c = f:|:initSegment R A c) as H12. {
-    rewrite H6. apply Restrict.TowerProperty. assumption. }
-    rewrite H12, H10. assumption.
+  intros R A F f a b H1 [H2 [H3 [H4 H5]]] H6 H7. unfold K.
+  assert (toClass b :<=: A) as H8. { intros x H8. apply H2, H6. assumption. }
+  assert (FunctionOn (f:|:b) b) as H9. {
+    apply FunctionOn.Restrict with a; assumption. }
+  assert (
+    forall x, x :< b -> (f:|:b)!x = F!((f:|:b) :|: initSegment R A x)) as H10. {
+      intros c H10.
+      assert (A :<=: A) as G1. { apply CIN.Refl. }
+      assert (A c) as G2. { apply H8. assumption. }
+      assert (f!c = F!(f:|:initSegment R A c)) as H11. {
+        apply H5, H6. assumption. }
+      assert ((f:|:b)!c = f!c) as H12. {
+        apply Restrict.Eval. 2: assumption. apply H4. }
+      assert (initSegment R A c :<=: b) as H13. {
+        apply TranClosure.InitSegment; assumption. }
+      assert ((f:|:b) :|: initSegment R A c = f:|:initSegment R A c) as H14. {
+        apply Restrict.TowerProperty. assumption. }
+      rewrite H12, H14. assumption. }
+  split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
+(*
 (* The recursion class associated with R A F is a functional class.             *)
 Proposition IsFunctional : forall (R A F:Class), WellFounded R A ->
   CRL.Functional (Recursion R A F).
@@ -161,6 +165,7 @@ Proof.
   assert (f2!x = y2) as H28. { apply Eval.Charac; try assumption. apply H11. }
   rewrite <- H27, <- H28, <- H20, <- H21; try assumption. reflexivity.
 Qed.
+
 
 Proposition IsFunction : forall (R A F:Class), WellFounded R A ->
   CRF.Function (Recursion R A F).
