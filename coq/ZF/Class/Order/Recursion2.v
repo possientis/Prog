@@ -3,6 +3,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Closed.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.WellFounded.
+Require Import ZF.Class.Order.TranClosure.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
@@ -38,14 +39,14 @@ Module CRR := ZF.Class.Relation.Relation.
 Definition Recursion (R A F:Class) : Class := fun x => exists f a,
   x :< f                                                            /\
   toClass a :<=: A                                                  /\
-  Closed R^:-1: (toClass a)                                         /\
+  Transitive R A a                                                  /\
   FunctionOn f a                                                    /\
   (forall b, b :< a -> f!b = F!(f:|:initSegment R A b)).
 
 (* Binary predicate underlying the recursion class.                             *)
 Definition K (R A F:Class) : U -> U -> Prop := fun f a =>
   toClass a :<=: A                                                  /\
-  Closed R^:-1: (toClass a)                                         /\
+  Transitive R A a                                                  /\
   FunctionOn f a                                                    /\
   (forall b, b :< a-> f!b = F!(f:|:initSegment R A b)).
 
@@ -57,40 +58,33 @@ Proof.
 Qed.
 
 (* Two recursive functions coincide on their common domain.                     *)
-Lemma Coincide : forall (R A F:Class) (f g a b:U),
-  WellFounded R A                                         ->
-  toClass a :<=: A                                        ->
-  Closed R^:-1: (toClass a)                               ->
-  a :<=: b                                                ->
-  FunctionOn f a                                          ->
-  FunctionOn g b                                          ->
-  (forall x, x :< a -> f!x = F!(f:|:initSegment R A x))   ->
-  (forall x, x :< b -> g!x = F!(g:|:initSegment R A x))   ->
-  (forall x, x :< a -> f!x = g!x).
+Lemma Coincide : forall (R A F:Class) (f g a b x:U),
+  WellFounded R A ->
+  K R A F f a     ->
+  K R A F g b     ->
+  x :< a :/\: b   ->
+  f!x = g!x.
 Proof.
-  intros R A F f g a b H1 H2 H4 H6 H7 H8 H9 H10.
+  intros R A F f g a b x H1 [H2 [H3 [H4 H5]]] [H6 [H7 [H8 H9]]] H10.
   assert (A :<=: A) as G1. { apply CIN.Refl. }
-  remember (fun x => x :< a -> f!x = g!x) as B eqn:H12.
+  apply Inter2.Charac in H10. destruct H10 as [H10 H11]. revert x H10 H11.
+  remember (fun x => x :< a -> x :< b -> f!x = g!x) as B eqn:H12.
   assert (forall x, A x -> B x) as H13. {
     apply Induction.Induction with R. 1: assumption. rewrite H12.
-    intros c H13 IH H14.
-    assert (initSegment R A c :<=: a) as H15. {
-      intros u H15.
-      assert (R :(u,c):) as H16. {
-        apply (InitSegment.IsLess R A A); assumption. }
-      apply H4. exists c. split. 1: assumption.
-      apply CRC.Charac2Rev. assumption. }
-    assert (initSegment R A c :<=: b) as H16. {
-      apply Incl.Tran with a; assumption. }
-    assert (forall x, x :< initSegment R A c -> f!x = g!x) as H17. {
-      intros x H17. apply IH. 1: assumption. apply H15. assumption. }
-    assert (f:|:initSegment R A c = g :|: initSegment R A c) as H18. {
+    intros c H13 IH H14 H15.
+    assert (initSegment R A c :<=: a) as H16. {
+      apply TranClosure.InitSegment; assumption. }
+    assert (initSegment R A c :<=: b) as H17. {
+      apply TranClosure.InitSegment; assumption. }
+    assert (forall x, x :< initSegment R A c -> f!x = g!x) as H18. {
+      intros x H18. apply IH. 1: assumption.
+      - apply H16. assumption.
+      - apply H17. assumption. }
+    assert (f:|:initSegment R A c = g :|: initSegment R A c) as H19. {
       apply FunctionOn.RestrictEqual with a b; assumption. }
-    assert (f!c = F!(f:|:initSegment R A c)) as H19. {
-      apply H9. assumption. }
-    assert (g!c = F!(g:|:initSegment R A c)) as H20. {
-      apply H10, H6. assumption. }
-    rewrite H19, H20, H18. reflexivity. }
+    assert (f!c = F!(f:|:initSegment R A c)) as H20. { apply H5. assumption. }
+    assert (g!c = F!(g:|:initSegment R A c)) as H21. { apply H9. assumption. }
+    rewrite H20, H21, H19. reflexivity. }
     rewrite H12 in H13. intros x H14. apply H13. 2: assumption.
     apply H2. assumption.
 Qed.
@@ -101,6 +95,8 @@ Proof.
   intros R A F x [f [a [H1 [H2 [H3 [H4 H5]]]]]]. apply H4. assumption.
 Qed.
 
+
+(*
 Lemma Restrict1 : forall (R A F:Class) (f g a b:U),
   WellFounded R A                                         ->
   toClass a :<=: A                                        ->
@@ -188,18 +184,31 @@ Proof.
     intros x H5. apply (InitSegment.IsIn R A A) with a; assumption. }
   assert (Closed R^:-1: (toClass (initSegment R A a))) as H6. {
     intros y [x [H6 H7]]. apply CRC.Charac2 in H7.
+(*
     apply InitSegment.CharacRev with A.
+*)
 Admitted.
 
-(*
+
 Lemma Extend : forall (R A F:Class) (a b f g:U),
   WellFounded R A                   ->
+  A a                               ->
   K R A F f (initSegment R A a)     ->
   g = extend f a F!f                ->
   b = initSegment R A a :\/: :{a}:  ->
   K R A F g b.
 Proof.
+  intros R A F a b f g H1 H2 [H3 [H4 [H5 H6]]] H7 H8. unfold K.
+  assert (toClass b :<=: A) as H9. {
+    intros x H9. rewrite H8 in H9.
+    apply Union2.Charac in H9. destruct H9 as [H9|H9].
+    - apply H3. assumption.
+    - apply Single.Charac in H9. subst. assumption. }
+  assert (Closed R^:-1: (toClass b)) as H10. {
+
 Admitted.
+
+
 
 Proposition DomainOf : forall (R A F:Class), WellFounded R A ->
   CRD.domain (Recursion R A F) :~: A.
@@ -211,6 +220,8 @@ Proof.
     apply H3. rewrite <- H7. apply Domain.Charac. exists y. assumption.
   - revert x. apply Induction.Induction with R. 1: assumption.
     intros a H2 IH.
+
+(*
     remember (Recursion R A F :|: initSegment R A a) as f eqn:H8.
     assert (K R A F f (initSegment R A a)) as H9. {
       apply Restrict2; assumption. }
@@ -220,4 +231,7 @@ Proof.
     exists F!f. apply Charac2. exists g, b. split. 2: assumption.
     rewrite H10. apply Union2.Charac. right. apply Single.IsIn.
 Qed.
+*)
+
+Show.
 *)

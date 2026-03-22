@@ -48,6 +48,7 @@ Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Definition Transitive (R A:Class) (a:U) : Prop :=
   forall x y, A x -> R :(x,y): -> y :< a -> x :< a.
 
+(* Existence of R-transitive closure of a subset a of A.                        *)
 Proposition Exists : forall (R A:Class) (a:U),
   WellFounded R A   ->
   toClass a :<=: A  ->
@@ -256,3 +257,23 @@ Proof.
     apply G4 in H28. destruct H28 as [n [H28 H30]].
     apply H29 with n; assumption.
 Qed.
+
+Proposition InitSegment : forall (R A:Class) (a:U),
+  WellFounded R A                                  ->
+  toClass a :<=: A                                 ->
+  Transitive R A a                                <->
+  (forall x, x :< a -> initSegment R A x :<=: a).
+Proof.
+  intros R A a H1 H2.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
+  split; intros H3.
+  - intros x H4 y H5.
+    apply (InitSegment.Charac R A A) in H5; try assumption.
+    destruct H5 as [H5 H6].
+    + revert H5 H6 H4. apply H3.
+    + apply H2. assumption.
+  - intros x y H4 H5 H6. apply (H3 y). 1: assumption.
+    apply InitSegment.CharacRev with A; try assumption.
+    apply H2. assumption.
+Qed.
+
