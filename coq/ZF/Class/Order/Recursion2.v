@@ -124,48 +124,27 @@ Proof.
   split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
-(*
 (* The recursion class associated with R A F is a functional class.             *)
 Proposition IsFunctional : forall (R A F:Class), WellFounded R A ->
   CRL.Functional (Recursion R A F).
 Proof.
-  intros R A F G1 x y1 y2 H1 H2.
-  destruct H1 as [f1 [a1 [H3 [H4 [H5 [H6 H7]]]]]].
-  destruct H2 as [f2 [a2 [H8 [H9 [H10 [H11 H12]]]]]].
-  remember (a1 :/\: a2) as a eqn:G2.
-  remember (f1:|:a) as f eqn:G3.
-  assert (toClass a :<=: A) as H14. {
-    intros u H14. rewrite G2 in H14. apply Inter2.Charac in H14.
-    apply H4, H14. }
-  assert (Closed R^:-1: (toClass a)) as H15. {
-    intros u [v [H15 H16]]. rewrite G2 in H15.
-    apply Inter2.Charac in H15. destruct H15 as [H15 H17].
-    rewrite G2. apply Inter2.Charac. split.
-    - apply H5. exists v. split; assumption.
-    - apply H10. exists v. split; assumption. }
-  assert (a :<=: a1) as H16. { rewrite G2. apply Inter2.IsInclL. }
-  assert (a :<=: a2) as H17. { rewrite G2. apply Inter2.IsInclR. }
-  assert (FunctionOn f a) as H18. {
-    rewrite G3. apply FunctionOn.Restrict with a1; assumption. }
-  assert (forall x, x :< a -> f!x = F!(f:|:initSegment R A x)) as H19. {
-    apply Restrict1 with f1 a1; assumption. }
-  assert (forall u, u :< a -> f!u = f1!u) as H20. {
-    apply Coincide with R A F a1; assumption. }
-  assert (forall u, u :< a -> f!u = f2!u) as H21. {
-    apply Coincide with R A F a2; assumption. }
-  assert (x :< domain f1) as H22. {
-    apply Domain.Charac. exists y1. assumption. }
-  assert (x :< domain f2) as H23. {
-    apply Domain.Charac. exists y2. assumption. }
-  assert (domain f1 = a1) as H24. { apply H6. }
-  assert (domain f2 = a2) as H25. { apply H11. }
-  assert (x :< a) as H26. {
-    rewrite G2, <- H24, <- H25. apply Inter2.Charac. split; assumption. }
-  assert (f1!x = y1) as H27. { apply Eval.Charac; try assumption. apply H6. }
-  assert (f2!x = y2) as H28. { apply Eval.Charac; try assumption. apply H11. }
-  rewrite <- H27, <- H28, <- H20, <- H21; try assumption. reflexivity.
+  intros R A F H1 x y1 y2 H2 H3.
+  apply (proj1 (Charac2 R A F x y1)) in H2.
+  apply (proj1 (Charac2 R A F x y2)) in H3.
+  destruct H2 as [f1 [a1 [H2 H4]]].
+  destruct H3 as [f2 [a2 [H3 H5]]].
+  assert (domain f1 = a1) as H6. { apply H4. }
+  assert (domain f2 = a2) as H7. { apply H5. }
+  assert (x :< domain f1) as H8. { apply Domain.Charac. exists y1. assumption. }
+  assert (x :< domain f2) as H9. { apply Domain.Charac. exists y2. assumption. }
+  assert (x :< a1) as H10. {  rewrite <- H6. assumption. }
+  assert (x :< a2) as H11. {  rewrite <- H7. assumption. }
+  assert (f1!x = y1) as H12. { apply Eval.Charac; try assumption. apply H4. }
+  assert (f2!x = y2) as H13. { apply Eval.Charac; try assumption. apply H5. }
+  rewrite <- H12, <- H13.
+  apply Coincide with R A F a1 a2; try assumption.
+  apply Inter2.Charac. split; assumption.
 Qed.
-
 
 Proposition IsFunction : forall (R A F:Class), WellFounded R A ->
   CRF.Function (Recursion R A F).
@@ -175,7 +154,21 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+Lemma Restrict2 : forall (R A F:Class) (a f:U),
+  WellFounded R A               ->
+  toClass a :<=: A              ->
+  Transitive R A a              ->
+  f = (Recursion R A F) :|: a   ->
+  K R A F f a.
+Proof.
+  intros R A F a f H1 H2 H3 H4. unfold K.
+  split. 1: assumption. split. 1: assumption.
+  assert (FunctionOn f a) as H5. {
+    rewrite H4.
+Admitted.
 
+
+(*
 Lemma Restrict2 : forall (R A F:Class) (a f:U),
   WellFounded R A                                                         ->
   A a                                                                     ->
@@ -238,5 +231,5 @@ Proof.
 Qed.
 *)
 
-Show.
+.
 *)
