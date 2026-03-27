@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -9,6 +10,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
@@ -277,3 +279,56 @@ Proof.
     apply H2. assumption.
 Qed.
 
+(* The class corresponding to the RA-closure of a when it exists.               *)
+Definition closure (R A:Class) (a:U) : Class := fun x =>
+  exists b, x :< b                                        /\
+    a :<=: b                                              /\
+    toClass b :<=: A                                      /\
+    Transitive R A b                                      /\
+    (forall x, x :< b -> exists n g,
+      n :< :N                                     /\
+      Fun g (succ n) b                            /\
+      g!:0: :< a                                  /\
+      g!n = x                                     /\
+      (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
+    (forall c,
+      a :<=: c          ->
+      toClass c :<=: A  ->
+      Transitive R A c  ->
+      b :<=: c).
+
+(* The RA-closure of the set a (viewed as a class) is small.                    *)
+Proposition IsSmall : forall (R A:Class) (a:U),
+  Small (closure R A a).
+Proof.
+  intros R A a.
+  remember (fun b =>
+    a :<=: b                                              /\
+    toClass b :<=: A                                      /\
+    Transitive R A b                                      /\
+    (forall x, x :< b -> exists n g,
+      n :< :N                                     /\
+      Fun g (succ n) b                            /\
+      g!:0: :< a                                  /\
+      g!n = x                                     /\
+      (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
+    (forall c,
+      a :<=: c          ->
+      toClass c :<=: A  ->
+      Transitive R A c  ->
+      b :<=: c)) as B eqn:H1.
+  assert ((exists b, B b) \/ ~ (exists b, B b)) as H2. {
+    apply LawExcludedMiddle. }
+  destruct H2 as [H2|H2].
+  - destruct H2 as [b H2].
+    exists b. intros x. split; intros H3.
+    + exists b. rewrite H1 in H2. split; assumption.
+    + destruct H3 as [c [H3 [H4 [H5 [H6 [H7 H8]]]]]].
+      rewrite H1 in H2. destruct H2 as [H9 [H10 [H11 [H12 H13]]]].
+      assert (c :<=: b) as H14. { apply H8; assumption. }
+      apply H14. assumption.
+  - exists :0:. intros x. split; intros H3.
+    + apply Empty.Charac in H3. contradiction.
+    + destruct H3 as [b [H3 H4]]. exfalso. apply H2. exists b.
+      rewrite H1. assumption.
+Qed.
