@@ -4,6 +4,7 @@ Require Import ZF.Class.Order.Closed.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Converse.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -28,20 +29,10 @@ Require Import ZF.Notation.Image.
 
 Module CIN := ZF.Class.Incl.
 Module CRC := ZF.Class.Relation.Converse.
+Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRR := ZF.Class.Relation.Relation.
-
-
-(* The recursion class associated with R A F. In other words, when R is well    *)
-(* founded on A, the unique function class G defined on A by the recursion:     *)
-(* G(b) = F(G|initSegment R A b).                                               *)
-Definition Recursion (R A F:Class) : Class := fun x => exists f a,
-  x :< f                                                            /\
-  toClass a :<=: A                                                  /\
-  Transitive R A a                                                  /\
-  FunctionOn f a                                                    /\
-  (forall b, b :< a -> f!b = F!(f:|:initSegment R A b)).
 
 (* Binary predicate underlying the recursion class.                             *)
 Definition K (R A F:Class) : U -> U -> Prop := fun f a =>
@@ -50,12 +41,11 @@ Definition K (R A F:Class) : U -> U -> Prop := fun f a =>
   FunctionOn f a                                                    /\
   (forall b, b :< a-> f!b = F!(f:|:initSegment R A b)).
 
-Proposition Charac2 : forall (R A F:Class) (x y:U),
-  Recursion R A F :(x,y): <-> exists f a, :(x,y): :< f /\ K R A F f a.
-Proof.
-  intros R A F x y. split; intros [f [a [H1 H2]]];
-  exists f, a; split; assumption.
-Qed.
+(* The recursion class associated with R A F. In other words, when R is well    *)
+(* founded on A, the unique function class G defined on A by the recursion:     *)
+(* G(b) = F(G|initSegment R A b).                                               *)
+Definition Recursion (R A F:Class) : Class := fun x =>
+  exists f a, x :< f /\ K R A F f a.
 
 (* Two recursive functions coincide on their common domain.                     *)
 Lemma Coincide : forall (R A F:Class) (f g a b x:U),
@@ -129,8 +119,6 @@ Proposition IsFunctional : forall (R A F:Class), WellFounded R A ->
   CRL.Functional (Recursion R A F).
 Proof.
   intros R A F H1 x y1 y2 H2 H3.
-  apply (proj1 (Charac2 R A F x y1)) in H2.
-  apply (proj1 (Charac2 R A F x y2)) in H3.
   destruct H2 as [f1 [a1 [H2 H4]]].
   destruct H3 as [f2 [a2 [H3 H5]]].
   assert (domain f1 = a1) as H6. { apply H4. }
@@ -154,18 +142,99 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+Lemma IsIncl1 : forall (R A F:Class),
+  CRD.domain (Recursion R A F) :<=: A.
+Proof.
+  intros R A F x [y [f [a [H1 [H2 [H3 [H4 H5]]]]]]].
+  assert (domain f = a) as H6. { apply H4. }
+  assert (x :< a) as H7. {
+    rewrite <- H6. apply Domain.Charac. exists y. assumption. }
+  apply H2. assumption.
+Qed.
+
+Lemma Eval : forall (R A F:Class) (f a x:U),
+  WellFounded R A                             ->
+  toClass a :<=: CRD.domain (Recursion R A F) ->
+  K R A F f a                                 ->
+  x :< a                                      ->
+  (Recursion R A F)!x = f!x.
+Proof.
+  intros R A F f a x H1 H2 H3 H4.
+  apply CRF.EvalCharac.
+  - apply IsFunction. assumption.
+  - apply H2. assumption.
+  - exists f, a. split. 2: assumption.
+    apply FunctionOn.Satisfies with a. 2: assumption. apply H3.
+Qed.
+
+Lemma IsIncl2 : forall (R A F:Class) (f a:U),
+  K R A F f a -> toClass a :<=: CRD.domain (Recursion R A F).
+Proof.
+  intros R A F f a H1 x H2. exists f!x, f, a. split. 2: assumption.
+  apply FunctionOn.Satisfies with a. 2: assumption. apply H1.
+Qed.
+
+Lemma Recurse : forall (R A F:Class) (b:U),
+  WellFounded R A                                                   ->
+  CRD.domain (Recursion R A F) b                                    ->
+  (Recursion R A F)!b = F!(Recursion R A F :|: initSegment R A b).
+Proof.
+  intros R A F b H1 [y [f [a [H2 H3]]]].
+  assert (domain f = a) as G1. { apply H3. }
+  assert (toClass a :<=: CRD.domain (Recursion R A F)) as G2. {
+    apply IsIncl2 with f. assumption. }
+  assert (b :< a) as G3. {
+    rewrite <- G1. apply Domain.Charac. exists y. assumption. }
+  assert ((Recursion R A F)!b = f!b) as H4. {
+    apply Eval with a; try assumption. }
+  assert (initSegment R A b :<=: a) as H5. {
+    apply TranClosure.InitSegment; try apply H3; assumption. }
+  assert (forall x, x :< initSegment R A b -> (Recursion R A F)!x = f!x) as H6. {
+    intros x H6. apply Eval with a; try assumption. apply H5. assumption. }
+  assert (toClass (initSegment R A b) :<=: CRD.domain (Recursion R A F)) as H7. {
+    apply CIN.Tran with (toClass a); assumption. }
+  assert (
+    domain (Recursion R A F :|: initSegment R A b) = initSegment R A b) as H8. {
+      apply RestrictOfClass.DomainWhenIncl. 2: assumption.
+      apply IsFunctional. assumption. }
+  assert (domain (f :|: initSegment R A b) = initSegment R A b) as H9. {
+    apply Restrict.DomainWhenIncl. rewrite G1. assumption. }
+  assert (Recursion R A F :|: initSegment R A b = f :|: initSegment R A b) as H10. {
+    apply Function.EqualCharac.
+    - apply RestrictOfClass.IsFunction, IsFunctional. assumption.
+    - apply Function.Restrict, H3.
+    - rewrite H8, H9. reflexivity.
+    - intros x H10. rewrite H8 in H10.
+      rewrite RestrictOfClass.Eval, Restrict.Eval; try assumption.
+      + apply H6. assumption.
+      + apply H3.
+      + apply IsFunctional. assumption. }
+  rewrite H4, H10. apply H3. assumption.
+Qed.
+
+(*
 Lemma Restrict2 : forall (R A F:Class) (a f:U),
-  WellFounded R A               ->
-  toClass a :<=: A              ->
-  Transitive R A a              ->
-  f = (Recursion R A F) :|: a   ->
+  WellFounded R A                               ->
+  toClass a :<=: CRD.domain (Recursion R A F)   ->
+  Transitive R A a                              ->
+  f = (Recursion R A F) :|: a                   ->
   K R A F f a.
 Proof.
   intros R A F a f H1 H2 H3 H4. unfold K.
-  split. 1: assumption. split. 1: assumption.
-  assert (FunctionOn f a) as H5. {
-    rewrite H4.
-Admitted.
+  assert (toClass a :<=: A) as H5. {
+    apply CIN.Tran with (CRD.domain (Recursion R A F)). 1: assumption.
+    apply IsIncl. }
+  assert (FunctionOn f a) as H6. {
+    rewrite H4. apply RestrictOfClass.IsFunctionOn. 2: assumption.
+    apply IsFunctional. assumption. }
+  assert (forall b, b :< a -> f!b = F!(f :|: initSegment R A b)) as H7. {
+    intros b H7.
+
+
+
+Show.
+*)
+
 
 
 (*

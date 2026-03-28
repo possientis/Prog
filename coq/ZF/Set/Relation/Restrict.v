@@ -83,6 +83,12 @@ Proof.
     apply Domain.Charac. exists y. apply Charac2. split; assumption.
 Qed.
 
+Proposition DomainWhenIncl : forall (f a:U),
+  a :<=: domain f -> domain (f:|:a) = a.
+Proof.
+  intros f a H1. rewrite DomainOf. apply Inter2.WhenInclL. assumption.
+Qed.
+
 (* The range of the restriction f|a is the direct image by f of a.              *)
 Proposition RangeOf : forall (f a:U),
   range (f:|:a) = f:[a]:.
@@ -166,3 +172,4 @@ Proof.
     rewrite H1 in H2. apply Empty.Charac in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.
 Qed.
+

@@ -14,6 +14,7 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
@@ -128,6 +129,14 @@ Proof.
   apply DoubleInclusion. split; intros x H3.
   - apply Specify.Charac in H3. apply H3.
   - apply Specify.Charac. split. 1: assumption. apply H2. assumption.
+Qed.
+
+Proposition IsFunctionOn : forall (F:Class) (a:U), CFL.Functional F ->
+  toClass a :<=: CRD.domain F -> FunctionOn (F:|:a) a.
+Proof.
+  intros F a H1 H2. split.
+  - apply IsFunction. assumption.
+  - apply DomainWhenIncl; assumption.
 Qed.
 
 (* The range of the restriction f|a is the direct image by f of a.              *)
