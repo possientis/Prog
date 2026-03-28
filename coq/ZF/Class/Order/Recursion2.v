@@ -3,13 +3,13 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Closed.
 Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.WellFounded.
-Require Import ZF.Class.Order.TranClosure.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.InitSegment.
+Require Import ZF.Set.Order.TranClosure.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Extend.

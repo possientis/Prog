@@ -50,25 +50,52 @@ Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Definition Transitive (R A:Class) (a:U) : Prop :=
   forall x y, A x -> R :(x,y): -> y :< a -> x :< a.
 
+(* Predicate satisfied by the R-transitive closure of a in A.                   *)
+Definition IsClosure (R A:Class) (a:U) : Class := fun b =>
+  a :<=: b                                              /\
+  toClass b :<=: A                                      /\
+  Transitive R A b                                      /\
+  (forall x, x :< b -> exists n g,
+    n :< :N                                     /\
+    Fun g (succ n) b                            /\
+    g!:0: :< a                                  /\
+    g!n = x                                     /\
+    (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
+  (forall c,
+    a :<=: c          ->
+    toClass c :<=: A  ->
+    Transitive R A c  ->
+    b :<=: c).
+
+(* The class corresponding to the R-transitive closure of a in A.               *)
+Definition closure (R A:Class) (a:U) : Class := fun x =>
+  exists b, x :< b /\ IsClosure R A a b.
+
+(* a is R-transitive in A iff the initial segments of all elements are subsets. *)
+Proposition InitSegment : forall (R A:Class) (a:U),
+  WellFounded R A                                  ->
+  toClass a :<=: A                                 ->
+  Transitive R A a                                <->
+  (forall x, x :< a -> initSegment R A x :<=: a).
+Proof.
+  intros R A a H1 H2.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
+  split; intros H3.
+  - intros x H4 y H5.
+    apply (InitSegment.Charac R A A) in H5; try assumption.
+    destruct H5 as [H5 H6].
+    + revert H5 H6 H4. apply H3.
+    + apply H2. assumption.
+  - intros x y H4 H5 H6. apply (H3 y). 1: assumption.
+    apply InitSegment.CharacRev with A; try assumption.
+    apply H2. assumption.
+Qed.
+
 (* Existence of R-transitive closure of a subset a of A.                        *)
 Proposition Exists : forall (R A:Class) (a:U),
   WellFounded R A   ->
   toClass a :<=: A  ->
-  exists b,
-    a :<=: b                                              /\
-    toClass b :<=: A                                      /\
-    Transitive R A b                                      /\
-    (forall x, x :< b -> exists n g,
-      n :< :N                                     /\
-      Fun g (succ n) b                            /\
-      g!:0: :< a                                  /\
-      g!n = x                                     /\
-      (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
-    (forall c,
-      a :<=: c          ->
-      toClass c :<=: A  ->
-      Transitive R A c  ->
-      b :<=: c).
+  exists b, IsClosure R A a b.
 Proof.
   intros R A a H1 H2.
   assert (:0: :< :N) as G0. { apply Omega.HasZero. }
@@ -260,75 +287,80 @@ Proof.
     apply H29 with n; assumption.
 Qed.
 
-Proposition InitSegment : forall (R A:Class) (a:U),
-  WellFounded R A                                  ->
-  toClass a :<=: A                                 ->
-  Transitive R A a                                <->
-  (forall x, x :< a -> initSegment R A x :<=: a).
-Proof.
-  intros R A a H1 H2.
-  assert (A :<=: A) as G1. { apply CIN.Refl. }
-  split; intros H3.
-  - intros x H4 y H5.
-    apply (InitSegment.Charac R A A) in H5; try assumption.
-    destruct H5 as [H5 H6].
-    + revert H5 H6 H4. apply H3.
-    + apply H2. assumption.
-  - intros x y H4 H5 H6. apply (H3 y). 1: assumption.
-    apply InitSegment.CharacRev with A; try assumption.
-    apply H2. assumption.
-Qed.
-
-(* The class corresponding to the RA-closure of a when it exists.               *)
-Definition closure (R A:Class) (a:U) : Class := fun x =>
-  exists b, x :< b                                        /\
-    a :<=: b                                              /\
-    toClass b :<=: A                                      /\
-    Transitive R A b                                      /\
-    (forall x, x :< b -> exists n g,
-      n :< :N                                     /\
-      Fun g (succ n) b                            /\
-      g!:0: :< a                                  /\
-      g!n = x                                     /\
-      (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
-    (forall c,
-      a :<=: c          ->
-      toClass c :<=: A  ->
-      Transitive R A c  ->
-      b :<=: c).
-
 (* The RA-closure of the set a (viewed as a class) is small.                    *)
 Proposition IsSmall : forall (R A:Class) (a:U),
   Small (closure R A a).
 Proof.
   intros R A a.
-  remember (fun b =>
-    a :<=: b                                              /\
-    toClass b :<=: A                                      /\
-    Transitive R A b                                      /\
-    (forall x, x :< b -> exists n g,
-      n :< :N                                     /\
-      Fun g (succ n) b                            /\
-      g!:0: :< a                                  /\
-      g!n = x                                     /\
-      (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
-    (forall c,
-      a :<=: c          ->
-      toClass c :<=: A  ->
-      Transitive R A c  ->
-      b :<=: c)) as B eqn:H1.
-  assert ((exists b, B b) \/ ~ (exists b, B b)) as H2. {
-    apply LawExcludedMiddle. }
+  assert (
+      (exists b, IsClosure R A a b) \/
+    ~ (exists b, IsClosure R A a b)) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - destruct H2 as [b H2].
     exists b. intros x. split; intros H3.
-    + exists b. rewrite H1 in H2. split; assumption.
+    + exists b. split; assumption.
     + destruct H3 as [c [H3 [H4 [H5 [H6 [H7 H8]]]]]].
-      rewrite H1 in H2. destruct H2 as [H9 [H10 [H11 [H12 H13]]]].
+      destruct H2 as [H9 [H10 [H11 [H12 H13]]]].
       assert (c :<=: b) as H14. { apply H8; assumption. }
       apply H14. assumption.
   - exists :0:. intros x. split; intros H3.
     + apply Empty.Charac in H3. contradiction.
     + destruct H3 as [b [H3 H4]]. exfalso. apply H2. exists b.
-      rewrite H1. assumption.
+      assumption.
 Qed.
+
+(* If b is an R-transitive closure of a in A, it contains (all elemnts of) a.   *)
+Proposition Contains : forall (R A:Class) (a b:U),
+  IsClosure R A a b -> a :<=: b.
+Proof.
+  intros R A a b H1. apply H1.
+Qed.
+
+(* If b is an R-transitive closure of a in A, then is is a subset of A.         *)
+Proposition IsIncl : forall (R A:Class) (a b:U),
+  IsClosure R A a b -> toClass b :<=: A.
+Proof.
+  intros R A a b H1. apply H1.
+Qed.
+
+(* If b is an R-transitive closure of a in A, then it is R-transitive in A..    *)
+Proposition IsTransitive : forall (R A:Class) (a b:U),
+  IsClosure R A a b -> Transitive R A b.
+Proof.
+  intros R A a b H1. apply H1.
+Qed.
+
+Proposition DecreasingPath : forall (R A:Class) (a b x:U),
+  IsClosure R A a b                             ->
+  x :< b                                        ->
+  exists n g,
+    n :< :N                                     /\
+    Fun g (succ n) b                            /\
+    g!:0: :< a                                  /\
+    g!n = x                                     /\
+    (forall i, i :< n -> R :(g!(succ i),g!i):).
+Proof.
+  intros R A a b x H1 H2. apply H1. assumption.
+Qed.
+
+(* An R-transitive closure in A is the smallest R-transitive set such that ...  *)
+Proposition IsSmallest : forall (R A:Class) (a b c:U),
+  IsClosure R A a b ->
+  a :<=: c          ->
+  toClass c :<=: A  ->
+  Transitive R A c  ->
+  b :<=: c.
+Proof.
+  intros R A a b c [H1 [H2 [H3 [H4 H5]]]] H6 H7 H8.
+  apply H5; assumption.
+Qed.
+
+Proposition IsUnique : forall (R A:Class) (a b c:U),
+  IsClosure R A a b -> IsClosure R A a c -> b = c.
+Proof.
+  intros R A a b c H1 H2.
+  apply DoubleInclusion. split.
+  - apply IsSmallest with R A a; try apply H2. assumption.
+  - apply IsSmallest with R A a; try apply H1. assumption.
+Qed.
+
