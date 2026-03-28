@@ -22,6 +22,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
@@ -212,7 +213,6 @@ Proof.
   rewrite H4, H10. apply H3. assumption.
 Qed.
 
-(*
 Lemma Restrict2 : forall (R A F:Class) (a f:U),
   WellFounded R A                               ->
   toClass a :<=: CRD.domain (Recursion R A F)   ->
@@ -223,40 +223,71 @@ Proof.
   intros R A F a f H1 H2 H3 H4. unfold K.
   assert (toClass a :<=: A) as H5. {
     apply CIN.Tran with (CRD.domain (Recursion R A F)). 1: assumption.
-    apply IsIncl. }
+    apply IsIncl1. }
   assert (FunctionOn f a) as H6. {
     rewrite H4. apply RestrictOfClass.IsFunctionOn. 2: assumption.
     apply IsFunctional. assumption. }
   assert (forall b, b :< a -> f!b = F!(f :|: initSegment R A b)) as H7. {
     intros b H7.
+    assert (initSegment R A b :<=: a) as H8. {
+      apply TranClosure.InitSegment; assumption. }
+    assert (CRD.domain (Recursion R A F) b) as H9. { apply H2. assumption. }
+    assert (f!b = (Recursion R A F)!b) as H10. {
+      rewrite H4. apply RestrictOfClass.Eval. 2: assumption.
+      apply IsFunctional. assumption. }
+    assert (f :|: initSegment R A b = Recursion R A F :|: initSegment R A b) as H11. {
+      rewrite H4. apply RestrictOfClass.TowerProperty. 2: assumption.
+      apply IsFunctional. assumption. }
+      rewrite H10, H11. apply Recurse; assumption. }
+  split. 1: assumption. split. 1: assumption. split; assumption.
+Qed.
 
-
-
-Show.
-*)
-
-
-
-(*
-Lemma Restrict2 : forall (R A F:Class) (a f:U),
+Lemma Restrict3 : forall (R A F:Class) (a b f:U),
   WellFounded R A                                                         ->
   A a                                                                     ->
   (forall x,  x :< initSegment R A a -> CRD.domain (Recursion R A F) x)   ->
-  f = (Recursion R A F) :|: initSegment R A a                             ->
-  K R A F f (initSegment R A a).
+  b = closure R A (initSegment R A a)                                     ->
+  f = (Recursion R A F) :|: b                                             ->
+  K R A F f b.
 Proof.
-  intros R A F a f H1 H2 H3 H4. unfold K.
+  intros R A F a b f H1 H2 H3 H4 H5.
   assert (A :<=: A) as G1. { apply CIN.Refl. }
-  assert (toClass (initSegment R A a) :<=: A) as H5. {
-    intros x H5. apply (InitSegment.IsIn R A A) with a; assumption. }
-  assert (Closed R^:-1: (toClass (initSegment R A a))) as H6. {
-    intros y [x [H6 H7]]. apply CRC.Charac2 in H7.
+  assert (toClass (initSegment R A a) :<=: A) as G2. {
+    apply (InitSegment.IsIncl R A A); assumption. }
+
+  assert (Transitive R A b) as H6. {
+    rewrite H4. apply TranClosure.IsTransitive. 1: assumption.
+    apply (InitSegment.IsIncl R A A); assumption. }
+  assert (toClass b :<=: CRD.domain (Recursion R A F)) as H7. {
+    remember ({{ x :< b | CRD.domain (Recursion R A F) }}) as c eqn:H8.
+    assert (c :<=: b) as H9. { rewrite H8. apply Specify.IsInclL. }
+    assert (toClass c :<=: A) as H10. {
+      apply CIN.Tran with (toClass b). 1: assumption.
+      rewrite H4. apply TranClosure.IsIncl; assumption. }
+    assert (initSegment R A a :<=: c) as H11. {
+      intros x H11. rewrite H8. apply Specify.Charac. split.
+      - rewrite H4. apply TranClosure.Contains; assumption.
+      - apply H3. assumption. }
+    assert (Transitive R A c) as H12. {
+      intros x y H12 H13 H14. rewrite H8 in H14.
+      apply Specify.Charac in H14. destruct H14 as [H14 H15].
+      rewrite H8. apply Specify.Charac. split.
+      - revert H14. apply H6; assumption.
+      - destruct H15 as [z [g [e [H15 H16]]]].
+        apply (IsIncl2 R A F g e). 1: assumption.
+        assert (domain g = e) as H17. { apply H16. }
+        assert (y :< e) as H18. {
+          rewrite <- H17. apply Domain.Charac. exists z. assumption. }
+        assert (Transitive R A e) as H19. { apply H16. }
+        revert H18. apply H19; assumption. }
+    assert (b :<=: c) as H13. {
+      rewrite H4. apply TranClosure.IsSmallest; assumption. }
+    apply CIN.Tran with (toClass c). 1: assumption.
+    rewrite H8. apply Specify.IsInclR. }
+  apply Restrict2; assumption.
+Qed.
+
 (*
-    apply InitSegment.CharacRev with A.
-*)
-Admitted.
-
-
 Lemma Extend : forall (R A F:Class) (a b f g:U),
   WellFounded R A                   ->
   A a                               ->
@@ -274,9 +305,9 @@ Proof.
   assert (Closed R^:-1: (toClass b)) as H10. {
 
 Admitted.
+*)
 
-
-
+(*
 Proposition DomainOf : forall (R A F:Class), WellFounded R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
@@ -287,7 +318,7 @@ Proof.
     apply H3. rewrite <- H7. apply Domain.Charac. exists y. assumption.
   - revert x. apply Induction.Induction with R. 1: assumption.
     intros a H2 IH.
-
+*)
 (*
     remember (Recursion R A F :|: initSegment R A a) as f eqn:H8.
     assert (K R A F f (initSegment R A a)) as H9. {
@@ -300,5 +331,4 @@ Proof.
 Qed.
 *)
 
-.
-*)
+
