@@ -17,6 +17,7 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Functional.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Single.
@@ -235,6 +236,20 @@ Proof.
     + left. assumption.
     + right. split. 1: assumption. split. 1: assumption. rewrite H1.
       apply Omega.HasUnion. assumption.
+Qed.
+
+Proposition IsFunctionOn : forall (f a n:U),
+  n :< :N                             ->
+  FunctionOn f n                      ->
+  FunctionOn (shiftR a f) (succ n).
+Proof.
+  intros f a n H1 H2.
+  assert (domain f = n) as G1. { apply H2. }
+  split.
+  - apply IsFunction.
+    + rewrite G1. intros m H3. apply Omega.IsIn with n; assumption.
+    + apply H2.
+  - rewrite <- G1. apply WhenDomainIsNat. rewrite G1. assumption.
 Qed.
 
 Proposition IsOrdFun : forall (f a:U),

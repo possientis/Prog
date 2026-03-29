@@ -8,11 +8,14 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.ShiftR.
 
 Require Import ZF.Notation.Eval.
 
@@ -138,5 +141,13 @@ Proof.
       - apply (InitSegment.IsIncl R A A); assumption.
       - rewrite <- H4. assumption. }
   destruct H5 as [n [f [H5 [H6 [H7 [H8 H9]]]]]].
+  remember (ShiftR.shiftR a f) as g eqn:H10.
+  apply (Founded2.NoLoopDec R A). 1: apply H1. exists (succ n), g.
+  assert (succ n :< :N) as H11. { apply Omega.HasSucc. assumption. }
+  assert (:1: :<=: succ n) as H12. { apply Omega.OneInclSucc. assumption. }
+  assert (FunctionOn g (succ (succ n))) as H13. {
+    rewrite H10. apply ShiftR.IsFunctionOn. 1: assumption. apply H6. }
+  assert (g!:0: = a) as H14. {
+    rewrite H10. apply ShiftR.EvalZero.
 Admitted.
 

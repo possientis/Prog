@@ -208,6 +208,27 @@ Proof.
   apply Succ.ElemCompat; assumption.
 Qed.
 
+Proposition SuccInclCompat : forall (n m:U), n :< :N -> m :< :N ->
+  n :<=: m -> succ n :<=: succ m.
+Proof.
+  intros n m H1 H2 H3.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  apply Succ.InclCompat; assumption.
+Qed.
+
+Proposition ZeroIncl : forall (n:U), n :< :N -> :0: :<=: n.
+  intros n H1. apply Core.IsIncl, HasOrdinalElem. assumption.
+Qed.
+
+Proposition OneInclSucc : forall (n:U), n :< :N  ->
+  :1: :<=: succ n.
+Proof.
+  intros n H1. apply SuccInclCompat. 2: assumption.
+  - apply HasZero.
+  - apply ZeroIncl. assumption.
+Qed.
+
 Proposition HasUnion : forall (n:U), n :< :N ->
   :U(n) :< :N.
 Proof.
