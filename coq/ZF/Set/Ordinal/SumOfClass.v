@@ -1,10 +1,10 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.ShiftL.
-Require Import ZF.Class.Ordinal.ShiftR.
 Require Import ZF.Class.Ordinal.Sum.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.ShiftL.
+Require Import ZF.Class.Relation.ShiftR.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.

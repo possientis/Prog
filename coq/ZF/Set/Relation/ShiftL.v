@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.ShiftL.
+Require Import ZF.Class.Relation.ShiftL.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -23,16 +23,16 @@ Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
 
-Module COS := ZF.Class.Ordinal.ShiftL.
+Module CRS := ZF.Class.Relation.ShiftL.
 Module SOU := ZF.Set.Ordinal.UnionOf.
 
 
 (* Shifting a function to the left. shiftL f = { (x,y) | (succ x, y) :< f }     *)
-Definition shiftL (f:U) : U := fromClass (COS.shiftL (toClass f))
-  (COS.IsSmall (toClass f) (SetIsSmall f)).
+Definition shiftL (f:U) : U := fromClass (CRS.shiftL (toClass f))
+  (CRS.IsSmall (toClass f) (SetIsSmall f)).
 
 Proposition ToClass : forall (f:U),
-  toClass (shiftL f) :~: COS.shiftL (toClass f).
+  toClass (shiftL f) :~: CRS.shiftL (toClass f).
 Proof.
   intros f. apply ToFromClass.
 Qed.

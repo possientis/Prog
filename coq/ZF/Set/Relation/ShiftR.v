@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.ShiftR.
+Require Import ZF.Class.Relation.ShiftR.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -25,14 +25,14 @@ Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 
-Module COS := ZF.Class.Ordinal.ShiftR.
+Module CRS := ZF.Class.Relation.ShiftR.
 
 (* Shifting a function to the right. shiftR a f = {(0,a)}\/{(succ x,y)|(x,y):<f}*)
-Definition shiftR (a f:U) : U := fromClass (COS.shiftR a (toClass f))
-  (COS.IsSmall (toClass f) a (SetIsSmall f)).
+Definition shiftR (a f:U) : U := fromClass (CRS.shiftR a (toClass f))
+  (CRS.IsSmall (toClass f) a (SetIsSmall f)).
 
 Proposition ToClass : forall (f a:U),
-  toClass (shiftR a f) :~: COS.shiftR a (toClass f).
+  toClass (shiftR a f) :~: CRS.shiftR a (toClass f).
 Proof.
   intros f a. apply ToFromClass.
 Qed.
