@@ -12,10 +12,14 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.ShiftR.
+Require Import ZF.Set.Single.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 
@@ -121,7 +125,6 @@ Proof.
     apply H2. assumption.
 Qed.
 
-
 (* A set does not belong to the R-transitive of its initial segment in A.       *)
 Proposition IsNotIn : forall (R A:Class) (a:U),
   WellFounded R A                         ->
@@ -142,6 +145,7 @@ Proof.
       - rewrite <- H4. assumption. }
   destruct H5 as [n [f [H5 [H6 [H7 [H8 H9]]]]]].
   remember (ShiftR.shiftR a f) as g eqn:H10.
+  assert (domain f = succ n) as G2. { apply H6. }
   apply (Founded2.NoLoopDec R A). 1: apply H1. exists (succ n), g.
   assert (succ n :< :N) as H11. { apply Omega.HasSucc. assumption. }
   assert (:1: :<=: succ n) as H12. { apply Omega.OneInclSucc. assumption. }
@@ -149,5 +153,37 @@ Proof.
     rewrite H10. apply ShiftR.IsFunctionOn. 1: assumption. apply H6. }
   assert (g!:0: = a) as H14. {
     rewrite H10. apply ShiftR.EvalZero.
+    - rewrite G2. apply Omega.IsIncl. assumption.
+    - apply H6. }
+  assert (g!(succ n) = a) as H15. {
+    rewrite H10. rewrite ShiftR.EvalSucc; try assumption.
+    - rewrite G2. apply Omega.IsIncl. assumption.
+    - apply H6.
+    - rewrite G2. apply Succ.IsIn. }
+  assert (g!:0: = g!(succ n)) as H16. { rewrite H14, H15. reflexivity. }
+  assert (toClass (initSegment R A a) :<=: A) as H17. {
+    apply InitSegment.IsIncl with A; assumption. }
+  assert (toClass b :<=: A) as H18. { rewrite H4. apply IsIncl; assumption. }
+  assert (range g = :{a}: :\/: range f) as H19. {
+    rewrite H10. apply ShiftR.RangeOf. rewrite G2.
+    apply Omega.IsIncl. assumption. }
+  assert (range f :<=: b) as H20. { apply H6. }
+  assert (toClass (range g) :<=: A) as H21. {
+    intros y H21. rewrite H19 in H21. apply Union2.Charac in H21.
+    destruct H21 as [H21|H21].
+    - apply Single.Charac in H21. subst. assumption.
+    - apply H18, H20. assumption. }
+  assert (forall i, i :< succ (succ n) -> g!i :< range g) as H22. {
+    intros i H22. apply Range.Charac. exists i.
+    apply FunctionOn.Satisfies with (succ (succ n)); assumption. }
+  assert (forall i, i :< succ (succ n) -> A g!i) as H23. {
+    intros i H23. apply H21, H22. assumption. }
+  assert (forall i, i :< succ n -> R :(g!(succ i),g!i):) as H24. {
+    intros i H24.
+    assert (i :< :N) as K1. { apply (Omega.IsIncl (succ n)); assumption. }
+    assert (i = :0: \/ :0: :< i) as H25. { apply Omega.ZeroOrElem. assumption. }
+    destruct H25 as [H25|H25].
+    - rewrite H25, H14, H10, ShiftR.EvalSucc.
+      +
 Admitted.
 
