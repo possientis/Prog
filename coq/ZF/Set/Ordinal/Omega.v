@@ -100,6 +100,12 @@ Proof.
   intros n m. apply IsTransitive.
 Qed.
 
+Proposition IsIncl : forall (n:U), n :< :N ->
+  n :<=: :N.
+Proof.
+  intros n H1 m H2. apply IsIn with n; assumption.
+Qed.
+
 (* The set N is an ordinal.                                                     *)
 Proposition IsOrdinal : Ordinal :N.
 Proof.
@@ -266,7 +272,7 @@ Proof.
 Qed.
 
 (* An ordinal with non-limit ordinals as elements is a subset of N.             *)
-Proposition IsIncl : forall (a:U),
+Proposition WhenNonLimitElem : forall (a:U),
   Ordinal a               ->
   toClass a :<=: NonLimit ->
   a :<=: :N.
