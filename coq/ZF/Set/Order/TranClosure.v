@@ -15,6 +15,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.ShiftR.
@@ -182,8 +183,28 @@ Proof.
     intros i H24.
     assert (i :< :N) as K1. { apply (Omega.IsIncl (succ n)); assumption. }
     assert (i = :0: \/ :0: :< i) as H25. { apply Omega.ZeroOrElem. assumption. }
+    assert (domain f :<=: :N) as K2. {
+      rewrite G2. apply Omega.IsIncl. assumption. }
+    assert (Functional f) as K3. { apply H6. }
     destruct H25 as [H25|H25].
-    - rewrite H25, H14, H10, ShiftR.EvalSucc.
-      +
-Admitted.
+    - rewrite H25, H14, H10, ShiftR.EvalSucc; try assumption.
+      + apply (InitSegment.IsLess R A A); assumption.
+      + apply Omega.HasZero.
+      + rewrite G2. apply Omega.SuccHasZero. assumption.
+    - apply Omega.IsSuccessor in H25. 2: assumption.
+      destruct H25 as [H25 [j H26]].
+      assert (j :< :N) as K4. {
+        apply Omega.HasSuccRev. rewrite <- H26. assumption. }
+      assert (succ j :< :N) as K5. { apply Omega.HasSucc. assumption. }
+      assert (j :< domain f) as K6. {
+        rewrite G2. apply Omega.SuccElemCompatRev; try assumption.
+        rewrite <- H26. apply (Succ.IsIncl (succ n)). assumption. }
+      assert (succ j :< domain f) as K7. {
+        rewrite G2. rewrite <- H26. assumption. }
+      rewrite H26, H10, ShiftR.EvalSucc, ShiftR.EvalSucc; try assumption.
+      apply H9. apply Omega.SuccElemCompatRev; try assumption.
+      rewrite <- H26. assumption. }
+  split. 1: assumption. split. 1: assumption. split. 1: assumption.
+  split. 1: assumption. split; assumption.
+Qed.
 

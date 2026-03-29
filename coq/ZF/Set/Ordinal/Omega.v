@@ -214,6 +214,15 @@ Proof.
   apply Succ.ElemCompat; assumption.
 Qed.
 
+Proposition SuccElemCompatRev : forall (n m:U), n :< :N -> m :< :N ->
+  succ n :< succ m -> n :< m.
+Proof.
+  intros n m H1 H2 H3.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  apply Succ.ElemCompatRev; assumption.
+Qed.
+
 Proposition SuccInclCompat : forall (n m:U), n :< :N -> m :< :N ->
   n :<=: m -> succ n :<=: succ m.
 Proof.
