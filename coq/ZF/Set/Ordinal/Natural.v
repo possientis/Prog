@@ -183,12 +183,7 @@ Proof.
 Qed.
 
 Proposition HasZero : forall (a:U), Ordinal a ->
-  :1: :< a -> :0: :< a.
+  :1: :<=: a -> :0: :< a.
 Proof.
-  intros a H1 H2.
-  assert (Ordinal :0:) as G1. { apply ZeroIsOrdinal. }
-  assert (Ordinal :1:) as G2. { apply OneIsOrdinal. }
-  apply ElemElemTran with :1:; try assumption.
-  apply Succ.IsIn.
+  intros a H1 H2. apply H2, Succ.IsIn.
 Qed.
-

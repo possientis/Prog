@@ -550,7 +550,8 @@ Proposition IsElemEuclid : forall (a b c q1 q2 r1 r2:U),
 Proof.
   intros a b c q1 q2 r1 r2 H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12.
   assert (Ordinal (succ b)) as G1. { apply Succ.IsOrdinal. assumption. }
-  assert (:0: :< a) as G2. { apply Natural.HasZero; assumption. }
+  assert (:0: :< a) as G2. {
+    apply Natural.HasZero. 1: assumption. apply Core.ElemIsIncl; assumption. }
   assert (Ordinal (a :^: c)) as G3. { apply Exp.IsOrdinal; assumption. }
   assert (Ordinal (a :^: c :*: q2)) as G4. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :^: b)) as G5. { apply Exp.IsOrdinal; assumption. }
@@ -608,7 +609,8 @@ Proof.
   intros a n m c d e f H1 H2 H3. revert n H3 m c d e f.
   assert (Ordinal :0:) as K1. { apply Core.ZeroIsOrdinal. }
   assert (Ordinal :1:) as K2. { apply Natural.OneIsOrdinal. }
-  assert (:0: :< a) as K3. { apply Natural.HasZero; assumption. }
+  assert (:0: :< a) as K3. {
+    apply Natural.HasZero. 1: assumption. apply Core.ElemIsIncl; assumption. }
   remember (fun n =>
     forall m c d e f : U,
     m :< :N                                                             ->
@@ -1382,3 +1384,4 @@ Proof.
   apply ExpNatEqual; try assumption.
   apply IsLimitL; assumption.
 Qed.
+

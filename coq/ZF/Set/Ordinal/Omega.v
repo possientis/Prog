@@ -199,6 +199,15 @@ Proof.
   apply Succ.HasZero. assumption.
 Qed.
 
+Proposition SuccElemCompat : forall (n m:U), n :< :N -> m :< :N ->
+  n :< m -> succ n :< succ m.
+Proof.
+  intros n m H1 H2 H3.
+  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  apply Succ.ElemCompat; assumption.
+Qed.
+
 Proposition HasUnion : forall (n:U), n :< :N ->
   :U(n) :< :N.
 Proof.
