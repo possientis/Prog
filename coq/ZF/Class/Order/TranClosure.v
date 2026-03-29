@@ -55,12 +55,12 @@ Definition IsClosure (R A:Class) (a:U) : Class := fun b =>
   a :<=: b                                              /\
   toClass b :<=: A                                      /\
   Transitive R A b                                      /\
-  (forall x, x :< b -> exists n g,
+  (forall x, x :< b -> exists n f,
     n :< :N                                     /\
-    Fun g (succ n) b                            /\
-    g!:0: :< a                                  /\
-    g!n = x                                     /\
-    (forall i, i :< n -> R :(g!(succ i),g!i):))         /\
+    Fun f (succ n) b                            /\
+    f!:0: :< a                                  /\
+    f!n = x                                     /\
+    (forall i, i :< n -> R :(f!(succ i),f!i):))         /\
   (forall c,
     a :<=: c          ->
     toClass c :<=: A  ->

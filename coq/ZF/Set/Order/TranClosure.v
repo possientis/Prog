@@ -1,5 +1,6 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Order.Founded2.
 Require Import ZF.Class.Order.TranClosure.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Set.Core.
@@ -13,7 +14,9 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 
+Require Import ZF.Notation.Eval.
 
+Module CIN := ZF.Class.Incl.
 Module COT := ZF.Class.Order.TranClosure.
 
 (* An R-transitive set a in class A,                                            *)
@@ -71,12 +74,12 @@ Proposition DecreasingPath : forall (R A:Class) (a x:U),
   WellFounded R A                               ->
   toClass a :<=: A                              ->
   x :< closure R A a                            ->
-  exists n g,
+  exists n f,
     n :< :N                                     /\
-    Fun g (succ n) (closure R A a)              /\
-    g!:0: :< a                                  /\
-    g!n = x                                     /\
-    (forall i, i :< n -> R :(g!(succ i),g!i):).
+    Fun f (succ n) (closure R A a)              /\
+    f!:0: :< a                                  /\
+    f!n = x                                     /\
+    (forall i, i :< n -> R :(f!(succ i),f!i):).
 Proof.
   intros R A a x H1 H2 H3.
   apply COT.DecreasingPath with A. 2: assumption.
@@ -114,3 +117,26 @@ Proof.
     apply InitSegment.CharacRev with A; try assumption.
     apply H2. assumption.
 Qed.
+
+
+(* A set does not belong to the R-transitive of its initial segment in A.       *)
+Proposition IsNotIn : forall (R A:Class) (a:U),
+  WellFounded R A                         ->
+  A a                                     ->
+  ~ a :< closure R A (initSegment R A a).
+Proof.
+  intros R A a H1 H2 H3.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
+  remember (closure R A (initSegment R A a)) as b eqn:H4.
+  assert (exists n f,
+    n :< :N                                     /\
+    Fun f (succ n) b                            /\
+    f!:0: :< initSegment R A a                  /\
+    f!n = a                                     /\
+    (forall i, i :< n -> R :(f!(succ i),f!i):)) as H5. {
+      rewrite H4. apply DecreasingPath. 1: assumption.
+      - apply (InitSegment.IsIncl R A A); assumption.
+      - rewrite <- H4. assumption. }
+  destruct H5 as [n [f [H5 [H6 [H7 [H8 H9]]]]]].
+Admitted.
+
