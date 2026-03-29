@@ -99,7 +99,7 @@ Proof.
   - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
-Proposition FoundedNoLoop1 : forall (R A:Class), Founded R A ->
+Proposition NoLoop1 : forall (R A:Class), Founded R A ->
   forall a, A a -> ~ R :(a,a):.
 Proof.
   intros R A H1 a H2 H3.
@@ -112,7 +112,7 @@ Proof.
   specialize (H5 a (Single.IsIn a)). contradiction.
 Qed.
 
-Proposition FoundedNoLoop2 : forall (R A:Class), Founded R A ->
+Proposition NoLoop2 : forall (R A:Class), Founded R A ->
   forall a b, A a -> A b -> ~ (R :(a,b): /\ R :(b,a):).
 Proof.
   intros R A H1 a b H2 H3 [H4 H5].
@@ -126,7 +126,7 @@ Proof.
   - specialize (H7 a (Pair.IsInL a b)). contradiction.
 Qed.
 
-Proposition FoundedNoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
+Proposition NoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
   A a1 ->
   A a2 ->
   A a3 ->
@@ -144,7 +144,7 @@ Proof.
   - specialize (H9 a2 (Tuple3In2 a1 a2 a3)). contradiction.
 Qed.
 
-Proposition FoundedNoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 a4,
+Proposition NoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 a4,
   A a1 ->
   A a2 ->
   A a3 ->

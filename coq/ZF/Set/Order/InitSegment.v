@@ -4,6 +4,7 @@ Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Transitive.
+Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Image.
@@ -294,5 +295,16 @@ Proof.
   intros F R S A B C a H1 H2 H3 H4 H5.
   rewrite <- (IsomImage F R S A B C); try assumption.
   apply ImageByClass.WhenEmpty. assumption.
+Qed.
+
+Proposition IsNotIn : forall (R A B:Class)(a:U),
+  WellFounded R A           ->
+  A a                       ->
+  B :<=: A                  ->
+  ~ a :< initSegment R B a.
+Proof.
+  intros R A B a H1 H2 H3 H4.
+  assert (R :(a,a):) as H5. { apply IsLess with A B; assumption. }
+  revert H5. apply (Founded.NoLoop1 R A). 2: assumption. apply H1.
 Qed.
 

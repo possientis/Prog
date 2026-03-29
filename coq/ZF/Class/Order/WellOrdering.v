@@ -48,7 +48,7 @@ Proof.
   intros R A [H1 H2] x y z H3 H4 H5 H6 H7.
   specialize (H2 x z H3 H5). destruct H2 as [H2|[H2|H2]].
   - subst. exfalso. assert (R :(y,z): /\ R :(z,y):) as H8. { split; assumption. }
-    revert H8. apply (FoundedNoLoop2 R A H1 y z); assumption.
+    revert H8. apply (Founded.NoLoop2 R A H1 y z); assumption.
   - assumption.
   - exfalso. assert (exists u, Minimal R (toClass :{x,y,z}:) u) as H8. {
       apply H1.
