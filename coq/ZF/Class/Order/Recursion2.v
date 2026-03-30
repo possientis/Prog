@@ -242,7 +242,7 @@ Proof.
   split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
-Lemma Restrict3 : forall (R A F:Class) (a b f:U),
+Lemma OnClosure : forall (R A F:Class) (a b f:U),
   WellFounded R A                                                         ->
   A a                                                                     ->
   (forall x,  x :< initSegment R A a -> CRD.domain (Recursion R A F) x)   ->
@@ -287,25 +287,70 @@ Proof.
   apply Restrict2; assumption.
 Qed.
 
-(*
-Lemma Extend : forall (R A F:Class) (a b f g:U),
-  WellFounded R A                   ->
-  A a                               ->
-  K R A F f (initSegment R A a)     ->
-  g = extend f a F!f                ->
-  b = initSegment R A a :\/: :{a}:  ->
-  K R A F g b.
+Lemma Extend : forall (R A F:Class) (a b c f g:U),
+  WellFounded R A                                   ->
+  A a                                               ->
+  b = closure R A (initSegment R A a)               ->
+  c = b :\/: :{a}:                                  ->
+  g = extend f a F!(f:|:initSegment R A a)          ->
+  K R A F f b                                       ->
+  K R A F g c.
 Proof.
-  intros R A F a b f g H1 H2 [H3 [H4 [H5 H6]]] H7 H8. unfold K.
-  assert (toClass b :<=: A) as H9. {
-    intros x H9. rewrite H8 in H9.
-    apply Union2.Charac in H9. destruct H9 as [H9|H9].
-    - apply H3. assumption.
-    - apply Single.Charac in H9. subst. assumption. }
-  assert (Closed R^:-1: (toClass b)) as H10. {
-
-Admitted.
-*)
+  intros R A F a b c f g H1 H2 H3 H4 H5 [H6 [H7 [H8 H9]]]. unfold K.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
+  assert (domain f = b) as G2. { apply H8. }
+  assert (toClass c :<=: A) as H10. {
+    intros x H10.
+    rewrite H4 in H10. apply Union2.Charac in H10. destruct H10 as [H10|H10].
+    - apply H6. assumption.
+    - apply Single.Charac in H10. subst. assumption. }
+  assert (Transitive R A c) as H11. {
+    intros x y H11 H12 H13. rewrite H4 in H13. rewrite H4.
+    apply Union2.Charac. left.
+    apply Union2.Charac in H13. destruct H13 as [H13|H13].
+    - revert H13. apply H7; assumption.
+    - apply Single.Charac in H13. rewrite H13 in H12. rewrite H3.
+      apply TranClosure.Contains. 1: assumption.
+      + apply (InitSegment.IsIncl R A A); assumption.
+      + apply (InitSegment.CharacRev R A A); assumption. }
+  assert (~ a :< b) as H12. {
+    rewrite H3. apply TranClosure.IsNotIn; assumption. }
+  assert (~ a :< domain f) as G3. { rewrite G2. assumption. }
+  assert (Functional f) as G4. { apply H8. }
+  assert (FunctionOn g c) as H13. {
+    rewrite H4, H5. apply Extend.IsFunctionOn; assumption. }
+  assert (forall x, x :< c -> g!x = F!(g:|:initSegment R A x)) as H14. {
+    intros x H14. rewrite H4 in H14. apply Union2.Charac in H14.
+    destruct H14 as [H14|H14].
+      assert (g!x = f!x) as K1. {
+        rewrite H5. apply Extend.Evalf; try assumption.
+        - rewrite G2. assumption. }
+      assert (initSegment R A x :<=: b) as K2. {
+        apply TranClosure.InitSegment; assumption. }
+      assert (forall u, u :< initSegment R A x -> g!u = f!u) as K3. {
+        intros u K3. rewrite H5. apply Extend.Evalf; try assumption.
+        rewrite G2. apply K2. assumption. }
+      assert (g:|:initSegment R A x = f:|:initSegment R A x) as K4. {
+        apply FunctionOn.RestrictEqual with c b; try assumption.
+        apply Incl.Tran with b. 1: assumption. rewrite H4.
+        apply Union2.IsInclL. }
+      rewrite K1, K4. apply H9. assumption.
+    - apply Single.Charac in H14. rewrite H14.
+      assert (g!a = F!(f:|:initSegment R A a)) as K1. {
+        rewrite H5. apply Extend.Evalx; assumption. }
+      assert (initSegment R A a :<=: b) as K2. {
+        rewrite H3. apply TranClosure.Contains. 1: assumption.
+        apply (InitSegment.IsIncl R A A); assumption. }
+      assert (forall u, u :< initSegment R A a -> g!u = f!u) as K3. {
+        intros u K3. rewrite H5. apply Extend.Evalf; try assumption.
+        rewrite G2. apply K2. assumption. }
+      assert (g:|:initSegment R A a = f:|:initSegment R A a) as K4. {
+        apply FunctionOn.RestrictEqual with c b; try assumption.
+        apply Incl.Tran with b. 1: assumption. rewrite H4.
+        apply Union2.IsInclL. }
+      rewrite K1, K4. reflexivity. }
+  split. 1: assumption. split. 1: assumption. split; assumption.
+Qed.
 
 (*
 Proposition DomainOf : forall (R A F:Class), WellFounded R A ->
