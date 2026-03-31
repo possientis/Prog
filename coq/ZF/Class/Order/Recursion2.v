@@ -5,6 +5,9 @@ Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Function.
+Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -33,6 +36,7 @@ Module CRC := ZF.Class.Relation.Converse.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
 Module CRL := ZF.Class.Relation.Functional.
+Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 
 (* Binary predicate underlying the recursion class.                             *)
@@ -370,5 +374,41 @@ Proof.
     + apply H8.
     + rewrite H6. apply Union2.Charac. right. apply Single.IsIn.
 Qed.
+
+Proposition IsFunctionOn : forall (R A F:Class), WellFounded R A ->
+  CFO.FunctionOn (Recursion R A F) A.
+Proof.
+  intros R A F H1. split.
+  - apply IsFunction. assumption.
+  - apply DomainOf. assumption.
+Qed.
+
+Proposition IsRecursive : forall (R A F:Class) (a:U),
+  WellFounded R A                                                   ->
+  A a                                                               ->
+  (Recursion R A F)!a = F!(Recursion R A F :|: initSegment R A a).
+Proof.
+  intros R A F a H1 H2. apply Recurse. 1: assumption.
+  apply DomainOf; assumption.
+Qed.
+
+Proposition IsUnique : forall (R A F G:Class),
+  WellFounded R A                                         ->
+  CFO.FunctionOn G A                                      ->
+  (forall b, A b -> G!b = F!(G :|: initSegment R A b))    ->
+  G :~: Recursion R A F.
+Proof.
+  intros R A F G H1 H2 H3.
+  assert (A :<=: A) as G1. { apply CIN.Refl. }
+  assert (A :~: A) as G2. { apply Equiv.Refl. }
+  apply (CFO.EqualCharac _ _ A A). 1: assumption.
+  - apply IsFunctionOn. assumption.
+  - split. 1: assumption. apply Induction.Induction with R. 1: assumption.
+    intros a H4 IH. remember (initSegment R A a) as b eqn:H5.
+  assert (G:|:b = (Recursion R A F) :|: b) as H6. {
+    apply Function.EqualCharac.
+Admitted.
+
+
 
 
