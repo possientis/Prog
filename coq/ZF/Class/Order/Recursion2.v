@@ -352,28 +352,23 @@ Proof.
   split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
-(*
 Proposition DomainOf : forall (R A F:Class), WellFounded R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
-  intros R A F G1 x. split.
-  - intros [y H1]. apply (proj1 (Charac2 R A F _ _)) in H1.
-    destruct H1 as [f [a [H2 [H3 [H4 [H5 H6]]]]]].
-    assert (domain f = a) as H7. { apply H5. }
-    apply H3. rewrite <- H7. apply Domain.Charac. exists y. assumption.
+  intros R A F H1 x. split.
+  - apply  IsIncl1.
   - revert x. apply Induction.Induction with R. 1: assumption.
     intros a H2 IH.
-*)
-(*
-    remember (Recursion R A F :|: initSegment R A a) as f eqn:H8.
-    assert (K R A F f (initSegment R A a)) as H9. {
-      apply Restrict2; assumption. }
-    remember (extend f a F!f) as g eqn:H10.
-    remember (initSegment R A a :\/: :{a}:) as b eqn:H11.
-    assert (K R A F g b) as H12. { apply Extend with a f; assumption. }
-    exists F!f. apply Charac2. exists g, b. split. 2: assumption.
-    rewrite H10. apply Union2.Charac. right. apply Single.IsIn.
+    remember (closure R A (initSegment R A a)) as b eqn:H3.
+    remember ((Recursion R A F) :|: b) as f eqn:H4.
+    assert (K R A F f b) as H5. { apply OnClosure with a; assumption. }
+    remember (b :\/: :{a}:) as c eqn:H6.
+    remember (extend f a F!(f:|:initSegment R A a)) as g eqn:H7.
+    assert (K R A F g c) as H8. { apply Extend with a b f; assumption. }
+    exists g!a, g, c. split. 2: assumption.
+    apply FunctionOn.Satisfies with c.
+    + apply H8.
+    + rewrite H6. apply Union2.Charac. right. apply Single.IsIn.
 Qed.
-*)
 
 
