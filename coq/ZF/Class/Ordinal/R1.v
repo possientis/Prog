@@ -1,11 +1,14 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Super.
+Require Import ZF.Set.Ordinal.Transitive.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
@@ -52,4 +55,15 @@ Proof.
   intros G H1 H2 H3. apply Recursion2.IsUnique; try assumption.
   intros b H4. symmetry. rewrite H3. 2: assumption. apply ToFun.Eval.
 Qed.
+
+Proposition IsSuper : forall (a:U), On a ->
+  Super R1!a.
+Proof.
+  apply Induction2.Induction.
+  - rewrite WhenZero. apply Super.WhenZero. reflexivity.
+  - intros a H1 IH. rewrite WhenSucc. 2: assumption.
+    apply Super.WhenPower. assumption.
+  - intros a H1 IH. rewrite WhenLimit. 2: assumption.
+Admitted.
+
 

@@ -17,3 +17,8 @@ Proposition Charac : forall (a:U),
 Proof.
   intros a. apply FromClass.Charac.
 Qed.
+
+Proposition IsIn : forall (a:U), a :< :P(a).
+Proof.
+  intros a. apply Charac, Incl.Refl.
+Qed.
