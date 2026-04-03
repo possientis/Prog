@@ -2,6 +2,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
 Require Import ZF.Class.Small.
@@ -22,10 +23,14 @@ Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Truncate.
 
+Require Import ZF.Notation.Eval.
+
 Export ZF.Notation.Pipe.
 
+Module CIN := ZF.Class.Incl.
 Module CRD := ZF.Class.Relation.Domain.
 Module CFL := ZF.Class.Relation.Functional.
+Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Range.
 
 Module SRD := ZF.Set.Relation.Domain.
@@ -208,5 +213,33 @@ Proof.
   - destruct H2 as [y [z [_ [H2 _]]]]. rewrite H1 in H2.
     apply Empty.Charac in H2. contradiction.
   - contradiction.
+Qed.
+
+Proposition Equal : forall (F G A B:Class) (c:U),
+  CFO.FunctionOn F A                ->
+  CFO.FunctionOn G B                ->
+  toClass c :<=: A                  ->
+  toClass c :<=: B                  ->
+  (forall x, x :< c -> F!x = G!x)   ->
+  F:|:c = G:|:c.
+Proof.
+  intros F G A B c H1 H2 H3 H4 H5.
+  assert (CRD.domain F :~: A) as G1. { apply H1. }
+  assert (CRD.domain G :~: B) as G2. { apply H2. }
+  assert (FunctionOn (F:|:c) c) as H6. {
+    apply IsFunctionOn.
+    - apply H1.
+    - apply CIN.EquivCompatR with A. 2: assumption.
+      apply Equiv.Sym. assumption. }
+  assert (FunctionOn (G:|:c) c) as H7. {
+    apply IsFunctionOn.
+    - apply H2.
+    - apply CIN.EquivCompatR with B. 2: assumption.
+      apply Equiv.Sym. assumption. }
+  apply FunctionOn.EqualCharac with c c; try assumption. 1: reflexivity.
+  intros x H8.
+  assert ((F:|:c)!x = F!x) as H9.  { apply Eval. 2: assumption. apply H1. }
+  assert ((G:|:c)!x = G!x) as H10. { apply Eval. 2: assumption. apply H2. }
+  rewrite H9, H10. apply H5. assumption.
 Qed.
 
