@@ -41,7 +41,7 @@ Proof.
     assert (i :< domain f) as H9. { apply Domain.Charac. exists y. assumption. }
     rewrite G1 in H9.
     assert (f!i = y) as H10. {
-      apply (FunctionOn.EvalCharac f (succ n)); assumption. }
+      apply (FunctionOn.Eval f (succ n)); assumption. }
     split; assumption. }
   assert (toClass a :<=: A) as H9. {
     intros y H9. specialize (G3 y H9). destruct G3 as [i [G3 G4]].

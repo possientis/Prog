@@ -342,7 +342,7 @@ Proof.
     - destruct H15 as [_ H15]. rewrite H12, H15. assumption.
     - destruct H8 as [_ H8]. rewrite H8, H12. assumption.
     - intros x H18. symmetry.
-      apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
+      apply (SFO.Eval g (initSegment R^:=: A a)). 1: assumption.
       + apply H17. rewrite <- H12. assumption.
       + rewrite H5. apply Union2.Charac. left.
         apply (SFO.Satisfies f (initSegment R A a)). 1: assumption.

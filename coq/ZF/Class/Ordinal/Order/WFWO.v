@@ -120,7 +120,7 @@ Proof.
     apply Class.Inter2.IsInclL. }
   destruct H4 as [y H4].
   assert (F!x = y) as H5. {
-    apply CRF.EvalCharac.
+    apply CRF.Eval.
     - apply CRF.EquivCompat with (SmallestFresh R A).
       + apply Equiv.Sym. assumption.
       + apply IsFunction, H1.

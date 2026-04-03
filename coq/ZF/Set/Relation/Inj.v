@@ -87,10 +87,10 @@ Proof.
     apply Compose.RangeIsSmaller.
 Qed.
 
-Proposition EvalCharac : forall (f a b x y:U),
+Proposition Eval : forall (f a b x y:U),
   Inj f a b -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
-  intros f a b x y H1. apply BijectionOn.EvalCharac, H1.
+  intros f a b x y H1. apply BijectionOn.Eval, H1.
 Qed.
 
 Proposition Satisfies : forall (f a b x:U),

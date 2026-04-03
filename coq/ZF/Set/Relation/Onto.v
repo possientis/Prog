@@ -95,10 +95,10 @@ Proof.
     destruct H3 as [_ H3]. rewrite H2, H3. apply Incl.Refl.
 Qed.
 
-Proposition EvalCharac : forall (f a b x y:U),
+Proposition Eval : forall (f a b x y:U),
   Onto f a b -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
-  intros f a b x y H1. apply FunctionOn.EvalCharac, H1.
+  intros f a b x y H1. apply FunctionOn.Eval, H1.
 Qed.
 
 Proposition Satisfies : forall (f a b x:U),

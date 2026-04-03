@@ -175,10 +175,10 @@ Proof.
     + apply DoubleInclusion. assumption.
 Qed.
 
-Proposition EvalCharac : forall (F A B:Class) (a y:U),
+Proposition Eval : forall (F A B:Class) (a y:U),
   Bij F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B a y H1. apply IsFun in H1. apply Fun.EvalCharac with B. assumption.
+  intros F A B a y H1. apply IsFun in H1. apply Fun.Eval with B. assumption.
 Qed.
 
 Proposition Satisfies : forall (F A B:Class) (a:U),

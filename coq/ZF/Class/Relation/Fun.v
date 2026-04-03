@@ -154,10 +154,10 @@ Proof.
 Qed.
 
 (* Characterization of the value at a of a function defined on A when a in A.   *)
-Proposition EvalCharac : forall (F A B:Class) (a y:U),
+Proposition Eval : forall (F A B:Class) (a y:U),
   Fun F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B a y H1. apply FunctionOn.EvalCharac, H1.
+  intros F A B a y H1. apply FunctionOn.Eval, H1.
 Qed.
 
 (* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)

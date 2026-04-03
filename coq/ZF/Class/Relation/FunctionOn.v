@@ -170,10 +170,10 @@ Proof.
 Qed.
 
 (* Characterization of the value at a of a function defined on A when a in A.   *)
-Proposition EvalCharac : forall (F A:Class) (a y:U),
+Proposition Eval : forall (F A:Class) (a y:U),
   FunctionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A a y [H1 H2] H3. apply Function.EvalCharac. 1: assumption.
+  intros F A a y [H1 H2] H3. apply Function.Eval. 1: assumption.
   apply H2. assumption.
 Qed.
 

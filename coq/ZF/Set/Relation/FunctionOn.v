@@ -91,10 +91,10 @@ Proof.
 Qed.
 
 (* Characterization of the value at x of a function defined on a when x in a.   *)
-Proposition EvalCharac : forall (f a x y:U),
+Proposition Eval : forall (f a x y:U),
   FunctionOn f a -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
-  intros f a x y [H1 H2] H3. subst. apply Function.EvalCharac; assumption.
+  intros f a x y [H1 H2] H3. subst. apply Function.Eval; assumption.
 Qed.
 
 (* The ordered pair (x,f!x) lies in the set f when x in a.                      *)

@@ -45,7 +45,7 @@ Proof.
           apply UnionGenOfClass.IsOrdinal. assumption. }
       intros y H7. destruct H7 as [x H7].
       assert (On x) as H8. { apply H5. exists y. assumption. }
-      apply CRF.EvalCharac in H7.
+      apply CRF.Eval in H7.
       * rewrite <- H7. apply H6. assumption.
       * apply Recursion2.IsFunctionOn.
       * apply H5. assumption.

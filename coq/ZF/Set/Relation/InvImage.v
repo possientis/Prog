@@ -58,7 +58,7 @@ Proof.
 Qed.
 
 (* Characterisation of the inverse image f^(-1)[b] in terms of evaluations of f.*)
-Proposition EvalCharac : forall (f b:U), Functional f ->
+Proposition Eval : forall (f b:U), Functional f ->
   forall x, x :< f^:-1: :[b]: <-> x :< domain f /\ f!x :< b.
 Proof.
   intros f b H1 x. split; intros H2.

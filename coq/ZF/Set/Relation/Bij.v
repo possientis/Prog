@@ -97,10 +97,10 @@ Proof.
     rewrite H3. apply Incl.Refl.
 Qed.
 
-Proposition EvalCharac : forall (f a b x y:U),
+Proposition Eval : forall (f a b x y:U),
   Bij f a b-> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
-  intros f a b x y H1. apply IsFun in H1. apply Fun.EvalCharac with b. assumption.
+  intros f a b x y H1. apply IsFun in H1. apply Fun.Eval with b. assumption.
 Qed.
 
 Proposition Satisfies : forall (f a b x:U),

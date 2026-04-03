@@ -147,9 +147,9 @@ Proof.
     destruct H8 as [_ H8]. rewrite <- H8.
     apply SRD.Charac. exists z. assumption. }
   assert (f!x = y) as H14. {
-    apply (SFO.EvalCharac f (initSegment R A a)); assumption. }
+    apply (SFO.Eval f (initSegment R A a)); assumption. }
   assert (g!x = z) as H15. {
-    apply (SFO.EvalCharac g (initSegment R A b)); assumption. }
+    apply (SFO.Eval g (initSegment R A b)); assumption. }
   rewrite <- H14, <- H15. destruct H11 as [H11|H11].
   - apply Coincide with R A F a b; assumption.
   - symmetry. apply Coincide with R A F b a; assumption.
@@ -206,7 +206,7 @@ Proof.
     assert (R :(b,c):) as H27. {
         rewrite H24 in H26. apply (SOI.IsLess R A A) in H26; assumption. }
     assert (f!b = g!b) as H28. {
-      assert (g!b = G!b) as H28. { apply SRF.EvalCharac; assumption. }
+      assert (g!b = G!b) as H28. { apply SRF.Eval; assumption. }
       assert (f!b = G!b) as H29. {
         rewrite H4. apply RestrictOfClass.Eval. 2: assumption.
         rewrite H15. apply IsFunction. assumption. }
@@ -219,7 +219,7 @@ Proof.
           apply (SOI.WhenLess R A A b c); assumption. }
         assert (G :(x,g!x):) as H31. {
           rewrite H15. apply Charac2. exists g. exists c. split; assumption. }
-        symmetry. apply CRF.EvalCharac. 3: assumption.
+        symmetry. apply CRF.Eval. 3: assumption.
         - rewrite H15. apply IsFunction. assumption.
         - exists g!x. assumption. }
       assert (f!x = G!x) as H31. {
@@ -295,7 +295,7 @@ Proof.
     intros x H7.
     assert ((g:|:initSegment R A a)!x = g!x) as H8. {
       apply Restrict.Eval. 2: assumption. apply G4. }
-    rewrite H8. apply SRF.EvalCharac.
+    rewrite H8. apply SRF.Eval.
     - apply G4.
     - assert (domain g = initSegment R^:=: A a) as H9. { apply G4. }
       rewrite H9. apply (SOI.CharacRefl R A A); try assumption.
@@ -309,12 +309,12 @@ Proof.
   destruct H6 as [H6|H6].
   - destruct H6 as [H6 H7].
     assert (g!b = F!f) as H8. {
-      rewrite H7. apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
+      rewrite H7. apply (SFO.Eval g (initSegment R^:=: A a)). 1: assumption.
       - apply (SOI.IsInRefl R A A); assumption.
       - rewrite H5. apply Union2.Charac. right. apply Single.Charac. reflexivity. }
     rewrite H8, H7, G5. reflexivity.
   - assert (g!b = f!b) as H8. {
-      apply (SFO.EvalCharac g (initSegment R^:=: A a)). 1: assumption.
+      apply (SFO.Eval g (initSegment R^:=: A a)). 1: assumption.
       - apply (SOI.CharacRefl R A A); try assumption. right. assumption.
       - rewrite H5. apply Union2.Charac. left.
         apply SFO.Satisfies with (initSegment R A a); assumption. }
@@ -414,7 +414,7 @@ Proof.
   - intros x H10.
     assert (((Recursion R A F) :|: b)!x = (Recursion R A F)!x) as H11. {
       apply RestrictOfClass.Eval. 2: assumption. apply IsFunction. assumption. }
-    rewrite H11. symmetry. apply (CFO.EvalCharac (Recursion R A F) A).
+    rewrite H11. symmetry. apply (CFO.Eval (Recursion R A F) A).
     + apply IsFunctionOn; assumption.
     + apply (SOI.IsIn R A A a); try assumption. rewrite <- H7. assumption.
     + apply Charac2. exists f. exists a. split. 2: assumption.
@@ -442,7 +442,7 @@ Proof.
     destruct H10 as [_ H10]. rewrite <- H10. apply SRD.Charac.
     exists (Recursion R A F)!b. assumption. }
   assert ((Recursion R A F)!b = f!b) as H13. {
-    symmetry. apply (SFO.EvalCharac f (initSegment R A a)); assumption. }
+    symmetry. apply (SFO.Eval f (initSegment R A a)); assumption. }
   assert (f = (Recursion R A F) :|: (initSegment R A a)) as H14. {
     apply K_Restrict; assumption. }
   assert (f:|:c = (Recursion R A F) :|: c) as H15. {
