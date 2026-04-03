@@ -233,7 +233,6 @@ Proof.
   - apply H2. apply BijectionOn.RangeCharac with A; assumption.
 Qed.
 
-(* TODO: add to API.                                                            *)
 Proposition ImageIncl : forall (F A B C:Class),
   Bij F A B -> C :<=: A -> F:[C]: :<=: B.
 Proof.

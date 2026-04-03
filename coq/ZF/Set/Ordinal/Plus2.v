@@ -25,7 +25,7 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union2.
 
-Require Import ZF.Notation.Eval. (* TODO: already exported by Eval so why ? *)
+Require Import ZF.Notation.Eval.
 
 Module SOR := ZF.Set.Order.RestrictOfClass.
 

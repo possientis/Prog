@@ -41,9 +41,9 @@ Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
 Proposition Equal : forall (F G:Class),
-  Function F ->
-  Function G ->
-  F :~: G   <->
+  Function F                                                      ->
+  Function G                                                      ->
+  F :~: G                                                        <->
   domain F :~: domain G  /\ forall x, domain F x -> F!x = G!x.
 Proof.
   intros F G. intros [Hf Gf] [Hg Gg].
@@ -75,9 +75,16 @@ Proof.
       rewrite <- H5. apply H2. assumption.
 Qed.
 
-Proposition Equal' : forall (F:Class), F :~: F. (* TODO*)
+Proposition Equal' : forall (F G:Class),
+  Function F                            ->
+  Function G                            ->
+  domain F :~: domain G                 ->
+  (forall x, domain F x -> F!x = G!x)   ->
+  F :~: G.
 Proof.
-Admitted.
+  intros F G H1 H2 H3 H4.
+  apply Equal; try assumption. split; assumption.
+Qed.
 
 (* The direct image of the domain is the range. F need not be a function.       *)
 Proposition ImageOfDomain : forall (F:Class),

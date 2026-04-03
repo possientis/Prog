@@ -79,12 +79,23 @@ Qed.
 
 (* Two surjections are equal iff they have same domain and coincide pointwise.  *)
 Proposition Equal : forall (F A B G C D:Class),
-  Onto F A B ->
-  Onto G C D ->
-  F :~: G   <->
+  Onto F A B                                ->
+  Onto G C D                                ->
+  F :~: G                                  <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
   intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.Equal; assumption.
+Qed.
+
+Proposition Equal' : forall (F G A B:Class),
+  Onto F A B                    ->
+  Onto G A B                    ->
+  (forall x, A x -> F!x = G!x)  ->
+  F :~: G.
+Proof.
+  intros F G A B H1 H2 H3.
+  apply (Equal F A B G A B); try assumption.
+  split. 2: assumption. apply Equiv.Refl.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)

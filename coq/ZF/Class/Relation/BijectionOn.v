@@ -57,18 +57,25 @@ Qed.
 
 (* Two bijections are equal iff they have same domain and coincide pointwise.   *)
 Proposition Equal : forall (F G A B:Class),
-  BijectionOn F A ->
-  BijectionOn G B ->
-  F :~: G        <->
+  BijectionOn F A                           ->
+  BijectionOn G B                           ->
+  F :~: G                                  <->
   A :~: B /\ forall x, A x -> F!x = G!x.
 Proof.
   intros F G A B H1 H2. apply FunctionOn.Equal;
   apply IsFunctionOn; assumption.
 Qed.
 
-Proposition Equal' : forall (F:Class), F :~: F. (* TODO *)
+Proposition Equal' : forall (F G A:Class),
+  BijectionOn F A               ->
+  BijectionOn G A               ->
+  (forall x, A x -> F!x = G!x)  ->
+  F :~: G.
 Proof.
-Admitted.
+  intros F G A H1 H2 H3.
+  apply (Equal F G A A); try assumption.
+  split. 2: assumption. apply Equiv.Refl.
+Qed.
 
 Proposition ImageOfDomain : forall (F A:Class),
   BijectionOn F A -> F:[A]: :~: range F.

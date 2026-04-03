@@ -26,7 +26,7 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Specify.
 
-Require Import ZF.Notation.Eval. (* TODO: already exported by Eval so why ? *)
+Require Import ZF.Notation.Eval.
 
 Module SOR := ZF.Set.Order.RestrictOfClass.
 Module SPR := ZF.Set.Prod.
