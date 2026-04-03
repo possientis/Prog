@@ -405,10 +405,17 @@ Proof.
   - apply IsFunctionOn. assumption.
   - split. 1: assumption. apply Induction.Induction with R. 1: assumption.
     intros a H4 IH. remember (initSegment R A a) as b eqn:H5.
-  assert (G:|:b = (Recursion R A F) :|: b) as H6. {
-    apply Function.Equal.
-Admitted.
-
+  assert (toClass b :<=: A) as H6. {
+    rewrite H5. apply (InitSegment.IsIncl R A A); assumption. }
+  assert (G:|:b = (Recursion R A F) :|: b) as H7. {
+    apply RestrictOfClass.Equal with A A; try assumption.
+    apply IsFunctionOn. assumption. }
+  assert (G!a = F!(G:|:b)) as H8. {
+    rewrite H5. apply H3. assumption. }
+  assert ((Recursion R A F)!a = F!((Recursion R A F) :|: b)) as H9. {
+    rewrite H5. apply IsRecursive; assumption. }
+  rewrite H8, H9, H7. reflexivity.
+Qed.
 
 
 
