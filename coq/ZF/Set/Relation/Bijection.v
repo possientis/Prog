@@ -40,14 +40,14 @@ Proof.
 Qed.
 
 (* Two bijections are equal iff they have same domain and coincide pointwise.   *)
-Proposition EqualCharac : forall (f g:U),
+Proposition Equal : forall (f g:U),
   Bijection f                             ->
   Bijection g                             ->
   domain f = domain g                     ->
   (forall x, x :< domain f -> f!x = g!x)  ->
   f = g.
 Proof.
-  intros f g H1 H2. apply Function.EqualCharac; apply IsFunction; assumption.
+  intros f g H1 H2. apply Function.Equal; apply IsFunction; assumption.
 Qed.
 
 (* f need not be a bijection.                                                   *)

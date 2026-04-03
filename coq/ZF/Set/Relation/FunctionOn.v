@@ -46,7 +46,7 @@ Proof.
 Qed.
 
 (* Two functions with the same domains and which coincide pointwise are equal.  *)
-Proposition EqualCharac : forall (f g a b:U),
+Proposition Equal : forall (f g a b:U),
   FunctionOn f a                   ->
   FunctionOn g b                   ->
   a = b                            ->
@@ -54,7 +54,7 @@ Proposition EqualCharac : forall (f g a b:U),
   f = g.
 Proof.
   intros f g a b [H1 H2] [H3 H4] H5 H6. subst.
-  apply Function.EqualCharac; assumption.
+  apply Function.Equal; assumption.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)

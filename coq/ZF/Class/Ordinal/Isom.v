@@ -137,7 +137,7 @@ Proof.
   assert (A :~: B) as H7. {
     apply Class.Incl.DoubleInclusion. split; assumption. }
   assert (F :~: I:|:A) as H8. {
-    apply IA.EqualCharac.
+    apply IA.Equal.
     - apply Bij.IsFunctionOn with B, H3.
     - apply IsId with B; assumption. }
   split; assumption.

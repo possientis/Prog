@@ -19,7 +19,7 @@ Proof.
   intros a b. apply UnionGenOfClass.Charac.
 Qed.
 
-Proposition EqualCharac : forall (a b c:U),
+Proposition Equal : forall (a b c:U),
   (forall x, x :< a -> b!x = c!x) -> :\/:_{a} b = :\/:_{a} c.
 Proof.
   intros a b c H1. apply DoubleInclusion. split; intros y H2;

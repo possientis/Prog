@@ -115,7 +115,7 @@ Proof.
         - rewrite G7. apply Succ.ElemCompat; assumption. }
       remember (fun i => a :^: b'!i :*: c'!i) as G eqn:E'.
       assert (:sum:_{n} (CRL.shiftL :[F]:) = :sum:_{n} :[G]:) as H24. {
-        apply SumOfClass.EqualCharac. 1: assumption.
+        apply SumOfClass.Equal. 1: assumption.
         intros i H24.
        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
         rewrite
@@ -266,7 +266,7 @@ Proof.
     - intros i H16. apply ToFun.DomainOf. }
   rewrite ToFun.Eval in H16.
   assert (s' = :sum:_{n} (CRL.shiftL :[F]:)) as H17. {
-    rewrite H15. apply SumOfClass.EqualCharac. 1: assumption.
+    rewrite H15. apply SumOfClass.Equal. 1: assumption.
     intros i H17.
     assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
     rewrite ToFun.Eval, CRL.Eval, ToFun.Eval,
@@ -481,7 +481,7 @@ Proof.
       remember (fun i => a :^: d'!i :*: c'!i) as G eqn:H34.
       remember (CRR.shiftR (a :^: e :*: q) :[F]:) as H eqn:H35.
       assert (:sum:_{succ n} (:[G]:) = :sum:_{succ n} H) as H36. {
-        apply SumOfClass.EqualCharac. 1: assumption. intros i H36.
+        apply SumOfClass.Equal. 1: assumption. intros i H36.
         rewrite H34, H35, ToFun.Eval, H25, H26.
         assert (i :< :N) as G20. {
           apply Omega.IsIn with (succ n); assumption. }
@@ -754,7 +754,7 @@ Proof.
         remember (fun i => a :^: d'!i :*: c'!i) as F1' eqn:E1'.
         remember (fun i => a :^: f'!i :*: e'!i) as F2' eqn:E2'.
         assert (:sum:_{n} (CRL.shiftL :[F1]:) = :sum:_{n} :[F1']:) as H23. {
-          apply SumOfClass.EqualCharac. 1: assumption. intros i H23.
+          apply SumOfClass.Equal. 1: assumption. intros i H23.
           assert (Ordinal i) as G16. { apply Core.IsOrdinal with n; assumption. }
           rewrite CRL.Eval, ToFun.Eval, ToFun.Eval, E1, E1', H19, H20,
             SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
@@ -763,7 +763,7 @@ Proof.
           - apply ToFun.IsFunctional.
           - apply ToFun.DomainOf. }
         assert (:sum:_{k} (CRL.shiftL :[F2]:) = :sum:_{k} :[F2']:) as H24. {
-          apply SumOfClass.EqualCharac. 1: assumption. intros i H24.
+          apply SumOfClass.Equal. 1: assumption. intros i H24.
           assert (Ordinal i) as G16. { apply Core.IsOrdinal with k; assumption. }
           rewrite CRL.Eval, ToFun.Eval, ToFun.Eval, E2, E2', H21, H22,
             SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.

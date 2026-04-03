@@ -49,7 +49,7 @@ Proof.
 Qed.
 
 (* Two bijections with the same domains and which coincide pointwise are equal. *)
-Proposition EqualCharac : forall (f g a b:U),
+Proposition Equal : forall (f g a b:U),
   BijectionOn f a                  ->
   BijectionOn g b                  ->
   a = b                            ->
@@ -57,7 +57,7 @@ Proposition EqualCharac : forall (f g a b:U),
   f = g.
 Proof.
   intros f g a b H1 H2.
-  apply FunctionOn.EqualCharac; apply IsFunctionOn; assumption.
+  apply FunctionOn.Equal; apply IsFunctionOn; assumption.
 Qed.
 
 Proposition ImageOfDomain : forall (f a:U),

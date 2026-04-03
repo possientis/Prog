@@ -46,14 +46,14 @@ Proof.
 Qed.
 
 (* Two injections with the same domains and which coincide pointwise are equal. *)
-Proposition EqualCharac : forall (f a b g c d:U),
+Proposition Equal : forall (f a b g c d:U),
   Inj f a b                       ->
   Inj g c d                       ->
   a = c                           ->
   (forall x, x :< a -> f!x = g!x) ->
   f = g.
 Proof.
-  intros f a b g c d [H1 _] [H2 _]. apply BijectionOn.EqualCharac; assumption.
+  intros f a b g c d [H1 _] [H2 _]. apply BijectionOn.Equal; assumption.
 Qed.
 
 Proposition ImageOfDomain : forall (f a b:U),

@@ -148,7 +148,7 @@ Proof.
   rewrite H2 in H3. assumption.
 Qed.
 
-Proposition EqualCharac : forall (F G:Class) (a:U),
+Proposition Equal : forall (F G:Class) (a:U),
   On a                            ->
   (forall x, x :< a -> F!x = G!x) ->
   (sum F)!a = (sum G)!a.
@@ -167,7 +167,7 @@ Proof.
       rewrite H4, H5. reflexivity.
     - intros a H2 IH H3.
       rewrite WhenLimit, WhenLimit; try assumption.
-      apply SUG.EqualCharac. intros x H4.
+      apply SUG.Equal. intros x H4.
       apply IH. 1: assumption. intros y H5. apply H3.
       assert (Ordinal a) as G1. { apply H2. }
       assert (Ordinal x) as G2. { apply SOC.IsOrdinal with a; assumption. }

@@ -199,7 +199,7 @@ Proof.
   assert (forall g a, K' g a -> g = f:|:a) as H13. {
     intros g a H13. assert (H14 := H13). rewrite H9 in H14.
     destruct H14 as [H14 [H15 H16]].
-    apply SFO.EqualCharac with a a. 1: assumption.
+    apply SFO.Equal with a a. 1: assumption.
     - apply H12 with g. assumption.
     - reflexivity.
     - intros x H17.
@@ -264,7 +264,7 @@ Proof.
       + apply Single.Charac in H18. exists F!f. rewrite H15.
         apply Union2.Charac. right. rewrite H18. apply Single.IsIn. }
   assert (g:|:c = f) as H19. {
-    apply SFO.EqualCharac with c c. 2: assumption.
+    apply SFO.Equal with c c. 2: assumption.
     - apply SFO.Restrict with (succ c). 1: assumption. apply Succ.IsIncl.
     - reflexivity.
     - intros x H19.
@@ -327,7 +327,7 @@ Lemma K_Restrict : forall (F:Class) (f a:U),
   K F f a -> f = (Recursion F) :|: a.
 Proof.
   intros F f a H1. assert (H2 := H1). destruct H2 as [H2 [H3 H4]].
-  apply SFO.EqualCharac with a a. 1: assumption.
+  apply SFO.Equal with a a. 1: assumption.
   - apply RestrictIsFunctionOn. assumption.
   - reflexivity.
   - intros x H5.
@@ -369,7 +369,7 @@ Proposition IsUnique : forall (F G:Class),
   G :~: Recursion F.
 Proof.
   intros F G H1 H2.
-  apply (CFO.EqualCharac _ _ On On). 1: assumption.
+  apply (CFO.Equal _ _ On On). 1: assumption.
   - apply IsFunctionOn.
   - split. 1: apply Equiv.Refl. apply Induction.Induction.
     intros a H3 H4.
@@ -380,7 +380,7 @@ Proof.
       apply RestrictOfClass.DomainWhenIncl. 1: apply IsFunction.
       intros x H7. apply DomainIsOn. apply SOC.IsOrdinal with a; assumption. }
     assert (G:|:a = (Recursion F) :|: a) as H5. {
-      apply SRF.EqualCharac.
+      apply SRF.Equal.
       - apply RestrictOfClass.IsFunction, H1.
       - apply RestrictOfClass.IsFunction, IsFunction.
       - rewrite H6, H7. reflexivity.

@@ -290,7 +290,7 @@ Proof.
     assert (SFO.FunctionOn (g:|:initSegment R A a) (initSegment R A a)) as H6. {
       apply SFO.Restrict with (initSegment R^:=: A a). 1: assumption.
       apply (SOI.IsInclRefl R A A); assumption. }
-    apply SFO.EqualCharac with (initSegment R A a) (initSegment R A a);
+    apply SFO.Equal with (initSegment R A a) (initSegment R A a);
     try assumption. 1: reflexivity.
     intros x H7.
     assert ((g:|:initSegment R A a)!x = g!x) as H8. {
@@ -408,7 +408,7 @@ Proof.
   remember (initSegment R A a) as b eqn:H7.
   assert (WellFounded R A) as H8. { apply H1. }
   assert (A :<=: A) as H9. { apply Class.Incl.Refl. }
-  apply SFO.EqualCharac with b b. 1: assumption.
+  apply SFO.Equal with b b. 1: assumption.
   - apply RestrictIsFunctionOn with a; assumption.
   - reflexivity.
   - intros x H10.
@@ -464,7 +464,7 @@ Proof.
   intros R A F G H1 H2 H3 H4.
   assert (WellFounded R A) as H5. { apply H1. }
   assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
-  apply (CFO.EqualCharac _ _ A A). 1: assumption.
+  apply (CFO.Equal _ _ A A). 1: assumption.
   - apply IsFunctionOn; assumption.
   - split. 1: apply Equiv.Refl. apply Induction.Induction with R. 1: assumption.
     intros a H7 H8.
@@ -479,7 +479,7 @@ Proof.
       - intros x H11. apply DomainOf; try assumption.
         rewrite H9 in H11. apply (SOI.IsIn R A A a); assumption. }
     assert (G:|:b = (Recursion R A F) :|: b) as H12. {
-      apply SRF.EqualCharac.
+      apply SRF.Equal.
       - apply RestrictOfClass.IsFunction, H3.
       - apply RestrictOfClass.IsFunction, IsFunction. assumption.
       - rewrite H10, H11. reflexivity.

@@ -205,7 +205,7 @@ Proof.
   assert (domain (f :|: initSegment R A b) = initSegment R A b) as H9. {
     apply Restrict.DomainWhenIncl. rewrite G1. assumption. }
   assert (Recursion R A F :|: initSegment R A b = f :|: initSegment R A b) as H10. {
-    apply Function.EqualCharac.
+    apply Function.Equal.
     - apply RestrictOfClass.IsFunction, IsFunctional. assumption.
     - apply Function.Restrict, H3.
     - rewrite H8, H9. reflexivity.
@@ -401,12 +401,12 @@ Proof.
   intros R A F G H1 H2 H3.
   assert (A :<=: A) as G1. { apply CIN.Refl. }
   assert (A :~: A) as G2. { apply Equiv.Refl. }
-  apply (CFO.EqualCharac _ _ A A). 1: assumption.
+  apply (CFO.Equal _ _ A A). 1: assumption.
   - apply IsFunctionOn. assumption.
   - split. 1: assumption. apply Induction.Induction with R. 1: assumption.
     intros a H4 IH. remember (initSegment R A a) as b eqn:H5.
   assert (G:|:b = (Recursion R A F) :|: b) as H6. {
-    apply Function.EqualCharac.
+    apply Function.Equal.
 Admitted.
 
 

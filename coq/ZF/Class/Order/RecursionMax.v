@@ -363,7 +363,7 @@ Proof.
   intros R A F G max H1 H2 H3 H4.
   assert (WellFounded R A) as H5. { apply H1. }
   assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
-  apply (CFO.EqualCharac _ _ A A). 1: assumption.
+  apply (CFO.Equal _ _ A A). 1: assumption.
   - apply IsFunctionOn with max; assumption.
   - split. 1: apply Equiv.Refl. apply Induction.Induction with R. 1: assumption.
     intros a H7 H8.
@@ -378,7 +378,7 @@ Proof.
       - intros x H11. apply DomainOf with max; try assumption.
         rewrite H9 in H11. apply (SOI.IsIn R A A a); assumption. }
     assert (G:|:b = (Recursion R A F) :|: b) as H12. {
-      apply SRF.EqualCharac.
+      apply SRF.Equal.
       - apply RestrictOfClass.IsFunction, H3.
       - apply RestrictOfClass.IsFunction. apply IsFunction with max; assumption.
       - rewrite H10, H11. reflexivity.

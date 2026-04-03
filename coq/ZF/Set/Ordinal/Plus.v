@@ -83,7 +83,7 @@ Proof.
   - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2. reflexivity.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     rewrite <- SOG.WhenLimit. 2: assumption.
-    apply SUG.EqualCharac. intros x. rewrite I.Eval. apply H2.
+    apply SUG.Equal. intros x. rewrite I.Eval. apply H2.
 Qed.
 
 Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->

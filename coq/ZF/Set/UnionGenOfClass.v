@@ -26,7 +26,7 @@ Proof.
   - apply FromClass.Charac, UnionGen.Charac. assumption.
 Qed.
 
-Proposition EqualCharac : forall (A B:Class) (a:U),
+Proposition Equal : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x = B!x) -> :\/:_{a} A = :\/:_{a} B.
 Proof.
   intros a A B H1. apply DoubleInclusion. split; intros y H2;
@@ -40,7 +40,7 @@ Proposition EquivCompat : forall (A B:Class) (a:U),
   A :~: B -> :\/:_{a} A = :\/:_{a} B.
 Proof.
   intros A B a H1.
-  apply EqualCharac. intros x H2.
+  apply Equal. intros x H2.
   apply EvalOfClass.EquivCompat. assumption.
 Qed.
 
@@ -93,6 +93,6 @@ Qed.
 Proposition EtaReduce : forall (A:Class) (a:U),
   :\/:_{a} (:[fun x => A!x]:) = :\/:_{a} A.
 Proof.
-  intros A a. apply EqualCharac. intros x H1. apply ToFun.Eval.
+  intros A a. apply Equal. intros x H1. apply ToFun.Eval.
 Qed.
 

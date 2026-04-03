@@ -306,7 +306,7 @@ Proof.
       - apply H3.
       - apply H6. }
     rewrite H9 in H11. 2: assumption. symmetry. assumption. }
-  apply (Bij.EqualCharac' G F On A). 3: assumption.
+  apply (Bij.Equal' G F On A). 3: assumption.
   - apply H3.
   - apply H5.
 Qed.

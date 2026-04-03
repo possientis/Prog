@@ -40,7 +40,7 @@ Proof.
 Qed.
 
 (* Two functions with the same domains which coincide pointwise are equal.      *)
-Proposition EqualCharac : forall (f g:U),
+Proposition Equal : forall (f g:U),
   Function f                              ->
   Function g                              ->
   domain f = domain g                     ->
@@ -185,7 +185,7 @@ Proof.
     rewrite Restrict.DomainOf. apply Inter2.WhenInclL. assumption. }
   assert (domain (g:|:a) = a) as H7. {
     rewrite Restrict.DomainOf. apply Inter2.WhenInclL. assumption. }
-  apply EqualCharac.
+  apply Equal.
   - apply Restrict. assumption.
   - apply Restrict. assumption.
   - rewrite H6, H7. reflexivity.

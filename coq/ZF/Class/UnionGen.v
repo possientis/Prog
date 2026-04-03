@@ -29,7 +29,7 @@ Proof.
     + exists x. split. { assumption. } { reflexivity. }
 Qed.
 
-Proposition EqualCharac : forall (A B C:Class),
+Proposition Equal : forall (A B C:Class),
   (forall x, A x -> B!x = C!x)  -> :\/:_{A} B :~: :\/:_{A} C.
 Proof.
   intros A B C H1 y. split; intros H2;

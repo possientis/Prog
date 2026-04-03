@@ -180,7 +180,7 @@ Proposition IsEqual : forall (f g n:U),
   f = g.
 Proof.
   intros f g n H1 [H2 H3] [H4 H5] H6 H7.
-  apply Function.EqualCharac.
+  apply Function.Equal.
   - apply H2.
   - apply H4.
   - rewrite H3, H5. reflexivity.

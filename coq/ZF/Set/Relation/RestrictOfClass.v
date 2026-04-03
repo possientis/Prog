@@ -236,7 +236,7 @@ Proof.
     - apply H2.
     - apply CIN.EquivCompatR with B. 2: assumption.
       apply Equiv.Sym. assumption. }
-  apply FunctionOn.EqualCharac with c c; try assumption. 1: reflexivity.
+  apply FunctionOn.Equal with c c; try assumption. 1: reflexivity.
   intros x H8.
   assert ((F:|:c)!x = F!x) as H9.  { apply Eval. 2: assumption. apply H1. }
   assert ((G:|:c)!x = G!x) as H10. { apply Eval. 2: assumption. apply H2. }

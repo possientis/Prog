@@ -68,7 +68,7 @@ Proposition WhenLimit : forall (F:Class) (a b c:U),
 Proof.
   intros F a b c H1 H2 H3.
   assert (:\/:_{c} (recursion F a b) = :\/:_{c} (Recursion F a)) as H4. {
-    apply UnionGenOfClass.EqualCharac. intros x H4. unfold recursion.
+    apply UnionGenOfClass.Equal. intros x H4. unfold recursion.
     apply RestrictOfClass.Eval.
     - apply Recursion2.IsFunctionOn.
     - apply Core.ElemIsIncl in H3. 2: assumption. apply H3. assumption. }
@@ -88,7 +88,7 @@ Proposition IsUnique : forall (F:Class) (a b f:U),
   f = recursion F a b.
 Proof.
   intros F a b f H1 H2 H3 H4 H5.
-  apply FunctionOn.EqualCharac with b b. 1: assumption.
+  apply FunctionOn.Equal with b b. 1: assumption.
   - apply IsFunctionOn. assumption.
   - reflexivity.
   - intros c H6.
@@ -104,7 +104,7 @@ Proof.
         + apply Core.ElemIsIncl in H9. 2: assumption. apply H9, Succ.IsIn.
       - rewrite H6. intros c H7 H8 H9. rewrite H5; try assumption. symmetry.
         assert (:\/:_{c} f = :\/:_{c} (recursion F a b)) as H10. {
-          apply UnionGen.EqualCharac. intros x H11. apply H8. 1: assumption.
+          apply UnionGen.Equal. intros x H11. apply H8. 1: assumption.
           apply Core.ElemIsIncl in H9. 2: assumption. apply H9. assumption. }
         rewrite H10. apply WhenLimit; assumption. }
     rewrite H6 in H7. assumption.

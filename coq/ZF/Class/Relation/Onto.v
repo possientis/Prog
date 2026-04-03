@@ -78,13 +78,13 @@ Proof.
 Qed.
 
 (* Two surjections are equal iff they have same domain and coincide pointwise.  *)
-Proposition EqualCharac : forall (F A B G C D:Class),
+Proposition Equal : forall (F A B G C D:Class),
   Onto F A B ->
   Onto G C D ->
   F :~: G   <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.EqualCharac; assumption.
+  intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.Equal; assumption.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)

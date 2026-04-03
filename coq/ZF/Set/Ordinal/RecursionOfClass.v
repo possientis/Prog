@@ -76,7 +76,7 @@ Proof.
   assert ((recursion F a)!b = (Recursion F)!b) as H4. {
     apply RestrictOfClass.Eval. 2: assumption. apply Recursion.IsFunctionOn. }
   assert ((recursion F a) :|: b = (Recursion F) :|: b) as H5. {
-    apply FunctionOn.EqualCharac with b b. 3: reflexivity.
+    apply FunctionOn.Equal with b b. 3: reflexivity.
     - apply FunctionOn.Restrict with a. 2: assumption.
       apply IsFunctionOn. assumption.
     - apply RestrictIsFunctionOn. apply Core.IsOrdinal with a; assumption.
@@ -95,7 +95,7 @@ Proposition IsUnique : forall (F:Class) (a f:U),
   (forall b, b :< a -> f!b = F!(f:|:b)) ->
   f = recursion F a.
 Proof.
-  intros F a f H1 H2 H3. apply FunctionOn.EqualCharac with a a.
+  intros F a f H1 H2 H3. apply FunctionOn.Equal with a a.
   1: assumption. 2: reflexivity.
   - apply IsFunctionOn. assumption.
   - remember (fun x => x :< a -> f!x = (recursion F a)!x) as A eqn:H4.

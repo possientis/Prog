@@ -111,7 +111,7 @@ Proof.
   assert (g <> :0:) as H8. {
     intros H8. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
   assert (:\/:_{b} g = :\/:_{b} G)as H9. {
-    apply UnionGenOfClass.EqualCharac. intros x H9.
+    apply UnionGenOfClass.Equal. intros x H9.
     rewrite H4. apply RestrictOfClass.Eval; assumption. }
   assert (Oracle F a :(g,:\/:_{b} G):) as H10. {
     apply Charac2. right. right. split.
