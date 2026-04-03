@@ -464,7 +464,7 @@ Proof.
   intros R A F G H1 H2 H3 H4.
   assert (WellFounded R A) as H5. { apply H1. }
   assert (A :<=: A) as H6. { apply Class.Incl.Refl. }
-  apply (CFO.Equal _ _ A A). 1: assumption.
+  apply (CFO.Equal' _ _ A A). 1: assumption.
   - apply IsFunctionOn; assumption.
   - split. 1: apply Equiv.Refl. apply Induction.Induction with R. 1: assumption.
     intros a H7 H8.

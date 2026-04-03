@@ -151,7 +151,7 @@ Proposition Equal : forall (F A:Class),
   (forall x, A x -> F!x = x)  ->
   F :~: I:|:A.
 Proof.
-  intros F A H1 H2. apply FunctionOn.Equal' with A. 1: assumption.
+  intros F A H1 H2. apply FunctionOn.Equal with A. 1: assumption.
   - apply IsFunctionOn.
   - intros x H3. rewrite H2. 2: assumption. symmetry. apply Eval. assumption.
 Qed.

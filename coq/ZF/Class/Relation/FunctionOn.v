@@ -60,7 +60,7 @@ Proof.
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition Equal : forall (F G A B:Class),
+Proposition Equal' : forall (F G A B:Class),
   FunctionOn F A ->
   FunctionOn G B ->
   F :~: G       <->
@@ -69,7 +69,7 @@ Proof.
   intros F G A B [H1 H2] [H3 H4].
   assert (F :~: G <->
     domain F :~: domain G /\ forall x, domain F x -> F!x = G!x) as H5.
-    { apply Function.Equal; assumption. }
+    { apply Function.Equal'; assumption. }
   split; intros H6.
   - apply H5 in H6. destruct H6 as [H6 H7]. clear H5. split.
     + apply Equiv.Tran with (domain F). 1: { apply Equiv.Sym. assumption. }
@@ -82,14 +82,14 @@ Proof.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
-Proposition Equal' : forall (F G A:Class),
+Proposition Equal : forall (F G A:Class),
   FunctionOn F A                ->
   FunctionOn G A                ->
   (forall x, A x -> F!x = G!x)  ->
   F :~: G.
 Proof.
   intros F G A H1 H2 H3.
-  apply (Equal F G A A H1 H2). split. 2: assumption. apply Equiv.Refl.
+  apply (Equal' F G A A H1 H2). split. 2: assumption. apply Equiv.Refl.
 Qed.
 
 (* The direct image of the domain is the range.                                 *)

@@ -40,7 +40,7 @@ Proof.
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition Equal : forall (F G:Class),
+Proposition Equal' : forall (F G:Class),
   Function F                                                      ->
   Function G                                                      ->
   F :~: G                                                        <->
@@ -75,7 +75,7 @@ Proof.
       rewrite <- H5. apply H2. assumption.
 Qed.
 
-Proposition Equal' : forall (F G:Class),
+Proposition Equal : forall (F G:Class),
   Function F                            ->
   Function G                            ->
   domain F :~: domain G                 ->
@@ -83,7 +83,7 @@ Proposition Equal' : forall (F G:Class),
   F :~: G.
 Proof.
   intros F G H1 H2 H3 H4.
-  apply Equal; try assumption. split; assumption.
+  apply Equal'; try assumption. split; assumption.
 Qed.
 
 (* The direct image of the domain is the range. F need not be a function.       *)
@@ -253,7 +253,7 @@ Proposition RestrictEqual : forall (F G A:Class),
   (forall x, A x -> F!x = G!x)  ->
   F:|:A :~: G:|:A.
 Proof.
-  intros F G A H1 H2 H3 H4 H5. apply Equal.
+  intros F G A H1 H2 H3 H4 H5. apply Equal'.
   - apply Restrict. assumption.
   - apply Restrict. assumption.
   - assert (domain (F:|:A) :~: A) as H6. {

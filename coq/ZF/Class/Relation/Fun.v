@@ -71,23 +71,23 @@ Proof.
 Qed.
 
 (* Two functions are equal iff they have same domain and coincide pointwise.    *)
-Proposition Equal : forall (F A B G C D:Class),
+Proposition Equal' : forall (F A B G C D:Class),
   Fun F A B                               ->
   Fun G C D                               ->
   F :~: G                                <->
   A :~: C /\ forall x, A x -> F!x = G!x.
 Proof.
-  intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.Equal; assumption.
+  intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.Equal'; assumption.
 Qed.
 
-Proposition Equal' : forall (F G A B:Class),
+Proposition Equal : forall (F G A B:Class),
   Fun F A B                     ->
   Fun G A B                     ->
   (forall x, A x -> F!x = G!x)  ->
   F :~: G.
 Proof.
   intros F G A B H1 H2 H3.
-  apply (Equal F A B G A B); try assumption.
+  apply (Equal' F A B G A B); try assumption.
   split. 2: assumption. apply Equiv.Refl.
 Qed.
 
