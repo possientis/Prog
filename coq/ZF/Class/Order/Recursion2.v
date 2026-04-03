@@ -90,35 +90,6 @@ Proof.
   intros R A F x [f [a [H1 [H2 [H3 [H4 H5]]]]]]. apply H4. assumption.
 Qed.
 
-(* The restriction of a recursive function to transitive set is recursive.      *)
-Lemma Restrict1 : forall (R A F:Class) (f a b:U),
-  WellFounded R A   ->
-  K R A F f a       ->
-  b :<=: a          ->
-  Transitive R A b  ->
-  K R A F (f:|:b) b.
-Proof.
-  intros R A F f a b H1 [H2 [H3 [H4 H5]]] H6 H7. unfold K.
-  assert (toClass b :<=: A) as H8. { intros x H8. apply H2, H6. assumption. }
-  assert (FunctionOn (f:|:b) b) as H9. {
-    apply FunctionOn.Restrict with a; assumption. }
-  assert (
-    forall x, x :< b -> (f:|:b)!x = F!((f:|:b) :|: initSegment R A x)) as H10. {
-      intros c H10.
-      assert (A :<=: A) as G1. { apply CIN.Refl. }
-      assert (A c) as G2. { apply H8. assumption. }
-      assert (f!c = F!(f:|:initSegment R A c)) as H11. {
-        apply H5, H6. assumption. }
-      assert ((f:|:b)!c = f!c) as H12. {
-        apply Restrict.Eval. 2: assumption. apply H4. }
-      assert (initSegment R A c :<=: b) as H13. {
-        apply TranClosure.InitSegment; assumption. }
-      assert ((f:|:b) :|: initSegment R A c = f:|:initSegment R A c) as H14. {
-        apply Restrict.TowerProperty. assumption. }
-      rewrite H12, H14. assumption. }
-  split. 1: assumption. split. 1: assumption. split; assumption.
-Qed.
-
 (* The recursion class associated with R A F is a functional class.             *)
 Proposition IsFunctional : forall (R A F:Class), WellFounded R A ->
   CRL.Functional (Recursion R A F).
@@ -139,6 +110,7 @@ Proof.
   apply Inter2.Charac. split; assumption.
 Qed.
 
+(* The recursion class associated with R A F is a function class.               *)
 Proposition IsFunction : forall (R A F:Class), WellFounded R A ->
   CRF.Function (Recursion R A F).
 Proof.
@@ -217,7 +189,7 @@ Proof.
   rewrite H4, H10. apply H3. assumption.
 Qed.
 
-Lemma Restrict2 : forall (R A F:Class) (a f:U),
+Lemma Restrict : forall (R A F:Class) (a f:U),
   WellFounded R A                               ->
   toClass a :<=: CRD.domain (Recursion R A F)   ->
   Transitive R A a                              ->
@@ -288,7 +260,7 @@ Proof.
       rewrite H4. apply TranClosure.IsSmallest; assumption. }
     apply CIN.Tran with (toClass c). 1: assumption.
     rewrite H8. apply Specify.IsInclR. }
-  apply Restrict2; assumption.
+  apply Restrict; assumption.
 Qed.
 
 Lemma Extend : forall (R A F:Class) (a b c f g:U),
@@ -356,6 +328,7 @@ Proof.
   split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
+(* The recursion class associated with R A F has domain A.                      *)
 Proposition DomainOf : forall (R A F:Class), WellFounded R A ->
   CRD.domain (Recursion R A F) :~: A.
 Proof.
@@ -375,6 +348,7 @@ Proof.
     + rewrite H6. apply Union2.Charac. right. apply Single.IsIn.
 Qed.
 
+(* The recursion class associated with R A F is a function class defined on A.  *)
 Proposition IsFunctionOn : forall (R A F:Class), WellFounded R A ->
   CFO.FunctionOn (Recursion R A F) A.
 Proof.
@@ -383,6 +357,7 @@ Proof.
   - apply DomainOf. assumption.
 Qed.
 
+(* The recursion class associated with R A F is recursive.                      *)
 Proposition IsRecursive : forall (R A F:Class) (a:U),
   WellFounded R A                                                   ->
   A a                                                               ->
@@ -392,6 +367,7 @@ Proof.
   apply DomainOf; assumption.
 Qed.
 
+(* The recursion class of R A F is the unique recursive function class on A.    *)
 Proposition IsUnique : forall (R A F G:Class),
   WellFounded R A                                         ->
   CFO.FunctionOn G A                                      ->
@@ -416,6 +392,3 @@ Proof.
     rewrite H5. apply IsRecursive; assumption. }
   rewrite H8, H9, H7. reflexivity.
 Qed.
-
-
-
