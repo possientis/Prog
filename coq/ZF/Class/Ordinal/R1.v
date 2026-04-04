@@ -5,6 +5,8 @@ Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.ToFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Super.
@@ -67,4 +69,50 @@ Proof.
     apply Super.WhenUnion. assumption.
 Qed.
 
+Proposition IsTransitive : forall (a:U), On a ->
+  Transitive R1!a.
+Proof.
+  intros a H1. apply IsSuper. assumption.
+Qed.
+
+Proposition ElemSucc : forall (a:U), On a ->
+  R1!a :< R1!(succ a).
+Proof.
+  intros a H1. rewrite WhenSucc. 2: assumption. apply Power.Charac, Incl.Refl.
+Qed.
+
+Proposition InclSucc : forall (a:U), On a ->
+  R1!a :<=: R1!(succ a).
+Proof.
+  intros a H1 x H2.
+  apply IsTransitive with R1!a. 2: assumption.
+  - apply Succ.IsOrdinal. assumption.
+  - apply ElemSucc. assumption.
+Qed.
+
+Proposition ElemCompat : forall (a b:U), On a -> On b ->
+  a :< b -> R1!a :< R1!b.
+Proof.
+  intros a b H1. revert b.
+  assert (On (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
+  assert (forall b, On b -> succ a :<=: b -> R1!a :< R1!b) as H2. {
+    apply Induction2.Induction'. 1: assumption.
+    - apply ElemSucc. assumption.
+    - intros b H2 H3 IH. apply InclSucc; assumption.
+    - intros b H2 H3 IH. rewrite (WhenLimit b). 2: assumption.
+      apply SUG.Charac. exists (succ a).
+      assert (succ a :< b) as H4. {
+        apply Limit.HasSucc. 1: assumption. apply H3, Succ.IsIn. }
+      split. 1: assumption. apply ElemSucc. assumption. }
+  intros b H3 H4. apply H2. 1: assumption.
+  apply Succ.ElemIsIncl; assumption.
+Qed.
+
+Proposition ElemInclCompat : forall (a b:U), On a -> On b ->
+  a :< b -> R1!a :<=: R1!b.
+Proof.
+  intros a b H1 H2 H3 x H4.
+  apply IsTransitive with R1!a; try assumption.
+  apply ElemCompat; assumption.
+Qed.
 
