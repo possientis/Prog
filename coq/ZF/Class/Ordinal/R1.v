@@ -64,6 +64,7 @@ Proof.
   - intros a H1 IH. rewrite WhenSucc. 2: assumption.
     apply Super.WhenPower. assumption.
   - intros a H1 IH. rewrite WhenLimit. 2: assumption.
-Admitted.
+    apply Super.WhenUnion. assumption.
+Qed.
 
 
