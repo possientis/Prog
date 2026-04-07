@@ -1,12 +1,16 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.Induction.
 Require Import ZF.Class.Ordinal.R1.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Succ.
@@ -74,3 +78,15 @@ Proof.
   assert (Ordinal (succ b)) as H18. { apply Succ.IsOrdinal. assumption. }
   exists (succ b). split; assumption.
 Qed.
+
+(* Every set is well founded.                                                   *)
+Proposition IsWellFounded : forall (a:U), WellFounded a.
+Proof.
+  assert (forall a, V a -> WellFounded a) as H1. {
+    apply Induction.Induction with E.
+    - apply E.IsWellFounded.
+    - intros a _ IH. apply WhenElems. intros x H1. apply IH.
+      rewrite InitSegment.EV. assumption. }
+  intros a. apply H1, I.
+Qed.
+

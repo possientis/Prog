@@ -1,5 +1,6 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.ReflClosure.
@@ -9,6 +10,7 @@ Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -17,6 +19,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Truncate.
 
+Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
 
 (* Initial segment of R on A at a.                                              *)
@@ -308,3 +311,16 @@ Proof.
   revert H5. apply (Founded.NoLoop1 R A). 2: assumption. apply H1.
 Qed.
 
+Proposition EV : forall (a:U),
+  initSegment E V a = a.
+Proof.
+  intros a.
+  assert (WellFounded E V) as G1. { apply E.IsWellFounded. }
+  assert (V a) as G2. { apply I. }
+  assert (V :<=: V) as G3. { apply CIN.Refl. }
+  apply DoubleInclusion. split; intros x H1.
+  - apply (ToClass E V V) in H1; try assumption.
+    apply E.InitSegmentEV. assumption.
+  - apply (ToClass E V V); try assumption.
+    apply E.InitSegmentEV. assumption.
+Qed.
