@@ -85,7 +85,46 @@ Proposition IsNotIn : forall (a b:U), Ordinal b ->
   b :<=: rank a -> ~ a :< R1!b.
 Proof.
   intros a b H1 H2 H3.
-Admitted.
+  assert (Ordinal (rank a)) as G1. { apply IsOrdinal. }
+  assert (Ordinal (succ (rank a))) as G2. { apply Succ.IsOrdinal. assumption. }
+  remember (fun c => Ordinal c /\ a :< R1!c) as A eqn:H4.
+  assert (A :<=: Ordinal) as H5. { rewrite H4. intros c H5. apply H5. }
+  assert (A :<>: :0:) as H6. {
+    rewrite H4. apply CEM.HasElem. apply IsWellFounded. }
+  assert (exists c, Ordinal c /\ A c /\ forall d, A d -> c :<=: d) as H7. {
+    apply Core.HasMinimal; assumption. }
+  destruct H7 as [c [H7 [H8 H9]]].
+  assert (a :< R1!c) as H10. { rewrite H4 in H8. apply H8. }
+  assert (Successor c) as H11. {
+    assert (c = :0: \/ Successor c \/ Limit c) as H11. {
+      apply Limit.ThreeWay. assumption. }
+    destruct H11 as [H11|[H11|H11]]. 2: assumption.
+    - exfalso. rewrite H11 in H10. rewrite R1.WhenZero in H10.
+      apply Empty.Charac in H10. contradiction.
+    - exfalso. rewrite R1.WhenLimit in H10. 2: assumption.
+      apply SUG.Charac in H10. destruct H10 as [d [H10 H12]].
+      assert (Ordinal d) as H13. { apply Core.IsOrdinal with c; assumption. }
+      assert (A d) as H14. { rewrite H4. split; assumption. }
+      assert (d :< d) as H15. { apply H9; assumption. }
+      revert H15. apply NoElemLoop1. }
+  destruct H11 as [_ [d H11]].
+  assert (Ordinal d) as H12. {
+    apply Succ.IsOrdinalRev. rewrite <- H11. assumption. }
+  assert (c :<=: succ (rank a)) as H13. {
+    apply H9. rewrite H4. split. 1: assumption. apply IsIn. 1: assumption.
+    apply Succ.IsIn. }
+  assert (succ (rank a) :<=: c) as H14. {
+    rewrite H11. apply Succ.InclCompat; try assumption.
+    apply SOI.IsLowerBound.
+    - apply IsIncl.
+    - split. 1: assumption. rewrite <- H11. assumption. }
+  assert (c = succ (rank a)) as H15. {
+    apply Incl.DoubleInclusion. split; assumption. }
+  assert (c :<=: b) as H16. { apply H9. rewrite H4. split; assumption. }
+  assert (rank a :< rank a) as H17. {
+    apply H2, H16. rewrite H15. apply Succ.IsIn. }
+  revert H17. apply NoElemLoop1.
+Qed.
 
 Proposition IsLowerBound : forall (a b:U), Ordinal b ->
   a :< R1!b -> succ(rank a) :<=: b.
@@ -114,3 +153,4 @@ Proof.
   assert (a :< R1!b) as H4. { apply IsIn; assumption. }
   contradiction.
 Qed.
+
