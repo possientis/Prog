@@ -59,9 +59,9 @@ Proof.
       apply SRI.CharacRev with x; try assumption.
       apply CRF.Satisfies. 1: assumption. rewrite H3. apply ToFun.DomainOf. }
   assert (forall x, x :< a -> R1!(F!x) :<=: R1!b) as H11. {
-    intros x H11. apply R1.ElemInclCompat. 2: assumption.
+    intros x H11. apply R1.InclCompat. 2: assumption.
     - apply H9. assumption.
-    - apply H10. assumption. }
+    - apply Core.ElemIsIncl. 1: assumption. apply H10. assumption. }
   assert (forall x, x :< a -> A x (inf (A x))) as H12. {
     intros x H12. apply SOI.IsIn.
     - rewrite H2. intros u [H13 H14]. assumption.

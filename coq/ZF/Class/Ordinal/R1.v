@@ -108,11 +108,14 @@ Proof.
   apply Succ.ElemIsIncl; assumption.
 Qed.
 
-Proposition ElemInclCompat : forall (a b:U), On a -> On b ->
-  a :< b -> R1!a :<=: R1!b.
+Proposition InclCompat : forall (a b:U), On a -> On b ->
+  a :<=: b -> R1!a :<=: R1!b.
 Proof.
-  intros a b H1 H2 H3 x H4.
-  apply IsTransitive with R1!a; try assumption.
-  apply ElemCompat; assumption.
+  intros a b H1 H2 H3.
+  apply Core.EqualOrElem in H3; try assumption.
+  destruct H3 as [H3|H3].
+  - subst. apply Incl.Refl.
+  - intros x H4.
+    apply IsTransitive with R1!a; try assumption.
+    apply ElemCompat; assumption.
 Qed.
-
