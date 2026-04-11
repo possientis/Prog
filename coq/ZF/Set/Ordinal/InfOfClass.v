@@ -35,6 +35,12 @@ Proof.
   intros y [H3 H4]. apply H2; assumption.
 Qed.
 
+Proposition EquivCompat : forall (A B:Class),
+  A :~: B -> inf A = inf B.
+Proof.
+  intros A B H1. apply InterOfClass.EquivCompat, Inter2.EquivCompatL. assumption.
+Qed.
+
 (* The infimum (as class) of the class is the class of the infimum (as set).    *)
 Proposition ToClass : forall (A:Class),
   Class.Ordinal.Inf.inf A :~: toClass (inf A).
@@ -101,6 +107,18 @@ Proof.
   - intros b [H3 H4]. apply H2; assumption.
 Qed.
 
+(* Not quite a compatibility property of course.                                *)
+Proposition InclCompat : forall (A B:Class),
+  A :<>: :0:    ->
+  B :<=: On     ->
+  A :<=: B -> inf B :<=: inf A.
+Proof.
+  intros A B H1 H2 H3.
+  assert (A :<=: On) as H4. { intros x H4. apply H2, H3. assumption. }
+  apply IsLargest; try assumption. intros b H5.
+  apply IsLowerBound. 1: assumption. apply H3. assumption.
+Qed.
+
 (* The infimum of a non-empty class of ordinals belongs to the class.           *)
 Proposition IsIn : forall (A:Class),
   A :<=: On -> A :<>: :0: -> A (inf A).
@@ -141,3 +159,4 @@ Proof.
     apply Equiv.Tran with (Class.Ordinal.Inf.inf A). 1: assumption.
     apply ToClass.
 Qed.
+
