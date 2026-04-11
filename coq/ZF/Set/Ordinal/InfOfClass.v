@@ -109,9 +109,10 @@ Qed.
 
 (* Not quite a compatibility property of course.                                *)
 Proposition InclCompat : forall (A B:Class),
-  A :<>: :0:    ->
-  B :<=: On     ->
-  A :<=: B -> inf B :<=: inf A.
+  A :<>: :0:          ->
+  B :<=: On           ->
+  A :<=: B            ->
+  inf B :<=: inf A.
 Proof.
   intros A B H1 H2 H3.
   assert (A :<=: On) as H4. { intros x H4. apply H2, H3. assumption. }
