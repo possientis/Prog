@@ -3,6 +3,8 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Rank.
 
@@ -27,4 +29,12 @@ Proof.
   assert (toClass a :/\: A :~: :0:) as H10. {
     intros c. split; intros H10.
     - exfalso. destruct H10 as [H10 H11].
-Admitted.
+      assert (rank a :<=: rank c) as H12. {
+        rewrite <- H9. apply H8. rewrite H2. exists c. split. 1: assumption.
+        reflexivity. }
+      assert (rank c :< rank a) as H13. { apply Rank.ElemCompat. assumption. }
+      assert (rank c :< rank c) as H14. { apply H12. assumption. }
+      revert H14. apply Foundation.NoElemLoop1.
+    - contradiction. }
+  assumption.
+Qed.
