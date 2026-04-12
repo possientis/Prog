@@ -14,6 +14,9 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
+Module CRO := ZF.Class.Relation.FunctionOn.
+Module CRF := ZF.Class.Relation.Fun.
+
 (* There is no infinite descending :<-chain.                                    *)
 Proposition NoInfiniteDescent : forall (F:Class),
   FunctionOn F (toClass :N) -> exists n, n :< :N /\ ~ F!(succ n) :< F!n.
@@ -21,18 +24,14 @@ Proof.
   intros F H1.
   assert (exists a, range F a /\ toClass a :/\: range F :~: :0: ) as H2. {
     apply Foundation.
-    - apply FunctionOn.RangeIsNotEmpty with (toClass :N). 1: assumption.
-      apply NotEmptyToClass, Omega.IsNotEmpty.
-    - apply FunctionOn.RangeIsSmall with (toClass :N). 1: assumption.
-      apply Small.EquivCompat with :N.
-      + apply Equiv.Sym, Omega.ToClass.
-      + apply Omega.IsSmall. }
+    apply CRO.RangeIsNotEmpty with (toClass :N). 1: assumption.
+    apply NotEmptyToClass, Omega.IsNotEmpty. }
   destruct H2 as [a [H2 H3]].
-  apply (FunctionOn.RangeCharac F (toClass :N)) in H2. 2: assumption.
+  apply (CRO.RangeCharac F (toClass :N)) in H2. 2: assumption.
   destruct H2 as [n [H2 H4]]. exists n. split. 1: assumption. intros H5.
   apply Class.Empty.Charac with (F!(succ n)). apply H3. split.
   - rewrite <- H4. assumption.
-  - apply FunctionOn.IsInRange with (toClass :N). 1: assumption.
+  - apply CRO.IsInRange with (toClass :N). 1: assumption.
     apply Omega.HasSucc. assumption.
 Qed.
 
@@ -45,17 +44,17 @@ Proof.
   intros F R A H1 H2.
   assert (exists a, Minimal R (range F) a) as H3. {
     apply Founded.WhenSmall with A. 1: assumption.
-    - apply Fun.RangeIsSmall with (toClass :N) A. 1: assumption.
+    - apply CRF.RangeIsSmall with (toClass :N) A. 1: assumption.
       apply Small.EquivCompat with :N. 2: apply Omega.IsSmall.
       apply Equiv.Sym, Omega.ToClass.
     - apply H1.
-    - apply Fun.RangeIsNotEmpty with (toClass :N) A. 1: assumption.
+    - apply CRF.RangeIsNotEmpty with (toClass :N) A. 1: assumption.
       apply NotEmptyToClass, Omega.IsNotEmpty. }
   destruct H3 as [a H3].
   assert (range F a) as H4. { apply Minimal.IsIn with R. assumption. }
-  apply (Fun.RangeCharac F (toClass :N) A) in H4. 2: assumption.
+  apply (CRF.RangeCharac F (toClass :N) A) in H4. 2: assumption.
   destruct H4 as [n [H4 H5]]. exists n. split. 1: assumption.
   rewrite H5. apply H3.
-  apply FunctionOn.IsInRange with (toClass :N). 1: apply H1.
+  apply CRO.IsInRange with (toClass :N). 1: apply H1.
   apply Omega.HasSucc. assumption.
 Qed.
