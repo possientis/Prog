@@ -15,6 +15,14 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Definition Minimal (R A:Class) (a:U) : Prop
   := A a /\ (forall x, A x -> ~ R :(x,a):).
 
+Proposition NotMinimal : forall (R A:Class) (a:U),
+  A a -> ~ Minimal R A a -> exists x, A x /\ R :(x,a):.
+Proof.
+  intros R A a H1 H2.
+  apply Classic.NotForAllNot. intros H3. apply H2. split. 1: assumption.
+  intros x H4 H5. apply (H3 x). split; assumption.
+Qed.
+
 Definition HasMinimal R A : Prop := exists a, Minimal R A a.
 
 Definition HasNoMinimal R A : Prop := ~ HasMinimal R A.
