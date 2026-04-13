@@ -1,23 +1,21 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Incl.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Order.Founded.
+Require Import ZF.Class.Order.Founded2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Order.WellFounded.
-Require Import ZF.Class.Order.WellFounded2.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Order.InitSegment.
-Require Import ZF.Set.OrdPair.
 
 Module CIN := ZF.Class.Incl.
 Module CIT := ZF.Class.Inter2.
 Module COI := ZF.Class.Order.InitSegment.
 
 Proposition Induction1 : forall (R A B:Class),
-  WellFounded R A                                         ->
+  Founded R A                                             ->
   B :<=: A                                                ->
   (forall x, A x -> COI.initSegment R A x :<=: B -> B x)  ->
   A :~: B.
@@ -26,8 +24,8 @@ Proof.
   (* Let R A B be arbitrary classes. *)
   intros R A B.
 
-  (* We assume that R is well-founded on A. *)
-  intros H1. assert (WellFounded R A) as X. apply H1. clear X.
+  (* We assume that R is founded on A. *)
+  intros H1. assert (Founded R A) as X. apply H1. clear X.
 
   (* We assume that B is a subclass of A. *)
   intros H2. assert (B :<=: A) as X. apply H2. clear X.
@@ -51,7 +49,7 @@ Proof.
 
   (* Then A\B has an R-minimal element. *)
   assert (exists a, Minimal R (A:\:B) a) as H6. {
-    apply WellFounded2.HasMinimal with A.
+    apply Founded2.HasMinimal with A.
     - assumption.
     - apply CIT.IsInclL.
     - assumption.
@@ -76,8 +74,8 @@ Proof.
 Qed.
 
 Proposition Induction : forall (R A B:Class),
-  WellFounded R A                                                      ->
-  (forall a, A a -> (forall x, x :< initSegment R A a -> B x) -> B a)  ->
+  Founded R A                                                          ->
+  (forall a, A a -> (forall x, COI.initSegment R A a x -> B x) -> B a)  ->
    forall a, A a -> B a.
 Proof.
   intros R A B H1 H2.
@@ -86,7 +84,6 @@ Proof.
     apply Induction1 with R. 1: assumption.
     - apply CIT.IsInclL.
     - intros a H3 H4. split. 1: assumption. apply H2. 1: assumption.
-      intros x H5. apply H4.
-      apply (InitSegment.ToClass R A A); assumption. }
+      intros x H5. apply H4. assumption. }
   intros a H4. apply H3. assumption.
 Qed.
