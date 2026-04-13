@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Axiom.NonEmptyUniverse.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -78,3 +79,9 @@ Proof.
   - apply Charac in H2. contradiction.
 Qed.
 
+Proposition WhenIncl : forall (A B:Class),
+  A :<=: B -> B :~: :0: -> A :~: :0:.
+Proof.
+  intros A B H1 H2 x. split; intros H3. 2: contradiction.
+  apply H2, H1. assumption.
+Qed.

@@ -1,3 +1,4 @@
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Founded.
@@ -13,11 +14,19 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Rank.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 
+Proposition HasMinimal : forall (R A B:Class),
+  Founded R A                 ->
+  B :<=: A                    ->
+  B :<>: :0:                  ->
+  exists x, Minimal R B x.
+Proof.
+Admitted.
 
 (* If R is founded on A, there is no decreasing loop of elements of A.          *)
 Proposition NoLoopDec : forall (R A:Class), Founded R A ->
