@@ -13,6 +13,8 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 
+Module SIC := ZF.Set.InterOfClass.
+
 (* The infimum of the class A.                                                  *)
 Definition inf (A:Class) : U := inter (A :/\: On).
 
@@ -159,5 +161,13 @@ Proof.
   - apply Inf.IsEMinimal in H3; try assumption. apply EqualToClass.
     apply Equiv.Tran with (Class.Ordinal.Inf.inf A). 1: assumption.
     apply ToClass.
+Qed.
+
+Proposition IsZero : forall (A:Class),
+  A :/\: On :~: :0: -> inf A = :0:.
+Proof.
+  intros A H1. unfold inf.
+  rewrite (InterOfClass.EquivCompat (A :/\: On) :0:). 2: assumption.
+  apply SIC.IsZero.
 Qed.
 

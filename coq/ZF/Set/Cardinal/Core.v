@@ -2,6 +2,7 @@ Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
@@ -40,7 +41,7 @@ Module CRT := ZF.Class.Relation.ToFun.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SRI := ZF.Set.Relation.ImageByClass.
 
-(* The cardinal of a set of the smallest ordinal in bijection with it.         *)
+(* The cardinal of a set is the smallest ordinal in bijection with it.         *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
 
 (* The class of all cardinal numbers.                                          *)
@@ -125,29 +126,36 @@ Proof.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
 
-Proposition IsEquiv : forall (a:U), Choice -> a :~: card a.
+Lemma IsEquivGen : forall (a:U),
+  (exists b, Ordinal b /\ a :~: b) -> a :~: card a.
 Proof.
-  intros a AC.
+  intros a K1.
   remember (fun b => Ordinal b /\ a :~: b) as A eqn:H1.
   assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
-  assert (A :<>: :0:) as H3. {
-    rewrite H1. apply CEM.HasElem, HasOrdinal. assumption. }
+  assert (A :<>: :0:) as H3. { apply CEM.HasElem. assumption. }
   assert (A (card a)) as H4. {
     unfold card. rewrite <- H1. apply SOI.IsIn; assumption. }
   rewrite H1 in H4. apply H4.
+Qed.
 
+Proposition IsEquivChoice : forall (a:U), Choice -> a :~: card a.
+Proof.
+  intros a AC. apply IsEquivGen, HasOrdinal. assumption.
 Qed.
 
 Proposition IsEquivOrd : forall (a:U), Ordinal a -> a :~: card a.
-  intros a G1.
-  remember (fun b => Ordinal b /\ a :~: b) as A eqn:H1.
-  assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
-  assert (A :<>: :0:) as H3. {
-    rewrite H1. apply CEM.HasElem. exists a. split. 1: assumption.
-    apply Equiv.Refl. }
-  assert (A (card a)) as H4. {
-    unfold card. rewrite <- H1. apply SOI.IsIn; assumption. }
-  rewrite H1 in H4. apply H4.
+Proof.
+  intros a H1.
+  apply IsEquivGen. exists a. split. 1: assumption. apply Equiv.Refl.
+Qed.
+
+Proposition IsEquivNotZero : forall (a:U),
+  card a <> :0: -> a :~: card a.
+Proof.
+  intros a H1.
+  apply IsEquivGen. apply Classic.DoubleNegation. intros H2.
+  apply H1. apply SOI.IsZero. intros x. split; intros H3. 2: contradiction.
+  exfalso. apply H2. exists x. apply H3.
 Qed.
 
 Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
@@ -169,7 +177,11 @@ Proof.
   intros b [a H1]. subst. apply IsOrdinal.
 Qed.
 
+Proposition WhenZero : card :0: = :0:.
+Proof.
+Admitted.
 
+(*
 Proposition WhenCardinal : forall (a:U), Cardinal a <-> a = card a.
 Proof.
   intros a. split; intros H1.
@@ -177,6 +189,7 @@ Proof.
     + remember (card a) as c eqn:H2. rewrite H1, H2.
       apply IsLowerBound. 1: apply IsOrdinal.
       apply Equiv.Tran with a.
-Admitted.
 
 
+Show.
+*)
