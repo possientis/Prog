@@ -13,8 +13,10 @@ Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Domain.
@@ -27,6 +29,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 
 Require Import ZF.Notation.Eval.
 
+Module CEM := ZF.Class.Empty.
 Module CEQ := ZF.Class.Equiv.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module COF := ZF.Class.Ordinal.FunctionOn.
@@ -34,7 +37,11 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module CRR := ZF.Class.Relation.Range.
 Module CRT := ZF.Class.Relation.ToFun.
+Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SRI := ZF.Set.Relation.ImageByClass.
+
+(* The cardinal of a set of the smallest ordinal in bijection with it.         *)
+Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
 
 Proposition HasOrdinal : Choice ->
   forall (a:U), exists b, Ordinal b /\ a :~: b.
@@ -85,3 +92,60 @@ Proof.
     apply RestrictOfClass.IsRelation, G1. }
   exists b. split. 1: assumption. apply Equiv.Sym. exists (F:|:b). assumption.
 Qed.
+
+Proposition IsOrdinal : forall (a:U), Ordinal (card a).
+Proof.
+  intros a. apply SOI.IsOrdinal.
+Qed.
+
+Proposition IsLowerBound : forall (a b:U),
+  Ordinal b       ->
+  a :~: b         ->
+  card a :<=: b.
+Proof.
+  intros a b H1 H2. apply SOI.IsLowerBound.
+  - intros c H3. apply H3.
+  - split; assumption.
+Qed.
+
+Proposition IsLargest : forall (a b:U),
+  Choice                                        ->
+  Ordinal b                                     ->
+  (forall c, Ordinal c -> a :~: c -> b :<=: c)  ->
+  b :<=: card a.
+Proof.
+  intros a b AC H1 H2.
+  apply SOI.IsLargest.
+  - intros c H3. apply H3.
+  - assert (exists c, Ordinal c /\ a :~: c) as H3. { apply HasOrdinal. assumption. }
+    destruct H3 as [c H3]. apply CEM.HasElem. exists c. assumption.
+  - intros c [H3 H4]. apply H2; assumption.
+Qed.
+
+Proposition IsEquiv : forall (a:U), Choice -> a :~: card a.
+Proof.
+  intros a AC.
+  remember (fun b => Ordinal b /\ a :~: b) as A eqn:H1.
+  assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
+  assert (A :<>: :0:) as H3. {
+    rewrite H1. apply CEM.HasElem, HasOrdinal. assumption. }
+  assert (A (card a)) as H4. {
+    unfold card. rewrite <- H1. apply SOI.IsIn; assumption. }
+  rewrite H1 in H4. apply H4.
+
+Qed.
+
+Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
+  b :< card a -> a :<>: b.
+Proof.
+  intros a b H1 H2 H3.
+  assert (card a :<=: b) as H4. { apply IsLowerBound; assumption. }
+  assert (b :< b) as H5. { apply H4. assumption. }
+  revert H5. apply NoElemLoop1.
+Qed.
+
+Proposition IsIncl : forall (a:U), Ordinal a -> card a :<=: a.
+Proof.
+  intros a H1. apply IsLowerBound. 1: assumption. apply Equiv.Refl.
+Qed.
+
