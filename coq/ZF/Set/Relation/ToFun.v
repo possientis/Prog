@@ -95,5 +95,3 @@ Proof.
   - rewrite DomainOf. assumption.
   - apply Satisfies. assumption.
 Qed.
-
-

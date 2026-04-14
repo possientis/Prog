@@ -11,10 +11,10 @@ Definition Class : Type := U -> Prop.
 Definition toClass (a:U) : Class := fun x => x :< a.
 
 (* Natural equivalence between classes.                                         *)
-Definition classEquiv (P Q:Class) : Prop := forall x, P x <-> Q x.
+Definition equiv (P Q:Class) : Prop := forall x, P x <-> Q x.
 
-(* Notation "P :~: Q" := (classEquiv P Q)                                       *)
-Global Instance Equiv : Equiv Class := { equiv := classEquiv }.
+(* Notation "P :~: Q" := (equiv P Q)                                            *)
+Global Instance Equiv : Equiv Class := { equiv := equiv }.
 
 (* The equivalence between classes is reflexive.                                *)
 Proposition Refl : forall (P:Class), P :~: P.
