@@ -43,6 +43,9 @@ Module SRI := ZF.Set.Relation.ImageByClass.
 (* The cardinal of a set of the smallest ordinal in bijection with it.         *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
 
+(* The class of all cardinal numbers.                                          *)
+Definition Cardinal : Class := fun b => exists a, b = card a.
+
 Proposition HasOrdinal : Choice ->
   forall (a:U), exists b, Ordinal b /\ a :~: b.
 Proof.
@@ -135,6 +138,18 @@ Proof.
 
 Qed.
 
+Proposition IsEquivOrd : forall (a:U), Ordinal a -> a :~: card a.
+  intros a G1.
+  remember (fun b => Ordinal b /\ a :~: b) as A eqn:H1.
+  assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
+  assert (A :<>: :0:) as H3. {
+    rewrite H1. apply CEM.HasElem. exists a. split. 1: assumption.
+    apply Equiv.Refl. }
+  assert (A (card a)) as H4. {
+    unfold card. rewrite <- H1. apply SOI.IsIn; assumption. }
+  rewrite H1 in H4. apply H4.
+Qed.
+
 Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
   b :< card a -> a :<>: b.
 Proof.
@@ -148,4 +163,20 @@ Proposition IsIncl : forall (a:U), Ordinal a -> card a :<=: a.
 Proof.
   intros a H1. apply IsLowerBound. 1: assumption. apply Equiv.Refl.
 Qed.
+
+Proposition CardIsOrd : Cardinal :<=: Ordinal.
+Proof.
+  intros b [a H1]. subst. apply IsOrdinal.
+Qed.
+
+
+Proposition WhenCardinal : forall (a:U), Cardinal a <-> a = card a.
+Proof.
+  intros a. split; intros H1.
+  - destruct H1 as [b H1]. apply Incl.DoubleInclusion. split.
+    + remember (card a) as c eqn:H2. rewrite H1, H2.
+      apply IsLowerBound. 1: apply IsOrdinal.
+      apply Equiv.Tran with a.
+Admitted.
+
 
