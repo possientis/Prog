@@ -13,6 +13,10 @@ Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module COI := ZF.Class.Order.Isom.
@@ -86,4 +90,15 @@ Proof.
     + apply COI.EquivCompat3 with (E :/: (toClass a)).
       * apply Equiv.Sym, RestrictOfClass.ToClass.
       * apply (COI.RestrictL _ E), (COI.RestrictR _ _ E). assumption. }
-Admitted.
+  assert(Monotone f) as H8. { apply (Monotone.FromIsom f c a); assumption. }
+  assert (domain f = c) as G3. { apply H7. }
+  assert (range f = a) as G4. { apply H7. }
+  assert (c :<=: b) as H9. {
+    intros d H9. apply Core.InclElemTran with f!d; try assumption.
+    - apply Core.IsOrdinal with c; assumption.
+    - apply H8. rewrite G4. apply Bij.IsInRange with c. 2: assumption. apply H7.
+    - apply Monotone.IsIncl. 1: assumption. rewrite G3. assumption.
+    - apply H2. apply Bij.IsInRange with c. 2: assumption. apply H7. }
+  split. 1: assumption. split; assumption.
+Qed.
+
