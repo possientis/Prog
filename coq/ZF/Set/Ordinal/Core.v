@@ -12,8 +12,22 @@ Require Import ZF.Set.Less.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 
+Module COC := ZF.Class.Ordinal.Core.
+
 (* The class of all ordinals.                                                   *)
 Definition Ordinal : Class := On.
+
+Proposition ToClass : forall (a:U),
+  Ordinal a -> COC.Ordinal (toClass a).
+Proof.
+  intros a H1. assumption.
+Qed.
+
+Proposition FromClass : forall (a:U),
+  COC.Ordinal (toClass a) -> Ordinal a.
+Proof.
+  intros a H1. assumption.
+Qed.
 
 (* An element of an ordinal is an ordinal.                                      *)
 Proposition IsOrdinal : forall (a b:U), Ordinal a ->
