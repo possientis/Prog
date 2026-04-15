@@ -10,7 +10,13 @@ Definition Total (r a:U) : Prop := forall (x y:U), x :< a -> y :< a ->
   x = y \/ :(x,y): :< r \/ :(y,x): :< r.
 
 Proposition ToClass : forall (r a:U),
-  Total r a <-> COT.Total (toClass r) (toClass a).
+  Total r a -> COT.Total (toClass r) (toClass a).
 Proof.
-  intros r a . split; intros H1; assumption.
+  intros r a H1. assumption.
+Qed.
+
+Proposition FromClass : forall (r a:U),
+  COT.Total (toClass r) (toClass a) -> Total r a.
+Proof.
+  intros r a H1. assumption.
 Qed.

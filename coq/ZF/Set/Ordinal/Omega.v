@@ -89,7 +89,7 @@ Qed.
 (* N is a transitive set.                                                       *)
 Proposition IsTransitive : Transitive :N.
 Proof.
-  apply Transitive.ToClass, COT.EquivCompat with :N.
+  apply Transitive.FromClass, COT.EquivCompat with :N.
   - apply Equiv.Sym, ToClass.
   - apply COO.IsTransitive.
 Qed.

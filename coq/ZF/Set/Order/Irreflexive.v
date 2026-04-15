@@ -9,9 +9,13 @@ Module COI := ZF.Class.Order.Irreflexive.
 Definition Irreflexive (r a:U) : Prop := forall (x:U), x :< a -> ~ :(x,x): :< r.
 
 Proposition ToClass : forall (r a:U),
-  Irreflexive r a <-> COI.Irreflexive (toClass r) (toClass a).
+  Irreflexive r a -> COI.Irreflexive (toClass r) (toClass a).
 Proof.
-  intros r a. split; intros H1; assumption.
+  intros r a H1. assumption.
 Qed.
 
-
+Proposition FromClass : forall (r a:U),
+  COI.Irreflexive (toClass r) (toClass a) -> Irreflexive r a.
+Proof.
+  intros r a H1. assumption.
+Qed.

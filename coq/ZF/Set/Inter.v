@@ -34,20 +34,20 @@ Qed.
 
 (* The inter' of the class is the class of the intersection.                    *)
 Proposition ToClass' : forall (a:U), a <> :0: ->
-  inter' (toClass a) :~: toClass :I(a).
+ toClass :I(a) :~:  inter' (toClass a).
 Proof.
   intros a H1 x. split; intros H2.
-  - apply CharacRev; assumption.
   - intros y H3. apply Charac with a; assumption.
+  - apply CharacRev; assumption.
 Qed.
 
 (* The intersection of the class is the class of the intersection.              *)
 Proposition ToClass : forall (a:U),
-  :I(toClass a) :~: toClass :I(a).
+ toClass :I(a) :~: :I(toClass a).
 Proof.
   intros a x. split; intros H1.
-  - apply FromClass.Charac. assumption.
   - apply FromClass.Charac in H1. assumption.
+  - apply FromClass.Charac. assumption.
 Qed.
 
 (* The intersection of the empty set is the empty set.                          *)

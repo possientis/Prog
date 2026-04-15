@@ -36,7 +36,7 @@ Proof.
   intros a b H1 H2. split; intros H3.
   - apply (LessIsElem (toClass b)); try assumption.
     apply Less.ToClass. assumption.
-  - apply Less.ToClass, (LessIsElem (toClass b)); assumption.
+  - apply Less.FromClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
 Proposition ElemIsIncl : forall (a b:U), Ordinal b ->
@@ -67,9 +67,9 @@ Proof.
     destruct H3 as [H3|[H3|H3]].
     - left. apply EqualToClass. assumption.
     - right. left. apply LessIsElem; try assumption.
-      apply Less.ToClass. assumption.
+      apply Less.FromClass. assumption.
     - right. right. apply LessIsElem; try assumption.
-      apply Less.ToClass. assumption.
+      apply Less.FromClass. assumption.
 Qed.
 
 Proposition EqualOrElem : forall (a b:U),

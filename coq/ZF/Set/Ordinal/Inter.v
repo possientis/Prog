@@ -22,7 +22,7 @@ Proposition IsOrdinal : forall (a:U),
   toClass a :<=: Ordinal -> Ordinal :I(a).
 Proof.
   intros a H1. apply COC.EquivCompat with :I(toClass a).
-  - apply SIR.ToClass.
+  - apply Equiv.Sym, SIR.ToClass.
   - apply COI.IsOrdinal. assumption.
 Qed.
 
@@ -33,7 +33,7 @@ Proposition IsLowerBound : forall (a b:U),
   :I(a) :<=: b.
 Proof.
   intros a b H1 H2. apply CIN.EquivCompatL with :I(toClass a).
-  - apply SIR.ToClass.
+  - apply Equiv.Sym, SIR.ToClass.
   - apply COI.IsLowerBound; assumption.
 Qed.
 
@@ -45,7 +45,7 @@ Proposition IsLargest : forall (a b:U),
   b :<=: :I(a).
 Proof.
   intros a b H1 H2 H3. apply CIN.EquivCompatR with :I(toClass a).
-  - apply SIR.ToClass.
+  - apply Equiv.Sym, SIR.ToClass.
   - apply COI.IsLargest; try assumption.
     apply Empty.NotEmptyToClass. assumption.
 Qed.

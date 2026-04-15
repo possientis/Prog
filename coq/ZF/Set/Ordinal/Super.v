@@ -16,15 +16,19 @@ Definition Super (a:U) : Prop := Transitive a /\
   forall x, x :< a -> :P(x) :<=: a.
 
 Proposition ToClass : forall (a:U),
-  Super a <-> COS.Super (toClass a).
+  Super a -> COS.Super (toClass a).
 Proof.
-  intros a. split; intros [H1 H2].
-  - split.
-    + apply Transitive.ToClass. assumption.
-    + intros x H3. apply H2. assumption.
-  - split.
-    + apply Transitive.ToClass. assumption.
-    + intros x H3. apply H2. assumption.
+  intros a [H1 H2]. split.
+  - apply Transitive.ToClass. assumption.
+  - intros x H3. apply H2. assumption.
+Qed.
+
+Proposition FromClass : forall (a:U),
+  COS.Super (toClass a) -> Super a.
+Proof.
+  intros a [H1 H2]. split.
+  - apply Transitive.FromClass. assumption.
+  - intros x H3. apply H2. assumption.
 Qed.
 
 Proposition WhenZero : forall (a:U),

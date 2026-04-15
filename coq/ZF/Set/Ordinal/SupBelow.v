@@ -32,12 +32,12 @@ Qed.
 
 (* The supremum below b of the class is the class of the supremum below b.      *)
 Proposition ToClass : forall (a b:U),
-  sup(:< b) (toClass a) :~: toClass (sup(:< b) a).
+  toClass (sup(:< b) a) :~: sup(:< b) (toClass a).
 Proof.
   intros a b x. split; intros H1.
-  - destruct H1 as [y [H1 [H2 [H3 H4]]]]. apply Charac.
-    exists y. split. 1: assumption. split. 1: assumption. split; assumption.
   - apply Charac in H1. destruct H1 as [y [H1 [H2 [H3 H4]]]].
+    exists y. split. 1: assumption. split. 1: assumption. split; assumption.
+  - destruct H1 as [y [H1 [H2 [H3 H4]]]]. apply Charac.
     exists y. split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 

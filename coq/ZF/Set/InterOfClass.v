@@ -37,11 +37,11 @@ Proof.
 Qed.
 
 Proposition ToClass : forall (A:Class),
-  :I(A) :~: toClass (inter A).
+  toClass (inter A) :~: :I(A).
 Proof.
   intros A x. split; intros H1.
-  - apply FromClass.Charac. assumption.
   - apply FromClass.Charac in H1. assumption.
+  - apply FromClass.Charac. assumption.
 Qed.
 
 Proposition IsZero : inter :0: = :0:.

@@ -4,20 +4,28 @@ Require Import ZF.Class.Relation.FunctionalAt.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
-(* Local property of a set a being functional at the point b.                   *)
-Definition FunctionalAt (a b:U) : Prop :=
-  forall y z, :(b,y): :< a -> :(b,z): :< a -> y = z.
+Module CRA := ZF.Class.Relation.FunctionalAt.
 
-Proposition ToClass : forall (a b:U),
-  FunctionalAt a b <-> Class.Relation.FunctionalAt.FunctionalAt (toClass a) b.
+(* Local property of a set f being functional at the point a.                   *)
+Definition FunctionalAt (f a:U) : Prop :=
+  forall y z, :(a,y): :< f -> :(a,z): :< f -> y = z.
+
+Proposition ToClass : forall (f a:U),
+  FunctionalAt f a -> CRA.FunctionalAt (toClass f) a.
 Proof.
-  intros a b. split; intros H1; assumption.
+  intros f a H1. assumption.
 Qed.
 
-Proposition WhenNot : forall (a b:U),
-  ~ FunctionalAt a b <-> exists y z, y <> z /\ :(b,y): :< a /\ :(b,z): :< a.
+Proposition FromClass : forall (f a:U),
+  CRA.FunctionalAt (toClass f) a -> FunctionalAt f a.
 Proof.
-  intros a b. split; intros H1.
+  intros f a H1. assumption.
+Qed.
+
+Proposition WhenNot : forall (f a:U),
+  ~ FunctionalAt f a <-> exists y z, y <> z /\ :(a,y): :< f /\ :(a,z): :< f.
+Proof.
+  intros f a. split; intros H1.
   - apply NotForAll in H1. destruct H1 as [y H1].
     apply NotForAll in H1. destruct H1 as [z H1].
     exists y. exists z. split.

@@ -9,8 +9,14 @@ Module COR := ZF.Class.Order.Reflexive.
 Definition Reflexive (r a:U) : Prop := forall (x:U), x :< a -> :(x,x): :< r.
 
 Proposition ToClass : forall (r a:U),
-  Reflexive r a <-> COR.Reflexive (toClass r) (toClass a).
+  Reflexive r a -> COR.Reflexive (toClass r) (toClass a).
 Proof.
-  intros r a. split; intros H1; assumption.
+  intros r a H1. assumption.
+Qed.
+
+Proposition FromClass : forall (r a:U),
+  COR.Reflexive (toClass r) (toClass a) -> Reflexive r a.
+Proof.
+  intros r a H1. assumption.
 Qed.
 

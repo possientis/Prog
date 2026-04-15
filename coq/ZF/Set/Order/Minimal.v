@@ -11,9 +11,15 @@ Definition Minimal (r a b:U) : Prop
   := b :< a /\ (forall x, x :< a  -> ~ :(x,b): :< r).
 
 Proposition ToClass : forall (r a b:U),
-  Minimal r a b <-> COM.Minimal (toClass r) (toClass a) b.
+  Minimal r a b -> COM.Minimal (toClass r) (toClass a) b.
 Proof.
-  intros r a b. split; intros [H1 H2]; split; assumption.
+  intros r a b H1. assumption.
+Qed.
+
+Proposition FromClass : forall (r a b:U),
+  COM.Minimal (toClass r) (toClass a) b -> Minimal r a b.
+Proof.
+  intros r a b H1. assumption.
 Qed.
 
 Proposition IsIn : forall (r a b:U),

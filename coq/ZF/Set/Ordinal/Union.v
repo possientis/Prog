@@ -14,7 +14,7 @@ Proposition IsOrdinal : forall (a:U),
   toClass a :<=: Ordinal -> Ordinal :U(a).
 Proof.
   intros a H1. apply COC.EquivCompat with :U(toClass a).
-  - apply Union.ToClass.
+  - apply Equiv.Sym, Union.ToClass.
   - apply COU.IsOrdinal. assumption.
 Qed.
 
@@ -25,7 +25,7 @@ Proposition IsUpperBound : forall (a b:U),
   b :<=: :U(a).
 Proof.
   intros a b H1 H2. apply Incl.EquivCompatR with :U(toClass a).
-  - apply Union.ToClass.
+  - apply Equiv.Sym, Union.ToClass.
   - apply COU.IsUpperBound; assumption.
 Qed.
 
@@ -36,7 +36,7 @@ Proposition IsSmallest : forall (a b:U),
   :U(a) :<=: b.
 Proof.
   intros a b H1 H2. apply Incl.EquivCompatL with :U(toClass a).
-  - apply Union.ToClass.
+  - apply Equiv.Sym, Union.ToClass.
   - apply COU.IsSmallest; assumption.
 Qed.
 

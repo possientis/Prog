@@ -12,6 +12,7 @@ Require Import ZF.Set.Specify.
 
 Export ZF.Notation.InfAbove.
 
+Module COI := ZF.Class.Ordinal.Inf.
 Module SIN := ZF.Set.Inter.
 Module SOI := ZF.Set.Ordinal.Inter.
 
@@ -44,9 +45,9 @@ Qed.
 
 (* The infimum above b of the class is the class of the infimum above b.        *)
 Proposition ToClass : forall (a b:U),
-  inf(>: b) (toClass a) :~: toClass (inf(>: b) a).
+  toClass (inf(>: b) a) :~: inf(>: b) (toClass a).
 Proof.
-  intros a b. apply Equiv.Tran with (Class.Ordinal.Inf.inf (toClass (a :\: b))).
+  intros a b. apply Equiv.Sym, Equiv.Tran with (COI.inf (toClass (a :\: b))).
   - apply Inf.EquivCompat, Equiv.Sym, Diff.ToClass.
   - apply Equiv.Sym, Inf.ToClass.
 Qed.

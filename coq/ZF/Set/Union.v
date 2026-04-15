@@ -23,12 +23,12 @@ Proof.
 Qed.
 
 Proposition ToClass : forall (a:U),
-  :U(toClass a) :~: toClass :U(a).
+  toClass :U(a) :~: :U(toClass a).
 Proof.
   intros a x. split; intros H1.
-  - destruct H1 as [y [H1 H2]]. apply Charac. exists y.
-    split; assumption.
   - apply Charac in H1. destruct H1 as [y [H1 H2]]. exists y.
+    split; assumption.
+  - destruct H1 as [y [H1 H2]]. apply Charac. exists y.
     split; assumption.
 Qed.
 

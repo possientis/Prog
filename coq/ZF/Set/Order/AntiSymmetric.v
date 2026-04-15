@@ -10,7 +10,13 @@ Definition AntiSymmetric (r a:U) : Prop := forall (x y:U), x :< a -> y :< a ->
   :(x,y): :< r -> :(y,x): :< r -> x = y.
 
 Proposition ToClass : forall (r a:U),
-  AntiSymmetric r a <-> COA.AntiSymmetric (toClass r) (toClass a).
+  AntiSymmetric r a -> COA.AntiSymmetric (toClass r) (toClass a).
 Proof.
-  intros r a. split; intros H1 x y; apply H1.
+  intros r a H1. assumption.
+Qed.
+
+Proposition FromClass : forall (r a:U),
+  COA.AntiSymmetric (toClass r) (toClass a) -> AntiSymmetric r a.
+Proof.
+  intros r a H1. assumption.
 Qed.

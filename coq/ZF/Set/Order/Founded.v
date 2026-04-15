@@ -15,7 +15,13 @@ Definition Founded (r a:U) : Prop := forall b,
   exists x, Minimal r b x.
 
 Proposition ToClass : forall (r a:U),
-  Founded r a <-> COF.Founded (toClass r) (toClass a).
+  Founded r a -> COF.Founded (toClass r) (toClass a).
 Proof.
-  intros r a. split; intros H1 b H2 H3; apply H1; assumption.
+  intros r a H1. assumption.
+Qed.
+
+Proposition FromClass : forall (r a:U),
+  COF.Founded (toClass r) (toClass a) -> Founded r a.
+Proof.
+  intros r a H1. assumption.
 Qed.
