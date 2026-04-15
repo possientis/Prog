@@ -28,12 +28,18 @@ Module CRR := ZF.Class.Relation.Range.
 Definition Bij (f a b:U) : Prop := BijectionOn f a /\ range f = b.
 
 Proposition ToClass : forall (f a b:U),
-  Bij f a b <-> CRB.Bij (toClass f) (toClass a) (toClass b).
+  Bij f a b -> CRB.Bij (toClass f) (toClass a) (toClass b).
 Proof.
-  intros f a b. split; intros [H1 H2]; split.
-  - apply BijectionOn.ToClass; assumption.
+  intros f a b [H1 H2]. split.
+  - apply BijectionOn.ToClass. assumption.
   - rewrite <- H2. apply Equiv.Sym, Range.ToClass.
-  - apply BijectionOn.ToClass; assumption.
+Qed.
+
+Proposition FromClass : forall (f a b:U),
+  CRB.Bij (toClass f) (toClass a) (toClass b) -> Bij f a b.
+Proof.
+  intros f a b [H1 H2]. split.
+  - apply BijectionOn.FromClass. assumption.
   - apply Equiv.EqualToClass.
     apply Equiv.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
     apply Equiv.Sym, Range.ToClass.

@@ -1,4 +1,6 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
@@ -27,3 +29,9 @@ Proof.
   intros a b c [f H1] [g H2]. exists (g :.: f).
   apply Bij.Compose with b; assumption.
 Qed.
+
+Proposition WhenIncl : forall (a b:U), Ordinal b ->
+  a :<=: b  -> exists c, Ordinal c /\ c :<=: b /\ a :~: c.
+Proof.
+  intros a b H1 H2.
+Admitted.

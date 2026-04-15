@@ -1,4 +1,6 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
@@ -10,11 +12,24 @@ Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Single.
 
+Module COC := ZF.Class.Ordinal.Core.
+Module COO := ZF.Class.Ordinal.OrdFun.
+
 (* An ordinal function is a function with ordinal domain and ordinal values.    *)
 Definition OrdFun : Class := fun f =>
   Function f                              /\
   Ordinal (domain f)                      /\
   (forall y, y :< range f -> Ordinal y).
+
+Proposition ToClass : forall (f:U),
+  OrdFun f <-> COO.OrdFun (toClass f).
+Proof.
+  intros f. split; intros [H1 [H2 H3]].
+  - split.
+    + assumption.
+    + split.
+      *
+Admitted.
 
 Proposition IsOrdinal : forall (f x:U), OrdFun f ->
   x :< domain f -> Ordinal f!x.
@@ -57,3 +72,4 @@ Proof.
     + intros y H3. rewrite Range.WhenSingle with :0: a f in H3.
       2: assumption. apply Single.Charac in H3. subst. assumption.
 Qed.
+

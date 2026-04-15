@@ -25,11 +25,19 @@ Module CRB := ZF.Class.Relation.Bijection.
 Definition Bijection (f:U) : Prop := Relation f /\ OneToOne f.
 
 Proposition ToClass : forall (f:U),
-  Bijection f <-> CRB.Bijection (toClass f).
+  Bijection f -> CRB.Bijection (toClass f).
 Proof.
-  intros f. split; intros [H1 H2].
-  - split. 1: assumption. apply OneToOne.ToClass. assumption.
-  - split. 1: assumption. apply OneToOne.ToClass. assumption.
+  intros f [H1 H2]. split.
+  - apply Relation.ToClass. assumption.
+  - apply OneToOne.ToClass. assumption.
+Qed.
+
+Proposition FromClass : forall (f:U),
+  CRB.Bijection (toClass f) -> Bijection f.
+Proof.
+  intros f [H1 H2]. split.
+  - apply Relation.FromClass. assumption.
+  - apply OneToOne.FromClass. assumption.
 Qed.
 
 (* A bijection is a function.                                                   *)

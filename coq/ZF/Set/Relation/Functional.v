@@ -14,9 +14,15 @@ Definition Functional (f:U) : Prop :=
   forall x y z, :(x,y): :< f -> :(x,z): :< f -> y = z.
 
 Proposition ToClass : forall (f:U),
-  Functional f <-> CRL.Functional (toClass f).
+  Functional f -> CRL.Functional (toClass f).
 Proof.
-  intros f. split; intros H1 x y z H3 H4; apply H1 with x; assumption.
+  intros f H1. assumption.
+Qed.
+
+Proposition FromClass : forall (f:U),
+  CRL.Functional (toClass f) -> Functional f.
+Proof.
+  intros f H1. assumption.
 Qed.
 
 (* Being functional is compatible with set inclusion (not quite of course).     *)

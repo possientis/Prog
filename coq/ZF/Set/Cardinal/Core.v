@@ -38,6 +38,7 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module CRR := ZF.Class.Relation.Range.
 Module CRT := ZF.Class.Relation.ToFun.
+Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SRI := ZF.Set.Relation.ImageByClass.
 
@@ -90,7 +91,7 @@ Proof.
   assert (domain (F:|:b) = b) as H15. {
     apply RestrictOfClass.DomainWhenIncl.
     - apply G1.
-    - intros c H15. apply G3. apply Core.IsOrdinal with b; assumption. }
+    - intros c H15. apply G3. apply SOC.IsOrdinal with b; assumption. }
   assert (Bij (F:|:b) b a) as H16. {
     split. 2: assumption. split. 2: assumption. split. 2: assumption.
     apply RestrictOfClass.IsRelation, G1. }
@@ -177,19 +178,46 @@ Proof.
   intros b [a H1]. subst. apply IsOrdinal.
 Qed.
 
-Proposition WhenZero : card :0: = :0:.
-Proof.
-Admitted.
-
-(*
 Proposition WhenCardinal : forall (a:U), Cardinal a <-> a = card a.
 Proof.
   intros a. split; intros H1.
-  - destruct H1 as [b H1]. apply Incl.DoubleInclusion. split.
-    + remember (card a) as c eqn:H2. rewrite H1, H2.
+  - destruct H1 as [b H1].
+    assert (Ordinal a) as G1. { rewrite H1. apply IsOrdinal. }
+    assert (Ordinal (card a)) as G2. { apply IsOrdinal. }
+    apply Incl.DoubleInclusion. split.
+    + assert (a = :0: \/ :0: :< a) as H2. { apply SOC.ZeroOrElem. assumption. }
+      destruct H2 as [H2|H2].
+      * rewrite H2. apply SOC.IsIncl. rewrite <- H2. assumption.
+      * remember (card a) as c eqn:H3. rewrite H1, H3.
+        apply IsLowerBound. 1: apply IsOrdinal.
+        apply Equiv.Tran with a.
+        { rewrite H1. apply IsEquivNotZero. rewrite <- H1.
+          apply Empty.HasElem. exists :0:. assumption. }
+        { apply IsEquivOrd. assumption. }
+    + apply IsIncl. assumption.
+  - exists a. assumption.
+Qed.
+
+Proposition EquivCharac : Choice -> forall (a b:U),
+  a :~: b <-> card a = card b.
+Proof.
+  intros AC a b. split; intros H1.
+  - assert (card b :<=: card a) as H2. {
       apply IsLowerBound. 1: apply IsOrdinal.
       apply Equiv.Tran with a.
+      + apply Equiv.Sym. assumption.
+      + apply IsEquivChoice. assumption. }
+    assert (card a :<=: card b) as H3. {
+      apply IsLowerBound. 1: apply IsOrdinal.
+      apply Equiv.Tran with b. 1: assumption.
+      apply IsEquivChoice. assumption. }
+    apply Incl.DoubleInclusion. split; assumption.
+  - apply Equiv.Tran with (card a).
+    + apply IsEquivChoice. assumption.
+    + rewrite H1. apply Equiv.Sym, IsEquivChoice. assumption.
+Qed.
 
-
-Show.
-*)
+Proposition Idem : forall (a:U), card (card a) = card a.
+Proof.
+  intros a. symmetry. apply WhenCardinal. exists a. reflexivity.
+Qed.

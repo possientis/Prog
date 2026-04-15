@@ -27,10 +27,18 @@ Module SRI := ZF.Set.Relation.InvImage.
 Definition FunctionOn (f a:U) : Prop := Function f /\ domain f = a.
 
 Proposition ToClass : forall (f a:U),
-  FunctionOn f a <-> CFO.FunctionOn (toClass f) (toClass a).
+  FunctionOn f a -> CFO.FunctionOn (toClass f) (toClass a).
 Proof.
-  intros f a. split; intros [H1 H2]; split; try assumption.
+  intros f a [H1 H2]. split.
+  - apply Function.ToClass. assumption.
   - rewrite <- H2. apply Equiv.Sym, Domain.ToClass.
+Qed.
+
+Proposition FromClass : forall (f a:U),
+  CFO.FunctionOn (toClass f) (toClass a) -> FunctionOn f a.
+Proof.
+  intros f a [H1 H2]. split.
+  - apply Function.FromClass. assumption.
   - apply Equiv.EqualToClass, Equiv.Tran with (CRD.domain (toClass f)).
     2: assumption. apply Domain.ToClass.
 Qed.
@@ -194,3 +202,4 @@ Proof.
   - apply Function.WhenSingle with x y. assumption.
   - apply Domain.WhenSingle with y. assumption.
 Qed.
+

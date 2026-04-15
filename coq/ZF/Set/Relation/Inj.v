@@ -26,13 +26,19 @@ Module CRR := ZF.Class.Relation.Range.
 Definition Inj (f a b:U) : Prop := BijectionOn f a /\ range f :<=: b.
 
 Proposition ToClass : forall (f a b:U),
-  Inj f a b <-> CRI.Inj (toClass f) (toClass a) (toClass b).
+  Inj f a b -> CRI.Inj (toClass f) (toClass a) (toClass b).
 Proof.
-  intros f a b. split; intros [H1 H2]; split.
-  - apply BijectionOn.ToClass; assumption.
+  intros f a b [H1 H2]. split.
+  - apply BijectionOn.ToClass. assumption.
   - apply Incl.EquivCompatL with (toClass (range f)). 2: assumption.
     apply Range.ToClass.
-  - apply BijectionOn.ToClass; assumption.
+Qed.
+
+Proposition FromClass : forall (f a b:U),
+  CRI.Inj (toClass f) (toClass a) (toClass b) -> Inj f a b.
+Proof.
+  intros f a b [H1 H2]. split.
+  - apply BijectionOn.FromClass. assumption.
   - apply Incl.ToClass.
     apply Incl.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
     apply Equiv.Sym, Range.ToClass.

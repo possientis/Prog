@@ -25,14 +25,22 @@ Module SRL := ZF.Set.Relation.Functional.
 Definition OneToOne (f:U) : Prop := Functional f /\ Functional f^:-1:.
 
 Proposition ToClass : forall (f:U),
-  OneToOne f <-> CRO.OneToOne (toClass f).
+  OneToOne f -> CRO.OneToOne (toClass f).
 Proof.
-  intros f. split; intros [H1 H2].
-  - split; try assumption. apply CRL.EquivCompat with (toClass f^:-1:).
-    2: assumption. apply SRC.ToClass.
-  - split; try assumption. apply SRL.ToClass.
-    apply CRL.EquivCompat with ((toClass f)^:-1:).
-    2: assumption. apply Equiv.Sym. apply SRC.ToClass.
+  intros f [H1 H2]. split.
+  - apply SRL.ToClass. assumption.
+  - apply CRL.EquivCompat with (toClass f^:-1:).
+    + apply SRC.ToClass.
+    + apply SRL.ToClass. assumption.
+Qed.
+
+Proposition FromClass : forall (f:U),
+  CRO.OneToOne (toClass f) -> OneToOne f.
+Proof.
+  intros f [H1 H2]. split.
+  - apply SRL.FromClass. assumption.
+  - apply SRL.FromClass, CRL.EquivCompat with (toClass f)^:-1:. 2: assumption.
+    apply Equiv.Sym, SRC.ToClass.
 Qed.
 
 (* Uniqueness of left coordinate when one-to-one.                               *)

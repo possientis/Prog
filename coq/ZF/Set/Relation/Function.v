@@ -26,9 +26,15 @@ Module SRI := ZF.Set.Relation.InvImage.
 Definition Function (f:U) : Prop := Relation f /\ Functional f.
 
 Proposition ToClass : forall (f:U),
-  Function f <-> CRF.Function (toClass f).
+  Function f -> CRF.Function (toClass f).
 Proof.
-  intros f. split; intros [H1 H2]; split; assumption.
+  intros f H1. assumption.
+Qed.
+
+Proposition FromClass : forall (f:U),
+  CRF.Function (toClass f) -> Function f.
+Proof.
+  intros f H1. assumption.
 Qed.
 
 Proposition IsOneToOne : forall (f:U),

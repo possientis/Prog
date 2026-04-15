@@ -1,11 +1,14 @@
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Restrict.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Order.WFWO.
+Require Import ZF.Class.Ordinal.Order.OnSubclass.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Order.WellOrdering.
@@ -14,6 +17,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module COI := ZF.Class.Order.Isom.
 Module COW := ZF.Class.Order.WellOrdering.
+Module COS := ZF.Class.Ordinal.Order.OnSubclass.
 Module COO := ZF.Class.Ordinal.Order.WFWO.
 
 Module SOI := ZF.Set.Order.Isom.
@@ -30,12 +34,12 @@ Proof.
   assert (COW.WellOrdering (toClass r) (toClass b)) as H2. { assumption. }
   assert (Small (toClass b)) as H3. { apply SetIsSmall. }
   assert (exists a, Ordinal a /\ forall (g:U),
-    g = (RecurseSmallestFresh (toClass r) (toClass b) :|: a) ->
+    g = (COO.RecurseSmallestFresh (toClass r) (toClass b) :|: a) ->
     COI.Isom (toClass g) E (toClass r) (toClass a) (toClass b)) as H4. {
       apply COO.WhenSmall; assumption. }
   destruct H4 as [a [H4 H5]].
-  remember (RecurseSmallestFresh (toClass r) (toClass b) :|: a) as f eqn:H6.
-  exists f. exists a. split. 1: assumption. apply SOI.ToClass.
+  remember (COO.RecurseSmallestFresh (toClass r) (toClass b) :|: a) as f eqn:H6.
+  exists f. exists a. split. 1: assumption. apply SOI.FromClass.
   apply COI.EquivCompat2 with (E:/:toClass a).
   - apply Equiv.Sym, RestrictOfClass.ToClass.
   - apply (proj1 (COI.RestrictL (toClass f) _ _ _ _)), H5. reflexivity.
@@ -57,3 +61,29 @@ Proof.
   - apply COI.RestrictL, COI.EquivCompat2 with (toClass (E:/:b)).
     1: apply RestrictOfClass.ToClass. apply SOI.ToClass. assumption.
 Qed.
+
+Proposition WhenOrdinals : forall (a b:U), Ordinal b ->
+  a :<=: b -> exists c f, Ordinal c /\ c :<=: b /\ Isom f (E:/:c) (E:/:a) c a.
+Proof.
+  intros a b H1 H2.
+  assert (Small (toClass a)) as G1. { apply Small.SetIsSmall. }
+  assert (toClass a :<=: Ordinal) as G2. {
+    intros c G2. apply Core.IsOrdinal with b. 1: assumption.
+    apply H2. assumption. }
+  assert (exists c, Ordinal c /\
+    forall (f:U),
+      f = (COS.RecurseSmallestFresh (toClass a) :|: c) ->
+      COI.Isom (toClass f) E E (toClass c) (toClass a)) as H3. {
+        apply COS.WhenSmall; assumption. }
+  destruct H3 as [c [H3 H4]].
+  remember (COS.RecurseSmallestFresh (toClass a) :|: c) as f eqn:H5.
+  assert (f = f) as H6. { reflexivity. }
+  specialize (H4 f H6). exists c, f.
+  assert (Isom f (E :/: c) (E :/: a) c a) as H7. {
+    apply SOI.FromClass.
+    apply COI.EquivCompat2 with (E :/: (toClass c)).
+    + apply Equiv.Sym, RestrictOfClass.ToClass.
+    + apply COI.EquivCompat3 with (E :/: (toClass a)).
+      * apply Equiv.Sym, RestrictOfClass.ToClass.
+      * apply (COI.RestrictL _ E), (COI.RestrictR _ _ E). assumption. }
+Admitted.

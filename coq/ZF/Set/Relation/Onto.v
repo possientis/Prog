@@ -26,12 +26,18 @@ Module CRR := ZF.Class.Relation.Range.
 Definition Onto (f a b:U) : Prop := FunctionOn f a /\ range f = b.
 
 Proposition ToClass : forall (f a b:U),
-  Onto f a b <-> CRO.Onto (toClass f) (toClass a) (toClass b).
+  Onto f a b -> CRO.Onto (toClass f) (toClass a) (toClass b).
 Proof.
-  intros f a b. split; intros [H1 H2]; split.
+  intros f a b [H1 H2]. split.
   - apply FunctionOn.ToClass. assumption.
   - rewrite <- H2. apply Equiv.Sym, Range.ToClass.
-  - apply FunctionOn.ToClass. assumption.
+Qed.
+
+Proposition FromClass : forall (f a b:U),
+  CRO.Onto (toClass f) (toClass a) (toClass b) -> Onto f a b.
+Proof.
+  intros f a b [H1 H2]. split.
+  - apply FunctionOn.FromClass. assumption.
   - apply Equiv.EqualToClass.
     apply Equiv.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
     apply Equiv.Sym, Range.ToClass.

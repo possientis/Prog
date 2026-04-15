@@ -17,11 +17,17 @@ Module CRR := ZF.Class.Relation.Relation.
 Definition Relation (f:U) : Prop :=
   forall x, x :< f -> exists y, exists z, x = :(y,z):.
 
-(* A set if a relation iff its associated class is a relation class.            *)
+(* If a set is a relation then its associated class is a relation class.        *)
 Proposition ToClass : forall (f:U),
-  Relation f <-> CRR.Relation (toClass f).
+  Relation f -> CRR.Relation (toClass f).
 Proof.
-  intros f. split; intros H1 x H2; specialize (H1 x H2); assumption.
+  intros f H1. assumption.
+Qed.
+
+Proposition FromClass : forall (f:U),
+  CRR.Relation (toClass f) -> Relation f.
+Proof.
+  intros f H1. assumption.
 Qed.
 
 (* The union of two relations is a relation.                                    *)
@@ -63,3 +69,4 @@ Proof.
   intros x y f H1 u H2.
   rewrite H1 in H2. apply Single.Charac in H2. exists x, y. assumption.
 Qed.
+

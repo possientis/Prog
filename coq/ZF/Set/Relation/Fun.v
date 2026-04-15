@@ -25,13 +25,19 @@ Module CRR := ZF.Class.Relation.Range.
 Definition Fun (f a b:U) : Prop := FunctionOn f a /\ range f :<=: b.
 
 Proposition ToClass : forall (f a b:U),
-  Fun f a b <-> CRF.Fun (toClass f) (toClass a) (toClass b).
+  Fun f a b -> CRF.Fun (toClass f) (toClass a) (toClass b).
 Proof.
-  intros f a b. split; intros [H1 H2]; split.
+  intros f a b [H1 H2]. split.
   - apply FunctionOn.ToClass. assumption.
   - apply Incl.EquivCompatL with (toClass (range f)).
     2: assumption. apply Range.ToClass.
-  - apply FunctionOn.ToClass. assumption.
+Qed.
+
+Proposition FromClass : forall (f a b:U),
+  CRF.Fun (toClass f) (toClass a) (toClass b) -> Fun f a b.
+Proof.
+  intros f a b [H1 H2]. split.
+  - apply FunctionOn.FromClass. assumption.
   - apply Incl.ToClass, Incl.EquivCompatL with (CRR.range (toClass f)).
     2: assumption. apply Equiv.Sym, Range.ToClass.
 Qed.

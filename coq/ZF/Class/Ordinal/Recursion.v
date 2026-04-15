@@ -176,7 +176,7 @@ Proof.
     apply Relation.ToClass. apply Relation.EquivCompat with (Recursion F).
     1: assumption. apply IsRelation. }
   assert  (SFL.Functional f) as H6. {
-    apply SFL.ToClass. apply CFL.EquivCompat with (Recursion F).
+    apply SFL.FromClass. apply CFL.EquivCompat with (Recursion F).
     1: assumption. apply IsFunction. }
   assert (SRF.Function f) as H7. { split; assumption. }
   assert (SFO.FunctionOn f c) as H8. { split; assumption. }
