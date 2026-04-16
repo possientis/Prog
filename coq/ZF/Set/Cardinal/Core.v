@@ -3,6 +3,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
@@ -16,16 +17,21 @@ Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Isom.
+Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
+Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -40,7 +46,9 @@ Module CRR := ZF.Class.Relation.Range.
 Module CRT := ZF.Class.Relation.ToFun.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
+Module SOO := ZF.Set.Ordinal.Order.
 Module SRI := ZF.Set.Relation.ImageByClass.
+Module SRR := ZF.Set.Relation.RestrictOfClass.
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.         *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
@@ -94,8 +102,21 @@ Proof.
     - intros c H15. apply G3. apply SOC.IsOrdinal with b; assumption. }
   assert (Bij (F:|:b) b a) as H16. {
     split. 2: assumption. split. 2: assumption. split. 2: assumption.
-    apply RestrictOfClass.IsRelation, G1. }
+    apply SRR.IsRelation, G1. }
   exists b. split. 1: assumption. apply Equiv.Sym. exists (F:|:b). assumption.
+Qed.
+
+Proposition WhenOrdinals : forall (a b:U), Ordinal b ->
+  a :<=: b  -> exists c, Ordinal c /\ c :<=: b /\ a :~: c.
+Proof.
+  intros a b H1 H2.
+  assert (exists c f,
+    Ordinal c /\ c :<=: b /\ Isom f (E:/:c) (E:/:a) c a) as H3. {
+      apply SOO.WhenOrdinals; assumption. }
+  destruct H3 as [c [f [H3 [H4 H5]]]].
+  exists c.
+  assert (a :~: c) as H6. { apply Sym. exists f. apply H5. }
+  split. 1: assumption. split; assumption.
 Qed.
 
 Proposition IsOrdinal : forall (a:U), Ordinal (card a).
@@ -221,3 +242,31 @@ Proposition Idem : forall (a:U), card (card a) = card a.
 Proof.
   intros a. symmetry. apply WhenCardinal. exists a. reflexivity.
 Qed.
+
+Proposition InclCompat : forall (a b:U), Choice ->
+  a :<=: b -> card a :<=: card b.
+Proof.
+  intros a b AC H1.
+  assert (b :~: card b) as H2. { apply IsEquivChoice. assumption. }
+  destruct H2 as [f H2].
+  assert (exists x, x :<=: card b /\ a :~: x) as H3. {
+    exists f:[a]:.
+    assert (f:[a]: :<=: card b) as H3. {
+      intros y H3.
+      apply (Bij.ImageCharac f b (card b)) in H3. 2: assumption.
+      destruct H3 as [x [H3 [H4 H5]]].
+      apply (Bij.RangeCharac f b (card b)). 1: assumption.
+      exists x. split; assumption. }
+    assert (a :~: f:[a]:) as H4. {
+      exists (f:|:a). apply (Bij.Restrict f b (card b)); assumption. }
+    split; assumption. }
+  destruct H3 as [x [H3 H4]].
+  assert (exists c, Ordinal c /\ c :<=: card b /\ x :~: c) as H5. {
+    apply WhenOrdinals. 2: assumption. apply IsOrdinal. }
+  destruct H5 as [c [H5 [H6 H7]]].
+  assert (card a = card x) as H8. { apply EquivCharac; assumption. }
+  assert (card x = card c) as H9. { apply EquivCharac; assumption. }
+  assert (card c :<=: c) as H10. { apply IsIncl. assumption. }
+  rewrite H8, H9. apply Incl.Tran with c; assumption.
+Qed.
+

@@ -1,6 +1,4 @@
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
@@ -8,6 +6,7 @@ Require Import ZF.Set.Relation.Id.
 
 Require Import ZF.Notation.Equiv.
 Export ZF.Notation.Equiv.
+
 
 Definition equiv (a b:U) : Prop := exists f, Bij f a b.
 
@@ -30,8 +29,4 @@ Proof.
   apply Bij.Compose with b; assumption.
 Qed.
 
-Proposition WhenIncl : forall (a b:U), Ordinal b ->
-  a :<=: b  -> exists c, Ordinal c /\ c :<=: b /\ a :~: c.
-Proof.
-  intros a b H1 H2.
-Admitted.
+
