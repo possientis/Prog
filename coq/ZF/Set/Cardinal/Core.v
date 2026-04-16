@@ -21,20 +21,27 @@ Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Order.
+Require Import ZF.Set.Ordinal.RecursionNOfClass.
+Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Require Import ZF.Notation.Eval.
+Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
 Module CEQ := ZF.Class.Equiv.
@@ -47,6 +54,7 @@ Module CRT := ZF.Class.Relation.ToFun.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Order.
+Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Module SRI := ZF.Set.Relation.ImageByClass.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
 
@@ -269,4 +277,67 @@ Proof.
   assert (card c :<=: c) as H10. { apply IsIncl. assumption. }
   rewrite H8, H9. apply Incl.Tran with c; assumption.
 Qed.
+
+Proposition CantorShroderBernsteinChoice : forall (a b c d:U),
+  Choice    ->
+  a :~: c   ->
+  b :~: d   ->
+  c :<=: b  ->
+  d :<=: a  ->
+  a :~: b.
+Proof.
+  intros a b c d AC H1 H2 H3 H4.
+  assert (card a = card c) as H5. { apply EquivCharac; assumption. }
+  assert (card b = card d) as H6. { apply EquivCharac; assumption. }
+  assert (card c :<=: card b) as H7. { apply InclCompat; assumption. }
+  assert (card d :<=: card a) as H8. { apply InclCompat; assumption. }
+  apply EquivCharac. assumption. apply Incl.DoubleInclusion. split.
+  - rewrite H5. assumption.
+  - rewrite H6. assumption.
+Qed.
+
+Proposition CantorShroderBernstein : forall (a b c d:U),
+  a :~: c   ->
+  b :~: d   ->
+  c :<=: b  ->
+  d :<=: a  ->
+  a :~: b.
+Proof.
+  intros a b c d H1 H2 H3 H4.
+  destruct H1 as [f H1]. destruct H2 as [g H2].
+  assert (range f = c) as G1. { apply H1. }
+  assert (range g = d) as G2. { apply H2. }
+  remember (fun x => (g :.: f) :[x]:) as H eqn:H5.
+  remember (SOR.recursion (toFun H) (a :\: d)) as h eqn:H6.
+  assert (FunctionOn h :N) as H7. { rewrite H6. apply SOR.IsFunctionOn. }
+  assert (h!:0: = a :\: d) as H8. { rewrite H6. apply SOR.WhenZero. }
+  assert (forall n, n :< :N -> h!(succ n) = (g :.: f) :[h!n]:) as H9. {
+    intros n H9. rewrite H6, SOR.WhenSucc, <- H6, CRT.Eval, H5.
+    2: assumption. reflexivity. }
+  assert (Inj f a b) as H10. {
+    split.
+    - apply H1.
+    - rewrite G1. assumption. }
+  assert (Inj g b a) as H11. {
+    split.
+    - apply H2.
+    - rewrite G2. assumption. }
+  assert (Inj (g :.: f) a a) as H12. { apply Inj.Compose with b; assumption. }
+  assert (forall n, n :< :N -> h!n :<=: a) as H13. {
+    apply Omega.Induction.
+    - rewrite H8. apply Diff.IsIncl.
+    - intros n H13 IH. rewrite (H9 n). 2: assumption.
+      intros y H14. apply Image.Charac in H14. destruct H14 as [x [H14 H15]].
+      assert ((g :.: f)!x = y) as H16. {
+        apply (Inj.Eval (g :.: f) a a); try assumption. apply IH. assumption. }
+      rewrite <- H16. apply Inj.IsInRange with a. 1: assumption.
+      apply IH. assumption. }
+  assert (forall n, n :< :N -> f:[h!n]: :<=: b) as H14. {
+    intros n H14 y H15. apply Image.Charac in H15. destruct H15 as [x [H15 H16]].
+    assert (f!x = y) as H17. { apply (Bij.Eval f a c); try assumption.
+    apply (H13 n); assumption. }
+Admitted.
+
+
+
 
