@@ -29,6 +29,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
+Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -39,6 +40,7 @@ Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Relation.ToFun2.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -336,6 +338,28 @@ Proof.
     intros n H14 y H15. apply Image.Charac in H15. destruct H15 as [x [H15 H16]].
     assert (f!x = y) as H17. { apply (Bij.Eval f a c); try assumption.
     apply (H13 n); assumption. }
+    apply H3. rewrite <- H17. apply Bij.IsInRange with a. 1: assumption.
+    apply (H13 n); assumption. }
+  remember (fun x => exists n, n :< :N /\ x :< h!n) as A eqn:H15.
+  remember (toFun2 a A (fun x => f!x) (fun x => g^:-1:!x)) as k eqn:H16.
+  assert (forall x n, ~ A x -> n :< :N -> ~ x :< h!n) as H17. {
+    rewrite H15.
+    intros x n H17 H18 H19. apply H17. exists n; split; assumption. }
+  assert (FunctionOn k a) as H18. { rewrite H16. apply ToFun2.IsFunctionOn. }
+  assert (Bij g^:-1: d b) as H19. { apply Bij.Converse. assumption. }
+  assert (domain g^:-1: = d) as H20. { apply H19. }
+  assert (range g^:-1: = b) as H21. { apply H19. }
+  assert (forall x, x :< a -> ~ A x -> x :< d) as H22. {
+    intros x H22 H23.
+    assert (~ x :< a :\: d) as H24. {
+      rewrite <- H8. apply (H17 x :0:) in H23. 1: assumption.
+      apply Omega.HasZero. }
+    apply Classic.DoubleNegation. intros H25. apply H24.
+    apply Diff.Charac. split; assumption. }
+  assert (range k :<=: b) as H23. {
+    intros y H23. apply Range.Charac in H23. destruct H23 as [x H23].
+    assert (k!x = y) as H24. {
+      apply FunctionOn.Eval with a.
 Admitted.
 
 
