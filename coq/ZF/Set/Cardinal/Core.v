@@ -28,12 +28,15 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Bijection.
+Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.ImageByClass.
@@ -415,13 +418,54 @@ Proof.
     assert(k!y = g^:-1:!y) as H33. {
       rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
     rewrite H32, H33 in H29.
+    assert (Function f) as G6. { apply (Bij.IsFun f a c). assumption. }
+    assert (Function g) as G7. { apply (Bij.IsFun g b d). assumption. }
     assert ((g :.: f)!x = y) as H34. {
-(*
-  assert (OneToOne k) as H27. {
+      rewrite Function.ComposeEval, H29, (Bij.EvalOfConverseEval g b d);
+      try assumption. 1: reflexivity.
+      - apply H22; assumption.
+      - rewrite G3. assumption.
+      - rewrite G4, H29. apply Bij.IsInRange with d. 1: assumption.
+        apply H22; assumption. }
+    rewrite H15 in H30. destruct H30 as [n [H30 H35]].
+    assert (succ n :< :N) as G8. { apply Omega.HasSucc. assumption. }
+    assert (y :< h!(succ n)) as H36. {
+      rewrite H9. 2: assumption. apply Image.Charac. exists x.
+      split. 1: assumption. rewrite <- H34.
+      apply Function.Satisfies.
+      - apply Function.Compose; assumption.
+      - apply Function.DomainOfCompose. 1: assumption. split.
+        + rewrite G3. assumption.
+        + rewrite G4. apply H3. apply (Bij.IsInRange f a c); assumption. }
+    apply (H17 y (succ n)); assumption. }
+  assert (OneToOne k) as H28. {
     apply FunctionOn.IsOneToOne with a. 1: assumption.
-    intros x y H27 H28 H29.
- *)
-Admitted.
-
-
-
+    intros x y H28 H29 H30.
+    assert (A x \/ ~ A x) as H31. { apply LawExcludedMiddle. }
+    destruct H31 as [H31|H31].
+    - assert (A y) as H32. { apply H27 with x; assumption. }
+      assert (k!x = f!x) as H33. {
+        rewrite H16, ToFun2.Eval1; try assumption. reflexivity. }
+      assert (k!y = f!y) as H34. {
+        rewrite H16, ToFun2.Eval1; try assumption. reflexivity. }
+      rewrite H33, H34 in H30.
+      apply (Bij.EvalInjective f a c); assumption.
+    - assert (~ A y) as H32. {
+        intros H32.
+        assert (A x) as H33. {
+          apply H27 with y; try assumption. symmetry. assumption. }
+        contradiction. }
+      assert (k!x = g^:-1:!x) as H33. {
+        rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+      assert (k!y = g^:-1:!y) as H34. {
+        rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+      rewrite H33, H34 in H30.
+      apply (Bij.EvalInjective g^:-1: d b); try assumption.
+      + apply H22; assumption.
+      + apply H22; assumption. }
+  assert (Bijection k) as H29. {
+    split. 2: assumption. apply H18. }
+  assert (BijectionOn k a) as H30. { split; assumption. }
+  assert (Bij k a b) as H31. { split; assumption. }
+  exists k. assumption.
+Qed.
