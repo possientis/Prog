@@ -331,12 +331,12 @@ Proof.
     - intros n H13 IH. rewrite (H9 n). 2: assumption.
       intros y H14. apply Image.Charac in H14. destruct H14 as [x [H14 H15]].
       assert ((g :.: f)!x = y) as H16. {
-        apply (Inj.Eval (g :.: f) a a); try assumption. apply IH. assumption. }
+        apply (Inj.Eval' (g :.: f) a a); try assumption. apply IH. assumption. }
       rewrite <- H16. apply Inj.IsInRange with a. 1: assumption.
       apply IH. assumption. }
   assert (forall n, n :< :N -> f:[h!n]: :<=: b) as H14. {
     intros n H14 y H15. apply Image.Charac in H15. destruct H15 as [x [H15 H16]].
-    assert (f!x = y) as H17. { apply (Bij.Eval f a c); try assumption.
+    assert (f!x = y) as H17. { apply (Bij.Eval' f a c); try assumption.
     apply (H13 n); assumption. }
     apply H3. rewrite <- H17. apply Bij.IsInRange with a. 1: assumption.
     apply (H13 n); assumption. }
@@ -359,7 +359,7 @@ Proof.
   assert (range k :<=: b) as H23. {
     intros y H23. apply Range.Charac in H23. destruct H23 as [x H23].
     assert (k!x = y) as H24. {
-      apply FunctionOn.Eval with a.
+      apply FunctionOn.Eval' with a.
 Admitted.
 
 

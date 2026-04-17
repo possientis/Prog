@@ -105,7 +105,7 @@ Proof.
   intros f g [_ H1] [_ H2]. apply FunctionalCompose; assumption.
 Qed.
 
-Proposition Eval : forall (f x y:U),
+Proposition Eval' : forall (f x y:U),
   Function f -> x :< domain f -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f x y H1. apply Eval.Charac, H1.
@@ -151,10 +151,10 @@ Proof.
   intros f y H1. split; intros H2.
   - apply Range.Charac in H2. destruct H2 as [x H2]. exists x. split.
     + apply Domain.Charac. exists y. assumption.
-    + apply Eval; try assumption. apply Domain.Charac.
+    + apply Eval'; try assumption. apply Domain.Charac.
       exists y. assumption.
   - destruct H2 as [x [H2 H3]]. apply Range.Charac. exists x.
-    apply Eval; assumption.
+    apply Eval'; assumption.
 Qed.
 
 (* If the domain of f is not empty, then neither is the range.                  *)

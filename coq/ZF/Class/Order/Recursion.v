@@ -137,7 +137,7 @@ Lemma Eval : forall (R A F:Class) (f a x:U),
   (Recursion R A F)!x = f!x.
 Proof.
   intros R A F f a x H1 H2 H3 H4.
-  apply CRF.Eval.
+  apply CRF.Eval'.
   - apply IsFunction. assumption.
   - apply H2. assumption.
   - exists f, a. split. 2: assumption.

@@ -116,8 +116,8 @@ Proof.
   assert (x :< b) as H11. {
     destruct H7 as [_ H7]. rewrite <- H7.
     apply SRD.Charac. exists z. assumption. }
-  assert (f!x = y) as H12. { apply (SFO.Eval f a); assumption. }
-  assert (g!x = z) as H13. { apply (SFO.Eval g b); assumption. }
+  assert (f!x = y) as H12. { apply (SFO.Eval' f a); assumption. }
+  assert (g!x = z) as H13. { apply (SFO.Eval' g b); assumption. }
   rewrite <- H12, <- H13. destruct H9 as [H9|H9].
   - apply Coincide with F a b; assumption.
   - symmetry. apply Coincide with F b a; assumption.
@@ -206,7 +206,7 @@ Proof.
       assert ((f:|:a)!x = f!x) as H18. {
         apply Restrict.Eval. 2: assumption.
         destruct H8 as [[_ H8] _]. assumption. }
-      rewrite H18. symmetry. apply (SFO.Eval f c). 1: assumption.
+      rewrite H18. symmetry. apply (SFO.Eval' f c). 1: assumption.
       apply (H11 g a); try assumption. apply H10. exists g. exists a. split.
       2: assumption. apply SFO.Satisfies with a; assumption. }
   assert (forall b, b :< c -> f!b = F!(f:|:b)) as H14. {
@@ -219,7 +219,7 @@ Proof.
       destruct H18 as [_ H18]. rewrite <- H18. apply SRD.Charac.
       exists f!b. assumption. }
     assert (f!b = g!b) as H21. {
-      symmetry. apply (SFO.Eval g a); assumption. }
+      symmetry. apply (SFO.Eval' g a); assumption. }
     assert (g = f:|:a) as H22. { apply H13. assumption. }
     assert (g:|:b = f:|:b) as H23. {
       rewrite H22. apply Restrict.TowerProperty.
@@ -271,7 +271,7 @@ Proof.
       assert ((g:|:c)!x = g!x) as H20. {
         apply Restrict.Eval. 2: assumption. destruct H18 as [[_ H18] _].
         assumption. }
-      rewrite H20. apply (SFO.Eval g (succ c)). 1: assumption.
+      rewrite H20. apply (SFO.Eval' g (succ c)). 1: assumption.
       + apply Union2.Charac. left. assumption.
       + rewrite H15. apply Union2.Charac. left.
         apply SFO.Satisfies with c; assumption. }
@@ -286,7 +286,7 @@ Proof.
       rewrite H21, H22. apply H14. assumption.
     - apply Single.Charac in H20.
       assert (g!b = F!f) as H21. {
-        apply (SFO.Eval g (succ c)). 1: assumption.
+        apply (SFO.Eval' g (succ c)). 1: assumption.
         + apply Union2.Charac. right. rewrite H20. apply Single.IsIn.
         + rewrite H20, H15. apply Union2.Charac. right. apply Single.IsIn. }
       rewrite H21, H20, H19. reflexivity. }
@@ -333,7 +333,7 @@ Proof.
   - intros x H5.
     assert (((Recursion F) :|: a)!x = (Recursion F)!x) as H6. {
       apply RestrictOfClass.Eval. 2: assumption. apply IsFunction. }
-    rewrite H6. symmetry. apply (CFO.Eval (Recursion F) On).
+    rewrite H6. symmetry. apply (CFO.Eval' (Recursion F) On).
     + apply IsFunctionOn.
     + apply SOC.IsOrdinal with a; assumption.
     + apply Charac2. exists f. exists a. split. 2: assumption.
@@ -353,7 +353,7 @@ Proof.
     destruct H5 as [_ H5]. rewrite <- H5. apply SRD.Charac.
     exists (Recursion F)!b. assumption. }
   assert ((Recursion F)!b = f!b) as H8. {
-    symmetry. apply (SFO.Eval f a); assumption. }
+    symmetry. apply (SFO.Eval' f a); assumption. }
   assert (f = (Recursion F) :|: a) as H9. { apply K_Restrict. assumption. }
   assert (f:|:b = (Recursion F) :|: b) as H10. {
     rewrite H9. apply RestrictOfClass.TowerProperty.

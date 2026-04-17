@@ -160,14 +160,14 @@ Proof.
   - destruct H5 as [x [H5 H6]].
     apply Charac in H5. destruct H5 as [H5 H7].
     apply Charac. assert (F!x = y) as H8. {
-      apply (Bij.Eval F A B); try assumption. apply H3. assumption. }
+      apply (Bij.Eval' F A B); try assumption. apply H3. assumption. }
     split.
     + exists x. split; assumption.
     + rewrite <- H8. apply H2; try assumption. apply H3. assumption.
   - apply Charac in H5. destruct H5 as [H5 H6].
     destruct H5 as [x [H5 H7]].
     assert (F!x = y) as H8. {
-      apply (Bij.Eval F A B); try assumption. apply H3. assumption. }
+      apply (Bij.Eval' F A B); try assumption. apply H3. assumption. }
     exists x. split. 2: assumption.
     apply Charac. split. 1: assumption. apply H2. 2: assumption.
     + apply H3. assumption.

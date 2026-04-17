@@ -94,10 +94,10 @@ Proof.
   intros f g [_ H1] [_ H2]. apply OneToOneCompose; assumption.
 Qed.
 
-Proposition Eval : forall (f x y:U),
+Proposition Eval' : forall (f x y:U),
   Bijection f -> x :< domain f -> :(x,y): :< f <-> f!x = y.
 Proof.
-  intros f x y H1. apply OneToOne.Eval, H1.
+  intros f x y H1. apply OneToOne.Eval', H1.
 Qed.
 
 Proposition Satisfies : forall (f x:U),

@@ -141,10 +141,10 @@ Proof.
     apply Equiv.Sym. assumption.
 Qed.
 
-Proposition Eval : forall (F A:Class) (a y:U),
+Proposition Eval' : forall (F A:Class) (a y:U),
   BijectionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A a y H1. apply FunctionOn.Eval, IsFunctionOn. assumption.
+  intros F A a y H1. apply FunctionOn.Eval', IsFunctionOn. assumption.
 Qed.
 
 Proposition Satisfies : forall (F A:Class) (a:U),

@@ -170,10 +170,10 @@ Proof.
     apply Equiv.Sym, H3.
 Qed.
 
-Proposition Eval : forall (F A B:Class) (a y:U),
+Proposition Eval' : forall (F A B:Class) (a y:U),
   Onto F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
-  intros F A B a y H1. apply FunctionOn.Eval, H1.
+  intros F A B a y H1. apply FunctionOn.Eval', H1.
 Qed.
 
 Proposition Satisfies : forall (F A B:Class) (a:U),

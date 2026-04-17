@@ -75,7 +75,7 @@ Proof.
   2: assumption. apply Converse.IsIncl.
 Qed.
 
-Proposition Eval : forall (f x y:U),
+Proposition Eval' : forall (f x y:U),
   OneToOne f -> x :< domain f -> :(x,y): :< f  <-> f!x = y.
 Proof.
   intros f x y [H1 _]. apply Eval.Charac. assumption.

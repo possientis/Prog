@@ -93,10 +93,10 @@ Proof.
   - apply Compose.DomainIsSame. assumption.
 Qed.
 
-Proposition Eval : forall (f a x y:U),
+Proposition Eval' : forall (f a x y:U),
   BijectionOn f a -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
-  intros f a x y H1. apply FunctionOn.Eval, IsFunctionOn. assumption.
+  intros f a x y H1. apply FunctionOn.Eval', IsFunctionOn. assumption.
 Qed.
 
 Proposition Satisfies : forall (f a x:U),

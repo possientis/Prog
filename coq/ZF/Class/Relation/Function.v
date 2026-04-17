@@ -160,7 +160,7 @@ Proof.
   intros F G [_ Hf] [_ Hg]. apply FunctionalCompose; assumption.
 Qed.
 
-Proposition Eval : forall (F:Class) (a y:U),
+Proposition Eval' : forall (F:Class) (a y:U),
   Function F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1. apply EvalOfClass.Charac, H1.
@@ -191,11 +191,11 @@ Proof.
   - apply ImageByClass.Charac in H2. 2: apply H1. destruct H2 as [x [H2 H3]].
     assert (domain F x) as H4. { exists y. assumption. }
     exists x. split. 1: assumption. split. 1: assumption.
-    apply Eval; assumption.
+    apply Eval'; assumption.
   - destruct H2 as [x [H2 [H3 H4]]]. apply ImageByClass.CharacRev with x.
     + apply H1.
     + assumption.
-    + apply Eval; assumption.
+    + apply Eval'; assumption.
 Qed.
 
 Proposition DomainOfCompose : forall (F G:Class) (a:U),
@@ -220,8 +220,8 @@ Proof.
   intros F y H1. split; intros H2.
   - destruct H2 as [x H2]. exists x. split.
     + exists y. assumption.
-    + apply Eval; try assumption. exists y. assumption.
-  - destruct H2 as [x [H2 H3]]. exists x. apply Eval; assumption.
+    + apply Eval'; try assumption. exists y. assumption.
+  - destruct H2 as [x [H2 H3]]. exists x. apply Eval'; assumption.
 Qed.
 
 (* If the domain of F is not empty, then neither is the range.                  *)
