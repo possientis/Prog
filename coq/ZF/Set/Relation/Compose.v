@@ -9,8 +9,11 @@ Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Functional.
+Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
+
+Require Import ZF.Notation.Image.
 
 Export ZF.Notation.Dot.
 
@@ -189,3 +192,18 @@ Proof.
   - apply Domain.Charac. exists z. apply Charac2. exists y. split; assumption.
   - apply Charac2. exists y. split; assumption.
 Qed.
+
+Proposition Image : forall (f g a:U),
+  (g :.: f) :[a]: = g:[f:[a]:]:.
+Proof.
+  intros f g a. apply Incl.DoubleInclusion. split; intros z H1.
+  - apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
+    apply Charac2 in H2. destruct H2 as [y [H2 H3]].
+    apply Image.Charac. exists y. split. 2: assumption.
+    apply Image.Charac. exists x. split; assumption.
+  - apply Image.Charac in H1. destruct H1 as [y [H1 H2]].
+    apply Image.Charac in H1. destruct H1 as [x [H1 H3]].
+    apply Image.Charac. exists x. split. 1: assumption.
+    apply Charac2. exists y. split; assumption.
+Qed.
+

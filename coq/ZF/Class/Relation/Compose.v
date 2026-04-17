@@ -15,6 +15,8 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
+Require Import ZF.Notation.Image.
+
 Require Import ZF.Notation.Dot.
 Export ZF.Notation.Dot.
 
@@ -281,3 +283,12 @@ Proof.
     + apply Prod.IsSmall; assumption.
 Qed.
 
+Proposition Image : forall (F G A:Class),
+  (G :.: F) :[A]: :~: G:[F:[A]:]:.
+Proof.
+  intros F G A z. split; intros H1.
+  - destruct H1 as [x [H1 H2]]. apply Charac2 in H2. destruct H2 as [y [H2 H3]].
+    exists y. split. 2: assumption. exists x. split; assumption.
+  - destruct H1 as [y [H1 H2]]. destruct H1 as [x [H1 H3]].
+    exists x. split. 1: assumption. apply Charac2. exists y. split; assumption.
+Qed.
