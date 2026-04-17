@@ -128,6 +128,13 @@ Proof.
   intros F a y H1. apply OneToOne.Eval', H1.
 Qed.
 
+Proposition Eval : forall (F:Class) (a y:U),
+  Bijection F -> F :(a,y): -> F!a = y.
+Proof.
+  intros F a y H1 H2. apply Eval'; try assumption.
+  exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (F:Class) (a:U),
   Bijection F -> domain F a -> F :(a,F!a):.
 Proof.

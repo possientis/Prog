@@ -157,6 +157,13 @@ Proof.
   intros F A B a y H1. apply BijectionOn.Eval', H1.
 Qed.
 
+Proposition Eval : forall (F A B:Class) (a y:U),
+  Inj F A B -> F :(a,y): -> F!a = y.
+Proof.
+  intros F A B a y H1 H2. apply Eval' with A B; try assumption.
+  apply H1. exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> F :(a,F!a):.
 Proof.

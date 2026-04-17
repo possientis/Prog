@@ -111,6 +111,13 @@ Proof.
   intros f x y H1. apply Eval.Charac, H1.
 Qed.
 
+Proposition Eval : forall (f x y:U),
+  Function f -> :(x,y): :< f -> f!x = y.
+Proof.
+  intros f x y H1 H2. apply Eval'; try assumption.
+  apply Domain.Charac. exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (f x:U),
   Function f -> x :< domain f -> :(x,f!x): :< f.
 Proof.
@@ -217,3 +224,4 @@ Proof.
   - apply Relation.WhenSingle with x y. assumption.
   - apply Functional.WhenSingle with x y. assumption.
 Qed.
+

@@ -99,6 +99,14 @@ Proof.
   intros f a x y H1. apply FunctionOn.Eval', IsFunctionOn. assumption.
 Qed.
 
+Proposition Eval : forall (f a x y:U),
+  BijectionOn f a -> :(x,y): :< f -> f!x = y.
+Proof.
+  intros f a x y H1 H2. apply Eval' with a; try assumption.
+  assert (domain f = a) as H3. { apply H1. }
+  rewrite <- H3. apply Domain.Charac. exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (f a x:U),
   BijectionOn f a -> x :< a -> :(x,f!x): :< f.
 Proof.

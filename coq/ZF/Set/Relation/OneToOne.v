@@ -81,6 +81,13 @@ Proof.
   intros f x y [H1 _]. apply Eval.Charac. assumption.
 Qed.
 
+Proposition Eval : forall (f x y:U),
+  OneToOne f -> :(x,y): :< f -> f!x = y.
+Proof.
+  intros f x y H1 H2. apply Eval'; try assumption.
+  apply Domain.Charac. exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (f x:U),
   OneToOne f -> x :< domain f -> :(x,f!x): :< f.
 Proof.

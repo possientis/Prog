@@ -75,6 +75,13 @@ Proof.
   intros F a y [H1 _]. apply EvalOfClass.Charac. assumption.
 Qed.
 
+Proposition Eval : forall (F:Class) (a y:U),
+  OneToOne F -> F :(a,y): -> F!a = y.
+Proof.
+  intros F a y H1 H2. apply Eval'; try assumption.
+  exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (F:Class) (a:U),
   OneToOne F -> domain F a -> F :(a,F!a):.
 Proof.

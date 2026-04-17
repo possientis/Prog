@@ -177,6 +177,13 @@ Proof.
   apply H2. assumption.
 Qed.
 
+Proposition Eval : forall (F A:Class) (a y:U),
+  FunctionOn F A -> F :(a,y): -> F!a = y.
+Proof.
+  intros F A a y H1 H2. apply Eval' with A; try assumption.
+  apply H1. exists y. assumption.
+Qed.
+
 (* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
 Proposition Satisfies : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> F :(a,F!a):.

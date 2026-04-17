@@ -166,6 +166,13 @@ Proof.
   intros F a y H1. apply EvalOfClass.Charac, H1.
 Qed.
 
+Proposition Eval : forall (F:Class) (a y:U),
+  Function F -> F :(a,y): -> F!a = y.
+Proof.
+  intros F a y H1 H2. apply Eval'; try assumption.
+  exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (F:Class) (a:U),
   Function F -> domain F a -> F :(a,F!a):.
 Proof.

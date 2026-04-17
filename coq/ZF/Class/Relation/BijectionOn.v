@@ -147,6 +147,13 @@ Proof.
   intros F A a y H1. apply FunctionOn.Eval', IsFunctionOn. assumption.
 Qed.
 
+Proposition Eval : forall (F A:Class) (a y:U),
+  BijectionOn F A -> F :(a,y): -> F!a = y.
+Proof.
+  intros F A a y H1 H2. apply Eval' with A; try assumption.
+  apply H1. exists y. assumption.
+Qed.
+
 Proposition Satisfies : forall (F A:Class) (a:U),
   BijectionOn F A -> A a -> F :(a,F!a):.
 Proof.

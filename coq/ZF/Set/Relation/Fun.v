@@ -104,6 +104,14 @@ Proof.
   intros f a b x y H1. apply FunctionOn.Eval', H1.
 Qed.
 
+Proposition Eval : forall (f a b x y:U),
+  Fun f a b -> :(x,y): :< f -> f!x = y.
+Proof.
+  intros f a b x y H1 H2. apply Eval' with a b; try assumption.
+  assert (domain f = a) as H3. { apply H1. }
+  rewrite <- H3. apply Domain.Charac. exists y. assumption.
+Qed.
+
 (* The ordered pair (x,f!x) lies in the set f when x in a.                      *)
 Proposition Satisfies : forall (f a b x:U),
   Fun f a b -> x :< a -> :(x,f!x): :< f.
