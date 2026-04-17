@@ -161,6 +161,18 @@ Proof.
   intros f g x [H1 _] [H2 _]. apply Compose.Eval; assumption.
 Qed.
 
+Proposition RangeCharac : forall (f y:U),
+  OneToOne f -> y :< range f <-> exists x, x :< domain f /\ f!x = y.
+Proof.
+  intros f y H1. split; intros H2.
+  - apply Range.Charac in H2. destruct H2 as [x H2].
+    assert (f!x = y) as H3. { apply Eval; assumption. }
+    assert (x :< domain f) as H4. { apply Domain.Charac. exists y. assumption. }
+    exists x. split; assumption.
+  - destruct H2 as [x [H2 H3]]. apply Range.Charac. exists x.
+    apply Eval'; assumption.
+Qed.
+
 Proposition InvImageOfImage : forall (f a:U),
   OneToOne f -> a :<=: domain f -> f^:-1::[ f:[a]: ]: = a.
 Proof.
@@ -224,5 +236,17 @@ Proof.
     apply Converse.Charac2 in H4. apply Restrict.Charac2 in H4.
     destruct H3 as [H3 H5]. destruct H4 as [H4 H6].
     apply H2 with z; apply Converse.Charac2Rev; assumption.
+Qed.
+
+Proposition FromImage : forall (f a x:U),
+  OneToOne f -> x :< domain f -> f!x :< f:[a]: -> x :< a.
+Proof.
+  intros f a x H1 H2 H3.
+  apply Image.Charac in H3. destruct H3 as [u [H3 H4]].
+  assert (:(x, f!x): :< f) as H5. { apply Satisfies; assumption. }
+  assert (Functional f^:-1:) as H6. { apply H1. }
+  assert (u = x) as H7. {
+    apply H6 with f!x; apply Converse.Charac2Rev; assumption. }
+  subst. assumption.
 Qed.
 

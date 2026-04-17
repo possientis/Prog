@@ -38,6 +38,8 @@ Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.OneToOne.
+Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -310,6 +312,8 @@ Proof.
   destruct H1 as [f H1]. destruct H2 as [g H2].
   assert (range f = c) as G1. { apply H1. }
   assert (range g = d) as G2. { apply H2. }
+  assert (domain f = a) as G3. { apply H1. }
+  assert (domain g = b) as G4. { apply H2. }
   remember (fun x => (g :.: f) :[x]:) as H eqn:H5.
   remember (SOR.recursion (toFun H) (a :\: d)) as h eqn:H6.
   assert (FunctionOn h :N) as H7. { rewrite H6. apply SOR.IsFunctionOn. }
@@ -388,7 +392,35 @@ Proof.
         apply Omega.HasPred in H31. 2: assumption. destruct H31 as [m [H31 H32]].
         assert (h!(succ m) = g:[f:[h!m]:]:) as H33. {
           rewrite H9, Compose.Image. 2: assumption. reflexivity. }
-        rewrite H32 in H29.
+        rewrite H32, H33 in H29.
+        assert (y :< f:[h!m]:) as H34. {
+          apply OneToOne.FromImage with g. 3: assumption.
+          - apply H2.
+          - rewrite G4. assumption. }
+        apply H27. exists m. split; assumption. }
+      assert (~ A g!y) as H29. {
+        rewrite H15. intros [n [H29 H30]]. apply (H28 n); assumption. }
+      assert (g!y :< a) as H30. { apply H4, (Bij.IsInRange g b d); assumption. }
+      assert (k!(g!y) = g^:-1:!(g!y)) as H31. {
+        rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+      rewrite (Bij.ConverseEvalOfEval g b d) in H31; try assumption.
+      exists g!y. split; assumption. }
+  assert (range k = b) as H26. {
+    apply Incl.DoubleInclusion. split; assumption. }
+  assert (domain k = a) as G5. { apply H24. }
+  assert (forall x y, x :< a -> y :< a -> k!x = k!y -> A x -> A y) as H27. {
+    intros x y H27 H28 H29 H30. apply Classic.DoubleNegation. intros H31.
+    assert (k!x = f!x) as H32. {
+      rewrite H16, ToFun2.Eval1; try assumption. reflexivity. }
+    assert(k!y = g^:-1:!y) as H33. {
+      rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+    rewrite H32, H33 in H29.
+    assert ((g :.: f)!x = y) as H34. {
+(*
+  assert (OneToOne k) as H27. {
+    apply FunctionOn.IsOneToOne with a. 1: assumption.
+    intros x y H27 H28 H29.
+ *)
 Admitted.
 
 
