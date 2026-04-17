@@ -387,9 +387,9 @@ Proof.
           destruct H29 as [H29 H32]. contradiction. }
         apply Omega.HasPred in H31. 2: assumption. destruct H31 as [m [H31 H32]].
         assert (h!(succ m) = g:[f:[h!m]:]:) as H33. {
-          rewrite H9.
+          rewrite H9, Compose.Image. 2: assumption. reflexivity. }
+        rewrite H32 in H29.
 Admitted.
-
 
 
 
