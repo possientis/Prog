@@ -33,6 +33,7 @@ Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.ImageByClass.
@@ -356,9 +357,37 @@ Proof.
     apply Classic.DoubleNegation. intros H25. apply H24.
     apply Diff.Charac. split; assumption. }
   assert (range k :<=: b) as H23. {
-    intros y H23. apply Range.Charac in H23. destruct H23 as [x H23].
-    assert (k!x = y) as H24. {
-      apply FunctionOn.Eval with a.
+    intros y H23. apply (FunctionOn.RangeCharac k a) in H23. 2: assumption.
+    destruct H23 as [x [H23 H24]]. rewrite <- H24.
+    assert (A x \/ ~ A x) as H25. { apply LawExcludedMiddle. }
+    destruct H25 as [H25|H25].
+    - rewrite H16, ToFun2.Eval1; try assumption.
+      apply H3, Bij.IsInRange with a; assumption.
+    - rewrite H16, ToFun2.Eval2; try assumption.
+      apply Bij.IsInRange with d. 1: assumption. apply H22; assumption. }
+  assert (Fun k a b) as H24. { split; assumption. }
+  assert (b :<=: range k) as H25. {
+    intros y H25. apply (Fun.RangeCharac k a b). 1: assumption.
+    remember (fun y => exists n, n :< :N /\ y :< f:[h!n]:) as B eqn:H26.
+    assert (B y \/ ~ B y) as H27. { apply LawExcludedMiddle. }
+    destruct H27 as [H27|H27]; rewrite H26 in H27.
+    - destruct H27 as [n [H27 H28]].
+      apply (Bij.ImageCharac f a c) in H28. 2: assumption.
+      destruct H28 as [x [H28 [H29 H30]]].
+      assert (k!x = y) as H31. {
+        rewrite H16, ToFun2.Eval1; try assumption.
+        rewrite H15. exists n. split; assumption. }
+      exists x. split; assumption.
+    - assert (forall n, n :< :N -> ~ g!y :< h!n) as H28. {
+        intros n H28 H29.
+        assert (g!y :< d) as H30. { apply (Bij.IsInRange g b d); assumption. }
+        assert (:0: :< n) as H31. {
+          apply Omega.WhenNotZero. 1: assumption. intros H31.
+          rewrite H31, H8 in H29. apply Diff.Charac in H29.
+          destruct H29 as [H29 H32]. contradiction. }
+        apply Omega.HasPred in H31. 2: assumption. destruct H31 as [m [H31 H32]].
+        assert (h!(succ m) = g:[f:[h!m]:]:) as H33. {
+          rewrite H9.
 Admitted.
 
 

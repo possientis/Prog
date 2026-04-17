@@ -150,6 +150,12 @@ Proof.
   apply IsOrdinal.
 Qed.
 
+Proposition WhenNotZero : forall (n:U), n :< :N ->
+  n <> :0: -> :0: :< n.
+Proof.
+  intros n H1. apply Core.HasZero. apply HasOrdinalElem. assumption.
+Qed.
+
 Proposition IsSuccessor : forall (n:U), n :< :N ->
   :0: :< n <-> Successor n.
 Proof.
