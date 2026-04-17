@@ -108,7 +108,7 @@ Proof.
     intros y H14. apply ImageByClass.Charac in H14. 2: apply H1.
     destruct H14 as [b [H14 H15]].
     assert (On b) as H16. { apply SOC.IsOrdinal with a; assumption. }
-    assert (F!b = y) as H17. { apply (CFO.Eval' F On); assumption. }
+    assert (F!b = y) as H17. { apply (CFO.Eval F On); assumption. }
     assert ((A :\: toClass F:[b]:) :<>: :0:) as H18. { apply H13. assumption. }
     assert ((A :\: toClass F:[b]:) F!b) as H19. { apply H3; assumption. }
     rewrite H17 in H19. apply H19. }

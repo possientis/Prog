@@ -256,16 +256,12 @@ Proof.
     apply (CharacRev S B F:[C]: F!a); try assumption.
     + exists x. split; assumption.
     + assert (F!x = y) as H11. {
-        apply (Bij.Eval' F A B). 3: assumption.
-        - apply H4.
-        - apply H3. assumption. }
+        apply (Bij.Eval F A B). 2: assumption. apply H4. }
       rewrite <- H11. apply H4; try assumption. apply H3. assumption.
   - apply (Charac S B F:[C]: F!a) in H8; try assumption.
     destruct H8 as [[x [H8 H9]] H10].
     assert (F!x = y) as H11. {
-      apply (Bij.Eval' F A B). 3: assumption.
-      - apply H4.
-      - apply H3. assumption. }
+      apply (Bij.Eval F A B). 2: assumption. apply H4. }
     rewrite <- H11 in H10. apply H4 in H10. 3: assumption.
     2: { apply H3. assumption. }
     apply ImageByClass.CharacRev with x. 3: assumption.
@@ -324,3 +320,4 @@ Proof.
   - apply (ToClass E V V); try assumption.
     apply E.InitSegmentEV. assumption.
 Qed.
+

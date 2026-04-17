@@ -61,9 +61,8 @@ Qed.
 (* F0 is the successor function on the class of ordinals.                       *)
 Lemma F0Eval : forall (a:U), On a  -> F0!a = succ a.
 Proof.
-  intros a H1. apply CRF.Eval'.
+  intros a H1. apply CRF.Eval.
   - apply F0OrdFun.
-  - apply F0Domain. assumption.
   - apply F0Charac2. split. 1: assumption. reflexivity.
 Qed.
 

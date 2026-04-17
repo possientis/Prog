@@ -148,15 +148,13 @@ Proof.
   intros F R S A B C a [H1 H2] H3 H4 y. split; intros H5.
   - destruct H5 as [x [H5 H6]].
     apply Charac in H5. destruct H5 as [H5 H7].
-    apply Charac. assert (F!x = y) as H8. {
-      apply (Bij.Eval' F A B); try assumption. apply H3. assumption. }
+    apply Charac. assert (F!x = y) as H8. { apply (Bij.Eval F A B); assumption. }
     split.
     + exists x. split; assumption.
     + rewrite <- H8. apply H2; try assumption. apply H3. assumption.
   - apply Charac in H5. destruct H5 as [H5 H6].
     destruct H5 as [x [H5 H7]].
-    assert (F!x = y) as H8. {
-      apply (Bij.Eval' F A B); try assumption. apply H3. assumption. }
+    assert (F!x = y) as H8. { apply (Bij.Eval F A B); assumption. }
     exists x. split. 2: assumption.
     apply Charac. split. 1: assumption. apply H2. 1: assumption.
     + apply H3. assumption.
