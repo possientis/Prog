@@ -8,6 +8,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
@@ -17,6 +18,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
@@ -43,6 +45,17 @@ Proof.
   - apply Equiv.EqualToClass.
     apply Equiv.EquivCompatL with (CRR.range (toClass f)). 2: assumption.
     apply Equiv.Sym, Range.ToClass.
+Qed.
+
+Proposition FromFun : forall (f a b:U),
+  Fun f a b -> OneToOne f -> b :<=: range f -> Bij f a b.
+Proof.
+  intros f a b H1 H2 H3.
+  assert (range f = b) as H4. {
+    apply Incl.DoubleInclusion. split. 2: assumption. apply H1. }
+  assert (Bijection f) as H5. { split. 2: assumption. apply H1. }
+  assert (BijectionOn f a) as H6. { split. 1: assumption. apply H1. }
+  split; assumption.
 Qed.
 
 Proposition IsFun : forall (f a b:U),

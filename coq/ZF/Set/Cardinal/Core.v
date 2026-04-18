@@ -46,6 +46,7 @@ Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Relation.ToFun.
 Require Import ZF.Set.Relation.ToFun2.
 
 Require Import ZF.Notation.Eval.
@@ -77,7 +78,7 @@ Proposition HasOrdinal : Choice ->
 Proof.
   intros AC a. specialize (AC :P(a)). destruct AC as [f [H1 H2]].
   remember (fun x => f!(a :\: range x)) as G eqn:H3.
-  remember (Recursion (toFun G)) as F eqn:H4.
+  remember (Recursion (CRT.toFun G)) as F eqn:H4.
   assert (forall x,
     a :\: range x <> :0: -> f!(a :\: range x) :< a :\: range x) as H5. {
       intros x H5. apply H2. 2: assumption.
@@ -318,7 +319,7 @@ Proof.
   assert (domain f = a) as G3. { apply H1. }
   assert (domain g = b) as G4. { apply H2. }
   remember (fun x => (g :.: f) :[x]:) as H eqn:H5.
-  remember (SOR.recursion (toFun H) (a :\: d)) as h eqn:H6.
+  remember (SOR.recursion (CRT.toFun H) (a :\: d)) as h eqn:H6.
   assert (FunctionOn h :N) as H7. { rewrite H6. apply SOR.IsFunctionOn. }
   assert (h!:0: = a :\: d) as H8. { rewrite H6. apply SOR.WhenZero. }
   assert (forall n, n :< :N -> h!(succ n) = (g :.: f) :[h!n]:) as H9. {
@@ -468,4 +469,64 @@ Proof.
   assert (BijectionOn k a) as H30. { split; assumption. }
   assert (Bij k a b) as H31. { split; assumption. }
   exists k. assumption.
+Qed.
+
+Proposition PowerCompat : forall (a b:U),
+  a :~: b -> :P(a) :~: :P(b).
+Proof.
+  intros a b [f H1].
+  assert (Fun f a b) as G1. { apply Bij.IsFun. assumption. }
+  assert (domain f = a) as G2. { apply H1. }
+  assert (Bij f^:-1: b a) as G3. { apply Bij.Converse. assumption. }
+  remember (toFun :P(a) (fun x => f:[x]:)) as g eqn:H2.
+  assert (FunctionOn g :P(a)) as H3. { rewrite H2. apply ToFun.IsFunctionOn. }
+  assert (range g :<=: :P(b)) as H4. {
+    intros y H4.
+    apply (FunctionOn.RangeCharac g :P(a)) in H4. 2: assumption.
+    destruct H4 as [x [H4 H5]]. rewrite H2, ToFun.Eval in H5. 2: assumption.
+    rewrite <- H5. apply Power.Charac. clear H5 y. intros y H5.
+    apply Image.Charac in H5. destruct H5 as [u [H5 H6]].
+    assert (f!u = y) as H7. {
+      apply FunctionOn.Eval with a. 2: assumption. apply G1. }
+    rewrite <- H7.
+    assert (u :< a) as H8. {
+      apply Power.Charac in H4. apply H4. assumption. }
+    apply (Bij.IsInRange f a b); assumption. }
+  assert (Fun g :P(a) :P(b)) as H9. { split; assumption. }
+  assert (forall x y z,
+    x :<=: a -> y :<=: a -> f:[x]: = f:[y]: -> z :< x -> z :< y) as H10. {
+      intros x y z H10 H11 H12 H13.
+    assert (f!z :< f:[x]:) as H14. {
+      apply (Bij.ImageCharac f a b). 1: assumption.
+      exists z. split. 1: assumption. split. 2: reflexivity.
+      apply H10. assumption. }
+    assert (f!z :< f:[y]:) as H15. { rewrite H12 in H14. assumption. }
+    apply OneToOne.FromImage with f. 3: assumption.
+    - apply H1.
+    - rewrite G2. apply H10. assumption. }
+  assert (OneToOne g) as H11. {
+      apply (Fun.IsOneToOne g :P(a) :P(b)). 1: assumption.
+      intros x y H11 H12 H13.
+      rewrite H2, ToFun.Eval, ToFun.Eval in H13; try assumption.
+      apply Power.Charac in H11. apply Power.Charac in H12.
+      apply DoubleInclusion. split; intros z H14.
+      - apply H10 with x; assumption.
+      - apply H10 with y; try assumption. symmetry. assumption. }
+  assert (:P(b) :<=: range g) as H12. {
+    intros y H12.
+    remember (f^:-1::[y]:) as x eqn:H13.
+    assert (x :< :P(a)) as H14. {
+      apply Power.Charac. intros z H14. rewrite H13 in H14.
+      apply (Bij.ImageCharac f^:-1: b a) in H14. 2: assumption.
+      destruct H14 as [u [H14 [H15 H16]]]. rewrite <- H16.
+      apply (Bij.IsInRange f^:-1: b a); assumption. }
+    assert (g!x = f:[f^:-1::[y]:]:) as H15. {
+      rewrite H2, ToFun.Eval, <- H13. 2: assumption. reflexivity. }
+    assert (g!x = y) as H16. {
+      rewrite (Bij.ImageOfInvImage f a b) in H15; try assumption.
+      apply Power.Charac in H12. assumption. }
+      apply (Fun.RangeCharac g :P(a) :P(b)). 1: assumption.
+      exists x. split; assumption. }
+  assert (Bij g :P(a) :P(b)) as H13. { apply Bij.FromFun; assumption. }
+  exists g. assumption.
 Qed.
