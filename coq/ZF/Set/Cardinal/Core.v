@@ -48,6 +48,7 @@ Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Relation.ToFun.
 Require Import ZF.Set.Relation.ToFun2.
+Require Import ZF.Set.Specify.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -529,4 +530,53 @@ Proof.
       exists x. split; assumption. }
   assert (Bij g :P(a) :P(b)) as H13. { apply Bij.FromFun; assumption. }
   exists g. assumption.
+Qed.
+
+(* No set is equivalent to its power set.                                       *)
+Proposition Cantor' : forall (a:U),
+  ~ a :~: :P(a).
+Proof.
+  intros a H1.
+  destruct H1 as [f H1].
+  remember {{ x :< a | fun x => ~ x :< f!x }} as b eqn:H2.
+  assert (b :<=: a) as H3. { rewrite H2. apply Specify.IsInclL. }
+  apply Power.Charac in H3.
+  apply (Bij.RangeCharac f a :P(a)) in H3. 2: assumption.
+  destruct H3 as [c [H3 H4]].
+  assert (c :< b \/ ~ c :< b) as H5. { apply LawExcludedMiddle. }
+  destruct H5 as [H5|H5]; assert (H6 := H5).
+  - rewrite H2 in H5. apply Specify.IsInclR in H5.
+    rewrite H4 in H5. contradiction.
+  - rewrite <- H4 in H5.
+    assert (c :< b) as H7. {
+      rewrite H2. apply Specify.Charac. split; assumption. }
+    contradiction.
+Qed.
+
+Proposition Cantor : forall (a:U), Choice ->
+  card a :< card :P(a).
+Proof.
+  intros a AC.
+  assert (exists b, Ordinal b /\ a :~: b) as H1. {
+    apply HasOrdinal. assumption. }
+  destruct H1 as [b [H1 H2]].
+  assert (Ordinal (card b)) as G1. { apply IsOrdinal. }
+  assert (Ordinal (card :P(b))) as G2. { apply IsOrdinal. }
+  assert (card a = card b) as H3. { apply EquivCharac; assumption. }
+  assert (card :P(a) = card :P(b)) as H4. {
+    apply EquivCharac, PowerCompat; assumption. }
+  assert (card b :< card :P(b)) as H5. {
+    assert (b :<=: :P(b)) as H5. {
+      intros c H5.
+      assert (Ordinal c) as K1. { apply SOC.IsOrdinal with b; assumption. }
+      apply Power.Charac. intros d H6.
+      assert (Ordinal d) as K2. { apply SOC.IsOrdinal with c; assumption. }
+      apply SOC.ElemElemTran with c; assumption. }
+  assert (card b :<=: card :P(b)) as H6. { apply InclCompat; assumption. }
+  assert (card b = card :P(b) \/ card b :< card :P(b)) as H7. {
+    apply SOC.EqualOrElem; assumption. }
+  destruct H7 as [H7|H7]. 2:assumption. exfalso.
+  assert (b :~: :P(b)) as H8. { apply EquivCharac; assumption. }
+  apply Cantor' with b. assumption. }
+  rewrite H3, H4. assumption.
 Qed.
