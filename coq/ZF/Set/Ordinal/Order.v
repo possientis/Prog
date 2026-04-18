@@ -66,7 +66,7 @@ Proof.
     1: apply RestrictOfClass.ToClass. apply SOI.ToClass. assumption.
 Qed.
 
-Proposition WhenOrdinals : forall (a b:U), Ordinal b ->
+Proposition OrdinalSubset : forall (a b:U), Ordinal b ->
   a :<=: b -> exists c f, Ordinal c /\ c :<=: b /\ Isom f (E:/:c) (E:/:a) c a.
 Proof.
   intros a b H1 H2.
