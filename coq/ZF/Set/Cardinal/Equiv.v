@@ -10,6 +10,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
@@ -18,7 +19,9 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
+Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
@@ -37,7 +40,9 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Relation.ToFun.
 Require Import ZF.Set.Relation.ToFun2.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Specify.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Equiv.
 Export ZF.Notation.Equiv.
@@ -361,8 +366,7 @@ Proof.
 Qed.
 
 (* No set is equivalent to its power set.                                       *)
-Proposition Cantor : forall (a:U),
-  ~ a :~: :P(a).
+Proposition Cantor : forall (a:U), ~ a :~: :P(a).
 Proof.
   intros a H1.
   destruct H1 as [f H1].
@@ -380,5 +384,128 @@ Proof.
       rewrite H2. apply Specify.Charac. split; assumption. }
     contradiction.
 Qed.
+
+Proposition WhenZero : forall (a:U),
+  a :~: :0: <-> a = :0:.
+Proof.
+  intros a. split; intros H1.
+  - destruct H1 as [f H1]. apply Incl.DoubleInclusion. split; intros x H2.
+    + exfalso.
+      assert (f!x :< :0:) as H3. { apply (Bij.IsInRange f a :0:); assumption. }
+      apply Empty.Charac in H3. contradiction.
+    + apply Empty.Charac in H2. contradiction.
+  - subst. apply Refl.
+Qed.
+
+Proposition AddElem : forall (a b:U),
+  a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a.
+Proof.
+  intros a b.
+  assert (b :< a \/ ~ b :< a) as H1. { apply LawExcludedMiddle. }
+  destruct H1 as [H1|H1].
+  - assert (a :\/: :{b}: = a) as H2. {
+      apply Incl.DoubleInclusion. split. 2: apply Union2.IsInclL.
+      intros x H2.
+      apply Union2.Charac in H2. destruct H2 as [H2|H2]. 1: assumption.
+      apply Single.Charac in H2. subst. assumption. }
+    left. assumption.
+  - assert (a :\/: :{b}: :~: succ a) as H2. {
+      remember (fun x => x = b) as A eqn:H2.
+      remember (toFun2 (a :\/: :{b}:) A (fun x => a) (fun x => x)) as f eqn:H3.
+      assert (FunctionOn f (a :\/: :{b}:)) as H4. {
+        rewrite H3. apply ToFun2.IsFunctionOn. }
+      assert (forall x, x :< a -> f!x = x) as G1. {
+        intros x G1. rewrite H3, ToFun2.Eval2. 1: reflexivity.
+        - apply Union2.Charac. left. assumption.
+        - rewrite H2. intros G2. subst. contradiction. }
+      assert (forall x, x = b -> f!x = a) as G2. {
+        intros x G2. rewrite H3, ToFun2.Eval1. 1: reflexivity.
+        - apply Union2.Charac. right. rewrite G2. apply Single.IsIn.
+        - rewrite H2. assumption. }
+      assert (range f :<=: succ a) as H5. {
+        intros y H5. apply (FunctionOn.RangeCharac f (a :\/: :{b}:)) in H5.
+        2: assumption. destruct H5 as [x [H5 H6]].
+        apply Union2.Charac in H5. destruct H5 as [H5|H5].
+        - assert (f!x = x) as H7. { apply G1. assumption. }
+          rewrite <- H6, H7. apply Union2.Charac. left. assumption.
+        - apply Single.Charac in H5.
+          assert (f!x = a) as H7. { apply G2. assumption. }
+          rewrite <- H6, H7. apply Union2.Charac. right. apply Single.IsIn. }
+      assert (Fun f (a :\/: :{b}:) (succ a)) as H6. { split; assumption. }
+      assert (succ a :<=: range f) as H7. {
+        intros y H7.
+        apply Union2.Charac in H7. destruct H7 as [H7|H7].
+        - assert (f!y = y) as H8. { apply G1. assumption. }
+          apply (FunctionOn.RangeCharac f (a :\/: :{b}:)). 1: assumption.
+          exists y. split. 2: assumption.
+          apply Union2.Charac. left. assumption.
+        - apply Single.Charac in H7.
+          assert (f!b = a) as H8. { apply G2. reflexivity. }
+          apply (FunctionOn.RangeCharac f (a :\/: :{b}:)). 1: assumption.
+          exists b. split.
+          + apply Union2.Charac. right. apply Single.IsIn.
+          + rewrite H7. assumption. }
+      assert (OneToOne f) as H8. {
+        apply (Fun.IsOneToOne f (a :\/: :{b}:) (succ a)). 1: assumption.
+          intros x y H8 H9 H10.
+          apply Union2.Charac in H8. apply Union2.Charac in H9.
+          destruct H8 as [H8|H8]; destruct H9 as [H9|H9].
+          - assert (f!x = x) as H11. { apply G1. assumption. }
+            assert (f!y = y) as H12. { apply G1. assumption. }
+            rewrite <- H11, <- H12. assumption.
+          - exfalso. apply Single.Charac in H9.
+            assert (f!x = x) as H11. { apply G1. assumption. }
+            assert (f!y = a) as H12. { apply G2. assumption. }
+            rewrite <- H11, H10, H12 in H8. revert H8.
+            apply Foundation.NoElemLoop1.
+          - exfalso. apply Single.Charac in H8.
+            assert (f!x = a) as H11. { apply G2. assumption. }
+            assert (f!y = y) as H12. { apply G1. assumption. }
+            rewrite <- H12, <- H10, H11 in H9. revert H9.
+            apply Foundation.NoElemLoop1.
+          - apply Single.Charac in H8. apply Single.Charac in H9.
+            rewrite H8, H9. reflexivity. }
+      assert (Bij f (a :\/: :{b}:) (succ a)) as H9. {
+        apply Bij.FromFun; assumption. }
+      exists f. assumption. }
+    right. assumption.
+Qed.
+
+Proposition ProdSingleL : forall (a b:U), :{b}: :x: a :~: a.
+Proof.
+  intros a b.
+  assert (a :~: :{b}: :x: a) as H1. {
+    remember (toFun a (fun x => :(b,x):)) as f eqn:H1.
+    assert (FunctionOn f a) as H2. { rewrite H1. apply ToFun.IsFunctionOn. }
+    assert (forall x, x :< a -> f!x = :(b,x):) as G1. {
+      intros x G1. rewrite H1, ToFun.Eval. 2: assumption. reflexivity. }
+    assert (range f :<=: :{b}: :x: a) as H3. {
+      intros y H3.
+      apply (FunctionOn.RangeCharac f a) in H3. 2: assumption.
+      destruct H3 as [x [H3 H4]].
+      rewrite <- H4, (G1 x). 2: assumption. apply Prod.Charac2.
+      split. 2: assumption. apply Single.IsIn. }
+    assert (Fun f a (:{b}: :x: a)) as H4. { split; assumption. }
+    assert (:{b}: :x: a :<=: range f) as H5. {
+      intros y H5. apply Prod.Charac in H5. destruct H5 as [u [x [H5 [H6 H7]]]].
+      apply Single.Charac in H6. rewrite H6 in H5.
+      assert (f!x = y) as H8. { rewrite H5. apply G1. assumption. }
+      apply (FunctionOn.RangeCharac f a). 1: assumption.
+      exists x. split; assumption. }
+    assert (OneToOne f) as H6. {
+      apply (FunctionOn.IsOneToOne f a). 1: assumption.
+      intros x y H6 H7 H8.
+      rewrite (G1 x), (G1 y) in H8; try assumption.
+      apply OrdPair.WhenEqual in H8. apply H8. }
+    assert (Bij f a (:{b}: :x: a)) as H7. { apply Bij.FromFun; assumption. }
+    exists f. assumption. }
+  apply Sym. assumption.
+Qed.
+
+Proposition ProdCompat : forall (a b c d:U),
+  a :~: c -> b :~: d -> a :x: b :~: c :x: d.
+Proof.
+  intros a b c d [f H1] [g H2].
+Admitted.
 
 
