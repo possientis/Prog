@@ -9,7 +9,7 @@ Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Class.Relation.Relation.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -123,7 +123,7 @@ Proof.
       destruct H12 as [H12 H16]. split. 1: assumption.
       exists u. split. 1: assumption. apply CRC.Charac2Rev. assumption. }
   remember (fun x => x :\/: :U(B:[x]:)) as G eqn:H12.
-  remember (SOR.recursion (toFun G) a) as f eqn:H13.
+  remember (SOR.recursion (From.from G) a) as f eqn:H13.
   remember (:U(f:[:N]:)) as b eqn:H14.
   exists b.
   assert (domain f = :N) as G2. { rewrite H13. apply SOR.IsFunctionOn. }
@@ -144,7 +144,7 @@ Proof.
     intros n G5 x G6. apply G4. exists n. split; assumption. }
   assert (a = f!:0:) as H15. { rewrite H13, SOR.WhenZero. reflexivity. }
   assert (forall n, n :< :N -> f!(succ n) = f!n :\/: :U(B:[f!n]:)) as H16. {
-    intros n H16. rewrite H13, SOR.WhenSucc, <- H13, ToFun.Eval, H12.
+    intros n H16. rewrite H13, SOR.WhenSucc, <- H13, From.Eval, H12.
     2: assumption. reflexivity. }
   assert (forall n, n :< :N -> f!n :<=: f!(succ n)) as H17. {
     intros n H17. rewrite H16. 2: assumption. apply Union2.IsInclL. }

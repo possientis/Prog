@@ -5,7 +5,7 @@ Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Relation.FunctionOn.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
@@ -38,8 +38,8 @@ Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
-Require Import ZF.Set.Relation.ToFun.
-Require Import ZF.Set.Relation.ToFun2.
+Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union2.
@@ -50,7 +50,7 @@ Export ZF.Notation.Equiv.
 Module CEQ := ZF.Class.Equiv.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module COF := ZF.Class.Ordinal.FunctionOn.
-Module CRT := ZF.Class.Relation.ToFun.
+Module CFF := ZF.Class.Relation.Fun.From.
 Module SOO := ZF.Set.Ordinal.Order.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
@@ -81,7 +81,7 @@ Proposition HasOrdinal : Choice ->
 Proof.
   intros AC a. specialize (AC :P(a)). destruct AC as [f [H1 H2]].
   remember (fun x => f!(a :\: range x)) as G eqn:H3.
-  remember (Recursion (CRT.toFun G)) as F eqn:H4.
+  remember (Recursion (CFF.from G)) as F eqn:H4.
   assert (forall x,
     a :\: range x <> :0: -> f!(a :\: range x) :< a :\: range x) as H5. {
       intros x H5. apply H2. 2: assumption.
@@ -90,7 +90,7 @@ Proof.
     intros b H6. rewrite H4. apply Recursion.IsRecursive. assumption. }
   assert (forall b , Ordinal b ->
     a :\: range (F:|:b) <> :0: -> F!b :< a :\: range (F:|:b)) as H7. {
-      intros b H7 H8. rewrite H6, CRT.Eval, H3. 2: assumption.
+      intros b H7 H8. rewrite H6, CFF.Eval, H3. 2: assumption.
       apply H5. assumption. }
   assert (CFO.FunctionOn F Ordinal) as G1. {
     rewrite H4. apply Recursion.IsFunctionOn. }
@@ -153,11 +153,11 @@ Proof.
   assert (domain f = a) as G3. { apply H1. }
   assert (domain g = b) as G4. { apply H2. }
   remember (fun x => (g :.: f) :[x]:) as H eqn:H5.
-  remember (SOR.recursion (CRT.toFun H) (a :\: d)) as h eqn:H6.
+  remember (SOR.recursion (CFF.from H) (a :\: d)) as h eqn:H6.
   assert (FunctionOn h :N) as H7. { rewrite H6. apply SOR.IsFunctionOn. }
   assert (h!:0: = a :\: d) as H8. { rewrite H6. apply SOR.WhenZero. }
   assert (forall n, n :< :N -> h!(succ n) = (g :.: f) :[h!n]:) as H9. {
-    intros n H9. rewrite H6, SOR.WhenSucc, <- H6, CRT.Eval, H5.
+    intros n H9. rewrite H6, SOR.WhenSucc, <- H6, CFF.Eval, H5.
     2: assumption. reflexivity. }
   assert (Inj f a b) as H10. {
     split.
@@ -183,11 +183,11 @@ Proof.
     apply H3. rewrite <- H17. apply Bij.IsInRange with a. 1: assumption.
     apply (H13 n); assumption. }
   remember (fun x => exists n, n :< :N /\ x :< h!n) as A eqn:H15.
-  remember (toFun2 a A (fun x => f!x) (fun x => g^:-1:!x)) as k eqn:H16.
+  remember (ifThenElse a A (fun x => f!x) (fun x => g^:-1:!x)) as k eqn:H16.
   assert (forall x n, ~ A x -> n :< :N -> ~ x :< h!n) as H17. {
     rewrite H15.
     intros x n H17 H18 H19. apply H17. exists n; split; assumption. }
-  assert (FunctionOn k a) as H18. { rewrite H16. apply ToFun2.IsFunctionOn. }
+  assert (FunctionOn k a) as H18. { rewrite H16. apply IfThenElse.IsFunctionOn. }
   assert (Bij g^:-1: d b) as H19. { apply Bij.Converse. assumption. }
   assert (domain g^:-1: = d) as H20. { apply H19. }
   assert (range g^:-1: = b) as H21. { apply H19. }
@@ -203,9 +203,9 @@ Proof.
     destruct H23 as [x [H23 H24]]. rewrite <- H24.
     assert (A x \/ ~ A x) as H25. { apply LawExcludedMiddle. }
     destruct H25 as [H25|H25].
-    - rewrite H16, ToFun2.Eval1; try assumption.
+    - rewrite H16, IfThenElse.Eval1; try assumption.
       apply H3, Bij.IsInRange with a; assumption.
-    - rewrite H16, ToFun2.Eval2; try assumption.
+    - rewrite H16, IfThenElse.Eval2; try assumption.
       apply Bij.IsInRange with d. 1: assumption. apply H22; assumption. }
   assert (Fun k a b) as H24. { split; assumption. }
   assert (b :<=: range k) as H25. {
@@ -217,7 +217,7 @@ Proof.
       apply (Bij.ImageCharac f a c) in H28. 2: assumption.
       destruct H28 as [x [H28 [H29 H30]]].
       assert (k!x = y) as H31. {
-        rewrite H16, ToFun2.Eval1; try assumption.
+        rewrite H16, IfThenElse.Eval1; try assumption.
         rewrite H15. exists n. split; assumption. }
       exists x. split; assumption.
     - assert (forall n, n :< :N -> ~ g!y :< h!n) as H28. {
@@ -240,7 +240,7 @@ Proof.
         rewrite H15. intros [n [H29 H30]]. apply (H28 n); assumption. }
       assert (g!y :< a) as H30. { apply H4, (Bij.IsInRange g b d); assumption. }
       assert (k!(g!y) = g^:-1:!(g!y)) as H31. {
-        rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+        rewrite H16, IfThenElse.Eval2; try assumption. reflexivity. }
       rewrite (Bij.ConverseEvalOfEval g b d) in H31; try assumption.
       exists g!y. split; assumption. }
   assert (range k = b) as H26. {
@@ -249,9 +249,9 @@ Proof.
   assert (forall x y, x :< a -> y :< a -> k!x = k!y -> A x -> A y) as H27. {
     intros x y H27 H28 H29 H30. apply Classic.DoubleNegation. intros H31.
     assert (k!x = f!x) as H32. {
-      rewrite H16, ToFun2.Eval1; try assumption. reflexivity. }
+      rewrite H16, IfThenElse.Eval1; try assumption. reflexivity. }
     assert(k!y = g^:-1:!y) as H33. {
-      rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+      rewrite H16, IfThenElse.Eval2; try assumption. reflexivity. }
     rewrite H32, H33 in H29.
     assert (Function f) as G6. { apply (Bij.IsFun f a c). assumption. }
     assert (Function g) as G7. { apply (Bij.IsFun g b d). assumption. }
@@ -280,9 +280,9 @@ Proof.
     destruct H31 as [H31|H31].
     - assert (A y) as H32. { apply H27 with x; assumption. }
       assert (k!x = f!x) as H33. {
-        rewrite H16, ToFun2.Eval1; try assumption. reflexivity. }
+        rewrite H16, IfThenElse.Eval1; try assumption. reflexivity. }
       assert (k!y = f!y) as H34. {
-        rewrite H16, ToFun2.Eval1; try assumption. reflexivity. }
+        rewrite H16, IfThenElse.Eval1; try assumption. reflexivity. }
       rewrite H33, H34 in H30.
       apply (Bij.EvalInjective f a c); assumption.
     - assert (~ A y) as H32. {
@@ -291,9 +291,9 @@ Proof.
           apply H27 with y; try assumption. symmetry. assumption. }
         contradiction. }
       assert (k!x = g^:-1:!x) as H33. {
-        rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+        rewrite H16, IfThenElse.Eval2; try assumption. reflexivity. }
       assert (k!y = g^:-1:!y) as H34. {
-        rewrite H16, ToFun2.Eval2; try assumption. reflexivity. }
+        rewrite H16, IfThenElse.Eval2; try assumption. reflexivity. }
       rewrite H33, H34 in H30.
       apply (Bij.EvalInjective g^:-1: d b); try assumption.
       + apply H22; assumption.
@@ -312,12 +312,12 @@ Proof.
   assert (Fun f a b) as G1. { apply Bij.IsFun. assumption. }
   assert (domain f = a) as G2. { apply H1. }
   assert (Bij f^:-1: b a) as G3. { apply Bij.Converse. assumption. }
-  remember (toFun :P(a) (fun x => f:[x]:)) as g eqn:H2.
-  assert (FunctionOn g :P(a)) as H3. { rewrite H2. apply ToFun.IsFunctionOn. }
+  remember (from :P(a) (fun x => f:[x]:)) as g eqn:H2.
+  assert (FunctionOn g :P(a)) as H3. { rewrite H2. apply From.IsFunctionOn. }
   assert (range g :<=: :P(b)) as H4. {
     intros y H4.
     apply (FunctionOn.RangeCharac g :P(a)) in H4. 2: assumption.
-    destruct H4 as [x [H4 H5]]. rewrite H2, ToFun.Eval in H5. 2: assumption.
+    destruct H4 as [x [H4 H5]]. rewrite H2, From.Eval in H5. 2: assumption.
     rewrite <- H5. apply Power.Charac. clear H5 y. intros y H5.
     apply Image.Charac in H5. destruct H5 as [u [H5 H6]].
     assert (f!u = y) as H7. {
@@ -341,7 +341,7 @@ Proof.
   assert (OneToOne g) as H11. {
       apply (Fun.IsOneToOne g :P(a) :P(b)). 1: assumption.
       intros x y H11 H12 H13.
-      rewrite H2, ToFun.Eval, ToFun.Eval in H13; try assumption.
+      rewrite H2, From.Eval, From.Eval in H13; try assumption.
       apply Power.Charac in H11. apply Power.Charac in H12.
       apply DoubleInclusion. split; intros z H14.
       - apply H10 with x; assumption.
@@ -355,7 +355,7 @@ Proof.
       destruct H14 as [u [H14 [H15 H16]]]. rewrite <- H16.
       apply (Bij.IsInRange f^:-1: b a); assumption. }
     assert (g!x = f:[f^:-1::[y]:]:) as H15. {
-      rewrite H2, ToFun.Eval, <- H13. 2: assumption. reflexivity. }
+      rewrite H2, From.Eval, <- H13. 2: assumption. reflexivity. }
     assert (g!x = y) as H16. {
       rewrite (Bij.ImageOfInvImage f a b) in H15; try assumption.
       apply Power.Charac in H12. assumption. }
@@ -411,15 +411,15 @@ Proof.
     left. assumption.
   - assert (a :\/: :{b}: :~: succ a) as H2. {
       remember (fun x => x = b) as A eqn:H2.
-      remember (toFun2 (a :\/: :{b}:) A (fun x => a) (fun x => x)) as f eqn:H3.
+      remember (ifThenElse (a :\/: :{b}:) A (fun x => a) (fun x => x)) as f eqn:H3.
       assert (FunctionOn f (a :\/: :{b}:)) as H4. {
-        rewrite H3. apply ToFun2.IsFunctionOn. }
+        rewrite H3. apply IfThenElse.IsFunctionOn. }
       assert (forall x, x :< a -> f!x = x) as G1. {
-        intros x G1. rewrite H3, ToFun2.Eval2. 1: reflexivity.
+        intros x G1. rewrite H3, IfThenElse.Eval2. 1: reflexivity.
         - apply Union2.Charac. left. assumption.
         - rewrite H2. intros G2. subst. contradiction. }
       assert (forall x, x = b -> f!x = a) as G2. {
-        intros x G2. rewrite H3, ToFun2.Eval1. 1: reflexivity.
+        intros x G2. rewrite H3, IfThenElse.Eval1. 1: reflexivity.
         - apply Union2.Charac. right. rewrite G2. apply Single.IsIn.
         - rewrite H2. assumption. }
       assert (range f :<=: succ a) as H5. {
@@ -475,10 +475,10 @@ Proposition ProdSingleL : forall (a b:U), :{b}: :x: a :~: a.
 Proof.
   intros a b.
   assert (a :~: :{b}: :x: a) as H1. {
-    remember (toFun a (fun x => :(b,x):)) as f eqn:H1.
-    assert (FunctionOn f a) as H2. { rewrite H1. apply ToFun.IsFunctionOn. }
+    remember (from a (fun x => :(b,x):)) as f eqn:H1.
+    assert (FunctionOn f a) as H2. { rewrite H1. apply From.IsFunctionOn. }
     assert (forall x, x :< a -> f!x = :(b,x):) as G1. {
-      intros x G1. rewrite H1, ToFun.Eval. 2: assumption. reflexivity. }
+      intros x G1. rewrite H1, From.Eval. 2: assumption. reflexivity. }
     assert (range f :<=: :{b}: :x: a) as H3. {
       intros y H3.
       apply (FunctionOn.RangeCharac f a) in H3. 2: assumption.

@@ -5,7 +5,7 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.ShiftL.
 Require Import ZF.Class.Relation.ShiftR.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
@@ -71,7 +71,7 @@ Proposition EtaReduce : forall (F:Class) (a:U), Ordinal a ->
   :sum:_{a} (:[fun x => F!x]:) = :sum:_{a} F.
 Proof.
   intros F a H1. apply Equal. 1: assumption.
-  intros x H2. apply ToFun.Eval.
+  intros x H2. apply From.Eval.
 Qed.
 
 Proposition ShiftL : forall (F:Class) (n:U),

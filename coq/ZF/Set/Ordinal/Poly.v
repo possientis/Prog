@@ -1,7 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.ShiftL.
 Require Import ZF.Class.Relation.ShiftR.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
@@ -74,19 +74,19 @@ Proof.
       assert (domain b = succ n) as G7. { apply H4. }
       assert (domain c = succ n) as G8. { apply H5. }
       remember (fun i => a :^: b!i :*: c!i) as F eqn:E.
-      assert (CRL.Functional :[F]:) as H11. { apply ToFun.IsFunctional. }
+      assert (CRL.Functional :[F]:) as H11. { apply From.IsFunctional. }
       assert (forall i, i :< succ n -> CRD.domain :[F]: i) as H12. {
-          intros i _. apply ToFun.DomainOf. }
+          intros i _. apply From.DomainOf. }
       assert (forall i, i :< succ n -> Ordinal b!i) as H13. {
         intros i H13. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
       assert (forall i, i :< succ n -> Ordinal c!i) as H14. {
         intros i H14. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
       assert (forall i : U, i :< succ n -> Ordinal (:[F]:!i)) as H15. {
-          intros i H15. rewrite ToFun.Eval. rewrite E.
+          intros i H15. rewrite From.Eval. rewrite E.
           apply Mult.IsOrdinal.
           - apply Exp.IsOrdinal. 1: assumption. apply H13. assumption.
           - apply H14. assumption. }
-      rewrite SumOfClass.ShiftL, ToFun.Eval; try assumption.
+      rewrite SumOfClass.ShiftL, From.Eval; try assumption.
       remember (shiftL b) as b' eqn:H16.
       remember (shiftL c) as c' eqn:H17.
       assert (OrdFunOn b' n) as H18. {
@@ -119,11 +119,11 @@ Proof.
         intros i H24.
        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
         rewrite
-          CRL.Eval, ToFun.Eval, ToFun.Eval, E, E', H16, H17, SRL.Eval, SRL.Eval;
+          CRL.Eval, From.Eval, From.Eval, E, E', H16, H17, SRL.Eval, SRL.Eval;
         try assumption. 1: reflexivity.
         - rewrite G8. apply Succ.ElemCompat; assumption.
         - rewrite G7. apply Succ.ElemCompat; assumption.
-        - apply ToFun.DomainOf. }
+        - apply From.DomainOf. }
       assert ((:sum:_{n} :[G]:) :< a :^: b!:0:) as H25. {
         rewrite E'. apply IH; assumption. }
       rewrite H24.
@@ -147,7 +147,7 @@ Proof.
         - apply G13. assumption. }
       assert (Ordinal (:sum:_{n} :[G]:)) as G16. {
         apply SumOfClass.IsOrdinal. 1: assumption.
-        intros i G16. rewrite ToFun.Eval. apply G15. assumption. }
+        intros i G16. rewrite From.Eval. apply G15. assumption. }
       assert (Ordinal (F :0: :+: :sum:_{n} :[G]:)) as G17. {
         apply Plus.IsOrdinal; assumption. }
       assert (Ordinal (F :0: :+: a :^: b!:0:)) as G18. {
@@ -201,7 +201,7 @@ Proof.
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
   assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
-    intros i G6. rewrite ToFun.Eval, H10.
+    intros i G6. rewrite From.Eval, H10.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G1. assumption.
     - apply G2. assumption. }
@@ -248,7 +248,7 @@ Proof.
   assert (forall i, i :< n -> Ordinal m'!i) as G23. {
     intros i G23. apply OrdFunOn.IsOrdinal with n; assumption. }
   assert (forall i, i :< n -> Ordinal (:[F']:!i)) as G24. {
-    intros i G24. rewrite ToFun.Eval, H14.
+    intros i G24. rewrite From.Eval, H14.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G22. assumption.
     - apply G23. assumption. }
@@ -262,21 +262,21 @@ Proof.
   assert (Ordinal (a :^: b!:0:)) as G28. { apply Exp.IsOrdinal; assumption. }
   assert (s = :[F]:!:0: :+: :sum:_{n} (CRL.shiftL :[F]:)) as H16. {
     rewrite H11. apply SumOfClass.ShiftL; try assumption.
-    - apply ToFun.IsFunctional.
-    - intros i H16. apply ToFun.DomainOf. }
-  rewrite ToFun.Eval in H16.
+    - apply From.IsFunctional.
+    - intros i H16. apply From.DomainOf. }
+  rewrite From.Eval in H16.
   assert (s' = :sum:_{n} (CRL.shiftL :[F]:)) as H17. {
     rewrite H15. apply SumOfClass.Equal. 1: assumption.
     intros i H17.
     assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
-    rewrite ToFun.Eval, CRL.Eval, ToFun.Eval,
+    rewrite From.Eval, CRL.Eval, From.Eval,
     H14, H10, H12, H13, SRL.Eval, SRL.Eval. 1: reflexivity.
     - apply H4.
     - rewrite G8. apply Succ.ElemCompat; assumption.
     - apply H3.
     - rewrite G7. apply Succ.ElemCompat; assumption.
-    - apply ToFun.IsFunctional.
-    - apply ToFun.DomainOf. }
+    - apply From.IsFunctional.
+    - apply From.DomainOf. }
   assert (s = F :0: :+: s') as H18. { rewrite H17. assumption. }
   assert (s' :< a :^: b!:0:) as H19. {
     rewrite H15, H14. apply IsElem; assumption. }
@@ -375,10 +375,10 @@ Proof.
       split. 1: assumption.
       rewrite G7, SumOfClass.WhenSucc, SumOfClass.WhenZero, Plus.WhenZeroL;
       try assumption.
-      rewrite ToFun.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
+      rewrite From.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
       try assumption.
       + rewrite H14, Plus.WhenZeroR in H10. assumption.
-      + rewrite ToFun.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
+      + rewrite From.Eval, (Eval.WhenSingle :0: q c), (Eval.WhenSingle :0: e d);
         assumption.
     - assert (a :^: e :*: :1: :<=: a :^: e :*: q) as H15. {
         apply Mult.InclCompatR; try assumption.
@@ -414,11 +414,11 @@ Proof.
         - rewrite H24.
           assert (a :^: d!i :*: c!i
             = :[fun i => a :^: d!i :*: c!i]:!i) as H30. {
-            symmetry. apply (ToFun.Eval (fun i => a :^: d!i :*: c!i)). }
+            symmetry. apply (From.Eval (fun i => a :^: d!i :*: c!i)). }
           rewrite H30. apply SumOfClass.IsIncl; try assumption.
           + intros j H31. exists (a :^: d!j :*: c!j).
-            apply ToFun.Charac2. reflexivity.
-          + intros j H31. rewrite ToFun.Eval.
+            apply From.Charac2. reflexivity.
+          + intros j H31. rewrite From.Eval.
             apply Mult.IsOrdinal.
             * apply Exp.IsOrdinal. 1: assumption.
               apply OrdFunOn.IsOrdinal with n; assumption.
@@ -482,7 +482,7 @@ Proof.
       remember (CRR.shiftR (a :^: e :*: q) :[F]:) as H eqn:H35.
       assert (:sum:_{succ n} (:[G]:) = :sum:_{succ n} H) as H36. {
         apply SumOfClass.Equal. 1: assumption. intros i H36.
-        rewrite H34, H35, ToFun.Eval, H25, H26.
+        rewrite H34, H35, From.Eval, H25, H26.
         assert (i :< :N) as G20. {
           apply Omega.IsIn with (succ n); assumption. }
         assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
@@ -490,7 +490,7 @@ Proof.
           apply Core.ZeroOrElem. assumption. }
         destruct H37 as [H37|H37].
         - rewrite H37, SRR.EvalZero, SRR.EvalZero, CRR.EvalZero; try assumption.
-          1: reflexivity. apply ToFun.IsFunctional.
+          1: reflexivity. apply From.IsFunctional.
         - apply Omega.HasPred in H37. 2: assumption.
           destruct H37 as [j [H37 H38]].
           assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
@@ -499,17 +499,17 @@ Proof.
             rewrite <- H38. assumption. }
           assert (j :< domain c) as G25. { rewrite G12. assumption. }
           assert (j :< domain d) as G26. { rewrite G13. assumption. }
-          rewrite H38, SRR.EvalSucc, SRR.EvalSucc, CRR.EvalSucc, H33, ToFun.Eval;
+          rewrite H38, SRR.EvalSucc, SRR.EvalSucc, CRR.EvalSucc, H33, From.Eval;
           try assumption. 1: reflexivity.
-          + apply ToFun.IsFunctional.
-          + apply ToFun.DomainOf. }
+          + apply From.IsFunctional.
+          + apply From.DomainOf. }
       rewrite H36, H35.
       assert (:sum:_{succ n} (CRR.shiftR (a :^: e :*: q) :[F]:)
         = a :^: e :*: q :+: :sum:_{n} :[F]:) as H37. {
           apply SumOfClass.ShiftR; try assumption.
-          - apply ToFun.IsFunctional.
-          - intros j H37. apply ToFun.DomainOf.
-          - intros j H37. rewrite ToFun.Eval, H33.
+          - apply From.IsFunctional.
+          - intros j H37. apply From.DomainOf.
+          - intros j H37. rewrite From.Eval, H33.
             apply Mult.IsOrdinal.
             + apply Exp.IsOrdinal. 1: assumption.
               apply OrdFunOn.IsOrdinal with n; assumption.
@@ -641,7 +641,7 @@ Proof.
         apply Omega.HasPred in H15. 2: assumption.
         destruct H15 as [k [H15 H16]].
         assert (Ordinal k) as G2. { apply Omega.HasOrdinalElem. assumption. }
-        rewrite H16, SumOfClass.WhenSucc, ToFun.Eval in H14. 2: assumption.
+        rewrite H16, SumOfClass.WhenSucc, From.Eval in H14. 2: assumption.
         assert (k :< m) as G3. { rewrite H16. apply Succ.IsIn. }
         assert (Ordinal (e!k)) as G4. {
           apply OrdFunOn.IsOrdinal with m; assumption. }
@@ -655,7 +655,7 @@ Proof.
         assert (Ordinal (F2 k)) as G7. { apply G6. assumption. }
         assert (Ordinal (:sum:_{k} :[F2]:)) as G8. {
           apply SumOfClass.IsOrdinal. 1: assumption.
-          intros i G8. rewrite ToFun.Eval. apply G6.
+          intros i G8. rewrite From.Eval. apply G6.
           apply Core.ElemElemTran with k; try assumption.
             apply Omega.HasOrdinalElem, Omega.IsIn with k; assumption. }
         assert (F2 k :<=: (:sum:_{k} :[F2]:) :+: F2 k) as H17. {
@@ -687,7 +687,7 @@ Proof.
       assert (m =:0: \/ :0: :< m) as H16. { apply Core.ZeroOrElem. assumption. }
       destruct H16 as [H16|H16].
       + exfalso.
-        rewrite H16, SumOfClass.WhenZero, SumOfClass.WhenSucc, ToFun.Eval in H15.
+        rewrite H16, SumOfClass.WhenZero, SumOfClass.WhenSucc, From.Eval in H15.
         2: assumption.
         assert (n :< succ n) as G5. { apply Succ.IsIn. }
         assert (Ordinal (c!n)) as G6. {
@@ -702,7 +702,7 @@ Proof.
         assert (Ordinal (F1 n)) as G9. { apply G8. assumption. }
         assert (Ordinal (:sum:_{n} :[F1]:)) as G10. {
           apply SumOfClass.IsOrdinal. 1: assumption.
-          intros i G10. rewrite ToFun.Eval. apply G8.
+          intros i G10. rewrite From.Eval. apply G8.
           apply Core.ElemElemTran with n; try assumption.
             apply Omega.HasOrdinalElem, Omega.IsIn with n; assumption. }
         assert (F1 n :<=: (:sum:_{n} :[F1]:) :+: F1 n) as H17. {
@@ -738,14 +738,14 @@ Proof.
         assert (F1 :0: :+: (:sum:_{n} (CRL.shiftL :[F1]:))
           = F2 :0: :+: (:sum:_{k} (CRL.shiftL :[F2]:))) as H18. {
             rewrite H17, SumOfClass.ShiftL, SumOfClass.ShiftL,
-            ToFun.Eval, ToFun.Eval in H15; try assumption.
-            - apply ToFun.IsFunctional.
-            - intros i H18. apply ToFun.DomainOf.
-            - intros i H18. rewrite ToFun.Eval. apply G5.
+            From.Eval, From.Eval in H15; try assumption.
+            - apply From.IsFunctional.
+            - intros i H18. apply From.DomainOf.
+            - intros i H18. rewrite From.Eval. apply G5.
               rewrite H17. assumption.
-            - apply ToFun.IsFunctional.
-            - intros i H18. apply ToFun.DomainOf.
-            - intros i H18. rewrite ToFun.Eval. apply G6. assumption. }
+            - apply From.IsFunctional.
+            - intros i H18. apply From.DomainOf.
+            - intros i H18. rewrite From.Eval. apply G6. assumption. }
         clear H15.
         remember (SRL.shiftL c) as c' eqn:H19.
         remember (SRL.shiftL d) as d' eqn:H20.
@@ -756,21 +756,21 @@ Proof.
         assert (:sum:_{n} (CRL.shiftL :[F1]:) = :sum:_{n} :[F1']:) as H23. {
           apply SumOfClass.Equal. 1: assumption. intros i H23.
           assert (Ordinal i) as G16. { apply Core.IsOrdinal with n; assumption. }
-          rewrite CRL.Eval, ToFun.Eval, ToFun.Eval, E1, E1', H19, H20,
+          rewrite CRL.Eval, From.Eval, From.Eval, E1, E1', H19, H20,
             SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
           - rewrite G11. apply Succ.ElemCompat; assumption.
           - rewrite G12. apply Succ.ElemCompat; assumption.
-          - apply ToFun.IsFunctional.
-          - apply ToFun.DomainOf. }
+          - apply From.IsFunctional.
+          - apply From.DomainOf. }
         assert (:sum:_{k} (CRL.shiftL :[F2]:) = :sum:_{k} :[F2']:) as H24. {
           apply SumOfClass.Equal. 1: assumption. intros i H24.
           assert (Ordinal i) as G16. { apply Core.IsOrdinal with k; assumption. }
-          rewrite CRL.Eval, ToFun.Eval, ToFun.Eval, E2, E2', H21, H22,
+          rewrite CRL.Eval, From.Eval, From.Eval, E2, E2', H21, H22,
             SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption.
           - rewrite G14, H17. apply Succ.ElemCompat; assumption.
-          - apply ToFun.IsFunctional.
-          - apply ToFun.DomainOf. }
+          - apply From.IsFunctional.
+          - apply From.DomainOf. }
         rewrite H23, H24 in H18. clear H23 H24.
         assert (Ordinal d!:0:) as G16. {
           apply OrdFunOn.IsOrdinal with (succ n). 1: assumption.
@@ -858,13 +858,13 @@ Proof.
           - rewrite G14, H17. apply Succ.ElemCompat; assumption. }
         assert (Ordinal (:sum:_{n} :[F1']:)) as G37. {
           apply SumOfClass.IsOrdinal. 1: assumption.
-          intros i G37. rewrite ToFun.Eval, E1'.
+          intros i G37. rewrite From.Eval, E1'.
           apply Mult.IsOrdinal.
           - apply Exp.IsOrdinal. 1: assumption. apply G34. assumption.
           - apply G33. assumption. }
         assert (Ordinal (:sum:_{k} :[F2']:)) as G38. {
           apply SumOfClass.IsOrdinal. 1: assumption.
-          intros i G38. rewrite ToFun.Eval, E2'.
+          intros i G38. rewrite From.Eval, E2'.
           apply Mult.IsOrdinal.
           - apply Exp.IsOrdinal. 1: assumption. apply G36. assumption.
           - apply G35. assumption. }
@@ -957,7 +957,7 @@ Proof.
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
   assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
-    intros i G6. rewrite ToFun.Eval, H10.
+    intros i G6. rewrite From.Eval, H10.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G1. assumption.
     - apply G2. assumption. }
@@ -982,8 +982,8 @@ Proof.
     apply Incl.Tran with (a :^: b!:0: :*: c!:0:). 1: assumption.
     assert (:[F]:!:0: :<=: :sum:_{succ n} :[F]:) as H13. {
       apply SumOfClass.IsIncl; try assumption.
-      intros i H13. apply ToFun.DomainOf. }
-    rewrite ToFun.Eval, H10 in H13. rewrite H11, H10. assumption. }
+      intros i H13. apply From.DomainOf. }
+    rewrite From.Eval, H10 in H13. rewrite H11, H10. assumption. }
   assert (s :< a :^: succ b!:0:) as H14. {
     rewrite H11, H10. apply IsElem; try assumption.
     intros i H14.
@@ -1037,7 +1037,7 @@ Proof.
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
   assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
-    intros i G6. rewrite ToFun.Eval, H10.
+    intros i G6. rewrite From.Eval, H10.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G1. assumption.
     - apply G2. assumption. }
@@ -1069,8 +1069,8 @@ Proof.
     - rewrite H10. assumption.
     - assert (:[F]:!:0: :<=: s) as H21. {
         rewrite H11. apply SumOfClass.IsIncl; try assumption.
-        intros i H21. apply ToFun.DomainOf. }
-      rewrite ToFun.Eval in H21. assumption. }
+        intros i H21. apply From.DomainOf. }
+      rewrite From.Eval in H21. assumption. }
   assert (s :< a :^: b!:0: :*: succ m!:0:) as H23. {
     rewrite H11, H10. apply IsElemNat; assumption. }
   assert (a :^: (b!:0: :+: d) :<=: s :*: a :^: d) as H24. {
@@ -1277,7 +1277,7 @@ Proof.
   assert (Ordinal (succ n)) as G10. { apply Succ.IsOrdinal. assumption. }
   assert (Ordinal s) as G11. {
     rewrite H9. apply SumOfClass.IsOrdinal; try assumption.
-    intros i G11. rewrite ToFun.Eval.
+    intros i G11. rewrite From.Eval.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G2. assumption.
     - apply G3. assumption. }
@@ -1328,7 +1328,7 @@ Proof.
   assert (Ordinal (succ n)) as G10. { apply Succ.IsOrdinal. assumption. }
   assert (Ordinal s) as G11. {
     rewrite H10. apply SumOfClass.IsOrdinal; try assumption.
-    intros i G11. rewrite ToFun.Eval.
+    intros i G11. rewrite From.Eval.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G2. assumption.
     - apply G3. assumption. }
@@ -1346,12 +1346,12 @@ Proof.
       apply SumOfClass.IsIncl.
       - apply Omega.HasSucc. assumption.
       - apply Succ.HasZero. assumption.
-      - intros i H13. apply ToFun.DomainOf.
-      - intros i H13. rewrite ToFun.Eval, G13.
+      - intros i H13. apply From.DomainOf.
+      - intros i H13. rewrite From.Eval, G13.
         apply Mult.IsOrdinal.
         + apply Exp.IsOrdinal. 1: assumption. apply G2. assumption.
         +apply G3. assumption. }
-    rewrite ToFun.Eval, G13 in H13.
+    rewrite From.Eval, G13 in H13.
     rewrite H10, G13. assumption. }
   assert (a :^: b!:0: :<=: s) as H14. {
     apply Incl.Tran with (a :^: b!:0: :*: m!:0:); assumption. }

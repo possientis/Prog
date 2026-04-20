@@ -6,7 +6,7 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Relation.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Core.
@@ -203,7 +203,7 @@ Proof.
   - assert (Exp a :~: Exp' a) as H3. { apply WhenNotZeroL. assumption. }
     rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
     rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
-    rewrite <- (ToFun.Eval (fun b => b :*: a)).
+    rewrite <- (From.Eval (fun b => b :*: a)).
     apply Recursion2.WhenSucc. assumption.
 Qed.
 

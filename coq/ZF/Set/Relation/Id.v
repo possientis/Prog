@@ -16,52 +16,52 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
-Require Import ZF.Set.Relation.ToFun.
+Require Import ZF.Set.Relation.Fun.From.
 
-Definition id (a:U) : U := toFun a (fun x => x).
+Definition id (a:U) : U := from a (fun x => x).
 
 Proposition Charac : forall (a x:U),
   x :< id a <-> exists y, x = :(y,y): /\ y :< a.
 Proof.
-  apply ToFun.Charac.
+  apply From.Charac.
 Qed.
 
 Proposition Charac2 : forall (a x y:U),
   :(x,y): :< id a <-> x :< a /\ y = x.
 Proof.
-  apply ToFun.Charac2.
+  apply From.Charac2.
 Qed.
 
 Proposition Satisfies : forall (a x:U),
   x :< a -> :(x,x): :< id a.
 Proof.
-  apply ToFun.Satisfies.
+  apply From.Satisfies.
 Qed.
 
 Proposition DomainOf : forall (a:U),
   domain (id a) = a.
 Proof.
-  apply ToFun.DomainOf.
+  apply From.DomainOf.
 Qed.
 
 Proposition IsRelation : forall (a:U), Relation (id a).
 Proof.
-  apply ToFun.IsRelation.
+  apply From.IsRelation.
 Qed.
 
 Proposition IsFunctional : forall (a:U), Functional (id a).
 Proof.
-  apply ToFun.IsFunctional.
+  apply From.IsFunctional.
 Qed.
 
 Proposition IsFunction : forall (a:U), Function (id a).
 Proof.
-  apply ToFun.IsFunction.
+  apply From.IsFunction.
 Qed.
 
 Proposition IsFunctionOn : forall (a:U), FunctionOn (id a) a.
 Proof.
-  apply ToFun.IsFunctionOn.
+  apply From.IsFunctionOn.
 Qed.
 
 Proposition RangeOf : forall (a:U), range (id a) = a.
@@ -127,5 +127,5 @@ Qed.
 Proposition Eval : forall (a x:U),
   x :< a -> (id a)!x = x.
 Proof.
-  apply ToFun.Eval.
+  apply From.Eval.
 Qed.

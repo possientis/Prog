@@ -3,7 +3,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.FunctionOn.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Ordinal.Limit.
@@ -41,7 +41,7 @@ Proof.
   intros a b H1.
   assert ((Plus a)!(succ b) = :[fun b => succ b]:!((Plus a)!b)) as H2. {
     apply Recursion2.WhenSucc. assumption. }
-  rewrite H2. apply ToFun.Eval.
+  rewrite H2. apply From.Eval.
 Qed.
 
 (* a + b = \/_{c :< b} a + c when b is a limit ordinal.                         *)
@@ -59,7 +59,7 @@ Proposition IsUnique : forall (G:Class) (a:U),
   G :~: Plus a.
 Proof.
   intros G a H1 H2 H3. apply Recursion2.IsUnique; try assumption.
-  intros b H4. symmetry. rewrite H3. 2: assumption. apply ToFun.Eval.
+  intros b H4. symmetry. rewrite H3. 2: assumption. apply From.Eval.
 Qed.
 
 Proposition RestrictIsFunctionOn : forall (a b:U), On b ->

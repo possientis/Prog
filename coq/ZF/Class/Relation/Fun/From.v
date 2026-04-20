@@ -1,5 +1,5 @@
-Declare Scope ZF_Class_ToFun_scope.
-Open    Scope ZF_Class_ToFun_scope.
+Declare Scope ZF_Class_From_scope.
+Open    Scope ZF_Class_From_scope.
 
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Domain.
@@ -14,9 +14,9 @@ Require Import ZF.Notation.Eval.
 
 (* Given a Coq expression representing a function on sets, we aim to quickly    *)
 (* define the class asociated with this expression and prove basic properties.  *)
-Definition toFun (f:U -> U) : Class := fun x => exists y, x = :(y,f y):.
+Definition from (f:U -> U) : Class := fun x => exists y, x = :(y,f y):.
 
-Notation ":[ f ]:" := (toFun f) (at level 1) : ZF_Class_ToFun_scope.
+Notation ":[ f ]:" := (from f) (at level 1) : ZF_Class_From_scope.
 
 Proposition Charac2 : forall (f:U -> U) (x y:U),
   :[f]: :(x,y): <-> y = f x.

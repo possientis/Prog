@@ -1,6 +1,6 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.
@@ -93,6 +93,6 @@ Qed.
 Proposition EtaReduce : forall (A:Class) (a:U),
   :\/:_{a} (:[fun x => A!x]:) = :\/:_{a} A.
 Proof.
-  intros A a. apply Equal. intros x H1. apply ToFun.Eval.
+  intros A a. apply Equal. intros x H1. apply From.Eval.
 Qed.
 

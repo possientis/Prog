@@ -3,7 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.EvalAsClass.
 Require Import ZF.Class.Relation.Image.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -52,10 +52,10 @@ Proof.
   intros R S A p q a H1 H2 H3 H4 H5 H6 H7.
   remember (fun i x => truncate (R$i:[toClass x]:)) as R_ eqn:H8.
   remember (fun i x => truncate (S$i:[toClass (x:x:x)]:)) as S_ eqn:H9.
-  remember (fun x => :\/:_{p} (toFun (fun i => R_ i x))) as R' eqn:H10.
-  remember (fun x => :\/:_{q} (toFun (fun i => S_ i x))) as S' eqn:H11.
+  remember (fun x => :\/:_{p} (From.from (fun i => R_ i x))) as R' eqn:H10.
+  remember (fun x => :\/:_{q} (From.from (fun i => S_ i x))) as S' eqn:H11.
   remember (fun x => x :\/: R' x :\/: S' x) as G eqn:H12.
-  remember (SOR.recursion (toFun G) a) as f eqn:H13.
+  remember (SOR.recursion (From.from G) a) as f eqn:H13.
   remember (:\/:_{:N} f) as b eqn:H14.
   exists b.
   assert (:0: :< :N) as G0. { apply Omega.HasZero. }
@@ -67,17 +67,17 @@ Proof.
     intros n G4 x G5. apply G3. exists n. split; assumption. }
   assert (a = f!:0:) as G5. { rewrite H13, SOR.WhenZero. reflexivity. }
   assert (forall n, n :< :N -> f!(succ n) = f!n :\/: R' f!n :\/: S' f!n) as G6. {
-    intros n G6. rewrite H13, SOR.WhenSucc, <- H13, ToFun.Eval, H12.
+    intros n G6. rewrite H13, SOR.WhenSucc, <- H13, From.Eval, H12.
     2: assumption. reflexivity. }
   assert (forall x, toClass x :<=: A -> toClass (R' x) :<=: A) as G7. {
     intros c G7. rewrite H10. apply UnionGenOfClass.WhenClassBounded.
-    intros i G8. rewrite ToFun.Eval, H8.
+    intros i G8. rewrite From.Eval, H8.
     apply Truncate.IsIncl. apply CIN.Tran with R$i:[A]:.
     - apply CRI.InclCompatR. assumption.
     - apply H4. assumption. }
   assert (forall x, toClass x :<=: A -> toClass (S' x) :<=: A) as G8. {
     intros x G8. rewrite H11. apply UnionGenOfClass.WhenClassBounded.
-    intros i G9. rewrite ToFun.Eval, H9.
+    intros i G9. rewrite From.Eval, H9.
     apply Truncate.IsIncl. apply CIN.Tran with S$i:[A:x:A]:.
     - apply CRI.InclCompatR.
       apply CIN.EquivCompatL with (toClass x :x: toClass x).
@@ -123,7 +123,7 @@ Proof.
     apply G4 with (succ n). 1: assumption. rewrite G6. 2: assumption.
     apply Union2.Charac3. right. left. rewrite H10.
     apply UnionGenOfClass.Charac. exists i. split. 1: assumption.
-    rewrite ToFun.Eval, H8. apply Truncate.Charac. split.
+    rewrite From.Eval, H8. apply Truncate.Charac. split.
     - apply H6. 1: assumption. apply H20. assumption.
     - exists x. split; assumption. }
   assert (forall i, i :< q -> Closed2 S$i (toClass b)) as H23. {
@@ -141,7 +141,7 @@ Proof.
     apply G4 with (succ r). 1: assumption. rewrite G6. 2: assumption.
     apply Union2.Charac3. right. right. rewrite H11.
     apply UnionGenOfClass.Charac. exists i. split. 1: assumption.
-    rewrite ToFun.Eval, H9. apply Truncate.Charac. split.
+    rewrite From.Eval, H9. apply Truncate.Charac. split.
     - apply H7. 1: assumption. apply H20. assumption.
     - exists x. split. 2: assumption. rewrite H24.
       apply Prod.Charac2. split; assumption. }

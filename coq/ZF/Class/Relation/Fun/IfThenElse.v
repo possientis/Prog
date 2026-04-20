@@ -14,12 +14,12 @@ Require Import ZF.Notation.Eval.
 (* we aim to quickly define the function class F such that:                     *)
 (* F(x) = f1(x) if A x                                                          *)
 (* F(x) = f2(x) if ~ A x                                                        *)
-Definition toFun2 (A:Class) (f1 f2:U -> U) : Class := fun x => exists y,
+Definition ifThenElse (A:Class) (f1 f2:U -> U) : Class := fun x => exists y,
   x = :(y, f1 y): /\   A y    \/
   x = :(y, f2 y): /\ ~ A y.
 
 Proposition Charac2 : forall (A:Class) (f1 f2:U -> U) (x y:U),
-  toFun2 A f1 f2 :(x,y): <-> y = f1 x /\ A x \/ y = f2 x /\ ~ A x.
+  ifThenElse A f1 f2 :(x,y): <-> y = f1 x /\ A x \/ y = f2 x /\ ~ A x.
 Proof.
   intros A f1 f2 x y. split; intros H1.
   - destruct H1 as [z [[H1 H2]|[H1 H2]]];
@@ -32,19 +32,19 @@ Proof.
 Qed.
 
 Proposition Satisfies1 : forall (A:Class) (f1 f2:U -> U) (a:U),
-  A a -> toFun2 A f1 f2 :(a, f1 a):.
+  A a -> ifThenElse A f1 f2 :(a, f1 a):.
 Proof.
   intros A f1 f2 a H1. apply Charac2. left. split. 2: assumption. reflexivity.
 Qed.
 
 Proposition Satisfies2 : forall (A:Class) (f1 f2:U -> U) (a:U),
-  ~ A a -> toFun2 A f1 f2 :(a, f2 a):.
+  ~ A a -> ifThenElse A f1 f2 :(a, f2 a):.
 Proof.
   intros A f1 f2 a H1. apply Charac2. right. split. 2: assumption. reflexivity.
 Qed.
 
 Proposition DomainOf : forall (A:Class) (f1 f2:U -> U) (a:U),
-  domain (toFun2 A f1 f2) a.
+  domain (ifThenElse A f1 f2) a.
 Proof.
   intros A f1 f2 a.
   assert (A a \/ ~ A a) as H1. { apply LawExcludedMiddle. }
@@ -54,7 +54,7 @@ Proof.
 Qed.
 
 Proposition IsRelation : forall (A:Class) (f1 f2:U -> U),
-  Relation (toFun2 A f1 f2).
+  Relation (ifThenElse A f1 f2).
 Proof.
   intros A f1 f2 x H1. destruct H1 as [y [[H1 H2]|[H1 H2]]]; exists y.
   - exists (f1 y). assumption.
@@ -62,7 +62,7 @@ Proof.
 Qed.
 
 Proposition IsFunctional : forall (A:Class) (f1 f2:U -> U),
-  Functional (toFun2 A f1 f2).
+  Functional (ifThenElse A f1 f2).
 Proof.
   intros A f1 f2 x y1 y2 H1 H2.
   apply Charac2 in H1. apply Charac2 in H2.
@@ -71,7 +71,7 @@ Proof.
 Qed.
 
 Proposition IsFunction : forall (A:Class) (f1 f2:U -> U),
-  Function (toFun2 A f1 f2).
+  Function (ifThenElse A f1 f2).
 Proof.
   intros A f1 f2. split.
   - apply IsRelation.
@@ -79,7 +79,7 @@ Proof.
 Qed.
 
 Proposition Eval1 : forall (A:Class) (f1 f2:U -> U) (a:U),
-  A a -> (toFun2 A f1 f2)!a = f1 a.
+  A a -> (ifThenElse A f1 f2)!a = f1 a.
 Proof.
   intros A f1 f2 a H1. apply EvalOfClass.Charac.
   - apply IsFunctional.
@@ -88,7 +88,7 @@ Proof.
 Qed.
 
 Proposition Eval2 : forall (A:Class) (f1 f2:U -> U) (a:U),
-  ~ A a -> (toFun2 A f1 f2)!a = f2 a.
+  ~ A a -> (ifThenElse A f1 f2)!a = f2 a.
 Proof.
   intros A f1 f2 a H1. apply EvalOfClass.Charac.
   - apply IsFunctional.

@@ -2,7 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -38,7 +38,7 @@ Proof.
   intros a H1.
   assert (R1!(succ a) = :[fun b => :P(b)]:!(R1!a)) as H2. {
     apply Recursion2.WhenSucc. assumption. }
-  rewrite H2. apply ToFun.Eval.
+  rewrite H2. apply From.Eval.
 Qed.
 
 Proposition WhenLimit : forall (a:U), Limit a ->
@@ -55,7 +55,7 @@ Proposition IsUnique : forall (G:Class),
   G :~: R1.
 Proof.
   intros G H1 H2 H3. apply Recursion2.IsUnique; try assumption.
-  intros b H4. symmetry. rewrite H3. 2: assumption. apply ToFun.Eval.
+  intros b H4. symmetry. rewrite H3. 2: assumption. apply From.Eval.
 Qed.
 
 Proposition IsSuper : forall (a:U), On a ->

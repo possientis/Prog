@@ -1,6 +1,6 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -35,7 +35,7 @@ Proof.
     rewrite H3. apply UnionGen.IsIncl, Omega.HasZero. }
   assert (a :<=: b) as H6. { rewrite H4. assumption. }
   assert (forall n, n :< :N -> f!(succ n) = f!n :\/: :U(f!n)) as H7. {
-    intros n H7. rewrite H2, SOR.WhenSucc, <- H2, ToFun.Eval, H1.
+    intros n H7. rewrite H2, SOR.WhenSucc, <- H2, From.Eval, H1.
     2: assumption. reflexivity. }
   assert (forall n, n :< :N -> f!n :<=: f!(succ n)) as H8. {
     intros n H8. rewrite H7. 2: assumption. apply Union2.IsInclL. }

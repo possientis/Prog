@@ -4,7 +4,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Relation.ToFun.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -49,12 +49,12 @@ Proof.
   assert (f!:0: = ofMinRank B) as H11. {
     rewrite H8. apply SOR.WhenZero. }
   assert (forall n, n :< :N -> f!(succ n) = :\/:_{f!n} :[G]:) as H12. {
-    intros n H12. rewrite H8, SOR.WhenSucc, <- H8, ToFun.Eval, H7.
+    intros n H12. rewrite H8, SOR.WhenSucc, <- H8, From.Eval, H7.
     2: assumption. reflexivity. }
   assert (forall y, initSegment R B y :<=: B) as H13. {
     intros y. apply COI.IsIncl. }
   assert (forall y, :[G]:!y = ofMinRank (initSegment R B y)) as H14. {
-    intros y. rewrite ToFun.Eval, H6. reflexivity. }
+    intros y. rewrite From.Eval, H6. reflexivity. }
   assert (forall n, n :< :N -> toClass f!n :<=: B) as H15. {
     intros n H15.
     assert (n = :0: \/ :0: :< n) as H16. { apply Omega.ZeroOrElem. assumption. }

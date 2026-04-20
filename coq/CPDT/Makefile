@@ -7,8 +7,11 @@ VOKFILES  = $(shell find . -name "*.vok")
 VOSFILES  = $(shell find . -name "*.vos")
 AUXFILES  = $(shell find . -name "*.aux")
 GLOBFILES = $(shell find . -name "*.glob")
+HIFILES   = $(shell find . -name "*.hi")
+OBJFILES  = $(shell find . -name "*.o")
+MAINFILE  = $(shell find . -name "Main")
 
-ARTIFACTS = $(VOFILES) $(VOKFILES) $(VOSFILES) $(AUXFILES) $(GLOBFILES)
+ARTIFACTS = $(VOFILES) $(VOKFILES) $(VOSFILES) $(AUXFILES) $(GLOBFILES) $(HIFILES) $(OBJFILES) $(MAINFILE)
 
 all : deps $(VOFILES)
 
