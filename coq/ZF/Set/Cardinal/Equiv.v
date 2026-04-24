@@ -543,4 +543,57 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+Proposition SuccCompat : forall (a b:U),
+  a :~: b ->  succ a :~: succ b.
+Proof.
+  intros a b [f H1].
+  remember (fun x => x = a) as A eqn:H2.
+  remember (ifThenElse (succ a) A (fun _ => b) (fun x => f!x)) as h eqn:H3.
+  assert (FunctionOn h (succ a)) as H4. {
+    rewrite H3. apply IfThenElse.IsFunctionOn. }
+  assert (forall x, x :< a -> h!x = f!x) as G1. {
+    intros x G1. rewrite H3, IfThenElse.Eval2. 1: reflexivity.
+    - apply Succ.Charac. right. assumption.
+    - rewrite H2. intros G2. subst. revert G1. apply Foundation.NoElemLoop1. }
+  assert (h!a = b) as G2. {
+    rewrite H3, IfThenElse.Eval1. 1: reflexivity.
+    - apply Succ.IsIn.
+    - rewrite H2. reflexivity. }
+  assert (range h :<=: succ b) as H5. {
+    intros y H5.
+    apply (FunctionOn.RangeCharac h (succ a)) in H5. 2: assumption.
+    destruct H5 as [x [H5 H6]].
+    apply Succ.Charac in H5. destruct H5 as [H5|H5].
+    - rewrite <- H6, H5, G2. apply Succ.IsIn.
+    - rewrite <- H6, (G1 x H5). apply Succ.Charac. right.
+      exact (Bij.IsInRange f a b x H1 H5). }
+  assert (Fun h (succ a) (succ b)) as H6. { split; assumption. }
+  assert (succ b :<=: range h) as H7. {
+    intros y H7. apply Succ.Charac in H7. destruct H7 as [H7|H7].
+    - rewrite H7. apply (FunctionOn.RangeCharac h (succ a)). 1: assumption.
+      exists a. split. 1: apply Succ.IsIn. exact G2.
+    - apply (Bij.RangeCharac f a b y H1) in H7. destruct H7 as [x [Hx Hfx]].
+      apply (FunctionOn.RangeCharac h (succ a)). 1: assumption.
+      exists x. split.
+      + apply Succ.Charac. right. assumption.
+      + rewrite (G1 x Hx). assumption. }
+  assert (OneToOne h) as H8. {
+    apply (Fun.IsOneToOne h (succ a) (succ b)). 1: assumption.
+    intros x y H8 H9 H10.
+    apply Succ.Charac in H8. apply Succ.Charac in H9.
+    destruct H8 as [H8|H8]; destruct H9 as [H9|H9].
+    - subst. reflexivity.
+    - subst. exfalso.
+      rewrite G2, (G1 y H9) in H10.
+      assert (f!y :< b) as H11. { exact (Bij.IsInRange f a b y H1 H9). }
+      rewrite <- H10 in H11. revert H11. apply Foundation.NoElemLoop1.
+    - subst. exfalso.
+      rewrite (G1 x H8), G2 in H10.
+      assert (f!x :< b) as H11. { exact (Bij.IsInRange f a b x H1 H8). }
+      rewrite H10 in H11. revert H11. apply Foundation.NoElemLoop1.
+    - rewrite (G1 x H8), (G1 y H9) in H10.
+      exact (Bij.EvalInjective f a b x y H1 H8 H9 H10). }
+  exists h. apply Bij.FromFun; assumption.
+Qed.
+
 
