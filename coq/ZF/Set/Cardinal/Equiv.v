@@ -39,6 +39,7 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Specify.
@@ -506,6 +507,40 @@ Proposition ProdCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
 Proof.
   intros a b c d [f H1] [g H2].
-Admitted.
+  remember (from2 a b (fun p => :(f!(fst p), g!(snd p)):)) as h eqn:Hh.
+  assert (FunctionOn h (a :x: b)) as H3. { rewrite Hh. apply From2.IsFunctionOn. }
+  assert (forall u v, u :< a -> v :< b -> h!(:(u,v):) = :(f!u, g!v):) as G1. {
+    intros u v Hu Hv. rewrite Hh. apply From2.Eval; assumption. }
+  assert (range h :<=: c :x: d) as H4. {
+    intros y Hy.
+    apply (FunctionOn.RangeCharac h (a :x: b)) in Hy. 2: assumption.
+    destruct Hy as [p [Hp Hpy]].
+    apply Prod.Charac in Hp. destruct Hp as [u [v [Hp [Hu Hv]]]].
+    rewrite <- Hpy, Hp, (G1 u v Hu Hv).
+    apply Prod.Charac2. split.
+    - exact (Bij.IsInRange f a c u H1 Hu).
+    - exact (Bij.IsInRange g b d v H2 Hv). }
+  assert (Fun h (a :x: b) (c :x: d)) as H5. { split; assumption. }
+  assert (c :x: d :<=: range h) as H6. {
+    intros z Hz.
+    apply Prod.Charac in Hz. destruct Hz as [c1 [d1 [Hz [Hc1 Hd1]]]].
+    apply (Bij.RangeCharac f a c c1 H1) in Hc1. destruct Hc1 as [u [Hu Hfu]].
+    apply (Bij.RangeCharac g b d d1 H2) in Hd1. destruct Hd1 as [v [Hv Hgv]].
+    apply (FunctionOn.RangeCharac h (a :x: b)). 1: assumption.
+    exists :(u,v):. split.
+    - apply Prod.Charac2. split; assumption.
+    - rewrite (G1 u v Hu Hv), Hfu, Hgv. symmetry. exact Hz. }
+  assert (OneToOne h) as H7. {
+    apply (FunctionOn.IsOneToOne h (a :x: b)). 1: assumption.
+    intros p q Hp Hq Hpq.
+    apply Prod.Charac in Hp. destruct Hp as [u1 [v1 [Hp [Hu1 Hv1]]]].
+    apply Prod.Charac in Hq. destruct Hq as [u2 [v2 [Hq [Hu2 Hv2]]]].
+    rewrite Hp, Hq, (G1 u1 v1 Hu1 Hv1), (G1 u2 v2 Hu2 Hv2) in Hpq.
+    apply OrdPair.WhenEqual in Hpq. destruct Hpq as [Hf Hg].
+    apply (Bij.EvalInjective f a c u1 u2 H1 Hu1 Hu2) in Hf.
+    apply (Bij.EvalInjective g b d v1 v2 H2 Hv1 Hv2) in Hg.
+    rewrite Hp, Hq, Hf, Hg. reflexivity. }
+  exists h. apply Bij.FromFun; assumption.
+Qed.
 
 
