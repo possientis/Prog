@@ -16,6 +16,8 @@ Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Mult.
+Require Import ZF.Set.Ordinal.Mult2.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Order.
@@ -873,4 +875,14 @@ Proof.
       apply Plus.IsInclR. 1: exact Ha. exact Hn_ord.
 Qed.
 
+(* For ordinals a and b, the cartesian product a x b is equipotent to a * b.    *)
+Proposition ProdIsMult : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :x: b :~: a :*: b.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* a x b ~ b x a by commutativity, and b x a ~ a * b by the Mult2 bijection.  *)
+  intros a b Ha Hb. apply Tran with (b :x: a).
+  - apply ProdComm.
+  - exists (Mult2.f a b). apply Mult2.IsBij; assumption.
+Qed.
 
