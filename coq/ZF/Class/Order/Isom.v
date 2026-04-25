@@ -116,8 +116,8 @@ Proposition RestrictR : forall (F R S A B:Class),
 Proof.
   intros F R S A B. split; intros [H1 H2]; split; try assumption;
   intros x y H3 H4.
-  - assert (B (F!x)) as H5. { apply Bij.IsInRange with A; assumption. }
-    assert (B (F!y)) as H6. { apply Bij.IsInRange with A; assumption. }
+  - assert (B F!x) as H5. { apply Bij.IsInRange with A; assumption. }
+    assert (B F!y) as H6. { apply Bij.IsInRange with A; assumption. }
     split; intros H7.
     + split.
       * apply H2; assumption.

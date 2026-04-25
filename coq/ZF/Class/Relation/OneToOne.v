@@ -89,7 +89,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),
-  OneToOne F -> domain F a -> range F (F!a).
+  OneToOne F -> domain F a -> range F F!a.
 Proof.
   intros F a [H1 _]. apply EvalOfClass.IsInRange. assumption.
 Qed.
@@ -148,7 +148,7 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   OneToOne F      ->
   OneToOne G      ->
   domain F a      ->
-  domain G (F!a)  ->
+  domain G F!a    ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [H1 _] [H2 _]. apply Compose.Eval; assumption.
@@ -195,12 +195,12 @@ Proof.
 Qed.
 
 Proposition EvalInImage : forall (F A:Class) (a:U),
-  OneToOne F -> domain F a -> F:[A]: (F!a) <-> A a.
+  OneToOne F -> domain F a -> F:[A]: F!a <-> A a.
 Proof.
   intros F A a H1 H2. split; intros H3.
   - destruct H3 as [x [H3 H4]].
     assert (x = a) as H5. {
-      apply CharacL with F (F!a); try assumption.
+      apply CharacL with F F!a; try assumption.
       apply Satisfies; assumption. }
     subst. assumption.
   - exists a. split. 1: assumption. apply Satisfies; assumption.

@@ -54,7 +54,7 @@ Qed.
 Proposition IsUnique : forall (G:Class) (a:U),
   CFO.FunctionOn G On                         ->
   G!:0: = a                                   ->
-  (forall b, On b -> G!(succ b) = succ (G!b)) ->
+  (forall b, On b -> G!(succ b) = succ G!b)   ->
   (forall b, Limit b -> G!b = :\/:_{b} G)     ->
   G :~: Plus a.
 Proof.

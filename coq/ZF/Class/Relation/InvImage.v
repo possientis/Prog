@@ -95,7 +95,7 @@ Proof.
     split. 1: assumption.
     assert (F!x = y) as H5. { apply EvalOfClass.Charac; assumption. }
     rewrite H5. assumption.
-  - destruct H2 as [H2 H3]. exists (F!x). split. 1: assumption.
+  - destruct H2 as [H2 H3]. exists F!x. split. 1: assumption.
     apply Converse.Charac2Rev. apply EvalOfClass.Satisfies; assumption.
 Qed.
 

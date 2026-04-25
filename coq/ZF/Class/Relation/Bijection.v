@@ -142,7 +142,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),
-  Bijection F -> domain F a -> range F (F!a).
+  Bijection F -> domain F a -> range F F!a.
 Proof.
   intros F a H1. apply OneToOne.IsInRange, H1.
 Qed.
@@ -169,7 +169,7 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   Bijection F     ->
   Bijection G     ->
   domain F a      ->
-  domain G (F!a)  ->
+  domain G F!a    ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [_ H1] [_ H2]. apply OneToOne.ComposeEval; assumption.
@@ -273,7 +273,7 @@ Proof.
 Qed.
 
 Proposition EvalInImage : forall (F A:Class) (a:U),
-  Bijection F -> domain F a -> F:[A]: (F!a) <-> A a.
+  Bijection F -> domain F a -> F:[A]: F!a <-> A a.
 Proof.
   intros F A a H1. apply OneToOne.EvalInImage, H1.
 Qed.

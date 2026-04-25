@@ -112,7 +112,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),
-  Functional F -> domain F a -> range F (F!a).
+  Functional F -> domain F a -> range F F!a.
 Proof.
   intros F a H1 H2. exists a.
   apply Satisfies; assumption.

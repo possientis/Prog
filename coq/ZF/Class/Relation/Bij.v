@@ -195,7 +195,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F A B:Class) (x:U),
-  Bij F A B -> A x -> B (F!x).
+  Bij F A B -> A x -> B F!x.
 Proof.
   intros F A B a H1. apply IsFun in H1. apply Fun.IsInRange. assumption.
 Qed.
@@ -335,7 +335,7 @@ Proof.
 Qed.
 
 Proposition EvalInImage : forall (F A B C:Class) (a:U),
-  Bij F A B -> A a -> F:[C]: (F!a) <-> C a.
+  Bij F A B -> A a -> F:[C]: F!a <-> C a.
 Proof.
   intros F A B C a H1. apply BijectionOn.EvalInImage, H1.
 Qed.

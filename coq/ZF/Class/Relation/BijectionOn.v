@@ -161,7 +161,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F A:Class) (a:U),
-  BijectionOn F A -> A a -> range F (F!a).
+  BijectionOn F A -> A a -> range F F!a.
 Proof.
   intros F A a H1. apply FunctionOn.IsInRange, IsFunctionOn. assumption.
 Qed.
@@ -181,7 +181,7 @@ Qed.
 Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
-  domain (G :.: F) a <-> A a /\ B (F!a).
+  domain (G :.: F) a <-> A a /\ B F!a.
 Proof.
   intros F G A B a H1 H2.
   apply FunctionOn.DomainOfCompose; apply IsFunctionOn; assumption.
@@ -191,7 +191,7 @@ Proposition ComposeEval : forall (F G A B:Class) (a:U),
   BijectionOn F A ->
   BijectionOn G B ->
   A a             ->
-  B (F!a)         ->
+  B F!a           ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B a H1 H2.
@@ -297,7 +297,7 @@ Proof.
 Qed.
 
 Proposition EvalInImage : forall (F A B:Class) (a:U),
-  BijectionOn F A -> A a -> F:[B]: (F!a) <-> B a.
+  BijectionOn F A -> A a -> F:[B]: F!a <-> B a.
 Proof.
   intros F A B a [H1 H2] H3. apply Bijection.EvalInImage. 1: assumption.
   apply H2. assumption.

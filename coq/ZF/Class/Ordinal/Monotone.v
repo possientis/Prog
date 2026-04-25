@@ -40,7 +40,7 @@ Proof.
   intros F a [[H1 [H2 H3]] H4] H5.
   assert (On a) as H6. {
     apply COC.IsOrdinal with (domain F); assumption. }
-  assert (On (F!a)) as H7. { apply H3, CRF.IsInRange; assumption. }
+  assert (On F!a) as H7. { apply H3, CRF.IsInRange; assumption. }
   remember (fun b => domain F b /\ F!b :< b) as A eqn:H8.
   assert (A :~: :0: \/ A :<>: :0:) as H9. { apply LawExcludedMiddle. }
   destruct H9 as [H9|H9].
@@ -55,7 +55,7 @@ Proof.
     assert (exists b, A b /\ A :/\: toClass b :~: :0:) as H11. {
       apply COC.HasMinimal with On; try assumption. apply COC.OnIsOrdinal. }
     destruct H11 as [b [H11 H12]]. rewrite H8 in H11. destruct H11 as [H11 H13].
-    assert (domain F (F!b)) as H14. {
+    assert (domain F F!b) as H14. {
       assert (Transitive (domain F)) as H14. { apply H2. }
       apply (H14 b); assumption. }
     assert (F!(F!b) :< F!b) as H15. { apply H4; assumption. }

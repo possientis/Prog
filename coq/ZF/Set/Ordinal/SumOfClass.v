@@ -175,7 +175,7 @@ Proof.
       assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
       assert (forall j, j :< n -> domain F j) as G2. {
         intros j G2. apply H3, Succ.IsIncl. assumption. }
-      assert (forall j, j :< n -> Ordinal (F!j)) as G3. {
+      assert (forall j, j :< n -> Ordinal F!j) as G3. {
         intros j G3. apply H4, Succ.IsIncl. assumption. }
       assert (Ordinal (:sum:_{n} F)) as G4. {
         apply IsOrdinal; assumption. }

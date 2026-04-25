@@ -180,7 +180,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F:Class) (a:U),
-  Function F -> domain F a -> range F (F!a).
+  Function F -> domain F a -> range F F!a.
 Proof.
   intros F a H1. apply EvalOfClass.IsInRange, H1.
 Qed.
@@ -215,7 +215,7 @@ Proposition ComposeEval : forall (F G:Class) (a:U),
   Function F     ->
   Function G     ->
   domain F a     ->
-  domain G (F!a) ->
+  domain G F!a   ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [_ H1] [_ H2]. apply Compose.Eval; assumption.

@@ -115,7 +115,7 @@ Proposition NotInImage : forall (F R S A B:Class) (a:U),
   WellOrdering S B ->
   Isom F R S A B   ->
   A a              ->
-  ~ F:[initSegment R A a]: (F!a).
+  ~ F:[initSegment R A a]: F!a.
 Proof.
   intros F R S A B a H1 H2 H3 H4. apply (IsNotIn R A a).
   - apply (WhenIsom F R S A B); assumption.

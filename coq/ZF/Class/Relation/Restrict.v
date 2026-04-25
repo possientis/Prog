@@ -193,7 +193,7 @@ Proof.
   intros F A x H1 H2.
   assert (Functional (F:|:A)) as H3. { apply IsFunctional. assumption. }
   assert (domain F x \/ ~ domain F x) as H4. { apply LawExcludedMiddle. }
-  remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
+  remember F!x as y eqn:E. destruct H4 as [H4|H4].
   - assert (domain (F:|:A) x) as H5. { apply DomainOf. split; assumption. }
     apply EvalOfClass.Charac; try assumption.
     apply Charac2. split. 1: assumption. rewrite E.

@@ -103,7 +103,7 @@ Qed.
 
 (* F(a + 1) = F(a) + 1.                                                         *)
 Lemma FWhenSucc : forall (a:U),
-  On a -> F!(succ a) = succ (F!a).
+  On a -> F!(succ a) = succ F!a.
 Proof.
   intros a H1. unfold F. rewrite Recursion2.WhenSucc. 2: assumption.
   rewrite F0Eval. 1: reflexivity. apply FOrdFun. exists a.

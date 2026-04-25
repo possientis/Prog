@@ -154,7 +154,7 @@ Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                                          ->
   C :<=: A                                                ->
   A a                                                     ->
-  F:[initSegment R C a]: :~: initSegment S F:[C]: (F!a).
+  F:[initSegment R C a]: :~: initSegment S F:[C]: F!a.
 Proof.
   intros F R S A B C a [H1 H2] H3 H4 y. split; intros H5.
   - destruct H5 as [x [H5 H6]].

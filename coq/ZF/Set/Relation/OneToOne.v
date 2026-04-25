@@ -219,7 +219,7 @@ Proof.
   intros f a x H1 H2. split; intros H3.
   - apply Image.Charac in H3. destruct H3 as [x' [H3 H4]].
     assert (x' = x) as H5. {
-      apply CharacL with f (f!x); try assumption.
+      apply CharacL with f f!x; try assumption.
       apply Satisfies; assumption. }
     subst. assumption.
   - apply Image.Charac. exists x. split. 1: assumption.

@@ -10,7 +10,7 @@ Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
 Proposition IsOrdinal : forall (A B:Class),
-  (forall x, A x -> On (B!x)) -> Ordinal :\/:_{A} B.
+  (forall x, A x -> On B!x) -> Ordinal :\/:_{A} B.
 Proof.
   intros A B H1. apply Union.IsOrdinal. intros y H2.
   destruct H2 as [x [H2 H3]]. subst. apply H1. assumption.

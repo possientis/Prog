@@ -75,7 +75,7 @@ Proof.
           + apply H8, H9. }
       assert (Minimal E (A :\: toClass b) b) as H10. {
         apply IsEMinimal; assumption. }
-      assert (Minimal E F:[A :\: toClass b]: (F!b)) as H11. {
+      assert (Minimal E F:[A :\: toClass b]: F!b) as H11. {
         apply Minimal.IsomImage with E A B; try assumption.
         apply Class.Inter2.IsInclL. }
       clear H10.
@@ -87,7 +87,7 @@ Proof.
           + apply Equiv.Tran with (toClass F:[b]:).
             * apply Equiv.Sym, ImageByClass.ToClass, H3.
             * apply EqualToClass. assumption. }
-      assert (Minimal E (B :\: toClass b) (F!b)) as H13. {
+      assert (Minimal E (B :\: toClass b) F!b) as H13. {
         apply Minimal.EquivCompatR with F:[A :\: toClass b]:; assumption. }
       clear H11 H12.
       assert (B b) as H14. {

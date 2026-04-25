@@ -217,7 +217,7 @@ Qed.
 (* G.F is functional at a if F is, G is functional at F!a and a lies in domain. *)
 Proposition IsFunctionalAt : forall (F G:Class) (a:U),
   FunctionalAt F a          ->
-  FunctionalAt G (F!a)      ->
+  FunctionalAt G F!a        ->
   domain F a                ->
   FunctionalAt (G :.: F) a.
 Proof.
@@ -232,9 +232,9 @@ Qed.
 (* Evaluating the composed class G.F at a, from evaluations of F and G.         *)
 Proposition FunctionalAtEval : forall (F G:Class) (a:U),
   FunctionalAt F a        ->
-  FunctionalAt G (F!a)    ->
+  FunctionalAt G F!a      ->
   domain F a              ->
-  domain G (F!a)          ->
+  domain G F!a            ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a H1 H2 H3 H4. assert (H5 := H3). assert (H6 := H4).
@@ -255,7 +255,7 @@ Proposition Eval : forall (F G:Class) (a:U),
   Functional F    ->
   Functional G    ->
   domain F a      ->
-  domain G (F!a)  ->
+  domain G F!a    ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a H1 H2. apply FunctionalAtEval.

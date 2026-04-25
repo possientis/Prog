@@ -89,7 +89,7 @@ Proof.
       apply Equiv.Tran with F:[F^:-1::[toClass b]:]:.
       - apply Image.EquivCompatR. assumption.
       - apply Bij.ImageOfInvImage with A B. 2: assumption. apply H1. }
-    exists (F!x). apply Minimal.EquivCompatR with F:[toClass a]:.
+    exists F!x. apply Minimal.EquivCompatR with F:[toClass a]:.
     1: assumption. apply Minimal.IsomImage with R A B; try assumption.
     apply H7, Minimal.IsIn with R. assumption. }
 

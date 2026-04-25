@@ -194,7 +194,7 @@ Qed.
 
 (* The value at a of a function defined on A lies in the range when a im A.     *)
 Proposition IsInRange : forall (F A:Class) (a:U),
-  FunctionOn F A -> A a -> range F (F!a).
+  FunctionOn F A -> A a -> range F F!a.
 Proof.
   intros F A a [H1 H2] H3. apply Function.IsInRange. 1: assumption.
   apply H2. assumption.
@@ -226,7 +226,7 @@ Qed.
 Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
-  domain (G :.: F) a <-> A a /\ B (F!a).
+  domain (G :.: F) a <-> A a /\ B F!a.
 Proof.
   intros F G A B a [H1 H2] [H3 H4]. split; intros H5.
   - apply Function.DomainOfCompose in H5. destruct H5 as [H5 H6]. split.
@@ -244,7 +244,7 @@ Proposition ComposeEval : forall (F G A B:Class) (a:U),
   FunctionOn F A ->
   FunctionOn G B ->
   A a            ->
-  B (F!a)        ->
+  B F!a          ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B a [H1 H2] [H3 H4] H5 H6.

@@ -246,7 +246,7 @@ Proof.
   intros F R S A B C a H1 H2 H3 H4.
   assert (WellFounded S B) as H5. {
     apply (WellFounded.IsomCompat F R S A B); assumption. }
-  assert (B (F!a)) as H6. {
+  assert (B F!a) as H6. {
     apply Bij.IsInRange with A. 2: assumption. apply H4. }
   assert (F:[C]: :<=: B) as H7. {
     apply (Bij.ImageIncl F A B). 2: assumption. apply H4. }
@@ -277,7 +277,7 @@ Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
 Proof.
   intros F R S A B a H1 H2 H3.
   assert (F:[A]: :~: B) as H4. { apply Bij.ImageOfDomain, H3. }
-  assert (initSegment S F:[A]: (F!a) = initSegment S B (F!a)) as H5. {
+  assert (initSegment S F:[A]: F!a = initSegment S B F!a) as H5. {
     apply EquivCompatR. assumption. }
   rewrite <- H5. apply IsomImage with A B; try assumption.
   apply Class.Incl.Refl.

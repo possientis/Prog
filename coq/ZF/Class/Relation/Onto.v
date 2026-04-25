@@ -190,7 +190,7 @@ Proof.
 Qed.
 
 Proposition IsInRange : forall (F A B:Class) (a:U),
-  Onto F A B -> A a -> B (F!a).
+  Onto F A B -> A a -> B F!a.
 Proof.
   intros F A B a H1 H2. apply H1.
   apply FunctionOn.IsInRange with A. 2: assumption. apply H1.

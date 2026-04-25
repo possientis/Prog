@@ -192,7 +192,7 @@ Proof.
   intros F a x H1 H2.
   assert (SFL.Functional (F:|:a)) as H3. { apply IsFunctional. assumption. }
   assert (CRD.domain F x \/ ~ CRD.domain F x) as H4. { apply LawExcludedMiddle. }
-  remember (F!x) as y eqn:E. destruct H4 as [H4|H4].
+  remember F!x as y eqn:E. destruct H4 as [H4|H4].
   - assert (x :< SRD.domain (F:|:a)) as H5. {
       rewrite DomainOf. 2: assumption. apply Specify.Charac. split; assumption. }
     apply Eval.Charac; try assumption. apply Charac2Rev; try assumption.

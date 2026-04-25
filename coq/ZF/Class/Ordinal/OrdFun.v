@@ -58,7 +58,7 @@ Proof.
 Qed.
 
 Proposition IsOrdinal : forall (F:Class) (a:U), OrdFun F ->
-  domain F a -> On (F!a).
+  domain F a -> On F!a.
 Proof.
   intros F a [H1 [H2 H3]] H4. apply H3. apply CRF.IsInRange; assumption.
 Qed.

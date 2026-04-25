@@ -90,7 +90,7 @@ Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   C :<=: A                ->
   A a                     ->
   Minimal R C a           ->
-  Minimal S F:[C]: (F!a).
+  Minimal S F:[C]: F!a.
 Proof.
   intros F R S A B C a H1 H2 H3 [H4 H5]. split.
   - apply (Bij.ImageCharac F A B). 1: apply H1.

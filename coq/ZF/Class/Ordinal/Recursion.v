@@ -134,7 +134,7 @@ Proof.
       destruct H3 as [_ H3]. rewrite <- H3. apply SRD.Charac.
       exists y. assumption. }
     assert (toClass a :<=: CRD.domain (Recursion F)) as H7. {
-      intros v H7. exists (f!v). exists f. exists a. split.
+      intros v H7. exists f!v. exists f. exists a. split.
       - apply SFO.Satisfies with a; assumption.
       - split. 1: assumption. split; assumption. }
     apply H7.

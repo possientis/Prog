@@ -81,7 +81,7 @@ Proof.
         intros i H13. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
       assert (forall i, i :< succ n -> Ordinal c!i) as H14. {
         intros i H14. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-      assert (forall i : U, i :< succ n -> Ordinal (:[F]:!i)) as H15. {
+      assert (forall i : U, i :< succ n -> Ordinal :[F]:!i) as H15. {
           intros i H15. rewrite From.Eval. rewrite E.
           apply Mult.IsOrdinal.
           - apply Exp.IsOrdinal. 1: assumption. apply H13. assumption.
@@ -200,7 +200,7 @@ Proof.
   assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
-  assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
+  assert (forall i, i :< succ n -> Ordinal :[F]:!i) as G6. {
     intros i G6. rewrite From.Eval, H10.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G1. assumption.
@@ -247,7 +247,7 @@ Proof.
     intros i G22. apply OrdFunOn.IsOrdinal with n; assumption. }
   assert (forall i, i :< n -> Ordinal m'!i) as G23. {
     intros i G23. apply OrdFunOn.IsOrdinal with n; assumption. }
-  assert (forall i, i :< n -> Ordinal (:[F']:!i)) as G24. {
+  assert (forall i, i :< n -> Ordinal :[F']:!i) as G24. {
     intros i G24. rewrite From.Eval, H14.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G22. assumption.
@@ -643,9 +643,9 @@ Proof.
         assert (Ordinal k) as G2. { apply Omega.HasOrdinalElem. assumption. }
         rewrite H16, SumOfClass.WhenSucc, From.Eval in H14. 2: assumption.
         assert (k :< m) as G3. { rewrite H16. apply Succ.IsIn. }
-        assert (Ordinal (e!k)) as G4. {
+        assert (Ordinal e!k) as G4. {
           apply OrdFunOn.IsOrdinal with m; assumption. }
-        assert (Ordinal (f!k)) as G5. {
+        assert (Ordinal f!k) as G5. {
           apply OrdFunOn.IsOrdinal with m; assumption. }
         assert (forall i, i :< m -> Ordinal (F2 i)) as G6. {
           intros i G6. rewrite E2. apply Mult.IsOrdinal.
@@ -690,9 +690,9 @@ Proof.
         rewrite H16, SumOfClass.WhenZero, SumOfClass.WhenSucc, From.Eval in H15.
         2: assumption.
         assert (n :< succ n) as G5. { apply Succ.IsIn. }
-        assert (Ordinal (c!n)) as G6. {
+        assert (Ordinal c!n) as G6. {
           apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-        assert (Ordinal (d!n)) as G7. {
+        assert (Ordinal d!n) as G7. {
           apply OrdFunOn.IsOrdinal with (succ n); assumption. }
         assert (forall i, i :< succ n -> Ordinal (F1 i)) as G8. {
           intros i G8. rewrite E1. apply Mult.IsOrdinal.
@@ -956,7 +956,7 @@ Proof.
   assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
-  assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
+  assert (forall i, i :< succ n -> Ordinal :[F]:!i) as G6. {
     intros i G6. rewrite From.Eval, H10.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G1. assumption.
@@ -1036,7 +1036,7 @@ Proof.
   assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
-  assert (forall i, i :< succ n -> Ordinal (:[F]:!i)) as G6. {
+  assert (forall i, i :< succ n -> Ordinal :[F]:!i) as G6. {
     intros i G6. rewrite From.Eval, H10.
     apply Mult.IsOrdinal.
     - apply Exp.IsOrdinal. 1: assumption. apply G1. assumption.

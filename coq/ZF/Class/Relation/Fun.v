@@ -183,7 +183,7 @@ Qed.
 
 (* The value at a of a function defined on A lies in B  when a im A.            *)
 Proposition IsInRange : forall (F A B:Class) (a:U),
-  Fun F A B -> A a -> B (F!a).
+  Fun F A B -> A a -> B F!a.
 Proof.
   intros F A B a H1 H2. apply H1.
   apply FunctionOn.IsInRange with A. 2: assumption. apply H1.
