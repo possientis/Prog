@@ -12,11 +12,15 @@ Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Order.
+Require Import ZF.Set.Ordinal.Plus.
+Require Import ZF.Set.Ordinal.Plus2.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
@@ -596,4 +600,107 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+Proposition DisjointUnion : forall (a b c d:U),
+  Ordinal c               ->
+  Ordinal d               ->
+  a :~: c                 ->
+  b :~: d                 ->
+  a :/\: b  = :0:         ->
+  a :\/: b  :~: c :+: d.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Let f : a -> c and g : b -> d be the bijections given by the hypotheses.   *)
+  intros a b c d Hc Hd [f Hf] [g Hg] Hdisj.
+  (* Define h : a \/ b -> {0}xc \/ {1}xd by case on membership:                 *)
+  (*   h(x) = (0, f!x)  for x in a  (lands in {0}xc since f!x in c)             *)
+  (*   h(x) = (1, g!x)  for x in b  (lands in {1}xd since g!x in d)             *)
+  remember (ifThenElse (a :\/: b) (fun x => x :< a)
+    (fun x => :( :0: , f!x ):) (fun x => :( :1: , g!x ):)) as h eqn:Hh.
+  assert (FunctionOn h (a :\/: b)) as HFon. {
+    rewrite Hh. apply IfThenElse.IsFunctionOn. }
+  (* By definition, for any x in a, h!x = (0, f!x).                             *)
+  assert (forall x, x :< a -> h!x = :( :0: , f!x ):) as HEvalA. {
+    intros x Hx. rewrite Hh, IfThenElse.Eval1. 1: reflexivity.
+    - apply Union2.IsInclL. assumption.
+    - assumption. }
+  (* Disjointness: a /\ b = 0 means x in b implies x not in a.                  *)
+  assert (forall x, x :< b -> ~ x :< a) as HDisjAB. {
+    intros x Hxb Hxa.
+    assert (x :< a :/\: b) as H. { apply Inter2.Charac. split; assumption. }
+    rewrite Hdisj in H. revert H. apply Empty.Charac. }
+  (* By disjointness, for any x in b, h!x = (1, g!x).                           *)
+  assert (forall x, x :< b -> h!x = :( :1: , g!x ):) as HEvalB. {
+    intros x Hx. rewrite Hh, IfThenElse.Eval2. 1: reflexivity.
+    - apply Union2.IsInclR. assumption.
+    - apply HDisjAB. assumption. }
+  (* range h <= {0}xc \/ {1}xd:                                                 *)
+  (*   a-side: h!x = (0, f!x) with f!x in c  =>  h!x in {0}xc.                  *)
+  (*   b-side: h!x = (1, g!x) with g!x in d  =>  h!x in {1}xd.                  *)
+  assert (range h :<=: Plus2.sum c d) as HRangeIncl. {
+    intros e He.
+    apply (FunctionOn.RangeCharac h (a :\/: b)) in He. 2: assumption.
+    destruct He as [x [Hx Hxe]].
+    apply Union2.Charac in Hx. destruct Hx as [Hxa | Hxb].
+    - rewrite HEvalA in Hxe. 2: assumption. subst e.
+      unfold Plus2.sum. apply Union2.IsInclL.
+      apply Prod.Charac2. split. 1: apply Single.IsIn.
+      apply Bij.IsInRange with a; assumption.
+    - rewrite HEvalB in Hxe. 2: assumption. subst e.
+      unfold Plus2.sum. apply Union2.IsInclR.
+      apply Prod.Charac2. split. 1: apply Single.IsIn.
+      apply Bij.IsInRange with b; assumption. }
+  assert (Fun h (a :\/: b) (Plus2.sum c d)) as HFun. { split; assumption. }
+  (* Surjectivity: {0}xc \/ {1}xd <= range h.                                   *)
+  (* Every element of {0}xc \/ {1}xd is (0,e') with e' in c, or                 *)
+  (* (1,e') with e' in d. Surjectivity of f (resp. g) supplies the preimage.    *)
+  assert (Plus2.sum c d :<=: range h) as HSurj. {
+    intros p Hp. unfold Plus2.sum in Hp.
+    apply Union2.Charac in Hp. destruct Hp as [Hp | Hp].
+    - (* p in {0}xc: p = (0,e') with e' in c.                                   *)
+      apply Prod.Charac in Hp. destruct Hp as [t [e' [Hpeq [Ht He']]]].
+      apply Single.Charac in Ht. subst t. subst p.
+      apply (Bij.RangeCharac f a c e' Hf) in He'. destruct He' as [x [Hxa Hfx]].
+      apply (FunctionOn.RangeCharac h (a :\/: b)). 1: assumption.
+      exists x. split.
+      + apply Union2.IsInclL. assumption.
+      + rewrite (HEvalA x Hxa), Hfx. reflexivity.
+    - (* p in {1}xd: p = (1,e') with e' in d.                                   *)
+      apply Prod.Charac in Hp. destruct Hp as [t [e' [Hpeq [Ht He']]]].
+      apply Single.Charac in Ht. subst t. subst p.
+      apply (Bij.RangeCharac g b d e' Hg) in He'. destruct He' as [y [Hyb Hgy]].
+      apply (FunctionOn.RangeCharac h (a :\/: b)). 1: assumption.
+      exists y. split.
+      + apply Union2.IsInclR. assumption.
+      + rewrite (HEvalB y Hyb), Hgy. reflexivity. }
+  (* Injectivity: h is one-to-one. Four cases on membership of x, y in a or b.  *)
+  assert (OneToOne h) as HInj. {
+    apply (Fun.IsOneToOne h (a :\/: b) (Plus2.sum c d)). 1: assumption.
+    intros x y Hx Hy Hxy.
+    apply Union2.Charac in Hx. apply Union2.Charac in Hy.
+    destruct Hx as [Hxa | Hxb]; destruct Hy as [Hya | Hyb].
+    - (* x, y both in a: (0,f!x) = (0,f!y) => f!x = f!y, then f injective.      *)
+      rewrite (HEvalA x Hxa), (HEvalA y Hya) in Hxy.
+      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [_ Hfxy].
+      exact (Bij.EvalInjective f a c x y Hf Hxa Hya Hfxy).
+    - (* x in a, y in b: (0,f!x) = (1,g!y) => 0 = 1, a contradiction.           *)
+      exfalso.
+      rewrite (HEvalA x Hxa), (HEvalB y Hyb) in Hxy.
+      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [H01 _].
+      exact (Natural.ZeroIsNotOne H01).
+    - (* x in b, y in a: (1,g!x) = (0,f!y) => 1 = 0, a contradiction.           *)
+      exfalso.
+      rewrite (HEvalB x Hxb), (HEvalA y Hya) in Hxy.
+      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [H10 _].
+      exact (Natural.ZeroIsNotOne (eq_sym H10)).
+    - (* x, y both in b: (1,g!x) = (1,g!y) => g!x = g!y, then g injective.      *)
+      rewrite (HEvalB x Hxb), (HEvalB y Hyb) in Hxy.
+      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [_ Hgxy].
+      exact (Bij.EvalInjective g b d x y Hg Hxb Hyb Hgxy). }
+  (* h bijects a \/ b onto {0}xc \/ {1}xd. Composing with the bijection         *)
+  (* {0}xc \/ {1}xd ~= c + d gives the required bijection a \/ b ~= c + d.      *)
+  exists ((Plus2.f c d) :.: h).
+  apply Bij.Compose with (Plus2.sum c d).
+  - apply Bij.FromFun; assumption.
+  - apply Plus2.IsBij; assumption.
+Qed.
 
