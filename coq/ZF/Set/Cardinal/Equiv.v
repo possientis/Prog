@@ -510,11 +510,17 @@ Qed.
 Proposition ProdCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
 Proof.
+  (* Proof by Claude.                                                           *)
+  (* Let f : a -> c and g : b -> d be the bijections given by the hypotheses.   *)
   intros a b c d [f H1] [g H2].
+  (* Define h : a x b -> c x d by h(u,v) = (f(u), g(v)).                        *)
   remember (from2 a b (fun p => :(f!(fst p), g!(snd p)):)) as h eqn:Hh.
   assert (FunctionOn h (a :x: b)) as H3. { rewrite Hh. apply From2.IsFunctionOn. }
+  (* By definition, for u in a and v in b, h(u,v) = (f(u), g(v)).               *)
   assert (forall u v, u :< a -> v :< b -> h!(:(u,v):) = :(f!u, g!v):) as G1. {
     intros u v Hu Hv. rewrite Hh. apply From2.Eval; assumption. }
+  (* range h <= c x d: for each (u,v) in a x b, f(u) in c and g(v) in d,        *)
+  (* so h(u,v) = (f(u), g(v)) lies in c x d.                                    *)
   assert (range h :<=: c :x: d) as H4. {
     intros y Hy.
     apply (FunctionOn.RangeCharac h (a :x: b)) in Hy. 2: assumption.
@@ -525,6 +531,8 @@ Proof.
     - exact (Bij.IsInRange f a c u H1 Hu).
     - exact (Bij.IsInRange g b d v H2 Hv). }
   assert (Fun h (a :x: b) (c :x: d)) as H5. { split; assumption. }
+  (* Surjectivity: for (c1,d1) in c x d, find u in a with f(u) = c1 and         *)
+  (* v in b with g(v) = d1 (by surjectivity of f and g); then h(u,v) = (c1,d1). *)
   assert (c :x: d :<=: range h) as H6. {
     intros z Hz.
     apply Prod.Charac in Hz. destruct Hz as [c1 [d1 [Hz [Hc1 Hd1]]]].
@@ -534,6 +542,8 @@ Proof.
     exists :(u,v):. split.
     - apply Prod.Charac2. split; assumption.
     - rewrite (G1 u v Hu Hv), Hfu, Hgv. symmetry. exact Hz. }
+  (* Injectivity: h(u1,v1) = h(u2,v2) gives (f(u1),g(v1)) = (f(u2),g(v2)),      *)
+  (* hence u1 = u2 and v1 = v2 by injectivity of f and g respectively.          *)
   assert (OneToOne h) as H7. {
     apply (FunctionOn.IsOneToOne h (a :x: b)). 1: assumption.
     intros p q Hp Hq Hpq.
@@ -550,19 +560,26 @@ Qed.
 Proposition SuccCompat : forall (a b:U),
   a :~: b ->  succ a :~: succ b.
 Proof.
+  (* Proof by Claude.                                                           *)
+  (* Let f : a -> b be the bijection given by the hypothesis.                   *)
   intros a b [f H1].
+  (* Define h : succ(a) -> succ(b) by h(a) = b and h(x) = f(x) for x in a.      *)
   remember (fun x => x = a) as A eqn:H2.
   remember (ifThenElse (succ a) A (fun _ => b) (fun x => f!x)) as h eqn:H3.
   assert (FunctionOn h (succ a)) as H4. {
     rewrite H3. apply IfThenElse.IsFunctionOn. }
+  (* For x in a, x ≠ a by the axiom of foundation, so h(x) = f(x).              *)
   assert (forall x, x :< a -> h!x = f!x) as G1. {
     intros x G1. rewrite H3, IfThenElse.Eval2. 1: reflexivity.
     - apply Succ.Charac. right. assumption.
     - rewrite H2. intros G2. subst. revert G1. apply Foundation.NoElemLoop1. }
+  (* h maps the new top element to the new top element: h(a) = b.               *)
   assert (h!a = b) as G2. {
     rewrite H3, IfThenElse.Eval1. 1: reflexivity.
     - apply Succ.IsIn.
     - rewrite H2. reflexivity. }
+  (* range h <= succ(b): h(a) = b in succ(b); for x in a, h(x) = f(x) in b,     *)
+  (* and b is a subset of succ(b).                                              *)
   assert (range h :<=: succ b) as H5. {
     intros y H5.
     apply (FunctionOn.RangeCharac h (succ a)) in H5. 2: assumption.
@@ -572,6 +589,8 @@ Proof.
     - rewrite <- H6, (G1 x H5). apply Succ.Charac. right.
       exact (Bij.IsInRange f a b x H1 H5). }
   assert (Fun h (succ a) (succ b)) as H6. { split; assumption. }
+  (* Surjectivity: b in succ(b) has preimage a since h(a) = b; for y in b,      *)
+  (* surjectivity of f gives x in a with f(x) = y, hence h(x) = y.              *)
   assert (succ b :<=: range h) as H7. {
     intros y H7. apply Succ.Charac in H7. destruct H7 as [H7|H7].
     - rewrite H7. apply (FunctionOn.RangeCharac h (succ a)). 1: assumption.
@@ -581,6 +600,9 @@ Proof.
       exists x. split.
       + apply Succ.Charac. right. assumption.
       + rewrite (G1 x Hx). assumption. }
+  (* Injectivity: four cases. x = y = a is trivial. If x = a and y in a,        *)
+  (* h(a) = b = f(y) in b gives b in b, contradicting the axiom of foundation.  *)
+  (* Both in a: f(x) = f(y) and injectivity of f give x = y.                    *)
   assert (OneToOne h) as H8. {
     apply (Fun.IsOneToOne h (succ a) (succ b)). 1: assumption.
     intros x y H8 H9 H10.
