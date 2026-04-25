@@ -410,6 +410,41 @@ Proof.
   - subst. apply Refl.
 Qed.
 
+(* Any singleton is equipotent to 1.                                            *)
+Proposition WhenSingle : forall (a:U),
+  :{a}: :~: :1:.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* The function sending a to 0 bijects {a} onto {0} = 1.                      *)
+  intros a.
+  remember (from :{a}: (fun _ => :0:)) as h eqn:Hh.
+  assert (FunctionOn h :{a}:) as H1. { rewrite Hh. apply From.IsFunctionOn. }
+  (* By definition, h(a) = 0.                                                   *)
+  assert (h!a = :0:) as G1. {
+    rewrite Hh. apply From.Eval. apply Single.IsIn. }
+  (* range h <= 1 = {0}: h always returns 0, and 0 in {0}.                      *)
+  assert (range h :<=: :1:) as H2. {
+    intros y Hy.
+    apply (FunctionOn.RangeCharac h :{a}:) in Hy. 2: assumption.
+    destruct Hy as [x [Hx Hxy]].
+    apply Single.Charac in Hx. subst x.
+    rewrite <- Hxy, G1, Natural.OneExtension. apply Single.IsIn. }
+  assert (Fun h :{a}: :1:) as H3. { split; assumption. }
+  (* Surjectivity: the unique element 0 of 1 = {0} has preimage a.              *)
+  assert (:1: :<=: range h) as H4. {
+    intros y Hy.
+    rewrite Natural.OneExtension in Hy. apply Single.Charac in Hy. subst y.
+    apply (FunctionOn.RangeCharac h :{a}:). 1: assumption.
+    exists a. split. 1: apply Single.IsIn. exact G1. }
+  (* Injectivity: {a} has only one element, so any two elements are equal.      *)
+  assert (OneToOne h) as H5. {
+    apply (FunctionOn.IsOneToOne h :{a}:). 1: assumption.
+    intros x y Hx Hy _.
+    apply Single.Charac in Hx. apply Single.Charac in Hy.
+    rewrite Hx, Hy. reflexivity. }
+  exists h. apply Bij.FromFun; assumption.
+Qed.
+
 (* Adding b to a gives either a itself or a set equipotent to succ(a).          *)
 Proposition AddElem : forall (a b:U),
   a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a.
@@ -790,3 +825,29 @@ Proof.
   - apply ProdComm.
   - apply ProdSingleL.
 Qed.
+
+(* If a is an ordinal with N <= a, then a is equipotent to its successor.       *)
+Proposition Succ : forall (a:U), Ordinal a ->
+  :N :<=: a -> a :~: succ a.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* succ(a) = a \/ {a} = {a} \/ a ~ 1 + a = a, so a ~ succ(a) by symmetry.     *)
+  intros a Ha HN. apply Sym. unfold succ. rewrite Union2.Comm.
+  (* {a} and a are disjoint: a in a would contradict the axiom of foundation.   *)
+  assert (:{a}: :/\: a = :0:) as Hdisj. {
+    apply Incl.DoubleInclusion. split. 2: apply Empty.IsIncl.
+    intros x Hx. apply Inter2.Charac in Hx. destruct Hx as [Hxa Ha'].
+    apply Single.Charac in Hxa. subst x. exfalso.
+    revert Ha'. apply Foundation.NoElemLoop1. }
+  apply Tran with (:1: :+: a).
+  (* {a} \/ a ~ 1 + a via DisjointUnion, using {a} ~ 1 and a ~ a.               *)
+  - apply DisjointUnion.
+    + apply Natural.OneIsOrdinal.
+    + exact Ha.
+    + apply WhenSingle.
+    + apply Refl.
+    + exact Hdisj.
+  (* 1 + a = a since 1 in N and N <= a, so the result follows.                  *)
+  - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
+Qed.
+
