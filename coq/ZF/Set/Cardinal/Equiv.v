@@ -65,22 +65,26 @@ Definition equiv (a b:U) : Prop := exists f, Bij f a b.
 (* Notation "a :~: b" := (equiv a b)                                            *)
 Global Instance Equiv : Equiv U := { equiv := equiv }.
 
+(* Every set is equipotent to itself.                                           *)
 Proposition Refl : forall (a:U), a :~: a.
 Proof.
   intros a. exists (id a). apply Id.IsBij.
 Qed.
 
+(* Equipotence is symmetric.                                                    *)
 Proposition Sym : forall (a b:U), a :~: b -> b :~: a.
 Proof.
   intros a b [f H1]. exists f^:-1:. apply Bij.Converse. assumption.
 Qed.
 
+(* Equipotence is transitive.                                                   *)
 Proposition Tran : forall (a b c:U), a :~: b -> b :~: c -> a :~: c.
 Proof.
   intros a b c [f H1] [g H2]. exists (g :.: f).
   apply Bij.Compose with b; assumption.
 Qed.
 
+(* Assuming choice, every set is equipotent to some ordinal.                    *)
 Proposition HasOrdinal : Choice ->
   forall (a:U), exists b, Ordinal b /\ a :~: b.
 Proof.
@@ -131,6 +135,7 @@ Proof.
   exists b. split. 1: assumption. apply Sym. exists (F:|:b). assumption.
 Qed.
 
+(* A subset of an ordinal is equipotent to some ordinal within it.              *)
 Proposition OrdinalSubset : forall (a b:U), Ordinal b ->
   a :<=: b  -> exists c, Ordinal c /\ c :<=: b /\ a :~: c.
 Proof.
@@ -144,6 +149,7 @@ Proof.
   split. 1: assumption. split; assumption.
 Qed.
 
+(* Cantor-Schroeder-Bernstein: mutual injectability implies equipotence.        *)
 Proposition CantorShroderBernstein : forall (a b c d:U),
   a :~: c   ->
   b :~: d   ->
@@ -310,6 +316,7 @@ Proof.
   exists k. assumption.
 Qed.
 
+(* Equipotent sets have equipotent power sets.                                  *)
 Proposition PowerCompat : forall (a b:U),
   a :~: b -> :P(a) :~: :P(b).
 Proof.
@@ -390,6 +397,7 @@ Proof.
     contradiction.
 Qed.
 
+(* A set is equipotent to the empty set if and only if it is empty.             *)
 Proposition WhenZero : forall (a:U),
   a :~: :0: <-> a = :0:.
 Proof.
@@ -402,6 +410,7 @@ Proof.
   - subst. apply Refl.
 Qed.
 
+(* Adding b to a gives either a itself or a set equipotent to succ(a).          *)
 Proposition AddElem : forall (a b:U),
   a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a.
 Proof.
@@ -476,6 +485,7 @@ Proof.
     right. assumption.
 Qed.
 
+(* The product of a singleton {b} and a set a is equipotent to a.               *)
 Proposition ProdSingleL : forall (a b:U), :{b}: :x: a :~: a.
 Proof.
   intros a b.
@@ -507,6 +517,7 @@ Proof.
   apply Sym. assumption.
 Qed.
 
+(* Equipotence is compatible with cartesian products.                           *)
 Proposition ProdCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
 Proof.
@@ -557,6 +568,7 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+(* Equipotence is compatible with the successor operation.                      *)
 Proposition SuccCompat : forall (a b:U),
   a :~: b ->  succ a :~: succ b.
 Proof.
@@ -622,6 +634,7 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+(* If a and b are disjoint, a ~ c and b ~ d, then a \/ b ~ c + d.               *)
 Proposition DisjointUnion : forall (a b c d:U),
   Ordinal c               ->
   Ordinal d               ->
@@ -719,13 +732,14 @@ Proof.
       apply OrdPair.WhenEqual in Hxy. destruct Hxy as [_ Hgxy].
       exact (Bij.EvalInjective g b d x y Hg Hxb Hyb Hgxy). }
   (* h bijects a \/ b onto {0}xc \/ {1}xd. Composing with the bijection         *)
-  (* {0}xc \/ {1}xd ~= c + d gives the required bijection a \/ b ~= c + d.      *)
+  (* {0}xc \/ {1}xd ~ c + d gives the required bijection a \/ b ~ c + d.        *)
   exists ((Plus2.f c d) :.: h).
   apply Bij.Compose with (Plus2.sum c d).
   - apply Bij.FromFun; assumption.
   - apply Plus2.IsBij; assumption.
 Qed.
 
+(* The cartesian product is commutative up to equipotence.                      *)
 Proposition ProdComm : forall (a b:U),
   a :x: b :~: b :x: a.
 Proof.
