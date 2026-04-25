@@ -851,3 +851,26 @@ Proof.
   - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
 Qed.
 
+(* Any ordinal a containing N is equipotent to a + n for every natural n.       *)
+Proposition WhenNatR : forall (n a:U), Ordinal a ->
+  n :< :N -> :N :<=: a -> a :~: a :+: n.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* By induction on n.                                                         *)
+  intros n a Ha Hn HN. revert n Hn.
+  apply Omega.Induction.
+  (* Base: a + 0 = a, so a ~ a + 0 trivially.                                   *)
+  - rewrite Plus.WhenZeroR. apply Refl.
+  (* Step: by induction a ~ a + n, and N <= a <= a + n, so Succ gives           *)
+  (* a + n ~ succ(a + n) = a + succ(n). Transitivity completes the step.        *)
+  - intros n Hn IH.
+    assert (Ordinal n) as Hn_ord. { apply Omega.HasOrdinalElem. exact Hn. }
+    rewrite (Plus.WhenSuccR a n Hn_ord).
+    apply Tran with (a :+: n). 1: exact IH.
+    apply Succ.
+    + apply Plus.IsOrdinal. 1: exact Ha. exact Hn_ord.
+    + apply Incl.Tran with a. 1: exact HN.
+      apply Plus.IsInclR. 1: exact Ha. exact Hn_ord.
+Qed.
+
+
