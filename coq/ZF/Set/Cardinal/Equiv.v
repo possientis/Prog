@@ -605,6 +605,26 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+(* Equipotence is left-compatible with cartesian product.                       *)
+Proposition ProdCompatL : forall (a b c:U),
+  a :~: b -> a :x: c :~: b :x: c.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* If a ~ b then a x c ~ b x c.                                               *)
+  intros a b c H.
+  exact (ProdCompat a c b c H (Refl c)).
+Qed.
+
+(* Equipotence is right-compatible with cartesian product.                      *)
+Proposition ProdCompatR : forall (a b c:U),
+  a :~: b -> c :x: a :~: c :x: b.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* If a ~ b then c x a ~ c x b.                                               *)
+  intros a b c H.
+  exact (ProdCompat c a c b (Refl c) H).
+Qed.
+
 (* Equipotence is compatible with the successor operation.                      *)
 Proposition SuccCompat : forall (a b:U),
   a :~: b ->  succ a :~: succ b.
