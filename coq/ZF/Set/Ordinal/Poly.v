@@ -44,7 +44,7 @@ Proposition IsElem : forall (a b c d n:U),
   :1: :< a                                              ->
   (forall i, i :< n -> b!i :< d)                        ->
   (forall i, i :< n -> c!i :< a)                        ->
-  :sum:_{n} (:[fun i => a :^: b!i :*: c!i]:) :< a :^: d.
+  :sum:_{n} :[fun i => a :^: b!i :*: c!i]: :< a :^: d.
 Proof.
   intros a b c d n H1 H2 H3 H4 H5 H6 H7.
   revert n H3 b c d H2 H4 H5 H6.
@@ -61,7 +61,7 @@ Proof.
     Decreasing b ->
     (forall i, i :< n -> b!i :< d) ->
     (forall i, i :< n -> c!i :< a) ->
-    :sum:_{ n} (:[ fun i => a :^: b!i :*: c!i ]:) :< a :^: d)
+    :sum:_{n} :[fun i => a :^: b!i :*: c!i]: :< a :^: d)
     as A eqn:H8.
   assert (forall n, n :< :N -> A n) as H9. {
     apply Omega.Induction; rewrite H8.
@@ -186,7 +186,7 @@ Proposition  IsElemNat : forall (a b m n:U),
   OrdFunOn m (succ n)                                    ->
   Decreasing b                                           ->
   (forall i, i :< succ n -> m!i :< :N)                   ->
-  :sum:_{succ n} (:[fun i => a :^: b!i :*: m!i]:)        :<
+  :sum:_{succ n} :[fun i => a :^: b!i :*: m!i]:          :<
   a :^: b!:0: :*: succ m!:0:.
 Proof.
   intros a b m n H1 H2 H3 H4 H5 H7.
@@ -480,7 +480,7 @@ Proof.
       remember (fun i => a :^: d!i :*: c!i) as F eqn:H33.
       remember (fun i => a :^: d'!i :*: c'!i) as G eqn:H34.
       remember (CRR.shiftR (a :^: e :*: q) :[F]:) as H eqn:H35.
-      assert (:sum:_{succ n} (:[G]:) = :sum:_{succ n} H) as H36. {
+      assert (:sum:_{succ n} :[G]: = :sum:_{succ n} H) as H36. {
         apply SumOfClass.Equal. 1: assumption. intros i H36.
         rewrite H34, H35, From.Eval, H25, H26.
         assert (i :< :N) as G20. {
@@ -602,8 +602,8 @@ Proposition IsUnique : forall (a n m c d e f:U),
   (forall i, i :< n -> c!i :< a  )                ->
   (forall i, i :< m -> :0: :< e!i)                ->
   (forall i, i :< m -> e!i :< a  )                ->
-  :sum:_{n} (:[fun i => a :^: d!i :*: c!i]:)       =
-  :sum:_{m} (:[fun i => a :^: f!i :*: e!i]:)      ->
+  :sum:_{n} :[fun i => a :^: d!i :*: c!i]:         =
+  :sum:_{m} :[fun i => a :^: f!i :*: e!i]:        ->
   n = m /\ c = e /\ d = f.
 Proof.
   intros a n m c d e f H1 H2 H3. revert n H3 m c d e f.
@@ -624,8 +624,8 @@ Proof.
     (forall i, i :< n -> c!i :< a  )                                    ->
     (forall i, i :< m -> :0: :< e!i)                                    ->
     (forall i, i :< m -> e!i  :< a )                                    ->
-    :sum:_{ n} (:[ fun i : U => a :^: (d) ! (i) :*: (c) ! (i) ]:) =
-      :sum:_{ m} (:[ fun i : U => a :^: (f) ! (i) :*: (e) ! (i) ]:)     ->
+    :sum:_{n} :[fun i => a :^: d!i :*: c!i]:                             =
+      :sum:_{m} :[fun i => a :^: f!i :*: e!i]:                          ->
     n = m /\ c = e /\ d = f) as A eqn:E.
   assert (forall n, n :< :N -> A n) as H3. {
     apply Omega.Induction; rewrite E.

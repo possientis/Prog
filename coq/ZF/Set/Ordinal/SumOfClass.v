@@ -46,7 +46,7 @@ Proposition WhenLimit : forall (F:Class) (a:U), Limit a ->
   :sum:_{a} F = :\/:_{a} :[fun b => :sum:_{b} F]:.
 Proof.
   intros F a H1.
-  assert (:\/:_{a} (:[fun b => :sum:_{b} F]:) = :\/:_{a} (COS.sum F)) as H2. {
+  assert (:\/:_{a} :[fun b => :sum:_{b} F]: = :\/:_{a} (COS.sum F)) as H2. {
     apply SUG.EtaReduce. }
   rewrite H2. apply COS.WhenLimit. assumption.
 Qed.
@@ -68,7 +68,7 @@ Proof.
 Qed.
 
 Proposition EtaReduce : forall (F:Class) (a:U), Ordinal a ->
-  :sum:_{a} (:[fun x => F!x]:) = :sum:_{a} F.
+  :sum:_{a} :[fun x => F!x]: = :sum:_{a} F.
 Proof.
   intros F a H1. apply Equal. 1: assumption.
   intros x H2. apply From.Eval.

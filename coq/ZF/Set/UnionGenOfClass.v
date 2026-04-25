@@ -91,7 +91,7 @@ Proof.
 Qed.
 
 Proposition EtaReduce : forall (A:Class) (a:U),
-  :\/:_{a} (:[fun x => A!x]:) = :\/:_{a} A.
+  :\/:_{a} :[fun x => A!x]: = :\/:_{a} A.
 Proof.
   intros A a. apply Equal. intros x H1. apply From.Eval.
 Qed.

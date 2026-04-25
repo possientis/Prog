@@ -16,7 +16,7 @@ Require Import ZF.Notation.Eval.
 (* define the class asociated with this expression and prove basic properties.  *)
 Definition from (f:U -> U) : Class := fun x => exists y, x = :(y,f y):.
 
-Notation ":[ f ]:" := (from f) (at level 1) : ZF_Class_From_scope.
+Notation ":[ f ]:" := (from f) (at level 0) : ZF_Class_From_scope.
 
 Proposition Charac2 : forall (f:U -> U) (x y:U),
   :[f]: :(x,y): <-> y = f x.
