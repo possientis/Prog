@@ -77,7 +77,7 @@ Qed.
 
 (* The intersection is distributive over the union.                             *)
 Proposition Inter2DistOverUnion2 : forall (a b c:U),
-  a :/\: (b:\/:c) = (a:/\:b) :\/: (a:/\:c).
+  a :/\: (b:\/:c) = a:/\:b :\/:a:/\:c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
@@ -94,7 +94,7 @@ Qed.
 
 (* The union is distributive over the intersection                              *)
 Proposition Union2DistOverInter2 : forall (a b c:U),
-  a :\/: (b:/\:c) = (a:\/:b) :/\: (a:\/:c).
+  a:\/:b:/\:c = (a:\/:b) :/\: (a:\/:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Union2.Charac in H1. destruct H1 as [H1|H1];

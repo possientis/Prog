@@ -103,7 +103,7 @@ Proof.
   destruct H1 as [_ [x H1]]. exists x. apply Charac. assumption.
 Qed.
 
-Proposition UnionR : forall (a b c:U), a :\: (b:\/:c) = (a:\:b) :/\: (a:\:c).
+Proposition UnionR : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
 intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter2.Charac.
@@ -118,7 +118,7 @@ intros a b c. apply Extensionality. intros x. split; intros H1.
 Qed.
 
 Proposition InterR : forall (a b c:U),
-  a :\: (b:/\:c) = (a:\:b) :\/: (a:\:c).
+  a :\: (b:/\:c) = a:\:b:\/:a:\:c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
@@ -142,7 +142,7 @@ Proof.
 Qed.
 
 Proposition InterDistOver : forall (a b c:U),
-  a :/\: (b :\: c) = (a:/\:b) :\: (a:/\:c).
+  a :/\: b:\:c = (a:/\:b) :\: (a:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
@@ -159,7 +159,7 @@ Proof.
 Qed.
 
 Proposition InterAssoc : forall (a b c:U),
-  (a :/\: b) :\: c = a :/\: (b :\: c).
+  (a :/\: b) :\: c = a :/\: b:\:c.
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2].

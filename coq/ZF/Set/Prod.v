@@ -71,7 +71,7 @@ Proof.
 Qed.
 
 Proposition Inter2 : forall (a1 a2 b1 b2:U),
-  (a1:x:b1) :/\: (a2:x:b2) = (a1:/\:a2) :x: (b1:/\:b2).
+  a1:x:b1 :/\: a2:x:b2 = (a1:/\:a2) :x: (b1:/\:b2).
 Proof.
   intros a1 a2 b1 b2. apply DoubleInclusion. split; intros x H1.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
