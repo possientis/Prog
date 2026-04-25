@@ -726,3 +726,44 @@ Proof.
   - apply Plus2.IsBij; assumption.
 Qed.
 
+Proposition ProdComm : forall (a b:U),
+  a :x: b :~: b :x: a.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Define h : a x b -> b x a by h(u,v) = (v,u).                               *)
+  intros a b.
+  remember (from2 a b (fun p => :(snd p, fst p):)) as h eqn:Hh.
+  assert (FunctionOn h (a :x: b)) as H1. { rewrite Hh. apply From2.IsFunctionOn. }
+  (* By definition, for u in a and v in b, h(u,v) = (v,u).                      *)
+  assert (forall u v, u :< a -> v :< b -> h!(:(u,v):) = :(v,u):) as G1. {
+    intros u v Hu Hv. rewrite Hh. apply From2.Eval; assumption. }
+  (* range h <= b x a: for (u,v) in a x b, h(u,v) = (v,u) lies in b x a.        *)
+  assert (range h :<=: b :x: a) as H2. {
+    intros y Hy.
+    apply (FunctionOn.RangeCharac h (a :x: b)) in Hy. 2: assumption.
+    destruct Hy as [p [Hp Hpy]].
+    apply Prod.Charac in Hp. destruct Hp as [u [v [Hp [Hu Hv]]]].
+    rewrite <- Hpy, Hp, (G1 u v Hu Hv).
+    apply Prod.Charac2. split; assumption. }
+  assert (Fun h (a :x: b) (b :x: a)) as H3. { split; assumption. }
+  (* Surjectivity: for (v,u) in b x a, (u,v) lies in a x b and h(u,v) = (v,u).  *)
+  assert (b :x: a :<=: range h) as H4. {
+    intros z Hz.
+    apply Prod.Charac in Hz. destruct Hz as [v [u [Hz [Hv Hu]]]].
+    apply (FunctionOn.RangeCharac h (a :x: b)). 1: assumption.
+    exists :(u,v):. split.
+    - apply Prod.Charac2. split; assumption.
+    - rewrite (G1 u v Hu Hv). symmetry. exact Hz. }
+  (* Injectivity: h(u1,v1) = h(u2,v2) gives (v1,u1) = (v2,u2),                  *)
+  (* so u1 = u2 and v1 = v2 by equality of ordered pairs.                       *)
+  assert (OneToOne h) as H5. {
+    apply (FunctionOn.IsOneToOne h (a :x: b)). 1: assumption.
+    intros p q Hp Hq Hpq.
+    apply Prod.Charac in Hp. destruct Hp as [u1 [v1 [Hp [Hu1 Hv1]]]].
+    apply Prod.Charac in Hq. destruct Hq as [u2 [v2 [Hq [Hu2 Hv2]]]].
+    rewrite Hp, Hq, (G1 u1 v1 Hu1 Hv1), (G1 u2 v2 Hu2 Hv2) in Hpq.
+    apply OrdPair.WhenEqual in Hpq. destruct Hpq as [Hveq Hueq].
+    rewrite Hp, Hq, Hveq, Hueq. reflexivity. }
+  exists h. apply Bij.FromFun; assumption.
+Qed.
+
