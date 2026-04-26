@@ -3,6 +3,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Eval.
 
 Require Import ZF.Notation.Eval.
@@ -30,4 +31,15 @@ Proposition FromClass : forall (f r s a b:U),
 Proof.
   intros f r s a b [H1 H2]. split. 2: assumption.
   apply Bij.FromClass. assumption.
+Qed.
+
+(* The inverse of an isomorphism is an isomorphism for the reversed orders.     *)
+Proposition Converse : forall (f r s a b:U),
+  Isom f r s a b -> Isom f^:-1: s r b a.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros f r s a b H1. apply FromClass.
+  apply COI.EquivCompat1 with (toClass f)^:-1:.
+  - apply Equiv.Sym. apply Converse.ToClass.
+  - apply COI.Converse. apply ToClass. exact H1.
 Qed.
