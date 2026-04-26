@@ -27,7 +27,7 @@ Module SOE := ZF.Set.Order.E.
 Module SOI := ZF.Set.Order.Isom.
 Module SOW := ZF.Set.Order.WellOrdering.
 
-Proposition IsIsom : forall (r b:U),
+Proposition Exists : forall (r b:U),
   WellOrdering r b          ->
 
   exists f a,
