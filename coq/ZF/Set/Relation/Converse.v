@@ -89,6 +89,16 @@ Proof.
   - rewrite <- H1. apply IsRelation.
 Qed.
 
+(* Equal converses imply equal relations, provided both are relations.          *)
+Proposition Injective : forall (f g:U), Relation f -> Relation g ->
+  f^:-1: = g^:-1: -> f = g.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros f g H1 H2 H3.
+  apply IsIdempotent in H1. apply IsIdempotent in H2.
+  rewrite <- H1, H3. exact H2.
+Qed.
+
 (* The domain of the converse is the range.                                     *)
 Proposition Domain : forall (f:U),
   domain f^:-1: = range f.

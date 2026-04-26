@@ -8,8 +8,14 @@ Require Import ZF.Set.Order.E.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Inj.
+
+Module CRR := ZF.Class.Relation.Relation.
+Module SOO := ZF.Set.Ordinal.Order.
+Module SRR := ZF.Set.Relation.Relation.
 
 Definition hartogs (a:U) : Class := fun b =>
   Ordinal b /\ exists f, Inj f b a.
@@ -34,10 +40,42 @@ Proof.
   - intros H1. exists r, x, f. split. reflexivity. assumption.
 Qed.
 
-Proposition IsRelation : Relation isom.
+(* Every element of isom is an ordered pair of the form ((r,x),f).              *)
+Proposition IsRelation : CRR.Relation isom.
 Proof.
-Admitted.
+  (* Proof by Claude.                                                           *)
+  (* Any y in isom satisfies y = ((r,x),f) for some r, x, f by definition.      *)
+  intros y H. unfold isom in H. destruct H as [r [x [f [H1 _]]]].
+  exists :(r,x):. exists f. exact H1.
+Qed.
 
+(* isom is functional: each input pair (r,x) determines at most one output.     *)
 Proposition IsFunctional : Functional isom.
 Proof.
-Admitted.
+  (* Proof by Claude.                                                           *)
+  (* Suppose isom(p,y) and isom(p,z). Both unpack as p = ((r,x),f) for some f;  *)
+  intros p y z H1 H2.
+  unfold isom in H1. destruct H1 as [r1 [x1 [f1 [Heq1 Hcase1]]]].
+  unfold isom in H2. destruct H2 as [r2 [x2 [f2 [Heq2 Hcase2]]]].
+  (* pair injectivity forces r and x to agree, reducing to showing f1 = f2.     *)
+  apply OrdPair.WhenEqual in Heq1. destruct Heq1 as [Hp1 Hy].
+  apply OrdPair.WhenEqual in Heq2. destruct Heq2 as [Hp2 Hz].
+  subst y z. rewrite Hp1 in Hp2.
+  apply OrdPair.WhenEqual in Hp2. destruct Hp2 as [Hr Hx].
+  subst r2 x2.
+  (* Split on whether (r,x) is well-ordered: if not, f1 = f2 = 0.               *)
+  destruct Hcase1 as [[Hnwo1 Hf1]|[Hwo1 [b1 [Hb1 HIsom1]]]];
+  destruct Hcase2 as [[Hnwo2 Hf2]|[Hwo2 [b2 [Hb2 HIsom2]]]].
+  - subst. reflexivity.
+  - contradiction.
+  - contradiction.
+  - assert (SRR.Relation f1) as HRf1. { apply HIsom1. }
+    assert (SRR.Relation f2) as HRf2. { apply HIsom2. }
+    (* Invert: f1^{-1}: b1 -> x and f2^{-1}: b2 -> x are isomorphisms.          *)
+    apply Isom.Converse in HIsom1. apply Isom.Converse in HIsom2.
+    (* Ordinal order-type uniqueness gives f1^{-1} = f2^{-1}.                   *)
+    assert (b1 = b2 /\ f1^:-1: = f2^:-1:) as [_ Hinv]. {
+      eapply SOO.IsUnique; eassumption. }
+    (* Since f1 and f2 are relations, converse injectivity gives f1 = f2.       *)
+    apply Converse.Injective; assumption.
+Qed.
