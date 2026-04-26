@@ -1,5 +1,8 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
@@ -11,6 +14,7 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Inj.
 
 Module CRR := ZF.Class.Relation.Relation.
@@ -78,4 +82,61 @@ Proof.
       eapply SOO.IsUnique; eassumption. }
     (* Since f1 and f2 are relations, converse injectivity gives f1 = f2.       *)
     apply Converse.Injective; assumption.
+Qed.
+
+(* A well-ordered pair (r,x) with its ordinal isomorphism belongs to isom.      *)
+Proposition Satisfies : forall (r x f b:U),
+  WellOrdering r x      ->
+  Ordinal b             ->
+  Isom f r (E b) x b    ->
+  isom :(:(r,x):,f):.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Unfold the definition: take the well-ordered branch with ordinal b.        *)
+  intros r x f b Hwo Hb HIsom.
+  unfold isom. exists r, x, f. split. 1: reflexivity.
+  right. split. 1: assumption.
+  exists b. split; assumption.
+Qed.
+
+(* isom is a function: it is both a relation and functional.                    *)
+Proposition IsFunction : Function isom.
+Proof.
+  split.
+  - apply IsRelation.
+  - apply IsFunctional.
+Qed.
+
+(* Every ordered pair (r,x) belongs to the domain of isom.                      *)
+Proposition DomainOf : forall (r x:U), domain isom :(r,x):.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Split on whether r well-orders x; provide a witness f for each case.       *)
+  intros r x. unfold domain.
+  assert (WellOrdering r x \/ ~ WellOrdering r x) as [Hwo|Hnwo]. {
+    apply LawExcludedMiddle. }
+  - (* The ordinal order type of (x, r) exists; its converse is the witness.    *)
+    assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
+      apply SOO.Exists. assumption. }
+    apply Isom.Converse in HIsom.
+    exists f^:-1:. eapply Satisfies; eassumption.
+  - (* Non-WO: the empty set witnesses membership in isom for (r,x).            *)
+    exists :0:. unfold isom. exists r, x, :0:. split. 1: reflexivity.
+    left. split. 1: assumption. reflexivity.
+Qed.
+
+(* Evaluating isom at (r,x) returns f, the ordinal isomorphism for (r,x).       *)
+Proposition Eval : forall (r x f b:U),
+  WellOrdering r x      ->
+  Ordinal b             ->
+  Isom f r (E b) x b    ->
+  (isom!:(r,x):) = f.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* The pair ((r,x),f) belongs to isom; convert via the eval characterisation. *)
+  intros r x f b Hwo Hb HIsom.
+  assert (isom :(:(r,x):,f):) as H. { eapply Satisfies; eassumption. }
+  apply (EvalOfClass.Charac isom :(r,x):). 3: assumption.
+  - apply IsFunctional.
+  - apply DomainOf.
 Qed.
