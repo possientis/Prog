@@ -4,6 +4,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -13,12 +14,18 @@ Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Inj.
+
+Require Import ZF.Notation.Eval.
+Require Import ZF.Notation.Image.
 
 Module CRR := ZF.Class.Relation.Relation.
 Module SOO := ZF.Set.Ordinal.Order.
+Module SRI := ZF.Set.Relation.Image.
 Module SRR := ZF.Set.Relation.Relation.
 
 Definition hartogs (a:U) : Class := fun b =>
@@ -140,3 +147,40 @@ Proof.
   - apply IsFunctional.
   - apply DomainOf.
 Qed.
+
+(* If r well-orders x, the direct image of x under isom!(r,x) is an ordinal.    *)
+Proposition IsOrdinal : forall (r x:U), WellOrdering r x ->
+  Ordinal (isom!:(r,x):) :[x]:.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Get the ordinal order type a with isomorphism f^{-1}: x -> a; the          *)
+  (* image f^{-1}[x] equals a by bijection, which is an ordinal.                *)
+  intros r x Hwo.
+  assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
+    apply SOO.Exists. assumption. }
+  apply Isom.Converse in HIsom.
+  assert ((isom!:(r,x):) = f^:-1:) as Heq. { eapply Eval; eassumption. }
+  assert (f^:-1::[x]: = a) as Himg. { apply Bij.ImageOfDomain. apply HIsom. }
+  rewrite Heq, Himg. assumption.
+Qed.
+
+(* If b = isom!(r,x)[x] and r well-orders x, then isom!(r,x) is an isomorphism. *)
+Proposition IsIsom : forall (r x b:U),
+  WellOrdering r x                  ->
+  b = (isom!:(r,x):) :[x]:          ->
+  Isom (isom!:(r,x):) r (E b) x b.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* f^{-1}: x -> a is the canonical ordinal isomorphism; isom!(r,x) = f^{-1}.  *)
+  intros r x b Hwo Hb.
+  assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
+    apply SOO.Exists. assumption. }
+  apply Isom.Converse in HIsom.
+  assert ((isom!:(r,x):) = f^:-1:) as Heq. { eapply Eval; eassumption. }
+  (* f^{-1}[x] = a by bijection, so b = isom!(r,x)[x] gives b = a.              *)
+  assert (f^:-1::[x]: = a) as Himg. { apply Bij.ImageOfDomain. apply HIsom. }
+  assert (b = a) as Hba. { rewrite Hb, Heq. exact Himg. }
+  (* The claim then follows directly from the isomorphism already established.  *)
+  rewrite Heq, Hba. exact HIsom.
+Qed.
+
