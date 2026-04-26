@@ -1,8 +1,11 @@
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.E.
+Require Import ZF.Class.Order.Restrict.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Specify.
+Require Import ZF.Set.Order.RestrictOfClass.
 
 Module COE := ZF.Class.Order.E.
 
@@ -32,3 +35,7 @@ Proof.
     split. 1: assumption. split; assumption.
   - apply Charac. exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
+
+Proposition ToClass : forall (a:U),
+  toClass (E a) :~: COE.E:/:(toClass a).
+Proof. apply RestrictOfClass.ToClass. Qed.

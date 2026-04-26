@@ -1,7 +1,6 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Relation.FunctionOn.
@@ -13,6 +12,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
+Require Import ZF.Set.Order.E.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
@@ -143,7 +143,7 @@ Proposition OrdinalSubset : forall (a b:U), Ordinal b ->
 Proof.
   intros a b H1 H2.
   assert (exists c f,
-    Ordinal c /\ c :<=: b /\ Isom f (E:/:c) (E:/:a) c a) as H3. {
+    Ordinal c /\ c :<=: b /\ Isom f (E c) (E a) c a) as H3. {
       apply SOO.OrdinalSubset; assumption. }
   destruct H3 as [c [f [H3 [H4 H5]]]].
   exists c.
