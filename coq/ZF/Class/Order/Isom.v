@@ -175,8 +175,6 @@ Proof.
   intros F R S A B H1 H2. split. 1: assumption.
   intros x y H3 H4. split; intros H5.
   - rewrite H1. apply (Transport.Charac2F F R A B); try assumption.
-    split. 1: assumption. split; assumption.
   - rewrite H1 in H5. apply (Transport.Charac2F F R A B) in H5; try assumption.
-    destruct H5 as [_ [_ H5]]. assumption.
 Qed.
 

@@ -68,7 +68,5 @@ Proof.
   destruct H8 as [H8|[H8|H8]]; rewrite <- H6, <- H7.
   - left. rewrite H8. reflexivity.
   - right. left. rewrite H1. apply (Transport.Charac2F F R A B); try assumption.
-    split. 1: assumption. split; assumption.
   - right. right. rewrite H1. apply (Transport.Charac2F F R A B); try assumption.
-    split. 1: assumption. split; assumption.
 Qed.

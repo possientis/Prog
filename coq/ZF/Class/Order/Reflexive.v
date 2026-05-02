@@ -18,5 +18,5 @@ Proof.
   destruct H4 as [a [H4 H5]].
   rewrite <- H5. rewrite H1.
   apply (Transport.Charac2F F R A B a a H2 H4 H4).
-  split. 1: assumption. split. 1: assumption. apply H3. assumption.
+  apply H3. assumption.
 Qed.

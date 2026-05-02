@@ -15,25 +15,26 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Definition transport (F R A:Class) : Class := fun x =>
   exists y z, x = :(F!y,F!z): /\ A y /\ A z /\ R :(y,z):.
 
+(* :(F!y,F!z): is in (transport F R A) iff R :(y,z):, given y,z in A.           *)
 Proposition Charac2F : forall (F R A B:Class) (y z:U),
-  Bij F A B ->
-  A y       ->
-  A z       ->
-  transport F R A :(F!y,F!z): <-> A y /\ A z /\ R :(y,z):.
+  Bij F A B                                   ->
+  A y                                         ->
+  A z                                         ->
+  transport F R A :(F!y,F!z): <-> R :(y,z):.
 Proof.
+  (* Proof by Claude.                                                           *)
   intros F R A B y z H1 H2 H3. split; intros H4.
-  - destruct H4 as [y' [z' [H4 [H5 [H6 H7]]]]]. apply WhenEqual in H4.
-    destruct H4 as [H4 H8].
+  - destruct H4 as [y' [z' [H4 [H5 [H6 H7]]]]].
+    apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H8].
     assert (y = y') as H9.  { apply Bij.EvalInjective with F A B; assumption. }
     assert (z = z') as H10. { apply Bij.EvalInjective with F A B; assumption. }
-    subst. split. 1: assumption. split; assumption.
-  - destruct H4 as [H4 [H5 H6]]. exists y. exists z. split.
-    1: reflexivity. split. 1: assumption. split; assumption.
+    subst. assumption.
+  - exists y, z. split. 1: reflexivity. split. 1: assumption. split; assumption.
 Qed.
 
 Proposition IsIncl : forall (F R A:Class),
-  Functional F                              ->
-  A :<=: domain F                           ->
+  Functional F                                ->
+  A :<=: domain F                             ->
   transport F R A :<=: F:[A]: :x: F:[A]:.
 Proof.
   intros F R A x H1 H2 H3.
@@ -46,9 +47,9 @@ Proof.
 Qed.
 
 Proposition IsSmall : forall (F R A:Class),
-  Functional F                        ->
-  A :<=: domain F                     ->
-  Small A                             ->
+  Functional F                                ->
+  A :<=: domain F                             ->
+  Small A                                     ->
   Small (transport F R A).
 Proof.
   intros F R A H1 H2 H3.

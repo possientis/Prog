@@ -22,7 +22,6 @@ Proof.
   rewrite <- H9, <- H8 in H7. rewrite H1 in H7.
   apply (Transport.Charac2F F R A B a b H2 H4 H5) in H6.
   apply (Transport.Charac2F F R A B b a H2 H5 H4) in H7.
-  destruct H6 as [_ [_ H6]]. destruct H7 as [_ [_ H7]].
   assert (a = b) as H10. { apply H3; assumption. }
   rewrite <- H8, <- H9. rewrite H10. reflexivity.
 Qed.

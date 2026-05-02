@@ -24,10 +24,8 @@ Proof.
   rewrite <- Hb, <- Hc in H8. rewrite H1 in H8.
   apply (Transport.Charac2F F R A B a b H2 H4 H5) in H7.
   apply (Transport.Charac2F F R A B b c H2 H5 H6) in H8.
-  destruct H7 as [_ [_ H7]]. destruct H8 as [_ [_ H8]].
   rewrite <- Ha, <- Hc. rewrite H1.
   apply (Transport.Charac2F F R A B a c H2 H4 H6).
-  split. 1: assumption. split. 1: assumption.
   apply H3 with b; assumption.
 Qed.
 
