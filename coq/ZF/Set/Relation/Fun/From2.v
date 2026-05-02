@@ -34,7 +34,7 @@ Proof.
     + apply CF2.Satisfies.
 Qed.
 
-Proposition Charac2 : forall (f:U*U -> U) (a b u v w:U),
+Proposition Charac3 : forall (f:U*U -> U) (a b u v w:U),
   :(:(u,v):,w): :< from2 a b f <-> u :< a /\ v :< b /\ w = f(u,v).
 Proof.
   (* Proof by Claude.                                                           *)
@@ -53,7 +53,7 @@ Proposition Satisfies : forall (f:U*U -> U) (a b u v:U),
 Proof.
   (* Proof by Claude.                                                           *)
   (* Follows directly from the membership characterization.                     *)
-  intros f a b u v H1 H2. apply Charac2.
+  intros f a b u v H1 H2. apply Charac3.
   split. 1: assumption. split. 1: assumption. reflexivity.
 Qed.
 
