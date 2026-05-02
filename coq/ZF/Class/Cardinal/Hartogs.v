@@ -41,7 +41,7 @@ Proof.
       apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4]. subst. assumption.
     - rewrite H1. exists r, x. split. 2: assumption. reflexivity. }
   remember (ifThenElse2 :P(a :x: a) :P(a) WO
-      (fun p => (isom!:(fst p,snd p):) :[snd p]:) (fun _ => :0:)) as f eqn:H3.
+      (fun r x => (isom!:(r,x):) :[x]:) (fun _ _ => :0:)) as f eqn:H3.
   assert (forall y, y :< range f <-> hartogs a y) as H4. {
     intros y. split; intros H4.
     - apply (FunctionOn.RangeCharac f (:P(a :x: a) :x: :P(a))) in H4.
@@ -50,7 +50,7 @@ Proof.
       destruct H4 as [r [x [H4 [H6 H7]]]]. rewrite H4 in H5. clear H4.
       assert (WO :(r,x): \/ ~ WO :(r,x):) as [H8|H8]. { apply LawExcludedMiddle. }
       + assert ((f!:(r,x):) = (isom!:(r,x):) :[x]:) as H9. {
-          rewrite H3. apply IfThenElse2.Eval1; assumption. }
+          rewrite H3. rewrite IfThenElse2.Eval1 by assumption. reflexivity. }
         unfold hartogs.
         assert (Ordinal y) as H10. {
           rewrite <- H5, H9. apply Isom.IsOrdinal, H2. assumption. }
@@ -67,7 +67,7 @@ Proof.
             rewrite H14. apply Power.Charac. assumption. }
         split. 1: assumption. exists g^:-1:. assumption.
       + assert ((f!:(r,x):) = :0:) as H9. {
-          rewrite H3. apply IfThenElse2.Eval2; assumption. }
+          rewrite H3. rewrite IfThenElse2.Eval2 by assumption. reflexivity. }
         assert (y = :0:) as H10. { rewrite <- H5, H9. reflexivity. }
         unfold hartogs. rewrite H10. split.
         * apply Core.ZeroIsOrdinal.

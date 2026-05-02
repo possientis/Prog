@@ -17,16 +17,16 @@ Module CFI2 := ZF.Class.Relation.Fun.IfThenElse2.
 Module SOR  := ZF.Set.Relation.RestrictOfClass.
 
 (* The function defined on a x b by:                                            *)
-(* f(u,v) = f1(u,v) if the condition holds at (u,v)                             *)
-(* f(u,v) = f2(u,v) if the condition fails at (u,v)                             *)
-Definition ifThenElse2 (a b:U) (A:Class) (f1 f2:U*U -> U) : U
+(* f(u,v) = f1(u,v) if the condition holds at (u,v)                            *)
+(* f(u,v) = f2(u,v) if the condition fails at (u,v)                            *)
+Definition ifThenElse2 (a b:U) (A:Class) (f1 f2:U -> U -> U) : U
   := (CFI2.ifThenElse2 A f1 f2) :|: (a :x: b).
 
 (* Generic membership exposes pair witnesses and the applicable branch.         *)
-Proposition Charac : forall (A:Class) (f1 f2:U*U -> U) (a b x:U),
+Proposition Charac : forall (A:Class) (f1 f2:U -> U -> U) (a b x:U),
   x :< ifThenElse2 a b A f1 f2 <-> exists u v,
-    x = :(:(u,v):,f1(u,v)): /\ u :< a /\ v :< b /\   A :(u,v):  \/
-    x = :(:(u,v):,f2(u,v)): /\ u :< a /\ v :< b /\ ~ A :(u,v):.
+    x = :(:(u,v):,f1 u v): /\ u :< a /\ v :< b /\   A :(u,v):  \/
+    x = :(:(u,v):,f2 u v): /\ u :< a /\ v :< b /\ ~ A :(u,v):.
 Proof.
   (* Proof by Claude.                                                           *)
   (* An element is a pair with first component in the product, and second       *)
@@ -51,11 +51,11 @@ Proof.
 Qed.
 
 (* Membership of a pair exposes the pair witnesses and applicable branch.       *)
-Proposition Charac2 : forall (A:Class) (f1 f2:U*U -> U) (a b p q:U),
+Proposition Charac2 : forall (A:Class) (f1 f2:U -> U -> U) (a b p q:U),
   :(p,q): :< ifThenElse2 a b A f1 f2 <->
   exists u v, p = :(u,v): /\ u :< a /\ v :< b /\
-    (q = f1(u,v) /\   A :(u,v):  \/
-     q = f2(u,v) /\ ~ A :(u,v):).
+    (q = f1 u v /\   A :(u,v):  \/
+     q = f2 u v /\ ~ A :(u,v):).
 Proof.
   (* Proof by Claude.                                                           *)
   (* Pair membership unpacks the witnesses via ordered-pair injectivity.        *)
@@ -76,11 +76,11 @@ Proof.
 Qed.
 
 (* Membership at a fully explicit input reduces to the two branch conditions.   *)
-Proposition Charac3 : forall (A:Class) (f1 f2:U*U -> U) (a b u v w:U),
+Proposition Charac3 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v w:U),
   :(:(u,v):,w): :< ifThenElse2 a b A f1 f2 <->
   u :< a /\ v :< b /\
-    (w = f1(u,v) /\   A :(u,v):  \/
-     w = f2(u,v) /\ ~ A :(u,v):).
+    (w = f1 u v /\   A :(u,v):  \/
+     w = f2 u v /\ ~ A :(u,v):).
 Proof.
   (* Proof by Claude.                                                           *)
   (* Follows from the pair characterization via ordered-pair injectivity.       *)
@@ -94,9 +94,9 @@ Proof.
 Qed.
 
 (* The first branch value belongs to ifThenElse2 when the condition holds.      *)
-Proposition Satisfies1 : forall (A:Class) (f1 f2:U*U -> U) (a b u v:U),
+Proposition Satisfies1 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> A :(u,v): ->
-  :(:(u,v):,f1(u,v)): :< ifThenElse2 a b A f1 f2.
+  :(:(u,v):,f1 u v): :< ifThenElse2 a b A f1 f2.
 Proof.
   (* Proof by Claude.                                                           *)
   (* Follows directly from the membership characterization.                     *)
@@ -106,9 +106,9 @@ Proof.
 Qed.
 
 (* The second branch value belongs to ifThenElse2 when the condition fails.     *)
-Proposition Satisfies2 : forall (A:Class) (f1 f2:U*U -> U) (a b u v:U),
+Proposition Satisfies2 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> ~ A :(u,v): ->
-  :(:(u,v):,f2(u,v)): :< ifThenElse2 a b A f1 f2.
+  :(:(u,v):,f2 u v): :< ifThenElse2 a b A f1 f2.
 Proof.
   (* Proof by Claude.                                                           *)
   (* Follows directly from the membership characterization.                     *)
@@ -118,7 +118,7 @@ Proof.
 Qed.
 
 (* The domain of ifThenElse2 on a x b equals the full product a x b.            *)
-Proposition DomainOf : forall (A:Class) (f1 f2:U*U -> U) (a b:U),
+Proposition DomainOf : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   domain (ifThenElse2 a b A f1 f2) = a :x: b.
 Proof.
   (* Proof by Claude.                                                           *)
@@ -132,24 +132,24 @@ Proof.
     apply Domain.Charac.
     assert (A :(u,v): \/ ~ A :(u,v):) as H4. { apply LawExcludedMiddle. }
     destruct H4 as [H4|H4].
-    + exists (f1(u,v)). apply Satisfies1; assumption.
-    + exists (f2(u,v)). apply Satisfies2; assumption.
+    + exists (f1 u v). apply Satisfies1; assumption.
+    + exists (f2 u v). apply Satisfies2; assumption.
 Qed.
 
 (* ifThenElse2 is a relation: every member is an ordered pair.                  *)
-Proposition IsRelation : forall (A:Class) (f1 f2:U*U -> U) (a b:U),
+Proposition IsRelation : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   Relation (ifThenElse2 a b A f1 f2).
 Proof.
   (* Proof by Claude.                                                           *)
   (* Every element has the form of a pair by the membership characterization.   *)
   intros A f1 f2 a b x H1. apply Charac in H1.
   destruct H1 as [u [v [[H1 [H2 [H3 H4]]]|[H1 [H2 [H3 H4]]]]]]; subst.
-  - exists :(u,v):. exists (f1(u,v)). reflexivity.
-  - exists :(u,v):. exists (f2(u,v)). reflexivity.
+  - exists :(u,v):. exists (f1 u v). reflexivity.
+  - exists :(u,v):. exists (f2 u v). reflexivity.
 Qed.
 
 (* ifThenElse2 is functional: the branch condition uniquely determines output.  *)
-Proposition IsFunctional : forall (A:Class) (f1 f2:U*U -> U) (a b:U),
+Proposition IsFunctional : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   Functional (ifThenElse2 a b A f1 f2).
 Proof.
   (* Proof by Claude.                                                           *)
@@ -166,7 +166,7 @@ Proof.
 Qed.
 
 (* ifThenElse2 is a function: it is both a relation and functional.             *)
-Proposition IsFunction : forall (A:Class) (f1 f2:U*U -> U) (a b:U),
+Proposition IsFunction : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   Function (ifThenElse2 a b A f1 f2).
 Proof.
   (* Proof by Claude.                                                           *)
@@ -176,7 +176,7 @@ Proof.
 Qed.
 
 (* ifThenElse2 is a function on the product a x b.                              *)
-Proposition IsFunctionOn : forall (A:Class) (f1 f2:U*U -> U) (a b:U),
+Proposition IsFunctionOn : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   FunctionOn (ifThenElse2 a b A f1 f2) (a :x: b).
 Proof.
   (* Proof by Claude.                                                           *)
@@ -186,9 +186,9 @@ Proof.
 Qed.
 
 (* When the condition holds, evaluating ifThenElse2 returns the first branch.   *)
-Proposition Eval1 : forall (A:Class) (f1 f2:U*U -> U) (a b u v:U),
+Proposition Eval1 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> A :(u,v): ->
-  (ifThenElse2 a b A f1 f2)!(:(u,v):) = f1(u,v).
+  (ifThenElse2 a b A f1 f2)!(:(u,v):) = f1 u v.
 Proof.
   (* Proof by Claude.                                                           *)
   (* The relevant pair belongs to the function; evaluation uniqueness gives     *)
@@ -200,9 +200,9 @@ Proof.
 Qed.
 
 (* When the condition fails, evaluating ifThenElse2 returns the second branch.  *)
-Proposition Eval2 : forall (A:Class) (f1 f2:U*U -> U) (a b u v:U),
+Proposition Eval2 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> ~ A :(u,v): ->
-  (ifThenElse2 a b A f1 f2)!(:(u,v):) = f2(u,v).
+  (ifThenElse2 a b A f1 f2)!(:(u,v):) = f2 u v.
 Proof.
   (* Proof by Claude.                                                           *)
   (* The relevant pair belongs to the function; evaluation uniqueness gives     *)

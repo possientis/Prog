@@ -562,11 +562,11 @@ Proof.
   (* Let f : a -> c and g : b -> d be the bijections given by the hypotheses.   *)
   intros a b c d [f H1] [g H2].
   (* Define h : a x b -> c x d by h(u,v) = (f(u), g(v)).                        *)
-  remember (from2 a b (fun p => :(f!(fst p), g!(snd p)):)) as h eqn:Hh.
+  remember (from2 a b (fun u v => :(f!u, g!v):)) as h eqn:Hh.
   assert (FunctionOn h (a :x: b)) as H3. { rewrite Hh. apply From2.IsFunctionOn. }
   (* By definition, for u in a and v in b, h(u,v) = (f(u), g(v)).               *)
   assert (forall u v, u :< a -> v :< b -> h!(:(u,v):) = :(f!u, g!v):) as G1. {
-    intros u v Hu Hv. rewrite Hh. apply From2.Eval; assumption. }
+    intros u v Hu Hv. rewrite Hh. rewrite From2.Eval by assumption. reflexivity. }
   (* range h <= c x d: for each (u,v) in a x b, f(u) in c and g(v) in d,        *)
   (* so h(u,v) = (f(u), g(v)) lies in c x d.                                    *)
   assert (range h :<=: c :x: d) as H4. {
@@ -803,11 +803,11 @@ Proof.
   (* Proof by Claude.                                                           *)
   (* Define h : a x b -> b x a by h(u,v) = (v,u).                               *)
   intros a b.
-  remember (from2 a b (fun p => :(snd p, fst p):)) as h eqn:Hh.
+  remember (from2 a b (fun u v => :(v, u):)) as h eqn:Hh.
   assert (FunctionOn h (a :x: b)) as H1. { rewrite Hh. apply From2.IsFunctionOn. }
   (* By definition, for u in a and v in b, h(u,v) = (v,u).                      *)
   assert (forall u v, u :< a -> v :< b -> h!(:(u,v):) = :(v,u):) as G1. {
-    intros u v Hu Hv. rewrite Hh. apply From2.Eval; assumption. }
+    intros u v Hu Hv. rewrite Hh. rewrite From2.Eval by assumption. reflexivity. }
   (* range h <= b x a: for (u,v) in a x b, h(u,v) = (v,u) lies in b x a.        *)
   assert (range h :<=: b :x: a) as H2. {
     intros y Hy.
