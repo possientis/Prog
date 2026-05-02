@@ -34,18 +34,35 @@ Proof.
     + apply CF2.Satisfies.
 Qed.
 
+(* Membership as a pair in from2 unpacks to witnesses and domain membership.    *)
+Proposition Charac2 : forall (f:U*U -> U) (a b x y:U),
+  :(x,y): :< from2 a b f <->
+  exists u v, x = :(u,v): /\ y = f(u,v) /\ u :< a /\ v :< b.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Membership as a pair unpacks the witnesses via ordered-pair injectivity.   *)
+  intros f a b x y. split; intros H1.
+  - apply Charac in H1. destruct H1 as [u [v [H1 [H2 H3]]]].
+    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4]. subst.
+    exists u, v. split. 1: reflexivity.
+    split. 1: reflexivity. split; assumption.
+  - destruct H1 as [u [v [H1 [H2 [H3 H4]]]]]. subst.
+    apply Charac. exists u, v. split. 1: reflexivity. split; assumption.
+Qed.
+
+(* Fully explicit membership in from2 reduces to domain and value conditions.   *)
 Proposition Charac3 : forall (f:U*U -> U) (a b u v w:U),
   :(:(u,v):,w): :< from2 a b f <-> u :< a /\ v :< b /\ w = f(u,v).
 Proof.
   (* Proof by Claude.                                                           *)
-  (* Follows from the membership characterization and ordered-pair equality.    *)
+  (* Follows from the pair-level characterization by ordered-pair injectivity.  *)
   intros f a b u v w. split; intros H1.
-  - apply Charac in H1. destruct H1 as [u' [v' [H1 [H2 H3]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H5]. subst.
-    split. 1: assumption. split. 1: assumption. reflexivity.
-  - destruct H1 as [H1 [H2 H3]]. subst. apply Charac.
-    exists u. exists v. split. 1: reflexivity. split; assumption.
+  - apply Charac2 in H1. destruct H1 as [u' [v' [H1 [H2 [H3 H4]]]]].
+    apply OrdPair.WhenEqual in H1. destruct H1 as [Hu Hv]. subst u'. subst v'.
+    split. 1: assumption. split. 1: assumption. assumption.
+  - destruct H1 as [H1 [H2 H3]]. subst. apply Charac2.
+    exists u, v. split. 1: reflexivity.
+    split. 1: reflexivity. split; assumption.
 Qed.
 
 Proposition Satisfies : forall (f:U*U -> U) (a b u v:U),
