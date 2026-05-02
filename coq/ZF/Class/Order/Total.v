@@ -4,6 +4,7 @@ Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Transport.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
@@ -55,3 +56,8 @@ Proof.
   - right. right. apply Converse.Charac2Rev. assumption.
   - right. left. apply Converse.Charac2Rev. assumption.
 Qed.
+
+Proposition Transport : forall (F R S A B:Class),
+  (S = transport F R A) -> Bij F A B -> Total R A -> Total S B.
+Proof.
+Admitted.

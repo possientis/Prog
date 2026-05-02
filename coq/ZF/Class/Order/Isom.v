@@ -2,6 +2,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Restrict.
+Require Import ZF.Class.Order.Transport.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Compose.
@@ -168,34 +169,14 @@ Proof.
         rewrite (Bij.ComposeEval F G A B C y) in H7; try assumption.
 Qed.
 
-(* Transporting a 'relation R on A' by F.                                       *)
-Definition transport (F R A:Class) : Class := fun x =>
-  exists y z, x = :(F!y,F!z): /\ A y /\ A z /\ R :(y,z):.
-
-Proposition TransportCharac2F : forall (F R A B:Class) (y z:U),
-  Bij F A B ->
-  A y       ->
-  A z       ->
-  transport F R A :(F!y,F!z): <-> A y /\ A z /\ R :(y,z):.
-Proof.
-  intros F R A B y z H1 H2 H3. split; intros H4.
-  - destruct H4 as [y' [z' [H4 [H5 [H6 H7]]]]]. apply WhenEqual in H4.
-    destruct H4 as [H4 H8].
-    assert (y = y') as H9.  { apply Bij.EvalInjective with F A B; assumption. }
-    assert (z = z') as H10. { apply Bij.EvalInjective with F A B; assumption. }
-    subst. split. 1: assumption. split; assumption.
-  - destruct H4 as [H4 [H5 H6]]. exists y. exists z. split.
-    1: reflexivity. split. 1: assumption. split; assumption.
-Qed.
-
-Proposition FromTransport : forall (F R S A B:Class),
+Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Isom F R S A B.
 Proof.
   intros F R S A B H1 H2. split. 1: assumption.
   intros x y H3 H4. split; intros H5.
-  - rewrite H1. apply (TransportCharac2F F R A B); try assumption.
+  - rewrite H1. apply (Transport.Charac2F F R A B); try assumption.
     split. 1: assumption. split; assumption.
-  - rewrite H1 in H5. apply (TransportCharac2F F R A B) in H5; try assumption.
+  - rewrite H1 in H5. apply (Transport.Charac2F F R A B) in H5; try assumption.
     destruct H5 as [_ [_ H5]]. assumption.
 Qed.
 
