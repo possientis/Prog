@@ -210,3 +210,10 @@ Proof.
     intros z H3. apply Single.Charac in H3. subst. assumption.
 Qed.
 
+Proposition WhenEmpty : forall (f b:U),
+  f = :0: -> Fun f :0: b.
+Proof.
+  intros f b H1. split.
+  - apply FunctionOn.WhenEmpty. assumption.
+  - rewrite Range.WhenEmpty. 2: assumption. apply Empty.IsIncl.
+Qed.

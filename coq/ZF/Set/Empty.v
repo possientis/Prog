@@ -108,3 +108,9 @@ Proof.
   intros a. split; intros H1 H2; apply H1, EmptyToClass; assumption.
 Qed.
 
+Proposition WhenIncl : forall (a:U),
+  a :<=: :0: -> a = :0:.
+Proof.
+  intros a H1. apply Incl.DoubleInclusion. split. 1: assumption.
+  intros x H2. apply Charac in H2. contradiction.
+Qed.

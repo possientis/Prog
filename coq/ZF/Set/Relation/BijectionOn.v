@@ -255,3 +255,10 @@ Proof.
   intros f a b c H1. apply Bijection.DiffImage, H1.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> BijectionOn f :0:.
+Proof.
+  intros f H1. split.
+  - apply Bijection.WhenEmpty. assumption.
+  - apply Domain.WhenEmpty. assumption.
+Qed.

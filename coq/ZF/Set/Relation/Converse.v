@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
@@ -138,4 +139,12 @@ Proof.
     assert (x1 = x2) as H6. { apply WhenFunctional with f y; assumption. }
     subst. apply Image.Charac. exists x2. split. 2: assumption.
     apply Inter2.Charac. split; assumption.
+Qed.
+
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> f^:-1: = :0:.
+Proof.
+  intros f H1. apply Empty.WhenIncl. intros x H2.
+  apply Charac in H2. destruct H2 as [y [z [H2 H3]]]. subst.
+  apply Empty.Charac in H3. contradiction.
 Qed.

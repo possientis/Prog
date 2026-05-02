@@ -250,3 +250,10 @@ Proof.
   intros f a b c d H1. apply BijectionOn.DiffImage with a, H1.
 Qed.
 
+Proposition WhenEmpty : forall (f b:U),
+  f = :0: -> Inj f :0: b.
+Proof.
+  intros f b H1. split.
+  - apply BijectionOn.WhenEmpty. assumption.
+  - rewrite Range.WhenEmpty. 2: assumption. apply Empty.IsIncl.
+Qed.

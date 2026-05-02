@@ -3,6 +3,7 @@ Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Compose.
@@ -250,3 +251,11 @@ Proof.
   subst. assumption.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> OneToOne f.
+Proof.
+  intros f H1. split.
+  - apply Functional.WhenEmpty. assumption.
+  - rewrite Converse.WhenEmpty. 2: assumption.
+    apply Functional.WhenEmpty. reflexivity.
+Qed.

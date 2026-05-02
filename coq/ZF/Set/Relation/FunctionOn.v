@@ -211,3 +211,10 @@ Proof.
   - apply Domain.WhenSingle with y. assumption.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> FunctionOn f :0:.
+Proof.
+  intros f H1. split.
+  -apply Function.WhenEmpty. assumption.
+  - apply Domain.WhenEmpty. assumption.
+Qed.

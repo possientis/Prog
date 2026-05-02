@@ -250,3 +250,10 @@ Proof.
   intros f a b H1. apply Diff.Image, H1.
 Qed.
 
+Proposition WhenEmpty : forall (f:U),
+  f = :0: -> Bijection f.
+Proof.
+  intros f H1. split.
+  - apply Relation.WhenEmpty. assumption.
+  - apply OneToOne.WhenEmpty. assumption.
+Qed.
