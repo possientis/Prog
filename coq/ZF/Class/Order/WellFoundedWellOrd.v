@@ -11,6 +11,8 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellOrdering.
+Require Import ZF.Class.Order.Transport.
+Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -217,3 +219,13 @@ Proof.
     apply H5. split; assumption.
 Qed.
 
+(* Well-founded well-ordering is preserved under transport by a bijection.      *)
+Proposition Transport : forall (F R S A B:Class),
+  (S = transport F R A) -> Bij F A B ->
+  WellFoundedWellOrd R A -> WellFoundedWellOrd S B.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros F R S A B H1 H2 [H3 H4]. split.
+  - apply (WellFounded.Transport F R S A B); assumption.
+  - apply (WellOrdering.Transport F R S A B); assumption.
+Qed.

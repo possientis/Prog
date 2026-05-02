@@ -4,41 +4,43 @@ Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Class.Order.StrictOrd.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.Total.
+Require Import ZF.Class.Order.Transport.
+Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
 (* Predicate expressing the fact that R is a strict total order class on A.     *)
 Definition StrictTotalOrd (R A:Class) : Prop := StrictOrd R A /\ Total R A.
 
-Proposition StrictTotalOrdIsStrictOrd : forall (R A:Class),
+Proposition IsStrictOrd : forall (R A:Class),
   StrictTotalOrd R A -> StrictOrd R A.
 Proof.
   intros R A H1. apply H1.
 Qed.
 
-Proposition StrictTotalOrdIsTotal : forall (R A:Class),
+Proposition IsTotal : forall (R A:Class),
   StrictTotalOrd R A -> Total R A.
 Proof.
   intros R A H1. apply H1.
 Qed.
 
-Proposition StrictTotalOrdIsIrreflexive : forall (R A:Class),
+Proposition IsIrreflexive : forall (R A:Class),
   StrictTotalOrd R A -> Irreflexive R A.
 Proof.
   intros R A H1.
-  apply StrictOrdIsIrreflexive, StrictTotalOrdIsStrictOrd.
+  apply StrictOrd.IsIrreflexive, IsStrictOrd.
   assumption.
 Qed.
 
-Proposition StrictTotalOrdIsTransitive : forall (R A:Class),
+Proposition IsTransitive : forall (R A:Class),
   StrictTotalOrd R A -> Transitive R A.
 Proof.
   intros R A H1.
-  apply StrictOrdIsTransitive, StrictTotalOrdIsStrictOrd.
+  apply StrictOrd.IsTransitive, IsStrictOrd.
   assumption.
 Qed.
 
-Proposition StrictTotalOrdWhenLess : forall (R A:Class) (x y:U),
+Proposition WhenLess : forall (R A:Class) (x y:U),
   A x                ->
   A y                ->
   StrictTotalOrd R A ->
@@ -46,7 +48,7 @@ Proposition StrictTotalOrdWhenLess : forall (R A:Class) (x y:U),
   ~ (x = y \/ R :(y,x): ).
 Proof.
   intros R A x y H1 H2 [H3 H4]. split; intros H5.
-  - apply StrictOrdWhenLess with A; assumption.
+  - apply StrictOrd.WhenLess with A; assumption.
   - apply DoubleNegation. intros H6. specialize (H4 x y H1 H2).
     destruct H4 as [H4|[H4|H4]].
     + apply H5. left. assumption.
@@ -54,7 +56,7 @@ Proof.
     + apply H5. right. assumption.
 Qed.
 
-Proposition StrictTotalOrdSuffice : forall (R A:Class),
+Proposition Suffice : forall (R A:Class),
   Transitive R A ->
   (forall x y, A x -> A y -> R :(x,y): <-> ~ (x = y \/ R :(y,x):)) ->
   StrictTotalOrd R A.
@@ -70,5 +72,15 @@ Proof.
     right. left. apply H2. intros [H7|H7].
     + apply H5. assumption.
     + apply H6. assumption.
+Qed.
+
+(* Strict total order is preserved under transport by a bijection.              *)
+Proposition Transport : forall (F R S A B:Class),
+  (S = transport F R A) -> Bij F A B -> StrictTotalOrd R A -> StrictTotalOrd S B.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros F R S A B H1 H2 [H3 H4]. split.
+  - apply (StrictOrd.Transport F R S A B); assumption.
+  - apply (Total.Transport F R S A B); assumption.
 Qed.
 

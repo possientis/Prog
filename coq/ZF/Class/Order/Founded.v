@@ -7,6 +7,7 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Transport.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -167,3 +168,14 @@ Proof.
   - specialize (H11 a3 (Tuple4In3 a1 a2 a3 a4)). contradiction.
 Qed.
 
+
+(* Foundedness is preserved under transport by a bijection.                     *)
+Proposition Transport : forall (F R S A B:Class),
+  (S = transport F R A) -> Bij F A B -> Founded R A -> Founded S B.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros F R S A B H1 H2 H3.
+  apply (IsomCompat F R S A B).
+  - apply Isom.Transport; assumption.
+  - assumption.
+Qed.

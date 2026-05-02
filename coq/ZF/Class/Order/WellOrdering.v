@@ -11,6 +11,7 @@ Require Import ZF.Class.Order.StrictOrd.
 Require Import ZF.Class.Order.StrictTotalOrd.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.Transitive.
+Require Import ZF.Class.Order.Transport.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -87,7 +88,7 @@ Proposition WhenLess : forall (R A:Class) (x y:U),
   R :(x,y):         <->
   ~ (x = y \/ R :(y,x): ).
 Proof.
-  intros R A x y H1 H2 H3. apply StrictTotalOrdWhenLess with A.
+  intros R A x y H1 H2 H3. apply StrictTotalOrd.WhenLess with A.
   - assumption.
   - assumption.
   - apply IsStrictTotalOrd. assumption.
@@ -120,4 +121,14 @@ Proof.
   intros F R S A B a H1 H2 H3 H4. apply (IsNotIn R A a).
   - apply (WhenIsom F R S A B); assumption.
   - apply (Bij.EvalInImage F A B); try assumption. apply H2.
+Qed.
+
+(* Well-ordering is preserved under transport by a bijection.                   *)
+Proposition Transport : forall (F R S A B:Class),
+  (S = transport F R A) -> Bij F A B -> WellOrdering R A -> WellOrdering S B.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros F R S A B H1 H2 [H3 H4]. split.
+  - apply (Founded.Transport F R S A B); assumption.
+  - apply (Total.Transport F R S A B); assumption.
 Qed.
