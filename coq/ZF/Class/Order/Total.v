@@ -60,4 +60,15 @@ Qed.
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Total R A -> Total S B.
 Proof.
-Admitted.
+  intros F R S A B H1 H2 H3 y1 y2 H4 H5.
+  apply (Bij.RangeCharac F A B) in H4. 2: assumption.
+  apply (Bij.RangeCharac F A B) in H5. 2: assumption.
+  destruct H4 as [x1 [H4 H6]]. destruct H5 as [x2 [H5 H7]].
+  assert (x1 = x2 \/ R :(x1,x2): \/ R :(x2,x1):) as H8. { apply H3; assumption. }
+  destruct H8 as [H8|[H8|H8]]; rewrite <- H6, <- H7.
+  - left. rewrite H8. reflexivity.
+  - right. left. rewrite H1. apply (Transport.Charac2F F R A B); try assumption.
+    split. 1: assumption. split; assumption.
+  - right. right. rewrite H1. apply (Transport.Charac2F F R A B); try assumption.
+    split. 1: assumption. split; assumption.
+Qed.
