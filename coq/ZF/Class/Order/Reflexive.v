@@ -17,6 +17,5 @@ Proof.
   apply (Bij.RangeCharac F A B) in H4. 2: assumption.
   destruct H4 as [a [H4 H5]].
   rewrite <- H5. rewrite H1.
-  apply (Transport.Charac2F F R A B a a H2 H4 H4).
-  apply H3. assumption.
+  apply (Transport.Charac2F F R A B). 1-3: assumption. apply H3. assumption.
 Qed.

@@ -22,10 +22,9 @@ Proof.
   destruct H6 as [c [H6 Hc]].
   rewrite <- Ha, <- Hb in H7. rewrite H1 in H7.
   rewrite <- Hb, <- Hc in H8. rewrite H1 in H8.
-  apply (Transport.Charac2F F R A B a b H2 H4 H5) in H7.
-  apply (Transport.Charac2F F R A B b c H2 H5 H6) in H8.
+  apply (Transport.Charac2F F R A B) in H7. 2-4: assumption.
+  apply (Transport.Charac2F F R A B) in H8. 2-4: assumption.
   rewrite <- Ha, <- Hc. rewrite H1.
-  apply (Transport.Charac2F F R A B a c H2 H4 H6).
-  apply H3 with b; assumption.
+  apply (Transport.Charac2F F R A B). 1-3: assumption. apply H3 with b; assumption.
 Qed.
 
