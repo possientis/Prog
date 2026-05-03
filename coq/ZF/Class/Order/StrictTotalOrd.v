@@ -18,27 +18,6 @@ Proof.
   intros R A H1. apply H1.
 Qed.
 
-Proposition IsTotal : forall (R A:Class),
-  StrictTotalOrd R A -> Total R A.
-Proof.
-  intros R A H1. apply H1.
-Qed.
-
-Proposition IsIrreflexive : forall (R A:Class),
-  StrictTotalOrd R A -> Irreflexive R A.
-Proof.
-  intros R A H1.
-  apply StrictOrd.IsIrreflexive, IsStrictOrd.
-  assumption.
-Qed.
-
-Proposition IsTransitive : forall (R A:Class),
-  StrictTotalOrd R A -> Transitive R A.
-Proof.
-  intros R A H1.
-  apply StrictOrd.IsTransitive, IsStrictOrd.
-  assumption.
-Qed.
 
 Proposition WhenLess : forall (R A:Class) (x y:U),
   A x                ->
