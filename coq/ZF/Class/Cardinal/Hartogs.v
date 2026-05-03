@@ -16,6 +16,7 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
@@ -59,22 +60,19 @@ Proof.
           rewrite <- H5, H9. apply Isom.IsOrdinal, H2. assumption. }
         remember (CCI.isom!:(r,x):) as g eqn:H11.
         assert (Isom g r (E y) x y) as H12. {
-          rewrite H11. apply Isom.IsIsom.
-          - apply H2. assumption.
-          - rewrite H5, H11 in H9. assumption. }
+          rewrite H11. apply Isom.IsIsom. 1: apply H2; assumption.
+          rewrite H5, H11 in H9. assumption. }
         assert (Bij g^:-1: y x) as H13. { apply Bij.Converse, H12. }
         assert (Inj g^:-1: y a) as H14. {
-          split.
-          - apply H13.
-          - assert (range g^:-1: = x) as H14. { apply H13. }
-            rewrite H14. apply Power.Charac. assumption. }
+          split. 1: apply H13.
+          assert (range g^:-1: = x) as Hrange. { apply H13. }
+          rewrite Hrange. apply Power.Charac. assumption. }
         split. 1: assumption. exists g^:-1:. assumption.
       + assert ((f!:(r,x):) = :0:) as H9. {
           rewrite H3. rewrite IfThenElse2.Eval2 by assumption. reflexivity. }
         assert (y = :0:) as H10. { rewrite <- H5, H9. reflexivity. }
-        unfold hartogs. rewrite H10. split.
-        * apply Core.ZeroIsOrdinal.
-        * exists :0:. apply Inj.WhenEmpty. reflexivity.
+        unfold hartogs. rewrite H10. split. 1: apply Core.ZeroIsOrdinal.
+        exists :0:. apply Inj.WhenEmpty. reflexivity.
     - destruct H4 as [H4 [i H5]].
       remember (range i) as x eqn:H6.
       assert (x :<=: a) as H7. { rewrite H6. apply H5. }
@@ -94,10 +92,25 @@ Proof.
         apply CCI.Eval with y; assumption. }
       assert (i^:-1: :[x]: = y) as H16. { apply Bij.ImageOfDomain, H14. }
       assert (x :< :P(a)) as H17. { apply Power.Charac. assumption. }
-
-(*
-      assert ((f!:(r,x):) = (CCI.isom!:(r,x):) :[x]:) as H18. {
-        rewrite H3, IfThenElse2.Eval1.
-*)
-
-Admitted.
+      assert (domain i = y) as H18. { apply H8. }
+      assert (r :<=: i:[y]: :x: i:[y]:) as H19. {
+        rewrite H9. apply Transport.IsIncl.
+        - apply H8.
+        - rewrite H18. apply Incl.Refl. }
+      assert (i:[y]: = x) as H20. { apply Bij.ImageOfDomain. assumption. }
+      assert (r :< :P(a :x: a)) as H21. {
+        apply Power.Charac. intros z H21. apply H19 in H21.
+        rewrite H20 in H21. apply Prod.Charac in H21.
+        destruct H21 as [u [v [H21 [H22 H23]]]].
+        apply Prod.Charac. exists u, v. split. 1: assumption.
+        split; apply H7; assumption. }
+      assert ((f!:(r,x):) = (CCI.isom!:(r,x):) :[x]:) as H22. {
+        rewrite H3. rewrite IfThenElse2.Eval1 by assumption. reflexivity. }
+      assert ((f!:(r,x):) = y) as H23. { rewrite H15, H16 in H22. assumption. }
+      assert (FunctionOn f (:P(a :x: a) :x: :P(a))) as H24. {
+        rewrite H3. apply IfThenElse2.IsFunctionOn. }
+      apply (FunctionOn.RangeCharac f (:P(a :x: a) :x: :P(a))). 1: assumption.
+      exists :(r,x):. split. 2: assumption.
+      apply Prod.Charac2. split; assumption. }
+  exists (range f). assumption.
+Qed.
