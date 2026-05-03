@@ -67,10 +67,20 @@ Proof.
     split. 1: assumption. split; assumption.
 Qed.
 
+(* The transport of r by f over a is included in f[a] x f[a].                   *)
 Proposition IsIncl : forall (f r a:U),
   Functional f                                      ->
   a :<=: domain f                                   ->
   transport f r a :<=: f:[a]: :x: f:[a]:.
 Proof.
-Admitted.
+  (* Proof by Claude.                                                           *)
+  intros f r a H1 H2 x H3.
+  apply Charac in H3; try assumption.
+  destruct H3 as [y [z [H3 [H4 [H5 _]]]]].
+  apply Prod.Charac. exists (f!y), (f!z). split. 1: assumption. split.
+  - apply Image.Charac. exists y. split. 1: assumption.
+    apply Eval.Satisfies. 1: assumption. apply H2. assumption.
+  - apply Image.Charac. exists z. split. 1: assumption.
+    apply Eval.Satisfies. 1: assumption. apply H2. assumption.
+Qed.
 
