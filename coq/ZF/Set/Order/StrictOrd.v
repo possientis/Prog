@@ -24,6 +24,20 @@ Proof.
   intros r a H1. assumption.
 Qed.
 
+(* In a strict order, if x < y then neither x = y nor y < x holds.             *)
+Proposition WhenLess : forall (r a x y:U),
+  x :< a                      ->
+  y :< a                      ->
+  StrictOrd r a               ->
+  :(x,y): :< r                ->
+  ~ (x = y \/ :(y,x): :< r).
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros r a x y H1 H2 [H3 H4] H5 H6. destruct H6 as [H6|H6].
+  - subst. apply H3 with y. 1: assumption. assumption.
+  - apply H3 with x. 1: assumption. apply H4 with y; assumption.
+Qed.
+
 (* Strict order is preserved under transport by a bijection.                    *)
 Proposition Transport : forall (f r s a b:U),
   s = transport f r a ->
