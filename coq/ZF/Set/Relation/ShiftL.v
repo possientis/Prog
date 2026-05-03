@@ -34,7 +34,7 @@ Definition shiftL (f:U) : U := fromClass (CRS.shiftL (toClass f))
 Proposition ToClass : forall (f:U),
   toClass (shiftL f) :~: CRS.shiftL (toClass f).
 Proof.
-  intros f. apply ToFromClass.
+  intros f. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (f x:U),

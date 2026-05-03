@@ -30,7 +30,7 @@ Proposition WhenSmall : forall (A:Class),
   Small A -> toClass (truncate A) :~: A.
 Proof.
   intros A H1. apply Equiv.Tran with (Class.Truncate.truncate A).
-  - apply ToFromClass.
+  - apply FromClass.ToClass.
   - apply Class.Truncate.WhenSmall. assumption.
 Qed.
 
@@ -39,7 +39,7 @@ Proposition WhenNotSmall : forall (A:Class),
 Proof.
   intros A H1. apply EqualToClass.
   apply Equiv.Tran with (Class.Truncate.truncate A).
-  - apply ToFromClass.
+  - apply FromClass.ToClass.
   - apply Equiv.Tran with :0:.
     + apply Class.Truncate.WhenNotSmall. assumption.
     + apply Equiv.Sym, Empty.ToClass.

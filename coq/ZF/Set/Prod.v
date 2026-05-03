@@ -18,7 +18,7 @@ Global Instance SetProd : Prod U := { prod := prod }.
 Proposition ToClass : forall (a b:U),
   toClass (a :x: b) :~: toClass a :x: toClass b.
 Proof.
-  intros a b. apply ToFromClass.
+  intros a b. apply FromClass.ToClass.
 Qed.
 
 (* Characterisation of the elements of the product axb *)

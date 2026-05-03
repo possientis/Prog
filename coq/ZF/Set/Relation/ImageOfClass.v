@@ -21,7 +21,7 @@ Global Instance SetOfClassImage : Image U Class U := { image := image }.
 Proposition ToClass : forall (A:Class) (f:U),
   toClass f:[A]: :~: (toClass f) :[A]:.
 Proof.
-  intros A f. apply FromClass.ToFromClass.
+  intros A f. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (A:Class) (f y:U),

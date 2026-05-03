@@ -22,7 +22,7 @@ Global Instance SetImage : Image U U U := { image := image }.
 Proposition ToClass : forall (f a:U),
   toClass f:[a]: :~: (toClass f) :[toClass a]:.
 Proof.
-  intros F a. apply ToFromClass.
+  intros F a. apply FromClass.ToClass.
 Qed.
 
 (* The image by f of a is the image by the class of f of a.                     *)

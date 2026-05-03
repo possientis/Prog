@@ -17,7 +17,7 @@ Definition ofMinRank (A:Class) : U := fromClass (CMR.ofMinRank A) (CMR.IsSmall A
 Proposition ToClass : forall (A:Class),
   toClass (ofMinRank A) :~: CMR.ofMinRank A.
 Proof.
-  intros A. apply FromClass.ToFromClass.
+  intros A. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (A:Class) (x:U),

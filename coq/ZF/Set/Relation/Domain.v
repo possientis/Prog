@@ -18,7 +18,7 @@ Definition domain (f:U) : U := fromClass (CRD.domain (toClass f))
 Proposition ToClass : forall (f:U),
   toClass (domain f) :~: CRD.domain (toClass f).
 Proof.
-  intros f. apply ToFromClass.
+  intros f. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (f x: U),

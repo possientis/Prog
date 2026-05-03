@@ -10,5 +10,5 @@ Definition hartogs (a:U) : U := fromClass (CCH.hartogs a) (CCH.IsSmall a).
 Proposition ToClass : forall (a:U),
   toClass (hartogs a) :~: CCH.hartogs a.
 Proof.
-  intros a. apply FromClass.ToFromClass.
+  intros a. apply FromClass.ToClass.
 Qed.

@@ -69,7 +69,7 @@ Proof.
     remember (fromClass C H5) as a eqn:Ea. specialize (H2 a).
     assert (toClass a :~: F^:-1::[toClass b]:) as H6. {
       apply Equiv.Tran with C.
-      - rewrite Ea. apply ToFromClass.
+      - rewrite Ea. apply FromClass.ToClass.
       - rewrite <- EC. apply Equiv.Refl. }
     clear EC Ea H5 C.
     assert (toClass a :<=: A) as H7. {

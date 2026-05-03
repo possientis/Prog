@@ -21,7 +21,7 @@ Proposition IsOrdinal : forall (A:Class) (a:U),
   (forall x, x :< a -> Ordinal A!x) -> Ordinal :\/:_{a} A.
 Proof.
   intros A a H1. unfold Ordinal, On. apply COC.EquivCompat with :\/:_{toClass a} A.
-  - apply Equiv.Sym, FromClass.ToFromClass.
+  - apply Equiv.Sym, FromClass.ToClass.
   - apply UnionGen.IsOrdinal. assumption.
 Qed.
 

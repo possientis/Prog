@@ -26,7 +26,7 @@ Global Instance SetInverse : Inverse U := { inverse := converse }.
 Proposition ToClass : forall (f:U),
   toClass f^:-1: :~: (toClass f)^:-1:.
 Proof.
-  intros f. apply ToFromClass.
+  intros f. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (f x:U),

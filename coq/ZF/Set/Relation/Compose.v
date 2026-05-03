@@ -28,7 +28,7 @@ Global Instance SetDot : Dot U := { dot := compose }.
 Proposition ToClass : forall (f g:U),
   toClass (g :.: f) :~: toClass g :.: toClass f.
 Proof.
-  intros f g. apply ToFromClass.
+  intros f g. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (f g u:U),

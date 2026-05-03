@@ -20,7 +20,7 @@ Definition range (f:U) : U := fromClass (CRR.range(toClass f))
 Proposition ToClass : forall (f:U),
   toClass (range f) :~: CRR.range (toClass f).
 Proof.
-  intros f. apply ToFromClass.
+  intros f. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (f y: U),

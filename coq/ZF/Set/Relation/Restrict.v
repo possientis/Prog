@@ -27,7 +27,7 @@ Global Instance SetPipe : Pipe U U U := { pipe := restrict }.
 Proposition ToClass : forall (f a:U),
   toClass (f:|:a) :~: toClass f :|: toClass a.
 Proof.
-  intros f a. apply ToFromClass.
+  intros f a. apply FromClass.ToClass.
 Qed.
 
 Proposition Charac : forall (f a x:U),

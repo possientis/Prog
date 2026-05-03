@@ -38,7 +38,7 @@ Global Instance SetN : N U := { omega := omega }.
 (* Converting the set N to a class yields the class N.                          *)
 Proposition ToClass : toClass :N :~: :N.
 Proof.
-  apply ToFromClass.
+  apply FromClass.ToClass.
 Qed.
 
 (* A natural number is an ordinal whose successor contains non-limit ordinals.  *)

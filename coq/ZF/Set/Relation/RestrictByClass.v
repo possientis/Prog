@@ -28,7 +28,7 @@ Global Instance SetByClassPipe : Pipe U Class U := { pipe := restrict }.
 Proposition ToClass : forall (A:Class) (f:U),
   toClass (f :|: A) :~: toClass f :|: A.
 Proof.
-  intros A f. apply FromClass.ToFromClass.
+  intros A f. apply FromClass.ToClass.
 Qed.
 
 Proposition EquivCompat : forall (A B:Class) (f:U),

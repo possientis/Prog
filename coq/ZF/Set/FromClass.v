@@ -43,7 +43,7 @@ Proof.
 Qed.
 
 (* The class associated with the set defined by a small class is the class.     *)
-Proposition ToFromClass : forall (A:Class) (p:Small A),
+Proposition ToClass : forall (A:Class) (p:Small A),
   toClass (fromClass A p) :~: A.
 Proof.
   intros A p x. apply Charac.

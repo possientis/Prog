@@ -119,7 +119,7 @@ Proof.
     remember (fromClass C H7) as c eqn:Ec.
 
   (* Then we have toClass c = C. *)
-    assert (toClass c :~: C) as H8. { rewrite Ec. apply ToFromClass. }
+    assert (toClass c :~: C) as H8. { rewrite Ec. apply FromClass.ToClass. }
 
   (* Furthermore, the set c is not empty. *)
     assert (c <> :0:) as H9. {
