@@ -37,13 +37,13 @@ Proposition IsIncl : forall (F R A:Class),
   A :<=: domain F                             ->
   transport F R A :<=: F:[A]: :x: F:[A]:.
 Proof.
-  intros F R A x H1 H2 H3.
+  intros F R A H1 H2 x H3.
   destruct H3 as [y [z [H3 [H4 [H5 _]]]]]. exists F!y, F!z.
   split. 1: assumption. split.
   - exists y. split. 1: assumption. apply EvalOfClass.Satisfies. 1: assumption.
-    apply H1. assumption.
+    apply H2. assumption.
   - exists z. split. 1: assumption. apply EvalOfClass.Satisfies. 1: assumption.
-    apply H1. assumption.
+    apply H2. assumption.
 Qed.
 
 Proposition IsSmall : forall (F R A:Class),
@@ -58,4 +58,3 @@ Proof.
   - apply IsIncl; assumption.
   - apply Prod.IsSmall; assumption.
 Qed.
-

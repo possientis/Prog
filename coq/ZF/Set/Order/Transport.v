@@ -4,10 +4,12 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Functional.
+Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Truncate.
 
 Module CIN := ZF.Class.Incl.
@@ -64,3 +66,11 @@ Proof.
   - apply Charac; try assumption. exists y, z. split. 1: reflexivity.
     split. 1: assumption. split; assumption.
 Qed.
+
+Proposition IsIncl : forall (f r a:U),
+  Functional f                                      ->
+  a :<=: domain f                                   ->
+  transport f r a :<=: f:[a]: :x: f:[a]:.
+Proof.
+Admitted.
+

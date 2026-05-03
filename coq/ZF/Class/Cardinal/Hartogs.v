@@ -85,4 +85,19 @@ Proof.
       remember (transport i (E y) y) as r eqn:H9.
       assert (Isom i (E y) r y x) as H10. { apply Isom.Transport; assumption. }
       assert (WellOrdering (E y) y) as H11. {
+        apply E.IsWellOrdering. assumption. }
+      assert (WellOrdering r x) as H12. {
+        apply WellOrdering.Transport with i (E y) y; assumption. }
+      assert (WO :(r,x):) as H13. { apply H2. assumption. }
+      assert (Isom i^:-1: r (E y) x y) as H14. { apply Isom.Converse. assumption. }
+      assert ((CCI.isom!:(r,x):) = i^:-1:) as H15. {
+        apply CCI.Eval with y; assumption. }
+      assert (i^:-1: :[x]: = y) as H16. { apply Bij.ImageOfDomain, H14. }
+      assert (x :< :P(a)) as H17. { apply Power.Charac. assumption. }
+
+(*
+      assert ((f!:(r,x):) = (CCI.isom!:(r,x):) :[x]:) as H18. {
+        rewrite H3, IfThenElse2.Eval1.
+*)
+
 Admitted.
