@@ -4,11 +4,11 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Order.E.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Mult.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.

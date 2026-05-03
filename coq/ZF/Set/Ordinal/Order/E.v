@@ -2,9 +2,11 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Restrict.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Specify.
+Require Import ZF.Set.Order.Irreflexive.
 Require Import ZF.Set.Order.RestrictOfClass.
 
 Module COE := ZF.Class.Order.E.
@@ -39,3 +41,8 @@ Qed.
 Proposition ToClass : forall (a:U),
   toClass (E a) :~: COE.E:/:(toClass a).
 Proof. apply RestrictOfClass.ToClass. Qed.
+
+Proposition IsIrreflexive : forall (a:U),
+  Irreflexive (E a) a.
+Proof.
+Admitted.

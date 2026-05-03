@@ -6,19 +6,19 @@ Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
-Require Import ZF.Set.Inter.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Order.E.
+Require Import ZF.Set.Inter.
 Require Import ZF.Set.Order.Minimal.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inter.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Specify.
 
 Module CIN := ZF.Class.Inter.
 Module COI := ZF.Class.Ordinal.Inf.
 Module SIN := ZF.Set.Inter.
-Module SOE := ZF.Set.Order.E.
+Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOI := ZF.Set.Ordinal.Inter.
 
 (* The infimum of the set a.                                                    *)

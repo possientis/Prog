@@ -3,13 +3,13 @@ Require Import ZF.Class.Cardinal.Isom.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Order.E.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.

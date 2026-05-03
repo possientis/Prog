@@ -8,11 +8,11 @@ Require Import ZF.Class.Ordinal.Order.OnSubclass.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Order.E.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Range.
@@ -23,7 +23,7 @@ Module COW := ZF.Class.Order.WellOrdering.
 Module COS := ZF.Class.Ordinal.Order.OnSubclass.
 Module COO := ZF.Class.Ordinal.Order.WFWO.
 
-Module SOE := ZF.Set.Order.E.
+Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOI := ZF.Set.Order.Isom.
 Module SOW := ZF.Set.Order.WellOrdering.
 

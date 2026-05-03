@@ -2,16 +2,16 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Order.E.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 
 Module COI := ZF.Class.Order.Isom.
 Module COM := ZF.Class.Ordinal.Monotone.
-Module SOE := ZF.Set.Order.E.
+Module SOE := ZF.Set.Ordinal.Order.E.
 
 
 (* A strictly monotone ordinal function.                                        *)
