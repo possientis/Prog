@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Foundation.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Restrict.
@@ -7,8 +8,10 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Specify.
+Require Import ZF.Set.Order.Founded.
 Require Import ZF.Set.Order.Irreflexive.
 Require Import ZF.Set.Order.RestrictOfClass.
+Require Import ZF.Set.Order.StrictOrd.
 Require Import ZF.Set.Order.Total.
 Require Import ZF.Set.Order.Transitive.
 
@@ -61,3 +64,16 @@ Proposition IsTotal : forall (a:U), Ordinal a ->
   Total (E a) a.
 Proof.
 Admitted.
+
+Proposition IsFounded : forall (a:U),
+  Founded (E a) a.
+Proof.
+Admitted.
+
+Proposition IsStrictOrd : forall (a:U), Ordinal a ->
+  StrictOrd (E a) a.
+Proof.
+Admitted.
+
+
+
