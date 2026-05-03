@@ -1,8 +1,8 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Order.Transport.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bij.
 
 Module COT := ZF.Class.Order.Total.

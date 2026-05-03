@@ -3,11 +3,14 @@ Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Restrict.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Order.Irreflexive.
 Require Import ZF.Set.Order.RestrictOfClass.
+Require Import ZF.Set.Order.Total.
+Require Import ZF.Set.Order.Transitive.
 
 Module COE := ZF.Class.Order.E.
 
@@ -40,9 +43,21 @@ Qed.
 
 Proposition ToClass : forall (a:U),
   toClass (E a) :~: COE.E:/:(toClass a).
-Proof. apply RestrictOfClass.ToClass. Qed.
+Proof.
+apply RestrictOfClass.ToClass.
+Qed.
 
 Proposition IsIrreflexive : forall (a:U),
   Irreflexive (E a) a.
+Proof.
+Admitted.
+
+Proposition IsTransitive : forall (a:U), Ordinal a ->
+  Transitive (E a) a.
+Proof.
+Admitted.
+
+Proposition IsTotal : forall (a:U), Ordinal a ->
+  Total (E a) a.
 Proof.
 Admitted.
