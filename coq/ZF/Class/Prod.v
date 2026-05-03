@@ -55,18 +55,16 @@ Qed.
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :x: R :~: Q :x: R.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros P Q R H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* The product of two classes is right-compatible with class equivalence.       *)
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :x: P :~: R :x: Q.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros P Q R H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* The product of two classes is compatible with class inclusion.               *)
@@ -83,18 +81,16 @@ Qed.
 Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P :x: R :<=: Q :x: R.
 Proof.
-  intros P Q R H1. apply InclCompat.
-  - assumption.
-  - apply Class.Incl.Refl.
+  intros P Q R H1. apply InclCompat. 1: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 (* The product of two classes is right-compatible with class inclusion.         *)
 Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :x: P :<=: R :x: Q.
 Proof.
-  intros P Q R H1. apply InclCompat.
-  - apply Class.Incl.Refl.
-  - assumption.
+  intros P Q R H1. apply InclCompat. 2: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 (* The product of two small classes is a small class.                           *)

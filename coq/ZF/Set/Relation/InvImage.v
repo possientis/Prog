@@ -33,18 +33,16 @@ Qed.
 Proposition InclCompatL : forall (f g a:U),
   f :<=: g -> f^:-1: :[a]: :<=: g^:-1: :[a]:.
 Proof.
-  intros f g a H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros f g a H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* The inverse image is right-compatible with set inclusion.                    *)
 Proposition InclCompatR : forall (f a b:U),
   a :<=: b -> f^:-1: :[a]: :<=: f^:-1: :[b]:.
 Proof.
-  intros f a b H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros f a b H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)

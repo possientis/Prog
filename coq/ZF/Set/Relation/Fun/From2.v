@@ -57,7 +57,7 @@ Proof.
   intros f a b u v w. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [u' [v' [H1 [H2 [H3 H4]]]]].
     apply OrdPair.WhenEqual in H1. destruct H1 as [Hu Hv]. subst u'. subst v'.
-    split. 1: assumption. split. 1: assumption. assumption.
+    split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 H3]]. subst. apply Charac2.
     exists u, v. split. 1: reflexivity.
     split. 1: reflexivity. split; assumption.

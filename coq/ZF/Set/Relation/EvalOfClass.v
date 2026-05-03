@@ -45,9 +45,8 @@ Qed.
 Proposition HasValueAtSatisfies : forall (F:Class) (a:U),
   HasValueAt F a -> F :(a,F!a):.
 Proof.
-  intros F a H1. apply HasValueAtEvalCharac.
-  - assumption.
-  - reflexivity.
+  intros F a H1. apply HasValueAtEvalCharac. 1: assumption.
+  reflexivity.
 Qed.
 
 (* If F is functional at a and a lies in domain then F (a,y) iff F!a = y.       *)
@@ -62,10 +61,8 @@ Qed.
 Proposition FunctionalAtSatisfies : forall (F:Class) (a:U),
   FunctionalAt F a -> domain F a -> F :(a,F!a):.
 Proof.
-  intros F a H1 H2. apply FunctionalAtEvalCharac.
-  - assumption.
-  - assumption.
-  - reflexivity.
+  intros F a H1 H2. apply FunctionalAtEvalCharac; try assumption.
+  reflexivity.
 Qed.
 
 (* If F has no value at a then F!a is the empty set.                            *)

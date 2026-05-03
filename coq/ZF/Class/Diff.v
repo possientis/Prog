@@ -34,17 +34,15 @@ Qed.
 Proposition EquivCompatL : forall (A B C:Class),
   A :~: C -> A :\: B :~: C :\: B.
 Proof.
-  intros A B C H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros A B C H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (A B C:Class),
   B :~: C -> A :\: B :~: A :\: C.
 Proof.
-  intros A B C H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros A B C H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition InclCompat : forall (A B C D:Class),
@@ -57,17 +55,15 @@ Qed.
 Proposition InclCompatL : forall (A B C:Class),
   A :<=: C -> A :\: B :<=: C :\: B.
 Proof.
-  intros A B C H1. apply InclCompat.
-  - assumption.
-  - apply Class.Incl.Refl.
+  intros A B C H1. apply InclCompat. 1: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 Proposition InclCompatR : forall (A B C:Class),
   C :<=: B -> A :\: B :<=: A :\: C.
 Proof.
-  intros A B C H1. apply InclCompat.
-  - apply Class.Incl.Refl.
-  - assumption.
+  intros A B C H1. apply InclCompat. 2: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 Proposition IsSmall : forall (A B:Class), Small A -> Small (A :\: B).

@@ -57,18 +57,16 @@ Qed.
 Proposition EquivCompatL : forall (F G G':Class),
   G :~: G' -> G :.: F :~: G' :.: F.
 Proof.
-  intros F G G' H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros F G G' H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* Composition is right-compatible with class equivalence.                      *)
 Proposition EquivCompatR : forall (F F' G:Class),
   F :~: F' -> G :.: F :~: G :.: F'.
 Proof.
-  intros F F' G H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros F F' G H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition Assoc : forall (F G H:Class),

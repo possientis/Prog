@@ -35,17 +35,15 @@ Qed.
 Proposition EquivCompatL : forall (F G A:Class),
   F :~: G -> BijectionOn F A -> BijectionOn G A.
 Proof.
-  intros F G A H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros F G A H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> BijectionOn F A -> BijectionOn F B.
 Proof.
-  intros F G A H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros F G A H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* A bijection defined on A is a function defined on A.                         *)

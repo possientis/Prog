@@ -36,17 +36,15 @@ Qed.
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> Maximal R A a -> Maximal S A a.
 Proof.
-  intros R S A a H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros R S A a H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Maximal R A a -> Maximal R B a.
 Proof.
-  intros R A B a H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros R A B a H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition IsIn : forall (R A:Class) (a:U),

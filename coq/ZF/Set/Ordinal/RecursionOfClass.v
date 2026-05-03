@@ -36,7 +36,7 @@ Proof.
     apply RestrictOfClass.CharacRev with y z; try assumption.
     + apply Recursion.IsFunction.
     + exists f. exists b. split. 1: assumption. split. 1: assumption.
-      split. 1: assumption. assumption.
+      split; assumption.
 Qed.
 
 Proposition Charac2 : forall (F:Class) (a y z:U),

@@ -37,17 +37,15 @@ Qed.
 Proposition EquivCompatL : forall (F G A:Class),
   F :~: G -> FunctionOn F A -> FunctionOn G A.
 Proof.
-  intros F G A H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros F G A H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> FunctionOn F A -> FunctionOn F B.
 Proof.
-  intros F G A H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros F G A H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition IsOneToOne : forall (F A:Class),

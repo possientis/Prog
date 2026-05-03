@@ -29,9 +29,8 @@ Qed.
 Proposition Charac : forall (f a y:U),
   Functional f -> a :< domain f -> :(a,y): :< f  <-> f!a = y.
 Proof.
-  intros f a y H1 H2. apply (EvalOfClass.Charac (toClass f)).
-  - assumption.
-  - apply Domain.ToClass. assumption.
+  intros f a y H1 H2. apply (EvalOfClass.Charac (toClass f)). 1: assumption.
+  apply Domain.ToClass. assumption.
 Qed.
 
 (* If f is functional and a lies in domain of f then (a,f!a) lies in f.         *)

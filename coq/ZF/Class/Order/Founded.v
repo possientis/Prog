@@ -175,7 +175,6 @@ Proposition Transport : forall (F R S A B:Class),
 Proof.
   (* Proof by Claude.                                                           *)
   intros F R S A B H1 H2 H3.
-  apply (IsomCompat F R S A B).
-  - apply Isom.Transport; assumption.
-  - assumption.
+  apply (IsomCompat F R S A B). 2: assumption.
+  apply Isom.Transport; assumption.
 Qed.

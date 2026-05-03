@@ -430,9 +430,8 @@ Proof.
         exists p. split. 1: assumption.
         assert (m :< n :+: p) as X. 2: apply X. (* rewrite failing *)
         rewrite H8. apply Succ.IsIn. }
-  apply Induction2.Induction'.
+  apply Induction2.Induction'. 2: assumption.
   - apply Omega.IsOrdinal.
-  - assumption.
   - intros a H1 H3 H4.
     rewrite WhenSuccR. 2: assumption. rewrite H4. reflexivity.
   - intros a H1 H3 H4.

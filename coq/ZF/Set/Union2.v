@@ -63,18 +63,16 @@ Qed.
 Proposition InclCompatL : forall (a b c:U),
   a :<=: b -> a:\/:c :<=: b:\/:c.
 Proof.
-  intros a b c H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros a b c H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* Union is right-compatible with inclusion.                                    *)
 Proposition InclCompatR : forall (a b c:U),
   a :<=: b -> c:\/:a :<=: c:\/:b.
 Proof.
-  intros a b c H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros a b c H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 Proposition WhenEqualR : forall (a b:U),

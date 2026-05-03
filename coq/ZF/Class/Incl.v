@@ -29,17 +29,15 @@ Qed.
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :<=: R -> Q :<=: R.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros P Q R H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<=: P -> R :<=: Q.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros P Q R H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* The inclusion relation is reflexive.                                         *)

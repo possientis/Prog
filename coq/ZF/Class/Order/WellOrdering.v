@@ -88,10 +88,8 @@ Proposition WhenLess : forall (R A:Class) (x y:U),
   R :(x,y):         <->
   ~ (x = y \/ R :(y,x): ).
 Proof.
-  intros R A x y H1 H2 H3. apply StrictTotalOrd.WhenLess with A.
-  - assumption.
-  - assumption.
-  - apply IsStrictTotalOrd. assumption.
+  intros R A x y H1 H2 H3. apply StrictTotalOrd.WhenLess with A; try assumption.
+  apply IsStrictTotalOrd. assumption.
 Qed.
 
 Proposition IsNotIn : forall (R A:Class) (a:U),

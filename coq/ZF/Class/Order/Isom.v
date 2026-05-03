@@ -44,8 +44,7 @@ Qed.
 Proposition EquivCompat1 : forall (F G R S A B:Class),
   F :~: G -> Isom F R S A B -> Isom G R S A B.
 Proof.
-  intros F G R S A B H1. apply EquivCompat.
-  - assumption.
+  intros F G R S A B H1. apply EquivCompat. 1: assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
@@ -55,9 +54,8 @@ Qed.
 Proposition EquivCompat2 : forall (F R R' S A B:Class),
   R :~: R' -> Isom F R S A B -> Isom F R' S A B.
 Proof.
-  intros F G R S A B H1. apply EquivCompat.
+  intros F G R S A B H1. apply EquivCompat. 2: assumption.
   - apply Equiv.Refl.
-  - assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
@@ -66,10 +64,9 @@ Qed.
 Proposition EquivCompat3 : forall (F R S S' A B:Class),
   S :~: S' -> Isom F R S A B -> Isom F R S' A B.
 Proof.
-  intros F G R S A B H1. apply EquivCompat.
+  intros F G R S A B H1. apply EquivCompat. 3: assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
-  - assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
 Qed.
@@ -77,23 +74,21 @@ Qed.
 Proposition EquivCompat4 : forall (F R S A A' B:Class),
   A :~: A' -> Isom F R S A B -> Isom F R S A' B.
 Proof.
-  intros F G R S A B H1. apply EquivCompat.
+  intros F G R S A B H1. apply EquivCompat. 4: assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
-  - assumption.
   - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompat5 : forall (F R S A B B':Class),
   B :~: B' -> Isom F R S A B -> Isom F R S A B'.
 Proof.
-  intros F G R S A B H1. apply EquivCompat.
+  intros F G R S A B H1. apply EquivCompat. 5: assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
-  - assumption.
 Qed.
 
 Proposition RestrictL : forall (F R S A B:Class),

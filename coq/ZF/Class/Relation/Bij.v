@@ -42,8 +42,7 @@ Qed.
 Proposition EquivCompatL : forall (F G A B:Class),
   F :~: G -> Bij F A B -> Bij G A B.
 Proof.
-  intros F G A B H1. apply EquivCompat.
-  - assumption.
+  intros F G A B H1. apply EquivCompat. 1: assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
 Qed.
@@ -51,19 +50,17 @@ Qed.
 Proposition EquivCompatM : forall (F A B C:Class),
   A :~: C -> Bij F A B -> Bij F C B.
 Proof.
-  intros F A B C H1. apply EquivCompat.
+  intros F A B C H1. apply EquivCompat. 2: assumption.
   - apply Equiv.Refl.
-  - assumption.
   - apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (F A B C:Class),
   B :~: C -> Bij F A B -> Bij F A C.
 Proof.
-  intros F A B C H1. apply EquivCompat.
+  intros F A B C H1. apply EquivCompat. 3: assumption.
   - apply Equiv.Refl.
   - apply Equiv.Refl.
-  - assumption.
 Qed.
 
 Proposition IsFun : forall (F A B:Class),

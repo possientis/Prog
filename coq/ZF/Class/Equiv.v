@@ -33,17 +33,15 @@ Qed.
 Proposition EquivCompatL : forall (A B C:Class),
   A :~: C -> A :~: B -> C :~: B.
 Proof.
-  intros A B C H1. apply EquivCompat.
-  - assumption.
-  - apply Refl.
+  intros A B C H1. apply EquivCompat. 1: assumption.
+  apply Refl.
 Qed.
 
 Proposition EquivCompatR : forall (A B C:Class),
   B :~: C -> A :~: B -> A :~: C.
 Proof.
-  intros A B C H1. apply EquivCompat.
-  - apply Refl.
-  - assumption.
+  intros A B C H1. apply EquivCompat. 2: assumption.
+  apply Refl.
 Qed.
 
 (* The equivalence between classes is symmetric.                                *)
@@ -92,16 +90,14 @@ Qed.
 Proposition NotCompatL : forall (P Q R:Class),
   P :~: Q -> P :<>: R -> Q :<>: R.
 Proof.
-  intros P Q R H1. apply NotCompat.
-  - assumption.
-  - apply Refl.
+  intros P Q R H1. apply NotCompat. 1: assumption.
+  apply Refl.
 Qed.
 
 Proposition NotCompatR : forall (P Q R:Class),
   P :~: Q -> R :<>: P -> R :<>: Q.
 Proof.
-  intros P Q R H1. apply NotCompat.
-  - apply Refl.
-  - assumption.
+  intros P Q R H1. apply NotCompat. 2: assumption.
+  apply Refl.
 Qed.
 

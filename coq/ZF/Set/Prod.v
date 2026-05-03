@@ -56,18 +56,16 @@ Qed.
 Proposition InclCompatL : forall (a b c:U),
   a :<=: b -> a :x: c :<=: b :x: c.
 Proof.
-  intros a b c H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros a b c H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* The product of two sets is right-compatible with inclusion.                  *)
 Proposition InclCompatR : forall (a b c:U),
   a :<=: b -> c :x: a :<=: c :x: b.
 Proof.
-  intros a b c H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros a b c H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 Proposition Inter2 : forall (a1 a2 b1 b2:U),

@@ -32,18 +32,16 @@ Qed.
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P:[R]: :~: Q:[R]:.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros P Q R H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* The direct image is right-compatible with equivalences.                      *)
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R:[P]: :~: R:[Q]:.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros P Q R H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* The direct image is compatible with inclusion.                               *)
@@ -60,18 +58,16 @@ Qed.
 Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P:[R]: :<=: Q:[R]:.
 Proof.
-  intros P Q R H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros P Q R H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* The direct image is right-compatible with inclusion.                         *)
 Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R:[P]: :<=: R:[Q]:.
 Proof.
-  intros P Q R H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros P Q R H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* If F is functional and P is small, then F:[P]: is small.                     *)

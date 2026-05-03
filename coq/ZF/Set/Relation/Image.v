@@ -58,18 +58,16 @@ Qed.
 Proposition InclCompatL : forall (f g a:U),
   f :<=: g -> f:[a]: :<=: g:[a]:.
 Proof.
-  intros f g a H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros f g a H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* The direct image is right-compatible with inclusion.                         *)
 Proposition InclCompatR : forall (f a b:U),
   a :<=: b -> f:[a]: :<=: f:[b]:.
 Proof.
-  intros f a b H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros f a b H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 Proposition WhenEmpty : forall (f a:U),

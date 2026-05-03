@@ -61,18 +61,16 @@ Qed.
 Proposition InclCompatL : forall (a b c:U),
   a :<=: b -> a :\: c :<=: b :\: c.
 Proof.
-  intros a b c H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros a b c H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 (* Diff is right-compatible with inclusion. Not quite of course.                *)
 Proposition InclCompatR : forall (a b c:U),
   a :<=: b -> c :\: b :<=: c :\: a.
 Proof.
-  intros a b c H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros a b c H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 Proposition WhenEmpty : forall (a b:U),

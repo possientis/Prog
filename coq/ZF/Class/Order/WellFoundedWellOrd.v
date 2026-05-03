@@ -165,11 +165,10 @@ Proof.
 
   (* But if y is less than x, by transitivity it is less than b. *)
       intros H13. assert (R :(y,b):) as H14. {
-        apply WellOrdering.IsTransitive in H2. apply H2 with x.
+        apply WellOrdering.IsTransitive in H2. apply H2 with x. 4: assumption.
         - apply H3. assumption.
         - apply H3, H10, Minimal.IsIn with R. assumption.
         - apply H3. assumption.
-        - assumption.
         - apply InitSegment.IsLess with B.
           assert (initSegment R B b x) as X. 2: apply X.
           rewrite <- EC. apply H8, Minimal.IsIn with R. assumption.

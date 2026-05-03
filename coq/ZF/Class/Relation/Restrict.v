@@ -51,17 +51,15 @@ Qed.
 Proposition EquivCompatL : forall (F G A:Class),
   F :~: G -> F:|:A :~: G:|:A.
 Proof.
-  intros F G A H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros F G A H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> F:|:A :~: F:|:B.
 Proof.
-  intros F A B H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros F A B H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* The restriction is always a relation.                                        *)
@@ -212,10 +210,8 @@ Proposition LesserThanRangeOfRestrict : forall (F A:Class),
   Small A.
 Proof.
   intros F A H1 [a H2]. apply Diff.WhenEmpty in H2.
-  apply LesserThanRangeIsSmall with F (toClass a).
-  - assumption.
-  - apply SetIsSmall.
-  - assumption.
+  apply LesserThanRangeIsSmall with F (toClass a); try assumption.
+  apply SetIsSmall.
 Qed.
 
 Proposition WhenEmpty : forall (F A:Class),

@@ -40,17 +40,15 @@ Qed.
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> Minimal R A a -> Minimal S A a.
 Proof.
-  intros R S A a H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros R S A a H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Minimal R A a -> Minimal R B a.
 Proof.
-  intros R A B a H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros R A B a H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition IsIn : forall (R A:Class) (a:U),

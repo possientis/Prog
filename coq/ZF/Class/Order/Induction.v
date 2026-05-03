@@ -51,10 +51,8 @@ Proof.
 
   (* Then A\B has an R-minimal element. *)
   assert (exists a, Minimal R (A:\:B) a) as H6. {
-    apply WellFounded2.HasMinimal with A.
-    - assumption.
-    - apply CIT.IsInclL.
-    - assumption.
+    apply WellFounded2.HasMinimal with A; try assumption.
+    apply CIT.IsInclL.
   }
 
   (* So let a be such an R-minimal element. *)

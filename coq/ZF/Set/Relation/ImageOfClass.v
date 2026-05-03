@@ -52,9 +52,8 @@ Qed.
 Proposition InclCompatL : forall (A:Class) (f g:U),
   f :<=: g -> f:[A]: :<=: g:[A]:.
 Proof.
-  intros A f g H1. apply InclCompat.
-  - assumption.
-  - apply Class.Incl.Refl.
+  intros A f g H1. apply InclCompat. 1: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 Proposition InclCompatR : forall (A B:Class) (f:U),

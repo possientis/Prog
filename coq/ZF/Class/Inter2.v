@@ -28,17 +28,15 @@ Qed.
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :/\: R :~: Q :/\: R.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros P Q R H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :/\: P :~: R :/\: Q.
 Proof.
-  intros P Q R H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros P Q R H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 Proposition InclCompat : forall (P Q R S:Class),
@@ -53,17 +51,15 @@ Qed.
 Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P :/\: R :<=: Q :/\: R.
 Proof.
-  intros P Q R H1. apply InclCompat.
-  - assumption.
-  - apply Incl.Refl.
+  intros P Q R H1. apply InclCompat. 1: assumption.
+  apply Incl.Refl.
 Qed.
 
 Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :/\: P :<=: R :/\: Q.
 Proof.
-  intros P Q R H1. apply InclCompat.
-  - apply Incl.Refl.
-  - assumption.
+  intros P Q R H1. apply InclCompat. 2: assumption.
+  apply Incl.Refl.
 Qed.
 
 Proposition Comm : forall (P Q:Class),

@@ -55,18 +55,16 @@ Qed.
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> initSegment R A a :~: initSegment S A a.
 Proof.
-  intros R S A a H1. apply EquivCompat.
-  - assumption.
-  - apply Equiv.Refl.
+  intros R S A a H1. apply EquivCompat. 1: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* Initial segments are right-compatible with equivalences.                     *)
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> initSegment R A a :~: initSegment R B a.
 Proof.
-  intros R A B a H1. apply EquivCompat.
-  - apply Equiv.Refl.
-  - assumption.
+  intros R A B a H1. apply EquivCompat. 2: assumption.
+  apply Equiv.Refl.
 Qed.
 
 (* Initial segments are compatible with inclusion.                              *)
@@ -81,18 +79,16 @@ Qed.
 Proposition InclCompatL : forall (R S A:Class) (a:U),
   R :<=: S -> initSegment R A a :<=: initSegment S A a.
 Proof.
-  intros R S A a H1. apply InclCompat.
-  - assumption.
-  - apply Class.Incl.Refl.
+  intros R S A a H1. apply InclCompat. 1: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 (* Initial segments are right-compatible with inclusion.                        *)
 Proposition InclCompatR : forall (R A B:Class) (a:U),
   A :<=: B -> initSegment R A a :<=: initSegment R B a.
 Proof.
-  intros R A B a H1. apply InclCompat.
-  - apply Class.Incl.Refl.
-  - assumption.
+  intros R A B a H1. apply InclCompat. 2: assumption.
+  apply Class.Incl.Refl.
 Qed.
 
 Proposition IsIn : forall (R A:Class) (a x:U),
