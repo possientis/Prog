@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Choice.
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
@@ -84,6 +85,29 @@ Proof.
   apply IsEquivGen. apply Classic.DoubleNegation. intros H2.
   apply H1. apply SOI.IsZero. intros x. split; intros H3. 2: contradiction.
   exfalso. apply H2. exists x. apply H3.
+Qed.
+
+Proposition Charac : forall (a:U),
+  Cardinal a  <-> Ordinal a /\
+    forall b, Ordinal b -> a :~: b -> a :<=: b.
+Proof.
+  intros a. split; intros H1.
+  - destruct H1 as [b H1].
+    assert (Ordinal a) as H2. { subst. apply IsOrdinal. }
+    split. 1: assumption. intros c H3 H4.
+    assert (a = :0: \/ a <> :0:) as [H5|H5]. { apply LawExcludedMiddle. }
+    + rewrite H5. apply Core.IsIncl. assumption.
+    + assert (b :~: card b) as H6. {
+        apply IsEquivNotZero. rewrite <- H1. assumption. }
+      assert (b :~: c) as H7. {
+        apply Equiv.Tran with (card b). 1: assumption.
+        rewrite <- H1. assumption. }
+      rewrite H1. apply IsLowerBound; assumption.
+  - destruct H1 as [H1 H2]. exists a. apply Incl.DoubleInclusion. split.
+    + apply H2.
+      * apply IsOrdinal.
+      * apply IsEquivOrd. assumption.
+    + apply IsLowerBound. 1: assumption. apply Equiv.Refl.
 Qed.
 
 Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
@@ -246,5 +270,3 @@ Proof.
     apply SOC.InclElemTran with (card :U(a)); assumption. }
   split; assumption.
 Qed.
-
-
