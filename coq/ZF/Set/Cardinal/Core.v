@@ -10,7 +10,6 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.RestrictOfClass.
-Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -244,29 +243,4 @@ Proof.
   assert (b :~: :P(b)) as H8. { apply EquivCharac; assumption. }
   apply Equiv.Cantor with b. assumption. }
   rewrite H3, H4. assumption.
-Qed.
-
-(* There is always a cardinal number larger than all cardinals of a given set.  *)
-Proposition LargerCardinal : forall (a:U),
-  Choice                                                ->
-  toClass a :<=: Cardinal                               ->
-  exists b, Cardinal b /\ forall c, c :< a -> c :< b.
-Proof.
-  intros a AC H1.
-  remember (card :P(:U(a))) as b eqn:H2. exists b.
-  assert (Cardinal b) as H3. { exists :P(:U(a)). assumption. }
-  assert (forall c, c :< a -> c :< b) as H4. {
-    intros c H4.
-    assert (Cardinal c) as H5. { apply H1. assumption. }
-    assert (Ordinal c) as H6. { apply CardIsOrd. assumption. }
-    assert (Ordinal (card :U(a))) as H7. { apply IsOrdinal. }
-    assert (Ordinal b) as H8. { apply CardIsOrd. assumption. }
-    assert (card :U(a) :< b) as H9. { rewrite H2. apply Cantor. assumption. }
-    assert (c :<=: card :U(a)) as H10. {
-      assert (c :<=: :U(a)) as H10. {
-        intros x H10. apply Union.Charac. exists c. split; assumption. }
-      assert (c = card c) as H11. { apply WhenCardinal. assumption. }
-      rewrite H11. apply InclCompat; assumption. }
-    apply SOC.InclElemTran with (card :U(a)); assumption. }
-  split; assumption.
 Qed.
