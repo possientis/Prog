@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.

@@ -233,5 +233,5 @@ Proposition IsIsom : Isom J0 R0 E (On :x: On) On.
 Proof.
   apply Isom.Converse, WFWO.IsIsom. 3: apply Equiv.Refl.
   - apply IsWellFoundedWellOrd.
-  - apply Core.OnSquaredIsProper.
+  - apply Core.IsProperSquare.
 Qed.

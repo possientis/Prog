@@ -4,6 +4,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
@@ -63,26 +64,26 @@ Qed.
 
 (* The inter' of a non-empty class of ordinals is an ordinal class.             *)
 Proposition IsOrdinal' : forall (A:Class),
-  A :<=: On -> A :<>: :0: -> Class.Ordinal.Core.Ordinal (inter' A).
+  A :<=: On -> A :<>: :0: -> COC.Ordinal (inter' A).
 Proof.
-  intros A H1 H2. apply TransitiveInclIsOrdinal with On.
-  - apply OnIsOrdinal.
+  intros A H1 H2. apply WhenTransitive with On.
+  - apply COC.IsOrdinal.
   - apply IsTransitive'. assumption.
   - apply IsIncl'; assumption.
 Qed.
 
 (* The intersection of class of ordinals is an ordinal class.                   *)
 Proposition IsOrdinal : forall (A:Class),
-  A :<=: On -> Class.Ordinal.Core.Ordinal :I(A).
+  A :<=: On -> COC.Ordinal :I(A).
 Proof.
   intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. {
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  - apply Class.Ordinal.Core.EquivCompat with :0:.
+  - apply COC.EquivCompat with :0:.
     + apply Equiv.Sym, Inter.WhenEmpty. assumption.
-    + apply Class.Ordinal.Core.ZeroIsOrdinal.
-  - apply Class.Ordinal.Core.EquivCompat with (inter' A).
+    + apply COC.Zero.
+  - apply COC.EquivCompat with (inter' A).
     + apply Equiv.Sym, WhenNotEmpty. assumption.
     + apply IsOrdinal'; assumption.
 Qed.

@@ -24,14 +24,14 @@ Proof.
   assert (On :\: A :<>: :0:) as H4. { apply Diff.WhenLess. split; assumption. }
   assert (exists a, (On :\: A) a /\ (On :\: A) :/\: toClass a :~: :0:) as H5. {
     apply COC.HasMinimal with On. 3: assumption.
-    - apply OnIsOrdinal.
+    - apply COC.IsOrdinal.
     - apply Class.Inter2.IsInclL. }
   destruct H5 as [a [[H5 H6] H7]]. assert (toClass a :<: On) as H8. {
-    apply Class.Ordinal.Core.LessIsElem; try assumption. apply OnIsOrdinal. }
+    apply COC.LessIsElem; try assumption. apply COC.IsOrdinal. }
   assert (toClass a :<=: A) as H9. {
     intros x H10. apply DoubleNegation. intros H11.
     apply Class.Empty.Charac with x, H7. split. 2: assumption. split. 2: assumption.
-    apply Class.Ordinal.Core.IsOrdinal with (toClass a); assumption. }
+    apply COC.WhenElem with (toClass a); assumption. }
   apply H6, H2; assumption.
 Qed.
 

@@ -9,6 +9,7 @@ Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -35,11 +36,11 @@ Proposition IsEMinimal : forall (A:Class) (a:U),
   Minimal E (A :\: toClass a) a.
 Proof.
   intros A a H1 H2.
-  assert (On a) as H3. { apply Class.Ordinal.Core.IsOrdinal with A; assumption. }
+  assert (On a) as H3. { apply COC.WhenElem with A; assumption. }
   assert (A :\: toClass a :<>: :0:) as H4. {
     apply Class.Empty.HasElem. exists a. split. 1: assumption. apply NoElemLoop1. }
   apply Inf.IsEMinimal. 2: assumption.
-  - intros x [H5 _]. apply Class.Ordinal.Core.IsOrdinal with A; assumption.
+  - intros x [H5 _]. apply COC.WhenElem with A; assumption.
   - apply Inf.WhenOrdinal; assumption.
 Qed.
 
@@ -91,7 +92,7 @@ Proof.
         apply Minimal.EquivCompatR with F:[A :\: toClass b]:; assumption. }
       clear H11 H12.
       assert (B b) as H14. {
-        apply Class.Ordinal.Core.LessIsElem; try assumption. split.
+        apply COC.LessIsElem; try assumption. split.
         - intros a H14. apply (Bij.ImageOfDomain F A B). 1: apply H3.
           apply (Bij.ImageCharac F A B). 1: apply H3.
           exists a. assert (A a) as H15. {
@@ -102,7 +103,7 @@ Proof.
       assert (Minimal E (B :\: toClass b) b) as H15. {
         apply IsEMinimal; assumption. }
       assert (B :\: toClass b :<=: On) as H16. {
-        intros a [H16 _]. apply Class.Ordinal.Core.IsOrdinal with B; assumption. }
+        intros a [H16 _]. apply COC.WhenElem with B; assumption. }
       assert (B :\: toClass b :<>: :0:) as H17. {
         apply Class.Empty.HasElem. exists b. split. 1: assumption.
         apply NoElemLoop1. }
@@ -112,7 +113,7 @@ Proof.
         apply InfOfClass.IsEMinimal; assumption. }
       rewrite <- H18 in H19. assumption. }
   intros a H6.
-  assert (On a) as H7. { apply Class.Ordinal.Core.IsOrdinal with A; assumption. }
+  assert (On a) as H7. { apply COC.WhenElem with A; assumption. }
   assert (C a) as H8. { apply H5. assumption. }
   rewrite H4 in H8. destruct H8 as [_ H8]. apply H8. assumption.
 Qed.

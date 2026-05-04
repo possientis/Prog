@@ -148,7 +148,7 @@ Proof.
       destruct H4 as [_ H4]. rewrite <- H4. apply SRD.Charac.
       exists y. assumption. }
     apply SOC.IsOrdinal with a; assumption. }
-  apply TransitiveInclIsOrdinal with On; try assumption. apply OnIsOrdinal.
+  apply WhenTransitive with On; try assumption. apply COC.IsOrdinal.
 Qed.
 
 (* The domain of the transfinite recursion class is the class of ordinals       *)
@@ -158,7 +158,7 @@ Proof.
   assert (
     CRD.domain (Recursion F) :~: On                           \/
     exists a, On a /\ CRD.domain (Recursion F) :~: toClass a) as H1. {
-      apply IsOnOrOrdinalSet. apply DomainIsOrdinal. }
+      apply IsOnOrOrdinal. apply DomainIsOrdinal. }
   destruct H1 as [H1|H1]. 1: assumption. exfalso. destruct H1 as [c [H1 H2]].
   assert (Small (Recursion F)) as H3. {
     apply Function.IsSmall.

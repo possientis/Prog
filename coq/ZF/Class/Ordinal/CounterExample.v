@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Recursion2.
@@ -52,7 +53,7 @@ Proof.
     + intros x y z H1 H2. apply F0Charac2 in H1. apply F0Charac2 in H2.
       destruct H1 as [H1 H3]. destruct H2 as [H2 H4]. subst. reflexivity.
   - split.
-    + apply Core.EquivCompat with On. 2: apply Core.OnIsOrdinal.
+    + apply Core.EquivCompat with On. 2: apply COC.IsOrdinal.
       apply Equiv.Sym, F0Domain.
     + intros z H1. destruct H1 as [y H1]. apply F0Charac2 in H1.
       destruct H1 as [H1 H2]. subst. apply Succ.IsOrdinal. assumption.

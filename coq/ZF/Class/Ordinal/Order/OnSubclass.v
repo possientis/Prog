@@ -5,6 +5,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Order.E.
 Require Import ZF.Class.Ordinal.Order.WFWO.
 Require Import ZF.Class.Ordinal.Recursion.

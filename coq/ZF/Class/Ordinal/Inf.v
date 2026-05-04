@@ -63,7 +63,7 @@ Proof.
   assert (inf A :~: On \/ inf A :<: On) as H1. {
     apply COC.IsOnOrLess, IsOrdinal. }
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
-  apply OnIsProper. apply Small.EquivCompat with (inf A).
+  apply IsProper. apply Small.EquivCompat with (inf A).
   1: assumption. apply IsSmall.
 Qed.
 
@@ -121,7 +121,7 @@ Proposition IsIn : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2 H3.
   assert (exists b, A b /\ A :/\: toClass b :~: :0:) as H4. {
-    apply COC.HasMinimal with On; try assumption. apply OnIsOrdinal. }
+    apply COC.HasMinimal with On; try assumption. apply COC.IsOrdinal. }
   destruct H4 as [b [H4 H5]].
   assert (forall c, A c -> b :<=: c) as H6. {
     intros c H6.
@@ -129,7 +129,7 @@ Proof.
       toClass b :~: toClass c \/
       toClass b :<: toClass c \/
       toClass c :<: toClass b) as H7. {
-        apply OrdinalTotal; apply H1; assumption. }
+        apply ThreeWay; apply H1; assumption. }
     destruct H7 as [H7|[H7|H7]].
     - apply EqualToClass in H7. subst. apply Incl.Refl.
     - apply H7.
@@ -155,7 +155,7 @@ Proposition IsInOrd : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2.
   assert (On a) as H3. {
-    apply Class.Ordinal.Core.EquivCompat with (inf A).
+    apply COC.EquivCompat with (inf A).
     apply Equiv.Sym. assumption. apply IsOrdinal. }
   assert (IsSetOf (inf (A :/\: On)) a) as H4. {
     apply IsSetOf.EquivCompat with (inf A). 2: assumption.
@@ -185,12 +185,12 @@ Proof.
       assert (toClass a :~: toClass b \/
               toClass a :<: toClass b \/
               toClass b :<: toClass a) as H6. {
-        apply OrdinalTotal; apply H1; assumption. }
+        apply ThreeWay; apply H1; assumption. }
       destruct H6 as [H6|[H6|H6]].
       * apply Incl.EquivCompatR with (toClass a). 1: assumption. apply Incl.Refl.
       * apply H6.
       * exfalso. apply Class.Empty.HasNoElem in H4. apply H4. exists b. split.
-        1: assumption. apply Class.Ordinal.Core.LessIsElem;
+        1: assumption. apply COC.LessIsElem;
         try assumption; apply H1; assumption.
     + apply IsLowerBound; assumption.
 Qed.
@@ -208,13 +208,13 @@ Proof.
       + apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
         apply Class.Empty.HasElem. exists b. split.
         * split; assumption.
-        * apply Class.Ordinal.Core.IsOrdinal with A; assumption.
+        * apply COC.WhenElem with A; assumption.
       + intros b [[H5 H6] H7].
         assert (
           toClass a :~: toClass b \/
           toClass a :<: toClass b \/
           toClass b :<: toClass a) as H8. {
-            apply OrdinalTotal; assumption. }
+            apply ThreeWay; assumption. }
         destruct H8 as [H8|[H8|H8]].
         * apply EqualToClass in H8. subst. apply Incl.Refl.
         * apply H8.
@@ -229,10 +229,10 @@ Proof.
           toClass a :~: A \/
           toClass a :<: A \/
           A :<: toClass a) as H6. {
-            apply OrdinalTotal; assumption. }
+            apply ThreeWay; assumption. }
         destruct H6 as [H6|[H6|H6]].
         * exfalso. apply H5, H6. assumption.
-        * apply Class.Ordinal.Core.LessIsElem; assumption.
+        * apply COC.LessIsElem; assumption.
         * exfalso. apply H5, H6. assumption. }
         apply H5. assumption.
 Qed.

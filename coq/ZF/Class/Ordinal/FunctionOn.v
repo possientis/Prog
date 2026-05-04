@@ -64,7 +64,7 @@ Proof.
     assert (Small On) as H7. {
       apply Small.EquivCompat with (domain F). 1: apply H1.
       apply CRF.DomainIsSmall; assumption. }
-    revert H7. apply COC.OnIsProper. }
+    revert H7. apply COC.IsProper. }
   split. 1: assumption. split; assumption.
 Qed.
 
@@ -92,7 +92,7 @@ Proof.
     contradiction. }
   remember (fun a => On a /\  A :\: toClass F:[a]: :~: :0:) as B eqn:H5.
   assert (B :<>: :0:) as H6. { apply Class.Empty.HasElem. assumption. }
-  assert (COC.Ordinal On) as H7. { apply COC.OnIsOrdinal. }
+  assert (COC.Ordinal On) as H7. { apply COC.IsOrdinal. }
   assert (B :<=: On) as H8. { intros x H8. rewrite H5 in H8. apply H8. }
   assert (exists a, B a /\ B :/\: toClass a :~: :0:) as H9. {
     apply COC.HasMinimal with On; assumption. }

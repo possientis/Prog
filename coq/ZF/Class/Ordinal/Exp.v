@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.

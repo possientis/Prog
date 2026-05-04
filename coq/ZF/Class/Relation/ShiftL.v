@@ -91,7 +91,7 @@ Proof.
   - apply DomainOf in H2. exists (succ x). split. 2: assumption.
     apply Succ.IsIn.
   - destruct H2 as [y [H2 H3]]. apply DomainOf.
-    assert (Ordinal y) as H4. { apply COC.IsOrdinal with (domain F); assumption. }
+    assert (Ordinal y) as H4. { apply COC.WhenElem with (domain F); assumption. }
     assert (Ordinal x) as H5. { apply SOC.IsOrdinal with y; assumption. }
     assert (Ordinal (succ x)) as H6. { apply Succ.IsOrdinal. assumption. }
     assert (succ x :<=: y) as H7. { apply Succ.ElemIsIncl; assumption. }

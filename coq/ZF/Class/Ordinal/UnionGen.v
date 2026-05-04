@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.

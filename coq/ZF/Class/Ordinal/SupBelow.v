@@ -3,6 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
@@ -41,6 +42,6 @@ Proof.
   assert (sup(:< b) A :~: On \/ sup(:< b) A :<: On) as H1. {
     apply Core.IsOnOrLess, IsOrdinal. }
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
-  apply OnIsProper. apply Small.EquivCompat with (sup(:< b) A).
+  apply IsProper. apply Small.EquivCompat with (sup(:< b) A).
   1: assumption. apply IsSmall.
 Qed.

@@ -35,7 +35,7 @@ Proof.
   - apply Recursion2.IsFunctionOn.
   - split.
     + apply Core.EquivCompat with On. apply Equiv.Sym.
-      1: assumption. apply Core.OnIsOrdinal.
+      1: assumption. apply COC.IsOrdinal.
     + assert (forall x, On x -> On (Recursion F a)!x) as H6. {
         apply Induction2.Induction.
         - rewrite Recursion2.WhenZero. assumption.
@@ -54,7 +54,7 @@ Proposition WhenInDomain : forall (F:Class) (a:U), OrdFun F ->
   domain F a -> On a.
 Proof.
   intros F a [H1 [H2 H3]] H4.
-  apply COC.IsOrdinal with (domain F); assumption.
+  apply COC.WhenElem with (domain F); assumption.
 Qed.
 
 Proposition IsOrdinal : forall (F:Class) (a:U), OrdFun F ->

@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Oracle.
 Require Import ZF.Class.Ordinal.Recursion.

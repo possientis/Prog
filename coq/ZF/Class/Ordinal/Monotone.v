@@ -39,7 +39,7 @@ Proposition IsIncl : forall (F:Class) (a:U),
 Proof.
   intros F a [[H1 [H2 H3]] H4] H5.
   assert (On a) as H6. {
-    apply COC.IsOrdinal with (domain F); assumption. }
+    apply COC.WhenElem with (domain F); assumption. }
   assert (On F!a) as H7. { apply H3, CRF.IsInRange; assumption. }
   remember (fun b => domain F b /\ F!b :< b) as A eqn:H8.
   assert (A :~: :0: \/ A :<>: :0:) as H9. { apply LawExcludedMiddle. }
@@ -50,10 +50,10 @@ Proof.
     apply H9 in H11. contradiction.
   - exfalso.
     assert (A :<=: On) as H10. {
-      intros b H10. rewrite H8 in H10. apply COC.IsOrdinal with (domain F).
+      intros b H10. rewrite H8 in H10. apply COC.WhenElem with (domain F).
       1: assumption. apply H10. }
     assert (exists b, A b /\ A :/\: toClass b :~: :0:) as H11. {
-      apply COC.HasMinimal with On; try assumption. apply COC.OnIsOrdinal. }
+      apply COC.HasMinimal with On; try assumption. apply COC.IsOrdinal. }
     destruct H11 as [b [H11 H12]]. rewrite H8 in H11. destruct H11 as [H11 H13].
     assert (domain F F!b) as H14. {
       assert (Transitive (domain F)) as H14. { apply H2. }

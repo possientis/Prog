@@ -14,6 +14,8 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 
+Module COC := ZF.Class.Ordinal.Core.
+
 (* The class of ordinal upper-bounds of A.                                      *)
 Definition upper (A:Class) : Class := fun a =>
   On a /\ forall b, On b -> A b -> b :<=: a.
@@ -53,10 +55,10 @@ Proof.
   - split. 1: assumption. intros b H3 H4.
     assert (
       sup A :~: toClass a \/ sup A :<: toClass a \/ toClass a :<: sup A) as H5. {
-        apply Class.Ordinal.Core.OrdinalTotal.
+        apply COC.ThreeWay.
         - apply Sup.IsOrdinal.
-        - apply Class.Ordinal.Core.IsOrdinal with On.
-          2: assumption. apply OnIsOrdinal. }
+        - apply COC.WhenElem with On.
+          2: assumption. apply COC.IsOrdinal. }
     destruct H5 as [H5|[H5|H5]].
     + intros x H6. apply H5. apply Sup.InterOn.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
@@ -66,11 +68,11 @@ Proof.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
       * apply Class.Inter2.IsInclR.
       * split; assumption.
-    + apply Class.Ordinal.Core.LessIsElem in H5.
+    + apply COC.LessIsElem in H5.
       * contradiction.
       * apply Sup.IsOrdinal.
-      * apply Class.Ordinal.Core.IsOrdinal with On.
-        2: assumption. apply OnIsOrdinal.
+      * apply COC.WhenElem with On.
+        2: assumption. apply COC.IsOrdinal.
 Qed.
 
 (* The supremum is a small class iff there is an ordinal upper-bound.           *)
@@ -86,7 +88,7 @@ Proof.
   - assert (sup A :~: On \/ sup A :<: On) as H2. {
       apply Core.IsOnOrLess, Sup.IsOrdinal. }
     destruct H2 as [H2|H2].
-    + exfalso. apply Core.OnIsProper, Small.EquivCompat with (sup A); assumption.
+    + exfalso. apply Core.IsProper, Small.EquivCompat with (sup A); assumption.
     + apply Diff.WhenLess in H2. apply Class.Empty.HasElem in H2.
       destruct H2 as [a [H2 H3]]. apply Class.Empty.HasElem. exists a.
       apply NotInSup; assumption.
@@ -98,7 +100,7 @@ Proposition IsIn : forall (A:Class) (a:U),
 Proof.
   intros A a H1.
   assert (On a) as H2. {
-    apply Class.Ordinal.Core.EquivCompat with (sup A).
+    apply COC.EquivCompat with (sup A).
     apply Equiv.Sym. assumption. apply Sup.IsOrdinal. }
   split. 1: assumption. intros b H3 H4. apply Incl.EquivCompatR with (sup A).
   - apply Equiv.Sym. assumption.

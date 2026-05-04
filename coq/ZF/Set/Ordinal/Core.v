@@ -33,7 +33,7 @@ Qed.
 Proposition IsOrdinal : forall (a b:U), Ordinal a ->
   b :< a -> Ordinal b.
 Proof.
-  intros a b H1 H2. apply Class.Ordinal.Core.IsOrdinal with (toClass a);
+  intros a b H1 H2. apply COC.WhenElem with (toClass a);
   assumption.
 Qed.
 
@@ -65,8 +65,8 @@ Qed.
 Proposition IsLess : forall (a:U), Ordinal a ->
   toClass a :<: Ordinal.
 Proof.
-  intros a H1. apply (Class.Ordinal.Core.LessIsElem Ordinal); try assumption.
-  apply OnIsOrdinal.
+  intros a H1. apply (COC.LessIsElem Ordinal); try assumption.
+  apply COC.IsOrdinal.
 Qed.
 
 (* Ordinals are totally ordered by set membership.                              *)
@@ -77,7 +77,7 @@ Proof.
     toClass a :~: toClass b \/
     toClass a :<: toClass b \/
     toClass b :<: toClass a) as H3. {
-      apply Class.Ordinal.Core.OrdinalTotal; assumption. }
+      apply COC.ThreeWay; assumption. }
     destruct H3 as [H3|[H3|H3]].
     - left. apply EqualToClass. assumption.
     - right. left. apply LessIsElem; try assumption.
@@ -163,8 +163,8 @@ Qed.
 (* 0 is an ordinal.                                                             *)
 Proposition ZeroIsOrdinal : Ordinal :0:.
 Proof.
-  apply Class.Ordinal.Core.EquivCompat with :0:.
-  2: apply Class.Ordinal.Core.ZeroIsOrdinal.
+  apply COC.EquivCompat with :0:.
+  2: apply COC.Zero.
   apply Equiv.Sym, Empty.ToClass.
 Qed.
 
@@ -212,10 +212,10 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
-    apply Core.HasMinimal with Ordinal; try assumption. apply OnIsOrdinal. }
+    apply Core.HasMinimal with Ordinal; try assumption. apply COC.IsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
-    apply Class.Ordinal.Core.IsOrdinal with Ordinal.
-    apply OnIsOrdinal. apply H1. assumption. }
+    apply COC.WhenElem with Ordinal.
+    apply COC.IsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. {

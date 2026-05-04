@@ -200,7 +200,7 @@ Proof.
   assert (Small On) as H11. {
     apply Small.EquivCompat with (domain F). 1: assumption.
     apply Function.DomainIsSmall; assumption. }
-  revert H11. apply COC.OnIsProper.
+  revert H11. apply COC.IsProper.
 Qed.
 
 

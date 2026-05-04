@@ -7,6 +7,7 @@ Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
+Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
@@ -143,7 +144,7 @@ Proof.
 Qed.
 
 Proposition WhenOrdinal : forall (A:Class) (a:U),
-  Class.Ordinal.Core.Ordinal A  ->
+  COC.Ordinal A                 ->
   Ordinal a                     ->
   A :\: toClass a :<>: :0:      ->
   inf (A :\: toClass a) = a.
@@ -154,8 +155,8 @@ Proof.
 Qed.
 
 Proposition IsEMinimal : forall (A:Class) (a:U),
-  A :<=: On   ->
-  A :<>: :0:  ->
+  A :<=: On                     ->
+  A :<>: :0:                    ->
   a = inf A <-> Minimal E A a.
 Proof.
   intros A a H1 H2. split; intros H3.

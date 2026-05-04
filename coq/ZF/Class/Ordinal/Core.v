@@ -41,14 +41,14 @@ Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
 (* The class of all sets which are ordinals.                                    *)
 Definition On : Class := fun x => Ordinal (toClass x).
 
-Proposition ZeroIsOrdinal : Ordinal :0:.
+Proposition Zero : Ordinal :0:.
 Proof.
   split.
   - apply ZeroIsTransitive.
   - intros x y H1.  apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
-Proposition OneIsOrdinal : Ordinal :1:.
+Proposition One : Ordinal :1:.
 Proof.
   split.
   - apply OneIsTransitive.
@@ -103,7 +103,7 @@ Proof.
 Qed.
 
 (* An element of an ordinal class defines an ordinal class.                     *)
-Proposition IsOrdinal : forall (A:Class) (a:U),
+Proposition WhenElem : forall (A:Class) (a:U),
   Ordinal A -> A a -> On a.
 Proof.
   intros A a [H1 H2] H3. split.
@@ -118,7 +118,7 @@ Proof.
 Qed.
 
 (* A transitive strict subclass of an ordinal class is small.                   *)
-Proposition TransitiveLessIsSmall : forall (A B:Class),
+Proposition IsSmall : forall (A B:Class),
   Ordinal A    ->
   Transitive B ->
   B :<: A      ->
@@ -182,7 +182,7 @@ Proof.
 Qed.
 
 (* For a transitive set, belonging to an ordinal is being a strict subclass.    *)
-Proposition WhenTransitiveLessIsElem : forall (A:Class) (a:U),
+Proposition LessIsElem' : forall (A:Class) (a:U),
   Ordinal A               ->
   Transitive (toClass a)  ->
   toClass a :<: A <-> A a.
@@ -214,11 +214,11 @@ Proposition LessIsElem : forall (A:Class) (a:U),
   Ordinal (toClass a)     ->
   toClass a :<: A <-> A a.
 Proof.
-  intros A a H1 [H2 _]. apply WhenTransitiveLessIsElem; assumption.
+  intros A a H1 [H2 _]. apply LessIsElem'; assumption.
 Qed.
 
 (* A transitive subclass of an ordinal class is an ordinal class.               *)
-Proposition TransitiveInclIsOrdinal : forall (A B:Class),
+Proposition WhenTransitive : forall (A B:Class),
   Ordinal A    ->
   Transitive B ->
   B :<=: A     ->
@@ -229,10 +229,10 @@ Proof.
 Qed.
 
 (* The intersection of two ordinal classes is an ordinal class.                 *)
-Proposition InterIsOrdinal : forall (A B:Class),
+Proposition Inter : forall (A B:Class),
   Ordinal A -> Ordinal B -> Ordinal (A :/\: B).
 Proof.
-  intros A B H1 H2. apply TransitiveInclIsOrdinal with A. 1: assumption.
+  intros A B H1 H2. apply WhenTransitive with A. 1: assumption.
   2: apply Class.Inter2.IsInclL. intros a [H3 H4].
   destruct H1 as [H1 _]. destruct H2 as [H2 _]. apply Class.Inter2.IsIncl.
   - apply H1. assumption.
@@ -240,7 +240,7 @@ Proof.
 Qed.
 
 (* Two ordinal classes are equal or strictly ordered by inclusion,              *)
-Proposition OrdinalTotal : forall (A B:Class),
+Proposition ThreeWay : forall (A B:Class),
   Ordinal A ->
   Ordinal B ->
   A :~: B \/ A :<: B \/ B :<: A.
@@ -248,17 +248,17 @@ Proof.
   intros A B H1 H2.
   assert (~(A:/\:B :<: A /\ A:/\:B :<: B)) as H3. {
     intros [H3 H4]. assert (Small (A:/\:B)) as H5. {
-      apply TransitiveLessIsSmall with A; try assumption.
-      apply InterIsOrdinal; assumption. }
+      apply IsSmall with A; try assumption.
+      apply Inter; assumption. }
     apply Small.IsSomeSet in H5. destruct H5 as [a H5].
     assert (Transitive (toClass a)) as H6. {
       apply Transitive.EquivCompat with (A:/\:B). 1: assumption.
-      apply InterIsOrdinal; assumption. }
+      apply Inter; assumption. }
     assert (A a) as H7. {
-      apply WhenTransitiveLessIsElem; try assumption.
+      apply LessIsElem'; try assumption.
       apply Less.EquivCompatL with (A:/\:B); assumption. }
     assert (B a) as H8. {
-      apply WhenTransitiveLessIsElem; try assumption.
+      apply LessIsElem'; try assumption.
       apply Less.EquivCompatL with (A:/\:B); assumption. }
     apply NoElemLoop1 with a. apply H5. split; assumption. }
   assert (A:/\:B :~: A \/ A:/\:B :~: B) as H4. {
@@ -278,14 +278,14 @@ Proof.
 Qed.
 
 (* The class of ordinals is an ordinal class.                                   *)
-Proposition OnIsOrdinal : Ordinal On.
+Proposition IsOrdinal : Ordinal On.
 Proof.
   split.
-  - intros a H1 x H2. apply IsOrdinal with (toClass a); assumption.
+  - intros a H1 x H2. apply WhenElem with (toClass a); assumption.
   - intros a b H1 H2. assert (
       toClass a :~: toClass b \/
       toClass a :<: toClass b \/
-      toClass b :<: toClass a) as H3. { apply OrdinalTotal; assumption. }
+      toClass b :<: toClass a) as H3. { apply ThreeWay; assumption. }
     destruct H3 as [H3|[H3|H3]].
     + left. apply EqualToClass. assumption.
     + right. left. apply (LessIsElem (toClass b)); assumption.
@@ -293,11 +293,11 @@ Proof.
 Qed.
 
 (* The class of ordinals is a proper class.                                     *)
-Proposition OnIsProper : Proper On.
+Proposition IsProper : Proper On.
 Proof.
   intros H1. apply Small.IsSomeSet in H1. destruct H1 as [a H1].
   apply NoElemLoop1 with a. apply H1. apply EquivCompat with On.
-  1: assumption. apply OnIsOrdinal.
+  1: assumption. apply IsOrdinal.
 Qed.
 
 (* Every ordinal class is the class of ordinals or a strict subclass thereof.   *)
@@ -305,13 +305,13 @@ Proposition IsOnOrLess : forall (A:Class),
   Ordinal A -> A :~: On \/ A :<: On.
 Proof.
   intros A H1. assert (A :~: On \/ A :<: On \/ On :<: A) as H2. {
-    apply OrdinalTotal. 1: assumption. apply OnIsOrdinal. }
+    apply ThreeWay. 1: assumption. apply IsOrdinal. }
   destruct H2 as [H2|[H2|H2]].
   - left. assumption.
   - right. assumption.
-  - exfalso. apply OnIsProper.
-    apply TransitiveLessIsSmall with A; try assumption.
-    apply OnIsOrdinal.
+  - exfalso. apply IsProper.
+    apply IsSmall with A; try assumption.
+    apply IsOrdinal.
 Qed.
 
 (* Every ordinal class is a subclass of the class of ordinals.                  *)
@@ -334,12 +334,12 @@ Proof.
     apply IsOnOrLess. assumption. }
   destruct H2 as [H2|H2].
   - left. assumption.
-  - right. apply TransitiveLessIsSmall with On. 3: assumption.
-    + apply OnIsOrdinal.
+  - right. apply IsSmall with On. 3: assumption.
+    + apply IsOrdinal.
     + apply H1.
 Qed.
 
-Proposition IsOnOrOrdinalSet : forall (A:Class),
+Proposition IsOnOrOrdinal : forall (A:Class),
   Ordinal A -> A :~: On \/ exists a, On a /\ A :~: toClass a.
 Proof.
   intros A H1.
@@ -384,7 +384,7 @@ Proposition HasZero : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (:1: :~: A \/ :1: :<: A \/ A :<: :1:) as H3. {
-    apply OrdinalTotal. 2: assumption. apply OneIsOrdinal. }
+    apply ThreeWay. 2: assumption. apply One. }
   destruct H3 as [H3|[H3|[H3 H4]]].
   - apply H3. reflexivity.
   - apply H3. reflexivity.
@@ -395,7 +395,7 @@ Proof.
 Qed.
 
 (* On x On is a proper class.                                                   *)
-Proposition OnSquaredIsProper : Proper (On :x: On).
+Proposition IsProperSquare : Proper (On :x: On).
 Proof.
   intros H1.
   remember (fun x => exists a, On a /\ x = :(a, :(a,:0:):):) as F eqn:H2.
@@ -409,7 +409,7 @@ Proof.
   assert (On :0:) as H4. {
     apply EquivCompat with :0:.
     - apply Equiv.Sym, Empty.ToClass.
-    - apply ZeroIsOrdinal. }
+    - apply Zero. }
   assert (range F :<=: On :x: On) as H5. {
     intros y [x H5]. apply H3 in H5. destruct H5 as [H5 H6]. subst.
     apply Prod.Charac2. split; assumption. }
@@ -431,5 +431,5 @@ Proof.
   assert (Small (domain F)) as H9. { apply Function.DomainIsSmall; assumption. }
   assert (Small On) as H10. {
     apply Small.EquivCompat with (domain F); assumption. }
-  revert H10. apply OnIsProper.
+  revert H10. apply IsProper.
 Qed.
