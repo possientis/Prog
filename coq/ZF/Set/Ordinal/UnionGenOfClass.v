@@ -29,8 +29,10 @@ Proposition WhenLimit : forall (a:U), Limit a -> :\/:_{a} I = a.
 Proof.
   intros a H1. apply DoubleInclusion. split; intros b H2.
   - apply SUC.Charac in H2. destruct H2 as [c [H2 H3]].
-    rewrite I.Eval in H3. apply Transitive.WhenOrdinal with c; try assumption.
-    apply H1.
+    rewrite I.Eval in H3.
+    assert (Ordinal a) as G1. { apply H1. }
+    assert (Transitive a) as G2. { apply Core.Charac in G1. apply G1. }
+    apply G2 with c; assumption.
   - apply SUC.Charac.
     assert (exists c, b :< c /\ c :< a) as H3. {
       apply Limit.InBetween; assumption. }

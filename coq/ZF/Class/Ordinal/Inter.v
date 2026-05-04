@@ -69,7 +69,7 @@ Qed.
 Proposition IsOrdinal' : forall (A:Class),
   A :<=: On -> A :<>: :0: -> COC.Ordinal (inter' A).
 Proof.
-  intros A H1 H2. apply WhenTransitive with On.
+  intros A H1 H2. apply COC.WhenTransitive with On.
   - apply COC.IsOrdinal.
   - apply IsTransitive'. assumption.
   - apply IsIncl'; assumption.

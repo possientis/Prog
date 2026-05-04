@@ -3,7 +3,6 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
@@ -24,14 +23,6 @@ Proposition FromClass : forall (a:U),
   COT.Transitive (toClass a) -> Transitive a.
 Proof.
   intros a H1 x y H2 H3. apply H1 with y; assumption.
-Qed.
-
-Proposition WhenOrdinal : forall (a:U), Ordinal a -> Transitive a.
-Proof.
-  intros a H1 x y H2 H3.
-  assert (Ordinal y) as H4. { apply Core.IsOrdinal with a; assumption. }
-  assert (Ordinal x) as H5. { apply Core.IsOrdinal with y; assumption. }
-  apply Core.ElemElemTran with y; assumption.
 Qed.
 
 Proposition WhenZero : forall (a:U),

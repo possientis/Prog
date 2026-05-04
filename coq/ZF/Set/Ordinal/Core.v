@@ -9,6 +9,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
+Require Import ZF.Set.Ordinal.Transitive.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 
@@ -27,6 +28,22 @@ Proposition FromClass : forall (a:U),
   COC.Ordinal (toClass a) -> Ordinal a.
 Proof.
   intros a H1. assumption.
+Qed.
+
+Proposition Charac : forall (a:U),
+  Ordinal a                    <->
+  Transitive a                  /\
+  forall x y,
+    x :< a                      ->
+    y :< a                      ->
+    x = y \/ x :< y \/ y :< x.
+Proof.
+  intros a. split; intros H1.
+  - assert (Transitive a) as H2. { apply Transitive.FromClass, H1. }
+    split. 1: assumption. apply H1.
+  - destruct H1 as [H1 H2]. split.
+    + apply Transitive.ToClass. assumption.
+    + assumption.
 Qed.
 
 (* An element of an ordinal is an ordinal.                                      *)
@@ -84,6 +101,15 @@ Proof.
       apply Less.FromClass. assumption.
     - right. right. apply LessIsElem; try assumption.
       apply Less.FromClass. assumption.
+Qed.
+
+Proposition WhenTransitive : forall (a:U),
+  Transitive  a           ->
+  toClass a :<=: Ordinal  ->
+  Ordinal a.
+Proof.
+  intros a H1 H2. apply Charac. split. 1: assumption.
+  intros x y H3 H4. apply IsTotal; apply H2; assumption.
 Qed.
 
 Proposition EqualOrElem : forall (a b:U),
@@ -212,7 +238,7 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
-    apply Core.HasMinimal with Ordinal; try assumption. apply COC.IsOrdinal. }
+    apply COC.HasMinimal with Ordinal; try assumption. apply COC.IsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
     apply COC.WhenElem with Ordinal.
     apply COC.IsOrdinal. apply H1. assumption. }

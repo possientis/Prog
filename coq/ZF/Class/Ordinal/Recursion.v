@@ -148,7 +148,7 @@ Proof.
       destruct H4 as [_ H4]. rewrite <- H4. apply SRD.Charac.
       exists y. assumption. }
     apply SOC.IsOrdinal with a; assumption. }
-  apply WhenTransitive with On; try assumption. apply COC.IsOrdinal.
+  apply COC.WhenTransitive with On; try assumption. apply COC.IsOrdinal.
 Qed.
 
 (* The domain of the transfinite recursion class is the class of ordinals       *)
