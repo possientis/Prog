@@ -20,24 +20,28 @@ Module SOC := ZF.Set.Ordinal.Core.
 
 Definition hartogs (a:U) : U := fromClass (CCH.hartogs a) (CCH.IsSmall a).
 
+(* hartogs(a) as a class equals the class-level Hartogs number of a.            *)
 Proposition ToClass : forall (a:U),
   toClass (hartogs a) :~: CCH.hartogs a.
 Proof.
   intros a. apply FromClass.ToClass.
 Qed.
 
+(* x is in hartogs(a) iff x is an ordinal admitting an injection into a.        *)
 Proposition Charac : forall (a x:U),
   x :< hartogs a <-> Ordinal x /\ exists f, Inj f x a.
 Proof.
   intros a x. apply FromClass.Charac.
 Qed.
 
+(* Every element of hartogs(a) is an ordinal.                                   *)
 Proposition IsIncl : forall (a:U),
   toClass (hartogs a) :<=: Ordinal.
 Proof.
   intros a x H1. apply Charac in H1. apply H1.
 Qed.
 
+(* hartogs(a) is a transitive set.                                              *)
 Proposition IsTransitive : forall (a:U),
   Transitive (hartogs a).
 Proof.
@@ -49,6 +53,7 @@ Proof.
   apply Charac. split. 1: assumption. exists (f:|:c). assumption.
 Qed.
 
+(* hartogs(a) is an ordinal.                                                    *)
 Proposition IsOrdinal : forall (a:U), Ordinal (hartogs a).
 Proof.
   intro a. apply SOC.WhenTransitive.
@@ -56,6 +61,7 @@ Proof.
   - apply IsIncl.
 Qed.
 
+(* hartogs(a) is a cardinal number.                                             *)
 Proposition IsCardinal : forall (a:U), Cardinal (hartogs a).
 Proof.
   intros a. apply SCC.Charac. split. 1: apply IsOrdinal.
@@ -74,6 +80,7 @@ Proof.
   revert H6. apply Foundation.NoElemLoop1.
 Qed.
 
+(* The empty set is an element of hartogs(a).                                   *)
 Proposition HasZero : forall (a:U), :0: :< hartogs a.
 Proof.
   intros a. apply Charac. split.
@@ -81,6 +88,7 @@ Proof.
   - exists :0:. apply Inj.WhenEmpty. reflexivity.
 Qed.
 
+(* The cardinal of a is strictly less than the Hartogs number of a.             *)
 Proposition IsMore : forall (a:U), card a :< hartogs a.
 Proof.
   intros a.
@@ -103,6 +111,7 @@ Proof.
     revert H8. apply Foundation.NoElemLoop1.
 Qed.
 
+(* There is no injection from hartogs(a) into a.                                *)
 Proposition HasNoInj : forall (a:U), ~ exists f, Inj f (hartogs a) a.
 Proof.
   intros a [f H1].

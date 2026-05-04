@@ -21,3 +21,7 @@ Proof.
   revert H6. apply NoElemLoop1.
 Qed.
 
+(* The class of cardinal numbers is a proper class.                             *)
+Proposition IsProperChoice : Proper Cardinal.
+Proof.
+Admitted.
