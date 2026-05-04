@@ -1,7 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
-Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Recursion2.
@@ -19,6 +18,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
+Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 
 (* F0 : On -> On is the successor function class.                               *)

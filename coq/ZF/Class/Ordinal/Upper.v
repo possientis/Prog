@@ -14,7 +14,9 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 
+
 Module COC := ZF.Class.Ordinal.Core.
+
 
 (* The class of ordinal upper-bounds of A.                                      *)
 Definition upper (A:Class) : Class := fun a =>

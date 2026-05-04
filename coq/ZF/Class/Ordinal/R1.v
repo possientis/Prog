@@ -1,6 +1,5 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
-Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.Fun.From.
@@ -19,6 +18,7 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
+Module COC := ZF.Class.Ordinal.Core.
 
 (* Function class needed to define the rank of a set.                           *)
 Definition R1 : Class := Recursion :[fun a => :P(a)]: :0:.

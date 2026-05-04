@@ -4,10 +4,13 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Core.
-Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
+
+
+Module COC := ZF.Class.Ordinal.Core.
+
 
 (* The inter' of a non-empty class of ordinals is a class of ordinals.          *)
 Proposition IsIncl' : forall (A:Class),

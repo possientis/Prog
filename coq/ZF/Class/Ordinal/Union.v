@@ -1,12 +1,15 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Core.
-Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
+
+
+Module COC := ZF.Class.Ordinal.Core.
+
 
 (* The union of a class of ordinals is an ordinal class.                        *)
 Proposition IsOrdinal : forall (A:Class),

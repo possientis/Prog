@@ -9,7 +9,6 @@ Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
-Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -27,6 +26,9 @@ Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
+
+
+Module COC := ZF.Class.Ordinal.Core.
 
 
 (* An element a of an ordinal class A is a :<-minimal element of A\a.           *)

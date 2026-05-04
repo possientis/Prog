@@ -7,13 +7,13 @@ Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
-Module COC := ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 
+Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Ordinal.Inf.
 Module SIC := ZF.Set.InterOfClass.
 Module SOC := ZF.Set.Ordinal.InterOfClass.
