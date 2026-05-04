@@ -82,7 +82,7 @@ Proposition ShiftL : forall (F:Class) (n:U),
   :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F).
 Proof.
   intros F n H1. revert n.
-  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as G1. { apply Core.Zero. }
   remember (fun n =>
     (forall i, i :< succ n -> domain F i)  ->
     (forall i, i :< succ n -> Ordinal F!i) ->
@@ -125,7 +125,7 @@ Proposition ShiftR : forall (F:Class) (a n:U),
   :sum:_{succ n} (shiftR a F) = a :+: :sum:_{n} F.
 Proof.
   intros F a n H1 H2. revert n.
-  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as G1. { apply Core.Zero. }
   remember (fun n =>
     (forall i, i :< n -> domain F i)                ->
     (forall i, i :< n -> Ordinal F!i)               ->

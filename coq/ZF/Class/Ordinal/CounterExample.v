@@ -174,7 +174,7 @@ Definition G:Class := Recursion F :0:.
 Lemma GOrdFun : OrdFun G.
 Proof.
   apply OrdFun.FromRecursion.
-  - apply ZeroIsOrdinal.
+  - apply Zero.
   - apply FOrdFun.
   - apply FDomain.
 Qed.

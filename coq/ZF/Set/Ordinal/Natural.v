@@ -85,14 +85,14 @@ Definition nine : U := succ :8:.
 (* Notation ":9:" := nine                                                      *)
 Global Instance SetNine : Nine U := { nine := nine }.
 
-Proposition ZeroIsOrdinal : Ordinal :0:.
+Proposition Zero : Ordinal :0:.
 Proof.
-  apply Core.ZeroIsOrdinal.
+  apply Core.Zero.
 Qed.
 
 Proposition OneIsOrdinal : Ordinal :1:.
 Proof.
-  apply Succ.IsOrdinal, ZeroIsOrdinal.
+  apply Succ.IsOrdinal, Zero.
 Qed.
 
 Proposition TwoIsOrdinal : Ordinal :2:.

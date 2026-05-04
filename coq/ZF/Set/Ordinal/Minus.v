@@ -71,7 +71,7 @@ Proposition IsZero : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2 H3.
   assert (Ordinal (b :-: a)) as H4. { apply IsOrdinal; assumption. }
-  assert (Ordinal :0:) as H5. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as H5. { apply Core.Zero. }
   assert (Ordinal (succ b)) as H6. { apply Succ.IsOrdinal. assumption. }
   remember ({{ x :< succ b | fun c => b :<=: a :+: c}}) as G eqn:H7.
   assert (b :-: a = inf G) as H8. { rewrite H7. reflexivity. }

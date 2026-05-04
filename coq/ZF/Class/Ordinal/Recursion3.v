@@ -44,7 +44,7 @@ Proposition WhenZero : forall (F:Class) (a:U),
 Proof.
   intros F a. unfold Recursion. rewrite COR.IsRecursive.
   - apply Oracle2.WhenZero.
-  - apply SOC.ZeroIsOrdinal.
+  - apply SOC.Zero.
 Qed.
 
 (* The transfinite recursion class satisfies the equation G(succ b) = F(b,G(b)) *)

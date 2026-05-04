@@ -174,10 +174,10 @@ Proof.
     apply EvalOfClass.Charac.
     + apply OnZeroIsFunctional.
     + exists :1:. apply OnZeroCharac2. split.
-      * apply SOC.ZeroIsOrdinal.
+      * apply SOC.Zero.
       * left. split; reflexivity.
     + apply OnZeroCharac2. split.
-      * apply SOC.ZeroIsOrdinal.
+      * apply SOC.Zero.
       * left. split; reflexivity.
   - assert (Exp a :~: Exp' a) as H2. { apply WhenNotZeroL. assumption. }
     rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.

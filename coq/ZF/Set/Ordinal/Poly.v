@@ -48,7 +48,7 @@ Proposition IsElem : forall (a b c d n:U),
 Proof.
   intros a b c d n H1 H2 H3 H4 H5 H6 H7.
   revert n H3 b c d H2 H4 H5 H6.
-  assert (Ordinal :0:) as G1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as G1. { apply Core.Zero. }
   assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
   assert (:0: :< a) as G3. {
     apply Core.ElemElemTran with :1:; try assumption.
@@ -316,7 +316,7 @@ Proof.
         apply Exp.InBetween; assumption. }
       destruct H5 as [e [H5 [H6 H7]]].
     assert (Ordinal (a :^: e)) as G1. { apply Exp.IsOrdinal; assumption. }
-    assert (Ordinal :0:) as G2. { apply Core.ZeroIsOrdinal. }
+    assert (Ordinal :0:) as G2. { apply Core.Zero. }
     assert (Ordinal :1:) as G3. { apply Natural.OneIsOrdinal. }
     assert (:0: :< a) as G4. {
       apply ElemElemTran with :1:; try assumption.
@@ -350,7 +350,7 @@ Proof.
     assert (r = :0: \/ :0: :< r) as H14. { apply Core.ZeroOrElem. assumption. }
     assert (:1: :< :N) as G6. { apply Omega.HasOne. }
     assert (:1: = succ :0:) as G7. { reflexivity. }
-    assert (Ordinal :0:) as G8. { apply Core.ZeroIsOrdinal. }
+    assert (Ordinal :0:) as G8. { apply Core.Zero. }
     destruct H14 as [H14|H14].
     - remember :{ :(:0:,q): }: as c eqn:H15.
       remember :{ :(:0:,e): }: as d eqn:H16.
@@ -607,7 +607,7 @@ Proposition IsUnique : forall (a n m c d e f:U),
   n = m /\ c = e /\ d = f.
 Proof.
   intros a n m c d e f H1 H2 H3. revert n H3 m c d e f.
-  assert (Ordinal :0:) as K1. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as K1. { apply Core.Zero. }
   assert (Ordinal :1:) as K2. { apply Natural.OneIsOrdinal. }
   assert (:0: :< a) as K3. {
     apply Natural.HasZero. 1: assumption. apply Core.ElemIsIncl; assumption. }
@@ -1115,7 +1115,7 @@ Proof.
   assert (:0: :< a) as G7. { apply Limit.HasZero. assumption. }
   assert (:0: :< a :^: b) as G8. { apply Exp.HasZero; assumption. }
   assert (:0: :< a :^: b :*: n) as G9. { apply Mult.HasZero; assumption. }
-  assert (Ordinal :0:) as G10. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as G10. { apply Core.Zero. }
   assert (n :< a :^: b) as G11. { apply Omega.InLimitIncl; assumption. }
   assert (Ordinal :1:) as G12. { apply Natural.OneIsOrdinal. }
   remember (fun c => :0: :< c ->
@@ -1230,7 +1230,7 @@ Proposition LimitWithNatIncl : forall (a b c n:U),
 Proof.
   intros a b c n H1 H2 H3 H4 H5 H6.
   assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal :0:) as G2. { apply Core.ZeroIsOrdinal. }
+  assert (Ordinal :0:) as G2. { apply Core.Zero. }
   assert (Ordinal a) as G3. { apply H1. }
   assert (Ordinal (b :*: c)) as G4. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :^: (b :*: c))) as G5. { apply Exp.IsOrdinal; assumption. }

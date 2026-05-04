@@ -49,7 +49,7 @@ Proof.
       apply SOC.EqualOrElem in H7. 3: assumption.
       + destruct H7 as [H7|H7]. 2: { left. assumption. }
         right. subst. assumption.
-      + apply SOC.ZeroIsOrdinal.
+      + apply SOC.Zero.
     - rewrite H6. intros a H7 H8.
       assert (On (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
       destruct H8 as [H8|H8].

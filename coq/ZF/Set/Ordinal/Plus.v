@@ -47,7 +47,7 @@ Proposition WhenOneR : forall (a:U), a :+: :1: = succ a.
 Proof.
   intros a.
   assert (a :+: :1: = succ (a :+: :0:)) as H1. {
-    apply COP.WhenSucc, Core.ZeroIsOrdinal. }
+    apply COP.WhenSucc, Core.Zero. }
   rewrite H1. rewrite WhenZeroR. reflexivity.
 Qed.
 
@@ -260,7 +260,7 @@ Proof.
   intros a b H1 H2.
   assert (:0: :+: a :<=: b :+: a) as H3. {
     apply InclCompatL; try assumption.
-    - apply Core.ZeroIsOrdinal.
+    - apply Core.Zero.
     - apply Core.IsIncl. assumption. }
   rewrite WhenZeroL in H3; assumption.
 Qed.
@@ -271,7 +271,7 @@ Proof.
   intros a b H1 H2.
   assert (a :+: :0: :<=: a :+: b) as H3. {
     apply InclCompatR; try assumption.
-    - apply Core.ZeroIsOrdinal.
+    - apply Core.Zero.
     - apply Core.IsIncl. assumption. }
   rewrite WhenZeroR in H3. assumption.
 Qed.
@@ -282,7 +282,7 @@ Proof.
   intros a b H1 H2 H3.
   assert (:0: :< b) as H4. { apply Core.HasZero; assumption. }
   assert (a :+: :0: :< a :+: b) as H5. {
-    apply ElemCompatR; try assumption. apply Core.ZeroIsOrdinal. }
+    apply ElemCompatR; try assumption. apply Core.Zero. }
   rewrite WhenZeroR in H5. assumption.
 Qed.
 
@@ -314,7 +314,7 @@ Proof.
     apply Class.Empty.HasElem. exists b. rewrite H4. split. 1: assumption.
     assert (:0: :+: b :<=: a :+: b) as H6. {
       apply InclCompatL; try assumption.
-      - apply Core.ZeroIsOrdinal.
+      - apply Core.Zero.
       - intros x H6. apply Empty.Charac in H6. contradiction. }
     rewrite WhenZeroL in H6. 2: assumption. assumption. }
   assert (exists c, Ordinal c /\ A c /\ forall d, A d -> c :<=: d) as H7. {
@@ -369,7 +369,7 @@ Proof.
   - apply Omega.IsOrdinal.
   - assert (n :+: :0: :<=: n :+: m) as H4. {
       apply InclCompatR; try assumption.
-      - apply Core.ZeroIsOrdinal.
+      - apply Core.Zero.
       - apply Core.IsIncl. assumption. }
     rewrite WhenZeroR in H4. assumption.
 Qed.
@@ -383,7 +383,7 @@ Proof.
   - apply Omega.IsOrdinal.
   - assert (:0: :+: m :<=: n :+: m) as H4. {
       apply InclCompatL; try assumption.
-      - apply Core.ZeroIsOrdinal.
+      - apply Core.Zero.
       - apply Core.IsIncl. assumption. }
     rewrite WhenZeroL in H4; assumption.
 Qed.
@@ -496,7 +496,7 @@ Proof.
   assert (Ordinal (a :+: b)) as H4. { apply IsOrdinal; assumption. }
   assert (a :+: b <> :0:) as H5. {
     assert (:0: :<=: a) as H5. { apply Core.IsIncl. assumption. }
-    assert (Ordinal :0:) as H6. { apply Core.ZeroIsOrdinal. }
+    assert (Ordinal :0:) as H6. { apply Core.Zero. }
     assert (:0: :+: b :<=: a :+: b) as H7. { apply InclCompatL; assumption. }
     assert (b :<=: a :+: b) as H8. { rewrite WhenZeroL in H7; assumption. }
     assert (:0: :< b) as H9. { apply Limit.HasZero. assumption. }

@@ -18,7 +18,7 @@ Definition NonLimit : Class := fun a =>
 Proposition HasOrdinalElem : NonLimit :<=: Ordinal.
 Proof.
   intros a [H1|H1].
-  - subst. apply Core.ZeroIsOrdinal.
+  - subst. apply Core.Zero.
   - apply H1.
 Qed.
 

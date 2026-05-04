@@ -131,7 +131,7 @@ Proof.
     On (sum F)!a) as A eqn:H2.
   assert (forall a, On a -> A a) as H3. {
     apply Induction2.Induction; rewrite H2.
-    - intros _. rewrite WhenZero. apply SOC.ZeroIsOrdinal.
+    - intros _. rewrite WhenZero. apply SOC.Zero.
     - intros a H3 IH H4. rewrite WhenSucc. 2: assumption.
       apply Plus.IsOrdinal.
       + apply IH. intros x H5. apply H4. apply Succ.IsIncl. assumption.

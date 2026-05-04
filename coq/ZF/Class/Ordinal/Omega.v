@@ -48,7 +48,7 @@ Qed.
 Proposition HasZero : (:N : Class) :0:.
 Proof.
   split.
-  - apply ZeroIsOrdinal.
+  - apply Zero.
   - intros a H1. apply Union2.Charac in H1. destruct H1 as [H1|H1].
     + apply Empty.Charac in H1. contradiction.
     + apply Single.Charac in H1. subst. left. reflexivity.

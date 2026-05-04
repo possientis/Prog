@@ -84,7 +84,7 @@ Qed.
 Proposition HasZero : forall (a:U), :0: :< hartogs a.
 Proof.
   intros a. apply Charac. split.
-  - apply SOC.ZeroIsOrdinal.
+  - apply SOC.Zero.
   - exists :0:. apply Inj.WhenEmpty. reflexivity.
 Qed.
 

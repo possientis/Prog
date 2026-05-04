@@ -146,7 +146,7 @@ Proof.
   assert ((On :x: On) :(:1:,:0:):) as H2. {
     apply Prod.Charac2. split.
     - apply Natural.OneIsOrdinal.
-    - apply Natural.ZeroIsOrdinal. }
+    - apply Natural.Zero. }
   specialize (H1 :(:1:,:0:): H2). clear H2.
   remember (fun x => exists a, On a /\ x = :(:0:,a):) as A eqn:H2.
   assert (forall y z, A :(y,z): <-> y = :0: /\ On z) as H3. {
@@ -161,7 +161,7 @@ Proof.
     - rewrite H2 in H4. destruct H4 as [a [H4 H5]].
       apply InitSegment.Charac. split.
       + subst. apply Prod.Charac2. split. 2: assumption.
-        apply Natural.ZeroIsOrdinal.
+        apply Natural.Zero.
       + subst. apply Charac4. left. apply Succ.IsIn.
     - apply InitSegment.Charac in H4. destruct H4 as [[a [b [H4 [H5 H6]]]] H7].
       subst. apply Charac4 in H7. destruct H7 as [H7|[H7 H8]].

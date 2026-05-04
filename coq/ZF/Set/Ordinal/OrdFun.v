@@ -69,7 +69,7 @@ Proof.
   - apply Function.WhenEmpty. assumption.
   - split.
     + assert (domain f = :0:) as H2. { apply Domain.WhenEmpty. assumption. }
-      rewrite H2. apply Core.ZeroIsOrdinal.
+      rewrite H2. apply Core.Zero.
     + intros y H2.
       assert (range f = :0:) as H3. { apply Range.WhenEmpty. assumption. }
       rewrite H3 in H2. apply Empty.Charac in H2. contradiction.
