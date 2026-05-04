@@ -42,6 +42,7 @@ Definition restrict (F:Class) (a:U) : U := truncate (F:|:toClass a).
 (* Notation "F :|: a" := (restrict F a)                                         *)
 Global Instance SetOfClassPipe : Pipe Class U U := { pipe := restrict }.
 
+(* Set-restriction and class-restriction of F to a agree when F is functional.  *)
 Proposition ToClass : forall (F:Class) (a:U), CFL.Functional F ->
   toClass (F:|:a) :~: F:|:toClass a.
 Proof.
@@ -49,18 +50,21 @@ Proof.
   1: assumption. apply Small.SetIsSmall.
 Qed.
 
+(* The class of the restriction equals the class restriction, when F is small.  *)
 Proposition ToClassWhenSmall : forall (F:Class) (a:U),
   Small F -> toClass (F:|:a) :~: F:|:toClass a.
 Proof.
   intros F a H1. apply Truncate.WhenSmall, Restrict.IsSmall'. assumption.
 Qed.
 
+(* Restricting equivalent classes to the same set gives equal restrictions.     *)
 Proposition EquivCompat : forall (F G:Class) (a:U),
   F :~: G -> F:|:a = G:|:a.
 Proof.
   intros F G a H1. apply Truncate.EquivCompat, Restrict.EquivCompatL. assumption.
 Qed.
 
+(* x belongs to F restricted to a iff x = (y,z) for y in a with F (y,z).        *)
 Proposition Charac : forall (F:Class) (a x:U), CFL.Functional F ->
   x :< F:|:a -> exists y z, x = :(y,z): /\ y :< a /\ F :(y,z):.
 Proof.
@@ -68,6 +72,7 @@ Proof.
   destruct H2 as [y [z H2]]. exists y. exists z. assumption.
 Qed.
 
+(* If y is in a and F (y,z), then the pair (y,z) belongs to F restricted to a.  *)
 Proposition CharacRev : forall (F:Class) (a x y z:U), CFL.Functional F ->
   x = :(y,z): -> y :< a -> F :(y,z): -> x :< F:|:a.
 Proof.
@@ -75,6 +80,7 @@ Proof.
   exists y. exists z. split. 1: assumption. split; assumption.
 Qed.
 
+(* The pair (y,z) belongs to F restricted to a iff y is in a and F (y,z).       *)
 Proposition Charac2 : forall (F:Class) (a y z:U), CFL.Functional F ->
   :(y,z): :< (F:|:a) -> y :< a /\ F :(y,z):.
 Proof.
@@ -83,6 +89,7 @@ Proof.
   split; assumption.
 Qed.
 
+(* If y is in a and F (y,z), then the pair (y,z) belongs to the restriction.    *)
 Proposition Charac2Rev : forall (F:Class) (a y z:U), CFL.Functional F ->
   y :< a -> F :(y,z): -> :(y,z): :< (F:|:a).
 Proof.
@@ -107,6 +114,7 @@ Proof.
   apply H1 with x; assumption.
 Qed.
 
+(* The restriction of a functional class to a set is a function.                *)
 Proposition IsFunction : forall (F:Class) (a:U), CFL.Functional F ->
   Function (F:|:a).
 Proof.
@@ -127,6 +135,7 @@ Proof.
     apply SRD.Charac. exists y. apply Charac2Rev; assumption.
 Qed.
 
+(* When a is contained in the domain of F, the domain of F restricted to a is a *)
 Proposition DomainWhenIncl : forall (F:Class) (a:U), CFL.Functional F ->
   toClass a :<=: CRD.domain F -> SRD.domain (F:|:a) = a.
 Proof.
@@ -136,6 +145,7 @@ Proof.
   - apply Specify.Charac. split. 1: assumption. apply H2. assumption.
 Qed.
 
+(* The restriction of F to a is a function on a, assuming F is functional.      *)
 Proposition IsFunctionOn : forall (F:Class) (a:U), CFL.Functional F ->
   toClass a :<=: CRD.domain F -> FunctionOn (F:|:a) a.
 Proof.
@@ -156,7 +166,7 @@ Proof.
     apply SRR.Charac. exists x. apply Charac2Rev; assumption.
 Qed.
 
-(* The range of the restriction is a subset of the range.                       *)
+(* Any element of the range of the restriction also belongs to the range of F.  *)
 Proposition RangeIsIncl : forall (F:Class) (a y:U), CFL.Functional F ->
   y :< SRR.range (F:|:a) -> CRR.range F y.
 Proof.
@@ -165,7 +175,7 @@ Proof.
   exists x. assumption.
 Qed.
 
-(* A restriction is a subset of the original class.                             *)
+(* Any element of the restriction of F to a also satisfies F.                   *)
 Proposition IsIncl : forall (F:Class) (a x:U), CFL.Functional F ->
   x :< F:|:a -> F x.
 Proof.
@@ -173,6 +183,7 @@ Proof.
   destruct H2 as [y [z [H2 [H3 H4]]]]. subst. assumption.
 Qed.
 
+(* Restricting a class twice to nested sets equals the restriction to smaller.  *)
 Proposition TowerProperty : forall (F:Class) (a b:U), CFL.Functional F ->
   a :<=: b -> (F:|:b) :|: a = F:|:a.
 Proof.
@@ -186,6 +197,7 @@ Proof.
     split. 1: assumption. apply Charac2Rev; try assumption. apply H2. assumption.
 Qed.
 
+(* For a functional class, the value of F restricted to a at x equals F!x.      *)
 Proposition Eval : forall (F:Class) (a x:U), CFL.Functional F ->
   x :< a -> (F:|:a)!x = F!x.
 Proof.
@@ -206,6 +218,7 @@ Proof.
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
 
+(* The restriction of any class to the empty set is the empty set.              *)
 Proposition WhenEmpty : forall (F:Class) (a:U),
   a = :0: -> F :|: a = :0:.
 Proof.
@@ -215,6 +228,7 @@ Proof.
   - contradiction.
 Qed.
 
+(* Two functions agreeing on a common sub-domain c have equal restrictions on c *)
 Proposition Equal : forall (F G A B:Class) (c:U),
   CFO.FunctionOn F A                ->
   CFO.FunctionOn G B                ->

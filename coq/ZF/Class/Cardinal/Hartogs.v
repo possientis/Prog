@@ -35,6 +35,7 @@ Module CCI := ZF.Class.Cardinal.Isom.
 Definition hartogs (a:U) : Class := fun b =>
   Ordinal b /\ exists f, Inj f b a.
 
+(* The Hartogs class of a set a is small.                                       *)
 Proposition IsSmall : forall (a:U), Small (hartogs a).
 Proof.
   intros a.

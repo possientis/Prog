@@ -25,6 +25,7 @@ Module CRR := ZF.Class.Relation.Range.
 (* f is a surjective function from a to b.                                      *)
 Definition Onto (f a b:U) : Prop := FunctionOn f a /\ range f = b.
 
+(* A set-level surjection from a to b lifts to a class-level surjection.        *)
 Proposition ToClass : forall (f a b:U),
   Onto f a b -> CRO.Onto (toClass f) (toClass a) (toClass b).
 Proof.
@@ -33,6 +34,7 @@ Proof.
   - rewrite <- H2. apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* A class-level surjection on the classes of a and b yields a set-level one.   *)
 Proposition FromClass : forall (f a b:U),
   CRO.Onto (toClass f) (toClass a) (toClass b) -> Onto f a b.
 Proof.
@@ -43,11 +45,13 @@ Proof.
     apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* A surjection from a to b is a function from a to b.                          *)
 Proposition IsFun : forall (f a b:U), Onto f a b -> Fun f a b.
 Proof.
   intros f a b [H1 H2]. split. 1: apply H1. rewrite H2. apply Incl.Refl.
 Qed.
 
+(* A surjection that is injective on its domain is one-to-one.                  *)
 Proposition IsOneToOne : forall (f a b:U),
   Onto f a b                                            ->
   (forall x y, x :< a -> y :< a -> f!x = f!y -> x = y)  ->
@@ -101,12 +105,14 @@ Proof.
     destruct H3 as [_ H3]. rewrite H2, H3. apply Incl.Refl.
 Qed.
 
+(* For a surjection and x in a, the pair (x,y) belongs to f iff f!x = y.        *)
 Proposition Eval' : forall (f a b x y:U),
   Onto f a b -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f a b x y H1. apply FunctionOn.Eval', H1.
 Qed.
 
+(* If (x,y) belongs to a surjection, then f!x = y.                              *)
 Proposition Eval : forall (f a b x y:U),
   Onto f a b -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -115,12 +121,14 @@ Proof.
   rewrite <- H3. apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* For a surjection and x in a, the pair (x,f!x) belongs to f.                  *)
 Proposition Satisfies : forall (f a b x:U),
   Onto f a b -> x :< a -> :(x,f!x): :< f.
 Proof.
   intros f a b x H1. apply FunctionOn.Satisfies, H1.
 Qed.
 
+(* For a surjection from a onto b, the value at any x in a belongs to b.        *)
 Proposition IsInRange : forall (f a b x:U),
   Onto f a b -> x :< a -> f!x :< b.
 Proof.
@@ -128,12 +136,14 @@ Proof.
   apply FunctionOn.IsInRange with a; assumption.
 Qed.
 
+(* y is in the image f[c] iff y = f!x for some x in both c and the domain a.    *)
 Proposition ImageCharac : forall (f a b c:U), Onto f a b ->
   forall y, y :< f:[c]: <-> exists x, x :< c /\ x :< a /\ f!x = y.
 Proof.
   intros f a b c H1. apply FunctionOn.ImageCharac, H1.
 Qed.
 
+(* The domain of the composition of two surjections equals the first domain.    *)
 Proposition DomainOfCompose : forall (f g a b c:U),
   Onto f a b  ->
   Onto g b c  ->
@@ -171,12 +181,14 @@ Proof.
   intros f a b [H1 H2]. subst. apply FunctionOn.RangeIsNotEmpty. assumption.
 Qed.
 
+(* A surjection from a equals its own restriction to a.                         *)
 Proposition IsRestrict : forall (f a b:U),
   Onto f a b -> f = f :|: a.
 Proof.
   intros f a b H1. apply FunctionOn.IsRestrict, H1.
 Qed.
 
+(* Restricting a surjection to a subset c gives a surjection onto f[c].         *)
 Proposition Restrict : forall (f a b c:U),
   Onto f a b -> c :<=: a -> Onto (f:|:c) c f:[c]:.
 Proof.
@@ -185,6 +197,7 @@ Proof.
   - apply Restrict.RangeOf.
 Qed.
 
+(* Two surjections agreeing on a common sub-domain e have equal restricts on e. *)
 Proposition RestrictEqual : forall (f a b g c d e:U),
   Onto f a b                      ->
   Onto g c d                      ->

@@ -22,6 +22,7 @@ Proof.
   intros P x. split; intros H1; apply H1.
 Qed.
 
+(* Class equivalence is compatible with itself on both sides.                   *)
 Proposition EquivCompat : forall (A B C D:Class),
   A :~: C -> B :~: D -> A :~: B -> C :~: D.
 Proof.
@@ -30,6 +31,7 @@ Proof.
   - apply H1, H3, H2. assumption.
 Qed.
 
+(* Class equivalence is compatible with itself on the left.                     *)
 Proposition EquivCompatL : forall (A B C:Class),
   A :~: C -> A :~: B -> C :~: B.
 Proof.
@@ -37,6 +39,7 @@ Proof.
   apply Refl.
 Qed.
 
+(* Class equivalence is compatible with itself on the right.                    *)
 Proposition EquivCompatR : forall (A B C:Class),
   B :~: C -> A :~: B -> A :~: C.
 Proof.
@@ -59,11 +62,13 @@ Proof.
   - apply H1, H2, H3.
 Qed.
 
+(* Non-equivalence of classes is symmetric.                                     *)
 Proposition NotSym : forall (P Q:Class), P :<>: Q -> Q :<>: P.
 Proof.
   intros P Q H1 H2. apply H1, Sym. assumption.
 Qed.
 
+(* Two sets are equal if and only if they are equivalent as classes.            *)
 Proposition EqualToClass : forall (a b:U),
   a = b <-> toClass a :~: toClass b.
 Proof.
@@ -72,12 +77,14 @@ Proof.
   - apply Extensionality.
 Qed.
 
+(* Two sets are unequal if and only if they are non-equivalent as classes.      *)
 Proposition NotEqualToClass : forall (a b:U),
   a <> b <-> toClass a :<>: toClass b.
 Proof.
   intros a b. split; intros H1 H2; apply H1, EqualToClass; assumption.
 Qed.
 
+(* Non-equivalence of classes is compatible with class equivalence.             *)
 Proposition NotCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :<>: R -> Q :<>: S.
 Proof.
@@ -87,6 +94,7 @@ Proof.
   apply Sym. assumption.
 Qed.
 
+(* Non-equivalence of classes is compatible with class equivalence on the left. *)
 Proposition NotCompatL : forall (P Q R:Class),
   P :~: Q -> P :<>: R -> Q :<>: R.
 Proof.
@@ -94,6 +102,7 @@ Proof.
   apply Refl.
 Qed.
 
+(* Non-equivalence is compatible with class equivalence on the right.           *)
 Proposition NotCompatR : forall (P Q R:Class),
   P :~: Q -> R :<>: P -> R :<>: Q.
 Proof.

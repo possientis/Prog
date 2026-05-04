@@ -7,6 +7,7 @@ Require Import ZF.Set.Specify.
 (* Predicate on classes, stating that a class is smaller than a set.            *)
 Definition Bounded (A:Class) : Prop := exists a, forall x, A x -> x :< a.
 
+(* A class included in a small class is itself small.                           *)
 Proposition WhenSmaller : forall (A B:Class),
   A :<=: B -> Small B -> Small A.
 Proof.

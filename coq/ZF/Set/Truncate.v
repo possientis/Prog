@@ -11,6 +11,7 @@ Require Import ZF.Set.Incl.
 Definition truncate (A:Class) : U :=
   fromClass (Class.Truncate.truncate A) (Class.Truncate.IsSmall A).
 
+(* x belongs to truncate(A) iff A is small and x belongs to A.                  *)
 Proposition Charac : forall (A:Class) (x:U),
   x :< truncate A <-> Small A /\ A x.
 Proof.
@@ -19,6 +20,7 @@ Proof.
   - apply FromClass.Charac. assumption.
 Qed.
 
+(* Equivalent classes have equal truncations.                                   *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> truncate A = truncate B.
 Proof.
@@ -26,6 +28,7 @@ Proof.
   apply FromClass.EquivCompat, Class.Truncate.EquivCompat. assumption.
 Qed.
 
+(* If A is small, the class of its truncation is equivalent to A itself.        *)
 Proposition WhenSmall : forall (A:Class),
   Small A -> toClass (truncate A) :~: A.
 Proof.
@@ -34,6 +37,7 @@ Proof.
   - apply Class.Truncate.WhenSmall. assumption.
 Qed.
 
+(* If A is not small, its truncation is the empty set.                          *)
 Proposition WhenNotSmall : forall (A:Class),
   ~ Small A -> truncate A = :0:.
 Proof.
@@ -45,6 +49,7 @@ Proof.
     + apply Equiv.Sym, Empty.ToClass.
 Qed.
 
+(* If A is equivalent to the empty class, its truncation is the empty set.      *)
 Proposition WhenEmpty : forall (A:Class), A :~: :0: -> truncate A = :0:.
 Proof.
   intros A H1. apply DoubleInclusion. split; intros x H2.
@@ -52,6 +57,7 @@ Proof.
   - apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* If A is included in B, the class of truncate(A) is also included in B.       *)
 Proposition IsIncl : forall (A B:Class),
   A :<=: B -> toClass (truncate A) :<=: B.
 Proof.

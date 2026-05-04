@@ -15,6 +15,7 @@ Definition inter2 (P Q:Class) : Class := fun x => P x /\ Q x.
 (* Notation "P :/\: Q" := (inter P Q)                                           *)
 Global Instance ClassAnd : And Class := { and := inter2 }.
 
+(* The binary intersection is compatible with class equivalence on both sides.  *)
 Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :/\: R :~: Q :/\: S.
 Proof.
@@ -25,6 +26,7 @@ Proof.
   - apply H2. assumption.
 Qed.
 
+(* The binary intersection is compatible with class equivalence on the left.    *)
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :/\: R :~: Q :/\: R.
 Proof.
@@ -32,6 +34,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* The binary intersection is compatible with class equivalence on the right.   *)
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :/\: P :~: R :/\: Q.
 Proof.
@@ -39,6 +42,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* The binary intersection is compatible with class inclusion on both sides.    *)
 Proposition InclCompat : forall (P Q R S:Class),
   P :<=: Q -> R :<=: S -> P :/\: R :<=: Q :/\: S.
 Proof.
@@ -48,6 +52,7 @@ Proof.
   - apply H2. assumption.
 Qed.
 
+(* The binary intersection is compatible with class inclusion on the left.      *)
 Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P :/\: R :<=: Q :/\: R.
 Proof.
@@ -55,6 +60,7 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* The binary intersection is compatible with class inclusion on the right.     *)
 Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :/\: P :<=: R :/\: Q.
 Proof.
@@ -62,6 +68,7 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* The binary intersection of classes is commutative.                           *)
 Proposition Comm : forall (P Q:Class),
   P :/\: Q :~: Q :/\: P.
 Proof.
@@ -69,18 +76,21 @@ Proof.
   destruct H1 as [H1 H2]; split; assumption.
 Qed.
 
+(* The binary intersection of P and Q is included in P.                         *)
 Proposition IsInclL : forall (P Q:Class),
   P :/\: Q :<=: P.
 Proof.
   intros P Q x H1. apply H1.
 Qed.
 
+(* The binary intersection of P and Q is included in Q.                         *)
 Proposition IsInclR : forall (P Q:Class),
   P :/\: Q :<=: Q.
 Proof.
   intros P Q x H1. apply H1.
 Qed.
 
+(* The binary intersection is small when the left component is small.           *)
 Proposition IsSmallL : forall (P Q:Class),
   Small P -> Small (P:/\:Q).
 Proof.
@@ -116,6 +126,7 @@ Proof.
     apply Specification.
 Qed.
 
+(* The binary intersection is small when the right component is small.          *)
 Proposition IsSmallR : forall (P Q:Class),
   Small Q -> Small (P:/\:Q).
 Proof.
@@ -124,6 +135,7 @@ Proof.
   - apply IsSmallL. assumption.
 Qed.
 
+(* A class included in both P and Q is included in their intersection.          *)
 Proposition IsIncl : forall (P Q R:Class),
   R :<=: P -> R :<=: Q -> R :<=: P :/\: Q.
 Proof.
@@ -132,6 +144,7 @@ Proof.
   - apply H2. assumption.
 Qed.
 
+(* P is included in Q if and only if the intersection of P and Q equals P.      *)
 Proposition WhenInclL : forall (P Q:Class),
   P :<=: Q <-> P :/\: Q :~: P.
 Proof.
@@ -142,6 +155,7 @@ Proof.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclR. assumption.
 Qed.
 
+(* Q is included in P if and only if the intersection of P and Q equals Q.      *)
 Proposition WhenInclR : forall (P Q:Class),
   Q :<=: P <-> P :/\: Q :~: Q.
 Proof.
@@ -152,6 +166,7 @@ Proof.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclL. assumption.
 Qed.
 
+(* The image of an intersection is included in the intersection of the images.  *)
 Proposition Image : forall (F P Q:Class),
   F:[P :/\: Q]: :<=: F:[P]: :/\: F:[Q]:.
 Proof.

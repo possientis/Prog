@@ -28,16 +28,18 @@ Require Import ZF.Notation.Eval.
 
 Module CRS := ZF.Class.Relation.ShiftR.
 
-(* Shifting a function to the right. shiftR a f = {(0,a)}\/{(succ x,y)|(x,y):<f}*)
+(* Shifting f to the right with a: shiftR a f = {(0,a)}\/{(succ x,y)|(x,y):<f}  *)
 Definition shiftR (a f:U) : U := fromClass (CRS.shiftR a (toClass f))
   (CRS.IsSmall (toClass f) a (SetIsSmall f)).
 
+(* The class of the right shift equals the right shift of the class.            *)
 Proposition ToClass : forall (f a:U),
   toClass (shiftR a f) :~: CRS.shiftR a (toClass f).
 Proof.
   intros f a. apply FromClass.ToClass.
 Qed.
 
+(* x is in the right shift iff x = (0,a) or x = (succ y, z) with (y,z) in f.    *)
 Proposition Charac : forall (f a x:U),
   x :< shiftR a f <->
   x = :(:0:,a): \/ exists y z, x = :(succ y,z): /\ :(y,z): :< f.
@@ -76,6 +78,7 @@ Proof.
       rewrite H5. split. 2: assumption. reflexivity.
 Qed.
 
+(* The right shift of a and f is a relation.                                    *)
 Proposition IsRelation : forall (f a:U), Relation (shiftR a f).
 Proof.
   intros f a x H1. apply Charac in H1. destruct H1 as [H1|H1].
@@ -83,6 +86,7 @@ Proof.
   - destruct H1 as [y [z [H1 _]]]. exists (succ y), z. assumption.
 Qed.
 
+(* The right shift of a functional set with natural domain is functional.       *)
 Proposition IsFunctional : forall (f a:U), domain f :<=: :N ->
   Functional f -> Functional (shiftR a f).
 Proof.
@@ -99,6 +103,7 @@ Proof.
     apply H1 with :U(y); assumption.
 Qed.
 
+(* The right shift of a functional set with natural domain is a function.       *)
 Proposition IsFunction : forall (f a:U), domain f :<=: :N ->
   Functional f -> Function (shiftR a f).
 Proof.
@@ -126,6 +131,7 @@ Proof.
       split; assumption.
 Qed.
 
+(* The right shift evaluates to a at zero.                                      *)
 Proposition EvalZero : forall (f a:U), domain f :<=: :N ->
   Functional f -> (shiftR a f)!:0: = a.
 Proof.
@@ -135,6 +141,7 @@ Proof.
   - apply Charac2. 1: assumption. left. split; reflexivity.
 Qed.
 
+(* The value of the right shift at a positive n equals f at the union of n.     *)
 Proposition Eval : forall (f a n:U),
   domain f :<=: :N            ->
   Functional f                ->
@@ -152,6 +159,7 @@ Proof.
     apply Eval.Satisfies; assumption.
 Qed.
 
+(* The value of the right shift at the successor of n equals f at n.            *)
 Proposition EvalSucc : forall (f a n:U),
   domain f :<=: :N            ->
   Functional f                ->
@@ -168,6 +176,7 @@ Proof.
   - rewrite G2. assumption.
 Qed.
 
+(* The range of the right shift is the union of the singleton a and range f.    *)
 Proposition RangeOf : forall (f a:U), domain f :<=: :N ->
   range (shiftR a f) = :{a}: :\/: range f.
 Proof.
@@ -193,6 +202,7 @@ Proof.
       * split; assumption.
 Qed.
 
+(* If the domain of f is a natural n, the domain of the right shift is succ(n). *)
 Proposition WhenDomainIsNat : forall (f a:U),
   domain f :< :N -> domain (shiftR a f) = succ (domain f).
 Proof.
@@ -221,6 +231,7 @@ Proof.
     rewrite Omega.SuccOfUnion; assumption.
 Qed.
 
+(* When the domain of f is N, so is the domain of the right shift.              *)
 Proposition WhenDomainIsN : forall (f a:U),
   domain f = :N -> domain (shiftR a f) = :N.
 Proof.
@@ -238,6 +249,7 @@ Proof.
       apply Omega.HasUnion. assumption.
 Qed.
 
+(* The right shift of a function on n is a function on the successor of n.      *)
 Proposition IsFunctionOn : forall (f a n:U),
   n :< :N                             ->
   FunctionOn f n                      ->
@@ -252,6 +264,7 @@ Proof.
   - rewrite <- G1. apply WhenDomainIsNat. rewrite G1. assumption.
 Qed.
 
+(* The right shift of an ordinal function by an ordinal is an ordinal function. *)
 Proposition IsOrdFun : forall (f a:U),
   Ordinal a             ->
   domain f :<=: :N      ->
@@ -277,6 +290,7 @@ Proof.
       * apply H3. assumption.
 Qed.
 
+(* The right shift of an ordinal function on n is an ordinal function on succ n.*)
 Proposition IsOrdFunOnNat : forall (f a n:U),
   Ordinal a                       ->
   n :< :N                         ->
@@ -291,6 +305,7 @@ Proof.
   - rewrite WhenDomainIsNat; rewrite H4. 2: assumption. reflexivity.
 Qed.
 
+(* The right shift of an ordinal function on the naturals is one on naturals.   *)
 Proposition IsOrdFunOnN : forall (f a:U),
   Ordinal a                 ->
   OrdFunOn f :N             ->
@@ -302,6 +317,7 @@ Proof.
   - rewrite WhenDomainIsN. 2: assumption. reflexivity.
 Qed.
 
+(* The right shift preserves the decreasing property under natural domain.      *)
 Proposition IsDecreasing : forall (f a:U),
   OrdFun f                                ->
   domain f :< :N                          ->

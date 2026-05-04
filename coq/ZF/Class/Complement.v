@@ -11,12 +11,14 @@ Definition complement (A:Class) : Class := fun x => ~ (A x).
 (* Notation ":¬: P" := (complement P)                                           *)
 Global Instance ClassNot : Not Class := { not := complement }.
 
+(* Complementation is compatible with class equivalence.                        *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> :¬:A :~: :¬:B.
 Proof.
   intros A B H1 x. split; intros H2 H3; apply H2, H1; assumption.
 Qed.
 
+(* Complementation reverses class inclusion.                                    *)
 Proposition InclCompat : forall (A B:Class),
   B :<=: A  -> :¬:A :<=: :¬:B.
 Proof.

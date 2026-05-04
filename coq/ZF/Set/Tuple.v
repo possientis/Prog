@@ -19,6 +19,7 @@ Definition tuple4 (a1 a2 a3 a4:U) : U := :{a1,a2,a3}: :\/: :{a4}:.
 Notation ":{ a , b , c , d }:" := (tuple4 a b c d)
   (at level 1, no associativity) : ZF_Set_Tuple_scope.
 
+(* A set is in the triple {a1,a2,a3} iff it equals one of the three elements.   *)
 Proposition Tuple3Charac : forall (a1 a2 a3:U),
   forall x, x :< :{a1,a2,a3}: <-> x = a1 \/ x = a2 \/ x = a3.
 Proof.
@@ -32,39 +33,46 @@ Proof.
     + right. apply Single.IsIn.
 Qed.
 
+(* If x equals the first element, then x belongs to the unordered triple.       *)
 Proposition Tuple3EqualIn1 : forall (a1 a2 a3:U),
   forall x, x = a1 -> x :< :{a1,a2,a3}:.
 Proof.
   intros a1 a2 a3 x Hx. apply Tuple3Charac. left. apply Hx.
 Qed.
 
+(* If x equals the second element, then x belongs to the unordered triple.      *)
 Proposition Tuple3EqualIn2 : forall (a1 a2 a3:U),
   forall x, x = a2 -> x :< :{a1,a2,a3}:.
 Proof.
   intros a1 a2 a3 x Hx. apply Tuple3Charac. right. left. apply Hx.
 Qed.
 
+(* If x equals the third element, then x belongs to the unordered triple.       *)
 Proposition Tuple3EqualIn3 : forall (a1 a2 a3:U),
   forall x, x = a3 -> x :< :{a1,a2,a3}:.
 Proof.
   intros a1 a2 a3 x Hx. apply Tuple3Charac. right. right. apply Hx.
 Qed.
 
+(* The first element of an unordered triple belongs to it.                      *)
 Proposition Tuple3In1 : forall (a1 a2 a3:U), a1 :< :{a1,a2,a3}:.
 Proof.
   intros a1 a2 a3. apply Tuple3EqualIn1. reflexivity.
 Qed.
 
+(* The second element of an unordered triple belongs to it.                     *)
 Proposition Tuple3In2 : forall (a1 a2 a3:U), a2 :< :{a1,a2,a3}:.
 Proof.
   intros a1 a2 a3. apply Tuple3EqualIn2. reflexivity.
 Qed.
 
+(* The third element of an unordered triple belongs to it.                      *)
 Proposition Tuple3In3 : forall (a1 a2 a3:U), a3 :< :{a1,a2,a3}:.
 Proof.
   intros a1 a2 a3. apply Tuple3EqualIn3. reflexivity.
 Qed.
 
+(* x belongs to the unordered 4-tuple iff it equals one of the four elements.   *)
 Proposition Tuple4Charac : forall (a1 a2 a3 a4:U),
   forall x, x :< :{a1,a2,a3,a4}: <-> x = a1 \/ x = a2 \/ x = a3 \/ x = a4.
 Proof.
@@ -79,62 +87,73 @@ Proof.
     + right. apply Single.Charac, H1.
 Qed.
 
+(* If x equals the first element, then x belongs to the unordered 4-tuple.      *)
 Proposition Tuple4EqualIn1 : forall (a1 a2 a3 a4:U),
   forall x, x = a1 -> x :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4 x Hx. apply Tuple4Charac. left. apply Hx.
 Qed.
 
+(* If x equals the second element, then x belongs to the unordered 4-tuple.     *)
 Proposition Tuple4EqualIn2 : forall (a1 a2 a3 a4:U),
   forall x, x = a2 -> x :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4 x Hx. apply Tuple4Charac. right. left. apply Hx.
 Qed.
 
+(* If x equals the third element, then x belongs to the unordered 4-tuple.      *)
 Proposition Tuple4EqualIn3 : forall (a1 a2 a3 a4:U),
   forall x, x = a3 -> x :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4 x Hx. apply Tuple4Charac. right. right. left. apply Hx.
 Qed.
 
+(* If x equals the fourth element, then x belongs to the unordered 4-tuple.     *)
 Proposition Tuple4EqualIn4 : forall (a1 a2 a3 a4:U),
   forall x, x = a4 -> x :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4 x Hx. apply Tuple4Charac. right. right. right. apply Hx.
 Qed.
 
+(* The first element of an unordered 4-tuple belongs to it.                     *)
 Proposition Tuple4In1 : forall (a1 a2 a3 a4:U), a1 :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4. apply Tuple4EqualIn1. reflexivity.
 Qed.
 
+(* The second element of an unordered 4-tuple belongs to it.                    *)
 Proposition Tuple4In2 : forall (a1 a2 a3 a4:U), a2 :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4. apply Tuple4EqualIn2. reflexivity.
 Qed.
 
+(* The third element of an unordered 4-tuple belongs to it.                     *)
 Proposition Tuple4In3 : forall (a1 a2 a3 a4:U), a3 :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4. apply Tuple4EqualIn3. reflexivity.
 Qed.
 
+(* The fourth element of an unordered 4-tuple belongs to it.                    *)
 Proposition Tuple4In4 : forall (a1 a2 a3 a4:U), a4 :< :{a1,a2,a3,a4}:.
 Proof.
   intros a1 a2 a3 a4. apply Tuple4EqualIn4. reflexivity.
 Qed.
 
+(* An unordered triple is never equal to the empty set.                         *)
 Proposition Tuple3IsNotEmpty : forall (a1 a2 a3:U), :{a1,a2,a3}: <> :0:.
 Proof.
   intros a1 a2 a3 H1. assert (a1 :< :0:) as H2. { rewrite <- H1. apply Tuple3In1. }
   apply Empty.Charac in H2. apply H2.
 Qed.
 
+(* An unordered 4-tuple is never equal to the empty set.                        *)
 Proposition Tuple4IsNotEmpty : forall (a1 a2 a3 a4:U), :{a1,a2,a3,a4}: <> :0:.
 Proof.
   intros a1 a2 a3 a4 H1. assert (a1 :< :0:) as H2. { rewrite <- H1. apply Tuple4In1. }
   apply Empty.Charac in H2. apply H2.
 Qed.
 
+(* A class contains {a1,a2,a3} iff it contains all three elements.              *)
 Proposition Tuple3ToClassIncl : forall (A:Class) (a1 a2 a3:U),
   A a1 /\ A a2 /\ A a3 <-> toClass :{a1,a2,a3}: :<=: A.
 Proof.
@@ -146,6 +165,7 @@ Proof.
     apply H1, Tuple3In3.
 Qed.
 
+(* A class contains {a1,a2,a3,a4} iff it contains all four elements.            *)
 Proposition Tuple4ToClassIncl : forall (A:Class) (a1 a2 a3 a4:U),
   A a1 /\ A a2 /\ A a3 /\ A a4 <-> toClass :{a1,a2,a3,a4}: :<=: A.
 Proof.

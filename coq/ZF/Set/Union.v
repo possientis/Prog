@@ -22,6 +22,7 @@ Proof.
   intros a. apply FromClass.Charac.
 Qed.
 
+(* The class of the union set of a equals the union class of the class of a.    *)
 Proposition ToClass : forall (a:U),
   toClass :U(a) :~: :U(toClass a).
 Proof.
@@ -32,6 +33,7 @@ Proof.
     split; assumption.
 Qed.
 
+(* The union of the empty set is the empty set.                                 *)
 Proposition WhenEmpty : :U(:0:) = :0:.
 Proof.
   apply DoubleInclusion. split; intros x H1.
@@ -40,6 +42,7 @@ Proof.
   - apply Empty.Charac in H1. contradiction.
 Qed.
 
+(* The union of a singleton {a} equals a itself.                                *)
 Proposition WhenSingleton : forall (a:U),
   :U(:{a}:) = a.
 Proof.

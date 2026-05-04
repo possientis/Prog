@@ -12,6 +12,7 @@ Definition Less (P Q:Class) : Prop := P :<=: Q /\ P :<>: Q.
 Global Instance ClassLt : Lt Class := { lt := Less }.
 
 
+(* Strict class inclusion is compatible with class equivalence on both sides.   *)
 Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :<: R -> Q :<: S.
 Proof.
@@ -21,6 +22,7 @@ Proof.
     apply Equiv.Tran with S. 1: assumption. apply Equiv.Sym. assumption.
 Qed.
 
+(* Strict class inclusion is compatible with class equivalence on the left.     *)
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :<: R -> Q :<: R.
 Proof.
@@ -28,6 +30,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* Strict class inclusion is compatible with class equivalence on the right.    *)
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<: P -> R :<: Q.
 Proof.
@@ -50,6 +53,7 @@ Proof.
     + intros H4. apply H3, H4, H2.
 Qed.
 
+(* Inclusion followed by strict inclusion yields strict inclusion.              *)
 Proposition InclLessTran : forall (P Q R:Class),
   P :<=: Q -> Q :<: R -> P :<: R.
 Proof.
@@ -59,6 +63,7 @@ Proof.
     apply Incl.EquivCompatL with P; assumption.
 Qed.
 
+(* Strict inclusion followed by inclusion yields strict inclusion.              *)
 Proposition LessInclTran : forall (P Q R:Class),
   P :<: Q -> Q :<=: R -> P :<: R.
 Proof.
@@ -68,6 +73,7 @@ Proof.
     apply Incl.EquivCompatR with R. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
 
+(* Inclusion is equivalent to being either equal or strictly included.          *)
 Proposition EquivOrLess : forall (P Q:Class),
   P :<=: Q <-> P :~: Q \/ P :<: Q.
 Proof.

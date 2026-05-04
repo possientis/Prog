@@ -10,6 +10,7 @@ Require Import ZF.Set.Rank.
 
 Module CEM := ZF.Class.Empty.
 
+(* Every non-empty class has an element disjoint from the class itself.         *)
 Proposition Foundation : forall (A:Class),
   A :<>: :0: -> exists a, A a /\ toClass a :/\: A :~: :0:.
 Proof.

@@ -15,6 +15,7 @@ Definition interGen (A B:Class) : Class
 (* Notation ":/\:_{ A } B" := (interGen A B)                                    *)
 Global Instance ClassInterGen : InterGen Class Class := {interGen := interGen }.
 
+(* An element of the generalized intersection belongs to each B(x) with x in A. *)
 Proposition Charac : forall (A B:Class) (x y:U),
   :/\:_{A} B y ->
   A x          ->
@@ -24,6 +25,7 @@ Proof.
   split. 1: assumption. reflexivity.
 Qed.
 
+(* A set in every B(x) for x in A belongs to the generalized intersection.      *)
 Proposition CharacRev : forall (A B:Class) (y:U),
   A :<>: :0:                  ->
   (forall x, A x -> y :< B!x) ->

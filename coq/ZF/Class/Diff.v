@@ -24,6 +24,7 @@ Definition diff (A B:Class) : Class := A :/\: :¬:B.
 (* Notation "A :\: B" := (diff A B)                                             *)
 Global Instance ClassDiff : Diff Class := { diff := diff }.
 
+(* The class difference is compatible with class equivalence on both sides.     *)
 Proposition EquivCompat : forall (A B C D:Class),
   A :~: C -> B :~: D -> A :\: B :~: C :\: D.
 Proof.
@@ -31,6 +32,7 @@ Proof.
   apply Complement.EquivCompat. assumption.
 Qed.
 
+(* The class difference is compatible with class equivalence on the left.       *)
 Proposition EquivCompatL : forall (A B C:Class),
   A :~: C -> A :\: B :~: C :\: B.
 Proof.
@@ -38,6 +40,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* The class difference is compatible with class equivalence on the right.      *)
 Proposition EquivCompatR : forall (A B C:Class),
   B :~: C -> A :\: B :~: A :\: C.
 Proof.
@@ -45,6 +48,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* The class difference is compatible with class inclusion on both sides.       *)
 Proposition InclCompat : forall (A B C D:Class),
   A :<=: C -> D :<=: B -> A :\: B :<=: C :\: D.
 Proof.
@@ -52,6 +56,7 @@ Proof.
   apply Complement.InclCompat. assumption.
 Qed.
 
+(* The class difference is compatible with class inclusion on the left.         *)
 Proposition InclCompatL : forall (A B C:Class),
   A :<=: C -> A :\: B :<=: C :\: B.
 Proof.
@@ -59,6 +64,7 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
+(* The class difference is 'compatible' with class inclusion on the right.      *)
 Proposition InclCompatR : forall (A B C:Class),
   C :<=: B -> A :\: B :<=: A :\: C.
 Proof.
@@ -66,11 +72,13 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
+(* If A is small, the difference of A with any class B is also small.           *)
 Proposition IsSmall : forall (A B:Class), Small A -> Small (A :\: B).
 Proof.
   intros A B. apply Inter2.IsSmallL.
 Qed.
 
+(* The difference A minus B is empty if and only if A is included in B.         *)
 Proposition WhenEmpty : forall (A B:Class),
   A :\: B  :~: :0: <-> A :<=: B.
 Proof.
@@ -83,6 +91,7 @@ Proof.
     + apply Class.Empty.Charac in H2. contradiction.
 Qed.
 
+(* If the difference A minus B is not empty, then A and B are not equivalent.   *)
 Proposition WhenNotEmpty : forall (A B:Class),
   A :\: B :<>: :0: -> A :<>: B.
 Proof.
@@ -90,6 +99,7 @@ Proof.
   destruct H1 as [x [H1 H3]]. apply H3, H2. assumption.
 Qed.
 
+(* When B is included in A, the difference is non-empty iff A and B differ.     *)
 Proposition WhenIncl : forall (A B:Class),
   B :<=: A -> A :\: B :<>: :0: <-> A :<>: B.
 Proof.
@@ -101,6 +111,7 @@ Proof.
     apply H3. split; assumption.
 Qed.
 
+(* If B is strictly included in A, then the difference A minus B is not empty.  *)
 Proposition WhenLess : forall (A B:Class),
   B :<: A -> A :\: B :<>: :0:.
 Proof.
@@ -108,6 +119,7 @@ Proof.
   apply Less.Exists in H1. destruct H1 as [_ H1]. assumption.
 Qed.
 
+(* The difference 'distributes' over union on the right.                        *)
 Proposition UnionR : forall (A B C:Class),
   A :\: (B:\/:C) :~: A:\:B :/\: A:\:C.
 Proof.
@@ -122,6 +134,7 @@ Proof.
     + intros H4. destruct H4 as [H4|H4]; contradiction.
 Qed.
 
+(* The image of A minus B under injective F equals F[A] minus F[B].             *)
 Proposition Image : forall (F A B:Class),
   Functional F^:-1: -> F:[A:\:B]: :~: F:[A]: :\: F:[B]:.
 Proof.
@@ -137,6 +150,7 @@ Proof.
     1: assumption. intros H5. apply H4. exists x. split; assumption.
 Qed.
 
+(* The difference of a proper class with any set is not empty.                  *)
 Proposition MinusASet : forall (A:Class) (a:U),
   Proper A -> A :\: toClass a :<>: :0:.
 Proof.

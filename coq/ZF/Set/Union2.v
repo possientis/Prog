@@ -75,6 +75,7 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* b equals a \/ b iff a is a subset of b.                                      *)
 Proposition WhenEqualR : forall (a b:U),
   b = a :\/: b <-> a :<=: b.
 Proof.
@@ -87,16 +88,19 @@ Proof.
       * apply H2.
 Qed.
 
+(* The union of two sets contains the left set.                                 *)
 Proposition IsInclL : forall (a b:U), a :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Charac. left. apply H1.
 Qed.
 
+(* The union of two sets contains the right set.                                *)
 Proposition IsInclR : forall (a b:U), b :<=: a:\/:b.
 Proof.
   intros a b x H1. apply Charac. right. apply H1.
 Qed.
 
+(* An unordered pair {a,b} equals the union of the singletons {a} and {b}.      *)
 Proposition PairAsUnion2 : forall (a b:U),
   :{a,b}: = :{a}: :\/: :{b}:.
 Proof.
@@ -109,6 +113,7 @@ Proof.
     + subst. apply Pair.IsInR.
 Qed.
 
+(* The empty set is a left identity for the union.                              *)
 Proposition IdentityL : forall (a:U),
   :0: :\/: a = a.
 Proof.
@@ -118,12 +123,14 @@ Proof.
   - apply Charac. right. assumption.
 Qed.
 
+(* The empty set is a right identity for the union.                             *)
 Proposition IdentityR : forall (a:U),
   a :\/: :0: = a.
 Proof.
   intros a. rewrite Comm. apply IdentityL.
 Qed.
 
+(* If a and b are both subsets of c, so is their union.                         *)
 Proposition IsIncl : forall (a b c:U),
   a :<=: c -> b :<=: c -> a :\/: b :<=: c.
 Proof.
@@ -132,6 +139,7 @@ Proof.
   - apply H2. assumption.
 Qed.
 
+(* x belongs to a \/ b \/ c iff x belongs to at least one of the three.         *)
 Proposition Charac3 : forall (a b c x:U),
   x :< a :\/: b :\/: c <-> x :< a \/ x :< b \/ x :< c.
 Proof.

@@ -26,6 +26,7 @@ Definition isom : Class := fun y => exists r x f, y = :(:(r,x):,f):   /\
   ((~WellOrdering r x /\ f = :0:)                                     \/
    ( WellOrdering r x /\ exists b, Ordinal b /\ Isom f r (E b) x b)).
 
+(* Characterization of membership in isom as a two-case disjunction.            *)
 Proposition Charac2 : forall (r x f:U),
   isom :(:(r,x):,f): <->
   (~WellOrdering r x /\ f = :0:)                                     \/

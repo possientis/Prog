@@ -17,11 +17,13 @@ Definition ofMinRank (A:Class) : Class := fun x =>
   A x /\ forall y, A y -> rank x :<=: rank y.
 
 
+(* The class of elements of A with minimal rank is included in A.               *)
 Proposition IsIncl : forall (A:Class), ofMinRank A :<=: A.
 Proof.
   intros A x H1. apply H1.
 Qed.
 
+(* If A is non-empty, the class of its elements with minimal rank is non-empty. *)
 Proposition IsNotEmpty : forall (A:Class),
   A :<>: :0: -> ofMinRank A :<>: :0:.
 Proof.
@@ -42,6 +44,7 @@ Proof.
   split. 1: assumption. reflexivity.
 Qed.
 
+(* If A is empty, the class of its elements with minimal rank is also empty.    *)
 Proposition WhenZero : forall (A:Class),
   A :~: :0: -> ofMinRank A :~: :0:.
 Proof.
@@ -49,6 +52,7 @@ Proof.
   apply CEM.WhenIncl with A. 2: assumption. apply IsIncl.
 Qed.
 
+(* The class of elements of A with minimal rank is always small.                *)
 Proposition IsSmall : forall (A:Class), Small (ofMinRank A).
 Proof.
   intros A.

@@ -24,6 +24,7 @@ Proof.
   intros f H1. assumption.
 Qed.
 
+(* If the class of f is a relation class, then f is a relation.                 *)
 Proposition FromClass : forall (f:U),
   CRR.Relation (toClass f) -> Relation f.
 Proof.
@@ -41,13 +42,13 @@ Qed.
 
 (* The union of a class of relations is a relation class.                       *)
 Proposition UnionClassOfRelsIsRel : forall (A:Class),
-  (forall x, A x -> Relation x) -> Class.Relation.Relation.Relation :U(A).
+  (forall x, A x -> Relation x) -> CRR.Relation :U(A).
 Proof.
   intros A H1 x H2. destruct H2 as [u [H2 H3]]. specialize (H1 u).
   apply H1 in H3. specialize (H3 x). apply H3 in H2. assumption.
 Qed.
 
-(* A relation is a subset of the product of its domain and image thereof.      *)
+(* A relation is a subset of the product of its domain and image thereof.       *)
 Proposition IsIncl : forall (f:U),
   Relation f -> f :<=: (domain f) :x: f:[domain f]:.
 Proof.
@@ -58,11 +59,13 @@ Proof.
     apply Domain.Charac. exists z. assumption.
 Qed.
 
+(* The empty set is a relation.                                                 *)
 Proposition WhenEmpty : forall (f:U), f = :0: -> Relation f.
 Proof.
   intros f H1 x H2. exfalso. subst. apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* A singleton set containing one ordered pair is a relation.                   *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> Relation f.
 Proof.

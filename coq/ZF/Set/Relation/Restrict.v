@@ -24,6 +24,7 @@ Definition restrict (f a:U) : U := fromClass (toClass f :|: toClass a)
 (* Notation "f :|: a" := (restrict f a)                                         *)
 Global Instance SetPipe : Pipe U U U := { pipe := restrict }.
 
+(* The class of the restriction equals the restriction of the class.            *)
 Proposition ToClass : forall (f a:U),
   toClass (f:|:a) :~: toClass f :|: toClass a.
 Proof.
@@ -40,6 +41,7 @@ Proof.
     exists y. exists z. split. 1: assumption. split; assumption.
 Qed.
 
+(* The pair (y,z) belongs to f restricted to a iff y is in a and (y,z) is in f. *)
 Proposition Charac2 : forall (f a y z:U),
   :(y,z): :< (f:|:a) <-> y :< a /\ :(y,z): :< f.
 Proof.
@@ -83,6 +85,7 @@ Proof.
     apply Domain.Charac. exists y. apply Charac2. split; assumption.
 Qed.
 
+(* When a is contained in the domain, the domain of the restriction equals a.   *)
 Proposition DomainWhenIncl : forall (f a:U),
   a :<=: domain f -> domain (f:|:a) = a.
 Proof.
@@ -131,6 +134,7 @@ Proof.
     destruct H2 as [y [z [H2 _]]]. exists y. exists z. assumption.
 Qed.
 
+(* Restricting twice to nested sets equals the restriction to the smaller set.  *)
 Proposition TowerProperty : forall (f a b:U),
   a :<=: b -> (f:|:b) :|: a = f:|:a.
 Proof.
@@ -144,6 +148,7 @@ Proof.
     apply H1. assumption.
 Qed.
 
+(* For a functional set, the value of the restriction at x equals the value.    *)
 Proposition Eval : forall (f a x:U), Functional f -> x :< a ->
   (f:|:a)!x = f!x.
 Proof.
@@ -164,6 +169,7 @@ Proof.
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
 
+(* The restriction of any set to the empty set is the empty set.                *)
 Proposition WhenEmpty : forall (f a:U),
   a = :0: -> f :|: a = :0:.
 Proof.

@@ -34,6 +34,7 @@ Proof.
   - contradiction.
 Qed.
 
+(* The intersection of the empty class is itself the empty class.               *)
 Proposition IsZero : :I(:0:) :~: :0:.
 Proof.
   apply WhenEmpty, Equiv.Refl.

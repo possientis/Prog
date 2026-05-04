@@ -18,6 +18,7 @@ Definition unionGen (a:U) (A:Class) : U := fromClass (:\/:_{toClass a} A)
 (* Notation ":\/:_{ a } A" := (unionGen a A)                                    *)
 Global Instance SetUnionGenOfClass : UnionGen U Class := {unionGen := unionGen }.
 
+(* y belongs to the generalized union iff y belongs to some A(x) with x in a.   *)
 Proposition Charac : forall (A:Class) (a y:U),
   y :< :\/:_{a} A <-> exists x, x :< a /\ y :< A!x.
 Proof.
@@ -26,6 +27,7 @@ Proof.
   - apply FromClass.Charac, UnionGen.Charac. assumption.
 Qed.
 
+(* The generalized union is the same when classes A and B agree on a.           *)
 Proposition Equal : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x = B!x) -> :\/:_{a} A = :\/:_{a} B.
 Proof.
@@ -36,6 +38,7 @@ Proof.
   - rewrite H1; assumption.
 Qed.
 
+(* The generalized union is invariant under class equivalence of the family.    *)
 Proposition EquivCompat : forall (A B:Class) (a:U),
   A :~: B -> :\/:_{a} A = :\/:_{a} B.
 Proof.
@@ -44,12 +47,14 @@ Proof.
   apply EvalOfClass.EquivCompat. assumption.
 Qed.
 
+(* If x is in a, then A(x) is included in the generalized union over a.         *)
 Proposition IsIncl : forall (A:Class) (a x:U),
   x :< a -> A!x :<=: :\/:_{a} A.
 Proof.
   intros A a x H1 y H2. apply Charac. exists x. split; assumption.
 Qed.
 
+(* The generalized union is monotone in both the index set and the family.      *)
 Proposition InclCompat : forall (A B:Class) (a b:U),
   a :<=: b                            ->
   (forall x, x :< a -> A!x :<=: B!x)  ->
@@ -62,6 +67,7 @@ Proof.
   - apply H2; assumption.
 Qed.
 
+(* The generalized union is monotone in the left index set.                     *)
 Proposition InclCompatL : forall (A:Class) (a b:U),
   a :<=: b -> :\/:_{a} A :<=: :\/:_{b} A.
 Proof.
@@ -69,6 +75,7 @@ Proof.
   intros x _. apply Incl.Refl.
 Qed.
 
+(* The generalized union is monotone in the right family.                       *)
 Proposition InclCompatR : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x :<=: B!x)  -> :\/:_{a} A :<=: :\/:_{a} B.
 Proof.
@@ -76,6 +83,7 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
+(* If each A(x) is a subset of b for x in a, the generalized union is too.      *)
 Proposition WhenSetBounded : forall (A:Class) (a b:U),
   (forall x, x :< a -> A!x :<=: b) -> :\/:_{a} A :<=: b.
 Proof.
@@ -83,6 +91,7 @@ Proof.
   apply (H1 x); assumption.
 Qed.
 
+(* If each A(x) is a subclass of B for x in a, so is the generalized union.     *)
 Proposition WhenClassBounded : forall (A B:Class) (a:U),
   (forall x, x :< a -> toClass A!x :<=: B) -> toClass (:\/:_{a} A) :<=: B.
 Proof.
@@ -90,6 +99,7 @@ Proof.
   apply (H1 x); assumption.
 Qed.
 
+(* The generalized union is unchanged by eta-reducing the family.               *)
 Proposition EtaReduce : forall (A:Class) (a:U),
   :\/:_{a} :[fun x => A!x]: = :\/:_{a} A.
 Proof.

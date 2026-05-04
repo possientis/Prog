@@ -25,12 +25,14 @@ Definition restrict (f:U) (A:Class) : U := fromClass (toClass f :|: A)
 (* Notation "f :|: A" := (restrict f A)                                         *)
 Global Instance SetByClassPipe : Pipe U Class U := { pipe := restrict }.
 
+(* The class of the restriction equals the restriction of the class by A.       *)
 Proposition ToClass : forall (A:Class) (f:U),
   toClass (f :|: A) :~: toClass f :|: A.
 Proof.
   intros A f. apply FromClass.ToClass.
 Qed.
 
+(* Restricting by equivalent classes gives equal restrictions.                  *)
 Proposition EquivCompat : forall (A B:Class) (f:U),
   A :~: B -> f:|:A = f:|:B.
 Proof.
@@ -48,6 +50,7 @@ Proof.
     exists y. exists z. split. 1: assumption. split; assumption.
 Qed.
 
+(* The pair (y,z) belongs to f restricted by A iff A y and (y,z) is in f.       *)
 Proposition Charac2 : forall (A:Class) (f y z:U),
   :(y,z): :< f:|:A <-> A y /\ :(y,z): :< f.
 Proof.
@@ -76,6 +79,7 @@ Proof.
   apply H1 with x; assumption.
 Qed.
 
+(* The restriction of a functional set by a class is a function.                *)
 Proposition IsFunction : forall (A:Class) (f:U),
   Functional f -> Function (f:|:A).
 Proof.
@@ -84,6 +88,7 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+(* The domain of the restriction by A consists of those domain elements in A.   *)
 Proposition DomainOf : forall (A:Class) (f:U),
   domain (f:|:A) = {{ x :< domain f | A }}.
 Proof.
@@ -98,6 +103,7 @@ Proof.
     apply Charac2. split; assumption.
 Qed.
 
+(* The range of the restriction by A equals the image of A under f.             *)
 Proposition RangeOf : forall (A:Class) (f:U),
   range (f:|:A) = f:[A]:.
 Proof.
@@ -109,6 +115,7 @@ Proof.
     apply Range.Charac. exists x. apply Charac2. split; assumption.
 Qed.
 
+(* The range of the restriction is a subset of the range of f.                  *)
 Proposition RangeIsIncl : forall (A:Class) (f:U),
   range (f:|:A) :<=: range f.
 Proof.
@@ -117,6 +124,7 @@ Proof.
   apply Range.Charac. exists x. assumption.
 Qed.
 
+(* The restriction of f by a class is a subset of f.                            *)
 Proposition IsIncl : forall (A:Class) (f:U),
   f:|:A :<=: f.
 Proof.
@@ -124,6 +132,7 @@ Proof.
   subst. assumption.
 Qed.
 
+(* Restricting twice by nested classes equals the restriction to the smaller.   *)
 Proposition TowerProperty : forall (A B:Class) (f:U),
   A :<=: B -> (f:|:B) :|: A = f:|:A.
 Proof.
@@ -136,6 +145,7 @@ Proof.
     apply Charac2. split. 2: assumption. apply H1. assumption.
 Qed.
 
+(* For a functional set, the value of the class-restriction at x equals f!x.    *)
 Proposition Eval : forall (A:Class) (f x:U), Functional f ->
   A x -> (f:|:A)!x = f!x.
 Proof.
@@ -156,6 +166,7 @@ Proof.
     rewrite H6. apply Eval.WhenNotInDomain. assumption.
 Qed.
 
+(* The restriction of any set by an empty class is the empty set.               *)
 Proposition WhenEmpty : forall (A:Class) (f:U),
   A :~: :0: -> f:|:A = :0:.
 Proof.

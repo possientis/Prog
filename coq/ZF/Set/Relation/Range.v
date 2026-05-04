@@ -23,6 +23,7 @@ Proof.
   intros f. apply FromClass.ToClass.
 Qed.
 
+(* y belongs to the range of f iff some x satisfies (x,y) in f.                 *)
 Proposition Charac : forall (f y: U),
   y :< range f <-> exists x, :(x,y): :< f.
 Proof.
@@ -39,6 +40,7 @@ Proof.
   apply Charac. exists x. apply H1. assumption.
 Qed.
 
+(* The image of the domain under f equals the range.                            *)
 Proposition ImageOfDomain : forall (f:U),
   f:[domain f]: = range f.
 Proof.
@@ -49,6 +51,7 @@ Proof.
     exists x. split. 2: assumption. apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* If the domain of f is not empty, then neither is the range.                  *)
 Proposition IsNotEmpty : forall (f:U),
   domain f <> :0: -> range f <> :0:.
 Proof.
@@ -57,6 +60,7 @@ Proof.
   apply Empty.HasElem. exists y. apply Charac. exists x. assumption.
 Qed.
 
+(* The image of any set under f is a subset of the range.                       *)
 Proposition ImageIsIncl: forall (f a:U),
   f:[a]: :<=: range f.
 Proof.
@@ -64,6 +68,7 @@ Proof.
   apply Charac. exists x. assumption.
 Qed.
 
+(* The range of the empty set is the empty set.                                 *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> range f = :0:.
 Proof.
@@ -73,6 +78,7 @@ Proof.
   - apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* The range of a singleton ordered pair set is the singleton of the value.     *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> range f = :{y}:.
 Proof.

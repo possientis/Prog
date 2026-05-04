@@ -21,18 +21,20 @@ Proof.
   - intros Hx. apply Pair.Charac. left. apply Hx.
 Qed.
 
-(* The set a is an element of the singleton set [a].                            *)
+(* The set a is an element of the singleton set {a}.                            *)
 Proposition IsIn : forall a, a :< :{a}:.
 Proof.
   intros a. apply Charac. reflexivity.
 Qed.
 
+(* Two singletons are equal if and only if their elements are equal.            *)
 Proposition WhenEqual : forall a b, :{a}: = :{b}: -> a = b.
 Proof.
   intros a b Hab. apply Charac. rewrite <- Hab.
   apply Charac. reflexivity.
 Qed.
 
+(* A contains a iff the class of {a} is a subclass of A.                        *)
 Proposition ToClassIncl : forall (A:Class) (a:U),
   A a <-> toClass :{a}: :<=: A.
 Proof.
@@ -41,6 +43,7 @@ Proof.
   - apply H1. apply IsIn.
 Qed.
 
+(* The singleton {a} is never equal to a pair {b,c} when b and c are distinct.  *)
 Proposition IsNotPair : forall (a b c:U),
   b <> c -> :{a}: <> :{b,c}:.
 Proof.

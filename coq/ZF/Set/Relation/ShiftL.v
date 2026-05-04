@@ -31,12 +31,14 @@ Module SOU := ZF.Set.Ordinal.UnionOf.
 Definition shiftL (f:U) : U := fromClass (CRS.shiftL (toClass f))
   (CRS.IsSmall (toClass f) (SetIsSmall f)).
 
+(* The class of the left shift equals the left shift of the class.              *)
 Proposition ToClass : forall (f:U),
   toClass (shiftL f) :~: CRS.shiftL (toClass f).
 Proof.
   intros f. apply FromClass.ToClass.
 Qed.
 
+(* x belongs to the left shift iff x = (y,z) with (succ y, z) in f.             *)
 Proposition Charac : forall (f x:U),
   x :< shiftL f <-> exists y z, x = :(y,z): /\ :(succ y, z): :< f.
 Proof.
@@ -47,6 +49,7 @@ Proof.
     exists y, z. split; assumption.
 Qed.
 
+(* The pair (y,z) belongs to the left shift iff (succ y, z) belongs to f.       *)
 Proposition Charac2 : forall (f y z:U),
   :(y,z): :< shiftL f <-> :(succ y, z): :< f.
 Proof.
@@ -56,12 +59,14 @@ Proof.
   - apply Charac. exists y, z. split. 2: assumption. reflexivity.
 Qed.
 
+(* The left shift is a relation.                                                *)
 Proposition IsRelation : forall (f:U), Relation (shiftL f).
 Proof.
   intros f x H1. apply Charac in H1. destruct H1 as [y [z [H1 _]]]. subst.
   exists y, z. reflexivity.
 Qed.
 
+(* The left shift of a functional set is functional.                            *)
 Proposition IsFunctional : forall (f:U),
   Functional f -> Functional (shiftL f).
 Proof.
@@ -70,6 +75,7 @@ Proof.
   apply H1 with (succ x); assumption.
 Qed.
 
+(* The left shift of a functional set is a function.                            *)
 Proposition IsFunction : forall (f:U),
   Functional f -> Function (shiftL f).
 Proof.
@@ -78,6 +84,7 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+(* x is in the domain of the left shift iff succ x is in the domain of f.       *)
 Proposition DomainOf : forall (f x:U),
   x :< domain (shiftL f) <-> succ x :< domain f.
 Proof.
@@ -87,6 +94,7 @@ Proof.
   - apply Domain.Charac. exists y. apply Charac2. assumption.
 Qed.
 
+(* The value of the left shift at x equals the value of f at the successor.     *)
 Proposition Eval : forall (f x:U), Functional f ->
   succ x :< domain f -> (shiftL f)!x = f!(succ x).
 Proof.
@@ -96,6 +104,7 @@ Proof.
   - apply Charac2. apply Eval.Satisfies; assumption.
 Qed.
 
+(* The range of the left shift is a subset of the range of f.                   *)
 Proposition RangeOf : forall (f:U),
   range (shiftL f) :<=: range f.
 Proof.
@@ -103,6 +112,7 @@ Proof.
   apply Charac2 in H1. apply Range.Charac. exists (succ x). assumption.
 Qed.
 
+(* If the domain of f is an ordinal, the domain of the left shift is its union. *)
 Proposition WhenOrdinalDomain : forall (f:U), Ordinal (domain f) ->
   domain (shiftL f) = :U(domain f).
 Proof.
@@ -121,6 +131,7 @@ Proof.
     + apply Core.ElemElemTran with y; assumption.
 Qed.
 
+(* The left shift of an ordinal function is an ordinal function.                *)
 Proposition IsOrdFun : forall (f:U),
   OrdFun f -> OrdFun (shiftL f).
 Proof.
@@ -133,6 +144,7 @@ Proof.
     + intros y H2. apply RangeOf in H2. revert H2. apply H1.
 Qed.
 
+(* The left shift of an ordinal function on a is one on the union of a.         *)
 Proposition IsOrdFunOn : forall (f a:U),
   OrdFunOn f a -> OrdFunOn (shiftL f) :U(a).
 Proof.
@@ -141,6 +153,7 @@ Proof.
   - subst. apply WhenOrdinalDomain, OrdFun.DomainOf. assumption.
 Qed.
 
+(* The left shift of an ordinal function on succ a is an ordinal function on a. *)
 Proposition OnSucc : forall (f a:U),
   OrdFunOn f (succ a) -> OrdFunOn (shiftL f) a.
 Proof.
@@ -154,6 +167,7 @@ Proof.
   rewrite G3 in H3. assumption.
 Qed.
 
+(* The left shift of an ordinal function with decreasing values is decreasing.  *)
 Proposition IsDecreasing : forall (f:U), OrdFun f ->
   Decreasing f -> Decreasing (shiftL f).
 Proof.
@@ -171,6 +185,7 @@ Proof.
   apply Succ.ElemCompat; assumption.
 Qed.
 
+(* Two ordinal functions on succ n agreeing at zero with equal shifts are equal.*)
 Proposition IsEqual : forall (f g n:U),
   n :< :N               ->
   OrdFunOn f (succ n)   ->

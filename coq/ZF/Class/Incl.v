@@ -20,12 +20,14 @@ Proof.
     + apply H2.
 Qed.
 
+(* Class inclusion is compatible with class equivalence on both sides.          *)
 Proposition EquivCompat : forall (P Q R S:Class),
   P :~: Q -> R :~: S -> P :<=: R -> Q :<=: S.
 Proof.
   intros P Q R S H1 H2 H3 x H4. apply H2, H3, H1, H4.
 Qed.
 
+(* Class inclusion is compatible with class equivalence on the left.            *)
 Proposition EquivCompatL : forall (P Q R:Class),
   P :~: Q -> P :<=: R -> Q :<=: R.
 Proof.
@@ -33,6 +35,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* Class inclusion is compatible with class equivalence on the right.           *)
 Proposition EquivCompatR : forall (P Q R:Class),
   P :~: Q -> R :<=: P -> R :<=: Q.
 Proof.

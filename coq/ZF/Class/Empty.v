@@ -16,6 +16,7 @@ Definition empty : Class := fun _ => False.
 (* Notation ":0:" := empty                                                      *)
 Global Instance ClassZero : Zero Class := { zero := empty }.
 
+(* No set belongs to the empty class.                                           *)
 Proposition Charac : forall (x:U), :0: x <-> False.
 Proof.
   intros x. unfold zero, ClassZero, empty. split; auto.
@@ -51,6 +52,7 @@ Proof.
   - intros H3. contradiction.
 Qed.
 
+(* A class is non-empty if and only if it has at least one element.             *)
 Proposition HasElem : forall (A:Class),
   A :<>: :0: <-> exists x, A x.
 Proof.
@@ -61,6 +63,7 @@ Proof.
   - destruct H1 as [x H1]. intros H2. apply H2, Charac in H1. contradiction.
 Qed.
 
+(* A class is equivalent to the empty class if and only if it has no elements.  *)
 Proposition HasNoElem : forall (A:Class),
   A :~: :0: <-> ~ exists x, A x.
 Proof.
@@ -71,6 +74,7 @@ Proof.
     + apply Charac in H2. contradiction.
 Qed.
 
+(* The direct image of the empty class under any relation is empty.             *)
 Proposition ImageOf : forall (F A:Class),
   A :~: :0: -> F:[A]: :~: :0:.
 Proof.
@@ -79,6 +83,7 @@ Proof.
   - apply Charac in H2. contradiction.
 Qed.
 
+(* A class included in an empty class is itself empty.                          *)
 Proposition WhenIncl : forall (A B:Class),
   A :<=: B -> B :~: :0: -> A :~: :0:.
 Proof.

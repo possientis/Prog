@@ -15,7 +15,6 @@ Definition specify (P:Class) (a:U) : U := fromClass (toClass a :/\: P)
 
 Notation "{{ x :< a | P }}" := (specify (fun x => P x) a)
   (at level 1, x ident, a at level 0, P at level 200) : ZF_Set_Specify_scope.
-(*  (at level 1, no associativity) : ZF_Set_Specify_scope. *)
 
 (* Characterisation of the elements of { x :< a | P x}.                         *)
 Proposition Charac : forall (P:Class) (a:U),
@@ -38,6 +37,7 @@ Proof.
   intros P a x H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1.
 Qed.
 
+(* The specification {x in a | P} equals a iff every element of a satisfies P.  *)
 Proposition IsA : forall (P:Class) (a:U),
   toClass a :<=: P <-> {{ x :< a | P }} = a.
 Proof.

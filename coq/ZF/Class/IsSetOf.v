@@ -23,6 +23,7 @@ Proof.
   - apply Equiv.Sym. intros x. apply H2.
 Qed.
 
+(* The predicate IsSetOf is compatible with class equivalence.                  *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> IsSetOf A :~: IsSetOf B.
 Proof.
@@ -33,6 +34,7 @@ Proof.
   - apply H2, H1. assumption.
 Qed.
 
+(* A set a defines A if and only if its class of elements is equivalent to A.   *)
 Proposition ToClass : forall (A:Class) (a:U),
   IsSetOf A a <-> toClass a :~: A.
 Proof.
