@@ -42,7 +42,7 @@ Proof.
 Qed.
 
 (* Limit is a class of ordinals.                                                *)
-Proposition HasOrdinalElem : Limit :<=: Ordinal.
+Proposition HasOrdinals : Limit :<=: Ordinal.
 Proof.
   apply Class.Inter2.IsInclL.
 Qed.
@@ -90,7 +90,7 @@ Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
 Proof.
   intros a b H1 H2. assert (Ordinal a) as H3. {
-    apply HasOrdinalElem. assumption. }
+    apply HasOrdinals. assumption. }
     apply Charac in H1; try assumption.
   destruct H1 as [_ H1]. assert (H4 := H2). rewrite H1 in H4.
   apply Union.Charac in H4. destruct H4 as [c [H4 H5]].

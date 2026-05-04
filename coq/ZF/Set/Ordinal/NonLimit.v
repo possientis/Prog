@@ -15,7 +15,7 @@ Definition NonLimit : Class := fun a =>
   a = :0: \/ Successor a.
 
 (* NonLimit is a class of ordinals.                                             *)
-Proposition HasOrdinalElem : NonLimit :<=: Ordinal.
+Proposition HasOrdinals : NonLimit :<=: Ordinal.
 Proof.
   intros a [H1|H1].
   - subst. apply Core.Zero.

@@ -215,7 +215,7 @@ Proof.
         remember (extend g (succ m) x) as h eqn:H34. exists (succ m), h.
         assert (domain g = succ m) as G8. { apply H30. }
         assert (Functional g) as G9. { apply H30. }
-        assert (Ordinal m) as G10. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal m) as G10. { apply Omega.HasOrdinals. assumption. }
         assert (succ m :< :N) as G11. { apply Omega.HasSucc. assumption. }
         assert (h!m = u) as G12. {
           rewrite H34, Extend.Evalf; try assumption; rewrite G8.
@@ -235,7 +235,7 @@ Proof.
           intros i H38.
           assert (i :< :N) as K1. {
             apply Omega.IsIn with (succ m); assumption. }
-          assert (Ordinal i) as K2. { apply Omega.HasOrdinalElem. assumption. }
+          assert (Ordinal i) as K2. { apply Omega.HasOrdinals. assumption. }
           apply Succ.Charac in H38. destruct H38 as [H38|H38].
           - rewrite H38, H37, G12. assumption.
           - assert (forall j, j :< succ m -> h!j = g!j) as H39. {

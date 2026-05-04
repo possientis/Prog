@@ -62,14 +62,14 @@ Proof.
       apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4]. subst.
       assert (u :< :N) as G1. { apply H1, Domain.Charac. exists v. assumption. }
       assert (succ u :< :N) as G2. { apply Omega.HasSucc. assumption. }
-      assert (Ordinal u) as G3. {  apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal u) as G3. {  apply Omega.HasOrdinals. assumption. }
       assert (:0: :< succ u) as G4. {  apply Succ.HasZero. assumption. }
       rewrite Succ.UnionOf. 2: assumption.
       split. 1: assumption. split; assumption.
   - destruct H2 as [H2|H2]; apply Charac.
     + left. destruct H2 as [H2 H3]. subst. reflexivity.
     + right. destruct H2 as [H2 [H3 H4]]. exists :U(x), y.
-      assert (Ordinal x) as G5. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal x) as G5. { apply Omega.HasOrdinals. assumption. }
       assert (succ :U(x) = x) as H5. {
         apply Succ.OfUnion. 1: assumption.
         apply SOO.IsSuccessor; assumption. }
@@ -162,7 +162,7 @@ Proof.
   intros f a n H1 H2 H3 H4.
   assert (succ n :< :N) as G1. { apply Omega.HasSucc. assumption. }
   assert (:U(succ n) = n) as G2. { apply Omega.UnionOfSucc. assumption. }
-  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinals. assumption. }
   rewrite Eval, G2; try assumption. 1: reflexivity.
   - apply Succ.HasZero. assumption.
   - rewrite G2. assumption.
@@ -185,7 +185,7 @@ Proof.
       assert (x :< domain f) as G1. {
         apply Domain.Charac. exists y. assumption. }
       assert (x :< :N) as G2. { apply H1. assumption. }
-      assert (Ordinal x) as G3. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal x) as G3. { apply Omega.HasOrdinals. assumption. }
       assert ((succ x) :< :N) as G4. { apply Omega.HasSucc. assumption. }
       assert (:U(succ x) = x) as H3. { apply Omega.UnionOfSucc. assumption. }
       rewrite H3. split.
@@ -200,19 +200,19 @@ Proof.
   assert (domain f :<=: :N) as G1. {
     intros m G1. apply Omega.IsIn with n. 2: assumption.
     subst. assumption. }
-  assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
   apply DoubleInclusion. split; intros x H3.
   - apply DomainOf in H3. 2: assumption. destruct H3 as [H3|[H3 [H4 H5]]].
     + rewrite H3. apply Succ.HasZero. assumption.
     + assert (succ :U(x) = x) as H6. { apply Omega.SuccOfUnion; assumption. }
       assert (:U(x) :< n) as H7. { rewrite <- H2. assumption. }
       assert (:U(x) :< :N) as G3. { apply Omega.IsIn with n; assumption. }
-      assert (Ordinal :U(x)) as G4. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal :U(x)) as G4. { apply Omega.HasOrdinals. assumption. }
       rewrite <- H6. apply Succ.ElemCompat; assumption.
   - apply DomainOf. 1: assumption.
     assert (succ n :< :N) as G5. { apply Omega.HasSucc. assumption. }
     assert (x :< :N) as G6. { apply Omega.IsIn with (succ n); assumption. }
-    assert (Ordinal x) as G7. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal x) as G7. { apply Omega.HasOrdinals. assumption. }
     assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4]. 1: { left. assumption. } right.
     split. 1: assumption. split. 1: assumption. rewrite H2.
@@ -230,7 +230,7 @@ Proof.
   - apply DomainOf in H3. 2: assumption.
     destruct H3 as [H3|[H3 [H4 H5]]]. 2: assumption. subst. apply Omega.HasZero.
   - apply DomainOf. 1: assumption.
-    assert (Ordinal x) as G1. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal x) as G1. { apply Omega.HasOrdinals. assumption. }
     assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4].
     + left. assumption.
@@ -316,13 +316,13 @@ Proof.
   rewrite WhenDomainIsNat in H8. 2: assumption.
   rewrite WhenDomainIsNat in H9. 2: assumption.
   remember (domain f) as n eqn:H11. symmetry in H11.
-  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinals. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
-  assert (Ordinal (succ n)) as G5. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal (succ n)) as G5. { apply Omega.HasOrdinals. assumption. }
   assert (x :< :N) as G6. { apply Omega.IsIn with (succ n); assumption. }
   assert (y :< :N) as G7. { apply Omega.IsIn with (succ n); assumption. }
-  assert (Ordinal x) as G8. { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal y) as G9. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal x) as G8. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal y) as G9. { apply Omega.HasOrdinals. assumption. }
   assert (Functional f) as G10. { apply H1. }
   assert (domain f :<=: :N) as G11. { rewrite H11. assumption. }
   assert (x = :0: \/ :0: :< x) as H12. { apply Core.ZeroOrElem. assumption. }
@@ -330,7 +330,7 @@ Proof.
   assert (forall i, i :< succ n -> :0: :< i -> :U(i) :< domain f) as H14. {
     intros i H14 H15. rewrite H11.
     assert (i :< :N) as G12. { apply Omega.IsIn with (succ n); assumption. }
-    assert (Ordinal i) as G13. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal i) as G13. { apply Omega.HasOrdinals. assumption. }
     assert (Ordinal :U(i)) as G14. { apply UnionOf.IsOrdinal. assumption. }
     apply Succ.ElemCompatRev; try assumption.
     rewrite Omega.SuccOfUnion; assumption. }

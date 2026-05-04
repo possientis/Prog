@@ -93,7 +93,7 @@ Proof.
       rewrite WhenSucc, WhenZero, Plus.WhenZeroL, WhenZero, Plus.WhenZeroR.
       3: assumption. 1: reflexivity. apply H4. apply Succ.IsIn.
     - intros n H3 IH H4 H5.
-      assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
       assert (Ordinal (succ n)) as G3. { apply Succ.IsOrdinal. assumption. }
       rewrite WhenSucc, IH, WhenSucc, ShiftL.Eval; try assumption.
       + apply Plus.Assoc.
@@ -136,7 +136,7 @@ Proof.
       rewrite WhenSucc, WhenZero, WhenZero, ShiftR.EvalZero; try assumption.
       rewrite Plus.WhenZeroL, Plus.WhenZeroR. 2: assumption. reflexivity.
     - intros n H4 IH H5 H6.
-      assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
       assert (Ordinal (succ n)) as G3. { apply Succ.IsOrdinal. assumption. }
       rewrite WhenSucc. 2: assumption.
       assert (:sum:_{ succ n} (shiftR a F) = a :+: :sum:_{ n} F) as H7. {
@@ -172,7 +172,7 @@ Proof.
     apply Omega.Induction; rewrite E.
     - intros i H1. apply Empty.Charac in H1. contradiction.
     - intros n H1 IH i H2 H3 H4.
-      assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G1. { apply Omega.HasOrdinals. assumption. }
       assert (forall j, j :< n -> domain F j) as G2. {
         intros j G2. apply H3, Succ.IsIncl. assumption. }
       assert (forall j, j :< n -> Ordinal F!j) as G3. {

@@ -115,7 +115,7 @@ Proof.
 Qed.
 
 (* Every element of N is an ordinal.                                            *)
-Proposition HasOrdinalElem : toClass :N :<=: Ordinal.
+Proposition HasOrdinals : toClass :N :<=: Ordinal.
 Proof.
   intros n H1. apply Charac in H1. destruct H1 as [H1 _]. assumption.
 Qed.
@@ -124,15 +124,15 @@ Proposition HasMax : forall (n m:U),
   n :< :N -> m :< :N -> n :\/: m :< :N.
 Proof.
   intros n m H1 H2.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
-  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinals. assumption. }
   assert (n :\/: m = n \/ n :\/: m = m) as G3. {
     apply Max.IsLeftOrRight; assumption. }
   destruct G3 as [G3|G3]; rewrite G3; assumption.
 Qed.
 
 (* Every element of N is a non-limit ordinal.                                   *)
-Proposition HasNonLimitElem : toClass :N :<=: NonLimit.
+Proposition HasNonLimits : toClass :N :<=: NonLimit.
 Proof.
   intros n H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1, Succ.IsIn.
 Qed.
@@ -146,22 +146,22 @@ Proof.
   apply Charac. split. 1: assumption.
   intros m H4.
   assert (Ordinal m) as H5. { apply Core.IsOrdinal with (succ n); assumption. }
-  apply HasNonLimitElem, Core.ElemElemTran with (succ n); try assumption.
+  apply HasNonLimits, Core.ElemElemTran with (succ n); try assumption.
   apply IsOrdinal.
 Qed.
 
 Proposition WhenNotZero : forall (n:U), n :< :N ->
   n <> :0: -> :0: :< n.
 Proof.
-  intros n H1. apply Core.HasZero. apply HasOrdinalElem. assumption.
+  intros n H1. apply Core.HasZero. apply HasOrdinals. assumption.
 Qed.
 
 Proposition IsSuccessor : forall (n:U), n :< :N ->
   :0: :< n <-> Successor n.
 Proof.
   intros n H1.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
-  assert (NonLimit n) as H3. { apply HasNonLimitElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
+  assert (NonLimit n) as H3. { apply HasNonLimits. assumption. }
   split; intros H2.
   - assert (Successor n \/ Limit n) as H4. { apply Limit.TwoWay; assumption. }
     destruct H4 as [H4|H4]. 1: assumption. exfalso.
@@ -183,7 +183,7 @@ Proposition UnionOfSucc : forall (n:U), n :< :N ->
   :U(succ n) = n.
 Proof.
   intros n H1.
-  assert (Ordinal n) as H2. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as H2. { apply HasOrdinals. assumption. }
   apply Succ.UnionOf. assumption.
 Qed.
 
@@ -191,7 +191,7 @@ Proposition SuccOfUnion : forall (n:U), n :< :N ->
   :0: :< n -> succ :U(n) = n.
 Proof.
   intros n H1 H2. apply Succ.OfUnion.
-  - apply HasOrdinalElem. assumption.
+  - apply HasOrdinals. assumption.
   - apply IsSuccessor; assumption.
 Qed.
 
@@ -199,7 +199,7 @@ Proposition ZeroOrElem : forall (n:U), n :< :N ->
   n = :0: \/ :0: :< n.
 Proof.
   intros n H1.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
   apply Core.ZeroOrElem. assumption.
 Qed.
 
@@ -207,7 +207,7 @@ Proposition SuccHasZero : forall (n:U), n :< :N ->
   :0: :< succ n.
 Proof.
   intros n H1.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
   apply Succ.HasZero. assumption.
 Qed.
 
@@ -215,8 +215,8 @@ Proposition SuccElemCompat : forall (n m:U), n :< :N -> m :< :N ->
   n :< m -> succ n :< succ m.
 Proof.
   intros n m H1 H2 H3.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
-  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinals. assumption. }
   apply Succ.ElemCompat; assumption.
 Qed.
 
@@ -224,8 +224,8 @@ Proposition SuccElemCompatRev : forall (n m:U), n :< :N -> m :< :N ->
   succ n :< succ m -> n :< m.
 Proof.
   intros n m H1 H2 H3.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
-  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinals. assumption. }
   apply Succ.ElemCompatRev; assumption.
 Qed.
 
@@ -233,13 +233,13 @@ Proposition SuccInclCompat : forall (n m:U), n :< :N -> m :< :N ->
   n :<=: m -> succ n :<=: succ m.
 Proof.
   intros n m H1 H2 H3.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
-  assert (Ordinal m) as G2. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
+  assert (Ordinal m) as G2. { apply HasOrdinals. assumption. }
   apply Succ.InclCompat; assumption.
 Qed.
 
 Proposition ZeroIncl : forall (n:U), n :< :N -> :0: :<=: n.
-  intros n H1. apply Core.IsIncl, HasOrdinalElem. assumption.
+  intros n H1. apply Core.IsIncl, HasOrdinals. assumption.
 Qed.
 
 Proposition OneInclSucc : forall (n:U), n :< :N  ->
@@ -254,7 +254,7 @@ Proposition HasUnion : forall (n:U), n :< :N ->
   :U(n) :< :N.
 Proof.
   intros n H1.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
   assert (Ordinal :N) as G2. { apply IsOrdinal. }
   assert (Ordinal :U(n)) as G3. { apply UnionOf.IsOrdinal. assumption. }
   assert (n = :0: \/ :0: :< n) as H2. { apply Core.ZeroOrElem. assumption. }
@@ -271,7 +271,7 @@ Proof.
   - intros H1. apply NoElemLoop1 with :N. apply Charac. split.
     + apply IsOrdinal.
     + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
-      * apply HasNonLimitElem. assumption.
+      * apply HasNonLimits. assumption.
       * apply Single.Charac in H2. subst. assumption.
 Qed.
 
@@ -280,7 +280,7 @@ Proposition InLimitIncl : forall (a:U), Limit a -> :N :<=: a.
 Proof.
   intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
     apply ElemOrIncl.
-    - apply Limit.HasOrdinalElem. assumption.
+    - apply Limit.HasOrdinals. assumption.
     - apply IsOrdinal. }
   destruct H2 as [H2|H2]. 2: assumption. exfalso.
   apply H1. apply Charac in H2. apply H2, Succ.IsIn.
@@ -346,7 +346,7 @@ Proposition Induction' : forall (A:Class) (m:U),
   forall n, n :< :N -> m :<=: n -> A n.
 Proof.
   intros A m H1 H2 H3.
-  assert (Ordinal m) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal m) as G1. { apply HasOrdinals. assumption. }
   assert (m = :0: \/ :0: :< m) as G2. { apply Core.ZeroOrElem. assumption. }
   remember (fun n => m :<=: n -> A n) as B eqn:H4.
   assert (forall n, n :< :N -> B n) as H5. {
@@ -355,7 +355,7 @@ Proof.
       + subst. assumption.
       + apply H5 in G2. apply Empty.Charac in G2. contradiction.
     - intros n H5 IH H6.
-      assert (Ordinal n) as G3. { apply HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G3. { apply HasOrdinals. assumption. }
       assert (Ordinal (succ n)) as G4. { apply Succ.IsOrdinal. assumption. }
       assert (m = succ n \/ m :< succ n) as H7. {
         apply Core.EqualOrElem; assumption. }
@@ -377,7 +377,7 @@ Proof.
   intros A H1 H2.
   assert (exists m, Ordinal m /\ A m /\forall n, A n -> m :<=: n) as H3. {
     apply Core.HasMinimal. 2: assumption.
-    intros x H3. apply HasOrdinalElem, H1. assumption. }
+    intros x H3. apply HasOrdinals, H1. assumption. }
   destruct H3 as [m [H3 [H4 H5]]]. exists m. split; assumption.
 Qed.
 
@@ -414,10 +414,10 @@ Proof.
   destruct H10 as [n [H10 H11]]. rewrite H4 in H10.
   destruct H10 as [H10 H12].
   exists n. split. 1: assumption. apply CIN.DoubleInclusion.
-  assert (Ordinal n) as G1. { apply HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
   split; intros m H13.
   - assert (m :< :N) as G2. { apply H2. assumption. }
-    assert (Ordinal m) as G3. { apply HasOrdinalElem. assumption. }
+    assert (Ordinal m) as G3. { apply HasOrdinals. assumption. }
     assert (n = m \/ n :< m \/ m :< n) as H14. {
       apply Core.IsTotal; assumption. }
     destruct H14 as [H14|[H14|H14]]. 3: assumption.

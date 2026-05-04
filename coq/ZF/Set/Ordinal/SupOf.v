@@ -46,7 +46,7 @@ Proposition WhenLimit : forall (a:U),
   Limit a -> sup a = a.
 Proof.
   intros a H1.
-  assert (Ordinal a) as H2. { apply Limit.HasOrdinalElem. assumption. }
+  assert (Ordinal a) as H2. { apply Limit.HasOrdinals. assumption. }
   rewrite WhenOrdinal. 2: assumption. symmetry. apply Limit.Charac in H1.
   2: assumption. destruct H1 as [_ H1]. assumption.
 Qed.
@@ -62,7 +62,7 @@ Proposition WhenNonLimit : forall (a:U),
   NonLimit a -> a <> :0: -> a = succ (sup a).
 Proof.
   intros a H1 H2.
-  assert (Ordinal a) as H3. { apply NonLimit.HasOrdinalElem. assumption. }
+  assert (Ordinal a) as H3. { apply NonLimit.HasOrdinals. assumption. }
   rewrite WhenOrdinal. 2: assumption.
   apply NonLimit.Charac in H1. 2: assumption.
   destruct H1 as [H1|H1]. 2: assumption. contradiction.

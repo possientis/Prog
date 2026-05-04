@@ -301,8 +301,8 @@ Proof.
   intros n m H1. revert m. apply Omega.Induction.
   - rewrite WhenZeroR. apply Omega.HasZero.
   - intros m H2 H3.
-    assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
-    assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal n) as H4. { apply Omega.HasOrdinals. assumption. }
+    assert (Ordinal m) as H5. { apply Omega.HasOrdinals. assumption. }
     assert (Ordinal (n :*: m)) as H6. { apply IsOrdinal; assumption. }
     rewrite WhenSuccR. 2: assumption. apply Plus.InOmega; assumption.
 Qed.
@@ -737,8 +737,8 @@ Proposition EuclidN : forall (n m:U),
     r :< m.
 Proof.
   intros n m H1 H2 H3.
-  assert (Ordinal n) as H4. { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal m) as H5. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as H4. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal m) as H5. { apply Omega.HasOrdinals. assumption. }
   assert (exists q r,
     Ordinal q /\ Ordinal r /\ n = m :*: q :+: r /\ r :< m) as H6. {
       apply Euclid; assumption. }
@@ -763,11 +763,11 @@ Proposition EuclidUniqueN : forall (m q1 q2 r1 r2:U),
   q1 = q2 /\ r1 = r2.
 Proof.
   intros m q1 q2 r1 r2 H1 H2 H3 H4 H5.
-  assert (Ordinal m)  as H6.  { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal q1) as H7.  { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal q2) as H8.  { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal r1) as H9.  { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal r2) as H10. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal m)  as H6.  { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal q1) as H7.  { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal q2) as H8.  { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal r1) as H9.  { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal r2) as H10. { apply Omega.HasOrdinals. assumption. }
   apply EuclidUnique; assumption.
 Qed.
 
@@ -782,7 +782,7 @@ Proof.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   assert (Limit :N) as G2. { apply Omega.IsLimit. }
   assert (:0: :< :N) as G3. { apply Omega.HasZero. }
-  assert (Ordinal m) as G4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal m) as G4. { apply Omega.HasOrdinals. assumption. }
   assert (Ordinal :0:) as G10. { apply Core.Zero. }
   assert (Ordinal :1:) as G12. { apply Natural.OneIsOrdinal. }
   remember (fun a => forall n c,
@@ -807,16 +807,16 @@ Proof.
           q :< :N /\ r :< :N /\ y = m :*: q :+: r /\ r :< m) as H10. {
             apply EuclidN; assumption. }
         destruct H10 as [q [r [H10 [H11 [H12 H13]]]]].
-        assert (Ordinal q) as H14. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal q) as H14. { apply Omega.HasOrdinals. assumption. }
         exists (succ q). split.
         * apply Omega.HasSucc. assumption.
         * assert (y :< m :*: succ q) as X. 2: apply X.
           rewrite WhenSuccR. 2: assumption. rewrite H12.
           apply Plus.ElemCompatR; try assumption.
-          { apply Omega.HasOrdinalElem. assumption. }
+          { apply Omega.HasOrdinals. assumption. }
           { apply IsOrdinal; assumption. }
     - rewrite H1. intros a H3 H5 IH n c H6 H7 H8.
-      assert (Ordinal n) as H9. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as H9. { apply Omega.HasOrdinals. assumption. }
       assert (Ordinal c) as G5. { apply H7. }
       assert (exists p, p :< :N /\ n = succ p) as H10. {
         apply Omega.HasPred. 1: assumption.
@@ -827,7 +827,7 @@ Proof.
         apply Limit.NotSucc with c. 1: assumption. subst.
         apply Succ.IsSuccessor. assumption. }
       destruct H10 as [p [H10 H11]].
-      assert (Ordinal p) as H12. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal p) as H12. { apply Omega.HasOrdinals. assumption. }
       assert (Ordinal (m :*: p)) as H13. { apply IsOrdinal; assumption. }
       assert (a = c :+: p) as H14. {
         rewrite H11 in H8. rewrite Plus.WhenSuccR in H8. 2: assumption.
@@ -859,7 +859,7 @@ Proof.
             apply Plus.Destruct; assumption. }
           destruct H12 as [b [n [H12 [H13 H14]]]].
           assert (Ordinal b) as G9. { apply H12. }
-          assert (Ordinal n) as G11. { apply Omega.HasOrdinalElem. assumption. }
+          assert (Ordinal n) as G11. { apply Omega.HasOrdinals. assumption. }
           assert (m :*: d = b :+: m :*: n) as H15. {
             apply IH; try assumption. rewrite Plus.WhenZeroR. assumption. }
           apply ElemElemTran with (m :*: d); try assumption. rewrite H15.
@@ -871,7 +871,7 @@ Proof.
         assert (:1: :*: c :<=: m :*: c) as H9. { apply InclCompatL; assumption. }
         rewrite WhenOneL in H9; assumption. }
   intros n c H5 H6. rewrite H1 in H3.
-  assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as H7. { apply Omega.HasOrdinals. assumption. }
   assert (Ordinal c) as H8. { apply H6. }
   apply H3; try assumption. 3: reflexivity.
   - apply Plus.IsOrdinal; assumption.
@@ -916,7 +916,7 @@ Proof.
           apply Omega.Induction; rewrite H5.
           - intros H6. apply Empty.Charac in H6. contradiction.
           - intros n H6 IH _.
-            assert (Ordinal n) as H7. { apply Omega.HasOrdinalElem. assumption. }
+            assert (Ordinal n) as H7. { apply Omega.HasOrdinals. assumption. }
             rewrite WhenSuccR, WhenSuccR; try assumption.
             assert (n = :0: \/ :0: :< n) as H8. {
               apply Core.ZeroOrElem. assumption. }
@@ -934,7 +934,7 @@ Proof.
     - intros y H6.
       rewrite WhenLimit in H6. 2: assumption.
       apply SUG.Charac in H6. destruct H6 as [n [H6 H7]].
-      assert (Ordinal n) as H8. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as H8. { apply Omega.HasOrdinals. assumption. }
       assert (n = :0: \/ :0: :< n) as H9. { apply Core.ZeroOrElem. assumption. }
       assert (y :< (:N :+: :1:) :*: n) as H10. { assumption. }
       assert (Ordinal (:N :*: n)) as G3. { apply IsOrdinal; assumption. }
@@ -966,17 +966,17 @@ Proposition Comm : forall (n m:U), n :< :N -> m :< :N ->
 Proof.
   intros n m H1 H2. revert n H1.
   assert (Ordinal :1:) as G1. { apply Natural.OneIsOrdinal. }
-  assert (Ordinal m) as H3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal m) as H3. { apply Omega.HasOrdinals. assumption. }
   apply Omega.Induction.
   - rewrite WhenZeroL, WhenZeroR. 2: assumption. reflexivity.
   - intros n H1 IH1.
-    assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+    assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
     assert (Ordinal (n :+: :1:)) as G3. { apply Plus.IsOrdinal; assumption. }
     assert (forall p, p :< :N -> succ n :*: p = n :*: p :+: p) as H4. {
       apply Omega.Induction.
       - rewrite WhenZeroR, WhenZeroR, Plus.WhenZeroR. reflexivity.
       - intros p H4 IH2.
-        assert (Ordinal p) as H5. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal p) as H5. { apply Omega.HasOrdinals. assumption. }
         assert (Ordinal (n :*: p)) as G4. { apply IsOrdinal; assumption. }
         assert (Ordinal (succ p)) as G5. { apply Succ.IsOrdinal. assumption. }
         rewrite (WhenSuccR (succ n)). 2: assumption. rewrite IH2.
@@ -997,9 +997,9 @@ Proposition DistribR : forall (n m p:U), n :< :N -> m :< :N -> p :< :N ->
 Proof.
   intros n m p H1 H2 H3.
   assert (n :+: m :< :N) as H4. { apply Plus.InOmega; assumption. }
-  assert (Ordinal n) as H5. { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal m) as H6. { apply Omega.HasOrdinalElem. assumption. }
-  assert (Ordinal p) as H7. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as H5. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal m) as H6. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal p) as H7. { apply Omega.HasOrdinals. assumption. }
   rewrite (Comm (n :+: m)); try assumption.
   rewrite DistribL; try assumption.
   rewrite (Comm n p), (Comm m p); try assumption. reflexivity.

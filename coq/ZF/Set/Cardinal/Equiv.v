@@ -886,7 +886,7 @@ Proof.
   (* Step: by induction a ~ a + n, and N <= a <= a + n, so Succ gives           *)
   (* a + n ~ succ(a + n) = a + succ(n). Transitivity completes the step.        *)
   - intros n Hn IH.
-    assert (Ordinal n) as Hn_ord. { apply Omega.HasOrdinalElem. exact Hn. }
+    assert (Ordinal n) as Hn_ord. { apply Omega.HasOrdinals. exact Hn. }
     rewrite (Plus.WhenSuccR a n Hn_ord).
     apply Tran with (a :+: n). 1: exact IH.
     apply Succ.

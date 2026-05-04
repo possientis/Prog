@@ -106,7 +106,7 @@ Proof.
   intros n H1.
   assert (:N :-: n :<=: :N) as H2. {
     apply IsIncl.
-    - apply Omega.HasOrdinalElem. assumption.
+    - apply Omega.HasOrdinals. assumption.
     - apply Omega.IsOrdinal. }
   assert (:N :<=: :N :-: n) as H3. {
     apply Inf.IsLargest.
@@ -119,7 +119,7 @@ Proof.
       + apply Succ.IsIn.
       + apply Plus.IsInclL.
         * apply Omega.IsOrdinal.
-        * apply Omega.HasOrdinalElem. assumption.
+        * apply Omega.HasOrdinals. assumption.
     - intros c H3.
       apply Specify.Charac in H3. destruct H3 as [H3 H4].
       apply Succ.Charac in H3. destruct H3 as [H3|H3].

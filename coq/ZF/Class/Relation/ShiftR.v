@@ -43,13 +43,13 @@ Proof.
     apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4]. subst.
     assert (u :< :N) as G1. { apply H1. exists v. assumption. }
     assert (succ u :< :N) as G2. { apply Omega.HasSucc. assumption. }
-    assert (On u) as G3. {  apply Omega.HasOrdinalElem. assumption. }
+    assert (On u) as G3. {  apply Omega.HasOrdinals. assumption. }
     assert (:0: :< succ u) as G4. {  apply Succ.HasZero. assumption. }
     rewrite Succ.UnionOf. 2: assumption.
     split. 1: assumption. split; assumption.
   - left. destruct H2 as [H2 H3]. subst. reflexivity.
   - right. destruct H2 as [H2 [H3 H4]]. exists :U(x), y.
-    assert (On x) as G5. { apply Omega.HasOrdinalElem. assumption. }
+    assert (On x) as G5. { apply Omega.HasOrdinals. assumption. }
     assert (succ :U(x) = x) as H5. {
       apply Succ.OfUnion. 1: assumption.
       apply SOO.IsSuccessor; assumption. }
@@ -144,7 +144,7 @@ Proposition EvalSucc : forall (F:Class) (a n:U),
   (shiftR a F)!(succ n) = F!n.
 Proof.
   intros F a n H1 H2 H3.
-  assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply Omega.HasOrdinals. assumption. }
   rewrite Eval, Omega.UnionOfSucc; try assumption. 1: reflexivity.
   - apply Succ.HasZero. assumption.
   - apply Omega.HasSucc. assumption.
@@ -172,7 +172,7 @@ Proposition WhenDomainIsNat : forall (F:Class) (a n:U),
   domain (shiftR a F) :~: toClass (succ n).
 Proof.
   intros F a n H1 H2 x.
-  assert (On n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+  assert (On n) as G1. { apply Omega.HasOrdinals. assumption. }
   assert (domain F :<=: toClass :N) as G2. {
     intros m G2. apply H2 in G2. apply Omega.IsIn with n; assumption. }
   split; intros H3.
@@ -182,12 +182,12 @@ Proof.
     + assert (succ :U(x) = x) as H6. { apply Omega.SuccOfUnion; assumption. }
       assert (:U(x) :< n) as H7. { apply H2. assumption. }
       assert (:U(x) :< :N) as G3. { apply Omega.IsIn with n; assumption. }
-      assert (On :U(x)) as G4. { apply SOO.HasOrdinalElem. assumption. }
+      assert (On :U(x)) as G4. { apply SOO.HasOrdinals. assumption. }
       rewrite <- H6. apply Succ.ElemCompat; assumption.
   - apply DomainOf. 1: assumption.
     assert (succ n :< :N) as G5. { apply Omega.HasSucc. assumption. }
     assert (x :< :N) as G6. { apply Omega.IsIn with (succ n); assumption. }
-    assert (On x) as G7. { apply SOO.HasOrdinalElem. assumption. }
+    assert (On x) as G7. { apply SOO.HasOrdinals. assumption. }
     assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4]. 1: { left. assumption. } right.
     split. 1: assumption. split. 1: assumption. apply H2.
@@ -206,7 +206,7 @@ Proof.
     destruct H3 as [H3|[H3 [H4 H5]]]. 2: assumption.
     subst. apply Omega.HasZero.
   - apply DomainOf. 1: assumption.
-    assert (On x) as G1. { apply Omega.HasOrdinalElem. assumption. }
+    assert (On x) as G1. { apply Omega.HasOrdinals. assumption. }
     assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4].
     + left. assumption.
@@ -232,7 +232,7 @@ Proof.
     + destruct H5 as [H5|[n [H5 H6]]].
       * apply COC.EquivCompat with (toClass :N). 2: assumption.
         apply Equiv.Sym, WhenDomainIsN. assumption.
-      * assert (On n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      * assert (On n) as G2. { apply Omega.HasOrdinals. assumption. }
         assert (On (succ n)) as G3. { apply Succ.IsOrdinal. assumption. }
         apply COC.EquivCompat with (toClass (succ n)). 2: assumption.
         apply Equiv.Sym, WhenDomainIsNat; assumption.

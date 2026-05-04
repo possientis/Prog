@@ -68,7 +68,7 @@ Proof.
     - intros b c d  H2 _ _ _ _ _.
       rewrite SumOfClass.WhenZero. apply Exp.HasZero; assumption.
     - intros n H3 IH b c d H2 H4 H5 H6 H9 H10.
-      assert (Ordinal n) as G4. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
       assert (Functional b) as G5. { apply H4. }
       assert (Functional c) as G6. { apply H5. }
       assert (domain b = succ n) as G7. { apply H4. }
@@ -197,7 +197,7 @@ Proof.
     intros i G1. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
   assert (forall i, i :< succ n -> Ordinal m!i) as G2. {
     intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinals. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
   assert (forall i, i :< succ n -> Ordinal :[F]:!i) as G6. {
@@ -391,7 +391,7 @@ Proof.
       assert (A r) as H18. { apply IH. assumption. }
       rewrite E in H18. specialize (H18 H14).
       destruct H18 as [n [c [d [H18 [H19 [H20 [H21 [H22 [H23 H24]]]]]]]]].
-      assert (Ordinal n) as G23. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G23. { apply Omega.HasOrdinals. assumption. }
       remember (shiftR e d) as d' eqn:H25.
       remember (shiftR q c) as c' eqn:H26.
       exists (succ n), c', d'.
@@ -435,7 +435,7 @@ Proof.
       assert (domain d :<=: :N) as G18. {
         rewrite G13. apply Core.ElemIsIncl; assumption. }
       assert (Ordinal (succ n)) as G19. {
-        apply Omega.HasOrdinalElem. assumption. }
+        apply Omega.HasOrdinals. assumption. }
       assert (Decreasing d') as H30. {
         rewrite H25. apply SRR.IsDecreasing; try assumption;
         rewrite G13;assumption. }
@@ -443,14 +443,14 @@ Proof.
         intros i H31.
         assert (i :< :N) as G20. {
           apply Omega.IsIn with (succ n); assumption. }
-        assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal i) as G21. { apply Omega.HasOrdinals. assumption. }
         assert (i = :0: \/ :0: :< i) as H32. {
           apply Core.ZeroOrElem. assumption. }
         destruct H32 as [H32|H32].
         - rewrite H26, H32, SRR.EvalZero; assumption.
         - apply Omega.HasPred in H32. 2: assumption.
           destruct H32 as [j [H32 H33]].
-          assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
+          assert (Ordinal j) as G22. { apply Omega.HasOrdinals. assumption. }
           assert (j :< n) as G24. {
             apply Succ.ElemCompatRev; try assumption.
             rewrite <- H33. assumption. }
@@ -461,14 +461,14 @@ Proof.
         intros i H32.
         assert (i :< :N) as G20. {
           apply Omega.IsIn with (succ n); assumption. }
-        assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal i) as G21. { apply Omega.HasOrdinals. assumption. }
         assert (i = :0: \/ :0: :< i) as H33. {
           apply Core.ZeroOrElem. assumption. }
         destruct H33 as [H33|H33].
         - rewrite H26, H33, SRR.EvalZero; assumption.
         - apply Omega.HasPred in H33. 2: assumption.
           destruct H33 as [j [H33 H34]].
-          assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
+          assert (Ordinal j) as G22. { apply Omega.HasOrdinals. assumption. }
           assert (j :< n) as G24. {
             apply Succ.ElemCompatRev; try assumption.
             rewrite <- H34. assumption. }
@@ -485,7 +485,7 @@ Proof.
         rewrite H34, H35, From.Eval, H25, H26.
         assert (i :< :N) as G20. {
           apply Omega.IsIn with (succ n); assumption. }
-        assert (Ordinal i) as G21. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal i) as G21. { apply Omega.HasOrdinals. assumption. }
         assert (i = :0: \/ :0: :< i) as H37. {
           apply Core.ZeroOrElem. assumption. }
         destruct H37 as [H37|H37].
@@ -493,7 +493,7 @@ Proof.
           1: reflexivity. apply From.IsFunctional.
         - apply Omega.HasPred in H37. 2: assumption.
           destruct H37 as [j [H37 H38]].
-          assert (Ordinal j) as G22. { apply Omega.HasOrdinalElem. assumption. }
+          assert (Ordinal j) as G22. { apply Omega.HasOrdinals. assumption. }
           assert (j :< n) as G24. {
             apply Succ.ElemCompatRev; try assumption.
             rewrite <- H38. assumption. }
@@ -632,7 +632,7 @@ Proof.
     - intros m c d e f H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
       remember (fun i => a :^: d!i :*: c!i) as F1 eqn:E1.
       remember (fun i => a :^: f!i :*: e!i) as F2 eqn:E2.
-      assert (Ordinal m) as G1. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal m) as G1. { apply Omega.HasOrdinals. assumption. }
       rewrite SumOfClass.WhenZero in H14.
       assert (:0: = m) as H15. {
         assert (m = :0: \/ :0: :< m) as H15. {
@@ -640,7 +640,7 @@ Proof.
         destruct H15 as [H15|H15]. 1: { symmetry. assumption. } exfalso.
         apply Omega.HasPred in H15. 2: assumption.
         destruct H15 as [k [H15 H16]].
-        assert (Ordinal k) as G2. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal k) as G2. { apply Omega.HasOrdinals. assumption. }
         rewrite H16, SumOfClass.WhenSucc, From.Eval in H14. 2: assumption.
         assert (k :< m) as G3. { rewrite H16. apply Succ.IsIn. }
         assert (Ordinal e!k) as G4. {
@@ -657,7 +657,7 @@ Proof.
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G8. rewrite From.Eval. apply G6.
           apply Core.ElemElemTran with k; try assumption.
-            apply Omega.HasOrdinalElem, Omega.IsIn with k; assumption. }
+            apply Omega.HasOrdinals, Omega.IsIn with k; assumption. }
         assert (F2 k :<=: (:sum:_{k} :[F2]:) :+: F2 k) as H17. {
           apply Plus.IsInclL; assumption. }
         rewrite <- H14 in H17.
@@ -679,11 +679,11 @@ Proof.
     - intros n H3 IH m c d e f H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14 H15.
       remember (fun i => a :^: d!i :*: c!i) as F1 eqn:E1.
       remember (fun i => a :^: f!i :*: e!i) as F2 eqn:E2.
-      assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
-      assert (Ordinal m) as G2. { apply Omega.HasOrdinalElem. assumption. }
+      assert (Ordinal n) as G1. { apply Omega.HasOrdinals. assumption. }
+      assert (Ordinal m) as G2. { apply Omega.HasOrdinals. assumption. }
       assert (succ n :< :N) as G3. { apply Omega.HasSucc. assumption. }
       assert (Ordinal (succ n)) as G4. {
-        apply Omega.HasOrdinalElem. assumption. }
+        apply Omega.HasOrdinals. assumption. }
       assert (m =:0: \/ :0: :< m) as H16. { apply Core.ZeroOrElem. assumption. }
       destruct H16 as [H16|H16].
       + exfalso.
@@ -704,7 +704,7 @@ Proof.
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G10. rewrite From.Eval. apply G8.
           apply Core.ElemElemTran with n; try assumption.
-            apply Omega.HasOrdinalElem, Omega.IsIn with n; assumption. }
+            apply Omega.HasOrdinals, Omega.IsIn with n; assumption. }
         assert (F1 n :<=: (:sum:_{n} :[F1]:) :+: F1 n) as H17. {
           apply Plus.IsInclL; assumption. }
         rewrite H15 in H17.
@@ -734,7 +734,7 @@ Proof.
         assert (domain d = succ n) as G12. { apply H6. }
         assert (domain e = m) as G13. { apply H7. }
         assert (domain f = m) as G14. { apply H8. }
-        assert (Ordinal k) as G15. { apply Omega.HasOrdinalElem. assumption. }
+        assert (Ordinal k) as G15. { apply Omega.HasOrdinals. assumption. }
         assert (F1 :0: :+: (:sum:_{n} (CRL.shiftL :[F1]:))
           = F2 :0: :+: (:sum:_{k} (CRL.shiftL :[F2]:))) as H18. {
             rewrite H17, SumOfClass.ShiftL, SumOfClass.ShiftL,
@@ -953,7 +953,7 @@ Proof.
     intros i G1. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
   assert (forall i, i :< succ n -> Ordinal c!i) as G2. {
     intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinals. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
   assert (forall i, i :< succ n -> Ordinal :[F]:!i) as G6. {
@@ -1033,7 +1033,7 @@ Proof.
     intros i G1. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
   assert (forall i, i :< succ n -> Ordinal m!i) as G2. {
     intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-  assert (Ordinal n) as G3. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G3. { apply Omega.HasOrdinals. assumption. }
   assert (succ n :< :N) as G4. { apply Omega.HasSucc. assumption. }
   assert (:0: :< succ n) as G5. { apply Omega.SuccHasZero. assumption. }
   assert (forall i, i :< succ n -> Ordinal :[F]:!i) as G6. {
@@ -1106,7 +1106,7 @@ Lemma LimitWithNat : forall (a b c n:U),
 Proof.
   intros a b c n H1 H2 H3 H4 H5 H6. revert c H3.
   assert (Ordinal a) as G1. { apply H1. }
-  assert (Ordinal n) as G2. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
   assert (Ordinal (a :^: b)) as G3. { apply Exp.IsOrdinal; assumption. }
   assert (Ordinal (a :^: b :*: n)) as G4. { apply Mult.IsOrdinal; assumption. }
   assert (Limit (a :^: b)) as G5. { apply IsLimitL; assumption. }
@@ -1229,7 +1229,7 @@ Proposition LimitWithNatIncl : forall (a b c n:U),
   (a :^: b :*: n) :^: c :<=: a :^: (b :*: c) :*: n.
 Proof.
   intros a b c n H1 H2 H3 H4 H5 H6.
-  assert (Ordinal n) as G1. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G1. { apply Omega.HasOrdinals. assumption. }
   assert (Ordinal :0:) as G2. { apply Core.Zero. }
   assert (Ordinal a) as G3. { apply H1. }
   assert (Ordinal (b :*: c)) as G4. { apply Mult.IsOrdinal; assumption. }
@@ -1266,7 +1266,7 @@ Proof.
     intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
   assert (forall i, i :< succ n -> Ordinal m!i) as G3. {
     intros i G3. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-  assert (Ordinal n) as G4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
   assert (Ordinal b!:0:) as G5. { apply G2. apply Succ.HasZero. assumption. }
   assert (Ordinal m!:0:) as G6. { apply G3. apply Succ.HasZero. assumption. }
   assert (Ordinal (succ m!:0:)) as G7. { apply Succ.IsOrdinal. assumption. }
@@ -1318,7 +1318,7 @@ Proof.
     intros i G2. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
   assert (forall i, i :< succ n -> Ordinal m!i) as G3. {
     intros i G3. apply OrdFunOn.IsOrdinal with (succ n); assumption. }
-  assert (Ordinal n) as G4. { apply Omega.HasOrdinalElem. assumption. }
+  assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
   assert (Ordinal b!:0:) as G5. { apply G2. apply Succ.HasZero. assumption. }
   assert (Ordinal m!:0:) as G6. { apply G3. apply Succ.HasZero. assumption. }
   assert (Ordinal (succ m!:0:)) as G7. { apply Succ.IsOrdinal. assumption. }

@@ -127,7 +127,7 @@ Proof.
   - apply FWhenZero.
   - intros n H1 H2.  rewrite FWhenSucc.
     + rewrite H2. reflexivity.
-    + apply Omega.HasOrdinalElem. assumption.
+    + apply Omega.HasOrdinals. assumption.
 Qed.
 
 (* F(N) = N.                                                                    *)
@@ -137,7 +137,7 @@ Proof.
   fold F. apply DoubleInclusion. split; intros y H1.
   - apply UnionGenOfClass.Charac in H1. destruct H1 as [n [H1 H2]].
     assert (On (succ n)) as H3. {
-      apply Omega.HasOrdinalElem. apply Omega.HasSucc. assumption. }
+      apply Omega.HasOrdinals. apply Omega.HasSucc. assumption. }
     rewrite Fn in H2. 2: assumption. apply SOC.ElemElemTran with (succ n);
     try assumption.
     + apply SOC.IsOrdinal with (succ n); assumption.
@@ -146,7 +146,7 @@ Proof.
   - apply Limit.InBetween in H1. 2: apply Omega.IsLimit.
     destruct H1 as [n [H1 H2]]. apply UnionGenOfClass.Charac.
     exists n. split. 1: assumption. rewrite Fn. 2: assumption.
-    assert (On n) as H3. { apply Omega.HasOrdinalElem. assumption. }
+    assert (On n) as H3. { apply Omega.HasOrdinals. assumption. }
     apply SOC.ElemInclTran with n; try assumption.
     + apply SOC.IsOrdinal with n; assumption.
     + apply Succ.IsOrdinal. assumption.
@@ -213,7 +213,7 @@ Proof.
   - apply GWhenZero.
   - intros b H1 H2. rewrite GWhenSucc.
     + rewrite H2, Fn. 2: assumption. reflexivity.
-    + apply Omega.HasOrdinalElem. assumption.
+    + apply Omega.HasOrdinals. assumption.
 Qed.
 
 (* G(N) = N.                                                                    *)
@@ -222,7 +222,7 @@ Proof.
   unfold G. rewrite Recursion2.WhenLimit. 2: apply Omega.IsLimit.
   fold G. apply DoubleInclusion. split; intros y H1.
   - apply UnionGenOfClass.Charac in H1. destruct H1 as [n [H1 H2]].
-    assert (On n) as H3. { apply Omega.HasOrdinalElem. assumption. }
+    assert (On n) as H3. { apply Omega.HasOrdinals. assumption. }
     rewrite Gn in H2. 2: assumption. apply SOC.ElemElemTran with n;
     try assumption.
     + apply SOC.IsOrdinal with n; assumption.

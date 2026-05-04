@@ -57,5 +57,5 @@ Proof.
   - intros n H4 H5. apply H3. apply Core.ElemIsIncl in H5. 2: apply Omega.IsOrdinal.
     apply H5, Succ.IsIn.
   - intros n H4 H5. destruct H4 as [H4 H6]. exfalso. apply H6.
-    apply Omega.HasNonLimitElem. assumption.
+    apply Omega.HasNonLimits. assumption.
 Qed.
