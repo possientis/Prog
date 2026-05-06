@@ -15,6 +15,7 @@ Module SRR := ZF.Set.Relation.RestrictOfClass.
 (* argument sets, we define the associated function with domain axb.            *)
 Definition from2 (a b:U) (f:U -> U -> U) : U := (CF2.from2 f) :|: (a :x: b).
 
+(* x belongs to from2 iff x = ((u,v), f u v) for some u in a and v in b.        *)
 Proposition Charac : forall (f:U -> U -> U) (a b x:U),
   x :< from2 a b f <-> exists u v, x = :(:(u,v):,f u v): /\ u :< a /\ v :< b.
 Proof.
@@ -32,7 +33,6 @@ Proof.
     + apply CF2.Satisfies.
 Qed.
 
-(* Membership as a pair in from2 unpacks to witnesses and domain membership.    *)
 Proposition Charac2 : forall (f:U -> U -> U) (a b x y:U),
   :(x,y): :< from2 a b f <->
   exists u v, x = :(u,v): /\ y = f u v /\ u :< a /\ v :< b.
@@ -48,7 +48,6 @@ Proof.
     apply Charac. exists u, v. split. 1: reflexivity. split; assumption.
 Qed.
 
-(* Fully explicit membership in from2 reduces to domain and value conditions.   *)
 Proposition Charac3 : forall (f:U -> U -> U) (a b u v w:U),
   :(:(u,v):,w): :< from2 a b f <-> u :< a /\ v :< b /\ w = f u v.
 Proof.
@@ -63,6 +62,7 @@ Proof.
     split. 1: reflexivity. split; assumption.
 Qed.
 
+(* The pair ((u,v), f(u,v)) belongs to from2 a b f when u in a and v in b.      *)
 Proposition Satisfies : forall (f:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> :(:(u,v):, f u v): :< from2 a b f.
 Proof.
@@ -72,6 +72,7 @@ Proof.
   split. 1: assumption. split. 1: assumption. reflexivity.
 Qed.
 
+(* The relation from2 a b f is a function on the product a x b.                 *)
 Proposition IsFunctionOn : forall (f:U -> U -> U) (a b:U),
   FunctionOn (from2 a b f) (a :x: b).
 Proof.
@@ -83,6 +84,7 @@ Proof.
   apply CF2.DomainOf.
 Qed.
 
+(* The value of from2 a b f at (u,v) equals f u v when u in a and v in b.      *)
 Proposition Eval : forall (f:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> (from2 a b f)!(:(u,v):) = f u v.
 Proof.

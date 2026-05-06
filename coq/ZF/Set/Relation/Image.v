@@ -34,6 +34,7 @@ Proof.
   - apply Equiv.Sym, ImageByClass.ToClassWhenSmall, SetIsSmall.
 Qed.
 
+(* y belongs to the image of a under f iff some x in a satisfies (x,y) in f.    *)
 Proposition Charac : forall (f a y:U),
   y :< f:[a]: <-> exists x, x :< a /\ :(x,y): :< f.
 Proof.
@@ -70,6 +71,7 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* The image of the empty set under any function is the empty set.              *)
 Proposition WhenEmpty : forall (f a:U),
   a = :0: -> f:[a]: = :0:.
 Proof.

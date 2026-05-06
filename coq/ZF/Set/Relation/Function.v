@@ -25,18 +25,21 @@ Module SRI := ZF.Set.Relation.InvImage.
 (* A set is a function iff it is a relation and it is functional.               *)
 Definition Function (f:U) : Prop := Relation f /\ Functional f.
 
+(* If the set is a function, then so is the class.                              *)
 Proposition ToClass : forall (f:U),
   Function f -> CRF.Function (toClass f).
 Proof.
   intros f H1. assumption.
 Qed.
 
+(* If the class is a function, then so is the set.                              *)
 Proposition FromClass : forall (f:U),
   CRF.Function (toClass f) -> Function f.
 Proof.
   intros f H1. assumption.
 Qed.
 
+(* A function that is injective on its domain is one-to-one.                    *)
 Proposition IsOneToOne : forall (f:U),
   Function f                                                          ->
   (forall x y, x :< domain f -> y :< domain f -> f!x = f!y -> x = y)  ->
@@ -105,12 +108,14 @@ Proof.
   intros f g [_ H1] [_ H2]. apply FunctionalCompose; assumption.
 Qed.
 
+(* For a function f and x in its domain, (x,y) lies in f iff f!x = y.           *)
 Proposition Eval' : forall (f x y:U),
   Function f -> x :< domain f -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f x y H1. apply Eval.Charac, H1.
 Qed.
 
+(* If (x,y) belongs to a function f then f!x = y.                               *)
 Proposition Eval : forall (f x y:U),
   Function f -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -118,30 +123,35 @@ Proof.
   apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* For a function f and x in its domain, the pair (x,f!x) lies in f.            *)
 Proposition Satisfies : forall (f x:U),
   Function f -> x :< domain f -> :(x,f!x): :< f.
 Proof.
   intros f x H1. apply Eval.Satisfies, H1.
 Qed.
 
+(* For a function f and x in its domain, the value f!x lies in the range.       *)
 Proposition IsInRange : forall (f x:U),
   Function f -> x :< domain f -> f!x :< range f.
 Proof.
   intros f x H1. apply Eval.IsInRange, H1.
 Qed.
 
+(* y lies in f[a] iff y = f!x for some x in both a and the domain of f.         *)
 Proposition ImageCharac : forall (f a: U), Function f ->
   forall y, y :< f:[a]: <-> exists x, x :< a /\ x :< domain f /\ f!x = y.
 Proof.
   intros f a H1. apply Eval.ImageCharac, H1.
 Qed.
 
+(* x is in the domain of g.f iff x is in the domain of f and f(x) in that of g. *)
 Proposition DomainOfCompose : forall (f g x:U),
   Function f -> x :< domain (g :.: f) <-> x :< domain f /\ f!x :< domain g.
 Proof.
   intros F G x H1. apply Compose.FunctionalDomainCharac, H1.
 Qed.
 
+(* (g.f)(x) = g(f(x)) when x is in the domain of f and f(x) is in that of g.    *)
 Proposition ComposeEval : forall (f g x:U),
   Function f      ->
   Function g      ->
@@ -152,6 +162,7 @@ Proof.
   intros f g x [_ H1] [_ H2]. apply Compose.Eval; assumption.
 Qed.
 
+(* y lies in the range of a function f iff y = f!x for some x in the domain.    *)
 Proposition RangeCharac : forall (f y:U),
   Function f -> y :< range f <-> exists x, x :< domain f /\ f!x = y.
 Proof.
@@ -171,12 +182,14 @@ Proof.
   apply Range.IsNotEmpty.
 Qed.
 
+(* A function equals its own restriction to its domain.                         *)
 Proposition IsRestrict : forall (f:U),
   Function f -> f = f :|: domain f.
 Proof.
   intros f H1. apply Restrict.RelationCharac, H1.
 Qed.
 
+(* The restriction of a function to any set is again a function.                *)
 Proposition Restrict : forall (f a:U),
   Function f  -> Function (f:|:a).
 Proof.
@@ -185,6 +198,7 @@ Proof.
   - apply Restrict.IsFunctional, H1.
 Qed.
 
+(* Functions agreeing on a subset a of the domains have equal restrictions to a *)
 Proposition RestrictEqual : forall (f g a:U),
   Function f                      ->
   Function g                      ->
@@ -209,6 +223,7 @@ Proof.
     + apply H1.
 Qed.
 
+(* The empty set is a function.                                                 *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> Function f.
 Proof.
@@ -217,6 +232,7 @@ Proof.
   - apply Functional.WhenEmpty. assumption.
 Qed.
 
+(* A singleton set containing a single ordered pair is a function.              *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> Function f.
 Proof.

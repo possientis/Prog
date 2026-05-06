@@ -13,12 +13,14 @@ Module CRL := ZF.Class.Relation.Functional.
 Definition Functional (f:U) : Prop :=
   forall x y z, :(x,y): :< f -> :(x,z): :< f -> y = z.
 
+(* If the set is functional, then so is the class.                              *)
 Proposition ToClass : forall (f:U),
   Functional f -> CRL.Functional (toClass f).
 Proof.
   intros f H1. assumption.
 Qed.
 
+(* If the class is functional, then so is the set.                              *)
 Proposition FromClass : forall (f:U),
   CRL.Functional (toClass f) -> Functional f.
 Proof.
@@ -41,6 +43,7 @@ Proof.
   - intros x. apply H1.
 Qed.
 
+(* The empty set is functional.                                                 *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> Functional f.
 Proof.
@@ -48,6 +51,7 @@ Proof.
   apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* A singleton set containing one ordered pair is functional.                   *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> Functional f.
 Proof.

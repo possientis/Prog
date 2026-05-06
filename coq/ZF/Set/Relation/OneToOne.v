@@ -25,6 +25,7 @@ Module SRL := ZF.Set.Relation.Functional.
 (* A set is one-to-one iff both itself and its converse are functional.         *)
 Definition OneToOne (f:U) : Prop := Functional f /\ Functional f^:-1:.
 
+(* If a set one-to-one then so is its associated class.                         *)
 Proposition ToClass : forall (f:U),
   OneToOne f -> CRO.OneToOne (toClass f).
 Proof.
@@ -35,6 +36,7 @@ Proof.
     + apply SRL.ToClass. assumption.
 Qed.
 
+(* If the class associated with a set is one-to-one then so is the set itself.  *)
 Proposition FromClass : forall (f:U),
   CRO.OneToOne (toClass f) -> OneToOne f.
 Proof.
@@ -69,6 +71,7 @@ Proof.
   - apply CharacL with f y2; assumption.
 Qed.
 
+(* The converse of a one-to-one relation is one-to-one.                         *)
 Proposition Converse : forall (f:U),
   OneToOne f -> OneToOne f^:-1:.
 Proof.
@@ -76,12 +79,14 @@ Proof.
   2: assumption. apply Converse.IsIncl.
 Qed.
 
+(* For a one-to-one relation and x in its domain, (x,y) is in f iff f!x = y.    *)
 Proposition Eval' : forall (f x y:U),
   OneToOne f -> x :< domain f -> :(x,y): :< f  <-> f!x = y.
 Proof.
   intros f x y [H1 _]. apply Eval.Charac. assumption.
 Qed.
 
+(* If (x,y) belongs to a one-to-one relation, then f!x = y.                     *)
 Proposition Eval : forall (f x y:U),
   OneToOne f -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -89,24 +94,28 @@ Proof.
   apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* For a one-to-one relation and x in its domain, the pair (x,f!x) belongs to f *)
 Proposition Satisfies : forall (f x:U),
   OneToOne f -> x :< domain f -> :(x,f!x): :< f.
 Proof.
   intros f x [H1 _]. apply Eval.Satisfies. assumption.
 Qed.
 
+(* For a one-to-one relation, the value at any domain element lies in the range *)
 Proposition IsInRange : forall (f x:U),
   OneToOne f -> x :< domain f -> f!x :< range f.
 Proof.
   intros f x [H1 _]. apply Eval.IsInRange. assumption.
 Qed.
 
+(* y is in the image f[a] iff y = f!x for some x in both a and the domain.      *)
 Proposition ImageCharac : forall (f a:U), OneToOne f ->
   forall y, y :< f:[a]: <-> exists x, x :< a /\ x :< domain f /\ f!x = y.
 Proof.
   intros f a [H1 _]. apply Eval.ImageCharac. assumption.
 Qed.
 
+(* For a one-to-one relation, the converse evaluates within the domain.         *)
 Proposition ConverseEvalIsInDomain : forall (f y:U),
   OneToOne f -> y :< range f -> f^:-1:!y :< domain f.
 Proof.
@@ -124,6 +133,7 @@ Proof.
   - rewrite Compose.Converse. apply Compose.IsFunctional; assumption.
 Qed.
 
+(* For a one-to-one relation, the converse of the value recovers the argument.  *)
 Proposition ConverseEvalOfEval : forall (f x:U),
   OneToOne f -> x :< domain f -> f^:-1:!(f!x) = x.
 Proof.
@@ -133,6 +143,7 @@ Proof.
   - apply Converse.Charac2Rev, Eval.Satisfies; assumption.
 Qed.
 
+(* For a one-to-one relation, the value of f at its converse recovers y.        *)
 Proposition EvalOfConverseEval : forall (f y:U),
   OneToOne f -> y :< range f -> f!(f^:-1:!y) = y.
 Proof.
@@ -146,12 +157,14 @@ Proof.
   exists y. assumption.
 Qed.
 
+(* x is in the domain of g.f iff x is in the domain of f and f!x in domain g.   *)
 Proposition DomainOfCompose : forall (f g x:U),
   OneToOne f -> x :< domain (g :.: f) <-> x :< domain f /\ f!x :< domain g.
 Proof.
   intros f g x [H1 _]. apply Compose.FunctionalDomainCharac. assumption.
 Qed.
 
+(* The value of g.f at x equals the value of g at f!x.                          *)
 Proposition ComposeEval : forall (f g x:U),
   OneToOne f      ->
   OneToOne g      ->
@@ -162,6 +175,7 @@ Proof.
   intros f g x [H1 _] [H2 _]. apply Compose.Eval; assumption.
 Qed.
 
+(* y is in the range iff y = f!x for some x in the domain.                      *)
 Proposition RangeCharac : forall (f y:U),
   OneToOne f -> y :< range f <-> exists x, x :< domain f /\ f!x = y.
 Proof.
@@ -174,6 +188,7 @@ Proof.
     apply Eval'; assumption.
 Qed.
 
+(* For a one-to-one relation, the inverse image of the image of a is a.         *)
 Proposition InvImageOfImage : forall (f a:U),
   OneToOne f -> a :<=: domain f -> f^:-1::[ f:[a]: ]: = a.
 Proof.
@@ -182,6 +197,7 @@ Proof.
   - apply InvImage.OfImageIsMore. assumption.
 Qed.
 
+(* For a one-to-one relation, the image of the inverse image of b is b.         *)
 Proposition ImageOfInvImage : forall (f b:U),
   OneToOne f -> b :<=: range f -> f:[ f^:-1::[b]: ]: = b.
 Proof.
@@ -190,6 +206,7 @@ Proof.
   - apply InvImage.ImageIsMore. assumption.
 Qed.
 
+(* A one-to-one relation is injective: equal values imply equal arguments.      *)
 Proposition EvalInjective : forall (f x y:U),
   OneToOne f -> x :< domain f -> y :< domain f -> f!x = f!y -> x = y.
 Proof.
@@ -199,6 +216,7 @@ Proof.
   rewrite <- H4 in H6. revert H5 H6. apply CharacL. assumption.
 Qed.
 
+(* A functional set whose evaluation is injective is one-to-one.                *)
 Proposition WhenFunctional : forall (f:U),
   Functional f                                                        ->
   (forall x y, x :< domain f -> y :< domain f -> f!x = f!y -> x = y)  ->
@@ -214,6 +232,7 @@ Proof.
   rewrite H7. symmetry. assumption.
 Qed.
 
+(* For a one-to-one relation, f!x lies in f[a] if and only if x lies in a.      *)
 Proposition EvalInImage : forall (f a x:U),
   OneToOne f -> x :< domain f -> f!x :< f:[a]: <-> x :< a.
 Proof.
@@ -227,6 +246,7 @@ Proof.
     apply Satisfies; assumption.
 Qed.
 
+(* The restriction of a one-to-one relation is one-to-one.                      *)
 Proposition Restrict : forall (f a:U),
   OneToOne f  -> OneToOne (f:|:a).
 Proof.
@@ -239,6 +259,7 @@ Proof.
     apply H2 with z; apply Converse.Charac2Rev; assumption.
 Qed.
 
+(* If f!x lies in the image of a, then x lies in a.                             *)
 Proposition FromImage : forall (f a x:U),
   OneToOne f -> x :< domain f -> f!x :< f:[a]: -> x :< a.
 Proof.
@@ -251,6 +272,7 @@ Proof.
   subst. assumption.
 Qed.
 
+(* The empty set is one-to-one.                                                 *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> OneToOne f.
 Proof.

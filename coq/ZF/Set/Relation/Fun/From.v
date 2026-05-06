@@ -21,6 +21,7 @@ Module SRR := ZF.Set.Relation.RestrictOfClass.
 (* to quickly define the associated function with domain a.                     *)
 Definition from (a:U) (f:U -> U) : U := :[f]: :|: a.
 
+(* x belongs to the function on a defined by f iff x = (y,f y) for some y in a. *)
 Proposition Charac : forall (f:U -> U) (a x:U),
   x :< from a f <-> exists y, x = :(y,f y): /\ y :< a.
 Proof.
@@ -46,12 +47,14 @@ Proof.
     apply Charac. exists x. split. 2: assumption. reflexivity.
 Qed.
 
+(* For x in a, the pair (x,f(x)) belongs to the function on a defined by f.     *)
 Proposition Satisfies : forall (f:U -> U) (a x:U),
   x :< a -> :(x,f x): :< from a f.
 Proof.
   intros f a x H1. apply Charac2. split. 1: assumption. reflexivity.
 Qed.
 
+(* The domain of the function on a defined by f is a.                           *)
 Proposition DomainOf : forall (f:U -> U) (a:U),
   domain (from a f) = a.
 Proof.
@@ -61,12 +64,14 @@ Proof.
   - apply Domain.Charac. exists (f x). apply Satisfies. assumption.
 Qed.
 
+(* The function on a defined by f is a relation.                                *)
 Proposition IsRelation : forall (f:U -> U) (a:U), Relation (from a f).
 Proof.
   intros f a x H1. apply Charac in H1. destruct H1 as [y [H1 H2]].
   exists y. exists (f y). assumption.
 Qed.
 
+(* The function on a defined by f is functional.                                *)
 Proposition IsFunctional : forall (f:U -> U) (a:U), Functional (from a f).
 Proof.
   intros f a x y1 y2 H1 H2.
@@ -74,6 +79,7 @@ Proof.
   destruct H1 as [_ H1]. destruct H2 as [_ H2]. subst. reflexivity.
 Qed.
 
+(* The function on a defined by f is a function.                                *)
 Proposition IsFunction : forall (f:U -> U) (a:U), Function (from a f).
 Proof.
   intros f a. split.
@@ -81,6 +87,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
+(* The function on a defined by f is a function with domain a.                  *)
 Proposition IsFunctionOn : forall (f:U -> U) (a:U), FunctionOn (from a f) a.
 Proof.
   intros f a. split.
@@ -88,6 +95,7 @@ Proof.
   - apply DomainOf.
 Qed.
 
+(* For x in a, evaluation of the function on a defined by f at x equals f x.    *)
 Proposition Eval : forall (f:U -> U) (a x:U),
   x :< a -> (from a f)!x = f x.
 Proof.

@@ -11,6 +11,7 @@ Require Import ZF.Set.Relation.Range.
 Export ZF.Notation.Image.
 Export ZF.Notation.Inverse.
 
+(* x belongs to the inverse image iff some y in a satisfies (x,y) in f.         *)
 Proposition Charac : forall (f a x:U),
   x :< f^:-1: :[a]: <-> exists y, y :< a /\ :(x,y): :< f.
 Proof.
@@ -55,7 +56,7 @@ Proof.
   rewrite <- H1, <- H2. apply Range.ImageOfDomain.
 Qed.
 
-(* Characterisation of the inverse image f^(-1)[b] in terms of evaluations of f.*)
+(* Characterisation of the inverse image f^(-1)[b] in terms of evaluations of f *)
 Proposition Eval : forall (f b:U), Functional f ->
   forall x, x :< f^:-1: :[b]: <-> x :< domain f /\ f!x :< b.
 Proof.
@@ -70,6 +71,7 @@ Proof.
     apply Charac. exists y. split. 2: assumption. rewrite H5 in H3. assumption.
 Qed.
 
+(* When the converse is functional, the inverse image of the image is smaller.  *)
 Proposition OfImageIsLess : forall (f a:U),
   Functional f^:-1: -> f^:-1::[ f:[a]: ]: :<=: a.
 Proof.
@@ -79,6 +81,7 @@ Proof.
   subst. assumption.
 Qed.
 
+(* If a inside the domain, a is contained in the inverse image of its image.    *)
 Proposition OfImageIsMore : forall (f a:U),
   a :<=: domain f -> a :<=: f^:-1::[ f:[a]: ]:.
 Proof.
@@ -88,6 +91,7 @@ Proof.
   apply Image.Charac. exists x. split; assumption.
 Qed.
 
+(* When f is functional, the image of the inverse image is contained in b.      *)
 Proposition ImageIsLess : forall (f b:U),
   Functional f -> f:[ f^:-1::[b]: ]: :<=: b.
 Proof.
@@ -97,6 +101,7 @@ Proof.
   subst. assumption.
 Qed.
 
+(* If b is contained in the range, b is contained in the image of its inverse.  *)
 Proposition ImageIsMore : forall (f b:U),
   b :<=: range f -> b :<=: f:[ f^:-1::[b]: ]:.
 Proof.

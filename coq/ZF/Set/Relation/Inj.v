@@ -25,6 +25,7 @@ Module CRR := ZF.Class.Relation.Range.
 (* f is an injective function from a to b.                                      *)
 Definition Inj (f a b:U) : Prop := BijectionOn f a /\ range f :<=: b.
 
+(* A set-level injection from a to b lifts to a class-level injection.          *)
 Proposition ToClass : forall (f a b:U),
   Inj f a b -> CRI.Inj (toClass f) (toClass a) (toClass b).
 Proof.
@@ -34,6 +35,7 @@ Proof.
     apply Range.ToClass.
 Qed.
 
+(* A class-level injection on the classes of a and b yields a set-level one.    *)
 Proposition FromClass : forall (f a b:U),
   CRI.Inj (toClass f) (toClass a) (toClass b) -> Inj f a b.
 Proof.
@@ -62,6 +64,7 @@ Proof.
   intros f a b g c d [H1 _] [H2 _]. apply BijectionOn.Equal; assumption.
 Qed.
 
+(* The image of the domain of an injection equals its range.                    *)
 Proposition ImageOfDomain : forall (f a b:U),
   Inj f a b -> f:[a]: = range f.
 Proof.
@@ -75,6 +78,7 @@ Proof.
   intros f a b H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
+(* The inverse image of the range of an injection is its domain.                *)
 Proposition InvImageOfRange : forall (f a b:U),
   Inj f a b -> f^:-1::[range f]: = a.
 Proof.
@@ -93,12 +97,14 @@ Proof.
     apply Compose.RangeIsSmaller.
 Qed.
 
+(* If f is injective from a to b and x in a, then (x,y) is in f iff f!x = y.    *)
 Proposition Eval' : forall (f a b x y:U),
   Inj f a b -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f a b x y H1. apply BijectionOn.Eval', H1.
 Qed.
 
+(* If (x,y) belongs to an injection, then f!x = y.                              *)
 Proposition Eval : forall (f a b x y:U),
   Inj f a b -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -107,24 +113,28 @@ Proof.
   rewrite <- H3. apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* For an injection and x in its domain a, the pair (x,f!x) belongs to f.       *)
 Proposition Satisfies : forall (f a b x:U),
   Inj f a b -> x :< a -> :(x,f!x): :< f.
 Proof.
   intros f a b x H1. apply BijectionOn.Satisfies, H1.
 Qed.
 
+(* For an injection from a to b, the value at any x in a belongs to b.          *)
 Proposition IsInRange : forall (f a b x:U),
   Inj f a b -> x :< a -> f!x :< b.
 Proof.
   intros f a b x H1. apply Fun.IsInRange, IsFun. assumption.
 Qed.
 
+(* y is in the image f[c] iff y = f!x for some x in both c and the domain a.    *)
 Proposition ImageCharac : forall (f a b c:U), Inj f a b ->
   forall y, y :< f:[c]: <-> exists x, x :< c /\ x :< a /\ f!x = y.
 Proof.
   intros f a b c H1. apply BijectionOn.ImageCharac, H1.
 Qed.
 
+(* The domain of the composition of two injections equals the first domain.     *)
 Proposition DomainOfCompose : forall (f g a b c:U),
   Inj f a b ->
   Inj g b c ->
@@ -135,6 +145,7 @@ Proof.
   destruct H3 as [[_ H3] _]. apply H3.
 Qed.
 
+(* The value of g.f at x equals the value of g at f!x, for x in the domain.     *)
 Proposition ComposeEval : forall (f g a b c x:U),
   Inj f a b ->
   Inj g b c ->
@@ -153,6 +164,7 @@ Proof.
   intros f a b y H1. apply BijectionOn.RangeCharac, H1.
 Qed.
 
+(* The range of an injection from a non-empty domain is non-empty.              *)
 Proposition RangeIsNotEmpty : forall (f a b:U),
   Inj f a b -> a <> :0: -> range f <> :0:.
 Proof.
@@ -166,6 +178,7 @@ Proof.
   intros f a b H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+(* Restricting an injection to a subset of its domain gives an injection.       *)
 Proposition Restrict : forall (f a b c:U),
   Inj f a b -> c :<=: a -> Inj (f:|:c) c b.
 Proof.
@@ -175,6 +188,8 @@ Proof.
     apply Restrict.RangeIsIncl.
 Qed.
 
+(* Two injections agreeing pointwise on a common sub-domain have equal          *)
+(* restrictions to that sub-domain.                                             *)
 Proposition RestrictEqual : forall (f a b g c d e:U),
   Inj f a b                       ->
   Inj g c d                       ->
@@ -187,7 +202,7 @@ Proof.
   apply BijectionOn.RestrictEqual; assumption.
 Qed.
 
-(* If f is an injection fron a to b with range b, f^-1 is an inj from b to a.   *)
+(* If f is an injection from a to b with range equal to b, the converse is too. *)
 Proposition Converse : forall (f a b:U),
   Inj f a b -> range f = b -> Inj f^:-1: b a.
 Proof.
@@ -196,60 +211,70 @@ Proof.
   - destruct H1 as [_ H1]. rewrite Converse.Range, H1. apply Incl.Refl.
 Qed.
 
+(* For an injection from a to b, the converse evaluates within the domain a.    *)
 Proposition ConverseEvalIsInDomain : forall (f a b y:U),
   Inj f a b -> y :< range f -> f^:-1:!y :< a.
 Proof.
   intros f a b y H1. apply BijectionOn.ConverseEvalIsInDomain, H1.
 Qed.
 
+(* For an injection from a to b, the converse followed by f is the identity.    *)
 Proposition ConverseEvalOfEval : forall (f a b x:U),
   Inj f a b -> x :< a -> f^:-1:!(f!x) = x.
 Proof.
   intros f a b x H1. apply BijectionOn.ConverseEvalOfEval, H1.
 Qed.
 
+(* For an injection from a to b, f followed by its converse is the identity.    *)
 Proposition EvalOfConverseEval : forall (f a b y:U),
   Inj f a b -> y :< range f -> f!(f^:-1:!y) = y.
 Proof.
   intros f a b y H1. apply BijectionOn.EvalOfConverseEval with a, H1.
 Qed.
 
+(* For an injection, the inverse image of the image of a subset is the subset.  *)
 Proposition InvImageOfImage : forall (f a b c:U),
   Inj f a b -> c :<=: a -> f^:-1::[ f:[c]: ]: =  c.
 Proof.
   intros f a b c H1. apply BijectionOn.InvImageOfImage, H1.
 Qed.
 
+(* For an injection, the image of the inverse image of a subset is the subset.  *)
 Proposition ImageOfInvImage : forall (f a b c:U),
   Inj f a b -> c :<=: range f -> f:[ f^:-1::[c]: ]: =  c.
 Proof.
   intros f a b c H1. apply BijectionOn.ImageOfInvImage with a, H1.
 Qed.
 
+(* An injection is injective: equal values imply equal arguments.               *)
 Proposition EvalInjective : forall (f a b x y:U),
   Inj f a b -> x :< a -> y :< a -> f!x = f!y -> x = y.
 Proof.
   intros f a b x y H1. apply BijectionOn.EvalInjective, H1.
 Qed.
 
+(* For an injection, f!x lies in f[c] if and only if x lies in c.               *)
 Proposition EvalInImage : forall (f a b c x:U),
   Inj f a b -> x :< a -> f!x :< f:[c]: <-> x :< c.
 Proof.
   intros f a b c x H1. apply BijectionOn.EvalInImage, H1.
 Qed.
 
+(* The image of an intersection is the intersection of the images.              *)
 Proposition Inter2Image : forall (f a b c d:U),
   Inj f a b -> f:[c :/\: d]: = f:[c]: :/\: f:[d]:.
 Proof.
   intros f a b c d H1. apply BijectionOn.Inter2Image with a, H1.
 Qed.
 
+(* The image of a difference under an injection equals the difference of images *)
 Proposition DiffImage : forall (f a b c d:U),
   Inj f a b -> f:[c :\: d]: = f:[c]: :\: f:[d]:.
 Proof.
   intros f a b c d H1. apply BijectionOn.DiffImage with a, H1.
 Qed.
 
+(* The empty set is an injection from the empty set to any set b.               *)
 Proposition WhenEmpty : forall (f b:U),
   f = :0: -> Inj f :0: b.
 Proof.

@@ -24,6 +24,7 @@ Module CRR := ZF.Class.Relation.Range.
 (* f is a function from a to b.                                                 *)
 Definition Fun (f a b:U) : Prop := FunctionOn f a /\ range f :<=: b.
 
+(* If the set is a function from a to be, then so is the class.                 *)
 Proposition ToClass : forall (f a b:U),
   Fun f a b -> CRF.Fun (toClass f) (toClass a) (toClass b).
 Proof.
@@ -33,6 +34,7 @@ Proof.
     2: assumption. apply Range.ToClass.
 Qed.
 
+(* If the class is a function from a to b, then so is the set.                  *)
 Proposition FromClass : forall (f a b:U),
   CRF.Fun (toClass f) (toClass a) (toClass b) -> Fun f a b.
 Proof.
@@ -42,6 +44,7 @@ Proof.
     2: assumption. apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* A function f:a -> b that is injective on a is one-to-one.                    *)
 Proposition IsOneToOne : forall (f a b:U),
   Fun f a b                                             ->
   (forall x y, x :< a -> y :< a -> f!x = f!y -> x = y)  ->
@@ -68,7 +71,7 @@ Proof.
   intros f a b [H1 _]. apply FunctionOn.ImageOfDomain. assumption.
 Qed.
 
-(* A function f:a -> b is a subset of axb.                                      *)
+(* A function f:a -> b is a subset of a x b.                                    *)
 Proposition IsIncl : forall (f a b:U),
   Fun f a b -> f :<=: a :x: b.
 Proof.
@@ -97,13 +100,13 @@ Proof.
     apply Compose.RangeIsSmaller.
 Qed.
 
-(* Characterization of the value at x of a function defined on a when x in a.   *)
 Proposition Eval' : forall (f a b x y:U),
   Fun f a b -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f a b x y H1. apply FunctionOn.Eval', H1.
 Qed.
 
+(* If (x,y) belongs to a function f:a -> b then f(x) = y.                       *)
 Proposition Eval : forall (f a b x y:U),
   Fun f a b -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -112,7 +115,7 @@ Proof.
   rewrite <- H3. apply Domain.Charac. exists y. assumption.
 Qed.
 
-(* The ordered pair (x,f!x) lies in the set f when x in a.                      *)
+(* The ordered pair (x,f(x)) lies in the set f when x in a.                     *)
 Proposition Satisfies : forall (f a b x:U),
   Fun f a b -> x :< a -> :(x,f!x): :< f.
 Proof.
@@ -127,13 +130,14 @@ Proof.
   apply FunctionOn.IsInRange with a. 2: assumption. apply H1.
 Qed.
 
+(* y lies in f[c] iff y = f(x) for some x in both c and the domain a.           *)
 Proposition ImageCharac : forall (f a b c:U), Fun f a b ->
   forall y, y :< f:[c]: <-> exists x, x :< c /\ x :< a /\ f!x = y.
 Proof.
   intros f a b c H1. apply FunctionOn.ImageCharac, H1.
 Qed.
 
-(* Characterization of the domain of g.f.                                       *)
+(* The domain of g.f is the domain of f.                                        *)
 Proposition DomainOfCompose : forall (f g a b c:U),
   Fun f a b             ->
   Fun g b c             ->
@@ -147,7 +151,7 @@ Proof.
     split; assumption.
 Qed.
 
-(* The value at x of g.f is the value at f!x of g when x in a.                  *)
+(* The value at x of g.f is the value at f(x) of g when x in a.                 *)
 Proposition ComposeEval : forall (f g a b c x:U),
   Fun f a b               ->
   Fun g b c               ->
@@ -173,12 +177,14 @@ Proof.
   intros f a b H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
 
+(* A function f:a -> b equals its own restriction to the domain a.              *)
 Proposition IsRestrict : forall (f a b:U),
   Fun f a b -> f = f :|: a.
 Proof.
   intros f a b H1. apply FunctionOn.IsRestrict, H1.
 Qed.
 
+(* Restricting a function f:a -> b to a subset c of a gives a function c -> b.  *)
 Proposition Restrict : forall (f a b c:U),
   Fun f a b -> c :<=: a -> Fun (f:|:c) c b.
 Proof.
@@ -189,6 +195,7 @@ Proof.
     + apply H2.
 Qed.
 
+(* Functions agreeing on a subset of both domains have equal restrictions to it *)
 Proposition RestrictEqual : forall (f a b g c d e:U),
   Fun f a b                       ->
   Fun g c d                       ->
@@ -201,6 +208,7 @@ Proof.
   apply FunctionOn.RestrictEqual; assumption.
 Qed.
 
+(* A singleton function {(x,y)} with y in b is a function from {x} to b.        *)
 Proposition WhenSingle : forall (x y f b:U),
   y :< b -> f = :{ :(x,y): }: -> Fun f :{x}: b.
 Proof.
@@ -210,6 +218,7 @@ Proof.
     intros z H3. apply Single.Charac in H3. subst. assumption.
 Qed.
 
+(* The empty set is a function from the empty set to any set b.                 *)
 Proposition WhenEmpty : forall (f b:U),
   f = :0: -> Fun f :0: b.
 Proof.

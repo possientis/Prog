@@ -17,12 +17,11 @@ Module CFI2 := ZF.Class.Relation.Fun.IfThenElse2.
 Module SOR  := ZF.Set.Relation.RestrictOfClass.
 
 (* The function defined on a x b by:                                            *)
-(* f(u,v) = f1(u,v) if the condition holds at (u,v)                            *)
-(* f(u,v) = f2(u,v) if the condition fails at (u,v)                            *)
+(* f(u,v) = f1 u v if the condition holds at (u,v)                              *)
+(* f(u,v) = f2 u v if the condition fails at (u,v)                              *)
 Definition ifThenElse2 (a b:U) (A:Class) (f1 f2:U -> U -> U) : U
   := (CFI2.ifThenElse2 A f1 f2) :|: (a :x: b).
 
-(* Generic membership exposes pair witnesses and the applicable branch.         *)
 Proposition Charac : forall (A:Class) (f1 f2:U -> U -> U) (a b x:U),
   x :< ifThenElse2 a b A f1 f2 <-> exists u v,
     x = :(:(u,v):,f1 u v): /\ u :< a /\ v :< b /\   A :(u,v):  \/
@@ -50,7 +49,6 @@ Proof.
       * apply CFI2.Satisfies2. assumption.
 Qed.
 
-(* Membership of a pair exposes the pair witnesses and applicable branch.       *)
 Proposition Charac2 : forall (A:Class) (f1 f2:U -> U -> U) (a b p q:U),
   :(p,q): :< ifThenElse2 a b A f1 f2 <->
   exists u v, p = :(u,v): /\ u :< a /\ v :< b /\
@@ -75,7 +73,6 @@ Proof.
       split. 1: reflexivity. split. 1: assumption. split; assumption.
 Qed.
 
-(* Membership at a fully explicit input reduces to the two branch conditions.   *)
 Proposition Charac3 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v w:U),
   :(:(u,v):,w): :< ifThenElse2 a b A f1 f2 <->
   u :< a /\ v :< b /\

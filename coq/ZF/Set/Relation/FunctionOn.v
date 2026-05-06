@@ -26,6 +26,7 @@ Module SRI := ZF.Set.Relation.InvImage.
 (* f is a function defined on a.                                                *)
 Definition FunctionOn (f a:U) : Prop := Function f /\ domain f = a.
 
+(* If the set is a function on a, tnen so is the class.                         *)
 Proposition ToClass : forall (f a:U),
   FunctionOn f a -> CFO.FunctionOn (toClass f) (toClass a).
 Proof.
@@ -34,6 +35,7 @@ Proof.
   - rewrite <- H2. apply Equiv.Sym, Domain.ToClass.
 Qed.
 
+(* If the class is a function on a then so is the set.                          *)
 Proposition FromClass : forall (f a:U),
   CFO.FunctionOn (toClass f) (toClass a) -> FunctionOn f a.
 Proof.
@@ -43,6 +45,7 @@ Proof.
     2: assumption. apply Domain.ToClass.
 Qed.
 
+(* A function on a that is injective on a is one-to-one.                        *)
 Proposition IsOneToOne : forall (f a:U),
   FunctionOn f a                                        ->
   (forall x y, x :< a -> y :< a -> f!x = f!y -> x = y)  ->
@@ -105,6 +108,7 @@ Proof.
   intros f a x y [H1 H2] H3. subst. apply Function.Eval'; assumption.
 Qed.
 
+(* If (x,y) belongs to a function on a then f!x = y.                            *)
 Proposition Eval : forall (f a x y:U),
   FunctionOn f a -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -127,6 +131,7 @@ Proof.
   intros F A a [H1 H2] H3. subst. apply Function.IsInRange; assumption.
 Qed.
 
+(* y lies in f[b] iff y = f!x for some x in both b and the domain a.            *)
 Proposition ImageCharac : forall (f a b:U), FunctionOn f a ->
   forall y, y :< f:[b]: <-> exists x, x :< b /\ x :< a /\ f!x = y.
 Proof.
@@ -168,12 +173,14 @@ Proof.
   intros f a [H1 H2]. subst. apply Function.RangeIsNotEmpty.
 Qed.
 
+(* A function on a equals its own restriction to a.                             *)
 Proposition IsRestrict : forall (f a:U),
   FunctionOn f a -> f = f :|: a.
 Proof.
   intros f a [H1 H2]. subst. apply Function.IsRestrict. assumption.
 Qed.
 
+(* Restricting a function on a to a subset b of a gives a function on b.        *)
 Proposition Restrict : forall (f a b:U),
   FunctionOn f a ->  b :<=: a -> FunctionOn (f:|:b) b.
 Proof.
@@ -182,6 +189,8 @@ Proof.
   - rewrite Restrict.DomainOf, H2. apply Inter2.WhenInclL. assumption.
 Qed.
 
+(* Two functions agreeing on c, a subset of both domains, have equal            *)
+(* restrictions to c.                                                           *)
 Proposition RestrictEqual : forall (f g a b c:U),
   FunctionOn f a                  ->
   FunctionOn g b                  ->
@@ -203,6 +212,7 @@ Proof.
   intros f H1. split. 1: assumption. reflexivity.
 Qed.
 
+(* A singleton set {(x,y)} is a function on the singleton domain {x}.           *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> FunctionOn f :{x}:.
 Proof.
@@ -211,6 +221,7 @@ Proof.
   - apply Domain.WhenSingle with y. assumption.
 Qed.
 
+(* The empty set is a function on the empty domain.                             *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> FunctionOn f :0:.
 Proof.

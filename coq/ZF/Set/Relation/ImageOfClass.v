@@ -18,12 +18,14 @@ Definition image (f:U) (A:Class) : U := fromClass (toClass f) :[A]:
 (* Notation "f :[ A ]:" := (image f A)                                          *)
 Global Instance SetOfClassImage : Image U Class U := { image := image }.
 
+(* The class of the image equals the image of the class by the class.           *)
 Proposition ToClass : forall (A:Class) (f:U),
   toClass f:[A]: :~: (toClass f) :[A]:.
 Proof.
   intros A f. apply FromClass.ToClass.
 Qed.
 
+(* y belongs to the image iff some x satisfying A maps to y under f.            *)
 Proposition Charac : forall (A:Class) (f y:U),
   y :< f:[A]: <-> exists x, A x /\ :(x,y): :< f.
 Proof.
@@ -32,6 +34,7 @@ Proof.
   - destruct H1 as [x H1]. apply FromClass.Charac. exists x. assumption.
 Qed.
 
+(* The image is compatible with class equivalence.                              *)
 Proposition EquivCompat : forall (A B:Class) (f:U),
   A :~: B -> f:[A]: = f:[B]:.
 Proof.
@@ -40,6 +43,7 @@ Proof.
   apply H1; assumption.
 Qed.
 
+(* The image is compatible with inclusion in both the function and class.       *)
 Proposition InclCompat : forall (A B:Class) (f g:U),
   f :<=: g -> A :<=: B -> f:[A]: :<=: g:[B]:.
 Proof.
@@ -49,6 +53,7 @@ Proof.
   - apply H1. assumption.
 Qed.
 
+(* The image is left-compatible with inclusion in the function argument.        *)
 Proposition InclCompatL : forall (A:Class) (f g:U),
   f :<=: g -> f:[A]: :<=: g:[A]:.
 Proof.
@@ -56,12 +61,14 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
+(* The image is right-compatible with class inclusion in the domain argument.   *)
 Proposition InclCompatR : forall (A B:Class) (f:U),
   A :<=: B -> f:[A]: :<=: f:[B]:.
 Proof.
   intros A B f. apply InclCompat, ZF.Set.Incl.Refl.
 Qed.
 
+(* The image of an empty class under any function is the empty set.             *)
 Proposition WhenEmpty : forall (A:Class) (f:U),
   A :~: :0: -> f:[A]: = :0:.
 Proof.

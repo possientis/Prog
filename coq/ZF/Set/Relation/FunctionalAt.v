@@ -10,18 +10,21 @@ Module CRA := ZF.Class.Relation.FunctionalAt.
 Definition FunctionalAt (f a:U) : Prop :=
   forall y z, :(a,y): :< f -> :(a,z): :< f -> y = z.
 
+(* A set being functional at a lifts to the class being functional at a.        *)
 Proposition ToClass : forall (f a:U),
   FunctionalAt f a -> CRA.FunctionalAt (toClass f) a.
 Proof.
   intros f a H1. assumption.
 Qed.
 
+(* A class being functional at a implies the set is functional at a.            *)
 Proposition FromClass : forall (f a:U),
   CRA.FunctionalAt (toClass f) a -> FunctionalAt f a.
 Proof.
   intros f a H1. assumption.
 Qed.
 
+(* f is not functional at a iff there exist two distinct values at a in f.      *)
 Proposition WhenNot : forall (f a:U),
   ~ FunctionalAt f a <-> exists y z, y <> z /\ :(a,y): :< f /\ :(a,z): :< f.
 Proof.

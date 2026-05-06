@@ -17,8 +17,8 @@ Module CFI := ZF.Class.Relation.Fun.IfThenElse.
 Module SOR := ZF.Set.Relation.RestrictOfClass.
 
 (* The function defined on the set a by:                                        *)
-(* f(x) = f1(x) if A x                                                          *)
-(* f(x) = f2(x) if ~ A X                                                        *)
+(* f(x) = f1 x if   A x                                                           *)
+(* f(x) = f2 x if ~ A X                                                         *)
 Definition ifThenElse (a:U)(A:Class)(f1 f2:U -> U) : U
   := (CFI.ifThenElse A f1 f2) :|: a.
 
@@ -70,6 +70,7 @@ Proof.
   split. 1: reflexivity. split; assumption.
 Qed.
 
+(* The domain of the piecewise function on a is a.                              *)
 Proposition DomainOf : forall (A:Class) (f1 f2:U -> U) (a:U),
   domain (ifThenElse a A f1 f2) = a.
 Proof.
@@ -83,6 +84,7 @@ Proof.
     + exists (f2 x). apply Satisfies2; assumption.
 Qed.
 
+(* The piecewise function on a is a relation.                                   *)
 Proposition IsRelation : forall (A:Class) (f1 f2:U -> U) (a:U),
   Relation (ifThenElse a A f1 f2).
 Proof.
@@ -92,6 +94,7 @@ Proof.
   - exists (f2 y). assumption.
 Qed.
 
+(* The piecewise function on a is functional.                                   *)
 Proposition IsFunctional : forall (A:Class) (f1 f2:U -> U) (a:U),
   Functional (ifThenElse a A f1 f2).
 Proof.
@@ -102,6 +105,7 @@ Proof.
   try contradiction; subst; reflexivity.
 Qed.
 
+(* The piecewise function on a is a function.                                   *)
 Proposition IsFunction : forall (A:Class) (f1 f2:U -> U) (a:U),
   Function (ifThenElse a A f1 f2).
 Proof.
@@ -110,6 +114,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
+(* The piecewise function on a is a function with domain a.                     *)
 Proposition IsFunctionOn : forall (A:Class) (f1 f2:U -> U) (a:U),
   FunctionOn (ifThenElse a A f1 f2) a.
 Proof.
@@ -118,6 +123,7 @@ Proof.
   - apply DomainOf.
 Qed.
 
+(* When A holds at x in a, the piecewise function evaluates to f1 x.            *)
 Proposition Eval1 : forall (A:Class) (f1 f2:U -> U) (a x:U),
   x :< a -> A x -> (ifThenElse a A f1 f2)!x = f1 x.
 Proof.
@@ -127,6 +133,7 @@ Proof.
   - apply Satisfies1; assumption.
 Qed.
 
+(* When A fails at x in a, the piecewise function evaluates to f2 x.            *)
 Proposition Eval2 : forall (A:Class) (f1 f2:U -> U) (a x:U),
   x :< a -> ~ A x -> (ifThenElse a A f1 f2)!x = f2 x.
 Proof.

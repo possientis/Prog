@@ -17,6 +17,7 @@ Require Import ZF.Notation.Eval.
 (* Extending a function with a single point.                                    *)
 Definition extend (f x y:U) : U := f :\/: :{ :(x,y): }:.
 
+(* An element u belongs to extend f x y iff u belongs to f or u equals (x,y).   *)
 Proposition Charac : forall (f x y u:U),
   u :< extend f x y <-> u :< f \/ u = :(x,y):.
 Proof.
@@ -29,6 +30,7 @@ Proof.
     + right. apply Single.Charac. assumption.
 Qed.
 
+(* (u,v) belongs to extend f x y iff (u,v) is in f or u = x and v = y.          *)
 Proposition Charac2 : forall (f x y u v:U),
   :(u,v): :< extend f x y <-> :(u,v): :< f \/ u = x /\ v = y.
 Proof.
@@ -41,6 +43,7 @@ Proof.
     + right. subst. reflexivity.
 Qed.
 
+(* If f is a relation then extending it at (x,y) yields a relation.             *)
 Proposition IsRelation : forall (f x y:U),
   Relation f -> Relation (extend f x y).
 Proof.
@@ -49,6 +52,7 @@ Proof.
   - exists x, y. assumption.
 Qed.
 
+(* Extending a functional set at a new point x not in the domain is functional. *)
 Proposition IsFunctional : forall (f x y:U), ~ x :< domain f ->
   Functional f -> Functional (extend f x y).
 Proof.
@@ -61,6 +65,7 @@ Proof.
   - subst. reflexivity.
 Qed.
 
+(* Extending a function at a new point x not in the domain yields a function.   *)
 Proposition IsFunction : forall (f x y:U), ~ x :< domain f ->
   Function f -> Function (extend f x y).
 Proof.
@@ -69,6 +74,7 @@ Proof.
   - apply IsFunctional; assumption.
 Qed.
 
+(* The domain of extend f x y is the domain of f union the singleton {x}.       *)
 Proposition DomainOf : forall (f x y:U),
   domain (extend f x y) = domain f :\/: :{x}:.
 Proof.
@@ -84,6 +90,7 @@ Proof.
       apply Charac2. right. split; reflexivity.
 Qed.
 
+(* Extending a function on a at a new point x yields a function on a \/ {x}.    *)
 Proposition IsFunctionOn : forall (f a x y:U), ~ x :< a ->
   FunctionOn f a -> FunctionOn (extend f x y) (a :\/: :{x}:).
 Proof.
@@ -119,7 +126,7 @@ Proposition Evalf : forall (f x y u:U),
   u :< domain f             ->
   (extend f x y)!u = f!u.
 Proof.
-  intros f x y u H1 H2 H3. apply Eval.Charac.
+ intros f x y u H1 H2 H3. apply Eval.Charac.
   - apply IsFunctional; assumption.
   - rewrite DomainOf. apply Union2.Charac. left. assumption.
   - apply Charac2. left. apply Eval.Satisfies; assumption.
