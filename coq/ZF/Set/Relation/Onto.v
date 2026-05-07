@@ -78,7 +78,7 @@ Proof.
   intros f a b H1. rewrite FunctionOn.ImageOfDomain; apply H1.
 Qed.
 
-(* A surjection f:a -> b is a subset of axb.                                    *)
+(* A surjection f:a -> b is a subset of a x b.                                  *)
 Proposition IsIncl : forall (f a b:U),
   Onto f a b -> f :<=: a :x: b.
 Proof.

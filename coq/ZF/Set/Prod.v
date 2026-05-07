@@ -15,13 +15,14 @@ Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
 (* Notation "a :x: b" := (prod a b)                                             *)
 Global Instance SetProd : Prod U := { prod := prod }.
 
+(* The class of the product a x b equals the product of the classes.            *)
 Proposition ToClass : forall (a b:U),
   toClass (a :x: b) :~: toClass a :x: toClass b.
 Proof.
   intros a b. apply FromClass.ToClass.
 Qed.
 
-(* Characterisation of the elements of the product axb *)
+(* Characterisation of the elements of the product a x b.                       *)
 Proposition Charac : forall (a b:U),
   forall x, x :< a :x: b <-> exists y, exists z, x = :(y,z): /\ y :< a /\ z :< b.
 Proof.
@@ -30,6 +31,7 @@ Proof.
   - apply FromClass.Charac. assumption.
 Qed.
 
+(* The ordered pair (y,z) belongs to a x b iff y is in a and z is in b.         *)
 Proposition Charac2 : forall (a b y z:U),
   :(y,z): :< a :x: b <-> y :< a /\ z :< b.
 Proof.
@@ -68,6 +70,7 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* The intersection of products equals the product of intersections.            *)
 Proposition Inter2 : forall (a1 a2 b1 b2:U),
   a1:x:b1 :/\: a2:x:b2 = (a1:/\:a2) :x: (b1:/\:b2).
 Proof.

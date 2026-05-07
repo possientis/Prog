@@ -25,6 +25,7 @@ Module CRD := ZF.Class.Relation.Domain.
 (* f is a bijection defined on a.                                               *)
 Definition BijectionOn (f a:U) : Prop := Bijection f /\ domain f = a.
 
+(* If the set is a bijection on a, then so is the class.                        *)
 Proposition ToClass : forall (f a:U),
   BijectionOn f a -> CBO.BijectionOn (toClass f) (toClass a).
 Proof.
@@ -33,6 +34,7 @@ Proof.
   - rewrite <- H2. apply Equiv.Sym, Domain.ToClass.
 Qed.
 
+(* If the class is a bijection on a, then so is the set.                        *)
 Proposition FromClass : forall (f a:U),
   CBO.BijectionOn (toClass f) (toClass a) -> BijectionOn f a.
 Proof.
@@ -64,18 +66,21 @@ Proof.
   apply FunctionOn.Equal; apply IsFunctionOn; assumption.
 Qed.
 
+(* The image of the domain a under a bijection defined on a equals the range.   *)
 Proposition ImageOfDomain : forall (f a:U),
   BijectionOn f a -> f:[a]: = range f.
 Proof.
   intros f a H1. apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
 Qed.
 
+(* A bijection defined on a is a subset of a times the image of a.              *)
 Proposition IsIncl : forall (f a:U),
   BijectionOn f a -> f :<=: a :x: f:[a]:.
 Proof.
   intros f a H1. apply FunctionOn.IsIncl, IsFunctionOn. assumption.
 Qed.
 
+(* The inverse image of the range under a bijection defined on a equals a.      *)
 Proposition InvImageOfRange : forall (f a:U),
   BijectionOn f a -> f^:-1::[range f]: = a.
 Proof.
@@ -93,12 +98,14 @@ Proof.
   - apply Compose.DomainIsSame. assumption.
 Qed.
 
+(* For a bijection on a and x in a, the pair (x,y) lies in f iff f!x = y.       *)
 Proposition Eval' : forall (f a x y:U),
   BijectionOn f a -> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f a x y H1. apply FunctionOn.Eval', IsFunctionOn. assumption.
 Qed.
 
+(* If (x,y) belongs to a bijection defined on a, then f!x = y.                  *)
 Proposition Eval : forall (f a x y:U),
   BijectionOn f a -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -107,18 +114,21 @@ Proof.
   rewrite <- H3. apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* For a bijection on a and x in a, the pair (x,f!x) lies in f.                 *)
 Proposition Satisfies : forall (f a x:U),
   BijectionOn f a -> x :< a -> :(x,f!x): :< f.
 Proof.
   intros f a x H1. apply FunctionOn.Satisfies, IsFunctionOn. assumption.
 Qed.
 
+(* For a bijection on a and x in a, the value f!x lies in the range.            *)
 Proposition IsInRange : forall (f a x:U),
   BijectionOn f a -> x :< a -> f!x :< range f.
 Proof.
   intros f a x H1. apply FunctionOn.IsInRange, IsFunctionOn. assumption.
 Qed.
 
+(* y lies in f[b] iff y = f!x for some x in both b and the domain a.            *)
 Proposition ImageCharac : forall (f a b:U), BijectionOn f a ->
   forall y, y :< f:[b]: <-> exists x, x :< b /\ x :< a /\ f!x = y.
 Proof.
@@ -145,24 +155,28 @@ Proof.
   apply FunctionOn.ComposeEval; apply IsFunctionOn; assumption.
 Qed.
 
+(* y lies in the range of a bijection on a iff y = f!x for some x in a.         *)
 Proposition RangeCharac : forall (f a y:U),
   BijectionOn f a -> y :< range f <-> exists x, x :< a /\ f!x = y.
 Proof.
   intros f a y H1. apply FunctionOn.RangeCharac, IsFunctionOn. assumption.
 Qed.
 
+(* If the domain a of a bijection is not empty, then neither is the range.      *)
 Proposition RangeIsNotEmpty : forall (f a:U),
   BijectionOn f a -> a <> :0: -> range f <> :0:.
 Proof.
   intros f a H1. apply FunctionOn.RangeIsNotEmpty, IsFunctionOn. assumption.
 Qed.
 
+(* A bijection defined on a equals its own restriction to a.                    *)
 Proposition IsRestrict : forall (f a:U),
   BijectionOn f a -> f =  f:|:a.
 Proof.
   intros f a H1. apply FunctionOn.IsRestrict, IsFunctionOn. assumption.
 Qed.
 
+(* The restriction of a bijection on a to a subset b of a is a bijection on b.  *)
 Proposition Restrict : forall (f a b:U),
   BijectionOn f a -> b :<=: a -> BijectionOn (f:|:b) b.
 Proof.
@@ -185,6 +199,7 @@ Proof.
   - rewrite H4. assumption.
 Qed.
 
+(* The converse of a bijection on a with range b is a bijection on b.           *)
 Proposition Converse : forall (f a b:U),
   BijectionOn f a -> range f = b -> BijectionOn f^:-1: b.
 Proof.
@@ -193,6 +208,7 @@ Proof.
   - apply Converse.Domain.
 Qed.
 
+(* For a bijection on a and y in its range, the value f^-1!y lies in a.         *)
 Proposition ConverseEvalIsInDomain : forall (f a y:U),
   BijectionOn f a -> y :< range f -> f^:-1:!y :< a.
 Proof.
@@ -200,12 +216,14 @@ Proof.
   apply Bijection.ConverseEvalIsInDomain; assumption.
 Qed.
 
+(* For a bijection on a and x in a, applying f^-1 after f returns x.            *)
 Proposition ConverseEvalOfEval : forall (f a x:U),
   BijectionOn f a -> x :< a -> f^:-1:!(f!x) = x.
 Proof.
   intros f a x [H1 H2] H3. subst. apply Bijection.ConverseEvalOfEval; assumption.
 Qed.
 
+(* For a bijection on a and y in the range, applying f after f^-1 returns y.    *)
 Proposition EvalOfConverseEval : forall (f a y:U),
   BijectionOn f a -> y :< range f -> f!(f^:-1:!y) = y.
 Proof.
@@ -224,12 +242,14 @@ Proof.
   intros f a b H1. apply Bijection.ImageOfInvImage, H1.
 Qed.
 
+(* A bijection on a is injective: equal values in a imply equal inputs.         *)
 Proposition EvalInjective : forall (f a x y:U),
   BijectionOn f a -> x :< a -> y :< a-> f!x = f!y -> x = y.
 Proof.
   intros F A x y [H1 H2] H3 H4. subst. apply Bijection.EvalInjective; assumption.
 Qed.
 
+(* For a bijection on a and x in a, f!x lies in f[b] iff x lies in b.           *)
 Proposition EvalInImage : forall (f a b x:U),
   BijectionOn f a -> x :< a -> f!x :< f:[b]:  <-> x :< b.
 Proof.
@@ -243,18 +263,21 @@ Proof.
   intros f H1. split. 1: assumption. reflexivity.
 Qed.
 
+(* A bijection on a preserves intersections: f[b /\ c] = f[b] /\ f[c].          *)
 Proposition Inter2Image : forall (f a b c:U),
   BijectionOn f a -> f:[b :/\: c]: = f:[b]: :/\: f:[c]:.
 Proof.
   intros f a b c H1. apply Bijection.Inter2Image, H1.
 Qed.
 
+(* A bijection defined on a preserves set differences: f[b \ c] = f[b] \ f[c].  *)
 Proposition DiffImage : forall (f a b c:U),
   BijectionOn f a -> f:[b :\: c]: = f:[b]: :\: f:[c]:.
 Proof.
   intros f a b c H1. apply Bijection.DiffImage, H1.
 Qed.
 
+(* The empty set is a bijection on the empty set.                               *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> BijectionOn f :0:.
 Proof.

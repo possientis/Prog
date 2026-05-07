@@ -18,6 +18,7 @@ Definition eval (f a:U) : U := (toClass f)!a.
 (* Notation "f ! a" := (eval f a)                                               *)
 Global Instance SetEval : Eval U := { eval := eval }.
 
+(* If x does not lie in the domain of f then f!x equals the empty set.          *)
 Proposition WhenNotInDomain : forall (f x:U),
   ~ x :< domain f -> f!x = :0:.
 Proof.
@@ -25,7 +26,6 @@ Proof.
   apply H1. apply ZF.Set.Relation.Domain.ToClass. assumption.
 Qed.
 
-(* If f is functional and a lies in domain of f then (a,y) :< f iff f!a = y.    *)
 Proposition Charac : forall (f a y:U),
   Functional f -> a :< domain f -> :(a,y): :< f  <-> f!a = y.
 Proof.
@@ -40,6 +40,7 @@ Proof.
   intros f a H1 H2. apply Charac; try assumption. reflexivity.
 Qed.
 
+(* For a functional set f and a in its domain, the value f!a lies in the range. *)
 Proposition IsInRange : forall (f a:U),
   Functional f -> a :< domain f -> f!a :< range f.
 Proof.
@@ -58,6 +59,7 @@ Proof.
     split. 1: assumption. apply Charac; assumption.
 Qed.
 
+(* If f is a singleton set containing exactly the pair (x,y), then f!x = y.     *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> f!x = y.
 Proof.

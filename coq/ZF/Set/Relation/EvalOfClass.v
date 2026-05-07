@@ -22,6 +22,7 @@ Definition eval (F:Class) (a:U) : U :=
 (* Notation "F ! a" := (eval F a)                                               *)
 Global Instance ClassEval : Eval Class := { eval := eval }.
 
+(* Evaluation is compatible with class equivalence: F ~ G implies F!a = G!a.    *)
 Proposition EquivCompat : forall (F G:Class) (a:U),
   F :~: G -> F!a = G!a.
 Proof.
@@ -108,6 +109,7 @@ Proof.
   apply IsFunctionalAt. assumption.
 Qed.
 
+(* If F is functional and a lies in the domain, the value lies in the range.    *)
 Proposition IsInRange : forall (F:Class) (a:U),
   Functional F -> domain F a -> range F F!a.
 Proof.
@@ -116,7 +118,6 @@ Proof.
 
 Qed.
 
-(* Characterisation of the direct image F[A] in terms of evaluations of F.      *)
 Proposition ImageCharac : forall (F A: Class), Functional F ->
   forall y, F:[A]: y <-> exists x, A x /\ domain F x /\ F!x = y.
 Proof.

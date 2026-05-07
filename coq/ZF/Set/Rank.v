@@ -30,11 +30,13 @@ Definition K (a:U) : Class := fun b => Ordinal b /\ a :< R1!(succ b).
 (* The rank of a set a.                                                         *)
 Definition rank (a:U) : U := inf (K a).
 
+(* The class K(a) consists only of ordinals.                                    *)
 Lemma IsIncl : forall (a:U), K a :<=: Ordinal.
 Proof.
   intros a b H1. apply H1.
 Qed.
 
+(* The class K(a) is non-empty: every set has a rank.                           *)
 Lemma IsNotEmpty : forall (a:U), K a :<>: :0:.
 Proof.
   intros a.
@@ -65,11 +67,13 @@ Proof.
   rewrite <- H8. assumption.
 Qed.
 
+(* The rank of any set is an ordinal.                                           *)
 Proposition IsOrdinal : forall (a:U), Ordinal (rank a).
 Proof.
   intros a. apply SOI.IsOrdinal.
 Qed.
 
+(* If the rank of a is less than ordinal b, then a belongs to R1(b).            *)
 Proposition IsIn : forall (a b:U), Ordinal b ->
   rank a :< b -> a :< R1!b.
 Proof.
@@ -84,6 +88,7 @@ Proof.
   - apply Succ.ElemIsIncl; assumption.
 Qed.
 
+(* If b is at most the rank of a, then a does not belong to R1(b).              *)
 Proposition IsNotIn : forall (a b:U), Ordinal b ->
   b :<=: rank a -> ~ a :< R1!b.
 Proof.
@@ -129,6 +134,7 @@ Proof.
   revert H17. apply NoElemLoop1.
 Qed.
 
+(* If a belongs to R1(b), then the rank of a is less than b.                    *)
 Proposition IsLowerBound : forall (a b:U), Ordinal b ->
   a :< R1!b -> rank a :< b.
 Proof.
@@ -142,6 +148,7 @@ Proof.
   contradiction.
 Qed.
 
+(* If a does not belong to R1(b), then b is at most the rank of a.              *)
 Proposition IsLargest : forall (a b:U), Ordinal b ->
   ~ a :< R1!b -> b :<=: rank a.
 Proof.
@@ -154,6 +161,7 @@ Proof.
   contradiction.
 Qed.
 
+(* b is the rank of a iff a is not in R1(b) but a is in R1(succ b).             *)
 Proposition  Equal : forall (a b:U), Ordinal b ->
   b = rank a <-> ~ a :< R1!b /\ a :< R1!(succ b).
 Proof.
@@ -171,6 +179,7 @@ Proof.
       apply IsLowerBound; assumption.
 Qed.
 
+(* If a is an element of b, then the rank of a is less than the rank of b.      *)
 Proposition ElemCompat : forall (a b:U),
   a :< b -> rank a :< rank b.
 Proof.
@@ -187,6 +196,7 @@ Proof.
   contradiction.
 Qed.
 
+(* The rank of a is the smallest ordinal bounding all ranks of elements of a.   *)
 Proposition FromElems : forall (a:U),
   rank a = inf (fun b => Ordinal b /\ forall x, x :< a -> rank x :< b).
 Proof.
@@ -212,6 +222,7 @@ Proof.
     intros x H4. apply ElemCompat. assumption.
 Qed.
 
+(* The rank of an ordinal is the ordinal itself.                                *)
 Proposition WhenOrdinal : forall (a:U), Ordinal a -> rank a = a.
 Proof.
   apply COI.Induction.
@@ -239,6 +250,7 @@ Proof.
   rewrite H4, H6, H9. reflexivity.
 Qed.
 
+(* If a is a subset of b, then the rank of a is at most the rank of b.          *)
 Proposition InclCompat : forall (a b:U),
   a :<=: b -> rank a :<=: rank b.
 Proof.

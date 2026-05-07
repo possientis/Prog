@@ -21,6 +21,7 @@ Proof.
   intros f. apply FromClass.ToClass.
 Qed.
 
+(* x belongs to the domain of f iff (x,y) belongs to f for some y.              *)
 Proposition Charac : forall (f x: U),
   x :< domain f <-> exists y, :(x,y): :< f.
 Proof.
@@ -37,6 +38,7 @@ Proof.
   apply Charac. exists y. apply H1. assumption.
 Qed.
 
+(* The domain of the empty set is the empty set.                                *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> domain f = :0:.
 Proof.

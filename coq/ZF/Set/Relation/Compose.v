@@ -59,6 +59,7 @@ Proof.
   exists x. exists z. assumption.
 Qed.
 
+(* The composition of two functional sets is functional.                        *)
 Proposition IsFunctional : forall (f g:U),
   Functional f -> Functional g -> Functional (g :.: f).
 Proof.

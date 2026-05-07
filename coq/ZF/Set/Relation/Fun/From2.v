@@ -12,7 +12,7 @@ Module CF2 := ZF.Class.Relation.Fun.From2.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
 
 (* Given sets a and b and a Coq expression f representing a function with two   *)
-(* argument sets, we define the associated function with domain axb.            *)
+(* argument sets, we define the associated function with domain a x b.          *)
 Definition from2 (a b:U) (f:U -> U -> U) : U := (CF2.from2 f) :|: (a :x: b).
 
 (* x belongs to from2 iff x = ((u,v), f u v) for some u in a and v in b.        *)

@@ -29,6 +29,7 @@ Module CRR := ZF.Class.Relation.Range.
 (* f is a bijection from a to b.                                                *)
 Definition Bij (f a b:U) : Prop := BijectionOn f a /\ range f = b.
 
+(* If the set is a bijection from a to b, then so is the class.                 *)
 Proposition ToClass : forall (f a b:U),
   Bij f a b -> CRB.Bij (toClass f) (toClass a) (toClass b).
 Proof.
@@ -37,6 +38,7 @@ Proof.
   - rewrite <- H2. apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* If the class is a bijection from a to b, then so is the set.                 *)
 Proposition FromClass : forall (f a b:U),
   CRB.Bij (toClass f) (toClass a) (toClass b) -> Bij f a b.
 Proof.
@@ -47,6 +49,7 @@ Proof.
     apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* A one-to-one function whose range covers b is a bijection from a to b.       *)
 Proposition FromFun : forall (f a b:U),
   Fun f a b -> OneToOne f -> b :<=: range f -> Bij f a b.
 Proof.
@@ -58,6 +61,7 @@ Proof.
   split; assumption.
 Qed.
 
+(* A bijection from a to b is a function from a to b.                           *)
 Proposition IsFun : forall (f a b:U),
   Bij f a b -> Fun f a b.
 Proof.
@@ -65,12 +69,14 @@ Proof.
   split. 1: assumption. subst. apply Incl.Refl.
 Qed.
 
+(* A bijection from a to b is an injection from a to b.                         *)
 Proposition IsInj : forall (f a b:U),
   Bij f a b -> Inj f a b.
 Proof.
   intros f a b [H1 H2]. split. 1: apply H1. subst. apply Incl.Refl.
 Qed.
 
+(* A bijection from a to b is a surjection from a to b.                         *)
 Proposition IsOnto : forall (f a b:U),
   Bij f a b -> Onto f a b.
 Proof.
@@ -88,25 +94,28 @@ Proof.
   intros f a b g c d [H1 _] [H2i _]. apply BijectionOn.Equal; assumption.
 Qed.
 
+(* The image of the domain a under a bijection f:a -> b equals b.               *)
 Proposition ImageOfDomain : forall (f a b:U),
   Bij f a b -> f:[a]: = b.
 Proof.
   intros f a b [H1 H2]. subst. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
-(* A bijection f:a -> b is a subset of axb.                                     *)
+(* A bijection f:a -> b is a subset of a x b.                                   *)
 Proposition IsIncl : forall (f a b:U),
   Bij f a b -> f :<=: a :x: b.
 Proof.
   intros f a b H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
+(* The inverse image of b under a bijection f:a -> b equals the domain a.       *)
 Proposition InvImageOfRange : forall (f a b:U),
   Bij f a b -> f^:-1::[b]: = a.
 Proof.
   intros f a b [H1 H2]. subst. apply BijectionOn.InvImageOfRange. assumption.
 Qed.
 
+(* The composition of bijections f:a -> b and g:b -> c is a bijection a -> c.   *)
 Proposition Compose : forall (f g a b c:U),
   Bij f a b -> Bij g b c -> Bij (g :.: f) a c.
 Proof.
@@ -116,12 +125,14 @@ Proof.
     rewrite H3. apply Incl.Refl.
 Qed.
 
+(* For a bijection f:a -> b and x in a, the pair (x,y) lies in f iff f!x = y.   *)
 Proposition Eval' : forall (f a b x y:U),
   Bij f a b-> x :< a -> :(x,y): :< f <-> f!x = y.
 Proof.
   intros f a b x y H1. apply IsFun in H1. apply Fun.Eval' with b. assumption.
 Qed.
 
+(* If (x,y) belongs to a bijection f:a -> b then f!x = y.                       *)
 Proposition Eval : forall (f a b x y:U),
   Bij f a b -> :(x,y): :< f -> f!x = y.
 Proof.
@@ -130,24 +141,28 @@ Proof.
   rewrite <- H3. apply Domain.Charac. exists y. assumption.
 Qed.
 
+(* For a bijection f:a -> b and x in a, the pair (x,f!x) lies in f.             *)
 Proposition Satisfies : forall (f a b x:U),
   Bij f a b -> x :< a -> :(x,f!x): :< f.
 Proof.
   intros f a b x H1. apply IsFun in H1. apply Fun.Satisfies with b. assumption.
 Qed.
 
+(* For a bijection f:a -> b and x in a, the value f!x lies in b.                *)
 Proposition IsInRange : forall (f a b x:U),
   Bij f a b -> x :< a -> f!x :< b.
 Proof.
   intros f a b x H1. apply IsFun in H1. apply Fun.IsInRange. assumption.
 Qed.
 
+(* y lies in the image f[c] iff y = f!x for some x in c and in a.               *)
 Proposition ImageCharac : forall (f a b c:U), Bij f a b ->
   forall y, y :< f:[c]: <-> exists x, x :< c /\ x :< a /\ f!x = y.
 Proof.
   intros f a b c H1. apply BijectionOn.ImageCharac, H1.
 Qed.
 
+(* The domain of the composition of bijections f:a -> b and g:b -> c is a.      *)
 Proposition DomainOfCompose : forall (f g a b c:U),
   Bij f a b             ->
   Bij g b c             ->
@@ -157,6 +172,7 @@ Proof.
   apply Fun.DomainOfCompose with b c; apply IsFun; assumption.
 Qed.
 
+(* For bijections f:a -> b and g:b -> c, (g.f)!x = g!(f!x) for x in a.          *)
 Proposition ComposeEval : forall (f g a b c x:U),
   Bij f a b               ->
   Bij g b c               ->
@@ -174,18 +190,21 @@ Proof.
   intros f a b y [H1 H2]. subst. apply BijectionOn.RangeCharac. assumption.
 Qed.
 
+(* If the domain a of a bijection f:a -> b is not empty, then neither is b.     *)
 Proposition RangeIsNotEmpty : forall (f a b:U),
   Bij f a b -> a <> :0: -> b <> :0:.
 Proof.
   intros f a b H1. apply Onto.RangeIsNotEmpty with f, IsOnto. assumption.
 Qed.
 
+(* A bijection f:a -> b equals its own restriction to the domain a.             *)
 Proposition IsRestrict : forall (f a b:U),
   Bij f a b -> f = f :|: a.
 Proof.
   intros f a b H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+(* Restricting a bijection f:a -> b to c subset a gives a bijection c -> f[c].  *)
 Proposition Restrict : forall (f a b c:U),
   Bij f a b -> c :<=: a -> Bij (f:|:c) c f:[c]:.
 Proof.
@@ -205,6 +224,7 @@ Proof.
   intros f a b g c d e [H1 _] [H2 _]. apply BijectionOn.RestrictEqual; assumption.
 Qed.
 
+(* The converse of a bijection f:a -> b is a bijection from b to a.             *)
 Proposition Converse : forall (f a b:U),
   Bij f a b -> Bij f^:-1: b a.
 Proof.
@@ -213,6 +233,7 @@ Proof.
   - destruct H1 as [_ H1]. subst. apply Converse.Range.
 Qed.
 
+(* For a bijection f:a -> b and y in b, the value f^-1!y lies in a.             *)
 Proposition ConverseEvalIsInDomain : forall (f a b y:U),
   Bij f a b -> y :< b -> f^:-1:!y :< a.
 Proof.
@@ -220,12 +241,14 @@ Proof.
   apply Converse. assumption.
 Qed.
 
+(* For a bijection f:a -> b and x in a, applying f^-1 after f recovers x.       *)
 Proposition ConverseEvalOfEval : forall (f a b x:U),
   Bij f a b -> x :< a -> f^:-1:!(f!x) = x.
 Proof.
   intros f a b x H1. apply BijectionOn.ConverseEvalOfEval, H1.
 Qed.
 
+(* For a bijection f:a -> b and y in b, applying f after f^-1 recovers y.       *)
 Proposition EvalOfConverseEval : forall (f a b y:U),
   Bij f a b -> y :< b -> f!(f^:-1:!y) = y.
 Proof.
@@ -233,12 +256,14 @@ Proof.
   apply BijectionOn.EvalOfConverseEval with a; assumption.
 Qed.
 
+(* For a bijection f:a -> b and c subset a, the inverse image of f[c] is c.     *)
 Proposition InvImageOfImage : forall (f a b c:U),
   Bij f a b -> c :<=: a -> f^:-1::[ f:[c]: ]: = c.
 Proof.
   intros f a b c [H1 H2] H3. apply BijectionOn.InvImageOfImage with a; assumption.
 Qed.
 
+(* For a bijection f:a -> b and c subset b, the image of the inverse image is c.*)
 Proposition ImageOfInvImage : forall (f a b c:U),
   Bij f a b -> c :<=: b -> f:[ f^:-1::[c]: ]: = c.
 Proof.
@@ -246,24 +271,28 @@ Proof.
   subst. apply BijectionOn.ImageOfInvImage with a; assumption.
 Qed.
 
+(* A bijection f:a -> b is injective: equal values in b imply equal inputs.     *)
 Proposition EvalInjective : forall (f a b x y:U),
   Bij f a b -> x :< a -> y :< a -> f!x = f!y -> x = y.
 Proof.
   intros f a b x y H1. apply BijectionOn.EvalInjective, H1.
 Qed.
 
+(* For a bijection f:a -> b and x in a, f!x lies in f[c] iff x lies in c.       *)
 Proposition EvalInImage : forall (f a b c x:U),
   Bij f a b -> x :< a -> f!x :< f:[c]: <-> x :< c.
 Proof.
   intros f a b c x H1. apply BijectionOn.EvalInImage, H1.
 Qed.
 
+(* A bijection preserves binary intersections: f[c /\ d] = f[c] /\ f[d].        *)
 Proposition Inter2Image : forall (f a b c d:U),
   Bij f a b -> f:[c :/\: d]: = f:[c]: :/\: f:[d]:.
 Proof.
   intros f a b c d H1. apply BijectionOn.Inter2Image with a, H1.
 Qed.
 
+(* A bijection preserves set differences: f[c \ d] = f[c] \ f[d].               *)
 Proposition DiffImage : forall (f a b c d:U),
   Bij f a b -> f:[c :\: d]: = f:[c]: :\: f:[d]:.
 Proof.

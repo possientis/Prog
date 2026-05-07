@@ -32,6 +32,7 @@ Proof.
   intros a b. apply Charac. right. reflexivity.
 Qed.
 
+(* A contains both a and b iff the class of {a,b} is a subclass of A.           *)
 Proposition ToClassIncl : forall (A:Class) (a b:U),
   A a /\ A b <-> toClass :{a,b}: :<=: A.
 Proof.

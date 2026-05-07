@@ -71,7 +71,7 @@ Proof.
   intros F A B H1. apply BijectionOn.ImageOfDomain, H1.
 Qed.
 
-(* An injection f:a -> b is a subset of axb.                                    *)
+(* An injection f:a -> b is a subset of a x b.                                  *)
 Proposition IsIncl : forall (f a b:U),
   Inj f a b -> f :<=: a :x: b.
 Proof.

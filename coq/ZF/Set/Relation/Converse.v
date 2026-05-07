@@ -77,7 +77,7 @@ Proof.
   apply Charac2 in H2. subst. assumption.
 Qed.
 
-(* A set is a relation iff the converse acting on it is idempotent.           *)
+(* A set is a relation iff the converse acting on it is idempotent.             *)
 Proposition IsIdempotent : forall (f:U),
   Relation f <-> (f^:-1:)^:-1: = f.
 Proof.
@@ -122,12 +122,14 @@ Proof.
     apply Range.Charac. exists y. apply Charac2Rev. assumption.
 Qed.
 
+(* If f^-1 is functional and (x,z) and (y,z) both lie in f, then x = y.         *)
 Proposition WhenFunctional : forall (f x y z:U),
   Functional f^:-1: -> :(x,z): :< f -> :(y,z): :< f -> x = y.
 Proof.
   intros f x y z H1 H2 H3. apply H1 with z; apply Charac2Rev; assumption.
 Qed.
 
+(* The image of the intersection is the intersection of the images.             *)
 Proposition Inter2Image : forall (f a b:U), Functional f^:-1: ->
   f:[a :/\: b]: = f:[a]: :/\: f:[b]:.
 Proof.
@@ -141,6 +143,7 @@ Proof.
     apply Inter2.Charac. split; assumption.
 Qed.
 
+(* The converse of the empty set is the empty set.                              *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> f^:-1: = :0:.
 Proof.
