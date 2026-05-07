@@ -17,6 +17,7 @@ Export ZF.Notation.UnionGen.
 Module COC := ZF.Class.Ordinal.Core.
 Module SUC := ZF.Set.UnionGenOfClass.
 
+(* The union of a class family of ordinals indexed by a is an ordinal.          *)
 Proposition IsOrdinal : forall (A:Class) (a:U),
   (forall x, x :< a -> Ordinal A!x) -> Ordinal :\/:_{a} A.
 Proof.
@@ -25,6 +26,7 @@ Proof.
   - apply UnionGen.IsOrdinal. assumption.
 Qed.
 
+(* The union of the identity family over a limit ordinal equals that ordinal.   *)
 Proposition WhenLimit : forall (a:U), Limit a -> :\/:_{a} I = a.
 Proof.
   intros a H1. apply DoubleInclusion. split; intros b H2.

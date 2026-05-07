@@ -43,6 +43,7 @@ Proof.
   intros a H1. apply Empty.Charac with a. rewrite <- H1. apply IsIn.
 Qed.
 
+(* A successor ordinal is not equal to zero.                                    *)
 Proposition IsNotZero : forall (a:U), Successor a -> a <> :0:.
 Proof.
   intros a [H1 [b H2]]. subst. apply NotZero.
@@ -61,6 +62,7 @@ Proof.
   apply COC.Succ.
 Qed.
 
+(* The successor of an ordinal is a successor ordinal.                          *)
 Proposition IsSuccessor : forall (a:U), Ordinal a ->
   Successor (succ a).
 Proof.
@@ -69,6 +71,7 @@ Proof.
   - exists a. reflexivity.
 Qed.
 
+(* The successor of any ordinal contains 0.                                     *)
 Proposition HasZero : forall (a:U), Ordinal a -> :0: :< succ a.
 Proof.
   intros a H1. apply Core.HasZero.
@@ -91,7 +94,7 @@ Proof.
   - apply Single.Charac in H2. assumption.
 Qed.
 
-(* The sets a and b need not be ordinals.                                       *)
+(* There is no set strictly between a and its successor.                        *)
 Proposition NoInBetween : forall (a b:U),
   ~ (a :< b /\ b :< succ a).
 Proof.
@@ -112,12 +115,14 @@ Proof.
     apply Core.ElemElemTran with a; assumption.
 Qed.
 
+(* If the successor of a is an ordinal then a is an ordinal.                    *)
 Proposition IsOrdinalRev : forall (a:U),
   Ordinal (succ a) -> Ordinal a.
 Proof.
   intros a H1. apply Core.IsOrdinal with (succ a). 1: assumption. apply IsIn.
 Qed.
 
+(* Every successor ordinal contains 0.                                          *)
 Proposition HasZero' : forall (a:U), Successor a -> :0: :< a.
 Proof.
   intros a [H1 [b H2]]. subst. apply HasZero, IsOrdinalRev. assumption.
@@ -137,6 +142,7 @@ Proof.
       * left. assumption.
 Qed.
 
+(* Inclusion of successors of ordinals implies inclusion of the ordinals.       *)
 Proposition InclCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
   succ a :<=: succ b -> a :<=: b.
 Proof.
@@ -149,6 +155,7 @@ Proof.
   + apply H3, IsIn.
 Qed.
 
+(* Membership of ordinals is preserved when taking successors.                  *)
 Proposition ElemCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b -> succ a :< succ b.
 Proof.
@@ -161,6 +168,7 @@ Proof.
       apply Injective. assumption.
 Qed.
 
+(* Membership of successors of ordinals implies membership of the ordinals.     *)
 Proposition ElemCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
   succ a :< succ b -> a :< b.
 Proof.
@@ -175,6 +183,7 @@ Proof.
   - apply InclCompat; assumption.
 Qed.
 
+(* An ordinal a is in b iff succ a is a subset of b.                            *)
 Proposition ElemIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b <-> succ a :<=: b.
 Proof.
@@ -191,6 +200,7 @@ Proof.
     apply H4, H3, IsIn.
 Qed.
 
+(* An ordinal a is a subset of b iff a is in succ b.                            *)
 Proposition InclIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b <-> a :< succ b.
 Proof.

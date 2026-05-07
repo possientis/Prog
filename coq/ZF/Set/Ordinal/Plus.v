@@ -37,12 +37,13 @@ Definition plus (a b:U) : U := (COP.Plus a)!b.
 (* Notation "a :+: b" := (plus a b)                                             *)
 Global Instance SetPlus : Plus U := { plus := plus }.
 
+(* Adding 0 on the right leaves an ordinal unchanged.                           *)
 Proposition WhenZeroR : forall (a:U), a :+: :0: = a.
 Proof.
   apply COP.WhenZero.
 Qed.
 
-(* 1 + N = N, so we cannot hope to have a WhenOneL.                             *)
+(* Adding 1 on the right to any ordinal gives its successor.                    *)
 Proposition WhenOneR : forall (a:U), a :+: :1: = succ a.
 Proof.
   intros a.
@@ -51,12 +52,14 @@ Proof.
   rewrite H1. rewrite WhenZeroR. reflexivity.
 Qed.
 
+(* Adding a successor on the right gives the successor of the sum.              *)
 Proposition WhenSuccR : forall (a b:U), Ordinal b ->
   a :+: (succ b) = succ (a :+: b).
 Proof.
   apply COP.WhenSucc.
 Qed.
 
+(* Adding a successor on the left of a natural gives the successor of the sum.  *)
 Proposition WhenSuccL : forall (a n:U), Ordinal a -> n :< :N ->
   succ a :+: n = succ (a :+: n).
 Proof.
@@ -69,12 +72,14 @@ Proof.
     2: assumption. reflexivity.
 Qed.
 
+(* Adding a limit ordinal on the right gives the union of all partial sums.     *)
 Proposition WhenLimit : forall (a b:U), Limit b ->
   a :+: b = :\/:_{b} (COP.Plus a).
 Proof.
   apply COP.WhenLimit.
 Qed.
 
+(* Adding 0 on the left leaves an ordinal unchanged.                            *)
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :+: a = a.
 Proof.
@@ -86,6 +91,7 @@ Proof.
     apply SUG.Equal. intros x. rewrite I.Eval. apply H2.
 Qed.
 
+(* The sum of two ordinals is an ordinal.                                       *)
 Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
   Ordinal (a :+: b).
 Proof.
@@ -97,7 +103,6 @@ Proof.
     apply SOG.IsOrdinal. apply H3.
 Qed.
 
-(* Note: 0 + N = 1 + N despite the fact that 0 < 1. So no 'ElemCompatL'         *)
 Proposition ElemCompatR : forall (a b c:U),
   Ordinal a             ->
   Ordinal b             ->
@@ -137,7 +142,7 @@ Proof.
   revert H7. apply NoElemLoop1.
 Qed.
 
-(* Note: 0 + N = 1 + N so we cannot hope to have a 'CancelR'                    *)
+(* The left summand can be cancelled from both sides of an equality.            *)
 Proposition CancelL : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -276,6 +281,7 @@ Proof.
   rewrite WhenZeroR in H3. assumption.
 Qed.
 
+(* Adding a non-zero ordinal on the right strictly increases the sum.           *)
 Proposition IsElemAddR : forall (a b:U), Ordinal a -> Ordinal b ->
   b <> :0: -> a :< a :+: b.
 Proof.
@@ -286,6 +292,7 @@ Proof.
   rewrite WhenZeroR in H5. assumption.
 Qed.
 
+(* The sum of two ordinals is 0 iff both summands are 0.                        *)
 Proposition WhenZero : forall (a b:U), Ordinal a -> Ordinal b ->
   a :+: b = :0: -> a = :0: /\ b = :0:.
 Proof.
@@ -304,6 +311,7 @@ Proof.
     apply Core.IsIncl. assumption.
 Qed.
 
+(* If a is at most b, there exists an ordinal c such that a + c equals b.       *)
 Proposition CompleteR : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> exists c, Ordinal c /\ a :+: c = b.
 Proof.
@@ -348,6 +356,7 @@ Proof.
     apply Core.ElemIsIncl. 1: assumption. apply G1; assumption.
 Qed.
 
+(* The sum of two natural numbers is a natural number.                          *)
 Proposition InOmega : forall (n m:U),
   n :< :N -> m :< :N -> n :+: m :< :N.
 Proof.
@@ -360,6 +369,7 @@ Proof.
     rewrite WhenSuccR. 2: assumption. apply Omega.HasSucc. assumption.
 Qed.
 
+(* If the sum n + m is a natural number, then n is a natural number.            *)
 Proposition InOmegaL : forall (n m:U), Ordinal n -> Ordinal m ->
   n :+: m :< :N -> n :< :N.
 Proof.
@@ -374,6 +384,7 @@ Proof.
     rewrite WhenZeroR in H4. assumption.
 Qed.
 
+(* If the sum n + m is a natural number, then m is a natural number.            *)
 Proposition InOmegaR : forall (n m:U), Ordinal n -> Ordinal m ->
   n :+: m :< :N -> m :< :N.
 Proof.
@@ -388,6 +399,7 @@ Proof.
     rewrite WhenZeroL in H4; assumption.
 Qed.
 
+(* If n is at most m in N, there exists a natural p such that n + p equals m.   *)
 Proposition CompleteOmegaR : forall (n m:U), n :< :N -> m :< :N ->
   n :<=: m -> exists p, p :< :N /\ n :+: p = m.
 Proof.
@@ -467,6 +479,7 @@ Proof.
         apply Core.InclElemTran with y; assumption.
 Qed.
 
+(* If a is a limit and a + n is a limit for natural n, then n must be 0.        *)
 Proposition LimitWithNat : forall (a n:U),
   Limit a           ->
   n :< :N           ->
@@ -672,6 +685,7 @@ Proof.
     rewrite <- H4. apply H19.
 Qed.
 
+(* The representation a + n is unique in limit a and natural n.                 *)
 Proposition DestructUnique : forall (a b n m:U),
   Limit a             ->
   Limit b             ->
@@ -723,6 +737,7 @@ Proof.
     destruct H10 as [H10 H11]. split; symmetry; assumption.
 Qed.
 
+(* The sum a + b is a limit iff b is a limit or b is 0 and a is a limit.        *)
 Proposition LimitCharac : forall (a b:U), Ordinal a -> Ordinal b  ->
   Limit (a :+: b) <-> Limit b \/ (b = :0: /\ Limit a).
 Proof.

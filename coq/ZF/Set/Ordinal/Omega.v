@@ -94,12 +94,14 @@ Proof.
   - apply COO.IsTransitive.
 Qed.
 
+(* An element of a natural number is a natural number.                          *)
 Proposition IsIn : forall (n m:U),
   m :< n -> n :< :N -> m :< :N.
 Proof.
   intros n m. apply IsTransitive.
 Qed.
 
+(* Every natural number is a subset of N.                                       *)
 Proposition IsIncl : forall (n:U), n :< :N ->
   n :<=: :N.
 Proof.
@@ -120,6 +122,7 @@ Proof.
   intros n H1. apply Charac in H1. destruct H1 as [H1 _]. assumption.
 Qed.
 
+(* The maximum of two natural numbers is a natural number.                      *)
 Proposition HasMax : forall (n m:U),
   n :< :N -> m :< :N -> n :\/: m :< :N.
 Proof.
@@ -137,6 +140,7 @@ Proof.
   intros n H1. apply Charac in H1. destruct H1 as [_ H1]. apply H1, Succ.IsIn.
 Qed.
 
+(* If the successor of n is a natural number, then n is a natural number.       *)
 Proposition HasSuccRev : forall (n:U), succ n :< :N -> n :< :N.
 Proof.
   intros n H1.
@@ -150,12 +154,14 @@ Proof.
   apply IsOrdinal.
 Qed.
 
+(* A non-zero natural number contains 0.                                        *)
 Proposition WhenNotZero : forall (n:U), n :< :N ->
   n <> :0: -> :0: :< n.
 Proof.
   intros n H1. apply Core.HasZero. apply HasOrdinals. assumption.
 Qed.
 
+(* A natural number is positive iff it is a successor ordinal.                  *)
 Proposition IsSuccessor : forall (n:U), n :< :N ->
   :0: :< n <-> Successor n.
 Proof.
@@ -170,6 +176,7 @@ Proof.
     apply Succ.IsOrdinalRev. assumption.
 Qed.
 
+(* Every positive natural number is the successor of a natural number.          *)
 Proposition HasPred : forall (n:U), n :< :N ->
   :0: :< n -> exists m, m :< :N /\ n = succ m.
 Proof.
@@ -179,6 +186,7 @@ Proof.
   apply HasSuccRev. rewrite <- H4. assumption.
 Qed.
 
+(* The union of the successor of a natural number is that natural number.       *)
 Proposition UnionOfSucc : forall (n:U), n :< :N ->
   :U(succ n) = n.
 Proof.
@@ -187,6 +195,7 @@ Proof.
   apply Succ.UnionOf. assumption.
 Qed.
 
+(* The successor of the union of a positive natural number is that number.      *)
 Proposition SuccOfUnion : forall (n:U), n :< :N ->
   :0: :< n -> succ :U(n) = n.
 Proof.
@@ -195,6 +204,7 @@ Proof.
   - apply IsSuccessor; assumption.
 Qed.
 
+(* A natural number is either 0 or contains 0.                                  *)
 Proposition ZeroOrElem : forall (n:U), n :< :N ->
   n = :0: \/ :0: :< n.
 Proof.
@@ -203,6 +213,7 @@ Proof.
   apply Core.ZeroOrElem. assumption.
 Qed.
 
+(* The successor of any natural number contains 0.                              *)
 Proposition SuccHasZero : forall (n:U), n :< :N ->
   :0: :< succ n.
 Proof.
@@ -211,6 +222,7 @@ Proof.
   apply Succ.HasZero. assumption.
 Qed.
 
+(* Membership of naturals is preserved when taking successors.                  *)
 Proposition SuccElemCompat : forall (n m:U), n :< :N -> m :< :N ->
   n :< m -> succ n :< succ m.
 Proof.
@@ -220,6 +232,7 @@ Proof.
   apply Succ.ElemCompat; assumption.
 Qed.
 
+(* Membership of successors of naturals implies membership of the naturals.     *)
 Proposition SuccElemCompatRev : forall (n m:U), n :< :N -> m :< :N ->
   succ n :< succ m -> n :< m.
 Proof.
@@ -229,6 +242,7 @@ Proof.
   apply Succ.ElemCompatRev; assumption.
 Qed.
 
+(* Inclusion of naturals is preserved when taking successors.                   *)
 Proposition SuccInclCompat : forall (n m:U), n :< :N -> m :< :N ->
   n :<=: m -> succ n :<=: succ m.
 Proof.
@@ -238,10 +252,12 @@ Proof.
   apply Succ.InclCompat; assumption.
 Qed.
 
+(* Zero is a subset of every natural number.                                    *)
 Proposition ZeroIncl : forall (n:U), n :< :N -> :0: :<=: n.
   intros n H1. apply Core.IsIncl, HasOrdinals. assumption.
 Qed.
 
+(* One is a subset of the successor of every natural number.                    *)
 Proposition OneInclSucc : forall (n:U), n :< :N  ->
   :1: :<=: succ n.
 Proof.
@@ -250,6 +266,7 @@ Proof.
   - apply ZeroIncl. assumption.
 Qed.
 
+(* The union of a natural number is a natural number.                           *)
 Proposition HasUnion : forall (n:U), n :< :N ->
   :U(n) :< :N.
 Proof.
@@ -339,6 +356,7 @@ Proof.
   intros n H5. apply H4 in H5. rewrite H3 in H5. apply H5.
 Qed.
 
+(* A stronger induction principle starting from a given natural number m.       *)
 Proposition Induction' : forall (A:Class) (m:U),
   m :< :N                                               ->
   A m                                                   ->
@@ -392,6 +410,7 @@ Proof.
   apply NotEmptyToClass. assumption.
 Qed.
 
+(* An ordinal subclass of N is either N itself or a natural number.             *)
 Proposition OrdinalSubclass : forall (A:Class),
   COC.Ordinal A                                               ->
   A :<=: toClass :N                                           ->

@@ -34,10 +34,10 @@ Module SPR := ZF.Set.Prod.
 (* Lexicographic order on b x a.                                                *)
 Definition le (a b:U) : U := Le :/: (b :x: a).
 
-(* The order induced by :< on the ordinal a*b.                                  *)
+(* The order induced by :< on the ordinal a * b.                                *)
 Definition r (a b:U) : U := E (a :*: b).
 
-(* Helper class to define isomorphism from bxa to a*b.                          *)
+(* Helper class to define isomorphism from bxa to a * b.                        *)
 Definition F (a b:U) : Class := fun x =>
   exists c d, c :< b /\ d :< a /\ x = :( :(c,d):, a :*: c :+: d):.
 
@@ -117,6 +117,7 @@ Proof.
       split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
+(* The set f a b is a relation.                                                 *)
 Proposition IsRelation : forall (a b:U), Relation (f a b).
 Proof.
   intros a b x H1.
@@ -125,6 +126,7 @@ Proof.
   exists y. exists z. assumption.
 Qed.
 
+(* The set f a b is a functional relation.                                      *)
 Proposition IsFunctional  : forall (a b:U), Ordinal a -> Ordinal b ->
   Functional (f a b).
 Proof.
@@ -135,6 +137,7 @@ Proof.
   apply OrdPair.WhenEqual in H9. destruct H9 as [H9 H10]. subst. reflexivity.
 Qed.
 
+(* The set f a b is a one-to-one relation.                                      *)
 Proposition IsOneToOne : forall (a b:U), Ordinal a -> Ordinal b ->
   OneToOne (f a b).
 Proof.
@@ -154,6 +157,7 @@ Proof.
   subst. reflexivity.
 Qed.
 
+(* The set f a b is a bijection.                                                *)
 Proposition IsBijection : forall (a b:U), Ordinal a -> Ordinal b ->
   Bijection (f a b).
 Proof.
@@ -162,6 +166,7 @@ Proof.
   - apply IsOneToOne; assumption.
 Qed.
 
+(* The domain of f a b is the cartesian product b x a.                          *)
 Proposition DomainOf : forall (a b:U), Ordinal a -> Ordinal b ->
   domain (f a b) = b :x: a.
 Proof.
@@ -176,6 +181,7 @@ Proof.
     split. 1: assumption. split. 1: assumption. split; reflexivity.
 Qed.
 
+(* The set f a b is a bijection on b x a.                                       *)
 Proposition IsBijectionOn : forall (a b:U), Ordinal a -> Ordinal b ->
   BijectionOn (f a b) (b :x: a).
 Proof.
@@ -184,6 +190,7 @@ Proof.
   - apply DomainOf; assumption.
 Qed.
 
+(* The range of f a b is a * b.                                                 *)
 Proposition RangeOf : forall (a b:U), Ordinal a -> Ordinal b ->
   range (f a b) = a :*: b.
 Proof.
@@ -220,7 +227,7 @@ Proof.
 Qed.
 
 
-(* f a b is a bijection from bxa to a*b.                                        *)
+(* f a b is a bijection from bxa to a * b.                                      *)
 Proposition IsBij : forall (a b:U), Ordinal a -> Ordinal b ->
   Bij (f a b) (b :x: a) (a :*: b).
 Proof.
@@ -229,6 +236,7 @@ Proof.
   - apply RangeOf; assumption.
 Qed.
 
+(* The value of f a b at (c,d) is a*c+d, when c is in b and d is in a.          *)
 Proposition Eval : forall (a b c d:U), Ordinal a -> Ordinal b ->
   c :< b -> d :< a -> (f a b)!(:(c,d):) = a :*: c :+: d.
 Proof.
@@ -240,7 +248,7 @@ Proof.
     split. 1: assumption. split. 1: assumption. split; reflexivity.
 Qed.
 
-(* f a b is an order isomorphism from bxa to a*b.                               *)
+(* f a b is an order isomorphism from b x a to a * b.                           *)
 Proposition IsIsom : forall (a b:U), Ordinal a -> Ordinal b ->
   Isom (f a b) (le a b) (r a b) (b :x: a) (a :*: b).
 Proof.

@@ -15,6 +15,7 @@ Module SUG := ZF.Set.UnionGenOfClass.
 Definition Super (a:U) : Prop := Transitive a /\
   forall x, x :< a -> :P(x) :<=: a.
 
+(* If the set is supertransitive, then so is the class.                         *)
 Proposition ToClass : forall (a:U),
   Super a -> COS.Super (toClass a).
 Proof.
@@ -23,6 +24,7 @@ Proof.
   - intros x H3. apply H2. assumption.
 Qed.
 
+(* If the class is supertransitive, then so is the set.                         *)
 Proposition FromClass : forall (a:U),
   COS.Super (toClass a) -> Super a.
 Proof.
@@ -31,6 +33,7 @@ Proof.
   - intros x H3. apply H2. assumption.
 Qed.
 
+(* The empty set is supertransitive.                                            *)
 Proposition WhenZero : forall (a:U),
   a = :0: -> Super a.
 Proof.
@@ -39,6 +42,7 @@ Proof.
   - intros x H2. subst. apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* The powerset of a supertransitive set is supertransitive.                    *)
 Proposition WhenPower : forall (a:U),
   Super a -> Super :P(a).
 Proof.
@@ -50,6 +54,7 @@ Proof.
     + apply Power.IsIn.
 Qed.
 
+(* The union of a family of supertransitive sets is supertransitive.            *)
 Proposition WhenUnion : forall (F:Class) (a:U),
   (forall x, x :< a -> Super F!x) -> Super (:\/:_{a} F).
 Proof.

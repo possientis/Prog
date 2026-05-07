@@ -27,6 +27,7 @@ Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOI := ZF.Set.Order.Isom.
 Module SOW := ZF.Set.Order.WellOrdering.
 
+(* Every well-ordered set is order-isomorphic to some ordinal.                  *)
 Proposition Exists : forall (r b:U),
   WellOrdering r b          ->
 
@@ -49,6 +50,7 @@ Proof.
   - apply (proj1 (COI.RestrictL (toClass f) _ _ _ _)), H5. reflexivity.
 Qed.
 
+(* The ordinal isomorphic to a well-ordered set is unique.                      *)
 Proposition IsUnique : forall (r a b c f g:U),
   WellOrdering r c      ->
   Ordinal a             ->
@@ -66,6 +68,7 @@ Proof.
     1: apply SOE.ToClass. apply SOI.ToClass. assumption.
 Qed.
 
+(* Every ordinal subset of an ordinal is order-isomorphic to some sub-ordinal.  *)
 Proposition OrdinalSubset : forall (a b:U), Ordinal b ->
   a :<=: b -> exists c f, Ordinal c /\ c :<=: b /\ Isom f (E c) (E a) c a.
 Proof.

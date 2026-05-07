@@ -16,6 +16,7 @@ Module SOU := ZF.Set.Ordinal.Union.
 (* The supremum of the set a.                                                   *)
 Definition sup (a:U) : U := :U( {{ x :< a | Ordinal }} ).
 
+(* An element of sup a belongs to some ordinal element of a.                    *)
 Proposition Charac : forall (a:U),
   forall x, x :< sup a <-> exists y, x :< y /\ y :< a /\ Ordinal y.
 Proof.
@@ -28,7 +29,7 @@ Proof.
     split; assumption.
 Qed.
 
-(* The supremum of the class is the class of the supremum.                      *)
+(* The class of the supremum is the supremum of the class.                      *)
 Proposition ToClass : forall (a:U),
    toClass (sup a) :~: COS.sup (toClass a).
 Proof.
@@ -39,12 +40,14 @@ Proof.
     split. 1: assumption. split; assumption.
 Qed.
 
+(* When all elements of a are ordinals, its supremum equals its union.          *)
 Proposition WhenOrdinals : forall (a:U),
   toClass a :<=: Ordinal -> sup a = :U(a).
 Proof.
   intros a H1. apply Specify.IsA in H1. unfold sup. rewrite H1. reflexivity.
 Qed.
 
+(* The supremum of the empty set is 0.                                          *)
 Proposition WhenEmpty : sup :0: = :0:.
 Proof.
   rewrite WhenOrdinals.
@@ -69,6 +72,7 @@ Proof.
   apply SOU.IsUpperBound; assumption.
 Qed.
 
+(* The supremum of a set of ordinals is the smallest upper bound.               *)
 Proposition IsSmallest : forall (a b:U),
   toClass a :<=: Ordinal          ->
   (forall c, c :< a -> c :<=: b)  ->
@@ -78,6 +82,7 @@ Proof.
   apply SOU.IsSmallest; assumption.
 Qed.
 
+(* No ordinal element of a can be greater than the supremum of a.               *)
 Proposition Contradict : forall (a b:U),
   toClass a :<=: Ordinal ->
   Ordinal b              ->
@@ -91,6 +96,7 @@ Proof.
   revert H6. apply NoElemLoop1.
 Qed.
 
+(* Every ordinal below the supremum of a is below some element of a.            *)
 Proposition WhenLess : forall (a b:U),
   toClass a :<=: Ordinal                    ->
   Ordinal b                                 ->

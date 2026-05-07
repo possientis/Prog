@@ -15,7 +15,6 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 (* defined on a by the recursion: forall b :< a, f(b) = F(f|b).                 *)
 Definition recursion (F:Class) (a:U) : U := (Recursion F) :|: a.
 
-(* Low level characterisation.                                                  *)
 Proposition Charac : forall (F:Class) (a x:U),
   x :< recursion F a                     <->
   exists y z f b,

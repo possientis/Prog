@@ -15,6 +15,7 @@ Definition supBelow (b a:U) : U := :U( {{ x :< a :/\: b | Ordinal }} ).
 (* Notation "sup(:< b ) a" := (supBelow b a)                                    *)
 Global Instance SetSupBelow : SupBelow U := { supBelow := supBelow }.
 
+(* An element of sup(<b) a belongs to some ordinal in both a and b.             *)
 Proposition Charac : forall (a b:U),
   forall x, x :< sup(:<b) a <->
     exists y, x :< y /\ y :< a /\ y :< b /\ Ordinal y.
@@ -30,7 +31,7 @@ Proof.
     split. 2: assumption. apply Inter2.Charac. split; assumption.
 Qed.
 
-(* The supremum below b of the class is the class of the supremum below b.      *)
+(* The class of the supremum below b equals the supremum below b of the class.  *)
 Proposition ToClass : forall (a b:U),
   toClass (sup(:< b) a) :~: sup(:< b) (toClass a).
 Proof.
@@ -67,5 +68,3 @@ Proof.
   - rewrite H4. apply Succ.UnionOf. assumption.
   - apply Succ.IsOrdinal. assumption.
 Qed.
-
-

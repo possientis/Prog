@@ -32,6 +32,7 @@ Proof.
   intros n m _ _. apply Succ.Injective.
 Qed.
 
+(* Induction: a class containing 0 and closed under successor contains all N.   *)
 Proposition Peano5 : forall (A:Class),
   A :0:                                    ->
   (forall n, n :< :N -> A n -> A (succ n)) ->

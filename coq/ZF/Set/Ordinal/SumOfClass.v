@@ -31,17 +31,20 @@ Definition sum (a:U) (F:Class) : U := (COS.sum F)!a.
 (* Notation ":sum:_{a} F" := (sum a F)                                          *)
 Global Instance SetClassSum : Sum U Class U := { sum := sum }.
 
+(* The sum over the empty index set is 0.                                       *)
 Proposition WhenZero : forall (F:Class), :sum:_{:0:} F = :0:.
 Proof.
   apply COS.WhenZero.
 Qed.
 
+(* The sum over succ a equals the sum over a plus the last term.                *)
 Proposition WhenSucc : forall (F:Class) (a:U), Ordinal a ->
   :sum:_{succ a} F = :sum:_{a} F :+: F!a.
 Proof.
   apply COS.WhenSucc.
 Qed.
 
+(* The sum over a limit ordinal is the union of all partial sums.               *)
 Proposition WhenLimit : forall (F:Class) (a:U), Limit a ->
   :sum:_{a} F = :\/:_{a} :[fun b => :sum:_{b} F]:.
 Proof.
@@ -51,6 +54,7 @@ Proof.
   rewrite H2. apply COS.WhenLimit. assumption.
 Qed.
 
+(* The sum over a of ordinal-valued F is an ordinal.                            *)
 Proposition IsOrdinal : forall (F:Class) (a:U),
   Ordinal a                           ->
   (forall x, x :< a -> Ordinal F!x)   ->
@@ -59,6 +63,7 @@ Proof.
   apply COS.IsOrdinal.
 Qed.
 
+(* Two class sums over a are equal when F and G agree on all elements of a.     *)
 Proposition Equal : forall (F G:Class) (a:U),
   Ordinal a                       ->
   (forall x, x :< a -> F!x = G!x) ->
@@ -67,6 +72,7 @@ Proof.
   apply COS.Equal.
 Qed.
 
+(* The class sum is invariant under eta-expansion of the summand function.      *)
 Proposition EtaReduce : forall (F:Class) (a:U), Ordinal a ->
   :sum:_{a} :[fun x => F!x]: = :sum:_{a} F.
 Proof.
@@ -74,6 +80,7 @@ Proof.
   intros x H2. apply From.Eval.
 Qed.
 
+(* The sum over succ n equals F(0) plus the sum of the left shift over n.       *)
 Proposition ShiftL : forall (F:Class) (n:U),
   Functional F                                        ->
   n :< :N                                             ->
@@ -116,6 +123,7 @@ Proof.
   rewrite H2 in H3. assumption.
 Qed.
 
+(* The sum over succ n of the right shift by a equals a plus the sum over n.    *)
 Proposition ShiftR : forall (F:Class) (a n:U),
   Functional F                                        ->
   Ordinal a                                           ->
@@ -155,6 +163,7 @@ Proof.
   rewrite H3 in H4. assumption.
 Qed.
 
+(* Each summand F(i) is included in the total sum over n when i is below n.     *)
 Proposition IsIncl : forall (F:Class) (n i:U),
   n :< :N                                             ->
   i :< n                                              ->
@@ -191,5 +200,3 @@ Proof.
   rewrite E in H1.
   intros n i H2. apply H1. assumption.
 Qed.
-
-

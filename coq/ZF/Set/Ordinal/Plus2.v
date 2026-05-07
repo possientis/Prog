@@ -177,6 +177,7 @@ Proof.
         apply Core.IsOrdinal with b; assumption.
 Qed.
 
+(* The set f a b is a relation.                                                 *)
 Proposition IsRelation : forall (a b:U), Relation (f a b).
 Proof.
   intros a b x H1.
@@ -185,6 +186,7 @@ Proof.
   exists y. exists z. assumption.
 Qed.
 
+(* The set f a b is a functional.                                               *)
 Proposition IsFunctional : forall (a b:U), Ordinal a -> Ordinal b ->
   Functional (f a b).
 Proof.
@@ -200,6 +202,7 @@ Proof.
   - destruct H7 as [_ H7]. subst. reflexivity.
 Qed.
 
+(* The set f a b is a one-to-one.                                               *)
 Proposition IsOneToOne : forall (a b:U), Ordinal a -> Ordinal b ->
   OneToOne (f a b).
 Proof.
@@ -230,6 +233,7 @@ Proof.
     apply Plus.CancelL in H8; try assumption. subst. reflexivity.
 Qed.
 
+(* The set f a b is a bijection.                                                *)
 Proposition IsBijection : forall (a b:U), Ordinal a -> Ordinal b ->
   Bijection (f a b).
 Proof.
@@ -238,6 +242,7 @@ Proof.
   - apply IsOneToOne; assumption.
 Qed.
 
+(* The domain of f a b is the disjoint sum of a and b.                          *)
 Proposition DomainOf : forall (a b:U), Ordinal a -> Ordinal b ->
   domain (f a b) = sum a b.
 Proof.
@@ -258,6 +263,7 @@ Proof.
       split. 1: assumption. split; reflexivity.
 Qed.
 
+(* The set f a b is a bijection on the disjoint sum of a and b.                 *)
 Proposition IsBijectionOn : forall (a b:U), Ordinal a -> Ordinal b ->
   BijectionOn (f a b) (sum a b).
 Proof.
@@ -266,6 +272,7 @@ Proof.
   - apply DomainOf; assumption.
 Qed.
 
+(* The range of f a b is a + b.                                                 *)
 Proposition RangeOf : forall (a b:U), Ordinal a -> Ordinal b ->
   range (f a b) = a :+: b.
 Proof.
@@ -304,6 +311,7 @@ Proof.
   - apply RangeOf; assumption.
 Qed.
 
+(* The value of f a b at (0,c) is c, when c is in a.                            *)
 Proposition Eval0 : forall (a b c:U), Ordinal a -> Ordinal b ->
   c :< a -> (f a b)!(:(:0:,c):) = c.
 Proof.
@@ -315,6 +323,7 @@ Proof.
     split. 1: assumption. split; reflexivity.
 Qed.
 
+(* The value of f a b at (1,c) is a+c, when c is in b.                          *)
 Proposition Eval1 : forall (a b c:U), Ordinal a -> Ordinal b ->
   c :< b -> (f a b)!(:(:1:,c):) = a :+: c.
 Proof.

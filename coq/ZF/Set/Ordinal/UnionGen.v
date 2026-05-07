@@ -8,6 +8,7 @@ Require Import ZF.Set.UnionGen.
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
+(* The union of a family of ordinals indexed by a is an ordinal.                *)
 Proposition IsOrdinal : forall (a b:U),
   (forall x, x :< a -> Ordinal b!x) -> Ordinal :\/:_{a} b.
 Proof.

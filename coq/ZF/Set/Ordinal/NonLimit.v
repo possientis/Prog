@@ -14,7 +14,7 @@ Require Import ZF.Set.Union.
 Definition NonLimit : Class := fun a =>
   a = :0: \/ Successor a.
 
-(* NonLimit is a class of ordinals.                                             *)
+(* Every non-limit ordinal is an ordinal.                                       *)
 Proposition HasOrdinals : NonLimit :<=: Ordinal.
 Proof.
   intros a [H1|H1].
@@ -22,6 +22,7 @@ Proof.
   - apply H1.
 Qed.
 
+(* An ordinal is non-limit iff it is 0 or the successor of its own union.       *)
 Proposition Charac : forall (a:U), Ordinal a ->
   NonLimit a <-> a = :0: \/ a = succ :U(a).
 Proof.

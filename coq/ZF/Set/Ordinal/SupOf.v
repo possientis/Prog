@@ -27,6 +27,7 @@ Proof.
   intros a. apply Sup.IsOrdinal.
 Qed.
 
+(* The supremum of the empty set is 0.                                          *)
 Proposition WhenZero : sup :0: = :0:.
 Proof.
   apply Sup.WhenEmpty.
@@ -103,6 +104,7 @@ Proof.
   apply UnionOf.IsIncl. assumption.
 Qed.
 
+(* If each element of a is dominated by some element of b, sup a is below b.    *)
 Proposition Compare : forall (a b:U),
   (forall x,
     Ordinal x                                   ->
@@ -115,6 +117,7 @@ Proof.
   apply Sup.Charac. exists y. split. 2: { split; assumption. } apply H6. assumption.
 Qed.
 
+(* No element of an ordinal a can be strictly less than the supremum of a.      *)
 Proposition Contradict : forall (a b:U),
   Ordinal a   ->
   Ordinal b   ->

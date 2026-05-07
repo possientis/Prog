@@ -24,6 +24,7 @@ Module COE := ZF.Class.Order.E.
 (* The binary relation on a induced by :<.                                      *)
 Definition E (a:U) : U := {{ x :< a :x: a | COE.E }}.
 
+(* An element of E a is an ordered pair (y,z) of elements of a with y in z.     *)
 Proposition Charac : forall (a x:U),
   x :< (E a) <-> exists y z, x = :(y,z): /\ y :< a /\ z :< a /\ y :< z.
 Proof.
@@ -38,6 +39,7 @@ Proof.
     + apply COE.Charac2. assumption.
 Qed.
 
+(* The pair (y,z) is in E a iff both y and z are in a and y is in z.            *)
 Proposition Charac2 : forall (a y z:U),
   :(y,z): :< (E a) <-> y :< a /\ z :< a /\ y :< z.
 Proof.
@@ -48,6 +50,7 @@ Proof.
   - apply Charac. exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
+(* The class of E a equals the restriction of the class E to the class a.       *)
 Proposition ToClass : forall (a:U),
   toClass (E a) :~: COE.E:/:(toClass a).
 Proof.
@@ -119,7 +122,7 @@ Proof.
   - apply IsTransitive. assumption.
 Qed.
 
-(* The relation E a is a strict total order on the ordinal a.                  *)
+(* The relation E a is a strict total order on the ordinal a.                   *)
 Proposition IsStrictTotalOrd : forall (a:U), Ordinal a ->
   StrictTotalOrd (E a) a.
 Proof.
@@ -129,7 +132,7 @@ Proof.
   - apply IsTotal. assumption.
 Qed.
 
-(* The relation E a is a well-ordering on the ordinal a.                       *)
+(* The relation E a is a well-ordering on the ordinal a.                        *)
 Proposition IsWellOrdering : forall (a:U), Ordinal a ->
   WellOrdering (E a) a.
 Proof.

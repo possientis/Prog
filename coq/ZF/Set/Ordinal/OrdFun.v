@@ -24,6 +24,7 @@ Definition OrdFun : Class := fun f =>
   Ordinal (domain f)                      /\
   (forall y, y :< range f -> Ordinal y).
 
+(* If the set is an ordinal function, then so is the class.                     *)
 Proposition ToClass : forall (f:U),
   OrdFun f -> COO.OrdFun (toClass f).
 Proof.
@@ -36,6 +37,7 @@ Proof.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
 Qed.
 
+(* If the class is an ordinal function, then so is the set.                     *)
 Proposition FromClass : forall (f:U),
   COO.OrdFun (toClass f) -> OrdFun f.
 Proof.
@@ -47,6 +49,7 @@ Proof.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
 Qed.
 
+(* The value of an ordinal function at any domain element is an ordinal.        *)
 Proposition IsOrdinal : forall (f x:U), OrdFun f ->
   x :< domain f -> Ordinal f!x.
 Proof.
@@ -56,12 +59,14 @@ Proof.
   rewrite H6. apply H3. apply Range.Charac. exists x. assumption.
 Qed.
 
+(* The domain of an ordinal function is an ordinal.                             *)
 Proposition DomainOf : forall (f:U),
   OrdFun f -> Ordinal (domain f).
 Proof.
   intros f [_ [H1 _]]. assumption.
 Qed.
 
+(* The empty set is an ordinal function.                                        *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> OrdFun f.
 Proof.
@@ -75,6 +80,7 @@ Proof.
       rewrite H3 in H2. apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* The singleton of the pair (0,a) is an ordinal function when a is ordinal.    *)
 Proposition WhenSingle : forall (a f:U),
   Ordinal a           ->
   f = :{ :(:0:,a): }: ->

@@ -14,7 +14,6 @@ Module SOR := ZF.Set.Ordinal.RecursionOfClass.
 (* defined on a by the recursion: forall b :< a, g(b) = f(g|b).                 *)
 Definition recursion (f a:U) : U := SOR.recursion (toClass f) a.
 
-(* Low level characterisation.                                                  *)
 Proposition Charac : forall (f a x:U),
   x :< recursion f a                     <->
   exists y z g b,

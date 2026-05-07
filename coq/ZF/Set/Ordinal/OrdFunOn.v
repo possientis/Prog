@@ -14,6 +14,7 @@ Require Import ZF.Set.Single.
 
 Definition OrdFunOn (f a:U) : Prop := OrdFun f /\ domain f = a.
 
+(* The value of an ordinal function at any element of its domain is an ordinal. *)
 Proposition IsOrdinal : forall (f a x:U), OrdFunOn f a ->
   x :< a -> Ordinal f!x.
 Proof.
@@ -24,11 +25,13 @@ Proof.
     subst. assumption.
 Qed.
 
+(* The domain of an ordinal function on a is itself an ordinal.                 *)
 Proposition DomainOf : forall (f a:U), OrdFunOn f a -> Ordinal a.
 Proof.
   intros f a [[H1 [H2 H3]] H4]. subst. assumption.
 Qed.
 
+(* A function is on the empty set iff it is itself the empty set.               *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: <-> OrdFunOn f :0:.
 Proof.
@@ -47,6 +50,7 @@ Proof.
     rewrite H2 in H5. apply Empty.Charac in H5. contradiction.
 Qed.
 
+(* The singleton of (0,a) is an ordinal function on 1, when a is an ordinal.    *)
 Proposition WhenSingle : forall (a f:U), Ordinal a ->
   f = :{ :(:0:,a): }: -> OrdFunOn f :1:.
 Proof.
