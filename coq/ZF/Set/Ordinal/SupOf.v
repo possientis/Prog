@@ -18,7 +18,8 @@ Require Import ZF.Set.Union.
 Proposition WhenOrdinal : forall (a:U),
   Ordinal a -> sup a = :U(a).
 Proof.
-  intros a H1. apply Sup.WhenOrdinals, Core.WhenOrdinal. assumption.
+  intros a H1. apply Sup.WhenOrdinals. intros x H2.
+  apply Core.IsOrdinal with a; assumption.
 Qed.
 
 (* The supremum of an ordinal is an ordinal.                                    *)

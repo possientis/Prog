@@ -57,13 +57,6 @@ Proof.
   assumption.
 Qed.
 
-(* Every element of an ordinal is itself an ordinal.                            *)
-Proposition WhenOrdinal : forall (a:U), Ordinal a ->
-  toClass a :<=: Ordinal.
-Proof.
-  intros a H1 x H2. apply IsOrdinal with a; assumption.
-Qed.
-
 (* Strict inclusion and set membership coincide on ordinals.                    *)
 Proposition LessIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<: b <-> a :< b.
