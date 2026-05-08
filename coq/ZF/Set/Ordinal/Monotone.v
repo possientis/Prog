@@ -18,6 +18,7 @@ Module SOE := ZF.Set.Ordinal.Order.E.
 Definition Monotone (f:U) : Prop := OrdFun f  /\ forall (a b:U),
   a :< domain f -> b :< domain f -> a :< b  -> f!a :< f!b.
 
+(* If the set is monotone, then so is the class.                                *)
 Proposition ToClass : forall (f:U),
   Monotone f -> COM.Monotone (toClass f).
 Proof.
@@ -28,6 +29,7 @@ Proof.
     + apply Domain.ToClass. assumption.
 Qed.
 
+(* If the class is monotone, then so is the set.                                *)
 Proposition FromClass : forall (f:U),
   COM.Monotone (toClass f) -> Monotone f.
 Proof.
@@ -38,6 +40,7 @@ Proof.
     + apply Domain.ToClass. assumption.
 Qed.
 
+(* A strictly monotone ordinal function satisfies a <= f(a) for all a.          *)
 Proposition IsIncl : forall (f a:U),
   Monotone f -> a :< domain f -> a :<=: f!a.
 Proof.

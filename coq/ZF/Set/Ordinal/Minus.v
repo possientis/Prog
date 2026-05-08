@@ -20,11 +20,13 @@ Definition minus (b a:U) : U := inf {{ x :< succ b | fun c => b :<=: a :+: c }}.
 (* Notation "b :-: a" := (minus b a)                                            *)
 Global Instance SetMinus : Minus U := { minus := minus }.
 
+(* The ordinal difference of any two sets is an ordinal.                        *)
 Proposition IsOrdinal : forall (a b:U), Ordinal (a :-: b).
 Proof.
   intros a b. apply Inf.IsOrdinal.
 Qed.
 
+(* When a is at most b, a plus (b minus a) equals b.                            *)
 Proposition IsEqual : forall (a b:U), Ordinal a -> Ordinal b  ->
   a :<=: b -> a :+: (b :-: a) = b.
 Proof.
@@ -66,6 +68,7 @@ Proof.
   apply DoubleInclusion. split; assumption.
 Qed.
 
+(* The difference b minus a is 0 when b is at most a.                           *)
 Proposition IsZero : forall (a b:U), Ordinal a -> Ordinal b ->
   b :<=: a -> b :-: a = :0:.
 Proof.
@@ -88,6 +91,7 @@ Proof.
   apply DoubleInclusion. split; assumption.
 Qed.
 
+(* The difference b minus a is at most b.                                       *)
 Proposition IsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   b :-: a :<=: b.
 Proof.
@@ -100,6 +104,7 @@ Proof.
     + apply Plus.IsInclL; assumption.
 Qed.
 
+(* Omega minus any natural number is omega.                                     *)
 Proposition OmegaNatural : forall (n:U),
   n :< :N -> :N :-: n = :N.
 Proof.

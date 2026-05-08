@@ -34,11 +34,13 @@ Definition mult (a b:U) : U := (COM.Mult a)!b.
 (* Notation "a :*: b" := (mult a b)                                             *)
 Global Instance SetMult : Mult U := { mult := mult }.
 
+(* Any ordinal multiplied on the right by 0 is 0.                               *)
 Proposition WhenZeroR : forall (a:U), a :*: :0: = :0:.
 Proof.
   apply COM.WhenZero.
 Qed.
 
+(* Any ordinal multiplied on the right by 1 is itself.                          *)
 Proposition WhenOneR : forall (a:U), Ordinal a ->
   a :*: :1: = a.
 Proof.
@@ -61,6 +63,7 @@ Proof.
   apply COM.WhenLimit.
 Qed.
 
+(* Any ordinal multiplied on the left by 0 is 0.                                *)
 Proposition WhenZeroL : forall (a:U), Ordinal a ->
   :0: :*: a = :0:.
 Proof.
@@ -76,6 +79,7 @@ Proof.
     + apply Empty.Charac in H3. contradiction.
 Qed.
 
+(* Any ordinal multiplied on the left by 1 is itself.                           *)
 Proposition WhenOneL : forall (a:U), Ordinal a ->
   :1: :*: a = a.
 Proof.
@@ -99,6 +103,7 @@ Proof.
       rewrite H2. 2: assumption. apply Succ.IsIn.
 Qed.
 
+(* The product of two ordinals is an ordinal.                                   *)
 Proposition IsOrdinal : forall (a b:U), Ordinal a -> Ordinal b ->
   Ordinal (a :*: b).
 Proof.
@@ -110,6 +115,7 @@ Proof.
     apply SOG.IsOrdinal. apply IH.
 Qed.
 
+(* Multiplication by a positive ordinal on the left is strictly increasing.     *)
 Proposition ElemCompatR : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -147,6 +153,7 @@ Proof.
   apply ElemIsIncl; assumption.
 Qed.
 
+(* Inclusion is preserved when cancelling a positive left factor.               *)
 Proposition InclCompatRevR : forall (a b c:U),
   Ordinal a             ->
   Ordinal b             ->
@@ -163,6 +170,7 @@ Proof.
   revert H8. apply NoElemLoop1.
 Qed.
 
+(* If c*a is in c*b, then c is positive.                                        *)
 Proposition IsNotZeroL : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -177,6 +185,7 @@ Proof.
   apply Empty.Charac in H4. contradiction.
 Qed.
 
+(* If a*c is in b*c, then c is positive.                                        *)
 Proposition IsNotZeroR : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -191,6 +200,7 @@ Proof.
   apply Empty.Charac in H4. contradiction.
 Qed.
 
+(* Strict membership is preserved when cancelling a left factor.                *)
 Proposition ElemCompatRevR : forall (a b c:U),
   Ordinal a           ->
   Ordinal b           ->
@@ -209,6 +219,7 @@ Proof.
   revert H4. apply NoElemLoop1.
 Qed.
 
+(* Multiplication on the left by c is non-decreasing.                           *)
 Proposition InclCompatR : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -228,6 +239,7 @@ Proof.
       * apply ElemCompatR; assumption.
 Qed.
 
+(* A positive left factor can be cancelled from an equality.                    *)
 Proposition CancelL : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -245,6 +257,7 @@ Proof.
     exfalso. rewrite H5 in H7. revert H7. apply NoElemLoop1.
 Qed.
 
+(* Multiplication on the right by c is non-decreasing.                          *)
 Proposition InclCompatL : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -265,6 +278,7 @@ Proof.
     apply IH; assumption.
 Qed.
 
+(* Multiplication is non-decreasing in both arguments.                          *)
 Proposition InclCompat : forall (a b c d:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -280,6 +294,7 @@ Proof.
   - apply InclCompatR; assumption.
 Qed.
 
+(* Membership is preserved when cancelling a right factor.                      *)
 Proposition ElemCompatRevL : forall (a b c:U),
   Ordinal a               ->
   Ordinal b               ->
@@ -295,6 +310,7 @@ Proof.
   revert H7. apply NoElemLoop1.
 Qed.
 
+(* The product of two natural numbers is a natural number.                      *)
 Proposition InOmega : forall (n m:U),
   n :< :N -> m :< :N -> n :*: m :< :N.
 Proof.
@@ -307,6 +323,7 @@ Proof.
     rewrite WhenSuccR. 2: assumption. apply Plus.InOmega; assumption.
 Qed.
 
+(* If n*m is a natural number and m is positive, then n is a natural number.    *)
 Proposition InOmegaL : forall (n m:U), Ordinal n -> Ordinal m ->
   :0: :< m -> n :*: m :< :N -> n :< :N.
 Proof.
@@ -321,6 +338,7 @@ Proof.
   apply InclElemTran with (n :*: m); assumption.
 Qed.
 
+(* If n*m is a natural number and n is positive, then m is a natural number.    *)
 Proposition InOmegaR : forall (n m:U), Ordinal n -> Ordinal m ->
   :0: :< n -> n :*: m :< :N -> m :< :N.
 Proof.
@@ -335,6 +353,7 @@ Proof.
   apply InclElemTran with (n :*: m); assumption.
 Qed.
 
+(* The product of two ordinals is 0 iff at least one factor is 0.               *)
 Proposition WhenZero : forall (a b:U), Ordinal a -> Ordinal b ->
   a :*: b = :0: <-> a = :0: \/ b = :0:.
 Proof.
@@ -358,6 +377,7 @@ Proof.
     + rewrite WhenZeroR. reflexivity.
 Qed.
 
+(* The product of two positive ordinals is positive.                            *)
 Proposition HasZero : forall (a b:U), Ordinal a -> Ordinal b ->
   :0: :< a -> :0: :< b -> :0: :< a :*: b.
 Proof.
@@ -371,6 +391,7 @@ Proof.
   - apply Empty.Charac in H4. contradiction.
 Qed.
 
+(* The product of a positive ordinal and a limit ordinal is a limit ordinal.    *)
 Proposition IsLimit : forall (a b:U), Ordinal a ->
   :0: :< a -> Limit b -> Limit (a :*: b).
 Proof.
@@ -411,6 +432,7 @@ Proof.
 Qed.
 
 (* Note that (N+1)*2 = (N+1)+(N+1) = N*2+1 <> N*2+2 so there is no DistribR.    *)
+(* Ordinal multiplication distributes on the left over addition.                *)
 Proposition DistribL : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
   a :*: (b :+: c) = a :*: b :+: a :*: c.
 Proof.
@@ -485,6 +507,7 @@ Proof.
           { apply IsOrdinal. 1: assumption. apply Plus.IsOrdinal; assumption. }
 Qed.
 
+(* Ordinal multiplication is associative.                                       *)
 Proposition Assoc : forall (a b c:U), Ordinal a -> Ordinal b -> Ordinal c ->
   (a :*: b) :*: c = a :*: (b :*: c).
 Proof.
@@ -557,6 +580,7 @@ Proof.
   rewrite WhenOneR in H7; assumption.
 Qed.
 
+(* Euclidean division: every ordinal a divides as b * c + d with d < b.         *)
 Proposition Euclid : forall (a b:U),
   Ordinal a             ->
   Ordinal b             ->
@@ -669,6 +693,7 @@ Proof.
     revert H24. apply NoElemLoop1.
 Qed.
 
+(* The quotient and remainder in Euclidean division are uniquely determined.    *)
 Proposition EuclidUnique : forall (b c1 c2 d1 d2:U),
   Ordinal b                           ->
   Ordinal c1                          ->
@@ -726,6 +751,7 @@ Proof.
     split; symmetry; apply H10.
 Qed.
 
+(* Euclidean division of naturals yields natural quotient and remainder.        *)
 Proposition EuclidN : forall (n m:U),
   n :< :N               ->
   m :< :N               ->
@@ -751,6 +777,7 @@ Proof.
   split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
+(* The quotient and remainder in natural number Euclidean division are unique.  *)
 Proposition EuclidUniqueN : forall (m q1 q2 r1 r2:U),
   m  :< :N                            ->
   q1 :< :N                            ->
@@ -1005,6 +1032,7 @@ Proof.
   rewrite (Comm n p), (Comm m p); try assumption. reflexivity.
 Qed.
 
+(* The product a * b is a limit iff both are positive and at least one is limit *)
 Proposition LimitCharac : forall (a b:U), Ordinal a -> Ordinal b ->
   Limit (a :*: b) <-> :0: :< a /\ :0: :< b /\ (Limit a \/ Limit b).
 Proof.

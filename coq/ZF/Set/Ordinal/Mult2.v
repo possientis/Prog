@@ -37,7 +37,7 @@ Definition le (a b:U) : U := Le :/: (b :x: a).
 (* The order induced by :< on the ordinal a * b.                                *)
 Definition r (a b:U) : U := E (a :*: b).
 
-(* Helper class to define isomorphism from bxa to a * b.                        *)
+(* Helper class to define isomorphism from b x a to a * b.                      *)
 Definition F (a b:U) : Class := fun x =>
   exists c d, c :< b /\ d :< a /\ x = :( :(c,d):, a :*: c :+: d):.
 
@@ -227,7 +227,7 @@ Proof.
 Qed.
 
 
-(* f a b is a bijection from bxa to a * b.                                      *)
+(* f a b is a bijection from b x a to a * b.                                    *)
 Proposition IsBij : forall (a b:U), Ordinal a -> Ordinal b ->
   Bij (f a b) (b :x: a) (a :*: b).
 Proof.
