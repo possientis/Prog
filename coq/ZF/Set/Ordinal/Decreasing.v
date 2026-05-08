@@ -15,6 +15,7 @@ Definition Decreasing (f:U) : Prop := forall (x y:U),
   x   :< y        ->
   f!y :< f!x.
 
+(* A function defined by a single pair is decreasing.                           *)
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> Decreasing f.
 Proof.
@@ -25,6 +26,7 @@ Proof.
   revert H4. apply NoElemLoop1.
 Qed.
 
+(* For a decreasing f, x included in y implies f(y) included in f(x).           *)
 Proposition Relax : forall (f x y:U),
   OrdFun f        ->
   Decreasing f    ->
@@ -46,6 +48,7 @@ Proof.
   - apply Core.ElemIsIncl. 1: assumption. apply H2; assumption.
 Qed.
 
+(* The empty function is decreasing.                                            *)
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> Decreasing f.
 Proof.

@@ -46,6 +46,7 @@ Definition exp (a b:U) : U := (COE.Exp a)!b.
 (* Notation "a :^: b" := (exp a b)                                              *)
 Global Instance SetExp : Exp U := { exp := exp }.
 
+(* Any ordinal raised to the power 0 equals 1.                                  *)
 Proposition WhenZeroR : forall (a:U), a :^: :0: = :1:.
 Proof.
   intros a. apply COE.WhenZero.
@@ -83,6 +84,7 @@ Proof.
   - rewrite WhenLimitZero; try reflexivity. assumption.
 Qed.
 
+(* The exponential of two ordinals is an ordinal.                               *)
 Proposition IsOrdinal : forall (a b :U), Ordinal a -> Ordinal b ->
   Ordinal (a :^: b).
 Proof.
@@ -99,6 +101,7 @@ Proof.
     + rewrite WhenLimit; try assumption. apply SOG.IsOrdinal. apply IH.
 Qed.
 
+(* 1 raised to any ordinal power is 1.                                          *)
 Proposition WhenOneL : forall (a:U), Ordinal a ->
   :1: :^: a = :1:.
 Proof.
@@ -121,6 +124,7 @@ Proof.
         apply Limit.HasZero. assumption.
 Qed.
 
+(* Any ordinal raised to the power 1 is itself.                                 *)
 Proposition WhenOneR : forall (a:U), Ordinal a ->
   a :^: :1: = a.
 Proof.
@@ -130,6 +134,7 @@ Proof.
   rewrite WhenSuccR, WhenZeroR, Mult.WhenOneL; try assumption. reflexivity.
 Qed.
 
+(* If a is at leat 1, then a^b is at least 1.                                   *)
 Proposition OneIsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   :1: :<=: a -> :1: :<=: a :^: b.
 Proof.
@@ -153,6 +158,7 @@ Proof.
       rewrite WhenZeroR. assumption.
 Qed.
 
+(* If 0 is in a, then 0 is in a^b.                                              *)
 Proposition HasZero : forall (a b:U), Ordinal a -> Ordinal b ->
   :0: :< a -> :0: :< a :^: b.
 Proof.
@@ -413,6 +419,7 @@ Proof.
   exists d. split. 1: assumption. split; assumption.
 Qed.
 
+(* When a > 1 and b is a limit ordinal, a^b is a limit ordinal.                 *)
 Proposition IsLimitR : forall (a b:U), Ordinal a ->
   :1: :< a -> Limit b -> Limit (a :^: b).
 Proof.
@@ -448,6 +455,7 @@ Proof.
     revert H9. apply NoElemLoop1.
 Qed.
 
+(* When b is positive and a is a limit ordinal, a^b is a limit ordinal.         *)
 Proposition IsLimitL : forall (a b:U), Ordinal b ->
   :0: :< b -> Limit a -> Limit (a :^: b).
 Proof.

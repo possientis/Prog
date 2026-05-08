@@ -21,6 +21,7 @@ Module SOC := ZF.Set.Ordinal.InterOfClass.
 (* The infimum of the class A.                                                  *)
 Definition inf (A:Class) : U := inter (A :/\: On).
 
+(* Every element of the infimum of A is less than every ordinal in A.           *)
 Proposition Charac : forall (A:Class) (x y:U),
   x :< inf A  ->
   A y         ->
@@ -31,6 +32,7 @@ Proof.
   1: assumption. split; assumption.
 Qed.
 
+(* A lower bound of all ordinals in A belongs to the infimum of A.              *)
 Proposition CharacRev : forall (A:Class) (x:U),
   A :/\: On  :<>: :0:               ->
   (forall y, A y -> On y -> x :< y) ->
@@ -40,13 +42,14 @@ Proof.
   intros y [H3 H4]. apply H2; assumption.
 Qed.
 
+(* The infimum of a class is compatible with class equivalence.                 *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> inf A = inf B.
 Proof.
   intros A B H1. apply SIC.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
-(* The infimum (as class) of the class is the class of the infimum (as set).    *)
+(* The class of the infimum (as a set) is the infimum (as a class).             *)
 Proposition ToClass : forall (A:Class),
   toClass (inf A) :~: COI.inf A.
 Proof.
@@ -101,7 +104,7 @@ Proof.
   1: apply Equiv.Sym, ToClass. apply Class.Ordinal.Inf.IsLargest; assumption.
 Qed.
 
-(* The infimum of a class with an ordinal is largest lower-bound of its ordinals*)
+(* The infimum of a class is largest lower-bound of its ordinal elements.       *)
 Proposition IsLargestOrd : forall (A:Class) (a:U),
   A :/\: On :<>: :0:                        ->
   (forall b, Ordinal b -> A b -> a :<=: b)  ->
@@ -143,6 +146,7 @@ Proof.
   2: assumption. apply Class.Inter2.IsInclR.
 Qed.
 
+(* The infimum of an ordinal class minus a singleton is the removed element.    *)
 Proposition WhenOrdinal : forall (A:Class) (a:U),
   COC.Ordinal A                 ->
   Ordinal a                     ->
@@ -154,6 +158,7 @@ Proof.
   2: apply Equiv.Sym, ToClass. apply Class.Ordinal.Inf.WhenOrdinal; assumption.
 Qed.
 
+(* The infimum of a non-empty class of ordinals is its E-minimal element.       *)
 Proposition IsEMinimal : forall (A:Class) (a:U),
   A :<=: On                     ->
   A :<>: :0:                    ->
@@ -166,6 +171,7 @@ Proof.
     apply Equiv.Sym, ToClass.
 Qed.
 
+(* The infimum of a class with no ordinals is 0.                                *)
 Proposition IsZero : forall (A:Class),
   A :/\: On :~: :0: -> inf A = :0:.
 Proof.

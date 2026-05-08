@@ -15,6 +15,7 @@ Proof.
   rewrite H2. reflexivity.
 Qed.
 
+(* The infimum of an ordinal is 0.                                              *)
 Proposition IsZero : forall (a:U), Ordinal a ->
   inf a = :0:.
 Proof.

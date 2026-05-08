@@ -43,7 +43,6 @@ Proof.
   apply Diff.Charac in H3. destruct H3 as [H3 H5]. apply H2; assumption.
 Qed.
 
-(* The infimum above b of the class is the class of the infimum above b.        *)
 Proposition ToClass : forall (a b:U),
   toClass (inf(>: b) a) :~: inf(>: b) (toClass a).
 Proof.
@@ -64,6 +63,7 @@ Proof.
   rewrite H3. reflexivity.
 Qed.
 
+(* The infimum above b of a is 0 when a is included in b.                       *)
 Proposition IsZero : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> inf(>: b) a = :0:.
 Proof.
@@ -73,6 +73,7 @@ Proof.
   rewrite H4. apply SIN.WhenEmpty.
 Qed.
 
+(* The infimum of a above b equals b when b is in a.                            *)
 Proposition IsEqual : forall (a b:U), Ordinal a -> Ordinal b ->
   b :< a -> inf(>: b) a = b.
 Proof.

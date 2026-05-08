@@ -24,6 +24,7 @@ Module SOI := ZF.Set.Ordinal.Inter.
 (* The infimum of the set a.                                                    *)
 Definition inf (a:U) : U := :I( {{ x :< a | Ordinal }} ).
 
+(* Every element of the infimum of a is less than every ordinal in a.           *)
 Proposition Charac : forall (a x y:U),
   x :< inf a  ->
   y :< a      ->
@@ -34,6 +35,7 @@ Proof.
   1: assumption. apply Specify.Charac. split; assumption.
 Qed.
 
+(* A lower bound of all ordinals in a belongs to the infimum of a.              *)
 Proposition CharacRev : forall (a x:U),
   {{ x:< a | Ordinal }}  <> :0:             ->
   (forall y, y :< a -> Ordinal y -> x :< y) ->
@@ -44,7 +46,7 @@ Proof.
   apply H2; assumption.
 Qed.
 
-(* The infimum of the class is the class of the infimum.                        *)
+(* The class of the infimum is the infimum of the class.                        *)
 Proposition ToClass : forall (a:U),
   toClass (inf a) :~: COI.inf (toClass a).
 Proof.
@@ -61,12 +63,14 @@ Proof.
     + destruct H2 as [H2 H3]. apply Specify.Charac. split; assumption.
 Qed.
 
+(* When all elements of a are ordinals, the infimum equals the intersection.    *)
 Proposition WhenOrdinals : forall (a:U),
   toClass a :<=: Ordinal -> inf a = :I(a).
 Proof.
   intros a H1. apply Specify.IsA in H1. unfold inf. rewrite H1. reflexivity.
 Qed.
 
+(* The infimum of the empty set is 0.                                           *)
 Proposition WhenEmpty : inf :0: = :0:.
 Proof.
   rewrite WhenOrdinals.
@@ -74,12 +78,14 @@ Proof.
   - intros x H1. apply Empty.Charac in H1. contradiction.
 Qed.
 
+(* The infimum of any set is an ordinal.                                        *)
 Proposition IsOrdinal : forall (a:U), Ordinal (inf a).
 Proof.
   intros a. apply SOI.IsOrdinal. intros x H1.
   apply Specify.IsInclR in H1. assumption.
 Qed.
 
+(* The infimum of a set of ordinals is a lower bound of that set.               *)
 Proposition IsLowerBound : forall (a b:U),
   toClass a :<=: Ordinal ->
   b :< a                 ->
@@ -89,6 +95,7 @@ Proof.
   apply SOI.IsLowerBound; assumption.
 Qed.
 
+(* The infimum of a non-empty set of ordinals is the greatest lower bound.      *)
 Proposition IsLargest : forall (a b:U),
   toClass a :<=: Ordinal          ->
   a <> :0:                        ->
@@ -99,6 +106,7 @@ Proof.
   apply SOI.IsLargest; assumption.
 Qed.
 
+(* No element of a set of ordinals can be less than the infimum.                *)
 Proposition Contradict : forall (a b:U),
   toClass a :<=: Ordinal ->
   Ordinal b              ->
@@ -112,6 +120,7 @@ Proof.
   revert H6. apply NoElemLoop1.
 Qed.
 
+(* The infimum of a non-empty set of ordinals is its minimal element.           *)
 Proposition IsMinimal : forall (a:U),
   toClass a :<=: Ordinal      ->
   a <> :0:                    ->
@@ -140,6 +149,7 @@ Proof.
   rewrite H8. assumption.
 Qed.
 
+(* The infimum of a non-empty set of ordinals belongs to that set.              *)
 Proposition IsIn : forall (a:U),
   toClass a :<=: Ordinal ->
   a <> :0:               ->
@@ -150,6 +160,7 @@ Proof.
   apply H3.
 Qed.
 
+(* If the infimum of a is less than b, some element of a is less than b.        *)
 Proposition WhenMore : forall (a b:U),
   toClass a :<=: Ordinal                    ->
   a <> :0:                                  ->

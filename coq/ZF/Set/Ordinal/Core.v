@@ -18,18 +18,21 @@ Module COC := ZF.Class.Ordinal.Core.
 (* The class of all ordinals.                                                   *)
 Definition Ordinal : Class := On.
 
+(* If the set is an ordinal, then so is the class.                              *)
 Proposition ToClass : forall (a:U),
   Ordinal a -> COC.Ordinal (toClass a).
 Proof.
   intros a H1. assumption.
 Qed.
 
+(* If the class is an ordinal, then so is the set.                              *)
 Proposition FromClass : forall (a:U),
   COC.Ordinal (toClass a) -> Ordinal a.
 Proof.
   intros a H1. assumption.
 Qed.
 
+(* An ordinal is a transitive set whose elements are totally ordered by :<.     *)
 Proposition Charac : forall (a:U),
   Ordinal a                    <->
   Transitive a                  /\
@@ -54,6 +57,7 @@ Proof.
   assumption.
 Qed.
 
+(* Every element of an ordinal is itself an ordinal.                            *)
 Proposition WhenOrdinal : forall (a:U), Ordinal a ->
   toClass a :<=: Ordinal.
 Proof.
@@ -70,6 +74,7 @@ Proof.
   - apply Less.FromClass, (LessIsElem (toClass b)); assumption.
 Qed.
 
+(* Membership in an ordinal implies inclusion in it.                            *)
 Proposition ElemIsIncl : forall (a b:U), Ordinal b ->
   a :< b -> a :<=: b.
 Proof.
@@ -103,6 +108,7 @@ Proof.
       apply Less.FromClass. assumption.
 Qed.
 
+(* A transitive set all of whose elements are ordinals is itself an ordinal.    *)
 Proposition WhenTransitive : forall (a:U),
   Transitive  a           ->
   toClass a :<=: Ordinal  ->
@@ -112,6 +118,7 @@ Proof.
   intros x y H3 H4. apply IsTotal; apply H2; assumption.
 Qed.
 
+(* For ordinals, inclusion is equivalent to equality or membership.             *)
 Proposition EqualOrElem : forall (a b:U),
   Ordinal a ->
   Ordinal b ->
@@ -126,6 +133,7 @@ Proof.
     + apply LessIsElem in H3; try assumption. apply H3.
 Qed.
 
+(* Any two ordinals are comparable by inclusion.                                *)
 Proposition InclOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b \/ b :<=: a.
 Proof.
@@ -137,6 +145,7 @@ Proof.
   - right. apply LessIsElem in H3; try assumption. apply H3.
 Qed.
 
+(* For ordinals, either a is in b or b is included in a.                        *)
 Proposition ElemOrIncl : forall (a b:U), Ordinal a -> Ordinal b ->
   a :< b \/ b :<=: a.
 Proof.
@@ -148,6 +157,7 @@ Proof.
   - right. apply ElemIsIncl; assumption.
 Qed.
 
+(* Inclusion followed by membership gives membership, for ordinals.             *)
 Proposition InclElemTran : forall (a b c:U),
   Ordinal a ->
   Ordinal b ->
@@ -161,6 +171,7 @@ Proof.
   apply LessIsElem; assumption.
 Qed.
 
+(* Membership followed by inclusion gives membership, for ordinals.             *)
 Proposition ElemInclTran : forall (a b c:U),
   Ordinal a ->
   Ordinal b ->
@@ -174,6 +185,7 @@ Proof.
   apply LessIsElem; assumption.
 Qed.
 
+(* Membership is transitive for ordinals.                                       *)
 Proposition ElemElemTran : forall (a b c:U),
   Ordinal a ->
   Ordinal b ->
@@ -206,6 +218,7 @@ Proof.
   apply Empty.Charac with x. apply H3. assumption.
 Qed.
 
+(* The empty set is included in every ordinal.                                  *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   :0: :<=: a.
 Proof.
@@ -215,6 +228,7 @@ Proof.
   destruct H2 as [H2|H2]. 2: assumption. apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* Every ordinal is either 0 or contains 0.                                     *)
 Proposition ZeroOrElem : forall (a:U), Ordinal a ->
   a = :0: \/ :0: :< a.
 Proof.
