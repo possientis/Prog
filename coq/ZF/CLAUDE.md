@@ -49,7 +49,13 @@ Place a one-line informal statement of the proposition on the line **immediately
 Proposition ...
 ```
 
-All `*)` comment closers must have their `*` at **column 81** (vim 1-indexed, i.e. the 81st character). Use `./clean.sh && git diff` to verify alignment after edits.
+All `*)` comment closers must have their `*` at **column 81** (vim 1-indexed, i.e. the 81st character). After every edit, verify with:
+
+```bash
+awk '{n=index($0,"*)"); if(n>0) printf "line %d: *) at col %d\n", NR, n}' File.v
+```
+
+Every content comment line must report col 81. Do not rely on visual counting.
 
 Comments must be readable by a mathematician unfamiliar with Coq — no references to tactics, lemma names, or Coq API. Describe the mathematical content, not the proof mechanism.
 
@@ -57,9 +63,8 @@ Always give an informal proof sketch first, then embed it as comments inside the
 
 ### Proof style preferences
 
-- `assert (P) as H. { ... }` over `pose proof` or deep destructuring.
+- `assert (P) as H. { ... }` over `pose proof` or deep destructuring. 
 - `apply`/`eapply` + `assumption`/`eassumption` over `exact (Lemma a b c)`. Explicit arguments to lemmas (e.g. `apply (Succ.NotZero n)`) are fine; avoid passing local hypotheses as explicit arguments (e.g. avoid `exact (H a b)` or `rewrite (IH p H1 H2)`).
-- `split. 1: reflexivity.` (goal selector) for trivial sub-goals rather than bullet blocks.
-- `tac; try assumption` when a tactic leaves 2+ assumption sub-goals; `tac. N: assumption.` for exactly one.
+- `tac; try assumption` when a tactic leaves 2+ assumption sub-goals; `tac. N: assumption.` for exactly one. When `tac` generates multiple goals and one is immediately closable by `assumption` or `reflexivity`, dispatch it inline with `N: assumption.` or `N: reflexivity.` — do not leave it as a separate bullet or block.
 - Hypothesis names: use sequential `H1, H2, G1, G2, K1, K2, ...` — not descriptive names like `Hfaneb` or `Gincl`; the informal comments carry the meaning.
 - If a primitive lemma or proposition appears to be missing from the existing API, say so rather than silently inlining it. Missing lemmas are opportunities to improve the API for future use.

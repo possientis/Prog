@@ -8,6 +8,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
@@ -243,4 +244,17 @@ Proof.
   assert (b :~: :P(b)) as H8. { apply EquivCharac; assumption. }
   apply Equiv.Cantor with b. assumption. }
   rewrite H3, H4. assumption.
+Qed.
+
+(* card n = n for every natural n: naturals are their own cardinals.            *)
+Proposition WhenNat : forall (n:U), n :< :N ->
+  card n = n.
+Proof.
+  (* Proof by Claude. *)
+  intros n H1.
+  (* n is an ordinal (naturals are), so n ~ card n; card n ~ n by symmetry;     *)
+  (* card n is an ordinal equipotent to n, so it equals n.                      *)
+  apply EqualOrdNat. 2: assumption.
+  - apply IsOrdinal.
+  - apply Equiv.Sym, IsEquivOrd, Omega.HasOrdinals. assumption.
 Qed.
