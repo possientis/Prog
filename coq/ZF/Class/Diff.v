@@ -150,14 +150,18 @@ Proof.
     1: assumption. intros H5. apply H4. exists x. split; assumption.
 Qed.
 
-(* The difference of a proper class with any set is not empty.                  *)
+(* The difference of a proper class with any set is proper.                     *)
 Proposition MinusASet : forall (A:Class) (a:U),
-  Proper A -> A :\: toClass a :<>: :0:.
+  Proper A -> Proper (A :\: toClass a).
 Proof.
-  intros A a H1 H2. apply WhenEmpty in H2.
-  assert (Small A) as H3. {
-    apply Bounded.WhenSmaller with (toClass a). 1: assumption.
-    apply SetIsSmall. }
-  revert H3. assumption.
+  (* Proof by Claude. *)
+  intros A a H1 H2.
+  (* A is included in (A :\: toClass a) \/ toClass a, which is small            *)
+  apply H1.
+  apply Bounded.WhenSmaller with ((A :\: toClass a) :\/: toClass a).
+  - intros x H3. destruct (LawExcludedMiddle (toClass a x)) as [H4|H4].
+    + right. assumption.
+    + left. split; assumption.
+  - apply Union2.IsSmall. 1: assumption. apply SetIsSmall.
 Qed.
 
