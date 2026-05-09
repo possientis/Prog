@@ -258,3 +258,9 @@ Proof.
   - apply IsOrdinal.
   - apply Equiv.Sym, IsEquivOrd, Omega.HasOrdinals. assumption.
 Qed.
+
+Proposition NatIsCardinal : forall (n:U),
+  n :< :N -> Cardinal n.
+Proof.
+  intros n H1. exists n. symmetry. apply WhenNat. assumption.
+Qed.
