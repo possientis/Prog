@@ -7,16 +7,18 @@ Require Import ZF.Set.Relation.Bij.
 
 Module COT := ZF.Class.Order.Total.
 
-(* Predicate expressing the fact that r is a total set on a.                    *)
+(* Predicate expressing the fact that r is a total set (as relation) on a.      *)
 Definition Total (r a:U) : Prop := forall (x y:U), x :< a -> y :< a ->
   x = y \/ :(x,y): :< r \/ :(y,x): :< r.
 
+(* If the sets form a total pair, then so do the classes.                       *)
 Proposition ToClass : forall (r a:U),
   Total r a -> COT.Total (toClass r) (toClass a).
 Proof.
   intros r a H1. assumption.
 Qed.
 
+(* If the classes form a total pair, then so do the sets.                       *)
 Proposition FromClass : forall (r a:U),
   COT.Total (toClass r) (toClass a) -> Total r a.
 Proof.

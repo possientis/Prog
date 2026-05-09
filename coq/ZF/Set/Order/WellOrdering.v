@@ -12,12 +12,14 @@ Module COW := ZF.Class.Order.WellOrdering.
 (* r is a well-ordering on a iff it is founded on a and total on a.             *)
 Definition WellOrdering (r a:U) : Prop :=  Founded r a /\ Total r a.
 
+(* If the sets form a well-ordering, then so do the classes.                    *)
 Proposition ToClass : forall (r a:U),
   WellOrdering r a -> COW.WellOrdering (toClass r) (toClass a).
 Proof.
   intros r a H1. assumption.
 Qed.
 
+(* If the classes form a well-ordering, then so do the sets.                    *)
 Proposition FromClass : forall (r a:U),
   COW.WellOrdering (toClass r) (toClass a) -> WellOrdering r a.
 Proof.

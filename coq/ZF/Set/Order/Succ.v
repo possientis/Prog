@@ -22,6 +22,7 @@ Module SIN := ZF.Set.Incl.
 (* The successor in the ordered class (A,R) of a set a.                         *)
 Definition succ (R A:Class) (a:U) : U := truncate (COS.succ R A a).
 
+(* The class of the successor is the class-level successor.                     *)
 Proposition ToClass : forall (R A:Class) (a:U),
   WellFoundedWellOrd R A                    ->
   A a                                       ->
@@ -31,6 +32,7 @@ Proof.
   apply Truncate.WhenSmall, COS.IsSmall; assumption.
 Qed.
 
+(* b is the successor of a in (A,R) iff b is the R-least element above a.       *)
 Proposition Charac : forall (R A:Class) (a b:U),
   WellFoundedWellOrd R A                        ->
   A a                                           ->
@@ -156,6 +158,7 @@ Proof.
     + apply IsMore; assumption.
 Qed.
 
+(* a is in the initial segment at its successor.                                *)
 Proposition InInit: forall (R A:Class) (a:U),
   WellFoundedWellOrd R A                                ->
   A a                                                   ->

@@ -15,9 +15,11 @@ Require Import ZF.Set.Truncate.
 Module CIN := ZF.Class.Incl.
 Module COT := ZF.Class.Order.Transport.
 
+(* The transport of r by f over a.                                              *)
 Definition transport (f r a:U) : U :=
   truncate (COT.transport (toClass f) (toClass r) (toClass a)).
 
+(* The class of the transport is the transport of the classes.                  *)
 Proposition ToClass : forall (f r a:U),
   Functional f                                      ->
   a :<=: domain f                                   ->

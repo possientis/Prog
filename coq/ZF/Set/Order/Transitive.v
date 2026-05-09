@@ -7,7 +7,7 @@ Require Import ZF.Set.Relation.Bij.
 
 Module COT := ZF.Class.Order.Transitive.
 
-(* Predicate expressing the fact that r is a transitive set on a.               *)
+(* Predicate expressing the fact that r is a transitive set (as relation) on a. *)
 Definition Transitive (r a:U) : Prop := forall (x y z:U),
   x :< a        ->
   y :< a        ->
@@ -16,12 +16,14 @@ Definition Transitive (r a:U) : Prop := forall (x y z:U),
   :(y,z): :< r  ->
   :(x,z): :< r.
 
+(* If the sets form a transitive pair, then so do the classes.                  *)
 Proposition ToClass : forall (r a:U),
   Transitive r a -> COT.Transitive (toClass r) (toClass a).
 Proof.
   intros r a H1. assumption.
 Qed.
 
+(* If the classes form a transitive pair, then so do the sets.                  *)
 Proposition FromClass : forall (r a:U),
   COT.Transitive (toClass r) (toClass a) -> Transitive r a.
 Proof.

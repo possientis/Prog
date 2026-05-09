@@ -51,7 +51,7 @@ Proof.
   subst. assumption.
 Qed.
 
-(* The R-transitive closure of a in A contains (all elemnts of) a.              *)
+(* A set a is a subset of its R-transitive closure in A.                        *)
 Proposition Contains : forall (R A:Class) (a:U),
   WellFounded R A                       ->
   toClass a :<=: A                      ->
@@ -78,6 +78,7 @@ Proof.
   intros R A a H1 H2. apply COT.IsTransitive with a, IsClosure; assumption.
 Qed.
 
+(* Each element of the closure has a decreasing R-path back to an element of a. *)
 Proposition DecreasingPath : forall (R A:Class) (a x:U),
   WellFounded R A                               ->
   toClass a :<=: A                              ->
@@ -126,7 +127,7 @@ Proof.
     apply H2. assumption.
 Qed.
 
-(* A set does not belong to the R-transitive of its initial segment in A.       *)
+(* A set is not in the R-transitive closure of its initial segment in Ai        *)
 Proposition IsNotIn : forall (R A:Class) (a:U),
   WellFounded R A                         ->
   A a                                     ->

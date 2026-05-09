@@ -39,6 +39,7 @@ Proof.
   - apply Charac. exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
+(* The class of the restriction is the restriction to the classe.               *)
 Proposition ToClass : forall (R:Class) (a:U),
   toClass (R:/:a) :~: R :/: (toClass a).
 Proof.
@@ -49,26 +50,30 @@ Proof.
     split. 1: assumption. split; assumption.
 Qed.
 
+(* The restriction of a class (as relation) to a set is a relation.             *)
 Proposition IsRelation : forall (R:Class) (a:U), Relation (R:/:a).
 Proof.
   intros R a x H1. apply Charac in H1. destruct H1 as [y [z [H1 _]]].
   exists y. exists z. assumption.
 Qed.
 
-Proposition InclR : forall (R:Class) (a x:U), x :< R:/:a -> R x.
+(* Every element of the restriction lies in the original class.                 *)
+Proposition IsIncl : forall (R:Class) (a x:U), x :< R:/:a -> R x.
 Proof.
   intros R a x H1.
   apply Charac in H1. destruct H1 as [y [z [H1 [H2 [H3 H4]]]]].
   subst. assumption.
 Qed.
 
-Proposition InAL : forall (R:Class) (a x y:U),
+(* If (x,y) is in R restricted to a, then x belongs to a.                       *)
+Proposition IsInL : forall (R:Class) (a x y:U),
   :(x,y): :< R:/:a -> x :< a.
 Proof.
   intros R a x y H1. apply Charac2 in H1. apply H1.
 Qed.
 
-Proposition InAR : forall (R:Class) (a x y:U),
+(* If (x,y) is in R restricted to a, then y belongs to a.                       *)
+Proposition IsInR: forall (R:Class) (a x y:U),
   :(x,y): :< R:/:a -> y :< a.
 Proof.
   intros R a x y H1. apply Charac2 in H1. apply H1.
