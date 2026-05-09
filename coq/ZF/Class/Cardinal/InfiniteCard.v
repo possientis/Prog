@@ -4,6 +4,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Proper.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Omega.
 
@@ -31,4 +32,13 @@ Proof.
   intros a H1. apply SCC.CardIsOrd, IsCardinal. assumption.
 Qed.
 
+(* omega is a cardinal number not contained in itself.                          *)
+Proposition HasOmega : InfiniteCard :N.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* N is a cardinal number not a member of itself by foundation.               *)
+  split.
+  - apply SCC.HasOmega.
+  - apply Foundation.NoElemLoop1.
+Qed.
 
