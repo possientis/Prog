@@ -1017,11 +1017,8 @@ Proof.
 Qed.
 
 (* Equipotent natural numbers are equal.                                        *)
-Proposition EqualNat : forall (m n:U),
-  m :< :N ->
-  n :< :N ->
-  m :~: n ->
-  m = n.
+Proposition EqualNat : forall (m n:U), m :< :N -> n :< :N ->
+  m :~: n -> m = n.
 Proof.
   (* Proof by Claude.                                                           *)
   (* Induction on n: define A n = "any m in N equipotent to n equals n".        *)
@@ -1049,5 +1046,64 @@ Proof.
   intros m n H3 H4 H5.
   assert (A n) as H6. { apply Omega.Induction; assumption. }
   rewrite HA in H6. apply H6; assumption.
+Qed.
+
+(* No natural number is equipotent to its successor.                            *)
+Proposition NotSuccNat : forall (n:U), n :< :N ->
+  ~ n :~: succ n.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros n H1 H2.
+  (* succ n is also a natural number.                                           *)
+  assert (succ n :< :N) as H3. { apply Omega.HasSucc. assumption. }
+  (* Since n ~ succ n and both are naturals, they must be equal.                *)
+  assert (n = succ n) as H4. { apply EqualNat; assumption. }
+  (* But n lies in succ n, so n = succ n gives n in n, contradicting foundation.*)
+  assert (n :< succ n) as H5. { apply Succ.IsIn. }
+  rewrite <- H4 in H5. revert H5. apply Foundation.NoElemLoop1.
+Qed.
+
+(* No injection from succ n into n exists for any natural number n.             *)
+Proposition NoInjSuccNat : forall (n:U), n :< :N ->
+  ~ exists f, Inj f (succ n) n.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros n H1 [f [H2 H3]].
+  (* f bijects succ n onto its range, which lies inside n.                      *)
+  assert (succ n :~: range f) as H4. {
+    exists f. split. 1: exact H2. reflexivity. }
+  (* n is a subset of succ n.                                                   *)
+  assert (n :<=: succ n) as H5. { apply Succ.IsIncl. }
+  (* By Cantor-Schroeder-Bernstein, succ n is equipotent to n.                  *)
+  assert (succ n :~: n) as H6. {
+    apply CantorShroderBernstein with (range f) n; try assumption.
+    apply Refl. }
+  (* Hence n ~ succ n, contradicting NotSuccNat.                                *)
+  apply (NotSuccNat n H1). apply Sym. assumption.
+Qed.
+
+(* An ordinal equipotent to a natural number equals that natural number.        *)
+Proposition EqualOrdNat : forall (a n:U), Ordinal a -> n :< :N ->
+  a :~: n -> a = n.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros a n H1 H2 H3.
+  (* n is an ordinal since every element of N is an ordinal.                    *)
+  assert (Ordinal n) as H4. { apply Omega.HasOrdinals. assumption. }
+  (* Ordinal trichotomy: a = n, a :< n, or n :< a.                              *)
+  assert (a = n \/ a :< n \/ n :< a) as H5. { apply Core.IsTotal; assumption. }
+  destruct H5 as [H5|[H5|H5]]. 1: assumption.
+  - (* a :< n implies a :< N, and two equipotent natural numbers are equal.     *)
+    assert (a :< :N) as H6. { apply Omega.IsIn with n; assumption. }
+    apply EqualNat; assumption.
+  - (* n :< a implies succ n :<=: a; compose injections succ n -> a -> n        *)
+    (* yielding an injection from succ n into n, which is impossible.           *)
+    assert (succ n :<=: a) as H6. { apply Succ.ElemIsIncl; assumption. }
+    destruct H3 as [f [H3 H3']].
+    assert (Inj (id a :|: succ n) (succ n) a) as I1. {
+      apply Inj.Restrict with a. 1: apply Id.IsInj. assumption. }
+    assert (Inj f a n) as I2. { apply Bij.IsInj. split; assumption. }
+    exfalso. apply (NoInjSuccNat n H2). exists (f :.: (id a :|: succ n)).
+    apply Inj.Compose with a; assumption.
 Qed.
 

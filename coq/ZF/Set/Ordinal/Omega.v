@@ -254,6 +254,7 @@ Qed.
 
 (* Zero is a subset of every natural number.                                    *)
 Proposition ZeroIncl : forall (n:U), n :< :N -> :0: :<=: n.
+Proof.
   intros n H1. apply Core.IsIncl, HasOrdinals. assumption.
 Qed.
 

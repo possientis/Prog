@@ -62,3 +62,4 @@ Always give an informal proof sketch first, then embed it as comments inside the
 - `split. 1: reflexivity.` (goal selector) for trivial sub-goals rather than bullet blocks.
 - `tac; try assumption` when a tactic leaves 2+ assumption sub-goals; `tac. N: assumption.` for exactly one.
 - Hypothesis names: use sequential `H1, H2, G1, G2, K1, K2, ...` — not descriptive names like `Hfaneb` or `Gincl`; the informal comments carry the meaning.
+- If a primitive lemma or proposition appears to be missing from the existing API, say so rather than silently inlining it. Missing lemmas are opportunities to improve the API for future use.
