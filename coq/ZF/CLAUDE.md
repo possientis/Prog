@@ -61,3 +61,4 @@ Always give an informal proof sketch first, then embed it as comments inside the
 - `apply`/`eapply` + `assumption`/`eassumption` over `exact (Lemma a b c)`.
 - `split. 1: reflexivity.` (goal selector) for trivial sub-goals rather than bullet blocks.
 - `tac; try assumption` when a tactic leaves 2+ assumption sub-goals; `tac. N: assumption.` for exactly one.
+- Hypothesis names: use sequential `H1, H2, G1, G2, K1, K2, ...` — not descriptive names like `Hfaneb` or `Gincl`; the informal comments carry the meaning.

@@ -691,6 +691,116 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+Proposition SuccCompatRev : forall (a b:U),
+  succ a :~: succ b -> a :~: b.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Let f : succ(a) -> succ(b) be the given bijection.                         *)
+  intros a b [f H1].
+  assert (a :< succ a) as G1. { apply Succ.IsIn. }
+  assert (a :<=: succ a) as G2. { apply Succ.IsIncl. }
+  assert (f!a :< succ b) as G3. {
+    apply (Bij.IsInRange f (succ a) (succ b)); assumption. }
+  (* For x in a define h(x) = f(a) if f(x) = b, else h(x) = f(x).               *)
+  remember (ifThenElse a (fun x => f!x = b) (fun _ => f!a) (fun x => f!x))
+    as h eqn:H2.
+  assert (FunctionOn h a) as H3. { rewrite H2. apply IfThenElse.IsFunctionOn. }
+  assert (forall x, x :< a -> f!x = b  -> h!x = f!a) as G4. {
+    intros x H4 H5. rewrite H2, IfThenElse.Eval1. 1: reflexivity.
+    all: assumption. }
+  assert (forall x, x :< a -> f!x <> b -> h!x = f!x) as G5. {
+    intros x H4 H5. rewrite H2, IfThenElse.Eval2. 1: reflexivity.
+    all: assumption. }
+  (* If f(x) = b for x in a then f(a) ≠ b: otherwise x = a contradicts          *)
+  (* foundation.                                                                *)
+  assert (forall x, x :< a -> f!x = b -> f!a <> b) as G6. {
+    intros x H4 H5 H6.
+    assert (x = a) as H7. {
+      apply (Bij.EvalInjective f (succ a) (succ b)).
+      1: assumption. 1: apply G2, H4. 1: apply G1.
+      rewrite H5. symmetry. assumption. }
+    rewrite H7 in H4. revert H4. apply Foundation.NoElemLoop1. }
+  (* h takes values in b: either h(x) = f(a) with f(a) in b (since f(a) ≠ b),   *)
+  (* or h(x) = f(x) with f(x) in b (since f(x) ≠ b).                            *)
+  assert (range h :<=: b) as H4. {
+    intros y H4.
+    apply (FunctionOn.RangeCharac h a) in H4. 2: assumption.
+    destruct H4 as [x [H4 H5]].
+    assert (f!x = b \/ f!x <> b) as [H6|H6]. { apply LawExcludedMiddle. }
+    - rewrite (G4 x H4 H6) in H5. rewrite <- H5.
+      apply Succ.Charac in G3. destruct G3 as [G3|G3].
+      + exfalso. apply (G6 x H4 H6). assumption.
+      + assumption.
+    - rewrite (G5 x H4 H6) in H5. rewrite <- H5.
+      assert (f!x :< succ b) as H7. {
+        apply (Bij.IsInRange f (succ a) (succ b)); try assumption.
+        apply G2. assumption. }
+      apply Succ.Charac in H7. destruct H7 as [H7|H7].
+      + exfalso. apply H6. assumption.
+      + assumption. }
+  assert (Fun h a b) as H5. { split; assumption. }
+  (* Surjectivity: for z in b, find x in a with h(x) = z.                       *)
+  (* b is not in b by foundation, so z ≠ b.                                     *)
+  assert (b :<=: range h) as H6. {
+    intros z H6.
+    assert (z :< succ b) as H7. { apply Succ.Charac. right. assumption. }
+    apply (Bij.RangeCharac f (succ a) (succ b)) in H7. 2: assumption.
+    destruct H7 as [u [H7 H8]].
+    apply Succ.Charac in H7. destruct H7 as [H7|H7].
+    - (* u = a: f(a) = z. Surjectivity gives v with f(v) = b.                   *)
+      subst u.
+      assert (b :< succ b) as H9. { apply Succ.IsIn. }
+      apply (Bij.RangeCharac f (succ a) (succ b)) in H9. 2: assumption.
+      destruct H9 as [v [H9 H10]].
+      apply Succ.Charac in H9. destruct H9 as [H9|H9].
+      + (* v = a: f(a) = b = z, but z in b contradicts foundation.              *)
+        subst v. rewrite H10 in H8.
+        exfalso. rewrite <- H8 in H6. revert H6. apply Foundation.NoElemLoop1.
+      + (* v in a: h(v) = f(a) = z.                                             *)
+        apply (FunctionOn.RangeCharac h a). 1: assumption.
+        exists v. split. 1: assumption.
+        rewrite (G4 v H9 H10). assumption.
+    - (* u in a: f(u) = z, and z ≠ b since z in b, so h(u) = f(u) = z.          *)
+      apply (FunctionOn.RangeCharac h a). 1: assumption.
+      exists u. split. 1: assumption.
+      assert (f!u <> b) as H9. {
+        intros H9.
+        assert (z = b) as H10. { rewrite <- H8. assumption. }
+        rewrite H10 in H6. revert H6. apply Foundation.NoElemLoop1. }
+      rewrite (G5 u H7 H9). assumption. }
+  (* Injectivity: four cases on whether f(x) = b and f(y) = b.                  *)
+  assert (OneToOne h) as H7. {
+    apply (Fun.IsOneToOne h a b). 1: assumption.
+    intros x y H7 H8 H9.
+    assert (f!x = b \/ f!x <> b) as [H10|H10]. { apply LawExcludedMiddle. }
+    - assert (f!y = b \/ f!y <> b) as [H11|H11]. { apply LawExcludedMiddle. }
+      + (* Both f(x) = b, f(y) = b: injectivity of f gives x = y.               *)
+        apply (Bij.EvalInjective f (succ a) (succ b)).
+        1: assumption. 1: apply G2, H7. 1: apply G2, H8.
+        rewrite H10, H11. reflexivity.
+      + (* f(x) = b, f(y) ≠ b: h(x) = f(a) = h(y) = f(y) gives a = y,           *)
+        (* contradicting y in a.                                                *)
+        exfalso.
+        rewrite (G4 x H7 H10), (G5 y H8 H11) in H9.
+        assert (a = y) as H12. {
+          apply (Bij.EvalInjective f (succ a) (succ b)).
+          1: assumption. 1: apply G1. 1: apply G2, H8. assumption. }
+        rewrite <- H12 in H8. revert H8. apply Foundation.NoElemLoop1.
+    - assert (f!y = b \/ f!y <> b) as [H11|H11]. { apply LawExcludedMiddle. }
+      + (* f(x) ≠ b, f(y) = b: symmetric.                                       *)
+        exfalso.
+        rewrite (G5 x H7 H10), (G4 y H8 H11) in H9.
+        assert (a = x) as H12. {
+          apply (Bij.EvalInjective f (succ a) (succ b)).
+          1: assumption. 1: apply G1. 1: apply G2, H7. symmetry. assumption. }
+        rewrite <- H12 in H7. revert H7. apply Foundation.NoElemLoop1.
+      + (* Both f(x) ≠ b, f(y) ≠ b: h(x) = f(x) = f(y) = h(y), inj of f.        *)
+        rewrite (G5 x H7 H10), (G5 y H8 H11) in H9.
+        apply (Bij.EvalInjective f (succ a) (succ b)).
+        1: assumption. 1: apply G2, H7. 1: apply G2, H8. assumption. }
+  exists h. apply Bij.FromFun; assumption.
+Qed.
+
 (* If a and b are disjoint, a ~ c and b ~ d, then a \/ b ~ c + d.               *)
 Proposition DisjointUnion : forall (a b c d:U),
   Ordinal c               ->
@@ -905,4 +1015,12 @@ Proof.
   - apply ProdComm.
   - exists (Mult2.f a b). apply Mult2.IsBij; assumption.
 Qed.
+
+Proposition EqualNat : forall (m n:U),
+  m :< :N ->
+  n :< :N ->
+  m :~: n ->
+  m = n.
+Proof.
+Admitted.
 
