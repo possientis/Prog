@@ -1016,11 +1016,38 @@ Proof.
   - exists (Mult2.f a b). apply Mult2.IsBij; assumption.
 Qed.
 
+(* Equipotent natural numbers are equal.                                        *)
 Proposition EqualNat : forall (m n:U),
   m :< :N ->
   n :< :N ->
   m :~: n ->
   m = n.
 Proof.
-Admitted.
+  (* Proof by Claude.                                                           *)
+  (* Induction on n: define A n = "any m in N equipotent to n equals n".        *)
+  remember (fun n => forall m, m :< :N -> m :~: n -> m = n) as A eqn:HA.
+  assert (A :0:) as H1. {
+    (* Base case: m :~: 0 implies m = 0.                                        *)
+    rewrite HA. intros m H1 H2. apply WhenZero. assumption. }
+  assert (forall n, n :< :N -> A n -> A (succ n)) as H2. {
+    rewrite HA. intros n H2 IH m H3 H4.
+    (* m :~: succ n and succ n ≠ 0, so m ≠ 0.                                   *)
+    assert (m <> :0:) as H5. {
+      intros H5. subst. apply Sym in H4. apply WhenZero in H4.
+      apply (Succ.NotZero n). assumption. }
+    (* m :< N and m ≠ 0, so m = succ p for some p :< N.                         *)
+    assert (exists p, p :< :N /\ m = succ p) as H6. {
+      apply Omega.HasPred. 1: assumption.
+      apply Omega.WhenNotZero; assumption. }
+    destruct H6 as [p [H6 H7]].
+    (* succ p :~: succ n, so p :~: n.                                           *)
+    assert (p :~: n) as H8. {
+      apply SuccCompatRev. rewrite <- H7. assumption. }
+    (* By the inductive hypothesis, p = n, hence m = succ p = succ n.           *)
+    assert (p = n) as H9. { apply IH; assumption. }
+    rewrite H7, H9. reflexivity. }
+  intros m n H3 H4 H5.
+  assert (A n) as H6. { apply Omega.Induction; assumption. }
+  rewrite HA in H6. apply H6; assumption.
+Qed.
 
