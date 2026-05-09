@@ -165,3 +165,14 @@ Proof.
   - apply Union2.IsSmall. 1: assumption. apply SetIsSmall.
 Qed.
 
+Proposition IsInclL : forall (A B:Class),
+  A :\: B :<=: A.
+Proof.
+  intros A B. apply Inter2.IsInclL.
+Qed.
+
+Proposition IsInclR : forall (A B:Class),
+  A :\: B :<=: :¬: B.
+Proof.
+  intros A B. apply Inter2.IsInclR.
+Qed.
