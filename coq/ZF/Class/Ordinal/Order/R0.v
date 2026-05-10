@@ -231,7 +231,7 @@ Qed.
 (* J0 is an order isomorphism from On x On to On.                               *)
 Proposition IsIsom : Isom J0 R0 E (On :x: On) On.
 Proof.
-  apply Isom.Converse, WFWOIsom.IsIsom. 3: apply Equiv.Refl.
+  apply Isom.Converse, WFWOIsom.IsIsom.
   - apply IsWellFoundedWellOrd.
   - apply Core.IsProperSquare.
 Qed.

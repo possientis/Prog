@@ -14,7 +14,6 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 
 Module CCI := ZF.Class.Cardinal.InfiniteCard.
-Module CEQ := ZF.Class.Equiv.
 Module COC := ZF.Class.Ordinal.Core.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COO := ZF.Class.Ordinal.OrdSub.
@@ -28,7 +27,6 @@ Proof.
   apply COO.IsIsom.
   - apply CCI.IsProper.
   - intros a. apply CCI.IsOrdinal.
-  - apply CEQ.Refl.
 Qed.
 
 (* Aleph is the unique isomorphism ...                                          *)
