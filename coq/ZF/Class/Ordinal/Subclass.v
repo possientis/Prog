@@ -1,7 +1,10 @@
+Require Import ZF.Class.DiffBySet.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Ordinal.MinFresh.
@@ -11,6 +14,7 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module CMF := ZF.Class.Ordinal.MinFresh.
@@ -37,6 +41,25 @@ Proof.
   intros A a H1. apply (CEN.IsRecursive E A). assumption.
 Qed.
 
+(* Each value of Enum A is the E-minimal element of A not yet covered.          *)
+Proposition IsMinimal : forall (A:Class) (a:U),
+  Proper A                                      ->
+  A :<=: On                                     ->
+  On a                                          ->
+  Minimal E (A :\: (Enum A):[a]:) (Enum A)!a.
+Proof.
+  (* Proof by Claude. *)
+  intros A a H1 H2 H3.
+  assert (FunctionOn (Enum A) On) as H4. { apply IsFunctionOn. }
+  assert (CEN.Recursive E A (Enum A)) as H5. { apply CEN.IsRecursive. }
+  (* A minus the image of a under Enum A is non-empty since A is proper.        *)
+  assert ((A :\: (Enum A):[a]:) :<>: :0:) as H6. {
+    apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
+  (* So Enum A(a) is the E-minimal element of that non-empty difference.        *)
+  apply CEN.IsMinimal; try assumption.
+  apply COE.IsWellFoundedWellOrd. assumption.
+Qed.
+
 (* Enum A is an isomorphism from On to A.                                       *)
 Proposition IsIsom : forall (A:Class),
   Proper A                  ->
@@ -60,12 +83,12 @@ Qed.
 
 (* A well ordered small class of ordinals is isomorphic to an ordinal.          *)
 Proposition WhenSmall : forall (A:Class),
-  Small A                   ->
-  A :<=: On                 ->
+  Small A                                   ->
+  A :<=: On                                 ->
 
-  exists a, On a  /\
+  exists a, On a                            /\
     forall (g:U),
-      g = (Enum A :|: a) ->
+      g = (Enum A :|: a)                    ->
       Isom (toClass g) E E (toClass a) A.
 Proof.
   intros A H1 H2. apply CEN.WhenSmall. 1: assumption.
