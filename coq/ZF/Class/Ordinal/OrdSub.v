@@ -49,7 +49,6 @@ Proof.
   intros A f H1 H2.
   apply CMF.IsMinimal.
   - apply COE.IsWellFoundedWellOrd. assumption.
-  - apply Equiv.Refl.
   - assumption.
 Qed.
 

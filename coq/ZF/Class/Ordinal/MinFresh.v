@@ -57,24 +57,21 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
-(* When F :~: MinFresh R A, F!x is R-minimal in A minus the range of x.         *)
-Lemma IsMinimal : forall (R A F:Class) (f:U),
+(* (MinFresh R A)(f) is R-minimal in A minus the range of f.                    *)
+Proposition IsMinimal : forall (R A:Class) (f:U),
   WellFoundedWellOrd R A                        ->
-  F :~: MinFresh R A                            ->
-  (A :\: range f) :<>: :0:            ->
-  Minimal R (A :\: range f) F!f.
+  (A :\: range f) :<>: :0:                      ->
+  Minimal R (A :\: range f) (MinFresh R A)!f.
 Proof.
   (* Proof by Claude. *)
-  intros R A F f H1 H2 H3.
-  assert (exists y, Minimal R (A :\: range f) y) as H4. {
+  intros R A f H1 H2.
+  assert (exists y, Minimal R (A :\: range f) y) as H3. {
     apply WellFoundedWellOrd.HasMinimal with A; try assumption.
     apply Class.Inter2.IsInclL. }
-  destruct H4 as [y H4].
-  assert (F!f = y) as H5. {
+  destruct H3 as [y H3].
+  assert ((MinFresh R A)!f = y) as H4. {
     apply CRF.Eval.
-    - apply CRF.EquivCompat with (MinFresh R A).
-      + apply Equiv.Sym. assumption.
-      + apply IsFunction, H1.
-    - apply H2, Charac2. assumption. }
-  rewrite H5. assumption.
+    - apply IsFunction, H1.
+    - apply Charac2. assumption. }
+  rewrite H4. assumption.
 Qed.

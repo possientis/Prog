@@ -79,7 +79,7 @@ Definition MinFresh (R A:Class) : Class := CMF.MinFresh R A.
 (* For G satisfying the Enum recursion, G!a is R-minimal in A minus G:[a]:.     *)
 Lemma WhenEnum_ : forall (R A F G:Class),
   WellFoundedWellOrd R A                  ->
-  F :~: CMF.MinFresh R A                  ->
+  F :~: MinFresh R A                      ->
   CFO.FunctionOn G On                     ->
   (forall a, On a -> G!a = F!(G:|:a))     ->
 
@@ -93,7 +93,9 @@ Proof.
   intros R A F G H1 H2 H3 H4 a H5 H6.
   assert (SRR.range (G:|:a) = G:[a]:) as H7. {
     apply RestrictOfClass.RangeOf, H3. }
-  rewrite H4. 2: assumption. rewrite <- H7.
+  rewrite H4. 2: assumption.
+  rewrite (EvalOfClass.EquivCompat F (CMF.MinFresh R A) _ H2).
+  rewrite <- H7.
   apply CMF.IsMinimal; try assumption. rewrite H7. assumption.
 Qed.
 
@@ -101,7 +103,7 @@ Qed.
 Lemma WhenEnum : forall (R A F G:Class),
   WellFoundedWellOrd R A                  ->
   Proper A                                ->
-  F :~: CMF.MinFresh R A                  ->
+  F :~: MinFresh R A                      ->
   CFO.FunctionOn G On                     ->
   (forall a, On a -> G!a = F!(G:|:a))     ->
   Isom G E R On A.
