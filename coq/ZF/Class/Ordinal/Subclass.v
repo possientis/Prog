@@ -8,6 +8,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Ordinal.MinFresh.
+Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Class.Ordinal.Order.E.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.FunctionOn.
@@ -17,9 +18,11 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
-Module CMF := ZF.Class.Ordinal.MinFresh.
-Module COE := ZF.Class.Ordinal.Order.E.
 Module CEN := ZF.Class.Ordinal.Enum.
+Module CMF := ZF.Class.Ordinal.MinFresh.
+Module COC := ZF.Class.Ordinal.Core.
+Module COE := ZF.Class.Ordinal.Order.E.
+Module COM := ZF.Class.Ordinal.Monotone.
 
 (* MinFresh picks the E-minimal element of A not in the range of its argument.  *)
 Definition MinFresh (A:Class) : Class := CMF.MinFresh E A.
@@ -81,6 +84,17 @@ Proof.
   apply COE.IsWellFoundedWellOrd. assumption.
 Qed.
 
+Proposition IsMonotone : forall (A:Class),
+  Proper A                  ->
+  A :<=: On                 ->
+  Monotone (Enum A).
+Proof.
+  intros A H1 H2.
+  apply COM.FromIsom with On A. 3: assumption.
+  - apply IsIsom; assumption.
+  - apply COC.IsOrdinal.
+Qed.
+
 (* A well ordered small class of ordinals is isomorphic to an ordinal.          *)
 Proposition WhenSmall : forall (A:Class),
   Small A                                   ->
@@ -94,3 +108,4 @@ Proof.
   intros A H1 H2. apply CEN.WhenSmall. 1: assumption.
   apply COE.IsWellOrdering. assumption.
 Qed.
+
