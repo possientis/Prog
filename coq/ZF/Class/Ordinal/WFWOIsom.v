@@ -106,7 +106,7 @@ Proof.
   (* Proof by Claude. *)
   intros R A F G H1 H2 H3 H4 H5.
   assert (forall a, On a -> (A :\: toClass G:[a]:) :<>: :0:) as H6. {
-    intros a H6. apply Proper.IsNotEmpty, Diff.MinusASet. assumption. }
+    intros a H6. apply Proper.IsNotEmpty, Diff.IsProper. assumption. }
   assert (forall a, On a -> Minimal R (A :\: toClass G:[a]:) G!a) as H7. {
     intros a H7. apply WhenEnum_ with F; try assumption.
     apply H6. assumption. }
@@ -128,7 +128,7 @@ Proof.
     destruct H15 as [a [H15 H16]].
     assert (Minimal R (A :\: toClass G:[a]:) G!a) as H17. {
       apply WhenEnum_ with F; try assumption.
-      apply Proper.IsNotEmpty, Diff.MinusASet. assumption. }
+      apply Proper.IsNotEmpty, Diff.IsProper. assumption. }
     destruct H17 as [H17 H18].
     assert (~ (A :\: toClass G:[a]:) x) as H19. {
       intros H19. revert H14. rewrite <- H16. apply H18. assumption. }

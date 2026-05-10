@@ -78,7 +78,7 @@ Proposition IsProper : forall (A:Class) (a:U),
   Proper A -> Proper (A :\: a).
 Proof.
   (* Proof by Claude.                                                           *)
-  intros A a H1. apply Class.Diff.MinusASet. assumption.
+  intros A a H1. apply Class.Diff.IsProper. assumption.
 Qed.
 
 (* The difference A minus a is empty iff A is included in the class of a.       *)

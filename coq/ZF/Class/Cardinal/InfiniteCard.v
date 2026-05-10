@@ -17,7 +17,7 @@ Definition InfiniteCard : Class := Cardinal :\: toClass :N.
 (* The class of infinite cardinal numbers is a proper class.                    *)
 Proposition IsProper : Proper InfiniteCard.
 Proof.
-  apply Diff.MinusASet, CCC.IsProper.
+  apply Diff.IsProper, CCC.IsProper.
 Qed.
 
 Proposition IsCardinal : forall (a:U),

@@ -151,7 +151,7 @@ Proof.
 Qed.
 
 (* The difference of a proper class with any set is proper.                     *)
-Proposition MinusASet : forall (A:Class) (a:U),
+Proposition IsProper : forall (A:Class) (a:U),
   Proper A -> Proper (A :\: toClass a).
 Proof.
   (* Proof by Claude. *)
