@@ -32,26 +32,6 @@ Definition MinFresh (A:Class) : Class := CMF.MinFresh E A.
 (* The canonical isomorphism from On onto A when A is a subclass of On.         *)
 Definition Enum (A:Class) : Class := Recursion (MinFresh A).
 
-(* MinFresh A is a function class when A is a subclass of On.                   *)
-Proposition IsFunction : forall (A:Class),
-  A :<=: On -> Function (MinFresh A).
-Proof.
-  intros A H1. apply CMF.IsFunction, COE.IsTotal. assumption.
-Qed.
-
-(* (MinFresh A)(f) is the E-minimal element of A not yet in the range of f.     *)
-Proposition IsMinimal : forall (A:Class) (f:U),
-   A :<=: On                                  ->
-  (A :\: range f) :<>: :0:                    ->
-  Minimal E (A :\: range f) (MinFresh A)!f.
-Proof.
-  (* Proof by Claude. *)
-  intros A f H1 H2.
-  apply CMF.IsMinimal.
-  - apply COE.IsWellFoundedWellOrd. assumption.
-  - assumption.
-Qed.
-
 (* Enum A is a function class defined on the class of ordinals.                 *)
 Proposition IsFunctionOn : forall (A:Class),
   FunctionOn (Enum A) On.
@@ -63,7 +43,7 @@ Qed.
 Proposition IsRecursive : forall (A:Class) (a:U),
   On a -> (Enum A)!a = (MinFresh A)!(Enum A :|: a).
 Proof.
-  intros A a H1. apply CWI.IsRecursive. assumption.
+  intros A a H1. apply (CWI.IsRecursive E A). assumption.
 Qed.
 
 (* Enum A is an isomorphism from On to A.                                       *)

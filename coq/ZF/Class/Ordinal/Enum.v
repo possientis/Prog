@@ -75,16 +75,19 @@ Definition Enum (R A:Class) : Class := Recursion (CMF.MinFresh R A).
 (* MinFresh R A picks the R-minimal element of A not in the range of its arg.   *)
 Definition MinFresh (R A:Class) : Class := CMF.MinFresh R A.
 
+(* G is MinFresh-recursive for (R, A): each G!a is the next fresh minimum.      *)
+Definition Recursive (R A G:Class) : Prop :=
+  forall a, On a -> G!a = (MinFresh R A)!(G:|:a).
 
-(* For G satisfying the Enum recursion, G!a is R-minimal in A minus G:[a]:.     *)
-Lemma IsMinimalStep : forall (R A G:Class),
-  WellFoundedWellOrd R A                           ->
-  CFO.FunctionOn G On                              ->
-  (forall a, On a -> G!a = (MinFresh R A)!(G:|:a)) ->
+(* If G is recursive, G(a) is R-minimal in A minus G:[a]:.                      *)
+Proposition IsMinimalStep : forall (R A G:Class),
+  WellFoundedWellOrd R A  ->
+  CFO.FunctionOn G On     ->
+  Recursive R A G         ->
 
   (forall a,
-    On a                                           ->
-    (A :\: G:[a]:) :<>: :0:                        ->
+    On a                    ->
+    (A :\: G:[a]:) :<>: :0: ->
     Minimal R (A :\: G:[a]:) G!a
   ).
 Proof.
@@ -92,17 +95,17 @@ Proof.
   intros R A G H1 H2 H3 a H4 H5.
   assert (SRR.range (G:|:a) = G:[a]:) as H6. {
     apply RestrictOfClass.RangeOf, H2. }
-  rewrite H3. 2: assumption.
+  rewrite (H3 a H4).
   rewrite <- H6.
   apply CMF.IsMinimal; try assumption. rewrite H6. assumption.
 Qed.
 
-(* A function with the Enum recursion property is an isomorphism from On to A.  *)
-Lemma RecIsIsom : forall (R A G:Class),
-  WellFoundedWellOrd R A                           ->
-  Proper A                                         ->
-  CFO.FunctionOn G On                              ->
-  (forall a, On a -> G!a = (MinFresh R A)!(G:|:a)) ->
+(* A recursive function class defined on On is an isomorphism from On to A.     *)
+Proposition RecIsIsom : forall (R A G:Class),
+  WellFoundedWellOrd R A  ->
+  Proper A                ->
+  CFO.FunctionOn G On     ->
+  Recursive R A G         ->
   Isom G E R On A.
 Proof.
   (* Proof by Claude. *)
@@ -267,7 +270,7 @@ Proof.
   remember (Enum R A) as G eqn:H4.
   assert (FunctionOn G On) as H5. {
     rewrite H4. apply IsFunctionOn. }
-  assert (forall a, On a -> G!a = (MinFresh R A)!(G:|:a)) as H7. {
+  assert (Recursive R A G) as H7. {
     intros a H7. rewrite H4. apply IsRecursive. assumption. }
   assert (forall a,
     On a                                  ->
