@@ -26,7 +26,7 @@ Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module CWI := ZF.Class.Ordinal.Enum.
 
-(* MinFresh A picks the E-minimal element of A not yet in the range of its arg. *)
+(* MinFresh picks the E-minimal element of A not in the range of its argument.  *)
 Definition MinFresh (A:Class) : Class := CMF.MinFresh E A.
 
 (* The canonical isomorphism from On onto A when A is a subclass of On.         *)

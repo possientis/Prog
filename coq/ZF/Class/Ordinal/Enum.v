@@ -72,27 +72,24 @@ Module SRR := ZF.Set.Relation.Range.
 (* The canonical isomorphism from On onto A, from recursion over MinFresh.      *)
 Definition Enum (R A:Class) : Class := Recursion (CMF.MinFresh R A).
 
-(* MinFresh R A picks the R-minimal element of A not in the range of its arg.   *)
+(* MinFresh picks the R-minimal element of A not in the range of its argument.  *)
 Definition MinFresh (R A:Class) : Class := CMF.MinFresh R A.
 
-(* G is MinFresh-recursive for (R, A): each G!a is the next fresh minimum.      *)
+(* G is MinFresh-recursive for R A: each G(a) is the next fresh minimum.        *)
 Definition Recursive (R A G:Class) : Prop :=
   forall a, On a -> G!a = (MinFresh R A)!(G:|:a).
 
-(* If G is recursive, G(a) is R-minimal in A minus G:[a]:.                      *)
-Proposition IsMinimalStep : forall (R A G:Class),
-  WellFoundedWellOrd R A  ->
-  CFO.FunctionOn G On     ->
-  Recursive R A G         ->
-
-  (forall a,
-    On a                    ->
-    (A :\: G:[a]:) :<>: :0: ->
-    Minimal R (A :\: G:[a]:) G!a
-  ).
+(* If G is recursive, G(a) is R-minimal in the difference A\G[a].               *)
+Proposition IsMinimal : forall (R A G:Class) (a:U),
+  WellFoundedWellOrd R A          ->
+  CFO.FunctionOn G On             ->
+  Recursive R A G                 ->
+  On a                            ->
+  (A :\: G:[a]:) :<>: :0:         ->
+  Minimal R (A :\: G:[a]:) G!a.
 Proof.
   (* Proof by Claude. *)
-  intros R A G H1 H2 H3 a H4 H5.
+  intros R A G a H1 H2 H3 H4 H5.
   assert (SRR.range (G:|:a) = G:[a]:) as H6. {
     apply RestrictOfClass.RangeOf, H2. }
   rewrite (H3 a H4).
@@ -102,10 +99,10 @@ Qed.
 
 (* A recursive function class defined on On is an isomorphism from On to A.     *)
 Proposition RecIsIsom : forall (R A G:Class),
-  WellFoundedWellOrd R A  ->
-  Proper A                ->
-  CFO.FunctionOn G On     ->
-  Recursive R A G         ->
+  WellFoundedWellOrd R A          ->
+  Proper A                        ->
+  CFO.FunctionOn G On             ->
+  Recursive R A G                 ->
   Isom G E R On A.
 Proof.
   (* Proof by Claude. *)
@@ -113,7 +110,7 @@ Proof.
   assert (forall a, On a -> (A :\: G:[a]:) :<>: :0:) as H6. {
     intros a H6. apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
   assert (forall a, On a -> Minimal R (A :\: G:[a]:) G!a) as H7. {
-    intros a H7. apply IsMinimalStep; try assumption.
+    intros a H7. apply IsMinimal; try assumption.
     apply H6. assumption. }
   assert (forall a, On a -> (A :\: G:[a]:) G!a) as H8. {
     intros a H8. apply Minimal.IsIn with R, H7. assumption. }
@@ -132,7 +129,7 @@ Proof.
       apply CFO.RangeCharac; assumption. }
     destruct H15 as [a [H15 H16]].
     assert (Minimal R (A :\: G:[a]:) G!a) as H17. {
-      apply IsMinimalStep; try assumption.
+      apply IsMinimal; try assumption.
       apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
     destruct H17 as [H17 H18].
     assert (~ (A :\: G:[a]:) x) as H19. {
@@ -200,30 +197,31 @@ Proof.
 Qed.
 
 (* Enum R A is MinFresh-recursive.                                              *)
-Proposition IsRecursive : forall (R A:Class) (a:U),
-  On a -> (Enum R A)!a = (MinFresh R A)!(Enum R A :|: a).
+Proposition IsRecursive : forall (R A:Class),
+  Recursive R A (Enum R A).
 Proof.
+  (* Proof by Claude. *)
   intros R A a H1. apply Recursion.IsRecursive. assumption.
 Qed.
 
 (* Enum R A is an isomorphism from On to A.                                     *)
 Proposition IsIsom : forall (R A:Class),
-  WellFoundedWellOrd R A          ->
-  Proper A                        ->
+  WellFoundedWellOrd R A                ->
+  Proper A                              ->
   Isom (Enum R A) E R On A.
 Proof.
   (* Proof by Claude. *)
   intros R A H1 H2.
   apply RecIsIsom; try assumption.
   - apply IsFunctionOn.
-  - intros a H3. apply IsRecursive. assumption.
+  - apply IsRecursive.
 Qed.
 
 (* Enum R A is the unique isomorphism from On to A.                             *)
 Proposition IsUnique : forall (R A G:Class),
-  WellFoundedWellOrd R A          ->
-  Proper A                        ->
-  Isom G E R On A                 ->
+  WellFoundedWellOrd R A                ->
+  Proper A                              ->
+  Isom G E R On A                       ->
   G :~: Enum R A.
 Proof.
   (* Proof by Claude. *)
@@ -255,12 +253,11 @@ Qed.
 
 (* A well ordered small class is isomorphic to an ordinal.                      *)
 Proposition WhenSmall : forall (R A:Class),
-  Small A           ->
-  WellOrdering R A  ->
-
-  exists a, On a    /\
+  Small A                               ->
+  WellOrdering R A                      ->
+  exists a, On a                        /\
     forall (g:U),
-      g = (Enum R A :|: a) ->
+      g = (Enum R A :|: a)              ->
       Isom (toClass g) E R (toClass a) A.
 Proof.
   (* Proof by Claude. *)
@@ -271,12 +268,12 @@ Proof.
   assert (FunctionOn G On) as H5. {
     rewrite H4. apply IsFunctionOn. }
   assert (Recursive R A G) as H7. {
-    intros a H7. rewrite H4. apply IsRecursive. assumption. }
+    rewrite H4. apply IsRecursive. }
   assert (forall a,
     On a                                  ->
     (A :\: G:[a]:) :<>: :0:       ->
     Minimal R (A :\: G:[a]:) G!a) as H8. {
-      apply IsMinimalStep; assumption. }
+      intros a H8 H9. apply IsMinimal; assumption. }
   assert (forall a,
     On a                                  ->
     (A :\: G:[a]:) :<>: :0:       ->
@@ -364,12 +361,12 @@ Qed.
 
 (* The ordinal and isomorphism for a small well-ordering are unique.            *)
 Proposition WhenSmallUnique : forall (R A:Class) (a b f g:U),
-  Small A                             ->
-  WellOrdering R A                    ->
-  On a                                ->
-  On b                                ->
-  Isom (toClass f) E R (toClass a) A  ->
-  Isom (toClass g) E R (toClass b) A  ->
+  Small A                               ->
+  WellOrdering R A                      ->
+  On a                                  ->
+  On b                                  ->
+  Isom (toClass f) E R (toClass a) A    ->
+  Isom (toClass g) E R (toClass b) A    ->
   a = b /\ f = g.
 Proof.
   (* Proof by Claude. *)
