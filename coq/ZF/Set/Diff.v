@@ -21,7 +21,7 @@ Definition diff (a b:U) : U := fromClass (toClass a :\: toClass b)
   (Diff.IsSmall (toClass a) (toClass b) (SetIsSmall a)).
 
 (* Notation "a :\: b" := (diff a b)                                             *)
-Global Instance SetDiff : Diff U := { diff := diff }.
+Global Instance SetDiff : Diff U U := { diff := diff }.
 
 (* The set a \ b is made of those elements of a which do not belong to b.       *)
 Proposition Charac : forall (a b:U),

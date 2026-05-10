@@ -22,7 +22,7 @@ Export ZF.Notation.Diff.
 Definition diff (A B:Class) : Class := A :/\: :¬:B.
 
 (* Notation "A :\: B" := (diff A B)                                             *)
-Global Instance ClassDiff : Diff Class := { diff := diff }.
+Global Instance ClassDiff : Diff Class Class := { diff := diff }.
 
 (* The class difference is compatible with class equivalence on both sides.     *)
 Proposition EquivCompat : forall (A B C D:Class),
