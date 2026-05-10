@@ -11,7 +11,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.MinFresh.
 Require Import ZF.Class.Ordinal.Order.E.
 Require Import ZF.Class.Ordinal.Recursion.
-Require Import ZF.Class.Ordinal.WFWOIsom.
+Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.FunctionOn.
@@ -24,7 +24,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Module CMF := ZF.Class.Ordinal.MinFresh.
 Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
-Module CWI := ZF.Class.Ordinal.WFWOIsom.
+Module CWI := ZF.Class.Ordinal.Enum.
 
 (* MinFresh A picks the E-minimal element of A not yet in the range of its arg. *)
 Definition MinFresh (A:Class) : Class := CMF.MinFresh E A.

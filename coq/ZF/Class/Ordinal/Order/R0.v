@@ -13,7 +13,7 @@ Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Order.Le.
-Require Import ZF.Class.Ordinal.WFWOIsom.
+Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Small.
@@ -44,7 +44,7 @@ Definition R0 : Class := fun x =>
     (a :\/: b  = c :\/: d /\ Le :( :(a,b): , :(c,d): ): )).
 
 (* Will be seen to be an order isomorpshism from On x On to On.                 *)
-Definition J0 : Class := (WFWOIsom.Enum R0 (On :x: On))^:-1:.
+Definition J0 : Class := (Enum.Enum R0 (On :x: On))^:-1:.
 
 Proposition Charac2 : forall (x y:U),
   R0 :(x,y): <->
@@ -231,7 +231,7 @@ Qed.
 (* J0 is an order isomorphism from On x On to On.                               *)
 Proposition IsIsom : Isom J0 R0 E (On :x: On) On.
 Proof.
-  apply Isom.Converse, WFWOIsom.IsIsom.
+  apply Isom.Converse, Enum.IsIsom.
   - apply IsWellFoundedWellOrd.
   - apply Core.IsProperSquare.
 Qed.
