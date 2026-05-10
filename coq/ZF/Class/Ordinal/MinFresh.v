@@ -14,14 +14,13 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Range.
 
 Module CRF := ZF.Class.Relation.Function.
-Module SRR := ZF.Set.Relation.Range.
 
 (* MinFresh A picks the R-minimal element of A not yet in the range of its arg. *)
 Definition MinFresh (R A:Class) : Class := fun x =>
-  exists f m, x = :(f,m): /\ Minimal R (A :\: toClass (SRR.range f)) m.
+  exists f m, x = :(f,m): /\ Minimal R (A :\: toClass (range f)) m.
 
 Proposition Charac2 : forall (R A:Class) (f m:U),
-  MinFresh R A :(f,m): <-> Minimal R (A :\: toClass (SRR.range f)) m.
+  MinFresh R A :(f,m): <-> Minimal R (A :\: toClass (range f)) m.
 Proof.
   (* Proof by Claude. *)
   intros R A f m. split; intros H1.
@@ -62,8 +61,8 @@ Qed.
 Lemma IsMinimal : forall (R A F:Class) (x:U),
   WellFoundedWellOrd R A                        ->
   F :~: MinFresh R A                            ->
-  (A :\: toClass (SRR.range x)) :<>: :0:        ->
-  Minimal R (A :\: toClass (SRR.range x)) F!x.
+  (A :\: toClass (range x)) :<>: :0:            ->
+  Minimal R (A :\: toClass (range x)) F!x.
 Proof.
   (* Proof by Claude. *)
   intros R A F x H1 H2 H3.
