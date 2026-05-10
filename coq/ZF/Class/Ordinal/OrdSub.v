@@ -1,7 +1,10 @@
+Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Ordinal.Core.
@@ -15,6 +18,7 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module CMF := ZF.Class.Ordinal.MinFresh.
@@ -33,6 +37,20 @@ Proposition IsFunction : forall (A:Class),
   A :<=: On -> Function (MinFresh A).
 Proof.
   intros A H1. apply CMF.IsFunction, COE.IsTotal. assumption.
+Qed.
+
+(* (MinFresh A) f is the E-minimal element of A not yet in the range of f.      *)
+Proposition IsMinimal : forall (A:Class) (f:U),
+  A :<=: On                                           ->
+ (A :\: toClass (range f)) :<>: :0:                   ->
+ Minimal E (A :\: toClass (range f)) (MinFresh A)!f.
+Proof.
+  (* Proof by Claude. *)
+  intros A f H1 H2.
+  apply CMF.IsMinimal.
+  - apply COE.IsWellFoundedWellOrd. assumption.
+  - apply Equiv.Refl.
+  - assumption.
 Qed.
 
 (* Enum A is a function class defined on the class of ordinals.                 *)
