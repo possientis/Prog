@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code 
+in this repository.
 
 ## Build
 
@@ -11,9 +12,11 @@ make -j$(nproc)         # compile everything in parallel
 ./clean.sh              # remove all build artifacts
 ```
 
-Never invoke `coqc` directly — the Makefile passes `-R . ZF` to resolve the load path and manages dependencies via `coqdep`.
+Never invoke `coqc` directly — the Makefile passes `-R . ZF` to resolve the load path 
+and manages dependencies via `coqdep`.
 
-All files are compiled under the logical prefix `ZF`, so `Require Import ZF.Class.Ordinal.Core` maps to `Class/Ordinal/Core.v`.
+All files are compiled under the logical prefix `ZF`, so 
+`Require Import ZF.Class.Ordinal.Core` maps to `Class/Ordinal/Core.v`.
 
 ## Architecture
 

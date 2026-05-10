@@ -1,4 +1,4 @@
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
@@ -17,10 +17,10 @@ Module CRF := ZF.Class.Relation.Function.
 
 (* MinFresh A picks the R-minimal element of A not yet in the range of its arg. *)
 Definition MinFresh (R A:Class) : Class := fun x =>
-  exists f m, x = :(f,m): /\ Minimal R (A :\: toClass (range f)) m.
+  exists f m, x = :(f,m): /\ Minimal R (A :\: range f) m.
 
 Proposition Charac2 : forall (R A:Class) (f m:U),
-  MinFresh R A :(f,m): <-> Minimal R (A :\: toClass (range f)) m.
+  MinFresh R A :(f,m): <-> Minimal R (A :\: range f) m.
 Proof.
   (* Proof by Claude. *)
   intros R A f m. split; intros H1.
@@ -58,19 +58,19 @@ Proof.
 Qed.
 
 (* When F :~: MinFresh R A, F!x is R-minimal in A minus the range of x.         *)
-Lemma IsMinimal : forall (R A F:Class) (x:U),
+Lemma IsMinimal : forall (R A F:Class) (f:U),
   WellFoundedWellOrd R A                        ->
   F :~: MinFresh R A                            ->
-  (A :\: toClass (range x)) :<>: :0:            ->
-  Minimal R (A :\: toClass (range x)) F!x.
+  (A :\: range f) :<>: :0:            ->
+  Minimal R (A :\: range f) F!f.
 Proof.
   (* Proof by Claude. *)
-  intros R A F x H1 H2 H3.
-  assert (exists y, Minimal R (A :\: toClass (range x)) y) as H4. {
+  intros R A F f H1 H2 H3.
+  assert (exists y, Minimal R (A :\: range f) y) as H4. {
     apply WellFoundedWellOrd.HasMinimal with A; try assumption.
     apply Class.Inter2.IsInclL. }
   destruct H4 as [y H4].
-  assert (F!x = y) as H5. {
+  assert (F!f = y) as H5. {
     apply CRF.Eval.
     - apply CRF.EquivCompat with (MinFresh R A).
       + apply Equiv.Sym. assumption.

@@ -11,6 +11,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Union2.
 Require Import ZF.Set.Relation.ImageByClass.
 
@@ -47,6 +48,14 @@ Proposition InclCompatL : forall (A B:Class) (a:U),
 Proof.
   (* Proof by Claude.                                                           *)
   intros A B a H1. unfold diff. apply Class.Diff.InclCompatL. assumption.
+Qed.
+
+(* When b is a subset of c, A minus c is included in A minus b.                 *)
+Proposition InclCompatR : forall (A:Class) (b c:U),
+  b :<=: c -> A :\: c :<=: A :\: b.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros A b c H1. unfold diff. apply Class.Diff.InclCompatR. assumption.
 Qed.
 
 (* The class-by-set difference is included in the original class.               *)

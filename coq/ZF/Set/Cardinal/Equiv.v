@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Recursion.
@@ -108,8 +109,8 @@ Proof.
   assert (Small (toClass a)) as G2. { apply Small.SetIsSmall. }
   assert (CRD.domain F :~: Ordinal) as G3. { apply G1. }
   assert (forall b, Ordinal b               ->
-    (toClass a :\: toClass F:[b]:) :<>: :0: ->
-    (toClass a :\: toClass F:[b]:) F!b) as H8. {
+    (toClass a :\: F:[b]:) :<>: :0: ->
+    (toClass a :\: F:[b]:) F!b) as H8. {
       intros b H8 H9.
       assert (range (F:|:b) = F:[b]:) as H10. {
         apply RestrictOfClass.RangeOf, G1. }
@@ -120,7 +121,7 @@ Proof.
       - apply Empty.EmptyToClass. assumption. }
   assert (exists b,
     Ordinal b                                                     /\
-    (forall c, c :< b -> (toClass a :\: toClass F:[c]:) :<>: :0:) /\
+    (forall c, c :< b -> (toClass a :\: F:[c]:) :<>: :0:) /\
     toClass F:[b]: :~: toClass a                                  /\
     SRO.OneToOne (F:|:b)) as H9. { apply COF.WhenFreshAndSmall; assumption. }
   destruct H9 as [b [H9 [H10 [H11 H12]]]].

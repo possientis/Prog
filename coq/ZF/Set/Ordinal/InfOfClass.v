@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -150,11 +150,11 @@ Qed.
 Proposition WhenOrdinal : forall (A:Class) (a:U),
   COC.Ordinal A                 ->
   Ordinal a                     ->
-  A :\: toClass a :<>: :0:      ->
-  inf (A :\: toClass a) = a.
+  A :\: a :<>: :0:      ->
+  inf (A :\: a) = a.
 Proof.
   intros A a H1 H2 H3. symmetry. apply EqualToClass.
-  apply Equiv.Tran with (Class.Ordinal.Inf.inf (A :\: toClass a)).
+  apply Equiv.Tran with (Class.Ordinal.Inf.inf (A :\: a)).
   2: apply Equiv.Sym, ToClass. apply Class.Ordinal.Inf.WhenOrdinal; assumption.
 Qed.
 

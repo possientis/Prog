@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Less.
 Require Import ZF.Class.Ordinal.Core.
@@ -16,7 +16,7 @@ Module COC := ZF.Class.Ordinal.Core.
 Export ZF.Notation.InfAbove.
 
 (* The infimum of the class A above b.                                          *)
-Definition infAbove (b:U)(A:Class) : Class := inf (A :\: toClass b).
+Definition infAbove (b:U)(A:Class) : Class := inf (A :\: b).
 
 (* Notation "inf(>: b ) A" := (infAbove b A)                                    *)
 Global Instance ClassInfAbove : InfAbove Class := { infAbove := infAbove }.

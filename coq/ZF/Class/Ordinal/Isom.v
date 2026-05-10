@@ -1,5 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -35,11 +36,11 @@ Module COC := ZF.Class.Ordinal.Core.
 Proposition IsEMinimal : forall (A:Class) (a:U),
   Ordinal A ->
   A a       ->
-  Minimal E (A :\: toClass a) a.
+  Minimal E (A :\: a) a.
 Proof.
   intros A a H1 H2.
   assert (On a) as H3. { apply COC.WhenElem with A; assumption. }
-  assert (A :\: toClass a :<>: :0:) as H4. {
+  assert (A :\: a :<>: :0:) as H4. {
     apply Class.Empty.HasElem. exists a. split. 1: assumption. apply NoElemLoop1. }
   apply Inf.IsEMinimal. 2: assumption.
   - intros x [H5 _]. apply COC.WhenElem with A; assumption.
@@ -76,13 +77,13 @@ Proof.
           exists a. split. 1: assumption. split.
           + destruct H1 as [H1 _]. apply (H1 b); assumption.
           + apply H8, H9. }
-      assert (Minimal E (A :\: toClass b) b) as H10. {
+      assert (Minimal E (A :\: b) b) as H10. {
         apply IsEMinimal; assumption. }
-      assert (Minimal E F:[A :\: toClass b]: F!b) as H11. {
+      assert (Minimal E F:[A :\: b]: F!b) as H11. {
         apply Minimal.IsomImage with E A B; try assumption.
         apply Class.Inter2.IsInclL. }
       clear H10.
-      assert (F:[A :\: toClass b]: :~: B :\: toClass b) as H12. {
+      assert (F:[A :\: b]: :~: B :\: b) as H12. {
         apply Equiv.Tran with (F:[A]: :\: F:[toClass b]:).
         - apply Bij.DiffImage with A B, H3.
         - apply Diff.EquivCompat.
@@ -90,8 +91,8 @@ Proof.
           + apply Equiv.Tran with (toClass F:[b]:).
             * apply Equiv.Sym, ImageByClass.ToClass, H3.
             * apply EqualToClass. assumption. }
-      assert (Minimal E (B :\: toClass b) F!b) as H13. {
-        apply Minimal.EquivCompatR with F:[A :\: toClass b]:; assumption. }
+      assert (Minimal E (B :\: b) F!b) as H13. {
+        apply Minimal.EquivCompatR with F:[A :\: b]:; assumption. }
       clear H11 H12.
       assert (B b) as H14. {
         apply COC.LessIsElem; try assumption. split.
@@ -100,18 +101,18 @@ Proof.
           exists a. assert (A a) as H15. {
             destruct H1 as [H1 _]. apply (H1 b); assumption. }
           split. 1: assumption. split. 1: assumption. apply H8, H14.
-        - apply Equiv.NotSym, Diff.WhenNotEmpty, Class.Empty.HasElem.
+        - apply Equiv.NotSym, DiffBySet.WhenNotEmpty, Class.Empty.HasElem.
           exists F!b. apply Minimal.IsIn with E. assumption. }
-      assert (Minimal E (B :\: toClass b) b) as H15. {
+      assert (Minimal E (B :\: b) b) as H15. {
         apply IsEMinimal; assumption. }
-      assert (B :\: toClass b :<=: On) as H16. {
+      assert (B :\: b :<=: On) as H16. {
         intros a [H16 _]. apply COC.WhenElem with B; assumption. }
-      assert (B :\: toClass b :<>: :0:) as H17. {
+      assert (B :\: b :<>: :0:) as H17. {
         apply Class.Empty.HasElem. exists b. split. 1: assumption.
         apply NoElemLoop1. }
-      assert (b = inf (B :\: toClass b)) as H18. {
+      assert (b = inf (B :\: b)) as H18. {
         apply InfOfClass.IsEMinimal; assumption. }
-      assert (F!b = inf (B :\: toClass b)) as H19. {
+      assert (F!b = inf (B :\: b)) as H19. {
         apply InfOfClass.IsEMinimal; assumption. }
       rewrite <- H18 in H19. assumption. }
   intros a H6.

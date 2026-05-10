@@ -3,6 +3,7 @@ Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -189,11 +190,11 @@ Proposition LessIsElem' : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2. split; intros H3.
   - assert ( exists x,
-     (A :\: toClass a) x /\
-     (A :\: toClass a)  :/\: toClass x :~: :0:) as H4. {
+     (A :\: a) x /\
+     (A :\: a)  :/\: toClass x :~: :0:) as H4. {
      apply HasMinimal with A. 1: assumption.
      - apply Class.Inter2.IsInclL.
-     - apply Diff.WhenLess. assumption. }
+     - apply DiffBySet.WhenLess. assumption. }
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
     assert (x = a) as H7. 2: { subst. assumption. }
     apply ZF.Set.Incl.DoubleInclusion. destruct H1 as [H1 H9]. split; intros u H7.

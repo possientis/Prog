@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Complement.
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
@@ -36,7 +36,7 @@ Module SRO := ZF.Set.Relation.OneToOne.
 
 Proposition WhenFreshValue : forall (F A:Class),
   CFO.FunctionOn F On                             ->
-  (forall a, On a -> (A :\: toClass F:[a]:) F!a)  ->
+  (forall a, On a -> (A :\: F:[a]:) F!a)          ->
   range F :<=: A                                  /\
   CRO.OneToOne F                                  /\
   Proper A.
@@ -73,24 +73,24 @@ Proposition WhenFreshAndSmall : forall (F A:Class),
   Small A                                                                 ->
   (forall a,
     On a                            ->
-    (A :\: toClass F:[a]:) :<>: :0: ->
-    (A :\: toClass F:[a]:) F!a                                          ) ->
+    (A :\: F:[a]:) :<>: :0:         ->
+    (A :\: F:[a]:) F!a                                          )         ->
 
   exists a,
     On a                                                                  /\
-    (forall b, b :< a -> (A :\: toClass F:[b]:) :<>: :0:)                 /\
+    (forall b, b :< a -> (A :\: F:[b]:) :<>: :0:)                 /\
     toClass F:[a]: :~: A                                                  /\
     SRO.OneToOne (F :|: a).
 Proof.
   intros F A H1 H2 H3.
-  assert (exists a, On a /\ A :\: toClass F:[a]: :~: :0:) as H4. {
+  assert (exists a, On a /\ A :\: F:[a]: :~: :0:) as H4. {
     apply NotForAllNot. intros H4.
-    assert (forall a, On a -> (A :\: toClass F:[a]:) F!a) as H5. {
+    assert (forall a, On a -> (A :\: F:[a]:) F!a) as H5. {
       intros a H5. apply H3. 1: assumption.
       intros H6. apply H4 with a. split; assumption. }
     assert (Proper A) as H6. { apply (WhenFreshValue F A); assumption. }
     contradiction. }
-  remember (fun a => On a /\  A :\: toClass F:[a]: :~: :0:) as B eqn:H5.
+  remember (fun a => On a /\  A :\: F:[a]: :~: :0:) as B eqn:H5.
   assert (B :<>: :0:) as H6. { apply Class.Empty.HasElem. assumption. }
   assert (COC.Ordinal On) as H7. { apply COC.IsOrdinal. }
   assert (B :<=: On) as H8. { intros x H8. rewrite H5 in H8. apply H8. }
@@ -98,8 +98,8 @@ Proof.
     apply COC.HasMinimal with On; assumption. }
   destruct H9 as [a [H9 H10]].
   assert (On a) as H11. { rewrite H5 in H9. apply H9. }
-  assert (A :\: toClass F:[a]: :~: :0:) as H12. { rewrite H5 in H9. apply H9. }
-  assert (forall b, b :< a -> (A :\: toClass F:[b]:) :<>: :0:) as H13. {
+  assert (A :\: F:[a]: :~: :0:) as H12. { rewrite H5 in H9. apply H9. }
+  assert (forall b, b :< a -> (A :\: F:[b]:) :<>: :0:) as H13. {
     intros b H13 H14.
     assert (On b) as H15. { apply SOC.IsOrdinal with a; assumption. }
     apply Class.Empty.Charac with b. apply H10. split. 2: assumption.
@@ -109,10 +109,10 @@ Proof.
     destruct H14 as [b [H14 H15]].
     assert (On b) as H16. { apply SOC.IsOrdinal with a; assumption. }
     assert (F!b = y) as H17. { apply (CFO.Eval F On); assumption. }
-    assert ((A :\: toClass F:[b]:) :<>: :0:) as H18. { apply H13. assumption. }
-    assert ((A :\: toClass F:[b]:) F!b) as H19. { apply H3; assumption. }
+    assert ((A :\: F:[b]:) :<>: :0:) as H18. { apply H13. assumption. }
+    assert ((A :\: F:[b]:) F!b) as H19. { apply H3; assumption. }
     rewrite H17 in H19. apply H19. }
-  assert (A :<=: toClass F:[a]:) as H15. { apply Diff.WhenEmpty. assumption. }
+  assert (A :<=: toClass F:[a]:) as H15. { apply DiffBySet.WhenEmpty. assumption. }
   assert (toClass F:[a]: :~: A) as H16. {
     apply DoubleInclusion. split; assumption. }
   assert (SFO.FunctionOn (F:|:a) a) as H17. {

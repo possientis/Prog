@@ -1,5 +1,5 @@
 Require Import ZF.Class.Cardinal.Core.
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Proper.
 Require Import ZF.Set.Cardinal.Core.
@@ -12,18 +12,18 @@ Module CCC := ZF.Class.Cardinal.Core.
 Module SCC := ZF.Set.Cardinal.Core.
 
 (* The class of infinite cardinal numbers.                                      *)
-Definition InfiniteCard : Class := Cardinal :\: toClass :N.
+Definition InfiniteCard : Class := Cardinal :\: :N.
 
 (* The class of infinite cardinal numbers is a proper class.                    *)
 Proposition IsProper : Proper InfiniteCard.
 Proof.
-  apply Diff.IsProper, CCC.IsProper.
+  apply DiffBySet.IsProper, CCC.IsProper.
 Qed.
 
 Proposition IsCardinal : forall (a:U),
   InfiniteCard a -> Cardinal a.
 Proof.
-  apply Diff.IsInclL.
+  apply DiffBySet.IsInclL.
 Qed.
 
 Proposition IsOrdinal : forall (a:U),

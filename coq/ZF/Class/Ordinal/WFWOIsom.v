@@ -1,5 +1,5 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
@@ -82,8 +82,8 @@ Lemma WhenEnum_ : forall (R A F G:Class),
 
   (forall a,
     On a                                  ->
-    (A :\: toClass G:[a]:) :<>: :0:       ->
-    Minimal R (A :\: toClass G:[a]:) G!a
+    (A :\: G:[a]:) :<>: :0:       ->
+    Minimal R (A :\: G:[a]:) G!a
   ).
 Proof.
   (* Proof by Claude. *)
@@ -105,12 +105,12 @@ Lemma WhenEnum : forall (R A F G:Class),
 Proof.
   (* Proof by Claude. *)
   intros R A F G H1 H2 H3 H4 H5.
-  assert (forall a, On a -> (A :\: toClass G:[a]:) :<>: :0:) as H6. {
-    intros a H6. apply Proper.IsNotEmpty, Diff.IsProper. assumption. }
-  assert (forall a, On a -> Minimal R (A :\: toClass G:[a]:) G!a) as H7. {
+  assert (forall a, On a -> (A :\: G:[a]:) :<>: :0:) as H6. {
+    intros a H6. apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
+  assert (forall a, On a -> Minimal R (A :\: G:[a]:) G!a) as H7. {
     intros a H7. apply WhenEnum_ with F; try assumption.
     apply H6. assumption. }
-  assert (forall a, On a -> (A :\: toClass G:[a]:) G!a) as H8. {
+  assert (forall a, On a -> (A :\: G:[a]:) G!a) as H8. {
     intros a H8. apply Minimal.IsIn with R, H7. assumption. }
   assert (CRR.range G :<=: A) as H9. { apply WhenFreshValue; assumption. }
   assert (CRO.OneToOne G) as H10. { apply (WhenFreshValue G A); assumption. }
@@ -126,11 +126,11 @@ Proof.
     assert (exists a, On a /\ G!a = y) as H15. {
       apply CFO.RangeCharac; assumption. }
     destruct H15 as [a [H15 H16]].
-    assert (Minimal R (A :\: toClass G:[a]:) G!a) as H17. {
+    assert (Minimal R (A :\: G:[a]:) G!a) as H17. {
       apply WhenEnum_ with F; try assumption.
-      apply Proper.IsNotEmpty, Diff.IsProper. assumption. }
+      apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
     destruct H17 as [H17 H18].
-    assert (~ (A :\: toClass G:[a]:) x) as H19. {
+    assert (~ (A :\: G:[a]:) x) as H19. {
       intros H19. revert H14. rewrite <- H16. apply H18. assumption. }
     assert (x :< G:[a]:) as H20. {
       apply DoubleNegation. intros H20. apply H19. split; assumption. }
@@ -154,12 +154,12 @@ Proof.
     assert (G:[a]: :<=: G:[b]:) as H18. {
       apply ImageByClass.InclCompatR. 1: apply H4.
       apply SOC.ElemIsIncl; assumption. }
-    assert (A :\: toClass G:[b]: :<=: A :\: toClass G:[a]:) as H19. {
-      apply Class.Diff.InclCompatR. assumption. }
-    assert ((A :\: toClass G:[a]:) G!b) as H20. {
+    assert (A :\: G:[b]: :<=: A :\: G:[a]:) as H19. {
+      apply DiffBySet.InclCompatR. assumption. }
+    assert ((A :\: G:[a]:) G!b) as H20. {
       apply H19. apply Minimal.IsIn with R. apply H7. assumption. }
     assert (G!a = G!b \/ R :(G!a,G!b):) as H21. {
-      apply Minimal.WhenIn with A (A :\: toClass G:[a]:). 4: assumption.
+      apply Minimal.WhenIn with A (A :\: G:[a]:). 4: assumption.
       - apply H1.
       - apply Class.Inter2.IsInclL.
       - apply H7. assumption. }
@@ -288,17 +288,17 @@ Proof.
     apply IsRecursive with R A; assumption. }
   assert (forall a,
     On a                                  ->
-    (A :\: toClass G:[a]:) :<>: :0:       ->
-    Minimal R (A :\: toClass G:[a]:) G!a) as H8. {
+    (A :\: G:[a]:) :<>: :0:       ->
+    Minimal R (A :\: G:[a]:) G!a) as H8. {
       apply WhenEnum_ with F; assumption. }
   assert (forall a,
     On a                                  ->
-    (A :\: toClass G:[a]:) :<>: :0:       ->
-    (A :\: toClass G:[a]:) G!a) as H9. {
+    (A :\: G:[a]:) :<>: :0:       ->
+    (A :\: G:[a]:) G!a) as H9. {
       intros a H9 H10. apply Minimal.IsIn with R. apply H8; assumption. }
   assert (exists a,
     On a                                                                  /\
-    (forall b, b :< a -> (A :\: toClass G:[b]:) :<>: :0:)                 /\
+    (forall b, b :< a -> (A :\: G:[b]:) :<>: :0:)                 /\
     toClass G:[a]: :~: A                                                  /\
     SRO.OneToOne (G :|: a)) as H10. { apply COF.WhenFreshAndSmall; assumption. }
   destruct H10 as [a [H10 [H11 [H12 H13]]]].
@@ -333,13 +333,13 @@ Proof.
     assert (c :<=: a) as H32. { apply SOC.ElemIsIncl; assumption. }
     assert (G:[b]: :<=: G:[c]:) as H33. {
       apply ImageByClass.InclCompatR. 2: assumption. apply H5. }
-    assert ((A :\: toClass G:[c]:) :<=: (A :\: toClass G:[b]:)) as H34. {
-      apply Class.Diff.InclCompatR. assumption. }
-    assert ((A :\: toClass G:[c]:) G!c) as H35. {
+    assert ((A :\: G:[c]:) :<=: (A :\: G:[b]:)) as H34. {
+      apply DiffBySet.InclCompatR. assumption. }
+    assert ((A :\: G:[c]:) G!c) as H35. {
       apply H9. 1: assumption. apply H11. assumption. }
-    assert ((A :\: toClass G:[b]:) G!c) as H36. { apply H34. assumption. }
+    assert ((A :\: G:[b]:) G!c) as H36. { apply H34. assumption. }
     assert (G!b = G!c \/ R :(G!b,G!c):) as H37. {
-      apply Minimal.WhenIn with A (A :\: toClass G:[b]:). 4: assumption.
+      apply Minimal.WhenIn with A (A :\: G:[b]:). 4: assumption.
       - apply H2.
       - apply Class.Inter2.IsInclL.
       - apply H8. 1: assumption. apply H11. assumption. }

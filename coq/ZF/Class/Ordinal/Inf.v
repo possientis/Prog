@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
@@ -166,8 +166,8 @@ Proof.
 Qed.
 
 Proposition IsEMinimal : forall (A:Class) (a:U),
-  A :<=: On   ->
-  A :<>: :0:  ->
+  A :<=: On                             ->
+  A :<>: :0:                            ->
   IsSetOf (inf A) a <-> Minimal E A a.
 Proof.
   intros A a H1 H2. split; intros H3.
@@ -198,11 +198,11 @@ Qed.
 Proposition WhenOrdinal : forall (A:Class) (a:U),
   Ordinal A                         ->
   On a                              ->
-  A :\: toClass a :<>: :0:          ->
-  IsSetOf (inf (A :\: toClass a)) a.
+  A :\: a :<>: :0:                  ->
+  IsSetOf (inf (A :\: a)) a.
 Proof.
   intros A a H1 H2 H3 x. split; intros H4.
-  - assert (toClass a :<=: inf (A :\: toClass a)) as H5. {
+  - assert (toClass a :<=: inf (A :\: a)) as H5. {
       apply Inter.IsLargest.
       + apply Class.Inter2.IsInclR.
       + apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
@@ -220,7 +220,7 @@ Proof.
         * apply H8.
         * apply LessIsElem in H8; try assumption. contradiction. }
     apply H5. assumption.
-  - assert (inf (A :\: toClass a) :<=: toClass a) as H5. {
+  - assert (inf (A :\: a) :<=: toClass a) as H5. {
       apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
       apply Inter.IsLowerBound.
       + apply Class.Inter2.IsInclR.

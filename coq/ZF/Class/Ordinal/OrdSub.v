@@ -1,4 +1,4 @@
-Require Import ZF.Class.Diff.
+Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
@@ -42,8 +42,8 @@ Qed.
 (* (MinFresh A) f is the E-minimal element of A not yet in the range of f.      *)
 Proposition IsMinimal : forall (A:Class) (f:U),
   A :<=: On                                           ->
- (A :\: toClass (range f)) :<>: :0:                   ->
- Minimal E (A :\: toClass (range f)) (MinFresh A)!f.
+ (A :\: range f) :<>: :0:                   ->
+ Minimal E (A :\: range f) (MinFresh A)!f.
 Proof.
   (* Proof by Claude. *)
   intros A f H1 H2.
