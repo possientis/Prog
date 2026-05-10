@@ -13,4 +13,5 @@ Definition aleph (a:U) : U := CCA.Aleph!a.
 Proposition IsIncl : forall (a:U), Ordinal a ->
   a :<=: aleph a.
 Proof.
-Admitted.
+  apply CCA.IsIncl.
+Qed.
