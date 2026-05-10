@@ -59,7 +59,7 @@ Qed.
 
 (* The class-by-set difference is included in the complement of the set.        *)
 Proposition IsInclR : forall (A:Class) (a:U),
-  A :\: a :<=: :¬: (toClass a).
+  A :\: a :<=: :¬: toClass a.
 Proof.
   (* Proof by Claude.                                                           *)
   intros A a. unfold diff. apply Class.Diff.IsInclR.
