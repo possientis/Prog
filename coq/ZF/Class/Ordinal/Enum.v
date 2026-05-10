@@ -98,7 +98,7 @@ Proof.
 Qed.
 
 (* A recursive function class defined on On is an isomorphism from On to A.     *)
-Proposition RecIsIsom : forall (R A G:Class),
+Proposition IsIsom' : forall (R A G:Class),
   WellFoundedWellOrd R A          ->
   Proper A                        ->
   CFO.FunctionOn G On             ->
@@ -212,7 +212,7 @@ Proposition IsIsom : forall (R A:Class),
 Proof.
   (* Proof by Claude. *)
   intros R A H1 H2.
-  apply RecIsIsom; try assumption.
+  apply IsIsom'; try assumption.
   - apply IsFunctionOn.
   - apply IsRecursive.
 Qed.

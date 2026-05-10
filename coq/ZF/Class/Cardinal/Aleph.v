@@ -5,7 +5,7 @@ Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Monotone.
-Require Import ZF.Class.Ordinal.OrdSub.
+Require Import ZF.Class.Ordinal.Subclass.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Set.Core.
@@ -16,7 +16,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module COC := ZF.Class.Ordinal.Core.
 Module COM := ZF.Class.Ordinal.Monotone.
-Module COO := ZF.Class.Ordinal.OrdSub.
+Module COO := ZF.Class.Ordinal.Subclass.
 
 (* The unique isomorphism between the ordinals and the infinite cardinals.      *)
 Definition Aleph : Class := COO.Enum InfiniteCard.
