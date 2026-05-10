@@ -77,43 +77,40 @@ Definition MinFresh (R A:Class) : Class := CMF.MinFresh R A.
 
 
 (* For G satisfying the Enum recursion, G!a is R-minimal in A minus G:[a]:.     *)
-Lemma WhenEnum_ : forall (R A F G:Class),
-  WellFoundedWellOrd R A                  ->
-  F :~: MinFresh R A                      ->
-  CFO.FunctionOn G On                     ->
-  (forall a, On a -> G!a = F!(G:|:a))     ->
+Lemma IsMinimalStep : forall (R A G:Class),
+  WellFoundedWellOrd R A                           ->
+  CFO.FunctionOn G On                              ->
+  (forall a, On a -> G!a = (MinFresh R A)!(G:|:a)) ->
 
   (forall a,
-    On a                                  ->
-    (A :\: G:[a]:) :<>: :0:               ->
+    On a                                           ->
+    (A :\: G:[a]:) :<>: :0:                        ->
     Minimal R (A :\: G:[a]:) G!a
   ).
 Proof.
   (* Proof by Claude. *)
-  intros R A F G H1 H2 H3 H4 a H5 H6.
-  assert (SRR.range (G:|:a) = G:[a]:) as H7. {
-    apply RestrictOfClass.RangeOf, H3. }
-  rewrite H4. 2: assumption.
-  rewrite (EvalOfClass.EquivCompat F (CMF.MinFresh R A) _ H2).
-  rewrite <- H7.
-  apply CMF.IsMinimal; try assumption. rewrite H7. assumption.
+  intros R A G H1 H2 H3 a H4 H5.
+  assert (SRR.range (G:|:a) = G:[a]:) as H6. {
+    apply RestrictOfClass.RangeOf, H2. }
+  rewrite H3. 2: assumption.
+  rewrite <- H6.
+  apply CMF.IsMinimal; try assumption. rewrite H6. assumption.
 Qed.
 
 (* A function with the Enum recursion property is an isomorphism from On to A.  *)
-Lemma WhenEnum : forall (R A F G:Class),
-  WellFoundedWellOrd R A                  ->
-  Proper A                                ->
-  F :~: MinFresh R A                      ->
-  CFO.FunctionOn G On                     ->
-  (forall a, On a -> G!a = F!(G:|:a))     ->
+Lemma RecIsIsom : forall (R A G:Class),
+  WellFoundedWellOrd R A                           ->
+  Proper A                                         ->
+  CFO.FunctionOn G On                              ->
+  (forall a, On a -> G!a = (MinFresh R A)!(G:|:a)) ->
   Isom G E R On A.
 Proof.
   (* Proof by Claude. *)
-  intros R A F G H1 H2 H3 H4 H5.
+  intros R A G H1 H2 H3 H4.
   assert (forall a, On a -> (A :\: G:[a]:) :<>: :0:) as H6. {
     intros a H6. apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
   assert (forall a, On a -> Minimal R (A :\: G:[a]:) G!a) as H7. {
-    intros a H7. apply WhenEnum_ with F; try assumption.
+    intros a H7. apply IsMinimalStep; try assumption.
     apply H6. assumption. }
   assert (forall a, On a -> (A :\: G:[a]:) G!a) as H8. {
     intros a H8. apply Minimal.IsIn with R, H7. assumption. }
@@ -132,14 +129,14 @@ Proof.
       apply CFO.RangeCharac; assumption. }
     destruct H15 as [a [H15 H16]].
     assert (Minimal R (A :\: G:[a]:) G!a) as H17. {
-      apply WhenEnum_ with F; try assumption.
+      apply IsMinimalStep; try assumption.
       apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
     destruct H17 as [H17 H18].
     assert (~ (A :\: G:[a]:) x) as H19. {
       intros H19. revert H14. rewrite <- H16. apply H18. assumption. }
     assert (x :< G:[a]:) as H20. {
       apply DoubleNegation. intros H20. apply H19. split; assumption. }
-      apply ImageByClass.ToClass in H20. 2: apply H4.
+      apply ImageByClass.ToClass in H20. 2: apply H3.
       destruct H20 as [u [H20 H21]]. exists u. assumption. }
   assert (A :~: CRR.range G) as H13. {
     destruct H12 as [H12|H12]. 1: assumption. destruct H12 as [a [H12 H13]].
@@ -148,7 +145,7 @@ Proof.
     - apply H1. assumption. }
   assert (Bij G On A) as H14. {
     split.
-    - split. 2: apply H4. split. 2: assumption. apply H4.
+    - split. 2: apply H3. split. 2: assumption. apply H3.
     - apply Equiv.Sym. assumption. }
   assert (forall a, On a -> A G!a) as G1. {
     intros a G1. apply H9. exists a. apply CFO.Satisfies with On; assumption. }
@@ -157,7 +154,7 @@ Proof.
     assert (A G!a) as G2. { apply G1. assumption. }
     assert (A G!b) as G3. { apply G1. assumption. }
     assert (G:[a]: :<=: G:[b]:) as H18. {
-      apply ImageByClass.InclCompatR. 1: apply H4.
+      apply ImageByClass.InclCompatR. 1: apply H3.
       apply SOC.ElemIsIncl; assumption. }
     assert (A :\: G:[b]: :<=: A :\: G:[a]:) as H19. {
       apply DiffBySet.InclCompatR. assumption. }
@@ -214,8 +211,7 @@ Proposition IsIsom : forall (R A:Class),
 Proof.
   (* Proof by Claude. *)
   intros R A H1 H2.
-  apply WhenEnum with (CMF.MinFresh R A); try assumption.
-  - apply Equiv.Refl.
+  apply RecIsIsom; try assumption.
   - apply IsFunctionOn.
   - intros a H3. apply IsRecursive. assumption.
 Qed.
@@ -271,15 +267,13 @@ Proof.
   remember (Enum R A) as G eqn:H4.
   assert (FunctionOn G On) as H5. {
     rewrite H4. apply IsFunctionOn. }
-  remember (CMF.MinFresh R A) as F eqn: H6.
-  assert (F :~: CMF.MinFresh R A) as G2. { rewrite H6. apply Equiv.Refl. }
-  assert (forall a, On a -> G!a = F!(G:|:a)) as H7. {
-    intros a H7. rewrite H4, H6. apply IsRecursive. assumption. }
+  assert (forall a, On a -> G!a = (MinFresh R A)!(G:|:a)) as H7. {
+    intros a H7. rewrite H4. apply IsRecursive. assumption. }
   assert (forall a,
     On a                                  ->
     (A :\: G:[a]:) :<>: :0:       ->
     Minimal R (A :\: G:[a]:) G!a) as H8. {
-      apply WhenEnum_ with F; assumption. }
+      apply IsMinimalStep; assumption. }
   assert (forall a,
     On a                                  ->
     (A :\: G:[a]:) :<>: :0:       ->
