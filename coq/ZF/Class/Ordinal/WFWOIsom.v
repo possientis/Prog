@@ -18,6 +18,7 @@ Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Isom.
+Require Import ZF.Class.Ordinal.MinFresh.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Bij.
@@ -47,6 +48,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
+Module CMF := ZF.Class.Ordinal.MinFresh.
 Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module COF := ZF.Class.Ordinal.FunctionOn.
@@ -67,70 +69,14 @@ Module SRF := ZF.Set.Relation.Function.
 Module SRO := ZF.Set.Relation.OneToOne.
 Module SRR := ZF.Set.Relation.Range.
 
-(* With appropriate assumptions, this is the function class which given a       *)
-(* function y, selects the smallest 'fresh' value z of A, i.e. the smallest     *)
-(* element z of A which has not yet been 'used' by y.                           *)
-Definition SmallestFresh (R A:Class) : Class := fun x =>
-  exists y z, x = :(y,z): /\ Minimal R (A :\: toClass (SRR.range y)) z.
+(* The canonical isomorphism from On onto A, from recursion over MinFresh.      *)
+Definition Enum (R A:Class) : Class := Recursion (CMF.MinFresh R A).
 
-(* With appropriate assumptions, the isomorphism between On and A.              *)
-Definition RecurseSmallestFresh (R A:Class) : Class
-  := Recursion (SmallestFresh R A).
 
-Proposition Charac2 : forall (R A:Class) (y z:U),
-  SmallestFresh R A :(y,z): <-> Minimal R (A :\: toClass (SRR.range y)) z.
-Proof.
-  intros R A y z. split; intros H1.
-  - destruct H1 as [y' [z' [H1 H2]]]. apply OrdPair.WhenEqual in H1.
-    destruct H1 as [H1 H3]. subst. assumption.
-  - exists y. exists z. split. 1: reflexivity. assumption.
-Qed.
-
-Proposition IsFunctional : forall (R A:Class),
-  Total R A -> Functional (SmallestFresh R A).
-Proof.
-  intros R A H1 x y1 y2 H2 H3.
-  apply Charac2 in H2. apply Charac2 in H3. revert H2 H3.
-  apply Minimal.Unique with A. 1: assumption. apply Class.Inter2.IsInclL.
-Qed.
-
-Proposition IsRelation : forall (R A:Class), Relation (SmallestFresh R A).
-Proof.
-  intros R A x H1. destruct H1 as [y [z [H1 _]]].
-  exists y. exists z. assumption.
-Qed.
-
-Proposition IsFunction : forall (R A:Class),
-  Total R A -> Function (SmallestFresh R A).
-Proof.
-  intros R A H1. split.
-  - apply IsRelation.
-  - apply IsFunctional. assumption.
-Qed.
-
-Lemma IsMinimal : forall (R A F:Class) (x:U),
-  WellFoundedWellOrd R A                        ->
-  F :~: SmallestFresh R A                       ->
-  (A :\: toClass (SRR.range x)) :<>: :0:        ->
-  Minimal R (A :\: toClass (SRR.range x)) F!x.
-Proof.
-  intros R A F x H1 H2 H3.
-  assert (exists y, Minimal R (A :\: toClass (range x)) y) as H4. {
-    apply WellFoundedWellOrd.HasMinimal with A; try assumption.
-    apply Class.Inter2.IsInclL. }
-  destruct H4 as [y H4].
-  assert (F!x = y) as H5. {
-    apply CRF.Eval.
-    - apply CRF.EquivCompat with (SmallestFresh R A).
-      + apply Equiv.Sym. assumption.
-      + apply IsFunction, H1.
-    - apply H2, Charac2. assumption. }
-  rewrite H5. assumption.
-Qed.
-
-Lemma WhenRecurseSmallestFresh_ : forall (R A F G:Class),
+(* For G satisfying the Enum recursion, G!a is R-minimal in A minus G:[a]:.     *)
+Lemma WhenEnum_ : forall (R A F G:Class),
   WellFoundedWellOrd R A                  ->
-  F :~: SmallestFresh R A                 ->
+  F :~: CMF.MinFresh R A                  ->
   CFO.FunctionOn G On                     ->
   (forall a, On a -> G!a = F!(G:|:a))     ->
 
@@ -140,26 +86,29 @@ Lemma WhenRecurseSmallestFresh_ : forall (R A F G:Class),
     Minimal R (A :\: toClass G:[a]:) G!a
   ).
 Proof.
+  (* Proof by Claude. *)
   intros R A F G H1 H2 H3 H4 a H5 H6.
   assert (SRR.range (G:|:a) = G:[a]:) as H7. {
     apply RestrictOfClass.RangeOf, H3. }
   rewrite H4. 2: assumption. rewrite <- H7.
-  apply IsMinimal; try assumption. rewrite H7. assumption.
+  apply CMF.IsMinimal; try assumption. rewrite H7. assumption.
 Qed.
 
-Lemma WhenRecurseSmallestFresh : forall (R A F G:Class),
+(* A function with the Enum recursion property is an isomorphism from On to A.  *)
+Lemma WhenEnum : forall (R A F G:Class),
   WellFoundedWellOrd R A                ->
   Proper A                              ->
-  F :~: SmallestFresh R A               ->
+  F :~: CMF.MinFresh R A                ->
   CFO.FunctionOn G On                   ->
   (forall a, On a -> G!a = F!(G:|:a))   ->
   Isom G E R On A.
 Proof.
+  (* Proof by Claude. *)
   intros R A F G H1 H2 H3 H4 H5.
   assert (forall a, On a -> (A :\: toClass G:[a]:) :<>: :0:) as H6. {
     intros a H6. apply Proper.IsNotEmpty, Diff.MinusASet. assumption. }
   assert (forall a, On a -> Minimal R (A :\: toClass G:[a]:) G!a) as H7. {
-    intros a H7. apply WhenRecurseSmallestFresh_ with F; try assumption.
+    intros a H7. apply WhenEnum_ with F; try assumption.
     apply H6. assumption. }
   assert (forall a, On a -> (A :\: toClass G:[a]:) G!a) as H8. {
     intros a H8. apply Minimal.IsIn with R, H7. assumption. }
@@ -178,7 +127,7 @@ Proof.
       apply CFO.RangeCharac; assumption. }
     destruct H15 as [a [H15 H16]].
     assert (Minimal R (A :\: toClass G:[a]:) G!a) as H17. {
-      apply WhenRecurseSmallestFresh_ with F; try assumption.
+      apply WhenEnum_ with F; try assumption.
       apply Proper.IsNotEmpty, Diff.MinusASet. assumption. }
     destruct H17 as [H17 H18].
     assert (~ (A :\: toClass G:[a]:) x) as H19. {
@@ -238,54 +187,58 @@ Proof.
   - apply E.Charac2. apply H18; assumption.
 Qed.
 
-(* RecurseSmallestFresh is a function class defined on the class of ordinals.   *)
+(* Enum R A is a function class defined on the class of ordinals.               *)
 Proposition IsFunctionOn : forall (R A G:Class),
-  G :~: RecurseSmallestFresh R A -> CFO.FunctionOn G On.
+  G :~: Enum R A -> CFO.FunctionOn G On.
 Proof.
-  intros R A G H1. apply CFO.EquivCompatL with (RecurseSmallestFresh R A).
+  (* Proof by Claude. *)
+  intros R A G H1. apply CFO.EquivCompatL with (Enum R A).
   - apply Equiv.Sym. assumption.
   - apply Recursion.IsFunctionOn.
 Qed.
 
-(* RecurseSmallestFresh is SmallestFresh-recursive.                             *)
+(* Enum R A is MinFresh-recursive.                                              *)
 Proposition IsRecursive : forall (R A F G:Class),
-  F :~: SmallestFresh R A             ->
-  G :~: RecurseSmallestFresh R A      ->
+  F :~: CMF.MinFresh R A             ->
+  G :~: Enum R A                     ->
   forall a, On a -> G!a = F!(G:|:a).
 Proof.
+  (* Proof by Claude. *)
   intros R A F G H1 H2 a H3.
-  assert (G!a = (RecurseSmallestFresh R A)!a) as H4. {
+  assert (G!a = (Enum R A)!a) as H4. {
     apply EvalOfClass.EquivCompat. assumption. }
-  assert (G:|:a = (RecurseSmallestFresh R A) :|: a) as H5. {
+  assert (G:|:a = (Enum R A) :|: a) as H5. {
     apply RestrictOfClass.EquivCompat. assumption. }
-  assert (F!(G:|:a) = (SmallestFresh R A)!(G:|:a)) as H6. {
+  assert (F!(G:|:a) = (CMF.MinFresh R A)!(G:|:a)) as H6. {
     apply EvalOfClass.EquivCompat. assumption. }
   rewrite H6, H5, H4. apply Recursion.IsRecursive. assumption.
 Qed.
 
-(* RecurseSmallestFresh is an isomorphism from On to A.                         *)
+(* Enum R A is an isomorphism from On to A.                                     *)
 Proposition IsIsom : forall (R A G:Class),
   WellFoundedWellOrd R A                    ->
   Proper A                                  ->
-  G :~: RecurseSmallestFresh R A            ->
+  G :~: Enum R A                            ->
   Isom G E R On A.
 Proof.
+  (* Proof by Claude. *)
   intros R A G H1 H2 H3.
-  apply WhenRecurseSmallestFresh with (SmallestFresh R A); try assumption.
+  apply WhenEnum with (CMF.MinFresh R A); try assumption.
   - apply Equiv.Refl.
   - apply IsFunctionOn with R A. assumption.
   - apply IsRecursive with R A. 2: assumption. apply Equiv.Refl.
 Qed.
 
-(* RecurseSmallestFresh is the unique isomorphism from On to A.                 *)
+(* Enum R A is the unique isomorphism from On to A.                             *)
 Proposition IsUnique : forall (R A G:Class),
   WellFoundedWellOrd R A          ->
   Proper A                        ->
   Isom G E R On A                 ->
-  G :~: RecurseSmallestFresh R A.
+  G :~: Enum R A.
 Proof.
+  (* Proof by Claude. *)
   intros R A G H1 H2 H3.
-  remember (RecurseSmallestFresh R A) as F eqn:H4.
+  remember (Enum R A) as F eqn:H4.
   assert (Isom F E R On A) as H5. {
     apply IsIsom; try assumption. rewrite H4. apply Equiv.Refl. }
   assert (Isom F^:-1: R E A On) as H6. { apply Isom.Converse. assumption. }
@@ -317,26 +270,27 @@ Proposition WhenSmall : forall (R A:Class),
 
   exists a, On a    /\
     forall (g:U),
-      g = (RecurseSmallestFresh R A :|: a) ->
+      g = (Enum R A :|: a) ->
       Isom (toClass g) E R (toClass a) A.
 Proof.
+  (* Proof by Claude. *)
   intros R A H1 H2.
   assert (WellFoundedWellOrd R A) as H3. {
     split. 2: assumption. apply WellFounded.WhenSmall. 1: assumption. apply H2. }
-  remember (RecurseSmallestFresh R A) as G eqn:H4.
-  assert (G :~: RecurseSmallestFresh R A) as G1. {
+  remember (Enum R A) as G eqn:H4.
+  assert (G :~: Enum R A) as G1. {
     rewrite H4. apply Equiv.Refl. }
   assert (FunctionOn G On) as H5. {
     rewrite H4. apply IsFunctionOn with R A, Equiv.Refl. }
-  remember (SmallestFresh R A) as F eqn: H6.
-  assert (F :~: SmallestFresh R A) as G2. { rewrite H6. apply Equiv.Refl. }
+  remember (CMF.MinFresh R A) as F eqn: H6.
+  assert (F :~: CMF.MinFresh R A) as G2. { rewrite H6. apply Equiv.Refl. }
   assert (forall a, On a -> G!a = F!(G:|:a)) as H7. {
     apply IsRecursive with R A; assumption. }
   assert (forall a,
     On a                                  ->
     (A :\: toClass G:[a]:) :<>: :0:       ->
     Minimal R (A :\: toClass G:[a]:) G!a) as H8. {
-      apply WhenRecurseSmallestFresh_ with F; assumption. }
+      apply WhenEnum_ with F; assumption. }
   assert (forall a,
     On a                                  ->
     (A :\: toClass G:[a]:) :<>: :0:       ->
@@ -422,6 +376,7 @@ Proof.
   - apply E.Charac2, H26; assumption.
 Qed.
 
+(* The ordinal and isomorphism for a small well-ordering are unique.            *)
 Proposition WhenSmallUnique : forall (R A:Class) (a b f g:U),
   Small A                             ->
   WellOrdering R A                    ->
@@ -431,6 +386,7 @@ Proposition WhenSmallUnique : forall (R A:Class) (a b f g:U),
   Isom (toClass g) E R (toClass b) A  ->
   a = b /\ f = g.
 Proof.
+  (* Proof by Claude. *)
   intros R A a b f g H1 H2 H3 H4 H5 H6.
   assert (toClass a :~: toClass b /\ toClass f :~: toClass g) as H7. {
     apply Isom.IsEquivGen with R A; assumption. }

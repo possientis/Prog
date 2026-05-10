@@ -3,7 +3,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Restrict.
 Require Import ZF.Class.Order.WellOrdering.
-Require Import ZF.Class.Ordinal.Order.WFWO.
+Require Import ZF.Class.Ordinal.WFWOIsom.
 Require Import ZF.Class.Ordinal.OrdSub.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -21,7 +21,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Module COI := ZF.Class.Order.Isom.
 Module COW := ZF.Class.Order.WellOrdering.
 Module COS := ZF.Class.Ordinal.OrdSub.
-Module COO := ZF.Class.Ordinal.Order.WFWO.
+Module COO := ZF.Class.Ordinal.WFWOIsom.
 
 Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOI := ZF.Set.Order.Isom.
@@ -39,11 +39,11 @@ Proof.
   assert (COW.WellOrdering (toClass r) (toClass b)) as H2. { assumption. }
   assert (Small (toClass b)) as H3. { apply SetIsSmall. }
   assert (exists a, Ordinal a /\ forall (g:U),
-    g = (COO.RecurseSmallestFresh (toClass r) (toClass b) :|: a) ->
+    g = (COO.Enum (toClass r) (toClass b) :|: a) ->
     COI.Isom (toClass g) COE.E (toClass r) (toClass a) (toClass b)) as H4. {
       apply COO.WhenSmall; assumption. }
   destruct H4 as [a [H4 H5]].
-  remember (COO.RecurseSmallestFresh (toClass r) (toClass b) :|: a) as f eqn:H6.
+  remember (COO.Enum (toClass r) (toClass b) :|: a) as f eqn:H6.
   exists f. exists a. split. 1: assumption. apply SOI.FromClass.
   apply COI.EquivCompat2 with (COE.E:/:toClass a).
   - apply Equiv.Sym, SOE.ToClass.
@@ -79,11 +79,11 @@ Proof.
     apply H2. assumption. }
   assert (exists c, Ordinal c /\
     forall (f:U),
-      f = (COS.RecurseSmallestFresh (toClass a) :|: c) ->
+      f = (COS.Enum (toClass a) :|: c) ->
       COI.Isom (toClass f) COE.E COE.E (toClass c) (toClass a)) as H3. {
         apply COS.WhenSmall; assumption. }
   destruct H3 as [c [H3 H4]].
-  remember (COS.RecurseSmallestFresh (toClass a) :|: c) as f eqn:H5.
+  remember (COS.Enum (toClass a) :|: c) as f eqn:H5.
   assert (f = f) as H6. { reflexivity. }
   specialize (H4 f H6). exists c, f.
   assert (Isom f (E c) (E a) c a) as H7. {

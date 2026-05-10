@@ -20,7 +20,7 @@ Module COM := ZF.Class.Ordinal.Monotone.
 Module COO := ZF.Class.Ordinal.OrdSub.
 
 (* The unique isomorphism between the ordinals and the infinite cardinals.      *)
-Definition Aleph : Class := COO.RecurseSmallestFresh InfiniteCard.
+Definition Aleph : Class := COO.Enum InfiniteCard.
 
 (* Aleph is an isomorphism between the ordinals and infinite cardinals.         *)
 Proposition IsIsom : Isom Aleph E E Ordinal InfiniteCard.
