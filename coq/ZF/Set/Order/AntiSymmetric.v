@@ -11,12 +11,14 @@ Module COA := ZF.Class.Order.AntiSymmetric.
 Definition AntiSymmetric (r a:U) : Prop := forall (x y:U), x :< a -> y :< a ->
   :(x,y): :< r -> :(y,x): :< r -> x = y.
 
+(* If the sets form an anti-symmetric pair, then so do the classes.             *)
 Proposition ToClass : forall (r a:U),
   AntiSymmetric r a -> COA.AntiSymmetric (toClass r) (toClass a).
 Proof.
   intros r a H1. assumption.
 Qed.
 
+(* If the classes form an anti-symmetric pair, then so do the sets.             *)
 Proposition FromClass : forall (r a:U),
   COA.AntiSymmetric (toClass r) (toClass a) -> AntiSymmetric r a.
 Proof.

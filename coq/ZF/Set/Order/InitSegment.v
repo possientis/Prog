@@ -22,9 +22,10 @@ Require Import ZF.Set.Truncate.
 Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
 
-(* Initial segment of R on A at a.                                              *)
+(* initial segment of (R,A) at a.                                               *)
 Definition initSegment (R A:Class) (a:U) : U := truncate (COI.initSegment R A a).
 
+(* The class of the initial segment is the class initial segment.               *)
 Proposition ToClass : forall (R A B:Class) (a:U),
   WellFounded R A                                         ->
   A a                                                     ->
@@ -35,6 +36,7 @@ Proof.
   apply Truncate.WhenSmall, WellFounded.IsSmall with A; assumption.
 Qed.
 
+(* The class of the 'refl' initial segment is the class 'refl' initial segment. *)
 Proposition ToClassRefl : forall (R A B:Class) (a:U),
   WellFounded R A                                                 ->
   A a                                                             ->
@@ -69,7 +71,7 @@ Proof.
   apply (ToClass R A B a); try assumption. apply COI.Charac. split; assumption.
 Qed.
 
-(* Initial segments are compatible with equivalences.                           *)
+(* Initial segments are compatible with class equivalence.                      *)
 Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> initSegment R A a = initSegment S B a.
 Proof.
@@ -77,7 +79,7 @@ Proof.
   apply Truncate.EquivCompat, COI.EquivCompat; assumption.
 Qed.
 
-(* Initial segments are left-compatible with equivalences.                      *)
+(* Initial segments are left-compatible with class equivalence.                 *)
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> initSegment R A a = initSegment S A a.
 Proof.
@@ -86,7 +88,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
-(* Initial segments are right-compatible with equivalences.                     *)
+(* Initial segments are right-compatible with class equivalence.                *)
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> initSegment R A a = initSegment R B a.
 Proof.
@@ -112,6 +114,7 @@ Proof.
     + right. apply (ToClass R A B); assumption.
 Qed.
 
+(* a belongs to its own reflexive initial segment.                              *)
 Proposition IsInRefl : forall (R A B:Class) (a:U),
   WellFounded R A               ->
   B a                           ->
@@ -124,6 +127,7 @@ Proof.
   - apply InitSegment.IsInRefl. assumption.
 Qed.
 
+(* The strict initial segment is included in the reflexive one.                 *)
 Proposition IsInclRefl : forall (R A B:Class) (a:U),
   WellFounded R A                                 ->
   A a                                             ->
@@ -134,6 +138,7 @@ Proof.
   apply (CharacRefl R A B); try assumption. right. assumption.
 Qed.
 
+(* Every element of the initial segment of (R,B) at a belongs to B.             *)
 Proposition IsIn : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
@@ -145,6 +150,7 @@ Proof.
   apply (Charac R A B a); assumption.
 Qed.
 
+(* Every element of the initial segment of (R,B) at a is strictly less than a.  *)
 Proposition IsLess : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
@@ -156,6 +162,7 @@ Proof.
   apply (Charac R A) in H4; try assumption. apply H4.
 Qed.
 
+(* Every element of the reflexive initial segment is less than or equal to a.   *)
 Proposition IsLeq : forall (R A B:Class) (a x:U),
   WellFounded R A             ->
   A a                         ->
@@ -170,7 +177,6 @@ Proof.
   - right. apply (IsLess R A B); assumption.
 Qed.
 
-(* The initial segment is empty iff there is no x in A which is less than a.    *)
 Proposition WhenEmpty : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
@@ -269,6 +275,7 @@ Proof.
     + apply (CharacRev R A C a); assumption.
 Qed.
 
+(* An isomorphism maps the full initial segment to the full initial segment.    *)
 Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
   WellFounded R A                                         ->
   A a                                                     ->
@@ -283,6 +290,7 @@ Proof.
   apply Class.Incl.Refl.
 Qed.
 
+(* An isomorphism preserves the emptiness of initial segments.                  *)
 Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),
   WellFounded R A                   ->
   A a                               ->
@@ -296,6 +304,7 @@ Proof.
   apply ImageByClass.WhenEmpty. assumption.
 Qed.
 
+(* a does not belong to its own strict initial segment.                         *)
 Proposition IsNotIn : forall (R A B:Class)(a:U),
   WellFounded R A           ->
   A a                       ->
@@ -307,6 +316,7 @@ Proof.
   revert H5. apply (Founded.NoLoop1 R A). 2: assumption. apply H1.
 Qed.
 
+(* The initial segment of the membership relation V at a equals a itself.       *)
 Proposition EV : forall (a:U),
   initSegment E V a = a.
 Proof.

@@ -11,18 +11,19 @@ Require Import ZF.Set.Relation.Bij.
 Module COF := ZF.Class.Order.Founded.
 
 (* Predicate expressing the fact that r is a founded set on a.                  *)
-(* r is founded on a iff every non-empty subset of a has an r-minimal element.  *)
 Definition Founded (r a:U) : Prop := forall b,
   b :<=: a                  ->
   b <> :0:                  ->
   exists x, Minimal r b x.
 
+(* If the sets form a founded pair, then so do the classes.                     *)
 Proposition ToClass : forall (r a:U),
   Founded r a -> COF.Founded (toClass r) (toClass a).
 Proof.
   intros r a H1. assumption.
 Qed.
 
+(* If the classes form a founded pair, then so do the sets.                     *)
 Proposition FromClass : forall (r a:U),
   COF.Founded (toClass r) (toClass a) -> Founded r a.
 Proof.

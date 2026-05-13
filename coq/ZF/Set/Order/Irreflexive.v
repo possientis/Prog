@@ -10,12 +10,14 @@ Module COI := ZF.Class.Order.Irreflexive.
 (* Predicate expressing the fact that r is an irreflexive set on a.             *)
 Definition Irreflexive (r a:U) : Prop := forall (x:U), x :< a -> ~ :(x,x): :< r.
 
+(* If the sets form an irreflexive pair, then so do the classes.                *)
 Proposition ToClass : forall (r a:U),
   Irreflexive r a -> COI.Irreflexive (toClass r) (toClass a).
 Proof.
   intros r a H1. assumption.
 Qed.
 
+(* If the classes form an irreflexive pair, then so do the sets.                *)
 Proposition FromClass : forall (r a:U),
   COI.Irreflexive (toClass r) (toClass a) -> Irreflexive r a.
 Proof.

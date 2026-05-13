@@ -14,11 +14,11 @@ Module COI := ZF.Class.Order.Isom.
 
 (* f is an (r,s)-isomorphism from a to b.                                       *)
 Definition Isom (f r s a b:U) : Prop := Bij f a b /\ forall x y,
-  x :< a             ->
-  y :< a             ->
-  :(x,y): :< r      <->
-  :(f!x,f!y): :< s.
+  x :< a                                ->
+  y :< a                                ->
+  :(x,y): :< r  <-> :(f!x,f!y): :< s.
 
+(* If the sets form an isomorphic structure, then so do the classes.            *)
 Proposition ToClass : forall (f r s a b:U),
   Isom f r s a b ->
   COI.Isom (toClass f) (toClass r) (toClass s) (toClass a) (toClass b).
@@ -27,6 +27,7 @@ Proof.
   apply Bij.ToClass. assumption.
 Qed.
 
+(* If the classes form an isomorphic structure, then so do the sets.            *)
 Proposition FromClass : forall (f r s a b:U),
   COI.Isom (toClass f) (toClass r) (toClass s) (toClass a) (toClass b) ->
   Isom f r s a b.
@@ -68,7 +69,7 @@ Proof.
         rewrite (Bij.ComposeEval f g a b c y) in H7; try assumption.
 Qed.
 
-(* If s is the transport of r by f, then f is an (r,s)-isomorphism.             *)
+(* If s is the transport of r by a bijection f then f is an (r,s)-isomorphism.  *)
 Proposition Transport : forall (f r s a b:U),
   s = transport f r a ->
   Bij f a b           ->

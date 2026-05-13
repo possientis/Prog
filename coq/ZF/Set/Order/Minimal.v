@@ -10,18 +10,21 @@ Module COM := Class.Order.Minimal.
 Definition Minimal (r a b:U) : Prop
   := b :< a /\ (forall x, x :< a  -> ~ :(x,b): :< r).
 
+(* If b is minimal w.r. to the sets, then it is minimal w.r. to the classes.    *)
 Proposition ToClass : forall (r a b:U),
   Minimal r a b -> COM.Minimal (toClass r) (toClass a) b.
 Proof.
   intros r a b H1. assumption.
 Qed.
 
+(* If b is minimal w.r. to the classes, then it is minimal w.r. to the sets.    *)
 Proposition FromClass : forall (r a b:U),
   COM.Minimal (toClass r) (toClass a) b -> Minimal r a b.
 Proof.
   intros r a b H1. assumption.
 Qed.
 
+(* A minimal element of a belongs to a.                                         *)
 Proposition IsIn : forall (r a b:U),
   Minimal r a b -> b :< a.
 Proof.
