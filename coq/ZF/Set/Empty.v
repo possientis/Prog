@@ -52,7 +52,7 @@ Proposition HasNoElem : forall (a:U),
 Proof.
   intros a. split; intros H1.
   - intros [x H2]. apply Charac with x. rewrite <- H1. assumption.
-  - apply DoubleInclusion. split; intros x H2.
+  - apply Incl.Double. split; intros x H2.
     + apply Charac, H1. exists x. assumption.
     + apply Charac in H2. contradiction.
 Qed.
@@ -76,7 +76,7 @@ Qed.
 (* An ordered pair is not empty.                                                *)
 Proposition OrdPairIsNotEmpty : forall (x y:U), :(x,y): <> :0:.
 Proof.
-  intros x y H1. apply DoubleInclusion in H1. destruct H1 as [H1 _].
+  intros x y H1. apply Incl.Double in H1. destruct H1 as [H1 _].
   apply NoElem with :{x}:. apply H1, Pair.IsInL.
 Qed.
 
@@ -111,6 +111,6 @@ Qed.
 Proposition WhenIncl : forall (a:U),
   a :<=: :0: -> a = :0:.
 Proof.
-  intros a H1. apply Incl.DoubleInclusion. split. 1: assumption.
+  intros a H1. apply Incl.Double. split. 1: assumption.
   intros x H2. apply Charac in H2. contradiction.
 Qed.

@@ -18,7 +18,7 @@ Proof.
   intros a b. split; intros H1.
   - destruct H1 as [H1 H2]. split.
     + apply H1.
-    + apply NotForAllNot. intros H3. apply H2. apply DoubleInclusion. split.
+    + apply NotForAllNot. intros H3. apply H2. apply Incl.Double. split.
       * apply H1.
       * intros x H4. apply DoubleNegation. intros H5. apply (H3 x). split; assumption.
   - destruct H1 as [H1 [x [H2 H3]]]. split.

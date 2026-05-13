@@ -11,6 +11,9 @@ Require Import ZF.Set.OrdPair.
 Export ZF.Notation.Image.
 Export ZF.Notation.Inverse.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Inverse image of P by F is the direct image of P by F^(-1).                  *)
 Proposition Charac : forall (F P:Class) (x:U),
   F^:-1: :[P]: x <-> exists y, P y /\ F :(x,y):.
@@ -59,7 +62,7 @@ Proposition InclCompatL : forall (F G P:Class),
   F :<=: G -> F^:-1: :[P]: :<=: G^:-1: :[P]:.
 Proof.
   intros F G P H1. apply InclCompat. 1: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* The inverse image is right-compatible with inclusion.                        *)
@@ -67,7 +70,7 @@ Proposition InclCompatR : forall (F P Q:Class),
   P :<=: Q -> F^:-1: :[P]: :<=: F^:-1: :[Q]:.
 Proof.
   intros F P Q H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* The inverse image of the range is the domain.                                *)

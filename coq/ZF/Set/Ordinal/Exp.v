@@ -114,7 +114,7 @@ Proof.
     rewrite WhenSuccR, Mult.WhenOneR; assumption.
   - intros a H1 IH.
     rewrite WhenLimit; try assumption.
-    apply DoubleInclusion. split; intros x H2.
+    apply Incl.Double. split; intros x H2.
     + apply SUG.Charac in H2. destruct H2 as [y [H2 H3]].
       assert (x :< :1: :^: y) as H4. { apply H3. }
       rewrite IH in H4; assumption.
@@ -512,7 +512,7 @@ Proof.
         assert (Ordinal (a :^: c)) as G9. { apply IsOrdinal; assumption. }
         rewrite WhenLimit; try assumption.
         rewrite Mult.WhenLimit. 2: assumption.
-        apply DoubleInclusion. split; intros y H8;
+        apply Incl.Double. split; intros y H8;
         apply SUG.Charac; apply SUG.Charac in H8.
         { destruct H8 as [e [H8 H9]].
           assert (Ordinal e) as G8. {
@@ -587,7 +587,7 @@ Proof.
         reflexivity.
       * assert (Ordinal (a :^: b)) as G5. { apply IsOrdinal; assumption. }
         assert (:0: :< a :^: b) as G6. { apply HasZero; assumption. }
-        apply DoubleInclusion. split; intros y H7;
+        apply Incl.Double. split; intros y H7;
         rewrite WhenLimit in H7; try assumption;
         rewrite WhenLimit; try assumption;
         apply SUG.Charac in H7;

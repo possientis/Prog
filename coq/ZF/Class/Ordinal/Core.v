@@ -35,6 +35,9 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Predicate defining an ordinal class.                                         *)
 Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
   A x -> A y -> x = y \/ x :< y \/ y :< x.
@@ -197,7 +200,7 @@ Proof.
      - apply DiffBySet.WhenLess. assumption. }
     destruct H4 as [x [H4 H5]]. assert (A x) as H6. { apply H4. }
     assert (x = a) as H7. 2: { subst. assumption. }
-    apply ZF.Set.Incl.DoubleInclusion. destruct H1 as [H1 H9]. split; intros u H7.
+    apply Incl.Double. destruct H1 as [H1 H9]. split; intros u H7.
     + apply DoubleNegation. intros H8. apply Class.Empty.Charac with u, H5.
       split. 2: assumption. split. 2: assumption.
       apply (H1 x); assumption.
@@ -323,7 +326,7 @@ Proof.
     apply IsOnOrLess. assumption. }
   destruct H2 as [H2|H2].
   - apply Incl.EquivCompatL with On. apply Equiv.Sym. 1: assumption.
-    apply Class.Incl.Refl.
+    apply CIN.Refl.
   - apply H2.
 Qed.
 
@@ -358,7 +361,7 @@ Qed.
 Proposition ElemIsInter : forall (A:Class) (a:U),
   Ordinal A -> A a -> toClass a :~: toClass a :/\: A.
 Proof.
-  intros A a H1 H2. apply Class.Incl.DoubleInclusion. split.
+  intros A a H1 H2. apply CIN.Double. split.
   2: apply Class.Inter2.IsInclL. intros x H3. split. 1: assumption.
   destruct H1 as [H1 _]. specialize (H1 a H2 x). apply H1. assumption.
 Qed.
@@ -389,7 +392,7 @@ Proof.
   destruct H3 as [H3|[H3|[H3 H4]]].
   - apply H3. reflexivity.
   - apply H3. reflexivity.
-  - exfalso. apply H4. apply Class.Incl.DoubleInclusion. split.
+  - exfalso. apply H4. apply CIN.Double. split.
     1: assumption. intros x H5. rewrite H5. apply Class.Empty.HasElem in H2.
     destruct H2 as [y H2]. assert (H6 := H2). apply H3 in H6.
     rewrite H6 in H2. assumption.

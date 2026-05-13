@@ -10,6 +10,7 @@ Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Set.Core.
 
+
 Module CIN := ZF.Class.Incl.
 Module CIT := ZF.Class.Inter2.
 Module COI := ZF.Class.Order.InitSegment.
@@ -39,7 +40,7 @@ Proof.
   assert (A :~: B) as X. 2: apply X.
 
   (* It is sufficient to show that A <= B. *)
-  apply DoubleInclusion. split. 2: assumption. assert (A :<=: B) as X. 2: apply X.
+  apply CIN.Double. split. 2: assumption. assert (A :<=: B) as X. 2: apply X.
 
   (* Or equivalently that A\B = 0. *)
   apply Diff.WhenEmpty. assert (A:\:B :~: :0:) as X. 2: apply X.

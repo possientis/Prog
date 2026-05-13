@@ -10,7 +10,7 @@ Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.
 Global Instance ClassLeq : Leq Class := { leq := Incl }.
 
 (* Two classes are equivalent if and only if they are included in each other.   *)
-Proposition DoubleInclusion : forall (P Q:Class),
+Proposition Double : forall (P Q:Class),
   P :~: Q <-> P :<=: Q /\ Q :<=: P.
 Proof.
   intros P Q. split; intros H1.
@@ -53,7 +53,7 @@ Qed.
 Proposition Anti : forall (P Q:Class),
   P :<=: Q -> Q :<=: P -> P :~: Q.
 Proof.
-  intros P Q H1 H2. apply DoubleInclusion. split; assumption.
+  intros P Q H1 H2. apply Double. split; assumption.
 Qed.
 
 (* The inclusion relation is transitive.                                        *)

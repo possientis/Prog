@@ -14,6 +14,9 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Inital segment of R on A at a.                                               *)
 Definition initSegment (R A:Class) (a:U) : Class
   := A :/\: R^:-1: :[ toClass :{a}: ]:.
@@ -80,7 +83,7 @@ Proposition InclCompatL : forall (R S A:Class) (a:U),
   R :<=: S -> initSegment R A a :<=: initSegment S A a.
 Proof.
   intros R S A a H1. apply InclCompat. 1: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* Initial segments are right-compatible with inclusion.                        *)
@@ -88,7 +91,7 @@ Proposition InclCompatR : forall (R A B:Class) (a:U),
   A :<=: B -> initSegment R A a :<=: initSegment R B a.
 Proof.
   intros R A B a H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 Proposition IsIn : forall (R A:Class) (a x:U),
@@ -175,7 +178,7 @@ Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
 Proof.
   intros F R S A B a H1 H2.
   apply Equiv.Tran with (initSegment S F:[A]: F!a).
-  - apply IsomImage with A B; try assumption. apply Class.Incl.Refl.
+  - apply IsomImage with A B; try assumption. apply CIN.Refl.
   - apply EquivCompatR, Bij.ImageOfDomain, H1.
 Qed.
 
@@ -206,7 +209,7 @@ Proposition WhenLeq : forall (R A:Class) (a b:U),
   initSegment R A a :<=: initSegment R A b.
 Proof.
   intros R A a b H1 H2 H3 H4. apply Charac2 in H4. destruct H4 as [H4|H4].
-  - subst. apply Class.Incl.Refl.
+  - subst. apply CIN.Refl.
   - apply WhenLess; assumption.
 Qed.
 

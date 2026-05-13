@@ -29,6 +29,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 
 
@@ -68,7 +69,7 @@ Proof.
         apply H11 with b; assumption. }
       clear H4 H6 C.
       assert (F:[b]: = b) as H9. {
-        apply DoubleInclusion. split; intros a H9.
+        apply Incl.Double. split; intros a H9.
         - apply (Bij.ImageSetCharac F A B) in H9. 2: apply H3.
           destruct H9 as [x [H9 [H10 H11]]].
           assert (F!x = x) as H12. { apply H8. assumption. }
@@ -139,7 +140,7 @@ Proof.
     assert (F!x = x) as H8. { apply IsId with A B; assumption. }
     rewrite H7 in H8. rewrite H8. assumption. }
   assert (A :~: B) as H7. {
-    apply Class.Incl.DoubleInclusion. split; assumption. }
+    apply CIN.Double. split; assumption. }
   assert (F :~: I:|:A) as H8. {
     apply IA.Equal.
     - apply Bij.IsFunctionOn with B, H3.

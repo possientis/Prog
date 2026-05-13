@@ -74,7 +74,7 @@ Qed.
 Proposition Inter2 : forall (a1 a2 b1 b2:U),
   a1:x:b1 :/\: a2:x:b2 = (a1:/\:a2) :x: (b1:/\:b2).
 Proof.
-  intros a1 a2 b1 b2. apply DoubleInclusion. split; intros x H1.
+  intros a1 a2 b1 b2. apply Incl.Double. split; intros x H1.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     apply Charac in H2. destruct H2 as [y2 [z2 [G2 [H2 H2']]]].

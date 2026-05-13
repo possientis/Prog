@@ -25,7 +25,7 @@ Proof.
 Qed.
 
 (* Two sets are equal if and only if they are subsets of each other.            *)
-Proposition DoubleInclusion : forall (a b:U),
+Proposition Double : forall (a b:U),
   a = b <-> a :<=: b /\ b :<=: a.
 Proof.
   intros a b. unfold Incl. split.
@@ -47,7 +47,7 @@ Qed.
 Proposition Anti : forall (a b:U),
   a :<=: b -> b :<=: a -> a = b.
 Proof.
-  intros a b H1 H2. apply DoubleInclusion. split; assumption.
+  intros a b H1 H2. apply Double. split; assumption.
 Qed.
 
 (* The inclusion relation is transitive.                                        *)

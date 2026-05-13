@@ -13,6 +13,9 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* A class is one-to-one iff both itself and its converse are functional.       *)
 Definition OneToOne (F:Class) : Prop := Functional F /\ Functional F^:-1:.
 
@@ -157,7 +160,7 @@ Qed.
 Proposition InvImageOfImage : forall (F A:Class),
   OneToOne F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
 Proof.
-  intros F A [H1 H2] H3. apply DoubleInclusion. split.
+  intros F A [H1 H2] H3. apply CIN.Double. split.
   - apply InvImage.OfImageIsLess. assumption.
   - apply InvImage.OfImageIsMore. assumption.
 Qed.
@@ -165,7 +168,7 @@ Qed.
 Proposition ImageOfInvImage : forall (F B:Class),
   OneToOne F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
-  intros F B [H1 H2] H3. apply DoubleInclusion. split.
+  intros F B [H1 H2] H3. apply CIN.Double. split.
   - apply InvImage.ImageIsLess. assumption.
   - apply InvImage.ImageIsMore. assumption.
 Qed.

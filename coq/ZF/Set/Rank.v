@@ -127,7 +127,7 @@ Proof.
     - apply IsIncl.
     - split. 1: assumption. rewrite <- H11. assumption. }
   assert (c = succ (rank a)) as H15. {
-    apply Incl.DoubleInclusion. split; assumption. }
+    apply Incl.Double. split; assumption. }
   assert (c :<=: b) as H16. { apply H9. rewrite H4. split; assumption. }
   assert (rank a :< rank a) as H17. {
     apply H2, H16. rewrite H15. apply Succ.IsIn. }
@@ -172,7 +172,7 @@ Proof.
   - split.
     + apply IsNotIn. 1: assumption. subst. apply Incl.Refl.
     + apply IsIn. 1: assumption. subst. apply Succ.IsIn.
-  - destruct H2 as [H2 H3]. apply Incl.DoubleInclusion. split.
+  - destruct H2 as [H2 H3]. apply Incl.Double. split.
     + apply IsLargest; assumption.
     + apply Succ.InclCompatRev; try assumption.
       apply Succ.ElemIsIncl; try assumption.
@@ -207,7 +207,7 @@ Proof.
   assert (A :<>: :0:) as H3. {
     apply CEM.HasElem. exists (rank a). rewrite H1. split. 1: assumption.
     intros x H3. apply ElemCompat. assumption. }
-  apply DoubleInclusion. split.
+  apply Incl.Double. split.
   - apply SOI.IsLargest; try assumption. rewrite H1. intros b [H4 H5].
     assert (Ordinal (succ b)) as K1. { apply Succ.IsOrdinal. assumption. }
     apply Succ.InclIsElem; try assumption.
@@ -242,7 +242,7 @@ Proof.
     apply CEM.HasElem. exists a. rewrite H3. split. 1: assumption.
     apply Incl.Refl. }
   assert (inf B = a) as H9. {
-    apply Incl.DoubleInclusion. split.
+    apply Incl.Double. split.
     - apply SOI.IsLowerBound. 1: assumption. rewrite H3. split. 1: assumption.
       apply Incl.Refl.
     - apply SOI.IsLargest; try assumption. intros b H9.

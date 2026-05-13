@@ -18,6 +18,9 @@ Require Import ZF.Set.Pair.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Predicate expressing the fact that R is a founded class on A.                *)
 (* R is founded on A iff every non-empty subset of A has an R-minimal element.  *)
 (* We wish this predicate to be expressed in the language of set theory, so     *)
@@ -51,7 +54,7 @@ Proposition InclCompat : forall (R A B:Class),
   A :<=: B -> Founded R B -> Founded R A.
 Proof.
   intros R A B H1 H2 a H3 H4. apply H2. 2: assumption.
-  apply Class.Incl.Tran with A; assumption.
+  apply CIN.Tran with A; assumption.
 Qed.
 
 Proposition IsomCompat : forall (F R S A B:Class),
@@ -75,9 +78,9 @@ Proof.
     assert (toClass a :<=: A) as H7. {
       apply Incl.EquivCompatL with (F^:-1::[toClass b]:).
       - apply Equiv.Sym. assumption.
-      - apply Class.Incl.Tran with F^:-1::[B]:.
+      - apply CIN.Tran with F^:-1::[B]:.
         + apply Image.InclCompatR. assumption.
-        + apply Incl.EquivCompatL with A. 2: apply Class.Incl.Refl.
+        + apply Incl.EquivCompatL with A. 2: apply CIN.Refl.
           apply Equiv.Sym, Bij.InvImageOfRange, H1. }
     assert (a <> :0:) as H8. { apply HasElem in H4.
       destruct H4 as [y H4]. apply HasElem.

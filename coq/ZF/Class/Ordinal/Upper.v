@@ -15,6 +15,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 
 
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 
 
@@ -119,7 +120,7 @@ Proof.
   destruct H3 as [a H3].
   assert (Small (inf (upper A))) as H4. { apply Inf.IsSmall. }
   assert (exists b, IsSetOf (inf (upper A)) b) as H5. { assumption. }
-  destruct H5 as [b H5]. apply Class.Incl.DoubleInclusion. split.
+  destruct H5 as [b H5]. apply CIN.Double. split.
   - apply Incl.EquivCompatR with (toClass b). 1: assumption.
     apply Sup.IsSmallestOrd. intros c H6 H7.
     apply Incl.EquivCompatR with (inf (upper A)).

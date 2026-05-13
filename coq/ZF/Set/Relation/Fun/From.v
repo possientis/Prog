@@ -58,7 +58,7 @@ Qed.
 Proposition DomainOf : forall (f:U -> U) (a:U),
   domain (from a f) = a.
 Proof.
-  intros f a. apply Incl.DoubleInclusion. split; intros x H1.
+  intros f a. apply Incl.Double. split; intros x H1.
   - apply Domain.Charac in H1. destruct H1 as [y H1].
     apply Charac2 in H1. apply H1.
   - apply Domain.Charac. exists (f x). apply Satisfies. assumption.

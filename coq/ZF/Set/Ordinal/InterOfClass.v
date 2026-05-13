@@ -61,7 +61,7 @@ Proof.
   assert (A :~: :0: \/ A :<>: :0:) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - rewrite <- SIC.IsZero. apply SIC.EquivCompat. assumption.
-  - apply SIN.DoubleInclusion. split; intros x H3.
+  - apply SIN.Double. split; intros x H3.
     + apply SIC.Charac with A. 1: assumption.
       apply COC.HasZero; assumption.
     + apply SEM.Charac in H3. contradiction.

@@ -22,6 +22,8 @@ Require Import ZF.Set.Union2.
 Require Import ZF.Notation.N.
 Export ZF.Notation.N.
 
+
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 
 
@@ -114,7 +116,7 @@ Proposition Induction : forall (A:Class),
 Proof.
   intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
   assert (:N :\: A :<=: On) as H4. {
-    apply Class.Incl.Tran with :N.
+    apply CIN.Tran with :N.
     - apply Class.Inter2.IsInclL.
     - apply HasOrdinalElem. }
   assert (exists n,
@@ -130,7 +132,7 @@ Proof.
   assert ((:N : Class) b) as H13. {
     split.
     - apply Succ.IsOrdinalRev. subst. assumption.
-    - apply Class.Incl.Tran with (toClass (succ n)). 2: assumption.
+    - apply CIN.Tran with (toClass (succ n)). 2: assumption.
       rewrite <- H11. apply Succ.IsIncl. }
   assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
     apply NoElemLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
@@ -145,7 +147,7 @@ Proposition FiniteInduction : forall (A:Class),
   (forall n, A n -> A (succ n)) ->
   A :~: :N.
 Proof.
-  intros A H1 H2 H3. apply DoubleInclusion. split. 1: assumption.
+  intros A H1 H2 H3. apply CIN.Double. split. 1: assumption.
   apply Induction. 1: assumption. intros n _. apply H3.
 Qed.
 

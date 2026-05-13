@@ -121,7 +121,7 @@ Proof.
   (* Proof by Claude.                                                           *)
   (* Every product element appears as a domain element via one of the branches; *)
   (* every domain element is a product element by the membership conditions.    *)
-  intros A f1 f2 a b. apply Incl.DoubleInclusion. split; intros x H1.
+  intros A f1 f2 a b. apply Incl.Double. split; intros x H1.
   - apply Domain.Charac in H1. destruct H1 as [y H1].
     apply Charac2 in H1. destruct H1 as [u [v [H1 [H2 [H3 _]]]]]. subst x.
     apply Prod.Charac. exists u, v. split. 1: reflexivity. split; assumption.

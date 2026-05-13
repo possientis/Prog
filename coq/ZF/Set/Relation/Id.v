@@ -75,7 +75,7 @@ Qed.
 (* The range of the identity on a is a.                                         *)
 Proposition RangeOf : forall (a:U), range (id a) = a.
 Proof.
-  intros a. apply Incl.DoubleInclusion. split; intros y H1.
+  intros a. apply Incl.Double. split; intros y H1.
   - apply Range.Charac in H1. destruct H1 as [x H1].
     apply Charac2 in H1. destruct H1 as [H1 H2]. subst. assumption.
   - apply Range.Charac. exists y. apply Charac2. split. 1: assumption.

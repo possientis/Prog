@@ -258,7 +258,7 @@ Proof.
       rewrite (Bij.ConverseEvalOfEval g b d) in H31; try assumption.
       exists g!y. split; assumption. }
   assert (range k = b) as H26. {
-    apply Incl.DoubleInclusion. split; assumption. }
+    apply Incl.Double. split; assumption. }
   assert (domain k = a) as G5. { apply H24. }
   assert (forall x y, x :< a -> y :< a -> k!x = k!y -> A x -> A y) as H27. {
     intros x y H27 H28 H29 H30. apply Classic.DoubleNegation. intros H31.
@@ -358,7 +358,7 @@ Proof.
       intros x y H11 H12 H13.
       rewrite H2, From.Eval, From.Eval in H13; try assumption.
       apply Power.Charac in H11. apply Power.Charac in H12.
-      apply DoubleInclusion. split; intros z H14.
+      apply Incl.Double. split; intros z H14.
       - apply H10 with x; assumption.
       - apply H10 with y; try assumption. symmetry. assumption. }
   assert (:P(b) :<=: range g) as H12. {
@@ -405,7 +405,7 @@ Proposition WhenZero : forall (a:U),
   a :~: :0: <-> a = :0:.
 Proof.
   intros a. split; intros H1.
-  - destruct H1 as [f H1]. apply Incl.DoubleInclusion. split; intros x H2.
+  - destruct H1 as [f H1]. apply Incl.Double. split; intros x H2.
     + exfalso.
       assert (f!x :< :0:) as H3. { apply (Bij.IsInRange f a :0:); assumption. }
       apply Empty.Charac in H3. contradiction.
@@ -456,7 +456,7 @@ Proof.
   assert (b :< a \/ ~ b :< a) as H1. { apply LawExcludedMiddle. }
   destruct H1 as [H1|H1].
   - assert (a :\/: :{b}: = a) as H2. {
-      apply Incl.DoubleInclusion. split. 2: apply Union2.IsInclL.
+      apply Incl.Double. split. 2: apply Union2.IsInclL.
       intros x H2.
       apply Union2.Charac in H2. destruct H2 as [H2|H2]. 1: assumption.
       apply Single.Charac in H2. subst. assumption. }
@@ -968,7 +968,7 @@ Proof.
   intros a Ha HN. apply Sym. unfold succ. rewrite Union2.Comm.
   (* {a} and a are disjoint: a in a would contradict the axiom of foundation.   *)
   assert (:{a}: :/\: a = :0:) as Hdisj. {
-    apply Incl.DoubleInclusion. split. 2: apply Empty.IsIncl.
+    apply Incl.Double. split. 2: apply Empty.IsIncl.
     intros x Hx. apply Inter2.Charac in Hx. destruct Hx as [Hxa Ha'].
     apply Single.Charac in Hxa. subst x. exfalso.
     revert Ha'. apply Foundation.NoElemLoop1. }

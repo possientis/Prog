@@ -134,7 +134,7 @@ Qed.
 Lemma FN : F!:N = :N.
 Proof.
   unfold F. rewrite Recursion2.WhenLimit. 2: apply Omega.IsLimit.
-  fold F. apply DoubleInclusion. split; intros y H1.
+  fold F. apply Incl.Double. split; intros y H1.
   - apply UnionGenOfClass.Charac in H1. destruct H1 as [n [H1 H2]].
     assert (On (succ n)) as H3. {
       apply Omega.HasOrdinals. apply Omega.HasSucc. assumption. }
@@ -220,7 +220,7 @@ Qed.
 Lemma GN : G!:N = :N.
 Proof.
   unfold G. rewrite Recursion2.WhenLimit. 2: apply Omega.IsLimit.
-  fold G. apply DoubleInclusion. split; intros y H1.
+  fold G. apply Incl.Double. split; intros y H1.
   - apply UnionGenOfClass.Charac in H1. destruct H1 as [n [H1 H2]].
     assert (On n) as H3. { apply Omega.HasOrdinals. assumption. }
     rewrite Gn in H2. 2: assumption. apply SOC.ElemElemTran with n;

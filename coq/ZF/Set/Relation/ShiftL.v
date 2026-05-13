@@ -116,7 +116,7 @@ Qed.
 Proposition WhenOrdinalDomain : forall (f:U), Ordinal (domain f) ->
   domain (shiftL f) = :U(domain f).
 Proof.
-  intros f H1. apply DoubleInclusion. split; intros x H2.
+  intros f H1. apply Incl.Double. split; intros x H2.
   - apply DomainOf in H2. apply Union.Charac. exists (succ x).
     split. 2: assumption. apply Succ.IsIn.
   - apply Union.Charac in H2. destruct H2 as [y [H2 H3]]. apply DomainOf.

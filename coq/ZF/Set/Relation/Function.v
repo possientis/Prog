@@ -56,7 +56,7 @@ Proposition Equal : forall (f g:U),
   (forall x, x :< domain f -> f!x = g!x)  ->
   f = g.
 Proof.
-  intros f g [H1 H2] [H3 H4] H5 H6. apply DoubleInclusion. split; intros x H7.
+  intros f g [H1 H2] [H3 H4] H5 H6. apply Incl.Double. split; intros x H7.
   - specialize (H1 x H7). destruct H1 as [y [z H1]]. subst.
     assert (y :< domain f) as H8. { apply Domain.Charac. exists z. assumption. }
     assert (f!y = z) as H9. { apply Eval.Charac; assumption. }

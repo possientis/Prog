@@ -301,13 +301,13 @@ Proof.
       apply Incl.Tran with (a :+: b).
       - apply IsInclR; assumption.
       - rewrite H3. apply Incl.Refl. }
-    apply DoubleInclusion. split. 1: assumption.
+    apply Incl.Double. split. 1: assumption.
     apply Core.IsIncl. assumption.
   - assert (b :<=: :0:) as H4. {
       apply Incl.Tran with (a :+: b).
       - apply IsInclL; assumption.
       - rewrite H3. apply Incl.Refl. }
-    apply DoubleInclusion. split. 1: assumption.
+    apply Incl.Double. split. 1: assumption.
     apply Core.IsIncl. assumption.
 Qed.
 
@@ -329,7 +329,7 @@ Proof.
     apply Core.HasMinimal; assumption. }
   destruct H7 as [c [H7 [H8 H9]]].
   rewrite H4 in H8. destruct H8 as [_ H8]. rewrite H4 in H9.
-  exists c. split. 1: assumption. apply DoubleInclusion. split. 2: assumption.
+  exists c. split. 1: assumption. apply Incl.Double. split. 2: assumption.
   assert (c = :0: \/ Successor c \/ Limit c) as H10. {
     apply Limit.ThreeWay. assumption. }
   assert (forall d, Ordinal d -> d :< c -> a :+: d :< b) as G1. {
@@ -420,7 +420,7 @@ Proof.
   intros n a H1 H2. revert a H1.
   assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
   assert (n :+: :N = :N) as G0. {
-    apply DoubleInclusion. split.
+    apply Incl.Double. split.
     - rewrite WhenLimit. 2: apply Omega.IsLimit.
       apply SUG.WhenSetBounded. intros m H1.
       apply Core.ElemIsIncl. 1: apply Omega.IsOrdinal.
@@ -449,7 +449,7 @@ Proof.
   - intros a H1 H3 H4.
     assert (Ordinal a) as G1. { apply H1. }
     assert (Ordinal :N) as G3. { apply Omega.IsOrdinal. }
-    rewrite WhenLimit. 2: assumption. apply DoubleInclusion. split; intros y H5.
+    rewrite WhenLimit. 2: assumption. apply Incl.Double. split; intros y H5.
     + apply SUG.Charac in H5. destruct H5 as [x [H5 H6]].
       assert (Ordinal x) as H7. { apply Core.IsOrdinal with a; assumption. }
       assert (x :< :N \/ :N :<=: x) as H8. { apply Core.ElemOrIncl; assumption. }
@@ -608,7 +608,7 @@ Proof.
             revert H18. apply NoElemLoop1. }
           assert (x :< (a :+: b) :+: d) as H18. { rewrite H6, H16; assumption. }
           exists d. split; assumption. }
-      apply DoubleInclusion. split; assumption. }
+      apply Incl.Double. split; assumption. }
   apply Induction2.Induction; assumption.
 Qed.
 

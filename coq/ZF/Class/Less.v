@@ -5,6 +5,9 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Notation.Lt.
 Export ZF.Notation.Lt.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Strict inclusion predicate.                                                  *)
 Definition Less (P Q:Class) : Prop := P :<=: Q /\ P :<>: Q.
 
@@ -45,7 +48,7 @@ Proof.
   intros P Q. split; intros H1.
   - destruct H1 as [H1 H2]. split.
     + apply H1.
-    + apply NotForAllNot. intros H3. apply H2. apply DoubleInclusion. split.
+    + apply NotForAllNot. intros H3. apply H2. apply CIN.Double. split.
       * apply H1.
       * intros x H4. apply DoubleNegation. intros H5. apply (H3 x). split; assumption.
   - destruct H1 as [H1 [x [H2 H3]]]. split.
@@ -59,7 +62,7 @@ Proposition InclLessTran : forall (P Q R:Class),
 Proof.
   intros P Q R H1 [H2 H3]. split.
   - apply Incl.Tran with Q; assumption.
-  - intros H4. apply H3, DoubleInclusion. split. 1: assumption.
+  - intros H4. apply H3, CIN.Double. split. 1: assumption.
     apply Incl.EquivCompatL with P; assumption.
 Qed.
 
@@ -69,7 +72,7 @@ Proposition LessInclTran : forall (P Q R:Class),
 Proof.
   intros P Q R [H1 H2] H3. split.
   - apply Incl.Tran with Q; assumption.
-  - intros H4. apply H2, DoubleInclusion. split. 1: assumption.
+  - intros H4. apply H2, CIN.Double. split. 1: assumption.
     apply Incl.EquivCompatR with R. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
 

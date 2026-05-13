@@ -55,7 +55,7 @@ Proposition FromFun : forall (f a b:U),
 Proof.
   intros f a b H1 H2 H3.
   assert (range f = b) as H4. {
-    apply Incl.DoubleInclusion. split. 2: assumption. apply H1. }
+    apply Incl.Double. split. 2: assumption. apply H1. }
   assert (Bijection f) as H5. { split. 2: assumption. apply H1. }
   assert (BijectionOn f a) as H6. { split. 1: assumption. apply H1. }
   split; assumption.

@@ -19,6 +19,8 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
+Module CIN := ZF.Class.Incl.
+
 (* F is a function from A to B.                                                 *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
@@ -100,7 +102,7 @@ Proposition IsIncl : forall (F A B:Class),
   Fun F A B -> F :<=: A :x: B.
 Proof.
   intros F A B H1.
-  apply Class.Incl.Tran with (A :x: F:[A]:).
+  apply CIN.Tran with (A :x: F:[A]:).
   - apply FunctionOn.IsIncl, H1.
   - apply Prod.InclCompatR, Incl.EquivCompatL with (range F).
     2: apply H1. apply Equiv.Sym, ImageOfDomain with B. assumption.
@@ -153,7 +155,7 @@ Proposition Compose : forall (F G A B C: Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply FunctionOn.Compose with B; assumption.
-  - apply Class.Incl.Tran with (range G). 2: assumption.
+  - apply CIN.Tran with (range G). 2: assumption.
     apply Compose.RangeIsSmaller.
 Qed.
 
@@ -249,7 +251,7 @@ Proposition Restrict : forall (F A B C:Class),
 Proof.
   intros F A B C [H1 H2] H3. split.
   - apply FunctionOn.Restrict with A; assumption.
-  - apply Class.Incl.Tran with (range F).
+  - apply CIN.Tran with (range F).
     + apply Restrict.RangeIsIncl.
     + apply H2.
 Qed.

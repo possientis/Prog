@@ -1009,7 +1009,7 @@ Proof.
     rewrite Exp.DistribL; try assumption.
     apply Mult.InclCompatL; try assumption.
     apply Exp.IsOrdinal; assumption. }
-  apply Incl.DoubleInclusion. split; assumption.
+  apply Incl.Double. split; assumption.
 Qed.
 
 Proposition MultReduceNatLimitL: forall (a b d m n:U),
@@ -1090,7 +1090,7 @@ Proof.
     - apply Succ.IsOrdinal. assumption. }
   assert (s :*: a :^: d :<=: a :^: (b!:0: :+: d)) as H27. {
     rewrite Exp.DistribL; assumption. }
-  apply Incl.DoubleInclusion. split; assumption.
+  apply Incl.Double. split; assumption.
 Qed.
 
 Lemma LimitWithNat : forall (a b c n:U),
@@ -1175,7 +1175,7 @@ Proof.
         - apply Limit.HasSucc; assumption.
         - assert (x :< (a :^: b) :^: (succ d)) as X. 2: apply X. (* rewrite *)
           rewrite Exp.Assoc; assumption. }
-      apply Incl.DoubleInclusion. split; assumption. }
+      apply Incl.Double. split; assumption. }
   rewrite E in H7. assumption.
 Qed.
 
@@ -1363,7 +1363,7 @@ Proof.
   assert ((a :^: b!:0: :*: succ m!:0:) :^: d = a :^: (b!:0: :*: d)) as H17. {
     apply LimitWithNatLimit; try assumption.
     apply Succ.HasZero. assumption. }
-  rewrite H17 in H16. apply Incl.DoubleInclusion. split; assumption.
+  rewrite H17 in H16. apply Incl.Double. split; assumption.
 Qed.
 
 Proposition ExpExpNatEqual : forall (a b d m n:U),

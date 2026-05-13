@@ -42,7 +42,7 @@ Proposition IsA : forall (P:Class) (a:U),
   toClass a :<=: P <-> {{ x :< a | P }} = a.
 Proof.
   intros P a. split; intros H1.
-  - apply DoubleInclusion. split; intros x H2.
+  - apply Incl.Double. split; intros x H2.
     + apply IsInclL with P. assumption.
     + apply Charac. split. 1: assumption. apply H1. assumption.
   - intros x H2. apply IsInclR with a. rewrite H1. assumption.

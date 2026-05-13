@@ -425,7 +425,7 @@ Proof.
   assert (B :<=: toClass :N) as H5. {
     intros n H5. rewrite H4 in H5. apply H5. }
   assert (B :<>: :0:) as H6. {
-    intros H6. apply H3, CIN.DoubleInclusion. split. 1: assumption.
+    intros H6. apply H3, CIN.Double. split. 1: assumption.
     intros n H7. apply DoubleNegation. intros H8.
     assert (B n) as H9. { rewrite H4. split; assumption. }
     apply H6 in H9. contradiction. }
@@ -433,7 +433,7 @@ Proof.
     apply HasMinimal; assumption. }
   destruct H10 as [n [H10 H11]]. rewrite H4 in H10.
   destruct H10 as [H10 H12].
-  exists n. split. 1: assumption. apply CIN.DoubleInclusion.
+  exists n. split. 1: assumption. apply CIN.Double.
   assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
   split; intros m H13.
   - assert (m :< :N) as G2. { apply H2. assumption. }

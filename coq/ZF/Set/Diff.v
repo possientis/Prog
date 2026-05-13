@@ -175,7 +175,7 @@ Qed.
 Proposition Image : forall (f a b:U),
   Functional f^:-1: -> f:[b:\:a]: = f:[b]: :\: f:[a]:.
 Proof.
-  intros f a b H1. apply DoubleInclusion. split; intros y H2.
+  intros f a b H1. apply Incl.Double. split; intros y H2.
   - apply Image.Charac in H2. destruct H2 as [x [H2 H3]].
     apply Charac in H2. destruct H2 as [H2 H4]. apply Charac. split.
     + apply Image.Charac. exists x. split; assumption.

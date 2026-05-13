@@ -82,7 +82,7 @@ Proposition IsIdempotent : forall (f:U),
   Relation f <-> (f^:-1:)^:-1: = f.
 Proof.
   intros f. split; intros H1.
-  - apply DoubleInclusion. split; intros x H2.
+  - apply Incl.Double. split; intros x H2.
     + specialize (H1 x). apply Charac in H2. destruct H2 as [z [y [H2 H3]]].
       apply Charac2 in H3. subst. assumption.
     + specialize (H1 x H2). destruct H1 as [y [z H1]]. subst.
@@ -104,7 +104,7 @@ Qed.
 Proposition Domain : forall (f:U),
   domain f^:-1: = range f.
 Proof.
-  intros f. apply DoubleInclusion. split; intros y H1.
+  intros f. apply Incl.Double. split; intros y H1.
   - apply Domain.Charac in H1. destruct H1 as [x H1]. apply Charac2 in H1.
     apply Range.Charac. exists x. assumption.
   - apply Range.Charac in H1. destruct H1 as [x H1].
@@ -115,7 +115,7 @@ Qed.
 Proposition Range : forall (f:U),
   range f^:-1: = domain f.
 Proof.
-  intros f. apply DoubleInclusion. split; intros x H1.
+  intros f. apply Incl.Double. split; intros x H1.
   - apply Range.Charac in H1. destruct H1 as [y H1]. apply Charac2 in H1.
     apply Domain.Charac. exists y. assumption.
   - apply Domain.Charac in H1. destruct H1 as [y H1].
@@ -133,7 +133,7 @@ Qed.
 Proposition Inter2Image : forall (f a b:U), Functional f^:-1: ->
   f:[a :/\: b]: = f:[a]: :/\: f:[b]:.
 Proof.
-  intros f a b H1. apply DoubleInclusion. split.
+  intros f a b H1. apply Incl.Double. split.
   - apply Inter2.Image.
   - intros y H2. apply Inter2.Charac in H2. destruct H2 as [H2 H3].
     apply Image.Charac in H2. apply Image.Charac in H3.

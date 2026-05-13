@@ -72,7 +72,7 @@ Proof.
   - intros a H1 H2. rewrite WhenSuccR. 2: assumption. rewrite H2.
     apply Plus.WhenZeroR.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
-    apply DoubleInclusion. split; intros x H3.
+    apply Incl.Double. split; intros x H3.
     + apply SUG.Charac in H3. destruct H3 as [y [H3 H4]].
       assert (x :< :0: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails *)
       rewrite H2 in H5; assumption.
@@ -89,7 +89,7 @@ Proof.
     apply Plus.WhenOneR.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     assert (Ordinal a) as G1. { apply H1. }
-    apply DoubleInclusion. split; intros x H3.
+    apply Incl.Double. split; intros x H3.
     + apply SUG.Charac in H3. destruct H3 as [y [H3 H4]].
       assert (x :< :1: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails *)
       rewrite H2 in H5. 2: assumption.
@@ -459,7 +459,7 @@ Proof.
       assert (Ordinal (a :*: c)) as G1. { apply H8. }
       rewrite (WhenLimit a (b :+: c)). 2: assumption.
       rewrite (Plus.WhenLimit (a :*: b) (a :*: c)). 2: assumption.
-      apply DoubleInclusion. split; intros y H9;
+      apply Incl.Double. split; intros y H9;
       apply SUG.Charac in H9; apply SUG.Charac.
       * destruct H9 as [d [H9 H10]].
         assert (Ordinal d) as H11. {
@@ -534,7 +534,7 @@ Proof.
     + assert (Limit (b :*: c)) as H6. { apply IsLimit; assumption. }
       rewrite (WhenLimit (a :*: b) c). 2: assumption.
       rewrite (WhenLimit a (b :*: c)). 2: assumption.
-      apply DoubleInclusion. split; intros y H7;
+      apply Incl.Double. split; intros y H7;
       apply SUG.Charac in H7; apply SUG.Charac.
       * destruct H7 as [d [H7 H8]]. exists (b :*: d).
         assert (Ordinal d) as H9. { apply Core.IsOrdinal with c; assumption. }
@@ -824,7 +824,7 @@ Proof.
        apply Plus.DestructUnique; try assumption.
         rewrite Plus.WhenZeroR. assumption. }
       destruct H7 as [H7 H8]. subst. clear H6. rewrite WhenZeroR, Plus.WhenZeroR.
-      rewrite WhenLimit. 2: assumption. apply DoubleInclusion.
+      rewrite WhenLimit. 2: assumption. apply Incl.Double.
       split; intros y H6.
       + apply SUG.Charac in H6. destruct H6 as [x [H6 H9]].
         apply Omega.IsIn with (m :*: x). 1: assumption.
@@ -870,7 +870,7 @@ Proof.
         rewrite Plus.WhenZeroR. assumption. }
       destruct H9 as [H9 H10]. subst. clear H3 H9. rewrite Plus.WhenZeroR in H5.
       rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroR.
-      apply DoubleInclusion. split.
+      apply Incl.Double. split.
       + rewrite WhenLimit. 2: assumption. intros y H8.
         apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
         assert (Ordinal d) as H10. { apply Core.IsOrdinal with c; assumption. }
@@ -957,7 +957,7 @@ Proof.
               rewrite <- (Plus.Assoc :1: :N), G1; try assumption.
               rewrite <- Plus.Assoc; try assumption. reflexivity. }
         rewrite H5 in H6. assumption. }
-    apply DoubleInclusion. split.
+    apply Incl.Double. split.
     - intros y H6.
       rewrite WhenLimit in H6. 2: assumption.
       apply SUG.Charac in H6. destruct H6 as [n [H6 H7]].

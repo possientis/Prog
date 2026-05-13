@@ -8,6 +8,7 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 
 
@@ -51,7 +52,7 @@ Qed.
 
 Proposition IsOn : :U(On) :~: On.
 Proof.
-  apply Class.Incl.DoubleInclusion. split.
+  apply CIN.Double. split.
   - apply Class.Ordinal.Transitive.UnionIncl, Core.IsOrdinal.
   - intros a H1. exists (a :\/: :{a}:). split.
     + apply Union2.Charac. right. apply Single.IsIn.

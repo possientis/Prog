@@ -13,6 +13,9 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Inital segment of R on A at a.                                               *)
 Definition finalSegment (R A:Class) (a:U) : Class
   := A :/\: R :[ toClass :{a}: ]:.
@@ -74,7 +77,7 @@ Proposition InclCompatL : forall (R S A:Class) (a:U),
   R :<=: S -> finalSegment R A a :<=: finalSegment S A a.
 Proof.
   intros R S A a H1. apply InclCompat. 1: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* Final segments are right-compatible with inclusion.                          *)
@@ -82,7 +85,7 @@ Proposition InclCompatR : forall (R A B:Class) (a:U),
   A :<=: B -> finalSegment R A a :<=: finalSegment R B a.
 Proof.
   intros R A B a H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 Proposition WhenIn : forall (R A:Class) (a x:U),
@@ -164,7 +167,7 @@ Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
 Proof.
   intros F R S A B a H1 H2.
   apply Equiv.Tran with (finalSegment S F:[A]: F!a).
-  - apply IsomImage with A B; try assumption. apply Class.Incl.Refl.
+  - apply IsomImage with A B; try assumption. apply CIN.Refl.
   - apply EquivCompatR, Bij.ImageOfDomain, H1.
 Qed.
 

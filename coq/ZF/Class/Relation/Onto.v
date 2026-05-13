@@ -21,6 +21,8 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
+Module CIN := ZF.Class.Incl.
+
 (* F is a surjective function class from A to B.                                *)
 Definition Onto (F A B:Class) : Prop := FunctionOn F A /\ range F :~: B.
 
@@ -63,7 +65,7 @@ Qed.
 
 Proposition IsFun : forall (F A B:Class), Onto F A B -> Fun F A B.
 Proof.
-  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.
+  intros F A B H1. split. 1: apply H1. apply CIN.Double, Equiv.Sym, H1.
 Qed.
 
 Proposition IsOneToOne : forall (F A B:Class),
@@ -160,10 +162,10 @@ Proposition Compose : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply FunctionOn.Compose with B; try assumption.
-    apply Incl.EquivCompatL with B. 2: apply Class.Incl.Refl.
+    apply Incl.EquivCompatL with B. 2: apply CIN.Refl.
     apply Equiv.Sym. assumption.
   - apply Equiv.Tran with (range G). 2: assumption.
-    apply Compose.RangeIsSame, DoubleInclusion, Equiv.Tran with B. 1: assumption.
+    apply Compose.RangeIsSame, CIN.Double, Equiv.Tran with B. 1: assumption.
     apply Equiv.Sym, H3.
 Qed.
 

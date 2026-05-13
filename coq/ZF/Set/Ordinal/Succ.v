@@ -107,7 +107,7 @@ Proposition InBetween : forall (a b:U), Ordinal b ->
   a :< b -> b :<=: succ a -> b = succ a.
 Proof.
   intros a b H1 H2 H3.
-  apply DoubleInclusion. split. 1: assumption.
+  apply Incl.Double. split. 1: assumption.
   intros x H4. apply Charac in H4. destruct H4 as [H4|H4].
   - subst. assumption.
   - assert (Ordinal a) as H5. { apply Core.IsOrdinal with b; assumption. }
@@ -225,7 +225,7 @@ Qed.
 Proposition UnionOf : forall (a:U), Ordinal a ->
   :U(succ a) = a.
 Proof.
-  intros a H1. apply DoubleInclusion. split; intros x H2.
+  intros a H1. apply Incl.Double. split; intros x H2.
   - apply Union.Charac in H2. destruct H2 as [y [H2 H3]].
     apply Union2.Charac in H3. destruct H3 as [H3|H3].
     + destruct H1 as [H1 _]. specialize (H1 y H3). apply H1. assumption.

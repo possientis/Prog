@@ -104,7 +104,7 @@ Qed.
 Proposition PairAsUnion2 : forall (a b:U),
   :{a,b}: = :{a}: :\/: :{b}:.
 Proof.
-  intros a b. apply DoubleInclusion. split; intros x H1.
+  intros a b. apply Incl.Double. split; intros x H1.
   - apply Pair.Charac in H1. destruct H1 as [H1|H1]; apply Charac.
     + left. apply Single.Charac. assumption.
     + right. apply Single.Charac. assumption.
@@ -117,7 +117,7 @@ Qed.
 Proposition IdentityL : forall (a:U),
   :0: :\/: a = a.
 Proof.
-  intros a. apply DoubleInclusion. split; intros x H1.
+  intros a. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [H1|H1]. 2: assumption.
     apply Empty.Charac in H1. contradiction.
   - apply Charac. right. assumption.

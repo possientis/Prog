@@ -19,6 +19,9 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.OrdPair.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Predicate expressing the fact that R is a well-founded well-ordering on A.   *)
 Definition WellFoundedWellOrd (R A:Class) : Prop :=
   WellFounded R A /\ WellOrdering R A.
@@ -202,7 +205,7 @@ Proof.
   assert ((A :\: B) a) as H6. { apply Minimal.IsIn with R. assumption. }
   assert (A a) as H7. { apply Inter2.IsInclL with (:¬:B). assumption. }
   assert ((:¬:B) a) as H8. { apply Inter2.IsInclR with A. assumption. }
-  split. 1: assumption. apply DoubleInclusion. split; intros b H9.
+  split. 1: assumption. apply CIN.Double. split; intros b H9.
   - assert (forall x, B x -> R :(x,a):) as H10. {
       intros x H10.
       assert (x = a \/ R :(x,a): \/ R :(a,x):) as H11. {

@@ -9,6 +9,9 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.And.
 Export ZF.Notation.And.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* The intersection of two classes P and Q.                                     *)
 Definition inter2 (P Q:Class) : Class := fun x => P x /\ Q x.
 
@@ -149,7 +152,7 @@ Proposition WhenInclL : forall (P Q:Class),
   P :<=: Q <-> P :/\: Q :~: P.
 Proof.
   intros P Q. split; intros H1.
-  - apply DoubleInclusion. split.
+  - apply CIN.Double. split.
     + apply IsInclL.
     + apply IsIncl. 2: assumption. apply Incl.Refl.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclR. assumption.
@@ -160,7 +163,7 @@ Proposition WhenInclR : forall (P Q:Class),
   Q :<=: P <-> P :/\: Q :~: Q.
 Proof.
   intros P Q. split; intros H1.
-  - apply DoubleInclusion. split.
+  - apply CIN.Double. split.
     + apply IsInclR.
     + apply IsIncl. 1: assumption. apply Incl.Refl.
   - apply Incl.EquivCompatL with (P:/\:Q). 2: apply IsInclL. assumption.

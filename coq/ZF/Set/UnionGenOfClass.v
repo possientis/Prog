@@ -11,6 +11,9 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* The generalized union \/_{x :< a} A(x)                                       *)
 Definition unionGen (a:U) (A:Class) : U := fromClass (:\/:_{toClass a} A)
   (UnionGen.IsSmall (toClass a) A (SetIsSmall a)).
@@ -31,7 +34,7 @@ Qed.
 Proposition Equal : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x = B!x) -> :\/:_{a} A = :\/:_{a} B.
 Proof.
-  intros a A B H1. apply DoubleInclusion. split; intros y H2;
+  intros a A B H1. apply Incl.Double. split; intros y H2;
   apply Charac in H2; destruct H2 as [x [H2 H3]]; apply Charac;
   exists x; split; try assumption.
   - rewrite <- H1; assumption.
@@ -80,7 +83,7 @@ Proposition InclCompatR : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x :<=: B!x)  -> :\/:_{a} A :<=: :\/:_{a} B.
 Proof.
   intros A B C H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* If each A(x) is a subset of b for x in a, the generalized union is too.      *)

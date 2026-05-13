@@ -73,7 +73,7 @@ Qed.
 Proposition Converse : forall (f g:U),
   (g :.: f)^:-1: = f^:-1: :.: g^:-1:.
 Proof.
-  intros f g. apply DoubleInclusion. split; intros u H1.
+  intros f g. apply Incl.Double. split; intros u H1.
   - apply Converse.Charac in H1. destruct H1 as [x [z [H1 H2]]].
     apply Charac2 in H2. destruct H2 as [y [H2 H3]]. apply Charac.
     exists z. exists y. exists x. split. 1: assumption. split;
@@ -106,7 +106,7 @@ Qed.
 Proposition DomainIsSame : forall (f g:U),
   range f :<=: domain g -> domain (g :.: f) = domain f.
 Proof.
-  intros f g H1. apply DoubleInclusion. split.
+  intros f g H1. apply Incl.Double. split.
   - apply DomainIsSmaller.
   - intros x H2. apply Domain.Charac in H2. destruct H2 as [y H2].
     assert (y :< domain g) as H3. {
@@ -134,7 +134,7 @@ Qed.
 Proposition RangeIsSame : forall (f g:U),
   domain g :<=: range f -> range (g :.: f) = range g.
 Proof.
-  intros f g H1. apply DoubleInclusion. split.
+  intros f g H1. apply Incl.Double. split.
   - apply RangeIsSmaller.
   - intros z H2. apply Range.Charac in H2. destruct H2 as [y H2].
     assert (y :< range f) as H3. {
@@ -197,7 +197,7 @@ Qed.
 Proposition Image : forall (f g a:U),
   (g :.: f) :[a]: = g:[f:[a]:]:.
 Proof.
-  intros f g a. apply Incl.DoubleInclusion. split; intros z H1.
+  intros f g a. apply Incl.Double. split; intros z H1.
   - apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
     apply Charac2 in H2. destruct H2 as [y [H2 H3]].
     apply Image.Charac. exists y. split. 2: assumption.

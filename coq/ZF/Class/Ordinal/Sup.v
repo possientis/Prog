@@ -9,6 +9,7 @@ Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 
 
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 
 
@@ -104,7 +105,7 @@ Qed.
 Proposition IsOn : sup On :~: On.
 Proof.
   apply Equiv.Tran with :U(On).
-  - apply Equiv.Sym, WhenOrdinalElem, Class.Incl.Refl.
+  - apply Equiv.Sym, WhenOrdinalElem, CIN.Refl.
   - apply Ordinal.Union.IsOn.
 Qed.
 

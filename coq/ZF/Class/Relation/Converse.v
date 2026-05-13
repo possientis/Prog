@@ -16,6 +16,9 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.Inverse.
 Export ZF.Notation.Inverse.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* The converse of a class is the relation of the converse of its binary class. *)
 Definition converse (F:Class) : Class := fun x =>
   exists y z, x = :(z,y): /\ F :(y,z):.
@@ -162,7 +165,7 @@ Qed.
 Proposition Inter2Image : forall (F A B:Class), Functional F^:-1: ->
   F:[A :/\: B]: :~: F:[A]: :/\: F:[B]:.
 Proof.
-  intros F A B H1. apply DoubleInclusion. split.
+  intros F A B H1. apply CIN.Double. split.
   - apply Inter2.Image.
   - intros y [[a [H2 H3]] [b [H4 H5]]].
     assert (a = b) as H6. { apply WhenFunctional with F y; assumption. }

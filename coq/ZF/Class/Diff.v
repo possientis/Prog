@@ -19,6 +19,9 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.Diff.
 Export ZF.Notation.Diff.
 
+
+Module CIN := ZF.Class.Incl.
+
 Definition diff (A B:Class) : Class := A :/\: :¬:B.
 
 (* Notation "A :\: B" := (diff A B)                                             *)
@@ -61,7 +64,7 @@ Proposition InclCompatL : forall (A B C:Class),
   A :<=: C -> A :\: B :<=: C :\: B.
 Proof.
   intros A B C H1. apply InclCompat. 1: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* The class difference is 'compatible' with class inclusion on the right.      *)
@@ -69,7 +72,7 @@ Proposition InclCompatR : forall (A B C:Class),
   C :<=: B -> A :\: B :<=: A :\: C.
 Proof.
   intros A B C H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* If A is small, the difference of A with any class B is also small.           *)
@@ -106,7 +109,7 @@ Proof.
   intros A B H1. split; intros H2 H3.
   - apply Class.Empty.HasElem in H2. destruct H2 as [x [H2 H4]].
     apply H4, H3. assumption.
-  - apply H2, DoubleInclusion. split. 2: assumption.
+  - apply H2, CIN.Double. split. 2: assumption.
     intros x H4. apply DoubleNegation. intros H5. apply Class.Empty.Charac with x.
     apply H3. split; assumption.
 Qed.

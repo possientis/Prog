@@ -23,6 +23,8 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
+Module CIN := ZF.Class.Incl.
+
 (* F is a bijection from A to B.                                                *)
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
 
@@ -67,7 +69,7 @@ Proposition IsFun : forall (F A B:Class),
   Bij F A B -> Fun F A B.
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
-  split. 1: assumption. apply DoubleInclusion, Equiv.Sym. assumption.
+  split. 1: assumption. apply CIN.Double, Equiv.Sym. assumption.
 Qed.
 
 Proposition IsFunctionOn : forall (F A B:Class),
@@ -79,7 +81,7 @@ Qed.
 Proposition IsInj : forall (F A B:Class),
   Bij F A B -> Inj F A B.
 Proof.
-  intros F A B H1. split. 1: apply H1. apply DoubleInclusion, Equiv.Sym, H1.
+  intros F A B H1. split. 1: apply H1. apply CIN.Double, Equiv.Sym, H1.
 Qed.
 
 Proposition IsOnto : forall (F A B:Class),
@@ -164,12 +166,12 @@ Proposition Compose : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply BijectionOn.Compose with B; try assumption.
-    apply DoubleInclusion, Equiv.Sym. assumption.
+    apply CIN.Double, Equiv.Sym. assumption.
   - apply Equiv.Tran with (range G). 2: assumption.
     apply Compose.RangeIsSame. destruct H3 as [H3 H5].
-    apply Class.Incl.Tran with B.
-    + apply DoubleInclusion, Equiv.Sym. assumption.
-    + apply DoubleInclusion. assumption.
+    apply CIN.Tran with B.
+    + apply CIN.Double, Equiv.Sym. assumption.
+    + apply CIN.Double. assumption.
 Qed.
 
 Proposition Eval' : forall (F A B:Class) (a y:U),

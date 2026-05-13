@@ -43,7 +43,7 @@ Proof.
   assert (exists b, IsClosure R A a b) as H3. { apply COT.Exists; assumption. }
   destruct H3 as [b H3].
   assert (b = closure R A a) as H4. {
-    apply DoubleInclusion. split; intros x H4.
+    apply Incl.Double. split; intros x H4.
     - apply FromClass.Charac. exists b. split; assumption.
     - apply FromClass.Charac in H4. destruct H4 as [c [H4 H5]].
       assert (b = c) as H6. { apply COT.IsUnique with R A a; assumption. }

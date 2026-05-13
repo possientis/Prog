@@ -7,6 +7,9 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* The generalized union \/_{x :< a} b(x)                                       *)
 Definition unionGen (a b:U) : U := :\/:_{a} (toClass b).
 
@@ -24,7 +27,7 @@ Qed.
 Proposition Equal : forall (a b c:U),
   (forall x, x :< a -> b!x = c!x) -> :\/:_{a} b = :\/:_{a} c.
 Proof.
-  intros a b c H1. apply DoubleInclusion. split; intros y H2;
+  intros a b c H1. apply Incl.Double. split; intros y H2;
   apply Charac in H2; destruct H2 as [x [H2 H3]]; apply Charac;
   exists x; split; try assumption.
   - rewrite <- H1; assumption.
@@ -64,7 +67,7 @@ Proposition InclCompatR : forall (a b c:U),
   (forall x, x :< a -> b!x :<=: c!x)  -> :\/:_{a} b :<=: :\/:_{a} c.
 Proof.
   intros a b c H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* If each b(x) is a subset of c for x in a, the generalized union is too.      *)

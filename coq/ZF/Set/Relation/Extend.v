@@ -78,7 +78,7 @@ Qed.
 Proposition DomainOf : forall (f x y:U),
   domain (extend f x y) = domain f :\/: :{x}:.
 Proof.
-  intros f x y. apply DoubleInclusion. split; intros u H1.
+  intros f x y. apply Incl.Double. split; intros u H1.
   - apply Domain.Charac in H1. destruct H1 as [v H1].
     apply Charac2 in H1. destruct H1 as [H1|[H1 H2]]; apply Union2.Charac.
     + left. apply Domain.Charac. exists v. assumption.

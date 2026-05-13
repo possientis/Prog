@@ -103,7 +103,7 @@ Proof.
         apply Equiv.Tran with (card b). 1: assumption.
         rewrite <- H1. assumption. }
       rewrite H1. apply IsLowerBound; assumption.
-  - destruct H1 as [H1 H2]. exists a. apply Incl.DoubleInclusion. split.
+  - destruct H1 as [H1 H2]. exists a. apply Incl.Double. split.
     + apply H2.
       * apply IsOrdinal.
       * apply IsEquivOrd. assumption.
@@ -135,7 +135,7 @@ Proof.
   - destruct H1 as [b H1].
     assert (Ordinal a) as G1. { rewrite H1. apply IsOrdinal. }
     assert (Ordinal (card a)) as G2. { apply IsOrdinal. }
-    apply Incl.DoubleInclusion. split.
+    apply Incl.Double. split.
     + assert (a = :0: \/ :0: :< a) as H2. { apply SOC.ZeroOrElem. assumption. }
       destruct H2 as [H2|H2].
       * rewrite H2. apply SOC.IsIncl. rewrite <- H2. assumption.
@@ -162,7 +162,7 @@ Proof.
       apply IsLowerBound. 1: apply IsOrdinal.
       apply Equiv.Tran with b. 1: assumption.
       apply IsEquivChoice. assumption. }
-    apply Incl.DoubleInclusion. split; assumption.
+    apply Incl.Double. split; assumption.
   - apply Equiv.Tran with (card a).
     + apply IsEquivChoice. assumption.
     + rewrite H1. apply Equiv.Sym, IsEquivChoice. assumption.
@@ -213,7 +213,7 @@ Proof.
   assert (card b = card d) as H6. { apply EquivCharac; assumption. }
   assert (card c :<=: card b) as H7. { apply InclCompat; assumption. }
   assert (card d :<=: card a) as H8. { apply InclCompat; assumption. }
-  apply EquivCharac. assumption. apply Incl.DoubleInclusion. split.
+  apply EquivCharac. assumption. apply Incl.Double. split.
   - rewrite H5. assumption.
   - rewrite H6. assumption.
 Qed.
@@ -281,5 +281,5 @@ Proof.
     assert (:N :~: card :N) as H4. { apply IsEquivOrd. assumption. }
     apply EqualOrdNat; assumption.
   - (* N <= card(N): card(N) <= N as N is an ordinal, so N = card(N).           *)
-    apply Incl.DoubleInclusion. split. 1: assumption. apply IsIncl. assumption.
+    apply Incl.Double. split. 1: assumption. apply IsIncl. assumption.
 Qed.

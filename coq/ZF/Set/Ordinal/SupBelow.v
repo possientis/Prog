@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.SupBelow.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Succ.
@@ -8,6 +9,8 @@ Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
 Export ZF.Notation.SupBelow.
+
+Module CIN := ZF.Class.Incl.
 
 (* The supremum of the set a below b.                                           *)
 Definition supBelow (b a:U) : U := :U( {{ x :< a :/\: b | Ordinal }} ).
@@ -61,7 +64,7 @@ Proof.
   intros a b H1 H2 H3.
   assert (a :/\: succ b = succ b) as H4. {
     apply ElemIsIncl in H3; try assumption.
-    apply ZF.Set.Incl.DoubleInclusion. split; intros x H4.
+    apply Incl.Double. split; intros x H4.
     - apply Inter2.Charac in H4. destruct H4 as [_ H4]. assumption.
     - apply Inter2.Charac. split. 2: assumption. apply H3. assumption. }
   rewrite WhenOrdinal. 2: assumption.

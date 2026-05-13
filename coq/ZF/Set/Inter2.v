@@ -146,7 +146,7 @@ Proposition WhenInclL : forall (a b:U),
   a :<=: b <-> a :/\: b = a.
 Proof.
   intros a b. split; intros H1.
-  - apply DoubleInclusion. split.
+  - apply Incl.Double. split.
     + apply IsInclL.
     + apply IsIncl. 2: assumption. apply Incl.Refl.
   - rewrite <- H1. apply IsInclR.
@@ -157,7 +157,7 @@ Proposition WhenInclR : forall (a b:U),
   b :<=: a <-> a :/\: b = b.
 Proof.
   intros a b. split; intros H1.
-  - apply DoubleInclusion. split.
+  - apply Incl.Double. split.
     + apply IsInclR.
     + apply IsIncl. 1: assumption. apply Incl.Refl.
   - rewrite <- H1. apply IsInclL.

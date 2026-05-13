@@ -74,7 +74,7 @@ Qed.
 Proposition DomainOf : forall (A:Class) (f1 f2:U -> U) (a:U),
   domain (ifThenElse a A f1 f2) = a.
 Proof.
-  intros A f1 f2 a. apply Incl.DoubleInclusion. split; intros x H1.
+  intros A f1 f2 a. apply Incl.Double. split; intros x H1.
   - apply Domain.Charac in H1. destruct H1 as [y H1].
     apply Charac2 in H1. destruct H1 as [H1|H1]; apply H1.
   - apply Domain.Charac.

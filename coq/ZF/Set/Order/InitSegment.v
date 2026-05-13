@@ -196,7 +196,7 @@ Proposition WhenEmptyRev : forall (R A B:Class) (a:U),
   (forall x, B x -> ~ R :(x,a):)  ->
   initSegment R B a = :0:.
 Proof.
-  intros R A B a H1 H2 H3 H4. apply DoubleInclusion. split; intros x H5.
+  intros R A B a H1 H2 H3 H4. apply Incl.Double. split; intros x H5.
   - exfalso. apply (Charac R A) in H5; try assumption.
     destruct H5 as [H5 H6]. specialize (H4 x H5). contradiction.
   - apply Empty.Charac in H5. contradiction.
@@ -256,7 +256,7 @@ Proof.
     apply Bij.IsInRange with A. 2: assumption. apply H4. }
   assert (F:[C]: :<=: B) as H7. {
     apply (Bij.ImageIncl F A B). 2: assumption. apply H4. }
-  apply DoubleInclusion. split; intros y H8.
+  apply Incl.Double. split; intros y H8.
   - apply ImageByClass.Charac in H8. 2: apply H4. destruct H8 as [x [H8 H9]].
     apply (Charac R A C a) in H8; try assumption. destruct H8 as [H8 H10].
     apply (CharacRev S B F:[C]: F!a); try assumption.
@@ -287,7 +287,7 @@ Proof.
   assert (initSegment S F:[A]: F!a = initSegment S B F!a) as H5. {
     apply EquivCompatR. assumption. }
   rewrite <- H5. apply IsomImage with A B; try assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* An isomorphism preserves the emptiness of initial segments.                  *)
@@ -324,7 +324,7 @@ Proof.
   assert (WellFounded E V) as G1. { apply E.IsWellFounded. }
   assert (V a) as G2. { apply I. }
   assert (V :<=: V) as G3. { apply CIN.Refl. }
-  apply DoubleInclusion. split; intros x H1.
+  apply Incl.Double. split; intros x H1.
   - apply (ToClass E V V) in H1; try assumption.
     apply E.InitSegmentEV. assumption.
   - apply (ToClass E V V); try assumption.

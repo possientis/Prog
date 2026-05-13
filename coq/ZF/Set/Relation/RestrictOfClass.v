@@ -127,7 +127,7 @@ Qed.
 Proposition DomainOf : forall (F:Class) (a:U), CFL.Functional F ->
   SRD.domain (F:|:a) = {{ x :< a | CRD.domain F }}.
 Proof.
-  intros F a H1. apply DoubleInclusion. split; intros x H2.
+  intros F a H1. apply Incl.Double. split; intros x H2.
   - apply SRD.Charac in H2. destruct H2 as [y H2]. apply Charac2 in H2.
     2: assumption. destruct H2 as [H2 H3]. apply Specify.Charac.
     split. 1: assumption. exists y. assumption.
@@ -140,7 +140,7 @@ Proposition DomainWhenIncl : forall (F:Class) (a:U), CFL.Functional F ->
   toClass a :<=: CRD.domain F -> SRD.domain (F:|:a) = a.
 Proof.
   intros F a H1 H2. rewrite DomainOf. 2: assumption.
-  apply DoubleInclusion. split; intros x H3.
+  apply Incl.Double. split; intros x H3.
   - apply Specify.Charac in H3. apply H3.
   - apply Specify.Charac. split. 1: assumption. apply H2. assumption.
 Qed.
@@ -158,7 +158,7 @@ Qed.
 Proposition RangeOf : forall (F:Class) (a:U), CFL.Functional F ->
   SRR.range (F:|:a) = F:[a]:.
 Proof.
-  intros F a H1. apply DoubleInclusion. split; intros y H2.
+  intros F a H1. apply Incl.Double. split; intros y H2.
   - apply SRR.Charac in H2. destruct H2 as [x H2].
     apply Charac2 in H2. 2: assumption. destruct H2 as [H2 H3].
     apply ImageByClass.CharacRev with x; assumption.
@@ -187,7 +187,7 @@ Qed.
 Proposition TowerProperty : forall (F:Class) (a b:U), CFL.Functional F ->
   a :<=: b -> (F:|:b) :|: a = F:|:a.
 Proof.
-  intros F a b H1 H2. apply DoubleInclusion. split; intros x H3.
+  intros F a b H1 H2. apply Incl.Double. split; intros x H3.
   - apply Restrict.Charac in H3. destruct H3 as [y [z [H3 [H4 H5]]]].
     apply Charac in H5. 2: assumption. destruct H5 as [y' [z' [H5 [H6 H7]]]].
     symmetry in H5. apply OrdPair.Equal in H5. destruct H5 as [H5 H8]. subst.

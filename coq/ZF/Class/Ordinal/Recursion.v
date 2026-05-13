@@ -26,6 +26,8 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
+
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
@@ -166,7 +168,7 @@ Proof.
     - apply IsSomeSet. exists c. assumption. }
   apply IsSomeSet in H3. destruct H3 as [f H3].
   assert (SRD.domain f = c) as H4. {
-    apply DoubleInclusion. split; intros x H4.
+    apply Incl.Double. split; intros x H4.
     - apply SRD.ToClass in H4. apply H2.
       apply CRD.EquivCompat with (toClass f); assumption.
     - apply H2 in H4. apply SRD.ToClass.
@@ -251,7 +253,7 @@ Proof.
       apply OrdPair.Equal in H17. apply OrdPair.Equal in H18.
       destruct H17 as [_ H17]. destruct H18 as [_ H18]. subst. reflexivity. }
   assert (SFO.FunctionOn g (succ c)) as H18. {
-    split. 1: assumption. apply DoubleInclusion. split; intros x H18.
+    split. 1: assumption. apply Incl.Double. split; intros x H18.
     - apply SRD.Charac in H18. destruct H18 as [y H18].
       rewrite H15 in H18. apply Union2.Charac in H18. apply Union2.Charac.
       destruct H18 as [H18|H18].
@@ -316,7 +318,7 @@ Proof.
   - apply RestrictOfClass.IsFunction, IsFunction.
   - apply RestrictOfClass.DomainWhenIncl.
     + apply IsFunction.
-    + apply Class.Incl.EquivCompatR with On.
+    + apply CIN.EquivCompatR with On.
       * apply Equiv.Sym, DomainIsOn.
       * intros x H2. apply SOC.IsOrdinal with a; assumption.
 Qed.

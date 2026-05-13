@@ -44,7 +44,7 @@ Qed.
 Proposition ImageOfDomain : forall (f:U),
   f:[domain f]: = range f.
 Proof.
-  intros f. apply DoubleInclusion. split; intros y H1.
+  intros f. apply Incl.Double. split; intros y H1.
   - apply Image.Charac in H1. destruct H1 as [x [H1 H2]].
     apply Charac. exists x. assumption.
   - apply Charac in H1. destruct H1 as [x H1]. apply Image.Charac.
@@ -72,7 +72,7 @@ Qed.
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> range f = :0:.
 Proof.
-  intros f H1. apply DoubleInclusion. split; intros y H2; exfalso.
+  intros f H1. apply Incl.Double. split; intros y H2; exfalso.
   - apply Charac in H2. destruct H2 as [x H2].
     subst. apply Empty.Charac in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.
@@ -82,7 +82,7 @@ Qed.
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> range f = :{y}:.
 Proof.
-  intros x y f H1. apply DoubleInclusion. split; intros v H2.
+  intros x y f H1. apply Incl.Double. split; intros v H2.
   - apply Charac in H2. destruct H2 as [u H2]. subst.
     apply Single.Charac in H2.
     apply OrdPair.Equal in H2. destruct H2 as [H2 H3]. subst.

@@ -11,6 +11,9 @@ Require Import ZF.Set.OrdPair.
 
 Export ZF.Notation.Image.
 
+
+Module CIN := ZF.Class.Incl.
+
 Definition image (f:U) (A:Class) : U := fromClass (toClass f) :[A]:
   (Image.IsSmall' (toClass f) A (SetIsSmall f)).
 
@@ -38,7 +41,7 @@ Qed.
 Proposition EquivCompat : forall (A B:Class) (f:U),
   A :~: B -> f:[A]: = f:[B]:.
 Proof.
-  intros A B f H1. apply DoubleInclusion. split; intros y H2; apply Charac in H2;
+  intros A B f H1. apply Incl.Double. split; intros y H2; apply Charac in H2;
   destruct H2 as [x [H2 H3]]; apply Charac; exists x; split; try assumption;
   apply H1; assumption.
 Qed.
@@ -58,7 +61,7 @@ Proposition InclCompatL : forall (A:Class) (f g:U),
   f :<=: g -> f:[A]: :<=: g:[A]:.
 Proof.
   intros A f g H1. apply InclCompat. 1: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* The image is right-compatible with class inclusion in the domain argument.   *)
@@ -72,7 +75,7 @@ Qed.
 Proposition WhenEmpty : forall (A:Class) (f:U),
   A :~: :0: -> f:[A]: = :0:.
 Proof.
-  intros A f H1. apply DoubleInclusion. split; intros y H2.
+  intros A f H1. apply Incl.Double. split; intros y H2.
   - apply Charac in H2. destruct H2 as [x [H2 H3]].
     apply H1 in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.

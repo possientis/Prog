@@ -78,7 +78,7 @@ Proposition IsEqual : forall (a b:U), Ordinal a -> Ordinal b ->
   b :< a -> inf(>: b) a = b.
 Proof.
   intros a b H1 H2 H3. rewrite WhenOrdinal; try assumption.
-  apply DoubleInclusion. split.
+  apply Incl.Double. split.
   - apply SOI.IsLowerBound.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Core.IsOrdinal with a; assumption.

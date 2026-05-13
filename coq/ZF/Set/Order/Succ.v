@@ -180,7 +180,7 @@ Proposition InitRefl : forall (R A:Class) (a:U),
   ~ Maximal R A a                                       ->
   initSegment R A (succ R A a) = initSegment R^:=: A a.
 Proof.
-  intros R A a H1 H2 H3. apply SIN.DoubleInclusion.
+  intros R A a H1 H2 H3. apply SIN.Double.
   assert (WellFounded R A) as H4. { apply H1. }
   assert (Total R A) as H5. { apply H1. }
   assert (A :<=: A) as H6. { apply CIN.Refl. }

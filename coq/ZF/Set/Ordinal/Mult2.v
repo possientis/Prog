@@ -170,7 +170,7 @@ Qed.
 Proposition DomainOf : forall (a b:U), Ordinal a -> Ordinal b ->
   domain (f a b) = b :x: a.
 Proof.
-  intros a b H1 H2. apply DoubleInclusion. split; intros x H3.
+  intros a b H1 H2. apply Incl.Double. split; intros x H3.
   - apply Domain.Charac in H3. destruct H3 as [y H3].
     apply Charac2 in H3; try assumption.
     destruct H3 as [c [d [H3 [H4 [H5 _]]]]]. subst.
@@ -194,7 +194,7 @@ Qed.
 Proposition RangeOf : forall (a b:U), Ordinal a -> Ordinal b ->
   range (f a b) = a :*: b.
 Proof.
-  intros a b H1 H2. apply DoubleInclusion.
+  intros a b H1 H2. apply Incl.Double.
   assert (Ordinal (a :*: b)) as G1. { apply Mult.IsOrdinal; assumption. }
   split; intros y H3.
   - apply Range.Charac in H3. destruct H3 as [x H3].

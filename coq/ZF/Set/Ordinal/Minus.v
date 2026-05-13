@@ -65,7 +65,7 @@ Proof.
         * rewrite <- H5. apply Plus.IsInclL; assumption.
         * apply Succ.IsIn.
       + rewrite H5. apply Incl.Refl. }
-  apply DoubleInclusion. split; assumption.
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* The difference b minus a is 0 when b is at most a.                           *)
@@ -88,7 +88,7 @@ Proof.
     apply Specify.Charac in H10. destruct H10 as [H10 _].
     apply Core.IsOrdinal with (succ b); assumption. }
   assert (:0: :<=: b :-: a) as H11. { apply Core.IsIncl. assumption. }
-  apply DoubleInclusion. split; assumption.
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* The difference b minus a is at most b.                                       *)
@@ -133,5 +133,5 @@ Proof.
         assert (n :+: c :< n :+: c) as H5. { (* contradiction *)
           apply H4. apply Plus.InOmega; assumption. }
         revert H5. apply NoElemLoop1. }
-  apply DoubleInclusion. split; assumption.
+  apply Incl.Double. split; assumption.
 Qed.

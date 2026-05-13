@@ -97,7 +97,7 @@ Proof.
       rewrite H8, H3, WhenSucc, H6; try assumption. 1: reflexivity.
       rewrite H8. apply Succ.IsIn.
     + assert (:\/:_{b} G = :\/:_{b} (Recursion F a)) as H8. {
-        apply DoubleInclusion. split; intros y H8;
+        apply Incl.Double. split; intros y H8;
         apply UnionGenOfClass.Charac in H8; destruct H8 as [x [H8 H9]].
           rewrite H6 in H9. 2: assumption. apply UnionGenOfClass.Charac.
           exists x. split; assumption.

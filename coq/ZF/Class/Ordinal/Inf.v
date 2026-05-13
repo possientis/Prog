@@ -15,9 +15,12 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Relation.InvImage.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
+
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 
 (* The infimum of the class A.                                                  *)
@@ -138,7 +141,7 @@ Proof.
       + apply H1. assumption.
       + apply H1. assumption. }
   assert (a = b) as H7. {
-    apply ZF.Set.Incl.DoubleInclusion. split; intros x H7.
+    apply Incl.Double. split; intros x H7.
     - assert (inf A x) as H8. { apply H3. assumption. }
       apply H8. split. 1: assumption. apply H1. assumption.
     - apply H3. split.
@@ -180,7 +183,7 @@ Proof.
       + apply IsLowerBound; assumption. }
     apply NoElemLoop1 with b. apply H7. assumption.
   - apply E.MinimalEA in H3. destruct H3 as [H3 H4].
-    apply Class.Incl.DoubleInclusion. split.
+    apply CIN.Double. split.
     + apply IsLargest; try assumption. intros b H5.
       assert (toClass a :~: toClass b \/
               toClass a :<: toClass b \/

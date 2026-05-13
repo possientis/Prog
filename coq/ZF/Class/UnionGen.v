@@ -11,6 +11,9 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Defining the generalized union \/_{x in A} B(x).                             *)
 Definition unionGen (A B:Class) : Class
   := :U( fun y => exists x, A x /\ y = B!x ).
@@ -92,7 +95,7 @@ Proposition InclCompatR : forall (A B C:Class),
   (forall x, A x -> B!x :<=: C!x) -> :\/:_{A} B :<=: :\/:_{A} C.
 Proof.
   intros A B C H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 Proposition WhenBounded : forall (A B C:Class),

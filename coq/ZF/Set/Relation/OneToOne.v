@@ -192,7 +192,7 @@ Qed.
 Proposition InvImageOfImage : forall (f a:U),
   OneToOne f -> a :<=: domain f -> f^:-1::[ f:[a]: ]: = a.
 Proof.
-  intros f a [H1 H2] H3. apply DoubleInclusion. split.
+  intros f a [H1 H2] H3. apply Incl.Double. split.
   - apply InvImage.OfImageIsLess. assumption.
   - apply InvImage.OfImageIsMore. assumption.
 Qed.
@@ -201,7 +201,7 @@ Qed.
 Proposition ImageOfInvImage : forall (f b:U),
   OneToOne f -> b :<=: range f -> f:[ f^:-1::[b]: ]: = b.
 Proof.
-  intros f b [H1 H2] H3. apply DoubleInclusion. split.
+  intros f b [H1 H2] H3. apply Incl.Double. split.
   - apply InvImage.ImageIsLess. assumption.
   - apply InvImage.ImageIsMore. assumption.
 Qed.

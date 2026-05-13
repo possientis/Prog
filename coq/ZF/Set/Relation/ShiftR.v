@@ -180,7 +180,7 @@ Qed.
 Proposition RangeOf : forall (f a:U), domain f :<=: :N ->
   range (shiftR a f) = :{a}: :\/: range f.
 Proof.
-  intros f a H1. apply DoubleInclusion. split; intros y H2.
+  intros f a H1. apply Incl.Double. split; intros y H2.
   - apply Range.Charac in H2. destruct H2 as [x H2].
     apply Charac2 in H2. 2: assumption.
     destruct H2 as [[H2 H3]|[H2 [H3 H4]]]; apply Union2.Charac.
@@ -211,7 +211,7 @@ Proof.
     intros m G1. apply Omega.IsIn with n. 2: assumption.
     subst. assumption. }
   assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
-  apply DoubleInclusion. split; intros x H3.
+  apply Incl.Double. split; intros x H3.
   - apply DomainOf in H3. 2: assumption. destruct H3 as [H3|[H3 [H4 H5]]].
     + rewrite H3. apply Succ.HasZero. assumption.
     + assert (succ :U(x) = x) as H6. { apply Omega.SuccOfUnion; assumption. }
@@ -237,7 +237,7 @@ Proposition WhenDomainIsN : forall (f a:U),
 Proof.
   intros f a H1.
   assert (domain f :<=: :N) as H2. { rewrite H1. apply Incl.Refl. }
-  apply DoubleInclusion. split; intros x H3.
+  apply Incl.Double. split; intros x H3.
   - apply DomainOf in H3. 2: assumption.
     destruct H3 as [H3|[H3 [H4 H5]]]. 2: assumption. subst. apply Omega.HasZero.
   - apply DomainOf. 1: assumption.

@@ -75,7 +75,7 @@ Qed.
 Proposition DomainOf : forall (f a:U),
   domain (f:|:a) = a :/\: domain f.
 Proof.
-  intros f a. apply DoubleInclusion. split; intros x H1.
+  intros f a. apply Incl.Double. split; intros x H1.
   - apply Domain.Charac in H1. destruct H1 as [y H1].
     apply Charac2 in H1. destruct H1 as [H1 H2].
     apply Inter2.Charac. split. 1: assumption.
@@ -96,7 +96,7 @@ Qed.
 Proposition RangeOf : forall (f a:U),
   range (f:|:a) = f:[a]:.
 Proof.
-  intros f a. apply DoubleInclusion. split; intros y H1.
+  intros f a. apply Incl.Double. split; intros y H1.
   - apply Range.Charac in H1. destruct H1 as [x H1].
     apply Charac2 in H1. destruct H1 as [H1 H2].
     apply Image.Charac. exists x. split; assumption.
@@ -124,7 +124,7 @@ Proposition RelationCharac : forall (f:U),
   Relation f <-> f = f :|: domain f.
 Proof.
   intros f. split; intros H1.
-  - apply DoubleInclusion. split; intros x H2.
+  - apply Incl.Double. split; intros x H2.
     + destruct (H1 x H2) as [y [z H3]]. apply Charac. exists y. exists z.
       split. 1: assumption. subst. split. 2: assumption.
       apply Domain.Charac. exists z. assumption.
@@ -138,7 +138,7 @@ Qed.
 Proposition TowerProperty : forall (f a b:U),
   a :<=: b -> (f:|:b) :|: a = f:|:a.
 Proof.
-  intros f a b H1. apply DoubleInclusion. split; intros x H2.
+  intros f a b H1. apply Incl.Double. split; intros x H2.
   - apply Charac in H2. destruct H2 as [y [z [H2 [H3 H4]]]].
     apply Charac2 in H4. destruct H4 as [H4 H5]. apply Charac.
     exists y. exists z. split. 1: assumption. split; assumption.
@@ -173,7 +173,7 @@ Qed.
 Proposition WhenEmpty : forall (f a:U),
   a = :0: -> f :|: a = :0:.
 Proof.
-  intros f a H1. apply DoubleInclusion. split; intros x H2.
+  intros f a H1. apply Incl.Double. split; intros x H2.
   - apply Charac in H2. destruct H2 as [y [z [_ [H2 _]]]].
     rewrite H1 in H2. apply Empty.Charac in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.

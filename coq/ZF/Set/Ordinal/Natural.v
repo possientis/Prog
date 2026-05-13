@@ -177,7 +177,7 @@ Proof.
 Qed.
 
 (* One is not a subset of zero.                                                 *)
-Proposition OneNotLessThanZero : ~ :1: :<=: :0:.
+Proposition OneNotLessThanZero : ~ :1: :<=: (:0: : U).
 Proof.
   intros H1.
   assert (:0: :< :0:) as H2. { apply H1, Succ.IsIn. }
@@ -193,7 +193,7 @@ Proof.
     apply Core.ElemOrIncl. 2: assumption. apply OneIsOrdinal. }
   destruct H3 as [H3|H3].
   - right. assumption.
-  - left. apply DoubleInclusion. split. 1: assumption.
+  - left. apply Incl.Double. split. 1: assumption.
     intros x H4. apply Succ.Charac in H4. destruct H4 as [H4|H4].
     + subst. assumption.
     + apply Empty.Charac in H4. contradiction.
@@ -205,3 +205,4 @@ Proposition HasZero : forall (a:U), Ordinal a ->
 Proof.
   intros a H1 H2. apply H2, Succ.IsIn.
 Qed.
+

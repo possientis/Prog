@@ -19,6 +19,9 @@ Require Import ZF.Set.Union2.
 Require Import ZF.Notation.Prod.
 Export ZF.Notation.Prod.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* The class of all ordered pairs (y,z) where y lies in P and z lies in Q.      *)
 Definition prod (P Q:Class) : Class := fun x =>
   exists y, exists z, x = :(y,z): /\ P y /\ Q z.
@@ -82,7 +85,7 @@ Proposition InclCompatL : forall (P Q R:Class),
   P :<=: Q -> P :x: R :<=: Q :x: R.
 Proof.
   intros P Q R H1. apply InclCompat. 1: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* The product of two classes is right-compatible with class inclusion.         *)
@@ -90,7 +93,7 @@ Proposition InclCompatR : forall (P Q R:Class),
   P :<=: Q -> R :x: P :<=: R :x: Q.
 Proof.
   intros P Q R H1. apply InclCompat. 2: assumption.
-  apply Class.Incl.Refl.
+  apply CIN.Refl.
 Qed.
 
 (* The product of two small classes is a small class.                           *)
@@ -372,7 +375,7 @@ Qed.
 Proposition Inter2 : forall (P1 P2 Q1 Q2:Class),
   P1:x:Q1 :/\: P2:x:Q2 :~: (P1:/\:P2) :x: (Q1:/\:Q2).
 Proof.
-  intros P1 P2 Q1 Q2. apply DoubleInclusion. split; intros x H1.
+  intros P1 P2 Q1 Q2. apply CIN.Double. split; intros x H1.
   - destruct H1 as [H1 H2].
     destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     destruct H2 as [y2 [z2 [G2 [H2 H2']]]].

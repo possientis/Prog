@@ -21,6 +21,8 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
 
+Module CIN := ZF.Class.Incl.
+
 (* F is an injective function class from A to B.                                *)
 Definition Inj (F A B: Class) : Prop := BijectionOn F A /\ range F :<=: B.
 
@@ -144,7 +146,7 @@ Proposition Compose : forall (F G A B C:Class),
 Proof.
   intros F G A B C [H1 H2] [H3 H4]. split.
   - apply BijectionOn.Compose with B; assumption.
-  - apply Class.Incl.Tran with (range G). 2: assumption.
+  - apply CIN.Tran with (range G). 2: assumption.
     apply Compose.RangeIsSmaller.
 Qed.
 
@@ -231,7 +233,7 @@ Proposition Restrict : forall (F A B C:Class),
 Proof.
   intros F A B C [H1 H2] H3. split.
   - apply BijectionOn.Restrict with A; assumption.
-  - apply Class.Incl.Tran with (range F). 2: assumption.
+  - apply CIN.Tran with (range F). 2: assumption.
     apply Restrict.RangeIsIncl.
 Qed.
 
@@ -263,7 +265,7 @@ Proof.
   - apply Incl.EquivCompatL with (domain F).
     + apply Equiv.Sym, Converse.Range.
     + destruct H1 as [_ H1]. apply Incl.EquivCompatR with (domain F). 1: assumption.
-      apply Class.Incl.Refl.
+      apply CIN.Refl.
 Qed.
 
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),

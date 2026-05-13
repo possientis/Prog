@@ -36,7 +36,7 @@ Proposition NotElemIsEqual : forall (a:U), Ordinal a ->
   ~ :U(a) :< a <-> :U(a) = a.
 Proof.
   intros a H1. split; intros H2.
-  - apply DoubleInclusion. split.
+  - apply Incl.Double. split.
     + apply IsSmallest; try assumption.
       intros c H3. apply ElemIsIncl; assumption.
     + assert (:U(a) :< a \/ a :<=: :U(a)) as H3. {

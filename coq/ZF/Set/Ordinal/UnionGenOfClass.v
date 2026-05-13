@@ -29,7 +29,7 @@ Qed.
 (* The union of the identity family over a limit ordinal equals that ordinal.   *)
 Proposition WhenLimit : forall (a:U), Limit a -> :\/:_{a} I = a.
 Proof.
-  intros a H1. apply DoubleInclusion. split; intros b H2.
+  intros a H1. apply Incl.Double. split; intros b H2.
   - apply SUC.Charac in H2. destruct H2 as [c [H2 H3]].
     rewrite I.Eval in H3.
     assert (Ordinal a) as G1. { apply H1. }

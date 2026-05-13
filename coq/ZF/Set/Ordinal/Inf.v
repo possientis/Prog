@@ -143,7 +143,7 @@ Proof.
     revert H11. apply NoElemLoop1. }
   assert (Ordinal (inf a)) as H7. { apply IsOrdinal. }
   assert (inf a = b) as H8. {
-    apply DoubleInclusion. split.
+    apply Incl.Double. split.
     - apply IsLowerBound; assumption.
     - apply IsLargest; assumption. }
   rewrite H8. assumption.

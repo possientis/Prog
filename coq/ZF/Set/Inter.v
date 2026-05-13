@@ -56,7 +56,7 @@ Qed.
 (* The intersection of the empty set is the empty set.                          *)
 Proposition WhenEmpty : :I(:0:) = :0:.
 Proof.
-  apply DoubleInclusion. split; intros x H1.
+  apply Incl.Double. split; intros x H1.
   - apply FromClass.Charac in H1. apply (Inter.EquivCompat :0:) in H1.
     + apply IsZero in H1. contradiction.
     + apply Equiv.Sym, Empty.ToClass.
@@ -67,7 +67,7 @@ Qed.
 Proposition WhenSingleton : forall (a:U),
   :I(:{a}:) = a.
 Proof.
-  intros a. apply DoubleInclusion. split; intros x H1.
+  intros a. apply Incl.Double. split; intros x H1.
   - apply Charac with :{a}:. 1: assumption. apply Single.IsIn.
   - apply CharacRev.
     + apply SingletonIsNotEmpty.

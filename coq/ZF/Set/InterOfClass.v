@@ -48,7 +48,7 @@ Qed.
 (* The intersection of the empty class is the empty set.                        *)
 Proposition IsZero : inter :0: = :0:.
 Proof.
-  apply DoubleInclusion. split; intros x H1.
+  apply Incl.Double. split; intros x H1.
   - apply FromClass.Charac in H1. destruct H1 as [_ [y H1]]. contradiction.
   - apply ZF.Set.Empty.Charac in H1. contradiction.
 Qed.

@@ -25,6 +25,8 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Specify.
 
+
+Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
@@ -114,7 +116,7 @@ Proof.
     rewrite H17 in H19. apply H19. }
   assert (A :<=: toClass F:[a]:) as H15. { apply DiffBySet.WhenEmpty. assumption. }
   assert (toClass F:[a]: :~: A) as H16. {
-    apply DoubleInclusion. split; assumption. }
+    apply CIN.Double. split; assumption. }
   assert (SFO.FunctionOn (F:|:a) a) as H17. {
     split.
     - apply RestrictOfClass.IsFunction, H1.

@@ -149,7 +149,7 @@ Proposition DomainOfCompose : forall (f g a b c:U),
   Onto g b c  ->
   domain (g :.: f) =  a.
 Proof.
-  intros f g a b c [H1 H2] [H3 H4]. apply DoubleInclusion. split; intros x H5.
+  intros f g a b c [H1 H2] [H3 H4]. apply Incl.Double. split; intros x H5.
   - apply (FunctionOn.DomainOfCompose f g a b x H1 H3) in H5. apply H5.
   - apply (FunctionOn.DomainOfCompose f g a b x); try assumption.
     split. 1: assumption. apply IsInRange with a. 2: assumption. split; assumption.

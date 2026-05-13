@@ -15,6 +15,9 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Predicate expressing the fact that a is an R-maximal element of A.           *)
 Definition Maximal (R A:Class) (a:U) : Prop
   := A a /\ (forall x, A x -> ~ R :(a,x):).
@@ -127,7 +130,7 @@ Proposition InitRefl : forall (R A:Class) (a:U),
   Maximal R A a                 ->
   A :~: initSegment R^:=: A a.
 Proof.
-  intros R A a H1 H2. apply DoubleInclusion. split; intros x H3.
+  intros R A a H1 H2. apply CIN.Double. split; intros x H3.
   - assert (x = a \/ R :(x,a): \/ R :(a,x):) as H4. {
       apply H1. 1: assumption. apply IsIn with R. assumption. }
     destruct H4 as [H4|[H4|H4]].

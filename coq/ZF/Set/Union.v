@@ -36,7 +36,7 @@ Qed.
 (* The union of the empty set is the empty set.                                 *)
 Proposition WhenEmpty : :U(:0:) = :0:.
 Proof.
-  apply DoubleInclusion. split; intros x H1.
+  apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [y [_ H1]].
     apply Empty.Charac in H1. contradiction.
   - apply Empty.Charac in H1. contradiction.
@@ -46,7 +46,7 @@ Qed.
 Proposition WhenSingleton : forall (a:U),
   :U(:{a}:) = a.
 Proof.
-  intros a. apply DoubleInclusion. split; intros x H1.
+  intros a. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [y [H1 H2]].
     apply Single.Charac in H2. subst. assumption.
   - apply Charac. exists a. split. 1: assumption. apply Single.IsIn.

@@ -42,7 +42,7 @@ Qed.
 Proposition WhenEmpty : forall (f:U),
   f = :0: -> domain f = :0:.
 Proof.
-  intros F H1. apply DoubleInclusion. split; intros x H2.
+  intros F H1. apply Incl.Double. split; intros x H2.
   - apply Charac in H2. destruct H2 as [y H2]. rewrite H1 in H2.
     apply Empty.Charac in H2. contradiction.
   - apply Empty.Charac in H2. contradiction.
@@ -51,7 +51,7 @@ Qed.
 Proposition WhenSingle : forall (x y f:U),
   f = :{ :(x,y): }: -> domain f = :{x}:.
 Proof.
-  intros x y f H1. apply DoubleInclusion. split; intros u H2.
+  intros x y f H1. apply Incl.Double. split; intros u H2.
   - apply Charac in H2. destruct H2 as [v H2]. subst.
     apply Single.Charac in H2.
     apply OrdPair.Equal in H2. destruct H2 as [H2 H3]. subst.

@@ -38,6 +38,7 @@ Require Import ZF.Set.Union2.
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
+
 Module CIN := ZF.Class.Incl.
 Module CRC := ZF.Class.Relation.Converse.
 Module CRD := ZF.Class.Relation.Domain.
@@ -339,7 +340,7 @@ Proposition IsUnique : forall (R A:Class) (a b c:U),
   IsClosure R A a b -> IsClosure R A a c -> b = c.
 Proof.
   intros R A a b c H1 H2.
-  apply DoubleInclusion. split.
+  apply Incl.Double. split.
   - apply IsSmallest with R A a; try apply H2. assumption.
   - apply IsSmallest with R A a; try apply H1. assumption.
 Qed.

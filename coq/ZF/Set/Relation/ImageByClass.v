@@ -14,6 +14,9 @@ Require Import ZF.Set.Truncate.
 
 Export ZF.Notation.Image.
 
+
+Module CIN := ZF.Class.Incl.
+
 (* Need to use 'truncate' as the image F[a] may not be small.                   *)
 Definition image (F:Class) (a:U) : U := truncate F:[toClass a]:.
 
@@ -80,7 +83,7 @@ Qed.
 Proposition InclCompatR : forall (F:Class) (a b:U), Functional F ->
   a :<=: b -> F:[a]: :<=: F:[b]:.
 Proof.
-  intros F a b H1 H2. apply InclCompat; try assumption. apply Class.Incl.Refl.
+  intros F a b H1 H2. apply InclCompat; try assumption. apply CIN.Refl.
 Qed.
 
 (* The image of the empty set under any class is the empty set.                 *)
