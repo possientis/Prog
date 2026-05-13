@@ -39,7 +39,7 @@ Lemma OracleCharac2 : forall (F:Class) (x y:U),
 Proof.
   intros F x y. split; intros H1.
   - destruct H1 as [c [a H1]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H2].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H2].
     exists c, a; split; assumption.
   - destruct H1 as [c [a [H1 H2]]]. exists c, a. subst. reflexivity.
 Qed.
@@ -49,8 +49,8 @@ Lemma OracleCharac3 : forall (F:Class) (c a y:U),
 Proof.
   intros F c a y. split; intros H1.
   - destruct H1 as [c' [a' H1]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H2].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H2].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
     subst. reflexivity.
   - exists c, a. subst. reflexivity.
 Qed.
@@ -62,7 +62,7 @@ Proof.
   apply OracleCharac2 in H1. apply OracleCharac2 in H2.
   destruct H1 as [c [a [H1 H3]]].
   destruct H2 as [c' [a' [H2 H4]]].
-  subst. apply OrdPair.WhenEqual in H2. destruct H2 as [H1 H2].
+  subst. apply OrdPair.Equal in H2. destruct H2 as [H1 H2].
   subst. reflexivity.
 Qed.
 

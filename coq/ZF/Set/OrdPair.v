@@ -27,7 +27,7 @@ Proof.
 Qed.
 
 (* If two ordered pairs are equal, then their components are equal.             *)
-Proposition WhenEqual : forall (a b c d:U),
+Proposition Equal : forall (a b c d:U),
   :(a,b): = :(c,d): -> a = c /\ b = d.
 Proof.
   intros a b c d H.
@@ -59,15 +59,4 @@ Proof.
       * apply H2.
 Qed.
 
-Proposition WhenEqualL : forall (a b c d:U),
-  :(a,b): = :(c,d): -> a = c.
-Proof.
-  intros a b d c H. apply WhenEqual in H. destruct H as [H1 H2]. apply H1.
-Qed.
-
-Proposition WhenEqualR : forall (a b c d:U),
-  :(a,b): = :(c,d): -> b = d.
-Proof.
-  intros a b d c H. apply WhenEqual in H. destruct H as [H1 H2]. apply H2.
-Qed.
 

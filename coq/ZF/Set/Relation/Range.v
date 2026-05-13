@@ -85,7 +85,7 @@ Proof.
   intros x y f H1. apply DoubleInclusion. split; intros v H2.
   - apply Charac in H2. destruct H2 as [u H2]. subst.
     apply Single.Charac in H2.
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H3]. subst.
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H3]. subst.
     apply Single.Charac. reflexivity.
   - apply Single.Charac in H2. subst.
     apply Charac. exists x. apply Single.Charac. reflexivity.

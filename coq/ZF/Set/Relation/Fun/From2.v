@@ -24,7 +24,7 @@ Proof.
     destruct H1 as [y [z [H1 [H2 H3]]]].
     apply Prod.Charac in H2. destruct H2 as [u [v [H2 [H4 H5]]]].
     apply CF2.Charac2 in H3. destruct H3 as [u' [v' [H3 H6]]].
-    subst. apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H7]. subst.
+    subst. apply OrdPair.Equal in H3. destruct H3 as [H3 H7]. subst.
     exists u', v'. split. 1: reflexivity. split; assumption.
   - destruct H1 as [u [v [H1 [H2 H3]]]].
     apply SRR.CharacRev with :(u,v): (f u v); try assumption.
@@ -41,7 +41,7 @@ Proof.
   (* Membership as a pair unpacks the witnesses via ordered-pair injectivity.   *)
   intros f a b x y. split; intros H1.
   - apply Charac in H1. destruct H1 as [u [v [H1 [H2 H3]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4]. subst.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H4]. subst.
     exists u, v. split. 1: reflexivity.
     split. 1: reflexivity. split; assumption.
   - destruct H1 as [u [v [H1 [H2 [H3 H4]]]]]. subst.
@@ -55,7 +55,7 @@ Proof.
   (* Follows from the pair-level characterization by ordered-pair injectivity.  *)
   intros f a b u v w. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [u' [v' [H1 [H2 [H3 H4]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [Hu Hv]. subst u'. subst v'.
+    apply OrdPair.Equal in H1. destruct H1 as [Hu Hv]. subst u'. subst v'.
     split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 H3]]. subst. apply Charac2.
     exists u, v. split. 1: reflexivity.

@@ -61,7 +61,7 @@ Proof.
   split; intros H4.
   - apply Charac in H4; try assumption.
     destruct H4 as [y' [z' [H4 [H5 [H6 H7]]]]].
-    apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H8].
+    apply OrdPair.Equal in H4. destruct H4 as [H4 H8].
     assert (y = y') as H9.   { apply Bij.EvalInjective with f a b; assumption. }
     assert (z = z') as H910. { apply Bij.EvalInjective with f a b; assumption. }
     subst. assumption.

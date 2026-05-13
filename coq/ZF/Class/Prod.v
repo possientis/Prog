@@ -31,7 +31,7 @@ Proposition Charac2 : forall (P Q:Class) (y z:U),
 Proof.
   intros P Q y z. split; intros H1.
   - unfold prod in H1. destruct H1 as [y' [z' [H1 [H2 H3]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H1'].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H1'].
     subst. split; assumption.
   - destruct H1 as [H1 H2]. exists y. exists z. split.
     + reflexivity.
@@ -214,7 +214,7 @@ Proof.
   intros P Q x'. split; intros H1.
   - destruct H1 as [x [H1 H2]]. destruct H1 as [y [z [H3 [H4 H5]]]].
     apply Switch.Charac2 in H2. destruct H2 as [y' [z' [H6 H7]]]. subst.
-    apply OrdPair.WhenEqual in H6. destruct H6 as [H6 H8]. subst.
+    apply OrdPair.Equal in H6. destruct H6 as [H6 H8]. subst.
     exists z'. exists y'. split. 1: reflexivity. split; assumption.
   - destruct H1 as [z [y [H1 [H2 H3]]]]. exists :(y,z):. split.
     + apply Charac2. split; assumption.
@@ -290,9 +290,9 @@ Proof.
   assert (Functional R) as H5. {
     intros x y1 y2. rewrite Er.
     intros [x1 [T1 T2]] [x2 [T3 T4]].
-    apply OrdPair.WhenEqual in T1. destruct T1 as [T1 T1'].
-    apply OrdPair.WhenEqual in T3. destruct T3 as [T3 T3'].
-    subst. apply OrdPair.WhenEqual in T3. destruct T3 as [T3 _].
+    apply OrdPair.Equal in T1. destruct T1 as [T1 T1'].
+    apply OrdPair.Equal in T3. destruct T3 as [T3 T3'].
+    subst. apply OrdPair.Equal in T3. destruct T3 as [T3 _].
     assumption.
   }
 
@@ -300,7 +300,7 @@ Proof.
   assert (domain R :<=: P :x: Q) as H6. {
     intros x T1.
     destruct T1 as [y' T1]. rewrite Er in T1.
-    destruct T1 as [x' [T1 T2]]. apply OrdPair.WhenEqual in T1.
+    destruct T1 as [x' [T1 T2]]. apply OrdPair.Equal in T1.
     destruct T1 as [T1 _]. subst. apply Charac2. split; assumption.
   }
 
@@ -314,7 +314,7 @@ Proof.
     intros x. split; intros T1.
     - destruct T1 as [x' [_ T1]].
       rewrite Er in T1. destruct T1 as [x1 [T1 T2]].
-      apply OrdPair.WhenEqual in T1. destruct T1 as [_ T1]. subst. assumption.
+      apply OrdPair.Equal in T1. destruct T1 as [_ T1]. subst. assumption.
     - exists :(x,y):. rewrite Er. split.
       + exists x. exists x. split. 1: reflexivity. assumption.
       + exists x. split. 1: reflexivity. assumption.
@@ -376,7 +376,7 @@ Proof.
   - destruct H1 as [H1 H2].
     destruct H1 as [y1 [z1 [G1 [H1 H1']]]].
     destruct H2 as [y2 [z2 [G2 [H2 H2']]]].
-    subst. apply OrdPair.WhenEqual in G2. destruct G2 as [G1 G2]. subst.
+    subst. apply OrdPair.Equal in G2. destruct G2 as [G1 G2]. subst.
     apply Charac2. split; split; assumption.
   - unfold prod in H1. destruct H1 as [y [z [H1 [[H2 H2'] [H3 H3']]]]].
     split; exists y; exists z; split.

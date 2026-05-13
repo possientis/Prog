@@ -41,7 +41,7 @@ Proposition Charac2 : forall (x y:U),
 Proof.
   intros x y. split; intros H1.
   - destruct H1 as [a [b [c [d [H1 H2]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
     exists a. exists b. exists c. exists d. split. 1: assumption.
     split; assumption.
   - destruct H1 as [a [b [c [d [H1 [H2 H3]]]]]].
@@ -54,8 +54,8 @@ Proposition Charac4 : forall (a b c d:U),
 Proof.
   intros a b c d. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [a' [b' [c' [d' [H1 [H2 H3]]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4].
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H5].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H4].
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H5].
     subst. assumption.
   - apply Charac2. exists a. exists b. exists c. exists d.
     split. 1: reflexivity. split. 1: reflexivity. assumption.
@@ -152,7 +152,7 @@ Proof.
   assert (forall y z, A :(y,z): <-> y = :0: /\ On z) as H3. {
     intros y z. split; intros H3.
     - rewrite H2 in H3. destruct H3 as [a [H3 H4]].
-      apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H5]. subst.
+      apply OrdPair.Equal in H4. destruct H4 as [H4 H5]. subst.
       split. 2: assumption. reflexivity.
     - destruct H3 as [H3 H4]. subst. exists z.
       split. 1: assumption. reflexivity. }
@@ -172,7 +172,7 @@ Proof.
   assert (forall y z, F :(y,z): <-> On y /\ z = :(:0:,y):) as H6. {
     intros y z. split; intros H6.
     - rewrite H5 in H6. destruct H6 as [a [H6 H7]].
-      apply OrdPair.WhenEqual in H7. destruct H7 as [H7 H8]. subst.
+      apply OrdPair.Equal in H7. destruct H7 as [H7 H8]. subst.
       split. 1: assumption. reflexivity.
     - destruct H6 as [H6 H7]. subst. exists y. split. 1: assumption. reflexivity. }
   assert (OneToOne F) as H7. {
@@ -183,7 +183,7 @@ Proof.
       apply Converse.Charac2 in H7. apply Converse.Charac2 in H8.
       apply H6 in H7. apply H6 in H8.
       destruct H7 as [H7 H9]. destruct H8 as [H8 H10]. rewrite H9 in H10.
-      apply OrdPair.WhenEqual in H10. apply H10. }
+      apply OrdPair.Equal in H10. apply H10. }
   assert (domain F :~: On) as H8. {
     intros a. split; intros H8.
     - destruct H8 as [b H8]. apply H6 in H8. apply H8.

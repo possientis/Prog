@@ -37,8 +37,8 @@ Proof.
   (* OrdPair injectivity forces r'=r, x'=x, f'=f, collapsing the existentials.  *)
   intros r x f. unfold isom. split.
   - intros [r' [x' [f' [H1 H2]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H4].
     subst. assumption.
   - intros H1. exists r, x, f. split. reflexivity. assumption.
 Qed.
@@ -61,10 +61,10 @@ Proof.
   unfold isom in H1. destruct H1 as [r1 [x1 [f1 [Heq1 Hcase1]]]].
   unfold isom in H2. destruct H2 as [r2 [x2 [f2 [Heq2 Hcase2]]]].
   (* pair injectivity forces r and x to agree, reducing to showing f1 = f2.     *)
-  apply OrdPair.WhenEqual in Heq1. destruct Heq1 as [Hp1 Hy].
-  apply OrdPair.WhenEqual in Heq2. destruct Heq2 as [Hp2 Hz].
+  apply OrdPair.Equal in Heq1. destruct Heq1 as [Hp1 Hy].
+  apply OrdPair.Equal in Heq2. destruct Heq2 as [Hp2 Hz].
   subst y z. rewrite Hp1 in Hp2.
-  apply OrdPair.WhenEqual in Hp2. destruct Hp2 as [Hr Hx].
+  apply OrdPair.Equal in Hp2. destruct Hp2 as [Hr Hx].
   subst r2 x2.
   (* Split on whether (r,x) is well-ordered: if not, f1 = f2 = 0.               *)
   destruct Hcase1 as [[Hnwo1 Hf1]|[Hwo1 [b1 [Hb1 HIsom1]]]];

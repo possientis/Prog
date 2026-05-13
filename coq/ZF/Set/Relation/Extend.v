@@ -37,7 +37,7 @@ Proof.
   intros f x y u v. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1|H1].
     + left. assumption.
-    + right. apply OrdPair.WhenEqual in H1. assumption.
+    + right. apply OrdPair.Equal in H1. assumption.
   - destruct H1 as [H1|[H1 H2]]; apply Charac.
     + left. assumption.
     + right. subst. reflexivity.

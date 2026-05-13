@@ -50,7 +50,7 @@ Proof.
   intros F a y z. split; intros H1.
   - apply Charac in H1.
     destruct H1 as [y' [z' [f [b [H1 [H2 [H3 [H4 [H5 H6]]]]]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H7]. subst.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H7]. subst.
     exists f. exists b. split. 1: assumption. split. 1: assumption.
     split. 1: assumption. split; assumption.
   - destruct H1 as [f [b [H1 [H2 [H3 [H4 H5]]]]]]. apply Charac.

@@ -13,7 +13,7 @@ Proof.
   (* Proof by Claude.                                                           *)
   intros r x y. unfold from. split.
   - intros [a [b [H1 H2]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [Ha Hb].
+    apply OrdPair.Equal in H1. destruct H1 as [Ha Hb].
     subst. assumption.
   - intros H. exists x, y. split. 1: reflexivity. assumption.
 Qed.

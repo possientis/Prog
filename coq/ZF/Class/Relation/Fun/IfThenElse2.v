@@ -29,10 +29,10 @@ Proof.
   (* Proof by Claude.                                                           *)
   intros A f1 f2 x y. split.
   - intros [u [v [[H1 H2]|[H1 H2]]]].
-    + apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst.
+    + apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst.
       exists u, v. split. 1: reflexivity. left.  split. 2: assumption.
       reflexivity.
-    + apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst.
+    + apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst.
       exists u, v. split. 1: reflexivity. right. split. 2: assumption.
       reflexivity.
   - intros [u [v [H1 [[H2 H3]|[H2 H3]]]]]; subst; exists u, v.
@@ -49,7 +49,7 @@ Proof.
   (* Proof by Claude.                                                           *)
   intros A f1 f2 x y z. split.
   - intros H1. apply Charac2 in H1. destruct H1 as [u [v [H1 H2]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [Hu Hv]. subst. exact H2.
+    apply OrdPair.Equal in H1. destruct H1 as [Hu Hv]. subst. exact H2.
   - intros H1. apply Charac2. exists x, y. split. 1: reflexivity. exact H1.
 Qed.
 
@@ -98,7 +98,7 @@ Proof.
   intros A f1 f2 x y1 y2 H1 H2.
   apply Charac2 in H1. destruct H1 as [u1 [v1 [Hx H1]]].
   apply Charac2 in H2. destruct H2 as [u2 [v2 [Hx' H2]]].
-  rewrite Hx in Hx'. apply OrdPair.WhenEqual in Hx'.
+  rewrite Hx in Hx'. apply OrdPair.Equal in Hx'.
   destruct Hx' as [Hu Hv]. subst.
   destruct H1 as [[H1 H3]|[H1 H3]]; destruct H2 as [[H2 H4]|[H2 H4]];
   try contradiction; subst; reflexivity.

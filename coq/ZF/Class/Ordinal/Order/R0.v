@@ -56,7 +56,7 @@ Proposition Charac2 : forall (x y:U),
 Proof.
   intros x y. split; intros H1.
   - destruct H1 as [a [b [c [d [H1 H2]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
     exists a. exists b. exists c. exists d. split. 1: assumption.
     split; assumption.
   - destruct H1 as [a [b [c [d [H1 [H2 H3]]]]]].
@@ -71,8 +71,8 @@ Proposition Charac4 : forall (a b c d:U),
 Proof.
   intros a b c d. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [a' [b' [c' [d' [H1 [H2 H3]]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4].
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H5].
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H4].
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H5].
     subst. assumption.
   - apply Charac2. exists a. exists b. exists c. exists d.
     split. 1: reflexivity. split. 1: reflexivity. assumption.
@@ -117,7 +117,7 @@ Proof.
   assert (C :(a,b):) as H15. { apply Minimal.IsIn with Le. assumption. }
   assert (c = a :\/: b /\ A :(a,b):) as H16. {
     rewrite H9 in H15. destruct H15 as [a' [b' [H15 H16]]].
-    apply OrdPair.WhenEqual in H15. destruct H15 as [H15 H17].
+    apply OrdPair.Equal in H15. destruct H15 as [H15 H17].
     subst. assumption. }
   destruct H16 as [H16 H17].
   assert (Minimal R0 A :(a,b):)as H18. {

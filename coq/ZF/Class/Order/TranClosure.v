@@ -84,7 +84,7 @@ Proof.
   assert (forall x y, B :(x,y): <-> A x /\ y = initSegment R A x) as H4. {
     intros x y. split; intros H4.
     - rewrite H3 in H4. destruct H4 as [u [H4 H5]].
-      apply OrdPair.WhenEqual in H5. destruct H5 as [H5 H6]. subst.
+      apply OrdPair.Equal in H5. destruct H5 as [H5 H6]. subst.
       split. 1: assumption. reflexivity.
     - rewrite H3. destruct H4 as [H4 H5]. exists x. split. 1: assumption.
       rewrite H5. reflexivity. }

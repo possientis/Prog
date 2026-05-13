@@ -47,7 +47,7 @@ Proposition OnZeroCharac2 : forall (x y:U),
 Proof.
   intros x y. split; intros H1.
   - destruct H1 as [x' [y' [H1 [H2 H3]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4]. subst.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H4]. subst.
     split; assumption.
   - destruct H1 as [H1 [[H2 H3]|[H2 H3]]]; subst.
     + exists :0:. exists :1:. split. 1: reflexivity. split. 1: assumption.

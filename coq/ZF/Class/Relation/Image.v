@@ -130,9 +130,9 @@ Proof.
     intros x y z H3 H4.
     rewrite H2 in H3. destruct H3 as [y1 [z1 [H3 _]]].
     rewrite H2 in H4. destruct H4 as [y2 [z2 [H4 _]]].
-    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
-    apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H6].
-    rewrite H3 in H4. apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H7].
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H5].
+    apply OrdPair.Equal in H4. destruct H4 as [H4 H6].
+    rewrite H3 in H4. apply OrdPair.Equal in H4. destruct H4 as [H4 H7].
     subst. reflexivity. }
 
   (* Having assumed F to be small, we have a set f. *)
@@ -159,7 +159,7 @@ Proof.
 
   intros z. split; intros H9.
   - apply H8 in H9. destruct H9 as [x [H9 H10]]. rewrite H2 in H10.
-    destruct H10 as [y [z' [H10 H11]]]. apply OrdPair.WhenEqual in H10.
+    destruct H10 as [y [z' [H10 H11]]]. apply OrdPair.Equal in H10.
     destruct H10 as [H10 H12]. subst. apply H1 in H9.
     exists y. split; assumption.
   - destruct H9 as [y [H9 H10]]. apply H1 in H10. apply H8. exists :(y,z):.

@@ -50,7 +50,7 @@ Proposition FCharac2 : forall (a b x y:U),
 Proof.
   intros a b x y. split; intros H1.
   - destruct H1 as [c [d [H1 [H2 H3]]]].
-    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H4].
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H4].
     exists c. exists d. split. 1: assumption. split. 1: assumption.
     split; assumption.
   - destruct H1 as [c [d [H1 [H2 [H3 H4]]]]]. exists c. exists d. subst.
@@ -134,7 +134,7 @@ Proof.
   apply Charac2 in H3; try assumption. apply Charac2 in H4; try assumption.
   destruct H3 as [c [d [H3 [H5 [H6 H7]]]]].
   destruct H4 as [c' [d' [H4 [H8 [H9 H10]]]]]. subst.
-  apply OrdPair.WhenEqual in H9. destruct H9 as [H9 H10]. subst. reflexivity.
+  apply OrdPair.Equal in H9. destruct H9 as [H9 H10]. subst. reflexivity.
 Qed.
 
 (* The set f a b is a one-to-one relation.                                      *)

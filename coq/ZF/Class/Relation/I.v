@@ -25,7 +25,7 @@ Definition I : Class := fun x => exists y, x = :(y,y):.
 Proposition Charac2 : forall (y z:U), I :(y,z): <-> y = z.
 Proof.
   intros y z. split; intros H1.
-  - destruct H1 as [x H1]. apply WhenEqual in H1.
+  - destruct H1 as [x H1]. apply OrdPair.Equal in H1.
     destruct H1 as [H1 H2]. subst. reflexivity.
   - subst. exists z. reflexivity.
 Qed.

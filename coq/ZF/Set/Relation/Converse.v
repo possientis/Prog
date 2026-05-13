@@ -43,7 +43,7 @@ Proposition Charac2 : forall (f y z:U),
   :(y,z): :< f^:-1: -> :(z,y): :< f.
 Proof.
   intros f y z H1. apply Charac in H1. destruct H1 as [z' [y' [H1 H2]]].
-  apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
+  apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst. assumption.
 Qed.
 
 Proposition Charac2Rev : forall (f y z:U),

@@ -549,7 +549,7 @@ Proof.
       apply (FunctionOn.IsOneToOne f a). 1: assumption.
       intros x y H6 H7 H8.
       rewrite (G1 x), (G1 y) in H8; try assumption.
-      apply OrdPair.WhenEqual in H8. apply H8. }
+      apply OrdPair.Equal in H8. apply H8. }
     assert (Bij f a (:{b}: :x: a)) as H7. { apply Bij.FromFun; assumption. }
     exists f. assumption. }
   apply Sym. assumption.
@@ -599,7 +599,7 @@ Proof.
     apply Prod.Charac in Hp. destruct Hp as [u1 [v1 [Hp [Hu1 Hv1]]]].
     apply Prod.Charac in Hq. destruct Hq as [u2 [v2 [Hq [Hu2 Hv2]]]].
     rewrite Hp, Hq, (G1 u1 v1 Hu1 Hv1), (G1 u2 v2 Hu2 Hv2) in Hpq.
-    apply OrdPair.WhenEqual in Hpq. destruct Hpq as [Hf Hg].
+    apply OrdPair.Equal in Hpq. destruct Hpq as [Hf Hg].
     apply (Bij.EvalInjective f a c u1 u2 H1 Hu1 Hu2) in Hf.
     apply (Bij.EvalInjective g b d v1 v2 H2 Hv1 Hv2) in Hg.
     rewrite Hp, Hq, Hf, Hg. reflexivity. }
@@ -883,21 +883,21 @@ Proof.
     destruct Hx as [Hxa | Hxb]; destruct Hy as [Hya | Hyb].
     - (* x, y both in a: (0,f!x) = (0,f!y) => f!x = f!y, then f injective.      *)
       rewrite (HEvalA x Hxa), (HEvalA y Hya) in Hxy.
-      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [_ Hfxy].
+      apply OrdPair.Equal in Hxy. destruct Hxy as [_ Hfxy].
       exact (Bij.EvalInjective f a c x y Hf Hxa Hya Hfxy).
     - (* x in a, y in b: (0,f!x) = (1,g!y) => 0 = 1, a contradiction.           *)
       exfalso.
       rewrite (HEvalA x Hxa), (HEvalB y Hyb) in Hxy.
-      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [H01 _].
+      apply OrdPair.Equal in Hxy. destruct Hxy as [H01 _].
       exact (Natural.ZeroIsNotOne H01).
     - (* x in b, y in a: (1,g!x) = (0,f!y) => 1 = 0, a contradiction.           *)
       exfalso.
       rewrite (HEvalB x Hxb), (HEvalA y Hya) in Hxy.
-      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [H10 _].
+      apply OrdPair.Equal in Hxy. destruct Hxy as [H10 _].
       exact (Natural.ZeroIsNotOne (eq_sym H10)).
     - (* x, y both in b: (1,g!x) = (1,g!y) => g!x = g!y, then g injective.      *)
       rewrite (HEvalB x Hxb), (HEvalB y Hyb) in Hxy.
-      apply OrdPair.WhenEqual in Hxy. destruct Hxy as [_ Hgxy].
+      apply OrdPair.Equal in Hxy. destruct Hxy as [_ Hgxy].
       exact (Bij.EvalInjective g b d x y Hg Hxb Hyb Hgxy). }
   (* h bijects a \/ b onto {0} x c \/ {1} x d. Composing with the bijection     *)
   (* {0} x c \/ {1} x d ~ c + d gives the required bijection a \/ b ~ c + d.    *)
@@ -944,7 +944,7 @@ Proof.
     apply Prod.Charac in Hp. destruct Hp as [u1 [v1 [Hp [Hu1 Hv1]]]].
     apply Prod.Charac in Hq. destruct Hq as [u2 [v2 [Hq [Hu2 Hv2]]]].
     rewrite Hp, Hq, (G1 u1 v1 Hu1 Hv1), (G1 u2 v2 Hu2 Hv2) in Hpq.
-    apply OrdPair.WhenEqual in Hpq. destruct Hpq as [Hveq Hueq].
+    apply OrdPair.Equal in Hpq. destruct Hpq as [Hveq Hueq].
     rewrite Hp, Hq, Hveq, Hueq. reflexivity. }
   exists h. apply Bij.FromFun; assumption.
 Qed.

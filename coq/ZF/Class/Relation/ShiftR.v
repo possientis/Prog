@@ -38,9 +38,9 @@ Proposition Charac2 : forall (F:Class) (a x y:U), domain F :<=: toClass :N ->
   x = :0: /\ y = a \/ :0: :< x /\ x :< :N /\ F :(:U(x),y):.
 Proof.
   intros F a x y H1. split; intros [H2|H2].
-  - left. apply OrdPair.WhenEqual in H2. assumption.
+  - left. apply OrdPair.Equal in H2. assumption.
   - right. destruct H2 as [u [v [H2 H3]]].
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4]. subst.
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H4]. subst.
     assert (u :< :N) as G1. { apply H1. exists v. assumption. }
     assert (succ u :< :N) as G2. { apply Omega.HasSucc. assumption. }
     assert (On u) as G3. {  apply Omega.HasOrdinals. assumption. }
@@ -67,22 +67,22 @@ Proposition IsFunctional : forall (F:Class) (a:U),
   Functional F -> Functional (shiftR a F).
 Proof.
   intros F a H1 y z1 z2 [H2|H2] [H3|H3].
-  - apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
-    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+  - apply OrdPair.Equal in H2. destruct H2 as [H2 H4].
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H5].
     subst. reflexivity.
-  - exfalso. apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
+  - exfalso. apply OrdPair.Equal in H2. destruct H2 as [H2 H4].
     destruct H3 as [u [v [H3 H5]]].
-    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H6]. subst.
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H6]. subst.
     assert (u :< succ u) as H7. { apply Succ.IsIn. }
     rewrite <- H3 in H7. apply Empty.Charac in H7. contradiction.
-  - exfalso. apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+  - exfalso. apply OrdPair.Equal in H3. destruct H3 as [H3 H5].
     destruct H2 as [u [v [H2 H4]]].
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H6]. subst.
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H6]. subst.
     assert (u :< succ u) as H7. { apply Succ.IsIn. }
     rewrite H3 in H7. apply Empty.Charac in H7. contradiction.
   - destruct H2 as [u1 [v1 [H2 H4]]]. destruct H3 as [u2 [v2 [H3 H5]]].
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H6].
-    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H7]. subst.
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H6].
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H7]. subst.
     assert (u1 = u2) as H8. { apply Succ.Injective. assumption. } subst.
     apply H1 with u2; assumption.
 Qed.
@@ -156,9 +156,9 @@ Proposition RangeOf : forall (F:Class) (a y:U),
 Proof.
   intros F a y. split; intros H1.
   - destruct H1 as [x [H1|H1]].
-    + apply OrdPair.WhenEqual in H1. left. apply H1.
+    + apply OrdPair.Equal in H1. left. apply H1.
     + destruct H1 as [u [v [H1 H2]]].
-      apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3].
+      apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
       right. subst. exists u. assumption.
   - destruct H1 as [H1|H1].
     + subst. exists :0:. left. reflexivity.
@@ -250,7 +250,7 @@ Proof.
     G :(x,y): <-> exists u v, x = :(u,v): /\ y = :(succ u,v):) as H3. {
       intros x y. split; intros H3.
       - rewrite H2 in H3. destruct H3 as [u [v H3]].
-        apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H4].
+        apply OrdPair.Equal in H3. destruct H3 as [H3 H4].
         exists u, v. split; assumption.
       - destruct H3 as [u [v [H3 H4]]].
         rewrite H2. exists u,v. subst. reflexivity. }
@@ -258,7 +258,7 @@ Proof.
     intros x y1 y2 H4 H5.
     apply H3 in H4. destruct H4 as [u1 [v1 [H4 H6]]].
     apply H3 in H5. destruct H5 as [u2 [v2 [H5 H7]]].
-    subst. apply OrdPair.WhenEqual in H5. destruct H5 as [H4 H5].
+    subst. apply OrdPair.Equal in H5. destruct H5 as [H4 H5].
     subst. reflexivity. }
   assert (toClass :{:(:0:,a):}: :\/: G:[F]: :~: shiftR a F) as H5. {
     intros y. split; intros H5.

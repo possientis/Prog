@@ -57,7 +57,7 @@ Proposition WhenSingle : forall (x y f:U),
 Proof.
   intros x y f H1 u y1 y2 H2 H3. subst.
   apply Single.Charac in H2. apply Single.Charac in H3.
-  apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
-  apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+  apply OrdPair.Equal in H2. destruct H2 as [H2 H4].
+  apply OrdPair.Equal in H3. destruct H3 as [H3 H5].
   subst. reflexivity.
 Qed.

@@ -167,7 +167,7 @@ Proof.
 
       split. 1: assumption. intros b H4 H5.
       rewrite ER in H5. destruct H5 as [y [z [H5 [_ H6]]]].
-      apply OrdPair.WhenEqual in H5. destruct H5 as [_ H5]. subst.
+      apply OrdPair.Equal in H5. destruct H5 as [_ H5]. subst.
       destruct H6 as [v [w [H6 H7]]]. revert H7.
       apply IsNotPair. assumption.
 
@@ -197,7 +197,7 @@ Proof.
 
       split. 1: assumption. intros b H6 H7.
       rewrite ER in H7. destruct H7 as [c [d [H7 [H8 _]]]].
-      apply OrdPair.WhenEqual in H7. destruct H7 as [H7 _]. subst.
+      apply OrdPair.Equal in H7. destruct H7 as [H7 _]. subst.
       destruct H8 as [u H8]. subst. apply H3. exists u. assumption.
 
   (* We now need to show that R is not well-founded on A. *)
@@ -222,7 +222,7 @@ Proof.
     (* And the initial segment of R in A at a is the class of all singletons. *)
     assert (initSegment R A a :~: Singleton) as H3. { intros x. split; intros H3.
       - apply InitSegment.Charac in H3. destruct H3 as [_ H3]. rewrite ER in H3.
-        destruct H3 as [y [z [H3 [[u H4] _]]]]. apply OrdPair.WhenEqual in H3.
+        destruct H3 as [y [z [H3 [[u H4] _]]]]. apply OrdPair.Equal in H3.
         destruct H3 as [H3 _]. subst. exists u. reflexivity.
       - destruct H3 as [u H3]. apply InitSegment.Charac. split.
         + rewrite H3, EA. left. exists u. reflexivity.

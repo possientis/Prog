@@ -85,7 +85,7 @@ Proposition Charac2 : forall (F:Class) (a y z:U), CFL.Functional F ->
   :(y,z): :< (F:|:a) -> y :< a /\ F :(y,z):.
 Proof.
   intros F a y z H1 H2. apply Charac in H2. destruct H2 as [y' [z' [H2 [H3 H4]]]].
-  apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H5]. subst. 2: assumption.
+  apply OrdPair.Equal in H2. destruct H2 as [H2 H5]. subst. 2: assumption.
   split; assumption.
 Qed.
 
@@ -190,7 +190,7 @@ Proof.
   intros F a b H1 H2. apply DoubleInclusion. split; intros x H3.
   - apply Restrict.Charac in H3. destruct H3 as [y [z [H3 [H4 H5]]]].
     apply Charac in H5. 2: assumption. destruct H5 as [y' [z' [H5 [H6 H7]]]].
-    symmetry in H5. apply OrdPair.WhenEqual in H5. destruct H5 as [H5 H8]. subst.
+    symmetry in H5. apply OrdPair.Equal in H5. destruct H5 as [H5 H8]. subst.
     apply Charac2Rev; assumption.
   - apply Charac in H3. 2: assumption. destruct H3 as [y [z [H3 [H4 H5]]]].
     apply Restrict.Charac. exists y. exists z. split. 1: assumption.

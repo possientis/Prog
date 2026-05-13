@@ -35,7 +35,7 @@ Proposition Charac2 : forall (F:Class) (y z:U),
 Proof.
   intros F y z. split; intros H1.
   - destruct H1 as [y' [z' [H1 H2]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst. assumption.
   - exists y, z. split. 2: assumption. reflexivity.
 Qed.
 
@@ -126,7 +126,7 @@ Proof.
     G :(x,y): <-> exists u v, x = :(succ u, v): /\ y = :(u,v):) as H3. {
       intros x y. split; intros H3.
       - rewrite H2 in H3. destruct H3 as [u [v H3]].
-        apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H4].
+        apply OrdPair.Equal in H3. destruct H3 as [H3 H4].
         exists u, v. split; assumption.
       - destruct H3 as [u [v [H3 H4]]].
         rewrite H2. exists u,v. subst. reflexivity. }
@@ -134,7 +134,7 @@ Proof.
     intros x y1 y2 H4 H5.
     apply H3 in H4. destruct H4 as [u1 [v1 [H4 H6]]].
     apply H3 in H5. destruct H5 as [u2 [v2 [H5 H7]]].
-    subst. apply OrdPair.WhenEqual in H5. destruct H5 as [H4 H5].
+    subst. apply OrdPair.Equal in H5. destruct H5 as [H4 H5].
     assert (u1 = u2) as H6. { apply Succ.Injective. assumption. }
     subst. reflexivity. }
   assert (G:[F]: :~: shiftL F) as H5. {

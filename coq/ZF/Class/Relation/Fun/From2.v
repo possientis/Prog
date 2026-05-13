@@ -17,7 +17,7 @@ Proposition Charac2 : forall (f:U -> U -> U) (x y:U),
   from2 f :(x,y): <-> exists u v, x = :(u,v): /\ y = f u v.
 Proof.
   intros f x y. split; intros [u [v H1]].
-  - apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H2].
+  - apply OrdPair.Equal in H1. destruct H1 as [H1 H2].
     exists u, v. split; assumption.
   - destruct H1 as [H1 H2]. exists u, v. rewrite H1, H2. reflexivity.
 Qed.
@@ -27,7 +27,7 @@ Proposition Charac3 : forall (f:U -> U -> U) (x y z:U),
 Proof.
   intros f x y z. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [u [v [H1 H2]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst. reflexivity.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst. reflexivity.
   - exists x, y. rewrite H1. reflexivity.
 Qed.
 
@@ -53,7 +53,7 @@ Proposition IsFunctional : forall (f:U -> U -> U), Functional (from2 f).
 Proof.
   intros f x y1 y2 H1 H2. apply Charac2 in H1. apply Charac2 in H2.
   destruct H1 as [u1 [v1 [H1 H3]]]. destruct H2 as [u2 [v2 [H2 H4]]].
-  subst. apply OrdPair.WhenEqual in H2. destruct H2 as [H1 H2]. subst.
+  subst. apply OrdPair.Equal in H2. destruct H2 as [H1 H2]. subst.
   reflexivity.
 Qed.
 

@@ -26,7 +26,7 @@ Global Instance ClassInverse : Inverse Class := { inverse := converse }.
 Proposition Charac2 : forall (F:Class) (y z:U),
   F^:-1: :(y,z): -> F :(z,y):.
 Proof.
-  intros F y z [y' [z' [H1 H2]]]. apply OrdPair.WhenEqual in H1.
+  intros F y z [y' [z' [H1 H2]]]. apply OrdPair.Equal in H1.
   destruct H1 as [H1 H1']. subst. assumption.
 Qed.
 

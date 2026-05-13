@@ -33,7 +33,7 @@ Proposition Charac2 : forall (R:Class) (y z:U),
   R^:=: :(y,z): <-> y = z \/ R :(y,z):.
 Proof.
   intros R y z. split; intros H1; destruct H1 as [H1|H1].
-  - destruct H1 as [x H1]. apply OrdPair.WhenEqual in H1.
+  - destruct H1 as [x H1]. apply OrdPair.Equal in H1.
     destruct H1 as [H1 H2]. subst. left. reflexivity.
   - right. assumption.
   - subst. left. exists z. reflexivity.

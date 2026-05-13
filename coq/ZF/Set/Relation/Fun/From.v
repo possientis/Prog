@@ -41,7 +41,7 @@ Proposition Charac2 : forall (f:U -> U) (a x y:U),
 Proof.
   intros f a x y. split; intros H1.
   - apply Charac in H1. destruct H1 as [z [H1 H2]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst.
     split. 1: assumption. reflexivity.
   - destruct H1 as [H1 H2]. subst.
     apply Charac. exists x. split. 2: assumption. reflexivity.

@@ -60,10 +60,10 @@ Proof.
   intros A f1 f2 a b p q. split; intros H1.
   - apply Charac in H1.
     destruct H1 as [u [v [[H1 [H2 [H3 H4]]]|[H1 [H2 [H3 H4]]]]]].
-    + apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H5].
+    + apply OrdPair.Equal in H1. destruct H1 as [H1 H5].
       exists u, v. split. 1: assumption. split. 1: assumption.
       split. 1: assumption. left. split; assumption.
-    + apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H5].
+    + apply OrdPair.Equal in H1. destruct H1 as [H1 H5].
       exists u, v. split. 1: assumption. split. 1: assumption.
       split. 1: assumption. right. split; assumption.
   - destruct H1 as [u [v [H1 [H2 [H3 [[H4 H5]|[H4 H5]]]]]]].
@@ -83,7 +83,7 @@ Proof.
   (* Follows from the pair characterization via ordered-pair injectivity.       *)
   intros A f1 f2 a b u v w. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [u' [v' [H1 [H2 [H3 H4]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [Hu Hv]. subst u'. subst v'.
+    apply OrdPair.Equal in H1. destruct H1 as [Hu Hv]. subst u'. subst v'.
     split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 H3]]. apply Charac2.
     exists u, v. split. 1: reflexivity. split. 1: assumption.
@@ -155,7 +155,7 @@ Proof.
   intros A f1 f2 a b x y1 y2 H1 H2.
   apply Charac2 in H1. destruct H1 as [u1 [v1 [Hx [H1a [H1b H1c]]]]].
   apply Charac2 in H2. destruct H2 as [u2 [v2 [Hx' [H2a [H2b H2c]]]]].
-  rewrite Hx in Hx'. apply OrdPair.WhenEqual in Hx'.
+  rewrite Hx in Hx'. apply OrdPair.Equal in Hx'.
   destruct Hx' as [Hu Hv]. subst u2. subst v2.
   destruct H1c as [[H1c H1d]|[H1c H1d]];
   destruct H2c as [[H2c H2d]|[H2c H2d]];

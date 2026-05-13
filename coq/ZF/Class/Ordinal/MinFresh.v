@@ -24,7 +24,7 @@ Proposition Charac2 : forall (R A:Class) (f m:U),
 Proof.
   (* Proof by Claude. *)
   intros R A f m. split; intros H1.
-  - destruct H1 as [y [z [H1 H2]]]. apply OrdPair.WhenEqual in H1.
+  - destruct H1 as [y [z [H1 H2]]]. apply OrdPair.Equal in H1.
     destruct H1 as [H1 H3]. subst. assumption.
   - exists f. exists m. split. 1: reflexivity. assumption.
 Qed.

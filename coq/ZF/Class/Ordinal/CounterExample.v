@@ -29,7 +29,7 @@ Proposition F0Charac2 : forall (y z:U),
 Proof.
   intros y z. split; intros H1.
   - destruct H1 as [y' [z' [H1 H2]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst.
     split. 1: assumption. reflexivity.
   - destruct H1 as [H1 H2]. exists y. exists z. subst.
     split. 2: assumption. reflexivity.

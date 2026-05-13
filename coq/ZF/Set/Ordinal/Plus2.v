@@ -55,7 +55,7 @@ Proposition FCharac2 : forall (a b x y:U),
     (c :< b /\ x = :( :1: , c ): /\ y = a :+: c).
 Proof.
   intros a b x y. split; intros H1.
-  - destruct H1 as [c [[H1 H2]|[H1 H2]]]; apply OrdPair.WhenEqual in H1;
+  - destruct H1 as [c [[H1 H2]|[H1 H2]]]; apply OrdPair.Equal in H1;
     destruct H1 as [H1 H3]; exists c.
     + left.  split. 1: assumption. split; assumption.
     + right. split. 1: assumption. split; assumption.
@@ -194,7 +194,7 @@ Proof.
   apply Charac2 in H3; try assumption. apply Charac2 in H4; try assumption.
   destruct H3 as [c [[H3 [H5 H6]]|[H3 [H5 H6]]]];
   destruct H4 as [d [[H4 [H7 H8]]|[H4 [H7 H8]]]];
-  subst; apply OrdPair.WhenEqual in H7.
+  subst; apply OrdPair.Equal in H7.
   - apply H7.
   - destruct H7 as [H7 _]. exfalso. revert H7. apply Natural.ZeroIsNotOne.
   - destruct H7 as [H7 _]. symmetry in H7.

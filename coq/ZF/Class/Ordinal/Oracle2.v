@@ -34,7 +34,7 @@ Proposition Charac2 : forall (F:Class) (a f y:U),
 Proof.
   intros F a f y. split; intros H1.
   - destruct H1 as [f' [y' [d [H1 [H2 H3]]]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H4]. subst.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H4]. subst.
     destruct H3 as [H3|[H3|H3]].
     + left. assumption.
     + right. left. assumption.

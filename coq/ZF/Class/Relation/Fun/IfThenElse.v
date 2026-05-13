@@ -23,7 +23,7 @@ Proposition Charac2 : forall (A:Class) (f1 f2:U -> U) (x y:U),
 Proof.
   intros A f1 f2 x y. split; intros H1.
   - destruct H1 as [z [[H1 H2]|[H1 H2]]];
-    apply OrdPair.WhenEqual in H1; destruct H1 as [H1 H3]; subst.
+    apply OrdPair.Equal in H1; destruct H1 as [H1 H3]; subst.
     + left. split. 2: assumption. reflexivity.
     + right. split. 2: assumption. reflexivity.
   - destruct H1 as [[H1 H2]|[H1 H2]]; exists x; subst.

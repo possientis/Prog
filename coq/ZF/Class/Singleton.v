@@ -26,8 +26,8 @@ Proof.
   assert (Functional F) as H2. {
     intros x y z H2 H3. rewrite EF in H2. rewrite EF in H3.
     destruct H2 as [u H2]. destruct H3 as [v H3].
-    apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4].
-    apply OrdPair.WhenEqual in H3. destruct H3 as [H3 H5].
+    apply OrdPair.Equal in H2. destruct H2 as [H2 H4].
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H5].
     subst. apply Single.Charac. rewrite <- H3. apply Single.IsIn.
   }
 

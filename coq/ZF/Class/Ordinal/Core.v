@@ -403,7 +403,7 @@ Proof.
   assert (forall x y, F :(x,y): <-> On x /\ y = :(x,:0:):) as H3. {
     intros x y. split; intros H3.
     - rewrite H2 in H3. destruct H3 as [a [H3 H4]].
-      apply OrdPair.WhenEqual in H4. destruct H4 as [H4 H5]. subst.
+      apply OrdPair.Equal in H4. destruct H4 as [H4 H5]. subst.
       split. 1: assumption. reflexivity.
     - destruct H3 as [H3 H4]. rewrite H2. exists x. split. 1: assumption.
       subst. reflexivity. }
@@ -428,7 +428,7 @@ Proof.
       apply Converse.Charac2 in H8. apply Converse.Charac2 in H9.
       apply H3 in H8. apply H3 in H9.
       destruct H8 as [_ H8]. destruct H9 as [_ H9].
-      rewrite H8 in H9. apply OrdPair.WhenEqual in H9. apply H9. }
+      rewrite H8 in H9. apply OrdPair.Equal in H9. apply H9. }
   assert (Small (domain F)) as H9. { apply Function.DomainIsSmall; assumption. }
   assert (Small On) as H10. {
     apply Small.EquivCompat with (domain F); assumption. }

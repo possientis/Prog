@@ -22,7 +22,7 @@ Proposition Charac2 : forall (f:U -> U) (x y:U),
   :[f]: :(x,y): <-> y = f x.
 Proof.
   intros f x y. split; intros H1.
-  - destruct H1 as [x' H1]. apply OrdPair.WhenEqual in H1.
+  - destruct H1 as [x' H1]. apply OrdPair.Equal in H1.
     destruct H1 as [H1 H2]. subst. reflexivity.
   - exists x. subst. reflexivity.
 Qed.

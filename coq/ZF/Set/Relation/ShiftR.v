@@ -59,9 +59,9 @@ Proposition Charac2 : forall (f a x y:U), domain f :<=: :N ->
 Proof.
   intros f a x y H1. split; intros H2.
   - apply Charac in H2. destruct H2 as [H2|H2].
-    + left. apply OrdPair.WhenEqual in H2. assumption.
+    + left. apply OrdPair.Equal in H2. assumption.
     + right. destruct H2 as [u [v [H2 H3]]].
-      apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4]. subst.
+      apply OrdPair.Equal in H2. destruct H2 as [H2 H4]. subst.
       assert (u :< :N) as G1. { apply H1, Domain.Charac. exists v. assumption. }
       assert (succ u :< :N) as G2. { apply Omega.HasSucc. assumption. }
       assert (Ordinal u) as G3. {  apply Omega.HasOrdinals. assumption. }

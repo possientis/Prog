@@ -43,7 +43,7 @@ Proof.
   assert (forall r x, WO :(r,x): <-> WellOrdering r x) as H2. {
     intros r x. split; intros H2.
     - rewrite H1 in H2. destruct H2 as [r' [x' [H2 H3]]].
-      apply OrdPair.WhenEqual in H2. destruct H2 as [H2 H4]. subst. assumption.
+      apply OrdPair.Equal in H2. destruct H2 as [H2 H4]. subst. assumption.
     - rewrite H1. exists r, x. split. 2: assumption. reflexivity. }
   remember (ifThenElse2 :P(a :x: a) :P(a) WO
       (fun r x => (CCI.isom!:(r,x):) :[x]:) (fun _ _ => :0:)) as f eqn:H3.

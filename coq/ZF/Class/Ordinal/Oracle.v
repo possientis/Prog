@@ -39,7 +39,7 @@ Proposition Charac2 : forall (F:Class) (a f y:U),
 Proof.
   intros F a f y. unfold Oracle. split; intros H1.
   - destruct H1 as [g [z [H1 H2]]].
-    apply OrdPair.WhenEqual in H1. destruct H1 as [H1 H3]. subst. assumption.
+    apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst. assumption.
   - exists f. exists y. split. 1: reflexivity. assumption.
 Qed.
 
