@@ -10,8 +10,10 @@ Require Import ZF.Set.Single.
 
 Export ZF.Notation.Inter.
 
+Module CIR := ZF.Class.Inter.
+
 (* We consider the set defined by the intersection of a.                        *)
-Definition inter (a:U) : U := fromClass :I(toClass a) (IsSmall (toClass a)).
+Definition inter (a:U) : U := fromClass :I(toClass a) (CIR.IsSmall (toClass a)).
 
 (* Notation ":I( a )" := (inter a)                                              *)
 Global Instance SetInter : Inter U := { inter := inter }.
@@ -24,6 +26,7 @@ Proof.
   apply FromClass.Charac in H1. destruct H1 as [H1 _]. apply H1. assumption.
 Qed.
 
+(* If x belongs to every element of non-empty a, then x is in the intersection. *)
 Proposition CharacRev : forall (a x:U), a <> :0: ->
   (forall y, y :< a -> x :< y) -> x :< :I(a).
 Proof.
@@ -32,7 +35,7 @@ Proof.
   - apply Empty.HasElem in H1. assumption.
 Qed.
 
-(* The inter' of the class is the class of the intersection.                    *)
+(* For non-empty sets, the class of the intersections is the class inter'.      *)
 Proposition ToClass' : forall (a:U), a <> :0: ->
  toClass :I(a) :~:  inter' (toClass a).
 Proof.
@@ -41,7 +44,7 @@ Proof.
   - apply CharacRev; assumption.
 Qed.
 
-(* The intersection of the class is the class of the intersection.              *)
+(* The class of the intersection is the intersection of the class.              *)
 Proposition ToClass : forall (a:U),
  toClass :I(a) :~: :I(toClass a).
 Proof.

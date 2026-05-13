@@ -26,6 +26,7 @@ Proof.
     + intros H4. subst. contradiction.
 Qed.
 
+(* Strict inclusion between sets implies strict inclusion between classes.      *)
 Proposition ToClass : forall (a b:U),
   a :<: b -> toClass a :<: toClass b.
 Proof.
@@ -34,6 +35,7 @@ Proof.
   - apply Equiv.NotEqualToClass. assumption.
 Qed.
 
+(* Strict inclusion between classes implies strict inclusion between sets.      *)
 Proposition FromClass : forall (a b:U),
   toClass a :<: toClass b -> a :<: b.
 Proof.
@@ -42,6 +44,7 @@ Proof.
   - apply Equiv.NotEqualToClass. assumption.
 Qed.
 
+(* a is a subset of b iff a equals b or a is a proper subset of b.              *)
 Proposition EqualOrLess : forall (a b:U),
   a :<=: b <-> a = b \/ a :<: b.
 Proof.
@@ -54,6 +57,7 @@ Proof.
     + apply H1.
 Qed.
 
+(* A subset of a proper subset is a proper subset.                              *)
 Proposition InclLessTran : forall (a b c:U),
   a :<=: b -> b :<: c -> a :<: c.
 Proof.
@@ -62,6 +66,7 @@ Proof.
   apply ToClass. assumption.
 Qed.
 
+(* A proper subset of a subset is a proper subset.                              *)
 Proposition LessInclTran : forall (a b c:U),
   a :<: b -> b :<=: c -> a :<: c.
 Proof.

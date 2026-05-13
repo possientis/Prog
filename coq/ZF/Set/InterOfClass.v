@@ -8,13 +8,12 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Pair.
 
-(* This is a more general treatment of ZF.Set.Inter where we allow the argument *)
-(* of inter to be a class rather than a set. We do not introduce a notation.    *)
+Module CIR := ZF.Class.Inter.
+
 
 (* We consider the set defined by the (tweaked) intersection of A.              *)
-Definition inter (A:Class) : U := fromClass :I(A) (IsSmall A).
+Definition inter (A:Class) : U := fromClass :I(A) (CIR.IsSmall A).
 
-(* Characterisation of the elements of the intersection of A.                   *)
 Proposition Charac : forall (A:Class) (x y:U),
   x :< inter A -> A y -> x :< y.
 Proof.
@@ -29,6 +28,7 @@ Proof.
   apply Class.Empty.HasElem in H1. assumption.
 Qed.
 
+(* The intersection is compatible with class equivalence.                       *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> inter A = inter B.
 Proof.
@@ -36,6 +36,7 @@ Proof.
   apply FromClass.EquivCompat, Class.Inter.EquivCompat. assumption.
 Qed.
 
+(* The class of the intersection of A is the class-level intersection of A.     *)
 Proposition ToClass : forall (A:Class),
   toClass (inter A) :~: :I(A).
 Proof.
@@ -44,6 +45,7 @@ Proof.
   - apply FromClass.Charac. assumption.
 Qed.
 
+(* The intersection of the empty class is the empty set.                        *)
 Proposition IsZero : inter :0: = :0:.
 Proof.
   apply DoubleInclusion. split; intros x H1.

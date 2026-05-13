@@ -12,13 +12,13 @@ Definition ordPair (a b:U) : U := :{ :{a}: , :{a,b}: }:.
 Notation ":( a , b ):" := (ordPair a b)
   (at level 1, no associativity) : ZF_Set_OrdPair_scope.
 
-(* Characterisation of the elements of (:a,b:).                                 *)
 Lemma Charac : forall (a b:U),
   forall x, x :< :(a,b): <-> x = :{a}: \/ x = :{a,b}:.
 Proof.
   intros a b. unfold ordPair. apply Pair.Charac.
 Qed.
 
+(* If the singleton {a} equals the pair {b,c}, then a = b and a = c.            *)
 Lemma ABC : forall a b c, :{a}: = :{b,c}: -> a = b /\ a = c.
 Proof.
   intros a b c Habc. split.
@@ -58,5 +58,3 @@ Proof.
       * subst. apply ABC in H1. destruct H1 as [H1 H2]. apply H2.
       * apply H2.
 Qed.
-
-
