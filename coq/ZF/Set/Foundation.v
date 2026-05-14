@@ -44,6 +44,7 @@ Proof.
   apply Empty.Charac in H4. contradiction.
 Qed.
 
+(* There is no membership 2-cycle: it cannot happen that a in b and b in a.     *)
 Proposition NoLoop2 : forall a b, ~ (a :< b /\ b :< a).
 Proof.
   (* Let a,b be a sets such that a :< b and b :< a *)
@@ -87,6 +88,7 @@ Proof.
     apply Empty.Charac in H5. contradiction.
 Qed.
 
+(* There is no membership 3-cycle among sets a1, a2, a3.                        *)
 Proposition NoLoop3 : forall a1 a2 a3, ~ (a1 :< a2 /\ a2 :< a3 /\ a3 :< a1).
 Proof.
   (* Let a1 a2 a3 be a sets such that a1 :< a2, a2 :< a3 and a3 :< a1 *)
@@ -139,6 +141,7 @@ Proof.
     apply Empty.Charac in H5. contradiction.
 Qed.
 
+(* There is no membership 4-cycle among sets a1, a2, a3, a4.                    *)
 Proposition NoLoop4 : forall a1 a2 a3 a4,
   ~ (a1 :< a2 /\ a2 :< a3 /\ a3 :< a4 /\ a4 :< a1).
 Proof.

@@ -41,6 +41,7 @@ Proof.
   - destruct H1 as [H1 H2]. apply Charac. split; assumption.
 Qed.
 
+(* The difference a \ b is a subset of a.                                       *)
 Proposition IsIncl : forall (a b:U),
   a :\: b :<=: a.
 Proof.
@@ -73,6 +74,7 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* The difference a \ b is empty if and only if a is a subset of b.             *)
 Proposition WhenEmpty : forall (a b:U),
   a :\: b = :0: <-> a :<=: b.
 Proof.
@@ -87,6 +89,7 @@ Proof.
     + apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* If a \ b is non-empty then a and b are distinct.                             *)
 Proposition WhenNotEmpty : forall (a b:U),
   a :\: b <> :0: -> a <> b.
 Proof.
@@ -94,6 +97,7 @@ Proof.
   apply Charac in H1. destruct H1 as [H1 H3]. contradiction.
 Qed.
 
+(* If a is a proper subset of b then b \ a is non-empty.                        *)
 Proposition WhenLess : forall (a b:U),
   a :<: b -> b :\: a <> :0:.
 Proof.
@@ -101,7 +105,8 @@ Proof.
   destruct H1 as [_ [x H1]]. exists x. apply Charac. assumption.
 Qed.
 
-Proposition UnionR : forall (a b c:U), a :\: (b:\/:c) = a:\:b :/\: a:\:c.
+Proposition UnionR : forall (a b c:U),
+  a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
 intros a b c. apply Extensionality. intros x. split; intros H1.
   - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter2.Charac.
@@ -139,7 +144,7 @@ Proof.
     intros H2. apply Charac in H2. destruct H2 as [_ H2]. contradiction.
 Qed.
 
-Proposition InterDistOver : forall (a b c:U),
+Proposition InterDistrib : forall (a b c:U),
   a :/\: b:\:c = (a:/\:b) :\: (a:/\:c).
 Proof.
   intros a b c. apply Extensionality. intros x. split; intros H1.

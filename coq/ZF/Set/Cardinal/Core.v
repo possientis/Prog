@@ -19,17 +19,19 @@ Module CEM := ZF.Class.Empty.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 
-(* The cardinal of a set is the smallest ordinal in bijection with it.         *)
+(* The cardinal of a set is the smallest ordinal in bijection with it.          *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
 
-(* The class of all cardinal numbers.                                          *)
+(* The class of all cardinal numbers.                                           *)
 Definition Cardinal : Class := fun b => exists a, b = card a.
 
+(* The cardinal of a set is an ordinal.                                         *)
 Proposition IsOrdinal : forall (a:U), Ordinal (card a).
 Proof.
   intros a. apply SOI.IsOrdinal.
 Qed.
 
+(* The cardinal of a set is a lower bound of all ordinals equivalent to it.     *)
 Proposition IsLowerBound : forall (a b:U),
   Ordinal b       ->
   a :~: b         ->
@@ -40,6 +42,7 @@ Proof.
   - split; assumption.
 Qed.
 
+(* The cardinal of a set is the largest such lower bound.                       *)
 Proposition IsLargest : forall (a b:U),
   Choice                                        ->
   Ordinal b                                     ->
@@ -55,6 +58,7 @@ Proof.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
 
+(* If a set is equivalent to an ordinal, then it is equivalent to its cardinal. *)
 Lemma IsEquivGen : forall (a:U),
   (exists b, Ordinal b /\ a :~: b) -> a :~: card a.
 Proof.
@@ -67,17 +71,20 @@ Proof.
   rewrite H1 in H4. apply H4.
 Qed.
 
+(* Assuming choice, every set is equivalent to its cardinal.                    *)
 Proposition IsEquivChoice : forall (a:U), Choice -> a :~: card a.
 Proof.
   intros a AC. apply IsEquivGen, HasOrdinal. assumption.
 Qed.
 
+(* Every ordinal is equivalent to its cardinal.                                 *)
 Proposition IsEquivOrd : forall (a:U), Ordinal a -> a :~: card a.
 Proof.
   intros a H1.
   apply IsEquivGen. exists a. split. 1: assumption. apply Equiv.Refl.
 Qed.
 
+(* A set with non-empty cardinal is equivalent to its cardinal.                 *)
 Proposition IsEquivNotZero : forall (a:U),
   card a <> :0: -> a :~: card a.
 Proof.
@@ -110,6 +117,7 @@ Proof.
     + apply IsLowerBound. 1: assumption. apply Equiv.Refl.
 Qed.
 
+(* No ordinal strictly below the cardinal of a is equivalent to a.              *)
 Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
   b :< card a -> a :<>: b.
 Proof.
@@ -119,16 +127,19 @@ Proof.
   revert H5. apply Foundation.NoLoop1.
 Qed.
 
+(* For any ordinal a, its cardinal is a subset of a.                            *)
 Proposition IsIncl : forall (a:U), Ordinal a -> card a :<=: a.
 Proof.
   intros a H1. apply IsLowerBound. 1: assumption. apply Equiv.Refl.
 Qed.
 
+(* Every cardinal is an ordinal.                                                *)
 Proposition CardIsOrd : Cardinal :<=: Ordinal.
 Proof.
   intros b [a H1]. subst. apply IsOrdinal.
 Qed.
 
+(* A set is a cardinal iff it equals its own cardinal.                          *)
 Proposition WhenCardinal : forall (a:U), Cardinal a <-> a = card a.
 Proof.
   intros a. split; intros H1.
@@ -149,6 +160,7 @@ Proof.
   - exists a. assumption.
 Qed.
 
+(* Assuming choice, two sets are equivalent iff they have the same cardinal.    *)
 Proposition EquivCharac : Choice -> forall (a b:U),
   a :~: b <-> card a = card b.
 Proof.
@@ -168,11 +180,13 @@ Proof.
     + rewrite H1. apply Equiv.Sym, IsEquivChoice. assumption.
 Qed.
 
+(* The cardinal of a cardinal is itself.                                        *)
 Proposition Idem : forall (a:U), card (card a) = card a.
 Proof.
   intros a. symmetry. apply WhenCardinal. exists a. reflexivity.
 Qed.
 
+(* Assuming choice, inclusion implies inequality of cardinals.                  *)
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
 Proof.
@@ -200,6 +214,7 @@ Proof.
   rewrite H8, H9. apply Incl.Tran with c; assumption.
 Qed.
 
+(* Assuming choice, the Cantor-Schroeder-Bernstein theorem holds.               *)
 Proposition CantorShroderBernsteinChoice : forall (a b c d:U),
   Choice    ->
   a :~: c   ->
@@ -218,6 +233,7 @@ Proof.
   - rewrite H6. assumption.
 Qed.
 
+(* Assuming choice, the cardinal of a is strictly smaller than card(P(a)).      *)
 Proposition Cantor : forall (a:U), Choice ->
   card a :< card :P(a).
 Proof.
@@ -246,7 +262,7 @@ Proof.
   rewrite H3, H4. assumption.
 Qed.
 
-(* card n = n for every natural n: naturals are their own cardinals.            *)
+(* The cardinal of a natural number is itself.                                  *)
 Proposition WhenNat : forall (n:U), n :< :N ->
   card n = n.
 Proof.
@@ -259,6 +275,7 @@ Proof.
   - apply Equiv.Sym, IsEquivOrd, Omega.HasOrdinals. assumption.
 Qed.
 
+(* Every natural number is a cardinal number.                                   *)
 Proposition NatIsCardinal : forall (n:U),
   n :< :N -> Cardinal n.
 Proof.

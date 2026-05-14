@@ -16,7 +16,6 @@ Definition empty : U := fromClass :0: Empty.IsSmall.
 (* Notation ":0:" := emptySet                                                   *)
 Global Instance SetZero : Zero U := { zero := empty }.
 
-(* Characterisation of the elements of the empty set.                           *)
 Proposition Charac : forall x, x :< :0: <-> False.
 Proof.
   apply FromClass.Charac.
@@ -47,6 +46,7 @@ Proof.
     apply Charac in H1. apply H1.
 Qed.
 
+(* A set equals the empty set if and only if it has no element.                 *)
 Proposition HasNoElem : forall (a:U),
   a = :0: <-> ~ exists x, x :< a.
 Proof.
@@ -86,6 +86,7 @@ Proof.
   intros a. apply PairIsNotEmpty.
 Qed.
 
+(* The class of the empty set is the empty class.                               *)
 Proposition ToClass : toClass :0: :~: :0:.
 Proof.
   intros x. split; intros H1.
@@ -93,6 +94,7 @@ Proof.
   - apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
+(* A set is empty if and only if its associated class is the empty class.       *)
 Proposition EmptyToClass : forall (a:U),
   a = :0: <-> toClass a :~: :0:.
 Proof.
@@ -102,12 +104,14 @@ Proof.
     apply Equiv.Sym, ToClass.
 Qed.
 
+(* A set is non-empty if and only if its associated class is non-empty.         *)
 Proposition NotEmptyToClass : forall (a:U),
   a <> :0: <-> toClass a :<>: :0:.
 Proof.
   intros a. split; intros H1 H2; apply H1, EmptyToClass; assumption.
 Qed.
 
+(* Any subset of the empty set is itself the empty set.                         *)
 Proposition WhenIncl : forall (a:U),
   a :<=: :0: -> a = :0:.
 Proof.
