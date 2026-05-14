@@ -21,6 +21,7 @@ Definition unionGen (A B:Class) : Class
 (* Notation ":\/:_{ A } B" := (unionGen A B)                                    *)
 Global Instance ClassUnionGen : UnionGen Class Class := {unionGen := unionGen }.
 
+(* A set belongs to the generalized union iff it lies in some B(x) with x in A. *)
 Proposition Charac : forall (A B:Class) (y:U),
   :\/:_{A} B y <-> exists x, A x /\ y :< B!x.
 Proof.
@@ -32,6 +33,7 @@ Proof.
     + exists x. split. { assumption. } { reflexivity. }
 Qed.
 
+(* If B and C agree on A, their generalized unions over A are equivalent.       *)
 Proposition Equal : forall (A B C:Class),
   (forall x, A x -> B!x = C!x)  -> :\/:_{A} B :~: :\/:_{A} C.
 Proof.
@@ -42,6 +44,7 @@ Proof.
   - rewrite H1; assumption.
 Qed.
 
+(* If x belongs to A, then B(x) is included in the generalized union over A.    *)
 Proposition IsIncl : forall (A B:Class) (x:U),
   A x -> toClass B!x :<=: :\/:_{A} B.
 Proof.
@@ -72,6 +75,7 @@ Proof.
     subst. reflexivity.
 Qed.
 
+(* The generalized union is compatible with inclusion in both index and values. *)
 Proposition InclCompat : forall (A B C D:Class),
   A :<=: C                        ->
   (forall x, A x -> B!x :<=: D!x) ->
@@ -98,6 +102,7 @@ Proof.
   apply CIN.Refl.
 Qed.
 
+(* If every B(x) with x in A is included in C, the generalized union is too.    *)
 Proposition WhenBounded : forall (A B C:Class),
   (forall x, A x -> toClass B!x :<=: C) -> :\/:_{A} B :<=: C.
 Proof.

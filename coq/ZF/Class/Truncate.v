@@ -8,6 +8,7 @@ Require Import ZF.Set.Core.
 Definition truncate (A:Class) : Class := fun x =>
   Small A /\ A x.
 
+(* The truncation operation is compatible with class equivalence.               *)
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> truncate A :~: truncate B.
 Proof.
@@ -18,6 +19,7 @@ Proof.
   - apply H1, H2.
 Qed.
 
+(* When A is small, its truncation is equivalent to A itself.                   *)
 Proposition WhenSmall : forall (A:Class),
   Small A -> truncate A :~: A.
 Proof.
@@ -26,6 +28,7 @@ Proof.
   - split; assumption.
 Qed.
 
+(* When A is not small, its truncation is equivalent to the empty class.        *)
 Proposition WhenNotSmall : forall (A:Class),
   ~ Small A -> truncate A :~: :0:.
 Proof.
