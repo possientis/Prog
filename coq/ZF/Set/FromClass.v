@@ -8,20 +8,20 @@ Require Import ZF.Set.Core.
 Definition fromClass (A :Class) (p:Small A) : U
   := define (IsSetOf A) (IsSetOf.Exists A p) (IsSetOf.Unique A).
 
+(* Equivalent classes define the same set.                                      *)
 Proposition EquivCompat : forall (A B:Class) (p:Small A) (q:Small B),
   A :~: B -> fromClass A p = fromClass B q.
 Proof.
   intros A B p q H1. apply Define.EquivCompat, IsSetOf.EquivCompat. assumption.
 Qed.
 
-(* The set defined by a small class belongs to the class of all sets defined.   *)
+(* The set defined by a small class A lies in the class of sets defined by A.   *)
 Proposition IsIn : forall (A:Class) (p:Small A),
   IsSetOf A (fromClass A p).
 Proof.
   intros A p. unfold fromClass. apply Define.IsIn.
 Qed.
 
-(* Characterisation of the elements of the set defined by a small class.        *)
 Proposition Charac : forall (A:Class) (p:Small A),
   forall x, x :< (fromClass A p) <-> A x.
 Proof.
@@ -49,7 +49,7 @@ Proof.
   intros A p x. apply Charac.
 Qed.
 
-(* Belonging to the class of all sets defined, is the same as being defined by  *)
+(* a lies in the class of sets defined by A iff it is equal to the set of A.    *)
 Proposition IsSetOfFrom : forall (A:Class) (a:U) (p:Small A),
   IsSetOf A a <-> a = fromClass A p.
 Proof.
