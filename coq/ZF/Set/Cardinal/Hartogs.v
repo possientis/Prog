@@ -77,7 +77,7 @@ Proof.
     apply Inj.Compose with b; assumption. }
   assert (hartogs a :< hartogs a) as H6. {
     apply Charac. split. 1: assumption. exists (g :.: f). assumption. }
-  revert H6. apply Foundation.NoElemLoop1.
+  revert H6. apply Foundation.NoLoop1.
 Qed.
 
 (* The empty set is an element of hartogs(a).                                   *)
@@ -108,7 +108,7 @@ Proof.
       apply Inj.Restrict with (card a); assumption. }
     assert (hartogs a :< hartogs a) as H8. {
       apply Charac. split. 1: assumption. exists (f:|:hartogs a). assumption. }
-    revert H8. apply Foundation.NoElemLoop1.
+    revert H8. apply Foundation.NoLoop1.
 Qed.
 
 (* There is no injection from hartogs(a) into a.                                *)
@@ -118,6 +118,6 @@ Proof.
   assert (Ordinal (hartogs a)) as H2. { apply IsOrdinal. }
   assert (hartogs a :< hartogs a) as H3. {
     apply Charac. split. 1: assumption. exists f. assumption. }
-  revert H3. apply Foundation.NoElemLoop1.
+  revert H3. apply Foundation.NoLoop1.
 Qed.
 

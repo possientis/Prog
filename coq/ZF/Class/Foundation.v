@@ -35,7 +35,7 @@ Proof.
         reflexivity. }
       assert (rank c :< rank a) as H13. { apply Rank.ElemCompat. assumption. }
       assert (rank c :< rank c) as H14. { apply H12. assumption. }
-      revert H14. apply Foundation.NoElemLoop1.
+      revert H14. apply Foundation.NoLoop1.
     - contradiction. }
   assumption.
 Qed.

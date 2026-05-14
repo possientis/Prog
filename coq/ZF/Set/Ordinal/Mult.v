@@ -167,7 +167,7 @@ Proof.
   destruct H6 as [H6|H6]. 2: assumption. exfalso.
   assert (c :*: b :< c :*: a) as H7. { apply ElemCompatR; assumption. }
   assert (c :*: b :< c :*: b) as H8. { apply H5. assumption. }
-  revert H8. apply NoElemLoop1.
+  revert H8. apply Foundation.NoLoop1.
 Qed.
 
 (* If c*a is in c*b, then c is positive.                                        *)
@@ -216,7 +216,7 @@ Proof.
     apply Core.ElemIsIncl; assumption. }
   assert (a = b \/ a :< b) as H7. { apply Core.EqualOrElem; assumption. }
   destruct H7 as [H7|H7]. 2: assumption. subst. exfalso.
-  revert H4. apply NoElemLoop1.
+  revert H4. apply Foundation.NoLoop1.
 Qed.
 
 (* Multiplication on the left by c is non-decreasing.                           *)
@@ -252,9 +252,9 @@ Proof.
   assert (a = b \/ a :< b \/ b :< a) as H6. { apply Core.IsTotal; assumption. }
   destruct H6 as [H6|[H6|H6]]. 1: assumption.
   - assert (c :*: a :< c :*: b) as H7. { apply ElemCompatR; assumption. }
-    exfalso. rewrite H5 in H7. revert H7. apply NoElemLoop1.
+    exfalso. rewrite H5 in H7. revert H7. apply Foundation.NoLoop1.
   - assert (c :*: b :< c :*: a) as H7. { apply ElemCompatR; assumption. }
-    exfalso. rewrite H5 in H7. revert H7. apply NoElemLoop1.
+    exfalso. rewrite H5 in H7. revert H7. apply Foundation.NoLoop1.
 Qed.
 
 (* Multiplication on the right by c is non-decreasing.                          *)
@@ -307,7 +307,7 @@ Proof.
   destruct H5 as [H5|H5]. 1: assumption. exfalso.
   assert (b :*: c :<=: a :*: c) as H6. { apply InclCompatL; assumption. }
   assert (a :*: c :< a :*: c) as H7. { apply H6. assumption. }
-  revert H7. apply NoElemLoop1.
+  revert H7. apply Foundation.NoLoop1.
 Qed.
 
 (* The product of two natural numbers is a natural number.                      *)
@@ -428,7 +428,7 @@ Proof.
       rewrite WhenLimit. 2: assumption.
       apply SUG.Charac. exists (succ d). split. 2: assumption.
       apply Limit.HasSucc; assumption. }
-    rewrite H7 in H17. revert H17. apply NoElemLoop1.
+    rewrite H7 in H17. revert H17. apply Foundation.NoLoop1.
 Qed.
 
 (* Note that (N+1)*2 = (N+1)+(N+1) = N*2+1 <> N*2+2 so there is no DistribR.    *)
@@ -630,7 +630,7 @@ Proof.
       assert (:1: :*: a :<=: b :*: a) as G10. { apply InclCompatL; assumption. }
       rewrite WhenOneL in G10. 2: assumption.
       assert (b :*: a :< b :*: a) as G11. { apply G10. assumption. }
-      revert G11. apply NoElemLoop1. }
+      revert G11. apply Foundation.NoLoop1. }
     assert (forall d, Ordinal d -> d :< c -> b :*: d :<=: a) as H11. {
       intros d H11 H12.
       assert (Ordinal (b :*: d)) as H13. { apply IsOrdinal; assumption. }
@@ -646,7 +646,7 @@ Proof.
         - apply Incl.Tran with a. 1: assumption.
           apply Core.ElemIsIncl; assumption. }
       assert (d :< d) as H17. { apply H15. assumption. }
-      revert H17. apply NoElemLoop1. }
+      revert H17. apply Foundation.NoLoop1. }
     assert (b :*: c :<=: a) as H12. {
       assert (c = :0: \/ Successor c \/ Limit c) as H12. {
         apply Limit.ThreeWay. assumption. }
@@ -690,7 +690,7 @@ Proof.
     assert (succ c :<=: sup A) as H23. { apply Sup.IsUpperBound; assumption. }
     rewrite <- H6 in H23.
     assert (c :< c) as H24. { apply H23, Succ.IsIn. }
-    revert H24. apply NoElemLoop1.
+    revert H24. apply Foundation.NoLoop1.
 Qed.
 
 (* The quotient and remainder in Euclidean division are uniquely determined.    *)
@@ -741,7 +741,7 @@ Proof.
           - apply IsInclR; assumption.
           - apply Plus.IsInclR; assumption. }
         assert (d1 :< d1) as H19. { apply H18. assumption. }
-        revert H19. apply NoElemLoop1. }
+        revert H19. apply Foundation.NoLoop1. }
   intros b c1 c2 d1 d2 H1 H2 H3 H4 H5 H6 H7 H8.
   assert (c1 :<=: c2 \/ c2 :<=: c1) as H9. { apply Core.InclOrIncl; assumption. }
   destruct H9 as [H9|H9].

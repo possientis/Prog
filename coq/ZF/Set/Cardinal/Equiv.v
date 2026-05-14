@@ -509,12 +509,12 @@ Proof.
             assert (f!x = x) as H11. { apply G1. assumption. }
             assert (f!y = a) as H12. { apply G2. assumption. }
             rewrite <- H11, H10, H12 in H8. revert H8.
-            apply Foundation.NoElemLoop1.
+            apply Foundation.NoLoop1.
           - exfalso. apply Single.Charac in H8.
             assert (f!x = a) as H11. { apply G2. assumption. }
             assert (f!y = y) as H12. { apply G1. assumption. }
             rewrite <- H12, <- H10, H11 in H9. revert H9.
-            apply Foundation.NoElemLoop1.
+            apply Foundation.NoLoop1.
           - apply Single.Charac in H8. apply Single.Charac in H9.
             rewrite H8, H9. reflexivity. }
       assert (Bij f (a :\/: :{b}:) (succ a)) as H9. {
@@ -642,7 +642,7 @@ Proof.
   assert (forall x, x :< a -> h!x = f!x) as G1. {
     intros x G1. rewrite H3, IfThenElse.Eval2. 1: reflexivity.
     - apply Succ.Charac. right. assumption.
-    - rewrite H2. intros G2. subst. revert G1. apply Foundation.NoElemLoop1. }
+    - rewrite H2. intros G2. subst. revert G1. apply Foundation.NoLoop1. }
   (* h maps the new top element to the new top element: h(a) = b.               *)
   assert (h!a = b) as G2. {
     rewrite H3, IfThenElse.Eval1. 1: reflexivity.
@@ -682,11 +682,11 @@ Proof.
     - subst. exfalso.
       rewrite G2, (G1 y H9) in H10.
       assert (f!y :< b) as H11. { exact (Bij.IsInRange f a b y H1 H9). }
-      rewrite <- H10 in H11. revert H11. apply Foundation.NoElemLoop1.
+      rewrite <- H10 in H11. revert H11. apply Foundation.NoLoop1.
     - subst. exfalso.
       rewrite (G1 x H8), G2 in H10.
       assert (f!x :< b) as H11. { exact (Bij.IsInRange f a b x H1 H8). }
-      rewrite H10 in H11. revert H11. apply Foundation.NoElemLoop1.
+      rewrite H10 in H11. revert H11. apply Foundation.NoLoop1.
     - rewrite (G1 x H8), (G1 y H9) in H10.
       exact (Bij.EvalInjective f a b x y H1 H8 H9 H10). }
   exists h. apply Bij.FromFun; assumption.
@@ -720,7 +720,7 @@ Proof.
       apply (Bij.EvalInjective f (succ a) (succ b)).
       1: assumption. 1: apply G2, H4. 1: apply G1.
       rewrite H5. symmetry. assumption. }
-    rewrite H7 in H4. revert H4. apply Foundation.NoElemLoop1. }
+    rewrite H7 in H4. revert H4. apply Foundation.NoLoop1. }
   (* h takes values in b: either h(x) = f(a) with f(a) in b (since f(a) ≠ b),   *)
   (* or h(x) = f(x) with f(x) in b (since f(x) ≠ b).                            *)
   assert (range h :<=: b) as H4. {
@@ -756,7 +756,7 @@ Proof.
       apply Succ.Charac in H9. destruct H9 as [H9|H9].
       + (* v = a: f(a) = b = z, but z in b contradicts foundation.              *)
         subst v. rewrite H10 in H8.
-        exfalso. rewrite <- H8 in H6. revert H6. apply Foundation.NoElemLoop1.
+        exfalso. rewrite <- H8 in H6. revert H6. apply Foundation.NoLoop1.
       + (* v in a: h(v) = f(a) = z.                                             *)
         apply (FunctionOn.RangeCharac h a). 1: assumption.
         exists v. split. 1: assumption.
@@ -767,7 +767,7 @@ Proof.
       assert (f!u <> b) as H9. {
         intros H9.
         assert (z = b) as H10. { rewrite <- H8. assumption. }
-        rewrite H10 in H6. revert H6. apply Foundation.NoElemLoop1. }
+        rewrite H10 in H6. revert H6. apply Foundation.NoLoop1. }
       rewrite (G5 u H7 H9). assumption. }
   (* Injectivity: four cases on whether f(x) = b and f(y) = b.                  *)
   assert (OneToOne h) as H7. {
@@ -786,7 +786,7 @@ Proof.
         assert (a = y) as H12. {
           apply (Bij.EvalInjective f (succ a) (succ b)).
           1: assumption. 1: apply G1. 1: apply G2, H8. assumption. }
-        rewrite <- H12 in H8. revert H8. apply Foundation.NoElemLoop1.
+        rewrite <- H12 in H8. revert H8. apply Foundation.NoLoop1.
     - assert (f!y = b \/ f!y <> b) as [H11|H11]. { apply LawExcludedMiddle. }
       + (* f(x) ≠ b, f(y) = b: symmetric.                                       *)
         exfalso.
@@ -794,7 +794,7 @@ Proof.
         assert (a = x) as H12. {
           apply (Bij.EvalInjective f (succ a) (succ b)).
           1: assumption. 1: apply G1. 1: apply G2, H7. symmetry. assumption. }
-        rewrite <- H12 in H7. revert H7. apply Foundation.NoElemLoop1.
+        rewrite <- H12 in H7. revert H7. apply Foundation.NoLoop1.
       + (* Both f(x) ≠ b, f(y) ≠ b: h(x) = f(x) = f(y) = h(y), inj of f.        *)
         rewrite (G5 x H7 H10), (G5 y H8 H11) in H9.
         apply (Bij.EvalInjective f (succ a) (succ b)).
@@ -971,7 +971,7 @@ Proof.
     apply Incl.Double. split. 2: apply Empty.IsIncl.
     intros x Hx. apply Inter2.Charac in Hx. destruct Hx as [Hxa Ha'].
     apply Single.Charac in Hxa. subst x. exfalso.
-    revert Ha'. apply Foundation.NoElemLoop1. }
+    revert Ha'. apply Foundation.NoLoop1. }
   apply Tran with (:1: :+: a).
   (* {a} \/ a ~ 1 + a via DisjointUnion, using {a} ~ 1 and a ~ a.               *)
   - apply DisjointUnion.
@@ -1061,7 +1061,7 @@ Proof.
   assert (n = succ n) as H4. { apply EqualNat; assumption. }
   (* But n lies in succ n, so n = succ n gives n in n, contradicting foundation.*)
   assert (n :< succ n) as H5. { apply Succ.IsIn. }
-  rewrite <- H4 in H5. revert H5. apply Foundation.NoElemLoop1.
+  rewrite <- H4 in H5. revert H5. apply Foundation.NoLoop1.
 Qed.
 
 (* No injection from succ n into n exists for any natural number n.             *)

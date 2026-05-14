@@ -7,7 +7,7 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 
 (* No set belongs to itself.                                                    *)
-Proposition NoElemLoop1 : forall x, ~ x :< x.
+Proposition NoLoop1 : forall x, ~ x :< x.
 Proof.
   (* Let a be a set which belongs to itself *)
   intros a Ha.
@@ -44,7 +44,7 @@ Proof.
   apply Empty.Charac in H4. contradiction.
 Qed.
 
-Proposition NoElemLoop2 : forall a b, ~ (a :< b /\ b :< a).
+Proposition NoLoop2 : forall a b, ~ (a :< b /\ b :< a).
 Proof.
   (* Let a,b be a sets such that a :< b and b :< a *)
   intros a b [Hab Hba].
@@ -87,7 +87,7 @@ Proof.
     apply Empty.Charac in H5. contradiction.
 Qed.
 
-Proposition NoElemLoop3 : forall a1 a2 a3, ~ (a1 :< a2 /\ a2 :< a3 /\ a3 :< a1).
+Proposition NoLoop3 : forall a1 a2 a3, ~ (a1 :< a2 /\ a2 :< a3 /\ a3 :< a1).
 Proof.
   (* Let a1 a2 a3 be a sets such that a1 :< a2, a2 :< a3 and a3 :< a1 *)
   intros a1 a2 a3 [H12 [H23 H31]].
@@ -139,7 +139,7 @@ Proof.
     apply Empty.Charac in H5. contradiction.
 Qed.
 
-Proposition NoElemLoop4 : forall a1 a2 a3 a4,
+Proposition NoLoop4 : forall a1 a2 a3 a4,
   ~ (a1 :< a2 /\ a2 :< a3 /\ a3 :< a4 /\ a4 :< a1).
 Proof.
   (* Let a1 a2 a3 a4 be a sets such that a1 :< a2, a2 :< a3, a3 :< a4, a4 :< a1 *)

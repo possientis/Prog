@@ -73,9 +73,9 @@ Proof.
       right. apply H5; try assumption. intros x H10 H11.
       assert (x :< b \/ A x) as H12. { apply H8. assumption. }
       destruct H12 as [H12|H12]. 2: assumption.
-      exfalso. apply NoElemLoop1 with x. apply H10. assumption. }
+      exfalso. apply Foundation.NoLoop1 with x. apply H10. assumption. }
   rewrite H6 in H7. intros a H8 H9.
   apply H7 in H8. destruct H8 as [H8|H8]. 2: assumption.
-  exfalso. apply NoElemLoop1 with a. apply H9. assumption.
+  exfalso. apply Foundation.NoLoop1 with a. apply H9. assumption.
 Qed.
 

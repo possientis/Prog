@@ -43,7 +43,7 @@ Proof.
         apply ElemOrIncl. 2: assumption.
         apply IsOrdinal. assumption. }
       destruct H3 as [H3|H3]. 1: contradiction. assumption.
-  - intros H3. rewrite H2 in H3. apply NoElemLoop1 with a. assumption.
+  - intros H3. rewrite H2 in H3. apply Foundation.NoLoop1 with a. assumption.
 Qed.
 
 (* The union of an ordinal is a subset of it.                                   *)

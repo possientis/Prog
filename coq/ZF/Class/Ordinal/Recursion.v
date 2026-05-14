@@ -243,12 +243,12 @@ Proof.
       destruct H18 as [H18 _]. rewrite H18 in H17.
       assert (c :< SRD.domain f) as H19. {
         apply SRD.Charac. exists y. assumption. }
-      rewrite H4 in H19. apply NoElemLoop1 with c. assumption.
+      rewrite H4 in H19. apply Foundation.NoLoop1 with c. assumption.
     - exfalso. apply Single.Charac in H17. apply OrdPair.Equal in H17.
       destruct H17 as [H17 _]. rewrite H17 in H18.
       assert (c :< SRD.domain f) as H19. {
         apply SRD.Charac. exists z. assumption. }
-      rewrite H4 in H19. apply NoElemLoop1 with c. assumption.
+      rewrite H4 in H19. apply Foundation.NoLoop1 with c. assumption.
     - apply Single.Charac in H17. apply Single.Charac in H18.
       apply OrdPair.Equal in H17. apply OrdPair.Equal in H18.
       destruct H17 as [_ H17]. destruct H18 as [_ H18]. subst. reflexivity. }
@@ -299,7 +299,7 @@ Proof.
     rewrite H15. apply Union2.Charac. right. apply Single.IsIn. }
   assert (c :< SRD.domain f) as H23. {
     apply SRD.Charac. exists F!f. assumption. }
-  rewrite H4 in H23. apply NoElemLoop1 with c. assumption.
+  rewrite H4 in H23. apply Foundation.NoLoop1 with c. assumption.
 Qed.
 
 (* The transfinite recursion class is a function class defined on the ordinals. *)

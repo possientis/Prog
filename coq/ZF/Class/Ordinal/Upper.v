@@ -50,7 +50,7 @@ Proposition NotInSup : forall (A:Class) (a:U), On a ->
   upper A a <-> ~ sup A a.
 Proof.
   intros A a H1. split; intros H2.
-  - destruct H2 as [H2 H3]. intros H4. apply NoElemLoop1 with a.
+  - destruct H2 as [H2 H3]. intros H4. apply Foundation.NoLoop1 with a.
     apply Sup.IsSmallest with (A :/\: On).
     + apply Class.Inter2.IsInclR.
     + intros b [H5 H6]. apply H3; assumption.

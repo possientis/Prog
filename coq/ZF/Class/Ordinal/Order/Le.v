@@ -98,8 +98,8 @@ Proof.
     - intros x H14 H15. assert (H16 := H14). apply H1 in H14.
       destruct H14 as [y [z [H14 [H17 H18]]]]. subst.
       apply Charac4 in H15. destruct H15 as [H15|[H15 H19]].
-      + apply NoElemLoop1 with y. apply H7. 2: assumption. exists z. assumption.
-      + subst. apply NoElemLoop1 with z. apply H13; assumption. }
+      + apply Foundation.NoLoop1 with y. apply H7. 2: assumption. exists z. assumption.
+      + subst. apply Foundation.NoLoop1 with z. apply H13; assumption. }
   exists a. exists b. split. 1: assumption. split; assumption.
 Qed.
 

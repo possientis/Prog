@@ -220,18 +220,18 @@ Proof.
         assert (succ m :< :N) as G11. { apply Omega.HasSucc. assumption. }
         assert (h!m = u) as G12. {
           rewrite H34, Extend.Evalf; try assumption; rewrite G8.
-          - apply NoElemLoop1.
+          - apply Foundation.NoLoop1.
           - apply Succ.IsIn. }
         assert (Ordinal (succ m)) as G13. { apply Succ.IsOrdinal. assumption. }
         assert (Fun h (succ (succ m)) b) as H35. {
-          rewrite H34. apply Extend.IsFun; try assumption. apply NoElemLoop1. }
+          rewrite H34. apply Extend.IsFun; try assumption. apply Foundation.NoLoop1. }
         assert (h!:0: :< a) as H36. {
           rewrite H34, Extend.Evalf; try assumption; rewrite G8.
-          - apply NoElemLoop1.
+          - apply Foundation.NoLoop1.
           - apply Succ.HasZero. assumption. }
         assert (h!(succ m) = x) as H37. {
           rewrite H34. apply Extend.Evalx. 2: assumption.
-          rewrite G8. apply NoElemLoop1. }
+          rewrite G8. apply Foundation.NoLoop1. }
         assert (forall i, i :< succ m -> R :(h!(succ i), h!i):) as H38. {
           intros i H38.
           assert (i :< :N) as K1. {
@@ -242,7 +242,7 @@ Proof.
           - assert (forall j, j :< succ m -> h!j = g!j) as H39. {
               intros j H39. rewrite H34, Extend.Evalf; try assumption.
               - reflexivity.
-              - rewrite G8. apply NoElemLoop1.
+              - rewrite G8. apply Foundation.NoLoop1.
               - rewrite G8. assumption. }
             rewrite H39, H39.
             + apply H33. assumption.

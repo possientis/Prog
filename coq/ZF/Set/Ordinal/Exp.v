@@ -255,7 +255,7 @@ Proof.
     apply Core.ElemElemTran with :1:; try assumption.
     apply Succ.IsIn. }
   assert (c :^: a :< c :^: a) as H8. { apply H7. assumption. }
-  revert H8. apply NoElemLoop1.
+  revert H8. apply Foundation.NoLoop1.
 Qed.
 
 Proposition InclCompatL : forall (a b c:U),
@@ -303,7 +303,7 @@ Proof.
   destruct H5 as [H5|H5]. 1: assumption. exfalso.
   assert (b :^: c :<=: a :^: c) as H6. { apply InclCompatL; assumption. }
   assert (a :^: c :< a :^: c) as H7. { apply H6. assumption. }
-  revert H7. apply NoElemLoop1.
+  revert H7. apply Foundation.NoLoop1.
 Qed.
 
 Proposition ElemCompatL : forall (a b c:U),
@@ -394,7 +394,7 @@ Proof.
     assert (A d) as H14. { rewrite H5. split; assumption. }
     assert (c :<=: d) as H15. { apply H9. assumption. }
     assert (d :< d) as H16. { apply H15. assumption. }
-    revert H16. apply NoElemLoop1. }
+    revert H16. apply Foundation.NoLoop1. }
   assert (c <> :0:) as H12. {
     intros H12. rewrite H12 in H10. rewrite WhenZeroR in H10.
     rewrite Natural.OneExtension in H10.
@@ -415,7 +415,7 @@ Proof.
     assert (A d) as H18. { rewrite H5. split; assumption. }
     assert (c :<=: d) as H19. { apply H9. assumption. }
     assert (d :< d) as H20. { apply H19. rewrite H14. apply Succ.IsIn. }
-    revert H20. apply NoElemLoop1. }
+    revert H20. apply Foundation.NoLoop1. }
   exists d. split. 1: assumption. split; assumption.
 Qed.
 
@@ -433,7 +433,7 @@ Proof.
     assert (:1: :<=: a :^: b) as H5. {
       apply OneIsIncl; try assumption. apply Core.ElemIsIncl; assumption. }
     assert (:0: :< :0:) as H6. { rewrite H4 in H5. apply H5. apply Succ.IsIn. }
-    revert H6. apply NoElemLoop1.
+    revert H6. apply Foundation.NoLoop1.
   - exfalso. destruct H4 as [H4 [d H5]].
     assert (Ordinal d) as G3. {
       apply Succ.IsOrdinalRev. rewrite <- H5. assumption. }
@@ -452,7 +452,7 @@ Proof.
       apply Core.InclElemTran with (a :^: c); try assumption.
       - apply Succ.ElemIsIncl; assumption.
       - rewrite <- H5. assumption. }
-    revert H9. apply NoElemLoop1.
+    revert H9. apply Foundation.NoLoop1.
 Qed.
 
 (* When b is positive and a is a limit ordinal, a^b is a limit ordinal.         *)

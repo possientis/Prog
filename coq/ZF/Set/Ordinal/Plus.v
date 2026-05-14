@@ -139,7 +139,7 @@ Proof.
   destruct H5 as [H5|H5]. 2: assumption. exfalso.
   assert (c :+: b :< c :+: a) as H6. { apply ElemCompatR; assumption. }
   assert (c :+: b  :< c :+: b) as H7. { apply H4. assumption. }
-  revert H7. apply NoElemLoop1.
+  revert H7. apply Foundation.NoLoop1.
 Qed.
 
 (* The left summand can be cancelled from both sides of an equality.            *)
@@ -156,7 +156,7 @@ Proof.
   assert (a = b \/ a :< b \/ b :< a) as H7. { apply Core.IsTotal; assumption. }
   destruct H7 as [H7|[H7|H7]]; try assumption; exfalso;
   apply (ElemCompatR _ _ c) in H7; try assumption; rewrite H4 in H7; revert H7;
-  apply NoElemLoop1.
+  apply Foundation.NoLoop1.
 Qed.
 
 (* Cancelling a natural number from the right is fine.                          *)
@@ -211,7 +211,7 @@ Proof.
   destruct H5 as [H5|H5]. 1: assumption. exfalso.
   assert (b :+: c :<=: a :+: c) as H6. { apply InclCompatL; assumption. }
   assert (a :+: c :< a :+: c) as H7. { apply H6. assumption. }
-  revert H7. apply NoElemLoop1.
+  revert H7. apply Foundation.NoLoop1.
 Qed.
 
 Proposition InclCompatR : forall (a b c:U),
@@ -256,7 +256,7 @@ Proof.
   destruct H5 as [H5|H5]. 1: assumption. exfalso.
   assert (c :+: b :<=: c :+: a) as H6. { apply InclCompatR; assumption. }
   assert (c :+: a :< c :+: a) as H7. { apply H6. assumption. }
-  revert H7. apply NoElemLoop1.
+  revert H7. apply Foundation.NoLoop1.
 Qed.
 
 Proposition IsInclL : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -338,7 +338,7 @@ Proof.
     assert (a :+: d :< b \/ b :<=: a :+: d) as H14. {
       apply Core.ElemOrIncl; assumption. }
     destruct H14 as [H14|H14]. 1: assumption.
-    exfalso. apply NoElemLoop1 with d. apply H9. 2: assumption.
+    exfalso. apply Foundation.NoLoop1 with d. apply H9. 2: assumption.
     split; assumption. }
   destruct H10 as [H10|[H10|H10]].
   - rewrite H10. rewrite WhenZeroR. assumption.
@@ -540,7 +540,7 @@ Proof.
       rewrite WhenSuccR; assumption. }
     assert (succ d :< succ d) as H18. { (* our contradicton *)
       rewrite <- H8 in H17. rewrite H7 in H17. assumption. }
-    revert H18. apply NoElemLoop1. }
+    revert H18. apply Foundation.NoLoop1. }
   assert (a :+: b = :0: \/ Successor (a :+: b) \/ Limit (a :+: b)) as H7. {
     apply Limit.ThreeWay. assumption. }
   destruct H7 as [H7|[H7|H7]]; try contradiction. 2: assumption.
@@ -605,7 +605,7 @@ Proof.
             exfalso. apply (InclCompatR c d b) in H17; try assumption.
             rewrite H16 in H17.
             assert (e :< e) as H18. { apply H17. assumption. }
-            revert H18. apply NoElemLoop1. }
+            revert H18. apply Foundation.NoLoop1. }
           assert (x :< (a :+: b) :+: d) as H18. { rewrite H6, H16; assumption. }
           exists d. split; assumption. }
       apply Incl.Double. split; assumption. }

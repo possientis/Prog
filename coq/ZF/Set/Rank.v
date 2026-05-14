@@ -59,7 +59,7 @@ Proof.
       assert (Ordinal c) as H10. { apply Core.IsOrdinal with b; assumption. }
       assert (A c) as H11. { rewrite H1. split; assumption. }
       assert (c :< c) as H12. { apply H6; assumption. }
-      revert H12. apply NoElemLoop1. }
+      revert H12. apply Foundation.NoLoop1. }
   destruct H8 as [_ [c H8]].
   assert (Ordinal c) as H9. {
     apply Succ.IsOrdinalRev. rewrite <- H8. assumption. }
@@ -114,7 +114,7 @@ Proof.
       assert (Ordinal d) as H13. { apply Core.IsOrdinal with c; assumption. }
       assert (A d) as H14. { rewrite H4. split; assumption. }
       assert (d :< d) as H15. { apply H9; assumption. }
-      revert H15. apply NoElemLoop1. }
+      revert H15. apply Foundation.NoLoop1. }
   destruct H11 as [_ [d H11]].
   assert (Ordinal d) as H12. {
     apply Succ.IsOrdinalRev. rewrite <- H11. assumption. }
@@ -131,7 +131,7 @@ Proof.
   assert (c :<=: b) as H16. { apply H9. rewrite H4. split; assumption. }
   assert (rank a :< rank a) as H17. {
     apply H2, H16. rewrite H15. apply Succ.IsIn. }
-  revert H17. apply NoElemLoop1.
+  revert H17. apply Foundation.NoLoop1.
 Qed.
 
 (* If a belongs to R1(b), then the rank of a is less than b.                    *)

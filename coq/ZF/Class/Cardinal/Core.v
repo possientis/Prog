@@ -79,7 +79,7 @@ Proof.
   destruct H3 as [b [H3 H4]].
   assert (b :< a) as H5. { apply H1. assumption. }
   assert (b :< b) as H6. { apply H4. assumption. }
-  revert H6. apply NoElemLoop1.
+  revert H6. apply Foundation.NoLoop1.
 Qed.
 
 (* The class of cardinal numbers is a proper class.                             *)
@@ -98,5 +98,5 @@ Proof.
   destruct H3 as [b [H3 H4]].
   assert (b :< a) as H5. { apply H1. assumption. }
   assert (b :< b) as H6. { apply H4. assumption. }
-  revert H6. apply NoElemLoop1.
+  revert H6. apply Foundation.NoLoop1.
 Qed.

@@ -116,7 +116,7 @@ Proof.
   intros a b H1 H2 H3.
   assert (card a :<=: b) as H4. { apply IsLowerBound; assumption. }
   assert (b :< b) as H5. { apply H4. assumption. }
-  revert H5. apply NoElemLoop1.
+  revert H5. apply Foundation.NoLoop1.
 Qed.
 
 Proposition IsIncl : forall (a:U), Ordinal a -> card a :<=: a.

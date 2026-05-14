@@ -223,7 +223,7 @@ Proof.
           - apply Mult.InclCompatR; assumption.
           - rewrite H7. apply Plus.IsInclR; assumption. }
         assert (y :< y) as H11. { apply H10. assumption. }
-        revert H11. apply NoElemLoop1.
+        revert H11. apply Foundation.NoLoop1.
 Qed.
 
 
@@ -302,5 +302,5 @@ Proof.
             apply Succ.ElemIsIncl; assumption.
           + apply Plus.IsInclR; assumption. }
       assert (a :*: c :+: d :< a :*: c :+: d) as H14. { apply H13. assumption. }
-      revert H14. apply NoElemLoop1.
+      revert H14. apply Foundation.NoLoop1.
 Qed.

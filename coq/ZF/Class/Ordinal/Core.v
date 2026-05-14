@@ -115,8 +115,8 @@ Proof.
     assert (A x) as H6. { apply (H1 a); assumption. }
     assert (A y) as H7. { apply (H1 x); assumption. }
     specialize (H2 a y H3 H7). destruct H2 as [H2|[H2|H2]].
-    + subst. exfalso. apply NoElemLoop2 with x y. split; assumption.
-    + exfalso. apply NoElemLoop3 with x a y. split. 1: assumption. split; assumption.
+    + subst. exfalso. apply Foundation.NoLoop2 with x y. split; assumption.
+    + exfalso. apply Foundation.NoLoop3 with x a y. split. 1: assumption. split; assumption.
     + assumption.
   - intros x y H4 H5. apply H2; apply (H1 a); assumption.
 Qed.
@@ -264,7 +264,7 @@ Proof.
     assert (B a) as H8. {
       apply LessIsElem'; try assumption.
       apply Less.EquivCompatL with (A:/\:B); assumption. }
-    apply NoElemLoop1 with a. apply H5. split; assumption. }
+    apply Foundation.NoLoop1 with a. apply H5. split; assumption. }
   assert (A:/\:B :~: A \/ A:/\:B :~: B) as H4. {
     apply DoubleNegation. intros H4. apply H3. split.
     - split. 1: apply Class.Inter2.IsInclL. intros H5. apply H4.
@@ -300,7 +300,7 @@ Qed.
 Proposition IsProper : Proper On.
 Proof.
   intros H1. apply Small.IsSomeSet in H1. destruct H1 as [a H1].
-  apply NoElemLoop1 with a. apply H1. apply EquivCompat with On.
+  apply Foundation.NoLoop1 with a. apply H1. apply EquivCompat with On.
   1: assumption. apply IsOrdinal.
 Qed.
 

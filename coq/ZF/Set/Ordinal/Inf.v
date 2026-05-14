@@ -117,7 +117,7 @@ Proof.
   intros a b H1 H2 H3 H4.
   assert (inf a :<=: b) as H5. { apply IsLowerBound; assumption. }
   assert (b :< b) as H6. { apply H5. assumption. }
-  revert H6. apply NoElemLoop1.
+  revert H6. apply Foundation.NoLoop1.
 Qed.
 
 (* The infimum of a non-empty set of ordinals is its minimal element.           *)
@@ -140,7 +140,7 @@ Proof.
     assert (Ordinal c) as H8. { apply H1. assumption. }
     apply SOE.Charac2 in H7. destruct H7 as [H7 [H9 H10]].
     assert (c :< c) as H11. { apply H5; assumption. }
-    revert H11. apply NoElemLoop1. }
+    revert H11. apply Foundation.NoLoop1. }
   assert (Ordinal (inf a)) as H7. { apply IsOrdinal. }
   assert (inf a = b) as H8. {
     apply Incl.Double. split.
@@ -178,5 +178,5 @@ Proof.
     apply H5 with c. split. 1: assumption. split; assumption. }
   assert (b :<=: inf a) as H7. { apply IsLargest; assumption. }
   assert (inf a :< inf a) as H8. { apply H7. assumption. }
-  revert H8. apply NoElemLoop1.
+  revert H8. apply Foundation.NoLoop1.
 Qed.

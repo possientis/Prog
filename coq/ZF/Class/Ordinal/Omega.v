@@ -135,7 +135,7 @@ Proof.
     - apply CIN.Tran with (toClass (succ n)). 2: assumption.
       rewrite <- H11. apply Succ.IsIncl. }
   assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
-    apply NoElemLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
+    apply Foundation.NoLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
   apply H7. rewrite H11. apply H2. 1: assumption. apply DoubleNegation.
   intros H15. apply H14. split; assumption.
 Qed.

@@ -63,7 +63,7 @@ Proposition IsIrreflexive : forall (a:U),
 Proof.
   (* Proof by Claude.                                                           *)
   intros a x _ H1. apply Charac2 in H1. destruct H1 as [_ [_ H1]].
-  revert H1. apply NoElemLoop1.
+  revert H1. apply Foundation.NoLoop1.
 Qed.
 
 (* The relation E a is transitive on the ordinal a.                             *)

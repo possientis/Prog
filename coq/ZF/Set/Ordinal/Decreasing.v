@@ -23,7 +23,7 @@ Proof.
   rewrite Domain.WhenSingle with x y f in H2. 2: assumption.
   rewrite Domain.WhenSingle with x y f in H3. 2: assumption.
   apply Single.Charac in H2. apply Single.Charac in H3. subst.
-  revert H4. apply NoElemLoop1.
+  revert H4. apply Foundation.NoLoop1.
 Qed.
 
 (* For a decreasing f, x included in y implies f(y) included in f(x).           *)

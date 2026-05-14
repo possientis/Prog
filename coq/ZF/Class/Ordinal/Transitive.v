@@ -17,7 +17,7 @@ Proposition IsLess : forall (A:Class) (a:U),
 Proof.
   intros A a H1 H2. split.
   - apply H1. assumption.
-  - intros H3. apply NoElemLoop1 with a. apply H3. assumption.
+  - intros H3. apply Foundation.NoLoop1 with a. apply H3. assumption.
 Qed.
 
 (* Being a transitive class is compatible with class equivalence.               *)

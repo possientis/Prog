@@ -171,7 +171,6 @@ Proof.
   - specialize (H11 a3 (Tuple4In3 a1 a2 a3 a4)). contradiction.
 Qed.
 
-
 (* Foundedness is preserved under transport by a bijection.                     *)
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Founded R A -> Founded S B.

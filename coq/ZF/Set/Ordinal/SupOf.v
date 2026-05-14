@@ -129,5 +129,5 @@ Proof.
   intros a b H1 H2 H3 H4.
   assert (b :<=: sup a) as H5. { apply IsUpperBound; assumption. }
   assert (sup a :< sup a) as H6. { apply H5. assumption. }
-  revert H6. apply NoElemLoop1.
+  revert H6. apply Foundation.NoLoop1.
 Qed.

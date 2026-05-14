@@ -139,7 +139,7 @@ Proof.
   - exfalso. apply NotBoth with a. 1: assumption. right.
     split. 1: assumption.
     exists b. symmetry. assumption.
-  - exfalso. apply NoElemLoop1 with a. apply H3. assumption.
+  - exfalso. apply Foundation.NoLoop1 with a. apply H3. assumption.
 Qed.
 
 (* Every ordinal is either zero, a successor ordinal, or a limit ordinal.       *)
@@ -180,5 +180,5 @@ Proof.
   assert (succ :U(a) :< succ :U(a)) as H5. { (* contradiction *)
     apply (Succ.OfUnion a H1) in H4. symmetry in H4.
     rewrite H4 in H3. apply H3, Succ.IsIn. }
-  revert H5. apply NoElemLoop1.
+  revert H5. apply Foundation.NoLoop1.
 Qed.

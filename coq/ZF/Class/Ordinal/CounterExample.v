@@ -246,5 +246,5 @@ Proof.
     - apply GDomain, Omega.IsOrdinal.
     - apply GDomain, Succ.IsOrdinal, Omega.IsOrdinal.
     - apply Succ.IsIn. }
-  rewrite <- GSuccN in H2. apply Foundation.NoElemLoop1 with G!:N. assumption.
+  rewrite <- GSuccN in H2. apply Foundation.NoLoop1 with G!:N. assumption.
 Qed.

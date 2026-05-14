@@ -286,7 +286,7 @@ Proposition IsLimit : Limit :N.
 Proof.
   split.
   - apply IsOrdinal.
-  - intros H1. apply NoElemLoop1 with :N. apply Charac. split.
+  - intros H1. apply Foundation.NoLoop1 with :N. apply Charac. split.
     + apply IsOrdinal.
     + intros n H2. apply Union2.Charac in H2. destruct H2 as [H2|H2].
       * apply HasNonLimits. assumption.
@@ -450,6 +450,6 @@ Proof.
     assert (B m) as H16. { rewrite H4. split; assumption. }
     assert (n :<=: m) as H17. { apply H11. assumption. }
     assert (m :< m) as H18. { apply H17. assumption. }
-    revert H18. apply NoElemLoop1.
+    revert H18. apply Foundation.NoLoop1.
 Qed.
 

@@ -181,7 +181,7 @@ Proof.
       apply Incl.EquivCompatL with (inf A).
       + apply Equiv.Sym. assumption.
       + apply IsLowerBound; assumption. }
-    apply NoElemLoop1 with b. apply H7. assumption.
+    apply Foundation.NoLoop1 with b. apply H7. assumption.
   - apply E.MinimalEA in H3. destruct H3 as [H3 H4].
     apply CIN.Double. split.
     + apply IsLargest; try assumption. intros b H5.
@@ -227,7 +227,7 @@ Proof.
       apply Class.Empty.HasElem in H3. destruct H3 as [b [H3 H5]].
       apply Inter.IsLowerBound.
       + apply Class.Inter2.IsInclR.
-      + split. 2: assumption. split. 2: apply NoElemLoop1.
+      + split. 2: assumption. split. 2: apply Foundation.NoLoop1.
         assert (
           toClass a :~: A \/
           toClass a :<: A \/

@@ -167,7 +167,7 @@ Proof.
       - apply H7. assumption. }
     destruct H21 as [H21|H21]. 2: assumption. exfalso.
     assert (a = b) as H22. { apply (Bij.EvalInjective G On A); assumption. }
-    subst. revert H17. apply NoElemLoop1. }
+    subst. revert H17. apply Foundation.NoLoop1. }
   assert (Irreflexive R A) as H16. {
     apply WellFoundedWellOrd.IsIrreflexive. assumption. }
   assert (Transitive R A) as H17. {
@@ -330,7 +330,7 @@ Proof.
     assert (b = c) as H38. {
       apply SBO.EvalInjective with g a; try assumption.
       rewrite H28, H29. assumption. }
-    revert H25. rewrite H38. apply NoElemLoop1. }
+    revert H25. rewrite H38. apply Foundation.NoLoop1. }
   assert (Irreflexive R A) as H24. {
     apply WellOrdering.IsIrreflexive. assumption. }
   assert (Transitive R A) as H25. {

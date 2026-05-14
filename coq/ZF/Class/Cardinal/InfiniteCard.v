@@ -39,6 +39,6 @@ Proof.
   (* N is a cardinal number not a member of itself by foundation.               *)
   split.
   - apply SCC.HasOmega.
-  - apply Foundation.NoElemLoop1.
+  - apply Foundation.NoLoop1.
 Qed.
 

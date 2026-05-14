@@ -132,6 +132,6 @@ Proof.
       + exfalso.
         assert (n :+: c :< n :+: c) as H5. { (* contradiction *)
           apply H4. apply Plus.InOmega; assumption. }
-        revert H5. apply NoElemLoop1. }
+        revert H5. apply Foundation.NoLoop1. }
   apply Incl.Double. split; assumption.
 Qed.

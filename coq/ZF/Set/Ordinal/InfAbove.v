@@ -82,11 +82,11 @@ Proof.
   - apply SOI.IsLowerBound.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Core.IsOrdinal with a; assumption.
-    + apply Diff.Charac. split. 1: assumption. apply NoElemLoop1.
+    + apply Diff.Charac. split. 1: assumption. apply Foundation.NoLoop1.
   - apply SOI.IsLargest.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Core.IsOrdinal with a; assumption.
-    + intros H4. apply Diff.WhenEmpty in H4. apply NoElemLoop1 with b.
+    + intros H4. apply Diff.WhenEmpty in H4. apply Foundation.NoLoop1 with b.
       apply H4. assumption.
     + intros c H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       assert (Ordinal c) as H6. { apply Core.IsOrdinal with a; assumption. }

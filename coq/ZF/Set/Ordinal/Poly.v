@@ -336,7 +336,7 @@ Proof.
       destruct H12 as [H12|H12]. 2: assumption. subst. exfalso.
       rewrite Mult.WhenZeroR, Plus.WhenZeroL in H6. 2: assumption.
       assert (r :< r) as H13. { apply H6. assumption. }
-      revert H13. apply NoElemLoop1. }
+      revert H13. apply Foundation.NoLoop1. }
     assert (q :< a) as H13. {
       assert (q :< a \/ a :<=: q) as H13. { apply Core.ElemOrIncl; assumption. }
       destruct H13 as [H13|H13]. 1: assumption. exfalso.
@@ -346,7 +346,7 @@ Proof.
       - apply Mult.InclCompatR; assumption.
       - apply Plus.IsInclR; assumption. }
       assert (b :< b) as H15. { apply H14. assumption. }
-      revert H15. apply NoElemLoop1. }
+      revert H15. apply Foundation.NoLoop1. }
     assert (r = :0: \/ :0: :< r) as H14. { apply Core.ZeroOrElem. assumption. }
     assert (:1: :< :N) as G6. { apply Omega.HasOne. }
     assert (:1: = succ :0:) as G7. { reflexivity. }
@@ -889,14 +889,14 @@ Proof.
             + apply H12, Succ.HasZero. assumption.
             + apply H13. rewrite H17. apply Succ.HasZero. assumption. }
             assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
-            revert H31. apply NoElemLoop1.
+            revert H31. apply Foundation.NoLoop1.
           - exfalso.
             assert (s2 :< s1) as H30. {
             rewrite H27, H28. apply IsElemEuclid; try assumption.
             + apply H14. rewrite H17. apply Succ.HasZero. assumption.
             + apply H11, Succ.HasZero. assumption. }
             assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
-            revert H31. apply NoElemLoop1. }
+            revert H31. apply Foundation.NoLoop1. }
         assert (c!:0: = e!:0: /\ r1 = r2) as H30. {
           apply Mult.EuclidUnique with (a :^: f!:0:); try assumption.
           - apply Exp.IsOrdinal; assumption.

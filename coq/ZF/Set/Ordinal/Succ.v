@@ -88,7 +88,7 @@ Proof.
   assert (b :< succ a) as H3. { rewrite    H1. apply IsIn. }
   apply Union2.Charac in H2. apply Union2.Charac in H3.
   destruct H2 as [H2|H2]; destruct H3 as [H3|H3].
-  - exfalso. apply NoElemLoop2 with a b. split; assumption.
+  - exfalso. apply Foundation.NoLoop2 with a b. split; assumption.
   - apply Single.Charac in H3. subst. reflexivity.
   - apply Single.Charac in H2. assumption.
   - apply Single.Charac in H2. assumption.
@@ -99,8 +99,8 @@ Proposition NoInBetween : forall (a b:U),
   ~ (a :< b /\ b :< succ a).
 Proof.
   intros a b [H1 H2]. apply Union2.Charac in H2. destruct H2 as [H2|H2].
-  - apply NoElemLoop2 with a b. split; assumption.
-  - apply Single.Charac in H2. subst. apply NoElemLoop1 with a. assumption.
+  - apply Foundation.NoLoop2 with a b. split; assumption.
+  - apply Single.Charac in H2. subst. apply Foundation.NoLoop1 with a. assumption.
 Qed.
 
 Proposition InBetween : forall (a b:U), Ordinal b ->
@@ -175,7 +175,7 @@ Proof.
   intros a b H1 H2 H3. assert (a :< b \/ b :<=: a) as H4. {
     apply ElemOrIncl; assumption. }
   destruct H4 as [H4|H4]. 1: assumption.
-  exfalso. apply NoElemLoop1 with (succ a).
+  exfalso. apply Foundation.NoLoop1 with (succ a).
   apply ElemInclTran with (succ b); try assumption.
   - apply IsOrdinal. assumption.
   - apply IsOrdinal. assumption.
@@ -196,7 +196,7 @@ Proof.
   - intros H3. assert (a :< b \/ b :<=: a) as H4. {
       apply ElemOrIncl; assumption. }
     destruct H4 as [H4|H4]. 1: assumption.
-    exfalso. apply NoElemLoop1 with a.
+    exfalso. apply Foundation.NoLoop1 with a.
     apply H4, H3, IsIn.
 Qed.
 
@@ -216,7 +216,7 @@ Qed.
 (* The successor of a set is not equal to the set in question.                  *)
 Proposition NotEqual : forall (a:U), succ a <> a.
 Proof.
-  intros a H1. apply NoElemLoop1 with a. assert (a :< succ a) as H2. {
+  intros a H1. apply Foundation.NoLoop1 with a. assert (a :< succ a) as H2. {
     apply IsIn. }
   rewrite H1 in H2. assumption.
 Qed.

@@ -93,7 +93,7 @@ Proof.
   intros a b H1 H2 H3 H4.
   assert (b :<=: sup a) as H5. { apply IsUpperBound; assumption. }
   assert (sup a :< sup a) as H6. { apply H5. assumption. }
-  revert H6. apply NoElemLoop1.
+  revert H6. apply Foundation.NoLoop1.
 Qed.
 
 (* Every ordinal below the supremum of a is below some element of a.            *)
@@ -113,5 +113,5 @@ Proof.
     apply H4 with c. split. 1: assumption. split; assumption. }
   assert (sup a :<=: b) as H6. { apply IsSmallest; assumption. }
   assert (b :< b) as H7. { apply H6. assumption. }
-  revert H7. apply NoElemLoop1.
+  revert H7. apply Foundation.NoLoop1.
 Qed.

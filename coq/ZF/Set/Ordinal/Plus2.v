@@ -70,7 +70,7 @@ Proof.
   intros a b c d. split; intros H1.
   - apply (SOR.Charac2 Le (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
     apply Le.Charac4 in H3. destruct H3 as [H3|H3].
-    1: { exfalso. revert H3. apply NoElemLoop1. } destruct H3 as [_ H3].
+    1: { exfalso. revert H3. apply Foundation.NoLoop1. } destruct H3 as [_ H3].
     apply Union2.Charac in H1. apply Union2.Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2];
     apply Prod.Charac2 in H1; apply Prod.Charac2 in H2;
@@ -131,7 +131,7 @@ Proof.
   intros a b c d. split; intros H1.
   - apply (SOR.Charac2 Le (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
     apply Le.Charac4 in H3. destruct H3 as [H3|H3].
-    1: { exfalso. revert H3. apply NoElemLoop1. } destruct H3 as [_ H3].
+    1: { exfalso. revert H3. apply Foundation.NoLoop1. } destruct H3 as [_ H3].
     apply Union2.Charac in H1. apply Union2.Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2];
     apply Prod.Charac2 in H1; apply Prod.Charac2 in H2;
@@ -220,14 +220,14 @@ Proof.
       apply Core.InclElemTran with (a :+: d); try assumption.
       - apply Plus.IsOrdinal; assumption.
       - apply Plus.IsInclR; assumption. }
-    revert H9. apply NoElemLoop1.
+    revert H9. apply Foundation.NoLoop1.
   - exfalso.
     assert (a :< a) as H9. {
       assert (Ordinal c) as H9. { apply Core.IsOrdinal with b; assumption. }
       apply Core.InclElemTran with (a :+: c); try assumption.
       - apply Plus.IsOrdinal; assumption.
       - apply Plus.IsInclR; assumption. }
-    revert H9. apply NoElemLoop1.
+    revert H9. apply Foundation.NoLoop1.
   - assert (Ordinal c) as H9.  { apply Core.IsOrdinal with b; assumption. }
     assert (Ordinal d) as H10. { apply Core.IsOrdinal with b; assumption. }
     apply Plus.CancelL in H8; try assumption. subst. reflexivity.
@@ -370,7 +370,7 @@ Proof.
     assert (a :+: c :< a :+: c) as H15. {
       apply Plus.IsInclR; try assumption.
       apply Core.ElemElemTran with d; assumption. }
-    revert H15. apply NoElemLoop1.
+    revert H15. apply Foundation.NoLoop1.
   - apply le11Charac2 in H9. destruct H9 as [H9 [H10 H11]].
     rewrite Eval1, Eval1; try assumption. apply E.Charac2.
     assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }

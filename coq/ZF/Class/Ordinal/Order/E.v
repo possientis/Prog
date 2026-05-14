@@ -24,7 +24,7 @@ Module SOC := ZF.Set.Ordinal.Core.
 Proposition IsIrreflexive : forall (A:Class),
   Irreflexive E A.
 Proof.
-  intros A x H1 H2. apply E.Charac2 in H2. revert H2. apply NoElemLoop1.
+  intros A x H1 H2. apply E.Charac2 in H2. revert H2. apply Foundation.NoLoop1.
 Qed.
 
 (* The order :< is transitive on any class of ordinals.                         *)

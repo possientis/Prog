@@ -42,7 +42,7 @@ Proof.
   intros A a H1 H2.
   assert (On a) as H3. { apply COC.WhenElem with A; assumption. }
   assert (A :\: a :<>: :0:) as H4. {
-    apply Class.Empty.HasElem. exists a. split. 1: assumption. apply NoElemLoop1. }
+    apply Class.Empty.HasElem. exists a. split. 1: assumption. apply Foundation.NoLoop1. }
   apply Inf.IsEMinimal. 2: assumption.
   - intros x [H5 _]. apply COC.WhenElem with A; assumption.
   - apply Inf.WhenOrdinal; assumption.
@@ -110,7 +110,7 @@ Proof.
         intros a [H16 _]. apply COC.WhenElem with B; assumption. }
       assert (B :\: b :<>: :0:) as H17. {
         apply Class.Empty.HasElem. exists b. split. 1: assumption.
-        apply NoElemLoop1. }
+        apply Foundation.NoLoop1. }
       assert (b = inf (B :\: b)) as H18. {
         apply InfOfClass.IsEMinimal; assumption. }
       assert (F!b = inf (B :\: b)) as H19. {
