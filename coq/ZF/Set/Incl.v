@@ -12,12 +12,14 @@ Definition Incl (a b:U) : Prop := forall x, x :< a -> x :< b.
 (* Notation "a :<=: b" := (Incl a b)                                            *)
 Global Instance SetLeq : Leq U := { leq := Incl }.
 
+(* Inclusion of sets implies inclusion of the corresponding classes.            *)
 Proposition ToClass : forall (a b:U),
   a :<=: b -> toClass a :<=: toClass b.
 Proof.
   intros a b H1. assumption.
 Qed.
 
+(* Inclusion of the corresponding classes implies inclusion of sets.            *)
 Proposition FromClass : forall (a b:U),
   toClass a :<=: toClass b -> a :<=: b.
 Proof.
