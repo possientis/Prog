@@ -156,6 +156,6 @@ Proof.
       exists :(succ u, v):. split. 1: assumption.
       apply H3. exists u, v. split; reflexivity. }
   apply Small.EquivCompat with G:[F]:. 1: assumption.
-  apply Image.IsSmall; assumption.
+  apply Image.IsSmallR; assumption.
 Qed.
 

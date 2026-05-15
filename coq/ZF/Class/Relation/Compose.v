@@ -277,7 +277,7 @@ Proposition IsSmall : forall (F G:Class),
 Proof.
   intros F G H1 H2. apply Small.InclCompat with (Cmp :[F :x: G]:).
   - apply ImageByCmp.
-  - apply Image.IsSmall.
+  - apply Image.IsSmallR.
     + apply Cmp.IsFunctional.
     + apply Prod.IsSmall; assumption.
 Qed.

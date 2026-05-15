@@ -104,7 +104,7 @@ Qed.
 Proposition ImageIsSmall : forall (F A:Class),
   Function F -> Small A -> Small F:[A]:.
 Proof.
-  intros F A [_ H1]. apply Image.IsSmall. assumption.
+  intros F A [_ H1]. apply Image.IsSmallR. assumption.
 Qed.
 
 (* A function class with a small domain is small.                               *)

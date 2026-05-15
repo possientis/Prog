@@ -58,7 +58,7 @@ Proof.
   assert (Small (Fst:[F]:)) as A. 2: apply A.
 
   (* This follows from the fact that Fst is functional and F is small. *)
-  apply Image.IsSmall.
+  apply Image.IsSmallR.
 
   - apply Fst.IsFunctional.
 

@@ -52,7 +52,7 @@ Proposition IsSmall : forall (F R A:Class),
   Small (transport F R A).
 Proof.
   intros F R A H1 H2 H3.
-  assert (Small F:[A]:) as H4. { apply Image.IsSmall; assumption. }
+  assert (Small F:[A]:) as H4. { apply Image.IsSmallR; assumption. }
   apply Small.InclCompat with (F:[A]: :x: F:[A]:).
   - apply IsIncl; assumption.
   - apply Prod.IsSmall; assumption.

@@ -71,7 +71,7 @@ Proof.
 Qed.
 
 (* If F is functional and P is small, then F:[P]: is small.                     *)
-Proposition IsSmall : forall (F P:Class),
+Proposition IsSmallR : forall (F P:Class),
   Functional F -> Small P -> Small F:[P]:.
 Proof.
 
@@ -110,7 +110,7 @@ Proof.
 Qed.
 
 (* If F is small, then F:[P]: is small.                                         *)
-Proposition IsSmall' : forall (F P:Class),
+Proposition IsSmallL : forall (F P:Class),
     Small F -> Small F:[P]:.
 Proof.
   (* Let F and P be two arbitrary classes. *)

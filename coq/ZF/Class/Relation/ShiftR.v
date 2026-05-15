@@ -287,6 +287,6 @@ Proof.
   apply Small.EquivCompat with (toClass :{ :( :0:, a ): }: :\/: (G) :[ F ]:).
   1: assumption. apply Union2.IsSmall.
   - apply Small.SetIsSmall.
-  - apply Image.IsSmall; assumption.
+  - apply Image.IsSmallR; assumption.
 Qed.
 

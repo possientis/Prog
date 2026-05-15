@@ -134,19 +134,6 @@ Proof.
   2: assumption. apply IsIncl.
 Qed.
 
-(* The image of any class by a small class is small.                            *)
-Proposition ImageIsSmall : forall (F A:Class),
-  Small F -> Small F:[A]:.
-Proof.
-  intros F A H1. apply Small.EquivCompat with Snd:[F:|:A]:.
-  - apply Equiv.Tran with (range (F:|:A)).
-    + apply Range.ImageBySnd.
-    + apply RangeOf.
-  - apply Image.IsSmall.
-    + apply Snd.IsFunctional.
-    + apply Small.InclCompat with F. 2: assumption. apply IsIncl.
-Qed.
-
 (* A class is a relation iff it equals the restriction to its domain.           *)
 Proposition RelationCharac : forall (F:Class),
   Relation F <-> F :~: F :|: domain F.
@@ -181,7 +168,7 @@ Proof.
   intros F A B H1 H2 H3.
   apply Small.InclCompat with (range (F:|:B)). 1: assumption.
   apply Small.EquivCompat with F:[B]:. 1: apply Equiv.Sym, RangeOf.
-  apply Image.IsSmall; assumption.
+  apply Image.IsSmallR; assumption.
 Qed.
 
 Proposition Eval : forall (F A:Class) (x:U), Functional F -> A x ->

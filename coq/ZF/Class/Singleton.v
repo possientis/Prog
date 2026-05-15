@@ -52,6 +52,6 @@ Proof.
   assert (Small F:[Singleton]:) as A. 2: apply A.
 
   (* Which is true since F is functional, having assumed Singleton is small. *)
-  apply Image.IsSmall; assumption.
+  apply Image.IsSmallR; assumption.
 Qed.
 

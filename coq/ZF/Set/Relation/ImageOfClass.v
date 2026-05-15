@@ -15,7 +15,7 @@ Export ZF.Notation.Image.
 Module CIN := ZF.Class.Incl.
 
 Definition image (f:U) (A:Class) : U := fromClass (toClass f) :[A]:
-  (Image.IsSmall' (toClass f) A (SetIsSmall f)).
+  (Image.IsSmallL (toClass f) A (SetIsSmall f)).
 
 
 (* Notation "f :[ A ]:" := (image f A)                                          *)

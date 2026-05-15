@@ -27,7 +27,7 @@ Global Instance SetByClassImage : Image Class U U := { image := image }.
 Proposition ToClass : forall (F:Class) (a:U),
   Functional F -> toClass F:[a]: :~: F:[toClass a]:.
 Proof.
-  intros F a H1. apply Truncate.WhenSmall. apply Image.IsSmall.
+  intros F a H1. apply Truncate.WhenSmall. apply Image.IsSmallR.
   1: assumption. apply SetIsSmall.
 Qed.
 
@@ -35,7 +35,7 @@ Qed.
 Proposition ToClassWhenSmall : forall (F:Class) (a:U),
   Small F -> toClass F:[a]: :~: F:[toClass a]:.
 Proof.
-  intros F a H1. apply Truncate.WhenSmall, Restrict.ImageIsSmall. assumption.
+  intros F a H1. apply Truncate.WhenSmall, Image.IsSmallL. assumption.
 Qed.
 
 (* If F is functional and y is in the image of a, some x in a maps to y.        *)

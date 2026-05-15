@@ -78,6 +78,6 @@ Proof.
   - assert (Small F:[domain F]:) as X. 2: apply X.
 
   (* Which follows from the fact that F is functional and domain F is small. *)
-    apply Image.IsSmall. { apply H2. } { apply H3. }
+    apply Image.IsSmallR. { apply H2. } { apply H3. }
 Qed.
 
