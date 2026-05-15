@@ -1,5 +1,4 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Diff.
@@ -418,7 +417,7 @@ Proof.
     intros y [x H5]. apply H3 in H5. destruct H5 as [H5 H6]. subst.
     apply Prod.Charac2. split; assumption. }
   assert (Small (range F)) as H6. {
-    apply Bounded.WhenSmaller with (On :x: On); assumption. }
+    apply Small.InclCompat with (On :x: On); assumption. }
   assert (domain F :~: On) as H7. {
     intros x. split; intros H7.
     - destruct H7 as [y H7]. apply H3 in H7. apply H7.

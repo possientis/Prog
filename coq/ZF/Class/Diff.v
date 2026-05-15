@@ -1,5 +1,4 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
@@ -161,7 +160,7 @@ Proof.
   intros A a H1 H2.
   (* A is included in (A :\: toClass a) \/ toClass a, which is small            *)
   apply H1.
-  apply Bounded.WhenSmaller with ((A :\: toClass a) :\/: toClass a).
+  apply Small.InclCompat with ((A :\: toClass a) :\/: toClass a).
   - intros x H3. destruct (LawExcludedMiddle (toClass a x)) as [H4|H4].
     + right. assumption.
     + left. split; assumption.

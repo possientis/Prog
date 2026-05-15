@@ -1,4 +1,3 @@
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Prod.
@@ -54,7 +53,7 @@ Proposition IsSmall : forall (F R A:Class),
 Proof.
   intros F R A H1 H2 H3.
   assert (Small F:[A]:) as H4. { apply Image.IsSmall; assumption. }
-  apply Bounded.WhenSmaller with (F:[A]: :x: F:[A]:).
+  apply Small.InclCompat with (F:[A]: :x: F:[A]:).
   - apply IsIncl; assumption.
   - apply Prod.IsSmall; assumption.
 Qed.

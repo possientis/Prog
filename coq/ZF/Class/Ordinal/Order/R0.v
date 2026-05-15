@@ -1,4 +1,3 @@
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
@@ -216,7 +215,7 @@ Proof.
       apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
     split; apply SOC.InclElemTran with (a :\/: b); try assumption;
     apply Succ.IsIn. }
-  apply Bounded.WhenSmaller with (toClass (c :x: c)). 1: assumption.
+  apply Small.InclCompat with (toClass (c :x: c)). 1: assumption.
   apply Small.SetIsSmall.
 Qed.
 

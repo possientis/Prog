@@ -144,7 +144,7 @@ Proposition DomainIsSmall : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2] H3 H4.
   apply FunctionOn.DomainIsSmall with F; try assumption.
-  apply Bounded.WhenSmaller with B; assumption.
+  apply Small.InclCompat with B; assumption.
 Qed.
 
 (* If F:A -> B and G:B -> C then G.F : A -> C.                                  *)

@@ -62,7 +62,7 @@ Proof.
   assert (Proper A) as H5. {
     intros H5.
     assert (Small (range F)) as H6. {
-      apply Bounded.WhenSmaller with A; assumption. }
+      apply Small.InclCompat with A; assumption. }
     assert (Small On) as H7. {
       apply Small.EquivCompat with (domain F). 1: apply H1.
       apply CRF.DomainIsSmall; assumption. }

@@ -1,6 +1,5 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Diff.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
@@ -131,7 +130,7 @@ Qed.
 Proposition IsSmall' : forall (F A:Class),
   Small F -> Small (F:|:A).
 Proof.
-  intros F A H1. apply Bounded.WhenSmaller with F.
+  intros F A H1. apply Small.InclCompat with F.
   2: assumption. apply IsIncl.
 Qed.
 
@@ -145,7 +144,7 @@ Proof.
     + apply RangeOf.
   - apply Image.IsSmall.
     + apply Snd.IsFunctional.
-    + apply Bounded.WhenSmaller with F. 2: assumption. apply IsIncl.
+    + apply Small.InclCompat with F. 2: assumption. apply IsIncl.
 Qed.
 
 (* A class is a relation iff it equals the restriction to its domain.           *)
@@ -180,7 +179,7 @@ Proposition LesserThanRangeIsSmall : forall (F A B:Class),
   Functional F -> Small B -> A :<=: range (F:|:B) -> Small A.
 Proof.
   intros F A B H1 H2 H3.
-  apply Bounded.WhenSmaller with (range (F:|:B)). 1: assumption.
+  apply Small.InclCompat with (range (F:|:B)). 1: assumption.
   apply Small.EquivCompat with F:[B]:. 1: apply Equiv.Sym, RangeOf.
   apply Image.IsSmall; assumption.
 Qed.

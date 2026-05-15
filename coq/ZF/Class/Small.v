@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
@@ -27,5 +28,38 @@ Proof.
   intros P Q H1 [a H2]. exists a. intros x. split; intros H3.
   - apply H1, H2, H3.
   - apply H2, H1, H3.
+Qed.
+
+(* Axiom.Replacement is used directly here because Class.Relation.Replacement   *)
+(* transitively imports Class.Small, which would be circular.                   *)
+(* The property of being small is compatible with class inclusion.              *)
+Proposition InclCompat : forall (A B:Class),
+  A :<=: B -> Small B -> Small A.
+Proof.
+  (* Proof by Claude. *)
+
+  (* Let A and B be classes with A included in B, and let b witness Small B.    *)
+  intros A B H1 [b H2].
+
+  (* The binary predicate F(x,y) := (x = y) ∧ A(x) is functional.               *)
+  assert (Replacement.Functional (fun x y => x = y /\ A x)) as H3. {
+    intros x y z [H4 _] [H5 _]. rewrite <- H4, <- H5. reflexivity.
+  }
+
+  (* By replacement applied to F and b, there exists a set c with               *)
+  (* y ∈ c ↔ ∃x, x ∈ b ∧ x = y ∧ A(x), which simplifies to y ∈ c ↔ A(y).        *)
+  destruct (Replacement.Replacement _ H3 b) as [c H4].
+
+  (* We claim c witnesses Small A.                                              *)
+  exists c. intros x. split; intros H5.
+
+  (* If x ∈ c, some w ∈ b satisfies w = x and A(w), so A(x).                    *)
+  - apply H4 in H5. destruct H5 as [w [_ [H6 H7]]].
+    rewrite <- H6. apply H7.
+
+  (* If A(x), since A ⊆ B we have B(x), so x ∈ b. Taking y = x gives x ∈ c.     *)
+  - apply H4. exists x. split.
+    + apply H2, H1, H5.
+    + split. 1: reflexivity. apply H5.
 Qed.
 

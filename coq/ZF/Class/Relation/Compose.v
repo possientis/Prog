@@ -1,4 +1,3 @@
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Prod.
@@ -276,7 +275,7 @@ Qed.
 Proposition IsSmall : forall (F G:Class),
   Small F -> Small G -> Small (G :.: F).
 Proof.
-  intros F G H1 H2. apply Bounded.WhenSmaller with (Cmp :[F :x: G]:).
+  intros F G H1 H2. apply Small.InclCompat with (Cmp :[F :x: G]:).
   - apply ImageByCmp.
   - apply Image.IsSmall.
     + apply Cmp.IsFunctional.

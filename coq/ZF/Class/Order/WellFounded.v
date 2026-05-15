@@ -1,7 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Bij.
-Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
@@ -35,7 +34,7 @@ Proposition IsSmall : forall (R A B:Class) (a:U),
   Small (initSegment R B a).
 Proof.
   intros R A B a H1 H2 H3.
-  apply Bounded.WhenSmaller with (initSegment R A a).
+  apply Small.InclCompat with (initSegment R A a).
   - apply InitSegment.InclCompatR. assumption.
   - apply H1. assumption.
 Qed.
@@ -74,7 +73,7 @@ Proposition WhenSmall : forall (R A:Class),
   Small A -> Founded R A -> WellFounded R A.
 Proof.
   intros R A H1 H2. split. 1: assumption. intros a H3.
-  apply Bounded.WhenSmaller with A. 2: assumption. apply InitSegment.IsIncl.
+  apply Small.InclCompat with A. 2: assumption. apply InitSegment.IsIncl.
 Qed.
 
 (* If R is founded on a set a, then it is well-founded on a.                    *)
@@ -91,7 +90,7 @@ Proposition InclCompat : forall (R A B:Class),
 Proof.
   intros R A B H1 [H2 H3]. split.
   - apply Founded.InclCompat with B; assumption.
-  - intros a H4. apply Bounded.WhenSmaller with (initSegment R B a).
+  - intros a H4. apply Small.InclCompat with (initSegment R B a).
     + apply InitSegment.InclCompatR. assumption.
     + apply H3, H1. assumption.
 Qed.
