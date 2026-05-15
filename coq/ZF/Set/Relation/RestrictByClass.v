@@ -20,7 +20,7 @@ Require Import ZF.Set.Specify.
 Export ZF.Notation.Pipe.
 
 Definition restrict (f:U) (A:Class) : U := fromClass (toClass f :|: A)
-  (Restrict.IsSmall' (toClass f) A (SetIsSmall f)).
+  (Restrict.IsSmallL (toClass f) A (SetIsSmall f)).
 
 (* Notation "f :|: A" := (restrict f A)                                         *)
 Global Instance SetByClassPipe : Pipe U Class U := { pipe := restrict }.

@@ -109,7 +109,7 @@ Proof.
 Qed.
 
 (* The restriction of a functional class to a small class is small.             *)
-Proposition IsSmall : forall (F A:Class),
+Proposition IsSmallR : forall (F A:Class),
   Functional F -> Small A -> Small (F:|:A).
 Proof.
   intros F A H1 H2. apply Relation.IsSmall.
@@ -127,7 +127,7 @@ Proof.
   intros F A x [y [z [H1 [_ H2]]]]. subst. assumption.
 Qed.
 
-Proposition IsSmall' : forall (F A:Class),
+Proposition IsSmallL : forall (F A:Class),
   Small F -> Small (F:|:A).
 Proof.
   intros F A H1. apply Small.InclCompat with F.

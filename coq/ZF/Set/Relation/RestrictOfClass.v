@@ -46,7 +46,7 @@ Global Instance SetOfClassPipe : Pipe Class U U := { pipe := restrict }.
 Proposition ToClass : forall (F:Class) (a:U), CFL.Functional F ->
   toClass (F:|:a) :~: F:|:toClass a.
 Proof.
-  intros F a H1. apply Truncate.WhenSmall. apply Restrict.IsSmall.
+  intros F a H1. apply Truncate.WhenSmall. apply Restrict.IsSmallR.
   1: assumption. apply Small.SetIsSmall.
 Qed.
 
@@ -54,7 +54,7 @@ Qed.
 Proposition ToClassWhenSmall : forall (F:Class) (a:U),
   Small F -> toClass (F:|:a) :~: F:|:toClass a.
 Proof.
-  intros F a H1. apply Truncate.WhenSmall, Restrict.IsSmall'. assumption.
+  intros F a H1. apply Truncate.WhenSmall, Restrict.IsSmallL. assumption.
 Qed.
 
 (* Restricting equivalent classes to the same set gives equal restrictions.     *)

@@ -67,7 +67,7 @@ Proof.
     + destruct H3 as [y [H3 H4]]. exists y. apply Restrict.Charac2.
       split. 1: assumption. rewrite H2. exists y. exists z.
       split. 2: assumption. reflexivity.
-  - apply Union.IsSmall, Range.IsSmall, Restrict.IsSmall. 2: assumption.
+  - apply Union.IsSmall, Range.IsSmall, Restrict.IsSmallR. 2: assumption.
     intros x y z H3 H4. rewrite H2 in H3. rewrite H2 in H4.
     destruct H3 as [x1 [y' [H3 H5]]]. destruct H4 as [x2 [z' [H4 H6]]].
     apply OrdPair.Equal in H3. destruct H3 as [H3 H7].
