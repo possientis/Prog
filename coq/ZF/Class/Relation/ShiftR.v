@@ -56,6 +56,7 @@ Proof.
     rewrite H5. split. 2: assumption. reflexivity.
 Qed.
 
+(* The right shift of any class is a relation.                                  *)
 Proposition IsRelation : forall (F:Class) (a:U), Relation (shiftR a F).
 Proof.
   intros F a x [H1|H1].
@@ -63,6 +64,7 @@ Proof.
   - destruct H1 as [y [z [H1 _]]]. exists (succ y), z. assumption.
 Qed.
 
+(* The right shift of a functional class is functional.                         *)
 Proposition IsFunctional : forall (F:Class) (a:U),
   Functional F -> Functional (shiftR a F).
 Proof.
@@ -87,6 +89,7 @@ Proof.
     apply H1 with u2; assumption.
 Qed.
 
+(* The right shift of a functional class is a function class.                   *)
 Proposition IsFunction : forall (F:Class) (a:U),
   Functional F -> Function (shiftR a F).
 Proof.
@@ -95,6 +98,7 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+(* Characterisation of the domain of shiftR a F when the domain of F is in N.   *)
 Proposition DomainOf : forall (F:Class) (a x:U), domain F :<=: toClass :N ->
   domain (shiftR a F) x <->
   x = :0: \/ (:0: :< x /\ x :< :N /\ domain F :U(x)).
@@ -110,6 +114,7 @@ Proof.
       right. split. 1: assumption. split; assumption.
 Qed.
 
+(* The value of shiftR a F at zero is a.                                        *)
 Proposition EvalZero : forall (F:Class) (a:U),
   Functional F -> (shiftR a F)!:0: = a.
 Proof.
@@ -119,6 +124,7 @@ Proof.
   - left. reflexivity.
 Qed.
 
+(* The value of shiftR a F at a positive natural n equals F at the union of n.  *)
 Proposition Eval : forall (F:Class) (a n:U),
   Functional F                ->
   :0: :< n                    ->
@@ -137,6 +143,7 @@ Proof.
     + apply EvalOfClass.Satisfies; assumption.
 Qed.
 
+(* The value of shiftR a F at the successor of n equals F at n.                 *)
 Proposition EvalSucc : forall (F:Class) (a n:U),
   Functional F                ->
   n :< :N                     ->
@@ -151,6 +158,7 @@ Proof.
   - rewrite Omega.UnionOfSucc; assumption.
 Qed.
 
+(* Characterisation of the range of shiftR a F: it is {a} union the range of F. *)
 Proposition RangeOf : forall (F:Class) (a y:U),
   range (shiftR a F) y <-> y = a \/ range F y.
 Proof.
@@ -166,6 +174,7 @@ Proof.
       exists x, y. split. 2: assumption. reflexivity.
 Qed.
 
+(* If the domain of F is a natural number n, the domain of shiftR a F is n+1.   *)
 Proposition WhenDomainIsNat : forall (F:Class) (a n:U),
   n :< :N                                   ->
   domain F :~: toClass n                    ->
@@ -196,6 +205,7 @@ Proof.
     rewrite Omega.SuccOfUnion; assumption.
 Qed.
 
+(* If the domain of F is N, the domain of shiftR a F is also N.                 *)
 Proposition WhenDomainIsN : forall (F:Class) (a:U),
   domain F :~: toClass :N -> domain (shiftR a F) :~: toClass :N.
 Proof.
@@ -214,6 +224,7 @@ Proof.
       apply Omega.HasUnion. assumption.
 Qed.
 
+(* The right shift of an ordinal function class is an ordinal function class.   *)
 Proposition IsOrdFun : forall (F:Class) (a:U),
   On a                      ->
   domain F :<=: toClass :N  ->
@@ -241,6 +252,7 @@ Proof.
       * apply H3. assumption.
 Qed.
 
+(* The right shift of a small class is small.                                   *)
 Proposition IsSmall : forall (F:Class) (a:U),
   Small F -> Small (shiftR a F).
 Proof.

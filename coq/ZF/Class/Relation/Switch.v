@@ -7,6 +7,7 @@ Require Import ZF.Set.OrdPair.
 Definition Switch : Class := fun x =>
   exists y, exists z, x = :(:(y,z):,:(z,y):):.
 
+(* Characterisation: Switch (x,x') iff x = (y,z) and x' = (z,y) for some y,z.   *)
 Proposition Charac2 : forall (x x':U),
   Switch :(x,x'): <-> exists y, exists z, x = :(y,z): /\ x' = :(z,y):.
 Proof.
@@ -17,6 +18,7 @@ Proof.
     rewrite H1, H2. reflexivity.
 Qed.
 
+(* The class Switch is functional.                                              *)
 Proposition IsFunctional : Functional Switch.
 Proof.
   intros x x1 x2 H1 H2.

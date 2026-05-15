@@ -17,6 +17,7 @@ Proof.
     rewrite H1, H2. reflexivity.
 Qed.
 
+(* The class Snd is functional.                                                 *)
 Proposition IsFunctional : Functional Snd.
 Proof.
   intros x x1 x2 H1 H2.

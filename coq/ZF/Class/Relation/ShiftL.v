@@ -30,6 +30,7 @@ Module SOC := ZF.Set.Ordinal.Core.
 Definition shiftL (F:Class) : Class := fun x => exists y z,
   x = :(y,z): /\ F :(succ y,z):.
 
+(* The pair (y,z) lies in shiftL F iff the pair (succ y, z) lies in F.          *)
 Proposition Charac2 : forall (F:Class) (y z:U),
   shiftL F :(y,z): <-> F :(succ y,z):.
 Proof.
@@ -39,11 +40,13 @@ Proof.
   - exists y, z. split. 2: assumption. reflexivity.
 Qed.
 
+(* The left shift of any class is a relation.                                   *)
 Proposition IsRelation : forall (F:Class), Relation (shiftL F).
 Proof.
   intros F x H1. destruct H1 as [y [z [H1 _]]]. exists y, z. assumption.
 Qed.
 
+(* The left shift of a functional class is functional.                          *)
 Proposition IsFunctional : forall (F:Class),
   Functional F -> Functional (shiftL F).
 Proof.
@@ -51,6 +54,7 @@ Proof.
   apply Charac2 in H2. apply Charac2 in H3. apply H1 with (succ y); assumption.
 Qed.
 
+(* The left shift of a functional class is a function class.                    *)
 Proposition IsFunction : forall (F:Class),
   Functional F  -> Function (shiftL F).
 Proof.
@@ -59,6 +63,7 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+(* x is in the domain of shiftL F iff its successor is in the domain of F.      *)
 Proposition DomainOf : forall (F:Class) (x:U),
   domain (shiftL F) x <-> domain F (succ x).
 Proof.
@@ -67,6 +72,7 @@ Proof.
   - exists y. apply Charac2. assumption.
 Qed.
 
+(* The value of shiftL F at x equals the value of F at the successor of x.      *)
 Proposition Eval : forall (F:Class) (x:U), Functional F ->
   domain F (succ x) -> (shiftL F)!x = F!(succ x).
 Proof.
@@ -77,6 +83,7 @@ Proof.
   - apply Charac2. apply EvalOfClass.Satisfies; assumption.
 Qed.
 
+(* The range of shiftL F is included in the range of F.                         *)
 Proposition RangeOf : forall (F:Class),
   range (shiftL F) :<=: range F.
 Proof.
@@ -84,6 +91,7 @@ Proof.
   exists (succ x). assumption.
 Qed.
 
+(* When the domain of F is an ordinal, the domain of shiftL F is its union.     *)
 Proposition WhenOrdinalDomain : forall (F:Class), COC.Ordinal (domain F) ->
   domain (shiftL F) :~: :U(domain F).
 Proof.
@@ -103,6 +111,7 @@ Proof.
       apply H9 with y; assumption.
 Qed.
 
+(* The left shift of an ordinal function class is an ordinal function class.    *)
 Proposition IsOrdFun : forall (F:Class),
   OrdFun F  -> OrdFun (shiftL F).
 Proof.
@@ -117,6 +126,7 @@ Proof.
       * apply H1.
 Qed.
 
+(* The left shift of a small class is small.                                    *)
 Proposition IsSmall : forall (F:Class),
   Small F -> Small (shiftL F).
 Proof.
