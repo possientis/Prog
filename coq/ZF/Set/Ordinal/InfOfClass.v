@@ -159,14 +159,14 @@ Proof.
 Qed.
 
 (* The infimum of a non-empty class of ordinals is its E-minimal element.       *)
-Proposition IsEMinimal : forall (A:Class) (a:U),
+Proposition IsMinimal : forall (A:Class) (a:U),
   A :<=: On                     ->
   A :<>: :0:                    ->
   a = inf A <-> Minimal E A a.
 Proof.
   intros A a H1 H2. split; intros H3.
-  - apply Inf.IsEMinimal; try assumption. rewrite H3. apply ToClass.
-  - apply Inf.IsEMinimal in H3; try assumption. apply EqualToClass.
+  - apply Inf.IsMinimal; try assumption. rewrite H3. apply ToClass.
+  - apply Inf.IsMinimal in H3; try assumption. apply EqualToClass.
     apply Equiv.Tran with (Class.Ordinal.Inf.inf A). 1: assumption.
     apply Equiv.Sym, ToClass.
 Qed.

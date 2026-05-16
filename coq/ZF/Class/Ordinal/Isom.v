@@ -34,7 +34,7 @@ Module COC := ZF.Class.Ordinal.Core.
 
 
 (* An element a of an ordinal class A is a :<-minimal element of A\a.           *)
-Proposition IsEMinimal : forall (A:Class) (a:U),
+Proposition IsMinimal : forall (A:Class) (a:U),
   Ordinal A ->
   A a       ->
   Minimal E (A :\: a) a.
@@ -43,7 +43,7 @@ Proof.
   assert (On a) as H3. { apply COC.WhenElem with A; assumption. }
   assert (A :\: a :<>: :0:) as H4. {
     apply Class.Empty.HasElem. exists a. split. 1: assumption. apply Foundation.NoLoop1. }
-  apply Inf.IsEMinimal. 2: assumption.
+  apply Inf.IsMinimal. 2: assumption.
   - intros x [H5 _]. apply COC.WhenElem with A; assumption.
   - apply Inf.WhenOrdinal; assumption.
 Qed.
@@ -79,7 +79,7 @@ Proof.
           + destruct H1 as [H1 _]. apply (H1 b); assumption.
           + apply H8, H9. }
       assert (Minimal E (A :\: b) b) as H10. {
-        apply IsEMinimal; assumption. }
+        apply IsMinimal; assumption. }
       assert (Minimal E F:[A :\: b]: F!b) as H11. {
         apply Minimal.IsomImage with E A B; try assumption.
         apply Class.Inter2.IsInclL. }
@@ -105,16 +105,16 @@ Proof.
         - apply Equiv.NotSym, DiffBySet.WhenNotEmpty, Class.Empty.HasElem.
           exists F!b. apply Minimal.IsIn with E. assumption. }
       assert (Minimal E (B :\: b) b) as H15. {
-        apply IsEMinimal; assumption. }
+        apply IsMinimal; assumption. }
       assert (B :\: b :<=: On) as H16. {
         intros a [H16 _]. apply COC.WhenElem with B; assumption. }
       assert (B :\: b :<>: :0:) as H17. {
         apply Class.Empty.HasElem. exists b. split. 1: assumption.
         apply Foundation.NoLoop1. }
       assert (b = inf (B :\: b)) as H18. {
-        apply InfOfClass.IsEMinimal; assumption. }
+        apply InfOfClass.IsMinimal; assumption. }
       assert (F!b = inf (B :\: b)) as H19. {
-        apply InfOfClass.IsEMinimal; assumption. }
+        apply InfOfClass.IsMinimal; assumption. }
       rewrite <- H18 in H19. assumption. }
   intros a H6.
   assert (On a) as H7. { apply COC.WhenElem with A; assumption. }

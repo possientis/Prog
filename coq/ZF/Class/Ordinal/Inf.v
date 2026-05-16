@@ -168,7 +168,7 @@ Proof.
   destruct H5 as [H5 _]. assumption.
 Qed.
 
-Proposition IsEMinimal : forall (A:Class) (a:U),
+Proposition IsMinimal : forall (A:Class) (a:U),
   A :<=: On                             ->
   A :<>: :0:                            ->
   IsSetOf (inf A) a <-> Minimal E A a.
