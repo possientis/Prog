@@ -11,6 +11,7 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Union2.
 Require Import ZF.Set.Relation.ImageByClass.
@@ -72,6 +73,16 @@ Proposition IsInclR : forall (A:Class) (a:U),
 Proof.
   (* Proof by Claude.                                                           *)
   intros A a. unfold diff. apply Class.Diff.IsInclR.
+Qed.
+
+(* Removing the empty set from A leaves A unchanged.                            *)
+Proposition IdentityR : forall (A:Class), A :\: :0: :~: A.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* Nothing belongs to the empty set, so no element of A is removed.           *)
+  intros A x. split; intros H1.
+  - apply Class.Diff.IsInclL in H1. assumption.
+  - split. 1: assumption. apply Empty.NoElem.
 Qed.
 
 (* The class-by-set difference of a small class is small.                       *)
