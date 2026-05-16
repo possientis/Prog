@@ -1,7 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code 
-in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Build
 
@@ -12,8 +11,7 @@ make -j$(nproc)         # compile everything in parallel
 ./clean.sh              # remove all build artifacts
 ```
 
-Never invoke `coqc` directly — the Makefile passes `-R . ZF` to resolve the load path 
-and manages dependencies via `coqdep`.
+Never invoke `coqc` directly — the Makefile passes `-R . ZF` to resolve the load path and manages dependencies via `coqdep`.
 
 All files are compiled under the logical prefix `ZF`, so 
 `Require Import ZF.Class.Ordinal.Core` maps to `Class/Ordinal/Core.v`.
@@ -66,8 +64,9 @@ Always give an informal proof sketch first, then embed it as comments inside the
 
 ### Proof style preferences
 
-- `assert (P) as H. { ... }` over `pose proof` or deep destructuring. 
-- `apply`/`eapply` + `assumption`/`eassumption` over `exact (Lemma a b c)`. Explicit arguments to lemmas (e.g. `apply (Succ.NotZero n)`) are fine; avoid passing local hypotheses as explicit arguments (e.g. avoid `exact (H a b)` or `rewrite (IH p H1 H2)`).
+- `assert (P) as H. { ... }` over pose proof or deep destructuring. 
+- `Do not use exact but apply`/`eapply` + `assumption`/`eassumption. 
+-  Do not pass local hypothesis as explicit arguments. Explicit arguments which are e.g. sets or classes are fine.
 - `tac; try assumption` when a tactic leaves 2+ assumption sub-goals; `tac. N: assumption.` for exactly one. When `tac` generates multiple goals and one is immediately closable by `assumption` or `reflexivity`, dispatch it inline with `N: assumption.` or `N: reflexivity.` — do not leave it as a separate bullet or block.
 - Hypothesis names: use sequential `H1, H2, G1, G2, K1, K2, ...` — not descriptive names like `Hfaneb` or `Gincl`; the informal comments carry the meaning.
 - If a primitive lemma or proposition appears to be missing from the existing API, say so rather than silently inlining it. Missing lemmas are opportunities to improve the API for future use.
