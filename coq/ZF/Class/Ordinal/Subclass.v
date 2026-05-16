@@ -14,15 +14,21 @@ Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
+Require Import ZF.Notation.Eval.
+Require Import ZF.Notation.Image.
+
 Module CEN := ZF.Class.Ordinal.Enum.
+Module CIN := ZF.Class.Incl.
 Module CMF := ZF.Class.Ordinal.MinFresh.
 Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
+
 
 (* MinFresh picks the E-minimal element of A not in the range of its argument.  *)
 Definition MinFresh (A:Class) : Class := CMF.MinFresh E A.
@@ -61,6 +67,19 @@ Proof.
   (* So Enum A(a) is the E-minimal element of that non-empty difference.        *)
   apply CEN.IsMinimal; try assumption.
   apply COE.IsWellFoundedWellOrd. assumption.
+Qed.
+
+Proposition IsInf : forall (A:Class) (a:U),
+  Proper A                                      ->
+  A :<=: On                                     ->
+  On a                                          ->
+  (Enum A)!a = inf (A :\: (Enum A):[a]:).
+Proof.
+  intros A a H1 H2 H3.
+  apply InfOfClass.IsMinimal.
+  - apply CIN.Tran with A. 2: assumption. apply DiffBySet.IsInclL.
+  - apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption.
+  - apply IsMinimal; assumption.
 Qed.
 
 (* Enum A is an isomorphism from On to A.                                       *)

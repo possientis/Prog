@@ -14,6 +14,7 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -48,6 +49,14 @@ Proposition IsMinimal : forall (a:U), Ordinal a ->
 Proof.
   intros a H1.
   apply COS.IsMinimal. 3: assumption.
+  - apply CCI.IsProper.
+  - intros b. apply CCI.IsOrdinal.
+Qed.
+
+Proposition IsInf : forall (a:U), Ordinal a ->
+  Aleph!a = inf (InfiniteCard :\: Aleph:[a]:).
+Proof.
+  intros a H1. apply COS.IsInf. 3: assumption.
   - apply CCI.IsProper.
   - intros b. apply CCI.IsOrdinal.
 Qed.
