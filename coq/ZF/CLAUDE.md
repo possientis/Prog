@@ -66,7 +66,22 @@ Always give an informal proof sketch first, then embed it as comments inside the
 
 - `assert (P) as H. { ... }` over pose proof or deep destructuring. 
 - `Do not use exact but apply`/`eapply` + `assumption`/`eassumption. 
--  Do not pass local hypothesis as explicit arguments. Explicit arguments which are e.g. sets or classes are fine.
-- `tac; try assumption` when a tactic leaves 2+ assumption sub-goals; `tac. N: assumption.` for exactly one. When `tac` generates multiple goals and one is immediately closable by `assumption` or `reflexivity`, dispatch it inline with `N: assumption.` or `N: reflexivity.` — do not leave it as a separate bullet or block.
+- Do not pass local hypotheses as explicit arguments — this applies to every
+  tactic (`apply`, `eapply`, `destruct`, …). Sets, classes, and other
+  non-hypothesis terms are fine as explicit arguments.
+  Use `assumption`/`eassumption` to close hypothesis-shaped subgoals, and
+  `apply Lemma in H` to transform a hypothesis rather than `destruct (Lemma H)`.
+  Wrong: `apply (SCC.IsNotEquiv a b H1 H2)` — H1, H2 are local hypotheses.
+  Wrong: `destruct (Limit.ThreeWay a H2) as [...]` — H2 is a local hypothesis.
+  Right: `apply (SCC.IsNotEquiv a b); try assumption` — a, b are sets.
+  Right: `apply Limit.ThreeWay in H2. destruct H2 as [...]`
+- **Never** write a bullet (`-`, `+`, `*`) whose sole content is `assumption` or
+  `reflexivity`. These must always be dispatched inline. Choose the form by how
+  many sub-goals `tac` generates and how many are closable:
+  - 1 sub-goal, closable: `tac. assumption.` (or inline `tac. N: assumption.`)
+  - 2+ sub-goals, **all** closable: `tac; assumption.` / `tac; reflexivity.`
+  - 2+ sub-goals, **some** closable: `tac; try assumption.` / `tac; try reflexivity.`
+  Never use `try` when every sub-goal is closable — plain `assumption` /
+  `reflexivity` is cleaner and more precise.
 - Hypothesis names: use sequential `H1, H2, G1, G2, K1, K2, ...` — not descriptive names like `Hfaneb` or `Gincl`; the informal comments carry the meaning.
 - If a primitive lemma or proposition appears to be missing from the existing API, say so rather than silently inlining it. Missing lemmas are opportunities to improve the API for future use.
