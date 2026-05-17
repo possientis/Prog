@@ -805,15 +805,6 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
-Proposition WithOrdinalSucc : forall (a:U),
-  WithOrdinal a -> WithOrdinal (succ a).
-Proof.
-  intros a [b [H1 H2]].
-  assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
-  assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
-  exists (succ b). split; assumption.
-Qed.
-
 (* If a and b are disjoint, a ~ c and b ~ d, then a \/ b ~ c + d.               *)
 Proposition DisjointUnion : forall (a b c d:U),
   Ordinal c               ->
@@ -995,6 +986,20 @@ Proof.
   (* 1 + a = a since 1 in N and N <= a, so the result follows.                  *)
   - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
 Qed.
+
+Proposition WithOrdinalSucc : forall (a:U),
+  WithOrdinal a -> WithOrdinal (succ a).
+Proof.
+  intros a [b [H1 H2]].
+  assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
+  assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
+  exists (succ b). split; assumption.
+Qed.
+
+Proposition WithOridnalSuccRev : forall (a:U),
+  WithOrdinal (succ a) -> WithOrdinal a.
+Proof.
+Admitted.
 
 (* Any ordinal a containing N is equipotent to a + n for every natural n.       *)
 Proposition WhenNatR : forall (n a:U), Ordinal a ->
