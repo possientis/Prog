@@ -267,6 +267,22 @@ Proof.
     rewrite H2. apply Empty.IsIncl.
 Qed.
 
+Proposition IsInclSucc' : forall (a:U),
+  card (succ a) :<=: succ (card a).
+Proof.
+  intros a.
+  assert (WithOrdinal a \/ ~ WithOrdinal a) as [H1|H1]. {
+    apply LawExcludedMiddle. }
+  - assert (Ordinal (succ (card a))) as H2. { apply Succ.IsOrdinal, IsOrdinal. }
+    assert (a :~: card a) as H3. { apply IsEquivGen. assumption. }
+    assert (succ a :~: succ (card a)) as H4. { apply SuccCompat. assumption. }
+    apply IsLowerBound; assumption.
+  - assert (~ WithOrdinal (succ a)) as H2. {
+      intros H2. apply H1. apply Equiv.WithOrdinalSuccRev. assumption. }
+    assert (card (succ a) = :0:) as H3. { apply WhenNoOrdinal. assumption. }
+    rewrite H3. apply Empty.IsIncl.
+Qed.
+
 (* Assuming choice, the Cantor-Schroeder-Bernstein theorem holds.               *)
 Proposition CantorShroderBernsteinChoice : forall (a b c d:U),
   Choice    ->

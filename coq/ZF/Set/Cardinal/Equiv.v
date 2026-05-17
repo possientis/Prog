@@ -997,7 +997,7 @@ Proof.
   exists (succ b). split; assumption.
 Qed.
 
-Proposition WithOridnalSuccRev : forall (a:U),
+Proposition WithOrdinalSuccRev : forall (a:U),
   WithOrdinal (succ a) -> WithOrdinal a.
 Proof.
   intros a [c [H1 H2]].
