@@ -19,9 +19,8 @@ Require Import ZF.Notation.Eval.
 Module SCE := ZF.Set.Cardinal.Equiv.
 
 
-(* The class of finite sets, those equipotent to some natural number.           *)
-Definition Finite : Class := fun a =>
-  exists n, n :< :N /\ a :~: n.
+(* A set is finite if and only if it is equipotent to a natural number.         *)
+Definition Finite (a:U) : Prop := exists n, n :< :N /\ a :~: n.
 
 (* Finiteness is preserved under equipotence.                                   *)
 Proposition EquivCompat : forall (a b:U),

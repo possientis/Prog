@@ -217,12 +217,13 @@ Proof.
   intros a. symmetry. apply WhenCardinal. exists a. reflexivity.
 Qed.
 
-(* Assuming choice, inclusion implies inequality of cardinals.                  *)
-Proposition InclCompat : forall (a b:U), Choice ->
-  a :<=: b -> card a :<=: card b.
+Proposition InclCompatGen : forall (a b:U),
+  (exists c, Ordinal c /\ b :~: c)  ->
+  a :<=: b                          ->
+  card a :<=: card b.
 Proof.
-  intros a b AC H1.
-  assert (b :~: card b) as H2. { apply IsEquivChoice. assumption. }
+  intros a b G1 H1.
+  assert (b :~: card b) as H2. { apply IsEquivGen. assumption. }
   destruct H2 as [f H2].
   assert (exists x, x :<=: card b /\ a :~: x) as H3. {
     exists f:[a]:.
@@ -239,10 +240,17 @@ Proof.
   assert (exists c, Ordinal c /\ c :<=: card b /\ x :~: c) as H5. {
     apply Equiv.OrdinalSubset. 2: assumption. apply IsOrdinal. }
   destruct H5 as [c [H5 [H6 H7]]].
-  assert (card a = card x) as H8. { apply EquivCharac; assumption. }
-  assert (card x = card c) as H9. { apply EquivCharac; assumption. }
+  assert (card a = card x) as H8. { apply WhenEquiv. assumption. }
+  assert (card x = card c) as H9. { apply WhenEquiv. assumption. }
   assert (card c :<=: c) as H10. { apply IsIncl. assumption. }
   rewrite H8, H9. apply Incl.Tran with c; assumption.
+Qed.
+
+(* Assuming choice, inclusion implies inequality of cardinals.                  *)
+Proposition InclCompat : forall (a b:U), Choice ->
+  a :<=: b -> card a :<=: card b.
+Proof.
+  intros a b AC. apply InclCompatGen, Equiv.HasOrdinal. assumption.
 Qed.
 
 (* Assuming choice, the Cantor-Schroeder-Bernstein theorem holds.               *)
