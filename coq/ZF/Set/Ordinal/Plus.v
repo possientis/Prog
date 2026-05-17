@@ -266,7 +266,7 @@ Proof.
   assert (:0: :+: a :<=: b :+: a) as H3. {
     apply InclCompatL; try assumption.
     - apply Core.Zero.
-    - apply Core.IsIncl. assumption. }
+    - apply Empty.IsIncl. }
   rewrite WhenZeroL in H3; assumption.
 Qed.
 
@@ -277,7 +277,7 @@ Proof.
   assert (a :+: :0: :<=: a :+: b) as H3. {
     apply InclCompatR; try assumption.
     - apply Core.Zero.
-    - apply Core.IsIncl. assumption. }
+    - apply Empty.IsIncl. }
   rewrite WhenZeroR in H3. assumption.
 Qed.
 
@@ -302,13 +302,13 @@ Proof.
       - apply IsInclR; assumption.
       - rewrite H3. apply Incl.Refl. }
     apply Incl.Double. split. 1: assumption.
-    apply Core.IsIncl. assumption.
+    apply Empty.IsIncl.
   - assert (b :<=: :0:) as H4. {
       apply Incl.Tran with (a :+: b).
       - apply IsInclL; assumption.
       - rewrite H3. apply Incl.Refl. }
     apply Incl.Double. split. 1: assumption.
-    apply Core.IsIncl. assumption.
+    apply Empty.IsIncl.
 Qed.
 
 (* If a is at most b, there exists an ordinal c such that a + c equals b.       *)
@@ -380,7 +380,7 @@ Proof.
   - assert (n :+: :0: :<=: n :+: m) as H4. {
       apply InclCompatR; try assumption.
       - apply Core.Zero.
-      - apply Core.IsIncl. assumption. }
+      - apply Empty.IsIncl. }
     rewrite WhenZeroR in H4. assumption.
 Qed.
 
@@ -395,7 +395,7 @@ Proof.
   - assert (:0: :+: m :<=: n :+: m) as H4. {
       apply InclCompatL; try assumption.
       - apply Core.Zero.
-      - apply Core.IsIncl. assumption. }
+      - apply Empty.IsIncl. }
     rewrite WhenZeroL in H4; assumption.
 Qed.
 
@@ -508,7 +508,7 @@ Proof.
   assert (Ordinal b) as H3. { apply H2. }
   assert (Ordinal (a :+: b)) as H4. { apply IsOrdinal; assumption. }
   assert (a :+: b <> :0:) as H5. {
-    assert (:0: :<=: a) as H5. { apply Core.IsIncl. assumption. }
+    assert (:0: :<=: a) as H5. { apply Empty.IsIncl. }
     assert (Ordinal :0:) as H6. { apply Core.Zero. }
     assert (:0: :+: b :<=: a :+: b) as H7. { apply InclCompatL; assumption. }
     assert (b :<=: a :+: b) as H8. { rewrite WhenZeroL in H7; assumption. }

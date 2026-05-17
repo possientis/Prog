@@ -34,7 +34,6 @@ Module CEM := ZF.Class.Empty.
 Module COE := ZF.Class.Ordinal.Exp.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
-Module SEM := ZF.Set.Empty.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRL := ZF.Set.Relation.Functional.
@@ -62,7 +61,7 @@ Proposition WhenLimit : forall (a b:U), Limit b ->
   :0: :< a  -> a :^: b = :\/:_{b} (COE.Exp a).
 Proof.
   intros a b H1 H2.
-  apply COE.WhenLimit. 1: assumption. apply SEM.HasElem.
+  apply COE.WhenLimit. 1: assumption. apply Empty.HasElem.
   exists :0:. assumption.
 Qed.
 
@@ -280,7 +279,7 @@ Proof.
     assert (a = :0: \/ :0: :< a) as H5. { apply Core.ZeroOrElem. assumption. }
     destruct H5 as [H5|H5].
     + subst. rewrite WhenZeroL. 2: assumption.
-      * apply Core.IsIncl. assumption.
+      * apply Empty.IsIncl.
       * apply Limit.HasZero. assumption.
     + intros y H6.
       rewrite WhenLimit in H6; try assumption.
@@ -328,7 +327,7 @@ Proof.
   - rewrite WhenSuccR. 2: assumption. apply Mult.InclCompatL; assumption.
   - rewrite WhenSuccR. 2: assumption. apply Mult.ElemCompatR; try assumption.
     apply HasZero; try assumption. apply Core.HasZero. 1: assumption.
-    apply SEM.HasElem. exists a. assumption.
+    apply Empty.HasElem. exists a. assumption.
 Qed.
 
 Proposition IsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
@@ -399,7 +398,7 @@ Proof.
     intros H12. rewrite H12 in H10. rewrite WhenZeroR in H10.
     rewrite Natural.OneExtension in H10.
     apply Single.Charac in H10. rewrite H10 in H4.
-    apply SEM.Charac in H4. contradiction. }
+    apply Empty.Charac in H4. contradiction. }
   assert (Successor c) as H13. {
     assert (c = :0: \/ Successor c \/ Limit c) as H13. {
       apply Limit.ThreeWay. assumption. }

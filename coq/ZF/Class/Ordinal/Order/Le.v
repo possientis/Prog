@@ -28,7 +28,6 @@ Require Import ZF.Set.Single.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
-Module SEM := ZF.Set.Empty.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* Lexicographical order on On x On.                                            *)
@@ -108,7 +107,7 @@ Proposition IsFounded : Founded Le (On :x: On).
 Proof.
   intros x H1 H2.
   assert (exists a b, On a /\ On b /\ Minimal Le (toClass x) :(a,b):) as H3. {
-    apply HasMinimal. 1: assumption. apply SEM.NotEmptyToClass. assumption. }
+    apply HasMinimal. 1: assumption. apply Empty.NotEmptyToClass. assumption. }
   destruct H3 as [a [b [H3 [H4 H5]]]].
   exists :(a,b):. assumption.
 Qed.
@@ -167,7 +166,7 @@ Proof.
       subst. apply Charac4 in H7. destruct H7 as [H7|[H7 H8]].
       + rewrite Natural.OneExtension in H7. apply Single.Charac in H7. subst.
         exists b. split. 1: assumption. reflexivity.
-      + apply SEM.Charac in H8. contradiction. }
+      + apply Empty.Charac in H8. contradiction. }
   remember (fun x => exists a, On a /\ x = :(a,:(:0:,a):):) as F eqn:H5.
   assert (forall y z, F :(y,z): <-> On y /\ z = :(:0:,y):) as H6. {
     intros y z. split; intros H6.

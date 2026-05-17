@@ -30,7 +30,6 @@ Require Import ZF.Set.Union2.
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
 Module CPR := ZF.Class.Prod.
-Module SEM := ZF.Set.Empty.
 Module SIN := ZF.Set.Incl.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOS := ZF.Set.Ordinal.Succ.
@@ -153,7 +152,7 @@ Proposition IsFounded : Founded R0 (On :x: On).
 Proof.
   intros x H1 H2.
   assert (exists a b, On a /\ On b /\ Minimal R0 (toClass x) :(a,b):) as H3. {
-    apply HasMinimal. 1: assumption. apply SEM.NotEmptyToClass. assumption. }
+    apply HasMinimal. 1: assumption. apply Empty.NotEmptyToClass. assumption. }
   destruct H3 as [a [b [H3 [H4 H5]]]].
   exists :(a,b):. assumption.
 Qed.

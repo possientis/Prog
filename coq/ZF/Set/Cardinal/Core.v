@@ -116,7 +116,7 @@ Proof.
     assert (Ordinal a) as H2. { subst. apply IsOrdinal. }
     split. 1: assumption. intros c H3 H4.
     assert (a = :0: \/ a <> :0:) as [H5|H5]. { apply LawExcludedMiddle. }
-    + rewrite H5. apply Core.IsIncl. assumption.
+    + rewrite H5. apply Empty.IsIncl.
     + assert (b :~: card b) as H6. {
         apply IsEquivNotZero. rewrite <- H1. assumption. }
       assert (b :~: c) as H7. {
@@ -162,7 +162,7 @@ Proof.
     apply Incl.Double. split.
     + assert (a = :0: \/ :0: :< a) as H2. { apply SOC.ZeroOrElem. assumption. }
       destruct H2 as [H2|H2].
-      * rewrite H2. apply SOC.IsIncl. rewrite <- H2. assumption.
+      * rewrite H2. apply Empty.IsIncl.
       * remember (card a) as c eqn:H3. rewrite H1, H3.
         apply IsLowerBound. 1: apply IsOrdinal.
         apply Equiv.Tran with a.
@@ -264,7 +264,7 @@ Proof.
     apply InclCompatGen. 1: assumption. apply Succ.IsIncl.
   - assert (card a = :0:) as H2. { apply WhenNoOrdinal. assumption. }
     assert (Ordinal (card (succ a))) as H3. { apply IsOrdinal. }
-    rewrite H2. apply SOC.IsIncl. assumption.
+    rewrite H2. apply Empty.IsIncl.
 Qed.
 
 (* Assuming choice, the Cantor-Schroeder-Bernstein theorem holds.               *)

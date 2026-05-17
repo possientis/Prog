@@ -45,7 +45,7 @@ Proof.
   remember (fun a => a :< b \/ A a) as B eqn:H6.
   assert (forall a, On a -> B a) as H7. {
     apply Induction.
-    - rewrite H6. assert (:0: :<=: b) as H7. { apply SOC.IsIncl. assumption. }
+    - rewrite H6. assert (:0: :<=: b) as H7. { apply Empty.IsIncl. }
       apply SOC.EqualOrElem in H7. 3: assumption.
       + destruct H7 as [H7|H7]. 2: { left. assumption. }
         right. subst. assumption.

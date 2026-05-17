@@ -13,7 +13,6 @@ Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Ordinal.Inter.
 
-Module SEM := ZF.Set.Empty.
 Module SIR := ZF.Set.Inter.
 Module SOC := ZF.Set.Ordinal.Core.
 
@@ -60,5 +59,5 @@ Proof.
   - apply Incl.Double. split; intros x H3.
     + apply Inter.Charac with a. 1: assumption.
       apply SOC.HasZero; assumption.
-    + apply SEM.Charac in H3. contradiction.
+    + apply Empty.Charac in H3. contradiction.
 Qed.

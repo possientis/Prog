@@ -211,22 +211,12 @@ Proof.
   apply Empty.Charac with x. apply H3. assumption.
 Qed.
 
-(* The empty set is included in every ordinal.                                  *)
-Proposition IsIncl : forall (a:U), Ordinal a ->
-  :0: :<=: a.
-Proof.
-  intros a H1.
-  assert (a :< :0: \/ :0: :<=: a) as H2. {
-    apply ElemOrIncl. 1: assumption. apply Zero. }
-  destruct H2 as [H2|H2]. 2: assumption. apply Empty.Charac in H2. contradiction.
-Qed.
-
 (* Every ordinal is either 0 or contains 0.                                     *)
 Proposition ZeroOrElem : forall (a:U), Ordinal a ->
   a = :0: \/ :0: :< a.
 Proof.
   intros a H1.
-  assert (:0: :<=: a)  as H2. { apply IsIncl. assumption. }
+  assert (:0: :<=: a)  as H2. { apply Empty.IsIncl. }
   apply EqualOrElem in H2. 3: assumption.
   - destruct H2 as [H2|H2].
     + left. symmetry. assumption.

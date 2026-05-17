@@ -8,6 +8,7 @@ Require Import ZF.Class.Ordinal.Omega.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Core.
@@ -255,7 +256,7 @@ Qed.
 (* Zero is a subset of every natural number.                                    *)
 Proposition ZeroIncl : forall (n:U), n :< :N -> :0: :<=: n.
 Proof.
-  intros n H1. apply Core.IsIncl, HasOrdinals. assumption.
+  intros n H1. apply Empty.IsIncl.
 Qed.
 
 (* One is a subset of the successor of every natural number.                    *)

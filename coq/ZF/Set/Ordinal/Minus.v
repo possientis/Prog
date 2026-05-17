@@ -87,7 +87,7 @@ Proof.
     intros c H10. rewrite H7 in H10.
     apply Specify.Charac in H10. destruct H10 as [H10 _].
     apply Core.IsOrdinal with (succ b); assumption. }
-  assert (:0: :<=: b :-: a) as H11. { apply Core.IsIncl. assumption. }
+  assert (:0: :<=: b :-: a) as H11. { apply Empty.IsIncl. }
   apply Incl.Double. split; assumption.
 Qed.
 
