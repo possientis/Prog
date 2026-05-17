@@ -173,8 +173,7 @@ Proof.
   - assert (Successor n \/ Limit n) as H4. { apply Limit.TwoWay; assumption. }
     destruct H4 as [H4|H4]. 1: assumption. exfalso.
     revert H3. apply Limit.NotBoth. assumption.
-  - destruct H2 as [_ [m H2]]. subst. apply Succ.HasZero.
-    apply Succ.IsOrdinalRev. assumption.
+  - destruct H2 as [m [K1 K2]]. subst. apply Succ.HasZero. assumption.
 Qed.
 
 (* Every positive natural number is the successor of a natural number.          *)
@@ -183,7 +182,7 @@ Proposition HasPred : forall (n:U), n :< :N ->
 Proof.
   intros n H1 H2.
   assert (Successor n) as H3. { apply IsSuccessor; assumption. }
-  destruct H3 as [H3 [m H4]]. exists m. split. 2: assumption.
+  destruct H3 as [m [H3 H4]]. exists m. split. 2: assumption.
   apply HasSuccRev. rewrite <- H4. assumption.
 Qed.
 

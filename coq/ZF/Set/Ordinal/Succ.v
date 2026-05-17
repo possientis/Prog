@@ -14,9 +14,11 @@ Require Import ZF.Set.Union2.
 
 Module COC := ZF.Class.Ordinal.Core.
 
+(* The successor of a set a.                                                    *)
 Definition succ (a:U) : U := a :\/: :{a}:.
 
-Definition Successor (a:U) : Prop := Ordinal a /\ exists b, a = succ b.
+(* Predicate defining a successor ordinal.                                      *)
+Definition Successor (a:U) : Prop := exists b, Ordinal b /\ a = succ b.
 
 
 Definition Charac : forall (a x:U),
@@ -46,7 +48,7 @@ Qed.
 (* A successor ordinal is not equal to zero.                                    *)
 Proposition IsNotZero : forall (a:U), Successor a -> a <> :0:.
 Proof.
-  intros a [H1 [b H2]]. subst. apply NotZero.
+  intros a [b [H1 H2]]. subst. apply NotZero.
 Qed.
 
 (* A set (ordinal or not) is a subset of its successor.                         *)
@@ -66,9 +68,7 @@ Qed.
 Proposition IsSuccessor : forall (a:U), Ordinal a ->
   Successor (succ a).
 Proof.
-  intros a H1. split.
-  - apply IsOrdinal. assumption.
-  - exists a. reflexivity.
+  intros a H1. exists a. split. 1: assumption. reflexivity.
 Qed.
 
 (* The successor of any ordinal contains 0.                                     *)
@@ -125,7 +125,7 @@ Qed.
 (* Every successor ordinal contains 0.                                          *)
 Proposition HasZero' : forall (a:U), Successor a -> :0: :< a.
 Proof.
-  intros a [H1 [b H2]]. subst. apply HasZero, IsOrdinalRev. assumption.
+  intros a [b [H1 H2]]. subst. apply HasZero. assumption.
 Qed.
 
 (* The successor operation is compatible with set inclusion for ordinals.       *)
@@ -249,9 +249,10 @@ Proposition OfUnion : forall (a:U), Ordinal a ->
   Successor a <-> succ :U(a) = a.
 Proof.
   intros a H1. split; intros H2.
-  - destruct H2 as [H2 [b H3]]. subst.
-    assert (Ordinal b) as H4. { apply IsOrdinalRev. assumption. }
+  - destruct H2 as [b [H2 H3]]. subst.
     rewrite UnionOf. 2: assumption. reflexivity.
-  - split. 1: assumption. exists :U(a). symmetry. assumption.
+  - exists :U(a). split.
+    + apply IsOrdinalRev. rewrite H2. assumption.
+    + symmetry. assumption.
 Qed.
 

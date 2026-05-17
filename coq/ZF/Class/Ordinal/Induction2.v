@@ -24,9 +24,8 @@ Proof.
     apply Limit.ThreeWay. assumption. }
   destruct H6 as [H6|[H6|H6]].
   - rewrite H6. assumption.
-  - destruct H6 as [H6 [b H7]]. subst. apply H2.
-    + apply Succ.IsOrdinalRev. assumption.
-    + apply H5, Succ.IsIn.
+  - destruct H6 as [b [H6 H7]]. subst. apply H2. 1: assumption.
+    apply H5, Succ.IsIn.
   - apply H3; assumption.
 Qed.
 

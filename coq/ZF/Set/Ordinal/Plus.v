@@ -342,8 +342,7 @@ Proof.
     split; assumption. }
   destruct H10 as [H10|[H10|H10]].
   - rewrite H10. rewrite WhenZeroR. assumption.
-  - destruct H10 as [H10 [d H11]].
-    assert (Ordinal d) as H12. { apply Succ.IsOrdinalRev. subst. assumption. }
+  - destruct H10 as [d [H12 H11]].
     assert (Ordinal (a :+: d)) as H13. { apply IsOrdinal; assumption. }
     assert (a :+: d :< b) as H14. {
       apply G1. 1: assumption. rewrite H11. apply Succ.IsIn. }
@@ -493,11 +492,11 @@ Proof.
   assert (n = :0: \/ :0: :< n) as H6. { apply Core.ZeroOrElem. assumption. }
   destruct H6 as [H6|H6]. 1: assumption. exfalso.
   assert (Successor n) as H7. { apply Omega.IsSuccessor; assumption. }
-  destruct H7 as [H7 [m H8]].
-  assert (Ordinal m) as H9. {
-    apply Succ.IsOrdinalRev. rewrite <- H8. assumption. }
+  destruct H7 as [m [H7 H8]].
   apply Limit.NotBoth with (a :+: n). 1: assumption. right.
-  split. 1: apply H3. exists (a :+: m). subst. apply WhenSuccR. assumption.
+  exists (a :+: m). split.
+  1: { apply IsOrdinal; assumption. }
+  subst. apply WhenSuccR. assumption.
 Qed.
 
 (* The sum of an ordinal and a limit ordinal is a limit ordinal.                *)

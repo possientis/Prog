@@ -193,7 +193,7 @@ Proof.
       + apply Omega.HasZero.
       + rewrite G2. apply Omega.SuccHasZero. assumption.
     - apply Omega.IsSuccessor in H25. 2: assumption.
-      destruct H25 as [H25 [j H26]].
+      destruct H25 as [j [H25 H26]].
       assert (j :< :N) as K4. {
         apply Omega.HasSuccRev. rewrite <- H26. assumption. }
       assert (succ j :< :N) as K5. { apply Omega.HasSucc. assumption. }

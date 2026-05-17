@@ -1006,8 +1006,7 @@ Proof.
   - exfalso. subst.
     assert (succ a = :0:) as H4. { apply WhenZero. assumption. }
     revert H4. apply Succ.NotZero.
-  - destruct H3 as [H3 [b H4]]. subst.
-    assert (Ordinal b) as H5. { apply Succ.IsOrdinalRev. assumption. }
+  - destruct H3 as [b [H5 H4]]. subst.
     assert (a :~: b) as H6. { apply SuccCompatRev. assumption. }
     exists b. split; assumption.
   - assert (Ordinal c) as H4. { apply H3. }

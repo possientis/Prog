@@ -60,9 +60,7 @@ Proof.
       assert (A c) as H11. { rewrite H1. split; assumption. }
       assert (c :< c) as H12. { apply H6; assumption. }
       revert H12. apply Foundation.NoLoop1. }
-  destruct H8 as [_ [c H8]].
-  assert (Ordinal c) as H9. {
-    apply Succ.IsOrdinalRev. rewrite <- H8. assumption. }
+  destruct H8 as [c [H9 H8]].
   apply CEM.HasElem. exists c. split. 1: assumption.
   rewrite <- H8. assumption.
 Qed.
@@ -115,9 +113,7 @@ Proof.
       assert (A d) as H14. { rewrite H4. split; assumption. }
       assert (d :< d) as H15. { apply H9; assumption. }
       revert H15. apply Foundation.NoLoop1. }
-  destruct H11 as [_ [d H11]].
-  assert (Ordinal d) as H12. {
-    apply Succ.IsOrdinalRev. rewrite <- H11. assumption. }
+  destruct H11 as [d [H12 H11]].
   assert (c :<=: succ (rank a)) as H13. {
     apply H9. rewrite H4. split. 1: assumption. apply IsIn. 1: assumption.
     apply Succ.IsIn. }

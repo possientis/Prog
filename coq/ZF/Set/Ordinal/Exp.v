@@ -77,9 +77,8 @@ Proof.
   intros a H1 H2.
   assert (Successor a \/ Limit a) as H3. { apply Limit.TwoWay; assumption. }
   destruct H3 as [H3|H3].
-  - destruct H3 as [H [b H4]].
-    rewrite H4, WhenSuccR, Mult.WhenZeroR. 1: reflexivity.
-    subst. apply Succ.IsOrdinalRev. assumption.
+  - destruct H3 as [b [H H4]].
+    rewrite H4, WhenSuccR, Mult.WhenZeroR. 1: reflexivity. assumption.
   - rewrite WhenLimitZero; try reflexivity. assumption.
 Qed.
 
@@ -313,9 +312,8 @@ Proposition ElemCompatL : forall (a b c:U),
   a :^: c :< b :^: c.
 Proof.
   intros a b c H1 H2 H3 H4.
-  assert (Ordinal c) as H5. { apply H3. }
-  destruct H3 as [H3 [d H6]]. subst.
-  assert (Ordinal d) as H7. { apply Succ.IsOrdinalRev. assumption. }
+  destruct H3 as [d [H3 H6]]. subst.
+  assert (Ordinal (succ d)) as H5. { apply Succ.IsOrdinal. assumption. }
   assert (Ordinal (a :^: succ d)) as G1. { apply IsOrdinal; assumption. }
   assert (Ordinal (b :^: succ d)) as G2. { apply IsOrdinal; assumption. }
   assert (Ordinal (b :^: d)) as G3. { apply IsOrdinal; assumption. }
@@ -403,8 +401,7 @@ Proof.
     assert (c = :0: \/ Successor c \/ Limit c) as H13. {
       apply Limit.ThreeWay. assumption. }
     destruct H13 as [H13|[H13|H13]]; try contradiction. assumption. }
-  destruct H13 as [H13 [d H14]].
-  assert (Ordinal d) as H15. { apply Succ.IsOrdinalRev. subst. assumption. }
+  destruct H13 as [d [H15 H14]].
   assert (Ordinal (a :^: d)) as G7. { apply IsOrdinal; assumption. }
   assert (b :< a :^: succ d) as H16. { rewrite H14 in H10. assumption. }
   assert (a :^: d :<=: b) as H17. {
@@ -433,9 +430,7 @@ Proof.
       apply OneIsIncl; try assumption. apply Core.ElemIsIncl; assumption. }
     assert (:0: :< :0:) as H6. { rewrite H4 in H5. apply H5. apply Succ.IsIn. }
     revert H6. apply Foundation.NoLoop1.
-  - exfalso. destruct H4 as [H4 [d H5]].
-    assert (Ordinal d) as G3. {
-      apply Succ.IsOrdinalRev. rewrite <- H5. assumption. }
+  - exfalso. destruct H4 as [d [G3 H5]].
     assert (Ordinal :0:) as G4. { apply Core.Zero. }
     assert (Ordinal :1:) as G5. { apply Natural.OneIsOrdinal. }
     assert (:0: :< a) as G6. {
@@ -462,8 +457,7 @@ Proof.
   assert (Ordinal a) as G1. { apply H3. }
   assert (Successor b \/ Limit b) as H4. { apply Limit.TwoWay; assumption. }
   destruct H4 as [H4|H4].
-  - destruct H4 as [H4 [d H5]]. subst.
-    assert (Ordinal d) as G2. { apply Succ.IsOrdinalRev. assumption. }
+  - destruct H4 as [d [G2 H5]]. subst.
     assert (Ordinal (a :^: d)) as G3. { apply IsOrdinal; assumption. }
     assert (Ordinal :0:) as G4. { apply Core.Zero. }
     assert (Ordinal :1:) as G5. { apply Natural.OneIsOrdinal. }

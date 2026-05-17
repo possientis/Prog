@@ -1189,7 +1189,8 @@ Proposition LimitWithNatSucc : forall (a b c n:U),
   (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n.
 Proof.
   intros a b c n H1 H2 H3 H4 H5 H6.
-  assert (Ordinal c) as G1. { apply H3. }
+  assert (Ordinal c) as G1. {
+    destruct H3 as [d [K1 K2]]. rewrite K2. apply Succ.IsOrdinal. assumption. }
   assert (
     Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
     Limit c     /\ (a :^: b :*: n) :^: c = a :^: (b :*: c)) as H7. {

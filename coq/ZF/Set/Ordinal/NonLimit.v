@@ -19,7 +19,7 @@ Proposition HasOrdinals : NonLimit :<=: Ordinal.
 Proof.
   intros a [H1|H1].
   - subst. apply Core.Zero.
-  - apply H1.
+  - destruct H1 as [b [H1 H2]]. subst. apply Succ.IsOrdinal. assumption.
 Qed.
 
 (* An ordinal is non-limit iff it is 0 or the successor of its own union.       *)
@@ -39,7 +39,5 @@ Qed.
 Proposition HasSucc : forall (a:U), Ordinal a ->
   NonLimit (succ a).
 Proof.
-  intros a H1. right. split.
-  - apply Succ.IsOrdinal. assumption.
-  - exists a. reflexivity.
+  intros a H1. right. exists a. split. 1: assumption. reflexivity.
 Qed.

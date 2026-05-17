@@ -103,8 +103,7 @@ Proof.
     apply DiffBySet.Charac in H1. destruct H1 as [_ H1].
     apply H1. apply Omega.HasZero.
   - (* a is a successor, say a = succ b where b is an ordinal.                  *)
-    exfalso. destruct H3 as [H3 [b H4]]. subst.
-    assert (Ordinal b) as H4. { apply Succ.IsOrdinalRev. assumption. }
+    exfalso. destruct H3 as [b [H4 H3]]. subst.
     (* Since succ b is infinite, b is not in omega (else succ b would be).      *)
     assert (:N :<=: b) as H5. {
       assert (b :< :N \/ :N :<=: b) as H5. {

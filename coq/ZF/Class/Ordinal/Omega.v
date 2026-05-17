@@ -128,12 +128,11 @@ Proof.
   assert (n <> :0:) as H9. { intros H9. subst. contradiction. }
   assert (NonLimit n) as H10. { apply HasNonLimitElem. assumption. }
   destruct H10 as [H10|H10]. 1: contradiction.
-  destruct H10 as [H10 [b H11]]. assert (H12 := H6). destruct H12 as [_ H12].
+  destruct H10 as [b [H10 H11]]. assert (H12 := H6). destruct H12 as [_ H12].
   assert ((:N : Class) b) as H13. {
-    split.
-    - apply Succ.IsOrdinalRev. subst. assumption.
-    - apply CIN.Tran with (toClass (succ n)). 2: assumption.
-      rewrite <- H11. apply Succ.IsIncl. }
+    split. 1: assumption.
+    apply CIN.Tran with (toClass (succ n)). 2: assumption.
+    rewrite <- H11. apply Succ.IsIncl. }
   assert (~ (:N :\: A) b) as H14. { intros H14. apply H8 in H14.
     apply Foundation.NoLoop1 with b. apply H14. rewrite H11. apply Succ.IsIn. }
   apply H7. rewrite H11. apply H2. 1: assumption. apply DoubleNegation.

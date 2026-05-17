@@ -406,7 +406,7 @@ Proof.
   - exfalso. apply WhenZero in H6; try assumption. destruct H6 as [H6|H6].
     + rewrite H6 in H2. apply Empty.Charac in H2. contradiction.
     + rewrite H6 in H3. apply Limit.NotZero. assumption.
-  - exfalso. destruct H6 as [H6 [c H7]].
+  - exfalso. destruct H6 as [c [H6 H7]].
     assert (c :< a :*: b) as H8. { rewrite H7. apply Succ.IsIn. }
     rewrite WhenLimit in H8. 2: assumption.
     apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
@@ -652,9 +652,7 @@ Proof.
         apply Limit.ThreeWay. assumption. }
       destruct H12 as [H12|[H12|H12]].
       - exfalso. rewrite H12 in H10. apply OneNotLessThanZero. assumption.
-      - destruct H12 as [H12 [e H13]].
-        assert (Ordinal e) as H14. {
-          apply Succ.IsOrdinalRev. rewrite <- H13. assumption. }
+      - destruct H12 as [e [H14 H13]].
         assert (e :< c) as H15. { rewrite H13. apply Succ.IsIn. }
         assert (exists f, Ordinal f /\ f :< A /\ e :< f) as H16. {
           rewrite H6 in H15. apply Sup.WhenLess; assumption. }
@@ -1050,9 +1048,7 @@ Proof.
     assert (Successor b \/ Limit b) as H7. { apply Limit.TwoWay; assumption. }
     assert (Limit a \/ Limit b) as H8. {
       destruct H6 as [H6|H6]; destruct H7 as [H7|H7].
-      - exfalso. destruct H6 as [H6 [c H8]]. destruct H7 as [H7 [d H9]]. subst.
-        assert (Ordinal c) as H10. { apply Succ.IsOrdinalRev. assumption. }
-        assert (Ordinal d) as H11. { apply Succ.IsOrdinalRev. assumption. }
+      - exfalso. destruct H6 as [c [H10 H8]]. destruct H7 as [d [H11 H9]]. subst.
         rewrite WhenSuccR in H3. 2: assumption.
         rewrite Plus.WhenSuccR in H3. 2: assumption.
         revert H3. apply Limit.SuccIsNot.
@@ -1063,8 +1059,7 @@ Proof.
   - destruct H3 as [H3 [H4 [H5|H5]]].
     + assert (Successor b \/ Limit b) as H6. { apply Limit.TwoWay; assumption. }
       destruct H6 as [H6|H6].
-      * destruct H6 as [H6 [c H7]]. subst.
-        assert (Ordinal c) as H10. { apply Succ.IsOrdinalRev. assumption. }
+      * destruct H6 as [c [H10 H7]]. subst.
         rewrite WhenSuccR. 2: assumption.
         apply Plus.IsLimit. 2: assumption.
         apply IsOrdinal; assumption.

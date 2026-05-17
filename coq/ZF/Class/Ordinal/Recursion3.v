@@ -92,8 +92,7 @@ Proof.
       apply Limit.ThreeWay. assumption. }
     destruct H7 as [H7|[H7|H7]].
     + rewrite H7, H2, WhenZero. reflexivity.
-    + destruct H7 as [H7 [c H8]].
-      assert (Ordinal c) as H9. { apply Succ.IsOrdinalRev. subst. assumption. }
+    + destruct H7 as [c [H7 H8]].
       rewrite H8, H3, WhenSucc, H6; try assumption. 1: reflexivity.
       rewrite H8. apply Succ.IsIn.
     + assert (:\/:_{b} G = :\/:_{b} (Recursion F a)) as H8. {

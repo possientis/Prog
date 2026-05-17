@@ -29,8 +29,8 @@ Qed.
 Proposition NotSucc : forall (a:U),
   Limit a -> ~ Successor a.
 Proof.
-  intros a H1 [H2 [b H3]]. apply NotBoth with a. 1: assumption.
-  right. split. 1: assumption. exists b. assumption.
+  intros a H1 [b [H2 H3]]. apply NotBoth with a. 1: assumption.
+  right. exists b. split; assumption.
 Qed.
 
 (* The successor of any set is not a limit ordinal.                             *)
@@ -60,12 +60,13 @@ Proof.
     + assert (a = :U(a) \/ a = succ :U(a)) as H3. {
         apply UnionOrSuccOfUnion. assumption. }
       destruct H3 as [H3|H3]. 1: assumption. exfalso. apply H2. right.
-      split. 1: assumption. exists :U(a). assumption.
+      exists :U(a). split.
+      1: { apply IsOrdinalRev. rewrite <- H3. assumption. }
+      assumption.
   - destruct H2 as [H2 H3]. split. 1: assumption. intros [H4|H4].
     + contradiction.
-    + destruct H4 as [H4 [b H5]].
+    + destruct H4 as [b [H4 H5]].
       apply IfUnionThenNotSucc with a b; try assumption.
-      apply Succ.IsOrdinalRev. subst. assumption.
 Qed.
 
 (* Every limit ordinal contains zero.                                           *)
@@ -137,8 +138,7 @@ Proof.
     apply Core.IsTotal; assumption. }
   destruct H6 as [H6|[H6|H6]]. 2: assumption.
   - exfalso. apply NotBoth with a. 1: assumption. right.
-    split. 1: assumption.
-    exists b. symmetry. assumption.
+    exists b. split. 1: assumption. symmetry. assumption.
   - exfalso. apply Foundation.NoLoop1 with a. apply H3. assumption.
 Qed.
 
