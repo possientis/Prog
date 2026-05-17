@@ -1,5 +1,4 @@
 Require Import ZF.Axiom.Classic.
-Require Import ZF.Axiom.Extensionality.
 Require Import ZF.Class.Complement.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Diff.
@@ -11,6 +10,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Less.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
@@ -83,7 +83,7 @@ Proof.
     assert (x :< :0:) as H2.
       { rewrite <- H1. apply Charac. split; assumption. }
     apply Empty.Charac in H2. contradiction.
-  - apply Extensionality. intros x. split; intros H2.
+  - apply Incl.Double. split; intros x H2.
     + apply Charac in H2. destruct H2 as [H2 H3].
       apply H1 in H2. contradiction.
     + apply Empty.Charac in H2. contradiction.
@@ -108,7 +108,7 @@ Qed.
 Proposition UnionR : forall (a b c:U),
   a :\: (b:\/:c) = a:\:b :/\: a:\:c.
 Proof.
-intros a b c. apply Extensionality. intros x. split; intros H1.
+  intros a b c. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [H1 H2]. apply Inter2.Charac.
     split; apply Charac; split; try assumption.
     + intros H3. apply H2. apply Union2.Charac. left. apply H3.
@@ -123,7 +123,7 @@ Qed.
 Proposition InterR : forall (a b c:U),
   a :\: (b:/\:c) = a:\:b:\/:a:\:c.
 Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1.
+  intros a b c. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
     apply Union2.Charac. apply Inter2.WhenNotIn in H2. destruct H2 as [H2|H2].
     + left.  apply Charac. split; assumption.
@@ -138,16 +138,37 @@ Qed.
 Proposition OfDiff : forall (a b:U),
   a :\: (b :\: a) = a.
 Proof.
-  intros a b. apply Extensionality. intros x. split; intros H1.
-  - apply Charac in H1. destruct H1 as [H1 _]. apply H1.
+  intros a b. apply Incl.Double. split; intros x H1.
+  - apply Charac in H1. destruct H1 as [H1 _]. assumption.
   - apply Charac. split. 1: assumption.
     intros H2. apply Charac in H2. destruct H2 as [_ H2]. contradiction.
+Qed.
+
+(* Removing an element from a set then re-adding it recovers the original.      *)
+Proposition RemoveAddElem : forall (a x:U),
+  x :< a -> (a :\: :{x}:) :\/: :{x}: = a.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros a x H1. apply Incl.Double. split; intros y H2.
+  - apply Union2.Charac in H2. destruct H2 as [H2|H2].
+    (* y is in a \ {x}: the difference condition gives y in a directly.         *)
+    + apply Charac in H2. destruct H2 as [H2 _]. assumption.
+    (* y is in {x}: y equals x, which is in a by assumption.                    *)
+    + apply Single.Charac in H2. subst. assumption.
+  - (* y is in a: use the law of excluded middle on y = x.                      *)
+    apply Union2.Charac.
+    assert (y = x \/ y <> x) as [H3|H3]. { apply LawExcludedMiddle. }
+    (* y = x: y belongs to {x}.                                                 *)
+    + right. apply Single.Charac. assumption.
+    (* y <> x: y is not in {x}, so y is in a \ {x}.                             *)
+    + left. apply Charac. split. 1: assumption.
+      intros H4. apply Single.Charac in H4. contradiction.
 Qed.
 
 Proposition InterDistrib : forall (a b c:U),
   a :/\: b:\:c = (a:/\:b) :\: (a:/\:c).
 Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1.
+  intros a b c. apply Incl.Double. split; intros x H1.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H2. destruct H2 as [H2 H3].
     apply Charac. split.
@@ -164,17 +185,17 @@ Qed.
 Proposition InterAssoc : forall (a b c:U),
   (a :/\: b) :\: c = a :/\: b:\:c.
 Proof.
-  intros a b c. apply Extensionality. intros x. split; intros H1.
+  intros a b c. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [H1 H2].
     apply Inter2.Charac in H1. destruct H1 as [H1 H3].
     apply Inter2.Charac. split.
-    + apply H1.
+    + assumption.
     + apply Charac. split; assumption.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
     apply Charac in H2. destruct H2 as [H2 H3].
     apply Charac. split.
     + apply Inter2.Charac. split; assumption.
-    + apply H3.
+    + assumption.
 Qed.
 
 Proposition Image : forall (f a b:U),
