@@ -295,7 +295,7 @@ Proof.
 Qed.
 
 (* A limit ordinal is no less than N.                                           *)
-Proposition InLimitIncl : forall (a:U), Limit a -> :N :<=: a.
+Proposition IsInclLimit : forall (a:U), Limit a -> :N :<=: a.
 Proof.
   intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
     apply ElemOrIncl.

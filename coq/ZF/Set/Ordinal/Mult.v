@@ -903,7 +903,7 @@ Proof.
   apply H3; try assumption. 3: reflexivity.
   - apply Plus.IsOrdinal; assumption.
   - apply Incl.Tran with c.
-    + apply Omega.InLimitIncl. assumption.
+    + apply Omega.IsInclLimit. assumption.
     + apply Plus.IsInclR; assumption.
 Qed.
 

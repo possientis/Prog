@@ -16,6 +16,7 @@ Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Mult2.
 Require Import ZF.Set.Ordinal.Natural.
@@ -999,7 +1000,23 @@ Qed.
 Proposition WithOridnalSuccRev : forall (a:U),
   WithOrdinal (succ a) -> WithOrdinal a.
 Proof.
-Admitted.
+  intros a [c [H1 H2]].
+  assert (c = :0: \/ Successor c \/ Limit c) as [H3|[H3|H3]]. {
+    apply Limit.ThreeWay. assumption. }
+  - exfalso. subst.
+    assert (succ a = :0:) as H4. { apply WhenZero. assumption. }
+    revert H4. apply Succ.NotZero.
+  - destruct H3 as [H3 [b H4]]. subst.
+    assert (Ordinal b) as H5. { apply Succ.IsOrdinalRev. assumption. }
+    assert (a :~: b) as H6. { apply SuccCompatRev. assumption. }
+    exists b. split; assumption.
+  - assert (Ordinal c) as H4. { apply H3. }
+    assert (:N :<=: c) as H5. { apply Omega.IsInclLimit. assumption. }
+    assert (c :~: succ c) as H6. { apply Succ; assumption. }
+    assert (succ a :~: succ c) as H7. { apply Tran with c; assumption. }
+    assert (a :~: c) as H8. { apply SuccCompatRev. assumption. }
+    exists c. split; assumption.
+Qed.
 
 (* Any ordinal a containing N is equipotent to a + n for every natural n.       *)
 Proposition WhenNatR : forall (n a:U), Ordinal a ->

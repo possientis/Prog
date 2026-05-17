@@ -227,7 +227,7 @@ Proof.
   assert (forall i, i :< n -> m'!i :< a) as G20. {
     intros i G20.
     assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
-    apply Omega.InLimitIncl. 1: assumption.
+    apply Omega.IsInclLimit. 1: assumption.
     rewrite H13, SRL.Eval.
     - apply H7. apply Succ.ElemCompat; assumption.
     - apply H4.
@@ -1116,7 +1116,7 @@ Proof.
   assert (:0: :< a :^: b) as G8. { apply Exp.HasZero; assumption. }
   assert (:0: :< a :^: b :*: n) as G9. { apply Mult.HasZero; assumption. }
   assert (Ordinal :0:) as G10. { apply Core.Zero. }
-  assert (n :< a :^: b) as G11. { apply Omega.InLimitIncl; assumption. }
+  assert (n :< a :^: b) as G11. { apply Omega.IsInclLimit; assumption. }
   assert (Ordinal :1:) as G12. { apply Natural.OneIsOrdinal. }
   remember (fun c => :0: :< c ->
     Successor c /\ (a :^: b :*: n) :^: c = a :^: (b :*: c) :*: n \/
