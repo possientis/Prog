@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -58,8 +59,17 @@ Proof.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
 
+(* When a set has no equivalent ordinal, its cardinal is 0.                     *)
+Proposition WhenNoOrdinal : forall (a:U),
+  ~ (exists b, Ordinal b /\ a :~: b) -> card a = :0:.
+Proof.
+  intros a H1. unfold card. apply SOI.IsZero. intros b. split; intros H2.
+  - exfalso. destruct H2 as [H2 H3]. apply H1. exists b. assumption.
+  - contradiction.
+Qed.
+
 (* If a set is equivalent to an ordinal, then it is equivalent to its cardinal. *)
-Lemma IsEquivGen : forall (a:U),
+Proposition IsEquivGen : forall (a:U),
   (exists b, Ordinal b /\ a :~: b) -> a :~: card a.
 Proof.
   intros a K1.
@@ -160,21 +170,42 @@ Proof.
   - exists a. assumption.
 Qed.
 
+(* Two equivalent sets have the same cardinal.                                  *)
+Proposition WhenEquiv : forall (a b:U),
+  a :~: b -> card a = card b.
+Proof.
+  intros a b H1.
+  assert (
+    (exists c, Ordinal c /\ a :~: c) \/
+   ~(exists c, Ordinal c /\ a :~: c)) as [H2|H2]. { apply LawExcludedMiddle. }
+  - assert (exists c, Ordinal c /\ b :~: c) as H3. {
+      destruct H2 as [c [H2 H3]]. exists c. split. 1: assumption.
+      apply Equiv.Tran with a. 2: assumption. apply Equiv.Sym. assumption. }
+    assert (a :~: card a) as H4. { apply IsEquivGen. assumption. }
+    assert (b :~: card b) as H5. { apply IsEquivGen. assumption. }
+    assert (card a :<=: card b) as H7. {
+      apply IsLowerBound.
+      - apply IsOrdinal.
+      - apply Equiv.Tran with b; assumption. }
+    assert (card b :<=: card a) as H8. {
+      apply IsLowerBound.
+      - apply IsOrdinal.
+      - apply Equiv.Tran with a. 2: assumption. apply Equiv.Sym. assumption. }
+    apply Incl.Double. split; assumption.
+  - assert (~ exists c, Ordinal c /\ b :~: c) as H3. {
+      intros H3. destruct H3 as [c [H3 H4]]. apply H2.
+      exists c. split. 1: assumption. apply Equiv.Tran with b; assumption. }
+    assert (card a = :0:) as H4. { apply WhenNoOrdinal. assumption. }
+    assert (card b = :0:) as H5. { apply WhenNoOrdinal. assumption. }
+    rewrite H4, H5. reflexivity.
+Qed.
+
 (* Assuming choice, two sets are equivalent iff they have the same cardinal.    *)
 Proposition EquivCharac : Choice -> forall (a b:U),
   a :~: b <-> card a = card b.
 Proof.
   intros AC a b. split; intros H1.
-  - assert (card b :<=: card a) as H2. {
-      apply IsLowerBound. 1: apply IsOrdinal.
-      apply Equiv.Tran with a.
-      + apply Equiv.Sym. assumption.
-      + apply IsEquivChoice. assumption. }
-    assert (card a :<=: card b) as H3. {
-      apply IsLowerBound. 1: apply IsOrdinal.
-      apply Equiv.Tran with b. 1: assumption.
-      apply IsEquivChoice. assumption. }
-    apply Incl.Double. split; assumption.
+  - apply WhenEquiv. assumption.
   - apply Equiv.Tran with (card a).
     + apply IsEquivChoice. assumption.
     + rewrite H1. apply Equiv.Sym, IsEquivChoice. assumption.
@@ -300,3 +331,4 @@ Proof.
   - (* N <= card(N): card(N) <= N as N is an ordinal, so N = card(N).           *)
     apply Incl.Double. split. 1: assumption. apply IsIncl. assumption.
 Qed.
+
