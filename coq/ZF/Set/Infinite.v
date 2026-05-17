@@ -113,7 +113,7 @@ Proof.
 Qed.
 
 (* Assuming choice, an infinite set has a strict subset equipotent to it.       *)
-Proposition StrictSubset : forall (a:U), Choice -> Infinite a ->
+Proposition Dedekind : forall (a:U), Choice -> Infinite a ->
   exists b, b :<: a /\ b :~: a.
 Proof.
   (* Proof by Claude.                                                           *)
