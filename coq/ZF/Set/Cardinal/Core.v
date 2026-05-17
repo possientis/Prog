@@ -10,6 +10,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
@@ -61,7 +62,7 @@ Qed.
 
 (* When a set has no equivalent ordinal, its cardinal is 0.                     *)
 Proposition WhenNoOrdinal : forall (a:U),
-  ~ (exists b, Ordinal b /\ a :~: b) -> card a = :0:.
+  ~ WithOrdinal a -> card a = :0:.
 Proof.
   intros a H1. unfold card. apply SOI.IsZero. intros b. split; intros H2.
   - exfalso. destruct H2 as [H2 H3]. apply H1. exists b. assumption.
@@ -69,10 +70,10 @@ Proof.
 Qed.
 
 (* If a set is equivalent to an ordinal, then it is equivalent to its cardinal. *)
-Proposition IsEquivGen : forall (a:U),
-  (exists b, Ordinal b /\ a :~: b) -> a :~: card a.
+Proposition IsEquivGen : forall (a:U), WithOrdinal a ->
+  a :~: card a.
 Proof.
-  intros a K1.
+  intros a K1. unfold WithOrdinal in K1.
   remember (fun b => Ordinal b /\ a :~: b) as A eqn:H1.
   assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
   assert (A :<>: :0:) as H3. { apply CEM.HasElem. assumption. }
@@ -82,21 +83,23 @@ Proof.
 Qed.
 
 (* Assuming choice, every set is equivalent to its cardinal.                    *)
-Proposition IsEquivChoice : forall (a:U), Choice -> a :~: card a.
+Proposition IsEquivChoice : forall (a:U), Choice ->
+  a :~: card a.
 Proof.
   intros a AC. apply IsEquivGen, HasOrdinal. assumption.
 Qed.
 
 (* Every ordinal is equivalent to its cardinal.                                 *)
-Proposition IsEquivOrd : forall (a:U), Ordinal a -> a :~: card a.
+Proposition IsEquivOrd : forall (a:U), Ordinal a ->
+  a :~: card a.
 Proof.
   intros a H1.
   apply IsEquivGen. exists a. split. 1: assumption. apply Equiv.Refl.
 Qed.
 
 (* A set with non-empty cardinal is equivalent to its cardinal.                 *)
-Proposition IsEquivNotZero : forall (a:U),
-  card a <> :0: -> a :~: card a.
+Proposition IsEquivNotZero : forall (a:U), card a <> :0: ->
+  a :~: card a.
 Proof.
   intros a H1.
   apply IsEquivGen. apply Classic.DoubleNegation. intros H2.
@@ -175,9 +178,8 @@ Proposition WhenEquiv : forall (a b:U),
   a :~: b -> card a = card b.
 Proof.
   intros a b H1.
-  assert (
-    (exists c, Ordinal c /\ a :~: c) \/
-   ~(exists c, Ordinal c /\ a :~: c)) as [H2|H2]. { apply LawExcludedMiddle. }
+  assert (WithOrdinal a \/ ~ WithOrdinal a) as [H2|H2]. {
+    apply LawExcludedMiddle. }
   - assert (exists c, Ordinal c /\ b :~: c) as H3. {
       destruct H2 as [c [H2 H3]]. exists c. split. 1: assumption.
       apply Equiv.Tran with a. 2: assumption. apply Equiv.Sym. assumption. }
@@ -217,10 +219,8 @@ Proof.
   intros a. symmetry. apply WhenCardinal. exists a. reflexivity.
 Qed.
 
-Proposition InclCompatGen : forall (a b:U),
-  (exists c, Ordinal c /\ b :~: c)  ->
-  a :<=: b                          ->
-  card a :<=: card b.
+Proposition InclCompatGen : forall (a b:U), WithOrdinal b ->
+  a :<=: b -> card a :<=: card b.
 Proof.
   intros a b G1 H1.
   assert (b :~: card b) as H2. { apply IsEquivGen. assumption. }
@@ -251,6 +251,20 @@ Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
 Proof.
   intros a b AC. apply InclCompatGen, Equiv.HasOrdinal. assumption.
+Qed.
+
+Proposition IsInclSucc : forall (a:U),
+  card a :<=: card (succ a).
+Proof.
+  intros a.
+  assert (WithOrdinal a \/ ~ WithOrdinal a) as [H1|H1]. {
+    apply LawExcludedMiddle. }
+  - assert (WithOrdinal (succ a)) as H2. {
+      apply Equiv.WithOrdinalSucc. assumption. }
+    apply InclCompatGen. 1: assumption. apply Succ.IsIncl.
+  - assert (card a = :0:) as H2. { apply WhenNoOrdinal. assumption. }
+    assert (Ordinal (card (succ a))) as H3. { apply IsOrdinal. }
+    rewrite H2. apply SOC.IsIncl. assumption.
 Qed.
 
 (* Assuming choice, the Cantor-Schroeder-Bernstein theorem holds.               *)

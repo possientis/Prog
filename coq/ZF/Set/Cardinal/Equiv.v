@@ -68,6 +68,9 @@ Definition equiv (a b:U) : Prop := exists f, Bij f a b.
 (* Notation "a :~: b" := (equiv a b)                                            *)
 Global Instance Equiv : Equiv U := { equiv := equiv }.
 
+(* Useful predicate stating that a set is equipotent to some ordinal.           *)
+Definition WithOrdinal (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.
+
 (* Every set is equipotent to itself.                                           *)
 Proposition Refl : forall (a:U), a :~: a.
 Proof.
@@ -89,7 +92,7 @@ Qed.
 
 (* Assuming choice, every set is equipotent to some ordinal.                    *)
 Proposition HasOrdinal : Choice ->
-  forall (a:U), exists b, Ordinal b /\ a :~: b.
+  forall (a:U), WithOrdinal a.
 Proof.
   intros AC a. specialize (AC :P(a)). destruct AC as [f [H1 H2]].
   remember (fun x => f!(a :\: range x)) as G eqn:H3.
@@ -800,6 +803,15 @@ Proof.
         apply (Bij.EvalInjective f (succ a) (succ b)).
         1: assumption. 1: apply G2, H7. 1: apply G2, H8. assumption. }
   exists h. apply Bij.FromFun; assumption.
+Qed.
+
+Proposition WithOrdinalSucc : forall (a:U),
+  WithOrdinal a -> WithOrdinal (succ a).
+Proof.
+  intros a [b [H1 H2]].
+  assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
+  assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
+  exists (succ b). split; assumption.
 Qed.
 
 (* If a and b are disjoint, a ~ c and b ~ d, then a \/ b ~ c + d.               *)
