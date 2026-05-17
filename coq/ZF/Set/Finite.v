@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Diff.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Omega.
@@ -58,6 +59,14 @@ Proof.
   intros n H1. exists n. split. 1: assumption. apply SCE.Refl.
 Qed.
 
+(* The empty set is finite.                                                     *)
+Proposition Zero : Finite :0:.
+Proof.
+  (* Proof by Claude.                                                           *)
+  (* The empty set is equipotent to 0, which is a natural number.               *)
+  apply WhenNat. apply Omega.HasZero.
+Qed.
+
 (* A finite set remains finite after adjoining a single element.                *)
 Proposition AddElem : forall (a b:U),
   Finite a -> Finite (a :\/: :{b}:).
@@ -105,5 +114,4 @@ Proof.
   intros a b H1. apply EquivCompat with a. 2: assumption.
   apply SCE.Sym. apply SCE.ProdSingleR.
 Qed.
-
 

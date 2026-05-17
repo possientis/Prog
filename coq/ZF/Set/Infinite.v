@@ -3,9 +3,11 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Finite.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Less.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Foundation.
@@ -108,4 +110,34 @@ Proof.
   - assert (card (a :\/: :{b}:) = card (succ a)) as H3. {
       apply SCC.WhenEquiv. assumption. }
     rewrite H3. symmetry. apply CardOfSucc. assumption.
+Qed.
+
+(* Assuming choice, an infinite set has a strict subset equipotent to it.       *)
+Proposition StrictSubset : forall (a:U), Choice -> Infinite a ->
+  exists b, b :<: a /\ b :~: a.
+Proof.
+  (* Proof by Claude.                                                           *)
+  intros a AC H1.
+  (* The empty set is finite, so a is nonempty.                                 *)
+  assert (a <> :0:) as H2. {
+    intros H2. apply H1. rewrite H2. apply Finite.Zero. }
+  apply Empty.HasElem in H2. destruct H2 as [x H2].
+  (* Pick x in a and let b = a \ {x}.                                           *)
+  exists (a :\: :{x}:). split.
+  - (* x is in a but not in b, so b is a strict subset of a.                    *)
+    apply Less.Exists. split.
+    + apply Diff.IsIncl.
+    + exists x. split. 1: assumption.
+      intros H3. apply Diff.Charac in H3. destruct H3 as [_ H3].
+      apply H3. apply Single.IsIn.
+  - apply SCC.EquivCharac. 1: assumption.
+    assert ((a :\: :{x}:) :\/: :{x}: = a) as H3. {
+      apply Diff.RemoveAddElem. assumption. }
+    (* b is infinite: if finite, a = b u {x} would also be finite.              *)
+    assert (Infinite (a :\: :{x}:)) as H4. {
+      intros H4. apply H1. rewrite <- H3. apply Finite.AddElem. assumption. }
+    (* Since a = b u {x} and b is infinite, card b = card a.                    *)
+    assert (card (a :\: :{x}:) = card ((a :\: :{x}:) :\/: :{x}:)) as H5. {
+      apply AddElem. assumption. }
+    rewrite H3 in H5. assumption.
 Qed.
