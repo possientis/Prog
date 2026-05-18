@@ -25,6 +25,7 @@ Definition restrict (F A:Class) : Class := fun x =>
 (* Notation "F :|: A" := (restrict F A)                                         *)
 Global Instance ClassPipe : Pipe Class Class Class := { pipe := restrict }.
 
+(* The pair (y,z) lies in F restricted to A iff y is in A and (y,z) is in F.    *)
 Proposition Charac2 : forall (F A:Class) (y z:U),
   (F:|:A) :(y,z): <-> A y /\ F :(y,z):.
 Proof.
@@ -36,6 +37,7 @@ Proof.
     + assumption.
 Qed.
 
+(* The restriction is compatible with class equivalence in both arguments.      *)
 Proposition EquivCompat : forall (F G A B:Class),
   F :~: G -> A :~: B -> F:|:A :~: G:|:B.
 Proof.
@@ -47,6 +49,7 @@ Proof.
   - apply H1. assumption.
 Qed.
 
+(* The restriction is compatible with class equivalence in the first argument.  *)
 Proposition EquivCompatL : forall (F G A:Class),
   F :~: G -> F:|:A :~: G:|:A.
 Proof.
@@ -54,6 +57,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* The restriction is compatible with class equivalence in the second argument. *)
 Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> F:|:A :~: F:|:B.
 Proof.
@@ -127,6 +131,7 @@ Proof.
   intros F A x [y [z [H1 [_ H2]]]]. subst. assumption.
 Qed.
 
+(* The restriction of a small class is small.                                   *)
 Proposition IsSmallL : forall (F A:Class),
   Small F -> Small (F:|:A).
 Proof.
@@ -150,6 +155,7 @@ Proof.
     exists y. exists z. assumption.
 Qed.
 
+(* Restricting a restriction of F to B further to A equals restricting F to A.  *)
 Proposition TowerProperty : forall (F A B:Class),
   A :<=: B -> (F:|:B) :|: A :~: F:|:A.
 Proof.
@@ -162,6 +168,7 @@ Proof.
     2: assumption. apply H1. assumption.
 Qed.
 
+(* A class included in the range of a restriction to a small class is small.    *)
 Proposition LesserThanRangeIsSmall : forall (F A B:Class),
   Functional F -> Small B -> A :<=: range (F:|:B) -> Small A.
 Proof.
@@ -171,6 +178,7 @@ Proof.
   apply Image.IsSmallR; assumption.
 Qed.
 
+(* The value of F restricted to A at a point of A equals the value of F.        *)
 Proposition Eval : forall (F A:Class) (x:U), Functional F -> A x ->
   (F:|:A)!x = F!x.
 Proof.
@@ -190,6 +198,7 @@ Proof.
     rewrite H6. apply EvalOfClass.WhenNotInDomain. assumption.
 Qed.
 
+(* A class A is small if it is covered by the range of some restriction of F.   *)
 Proposition LesserThanRangeOfRestrict : forall (F A:Class),
   Functional F ->
   (exists a, A :\: range (F:|:toClass a) :~: :0:) ->
@@ -200,6 +209,7 @@ Proof.
   apply SetIsSmall.
 Qed.
 
+(* The restriction of any class to the empty class is the empty class.          *)
 Proposition WhenEmpty : forall (F A:Class),
   A :~: :0: -> F :|: A :~: :0:.
 Proof.

@@ -13,6 +13,7 @@ Require Import ZF.Set.OrdPair.
 Definition Relation (F:Class) : Prop :=
     forall x, F x -> exists y, exists z, x = :(y,z):.
 
+(* The relation property is compatible with class equivalence.                  *)
 Proposition EquivCompat : forall (F G:Class),
   F :~: G -> Relation F -> Relation G.
 Proof.
