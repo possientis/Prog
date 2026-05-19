@@ -4,7 +4,6 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
-Require Import ZF.Class.Relation.Snd.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 
@@ -24,22 +23,18 @@ Proof.
   intros F G H1 y H2. destruct H2 as [x H2]. exists x. apply H1, H2.
 Qed.
 
-(* The direct image of a class P by Snd is the range of P.                      *)
-Lemma ImageBySnd : forall (F:Class),
-  Snd :[F]: :~: range F.
+Proposition ImageOfDomain : forall (F:Class),
+  F:[domain F]: :~: range F.
 Proof.
-  intros F x. split; intros H1.
-  - unfold image in H1. destruct H1 as [x' [H1 H2]]. apply Snd.Charac2 in H2.
-    destruct H2 as [y [z [H2 H3]]]. exists y.
-    subst. assumption.
-  - destruct H1 as [z H1]. unfold image. exists :(z,x):. split.
-    + assumption.
-    + apply Snd.Charac2. exists z. exists x. split; reflexivity.
+  intros F y. split; intros H1.
+  - destruct H1 as [x [H1 H2]]. exists x. assumption.
+  - destruct H1 as [x H1]. exists x. split. 2: assumption. exists y. assumption.
 Qed.
 
 Proposition IsSmall : forall (F:Class),
   Small F -> Small (range F).
 Proof.
+  (* Proof by Claude. *)
   (* Let F be an arbitrary class. *)
   intros F.
 
@@ -49,26 +44,11 @@ Proof.
   (* We need to show that range(F) is small. *)
   assert (Small (range F)) as A. 2: apply A.
 
-  (* Using the equivalence Snd[F] ~ range(F) ... *)
-  apply Small.EquivCompat with Snd:[F]:. 1: apply ImageBySnd.
+  (* Using the equivalence F[domain F] ~ range(F) ... *)
+  apply Small.EquivCompat with F:[domain F]:. 1: apply ImageOfDomain.
 
-  (* It is sufficient to show that Snd[F] is small. *)
-  assert (Small (Snd:[F]:)) as A. 2: apply A.
-
-  (* This follows from the fact that Snd is functional and F is small. *)
-  apply Image.IsSmallR.
-
-  - apply Snd.IsFunctional.
-
-  - apply H1.
-Qed.
-
-Proposition ImageOfDomain : forall (F:Class),
-  F:[domain F]: :~: range F.
-Proof.
-  intros F y. split; intros H1.
-  - destruct H1 as [x [H1 H2]]. exists x. assumption.
-  - destruct H1 as [x H1]. exists x. split. 2: assumption. exists y. assumption.
+  (* Since F is small, so is F[domain F]. *)
+  apply Image.IsSmallL. apply H1.
 Qed.
 
 (* If the domain of F is not empty, then neither is the range.                  *)

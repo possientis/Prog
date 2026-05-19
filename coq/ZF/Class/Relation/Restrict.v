@@ -8,7 +8,6 @@ Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Relation.
-Require Import ZF.Class.Relation.Snd.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
