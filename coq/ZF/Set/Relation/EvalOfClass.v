@@ -55,7 +55,7 @@ Proposition FunctionalAtEvalCharac : forall (F:Class) (a y:U),
   FunctionalAt F a -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1 H2.
-  apply HasValueAtEvalCharac, HasValueAtWhenFunctionalAt; assumption.
+  apply HasValueAtEvalCharac, HasValueAt.WhenFunctionalAt; assumption.
 Qed.
 
 (* If F is functional at a and a lies in domain then (a,F!a) satisfies F.       *)
@@ -82,7 +82,7 @@ Proposition WhenNotFunctionalAt : forall (F:Class) (a:U),
   ~ FunctionalAt F a -> F!a = :0:.
 Proof.
   intros F a H1. apply WhenNotHasValueAt. intros H2. apply H1.
-  apply HasValueAtAsInter. assumption.
+  apply HasValueAt.AsInter. assumption.
 Qed.
 
 (* If a is not in domain of F then F!a is the empty set.                        *)
@@ -90,7 +90,7 @@ Proposition WhenNotInDomain : forall (F:Class) (a:U),
   ~ domain F a -> F!a = :0:.
 Proof.
   intros F a H1. apply WhenNotHasValueAt. intros H2. apply H1.
-  apply HasValueAtAsInter. assumption.
+  apply HasValueAt.AsInter. assumption.
 Qed.
 
 (* If F is functional and a lies in domain of F then F (a,y) iff F!a = y.       *)
@@ -98,7 +98,7 @@ Proposition Charac : forall (F:Class) (a y:U),
   Functional F -> domain F a -> F :(a,y): <-> F!a = y.
 Proof.
   intros F a y H1 H2.
-  apply HasValueAtEvalCharac, HasValueAtWhenFunctional; assumption.
+  apply HasValueAtEvalCharac, HasValueAt.WhenFunctional; assumption.
 Qed.
 
 (* If F is functional and a lies in domain of F then (a,F!a) satisfies F.       *)
