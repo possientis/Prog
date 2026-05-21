@@ -37,18 +37,21 @@ Proof.
   intros f a b. apply Charac3. reflexivity.
 Qed.
 
+(* Every ordered pair (a,b) lies in the domain of from2 f.                      *)
 Proposition DomainOf : forall (f:U -> U -> U) (a b:U),
   domain (from2 f) :(a,b):.
 Proof.
   intros f a b. exists (f a b). apply Satisfies.
 Qed.
 
+(* The class from2 f is a relation.                                             *)
 Proposition IsRelation : forall (f:U -> U -> U), Relation (from2 f).
 Proof.
   intros f x H1. destruct H1 as [u [v H1]].
   exists :(u,v):, (f u v). assumption.
 Qed.
 
+(* The class from2 f is functional.                                             *)
 Proposition IsFunctional : forall (f:U -> U -> U), Functional (from2 f).
 Proof.
   intros f x y1 y2 H1 H2. apply Charac2 in H1. apply Charac2 in H2.
@@ -57,6 +60,7 @@ Proof.
   reflexivity.
 Qed.
 
+(* The class from2 f is a function class.                                       *)
 Proposition IsFunction : forall (f:U -> U -> U), Function (from2 f).
 Proof.
   intros f. split.
@@ -64,6 +68,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
+(* The value of from2 f at the pair (a,b) equals f a b.                         *)
 Proposition Eval : forall (f:U -> U -> U) (a b:U),
   ((from2 f)!:(a,b):) = f a b.
 Proof.

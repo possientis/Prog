@@ -12,7 +12,7 @@ Require Import ZF.Notation.Eval.
 
 (* Given Coq expressions f1 and f2 representing functions on sets and a class A *)
 (* we aim to quickly define the function class F such that:                     *)
-(* F(x) = f1(x) if A x                                                          *)
+(* F(x) = f1(x) if   A x                                                        *)
 (* F(x) = f2(x) if ~ A x                                                        *)
 Definition ifThenElse (A:Class) (f1 f2:U -> U) : Class := fun x => exists y,
   x = :(y, f1 y): /\   A y    \/
@@ -43,6 +43,7 @@ Proof.
   intros A f1 f2 a H1. apply Charac2. right. split. 2: assumption. reflexivity.
 Qed.
 
+(* Every set a lies in the domain of ifThenElse A f1 f2.                        *)
 Proposition DomainOf : forall (A:Class) (f1 f2:U -> U) (a:U),
   domain (ifThenElse A f1 f2) a.
 Proof.
@@ -53,6 +54,7 @@ Proof.
   - exists (f2 a). apply Satisfies2. assumption.
 Qed.
 
+(* The class ifThenElse A f1 f2 is a relation.                                  *)
 Proposition IsRelation : forall (A:Class) (f1 f2:U -> U),
   Relation (ifThenElse A f1 f2).
 Proof.
@@ -61,6 +63,7 @@ Proof.
   - exists (f2 y). assumption.
 Qed.
 
+(* The class ifThenElse A f1 f2 is functional.                                  *)
 Proposition IsFunctional : forall (A:Class) (f1 f2:U -> U),
   Functional (ifThenElse A f1 f2).
 Proof.
@@ -70,6 +73,7 @@ Proof.
   try contradiction; subst; reflexivity.
 Qed.
 
+(* The class ifThenElse A f1 f2 is a function class.                            *)
 Proposition IsFunction : forall (A:Class) (f1 f2:U -> U),
   Function (ifThenElse A f1 f2).
 Proof.
@@ -78,6 +82,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
+(* When a lies in A, the value of ifThenElse A f1 f2 at a equals f1(a).         *)
 Proposition Eval1 : forall (A:Class) (f1 f2:U -> U) (a:U),
   A a -> (ifThenElse A f1 f2)!a = f1 a.
 Proof.
@@ -87,6 +92,7 @@ Proof.
   - apply Satisfies1. assumption.
 Qed.
 
+(* When a does not lie in A, the value of ifThenElse A f1 f2 at a equals f2.    *)
 Proposition Eval2 : forall (A:Class) (f1 f2:U -> U) (a:U),
   ~ A a -> (ifThenElse A f1 f2)!a = f2 a.
 Proof.

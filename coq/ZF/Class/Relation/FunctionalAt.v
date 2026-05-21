@@ -7,13 +7,14 @@ Require Import ZF.Set.OrdPair.
 Definition FunctionalAt (F:Class) (a:U) : Prop :=
   forall y z, F :(a,y): -> F :(a,z): -> y = z.
 
-(* The property of being functional at a is compatible with equivalence.        *)
+(* The property of being functional at a is compatible with class equivalence.  *)
 Proposition EquivCompat : forall (F G:Class) (a:U),
   F :~: G -> FunctionalAt F a -> FunctionalAt G a.
 Proof.
   intros F G a H1 H2 y z H3 H4. apply H2; apply H1; assumption.
 Qed.
 
+(* F is not functional at a iff there exist two distinct values y, z at a.      *)
 Proposition WhenNot : forall (F:Class) (a:U),
   ~ FunctionalAt F a <-> exists y z, y <> z /\ F :(a,y): /\ F :(a,z):.
 Proof.

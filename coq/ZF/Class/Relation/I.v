@@ -22,6 +22,7 @@ Require Import ZF.Set.OrdPair.
 (* The class of all ordered pairs of the form (x,x), aka the 'identity' class.  *)
 Definition I : Class := fun x => exists y, x = :(y,y):.
 
+(* The pair (y,z) is in I iff y equals z.                                       *)
 Proposition Charac2 : forall (y z:U), I :(y,z): <-> y = z.
 Proof.
   intros y z. split; intros H1.
@@ -127,7 +128,6 @@ Proof.
   - apply Charac2. reflexivity.
 Qed.
 
-(* Given any class R, I is an isomorphism class from V to V w.r. to R (and R).  *)
 Proposition IsIsom : forall (R:Class), Isom I R R V V.
 Proof.
   intros R. split.

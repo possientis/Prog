@@ -26,11 +26,12 @@ Module CIN := ZF.Class.Incl.
 (* F is a surjective function class from A to B.                                *)
 Definition Onto (F A B:Class) : Prop := FunctionOn F A /\ range F :~: B.
 
+(* Onto is compatible with class equivalence in all three arguments.            *)
 Proposition EquivCompat : forall (F G A B C D:Class),
-  F :~: G   ->
-  A :~: C   ->
-  B :~: D   ->
-  Onto F A B ->
+  F :~: G       ->
+  A :~: C       ->
+  B :~: D       ->
+  Onto F A B    ->
   Onto G C D.
 Proof.
   intros F G A B C D H1 H2 H3 [H4 H5]. split.
@@ -39,6 +40,7 @@ Proof.
     apply Range.EquivCompat. assumption.
 Qed.
 
+(* Onto is compatible with class equivalence in the first argument.             *)
 Proposition EquivCompatL : forall (F G A B:Class),
   F :~: G -> Onto F A B -> Onto G A B.
 Proof.
@@ -47,6 +49,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Onto is compatible with class equivalence in the second argument.            *)
 Proposition EquivCompatM : forall (F A B C:Class),
   A :~: C -> Onto F A B -> Onto F C B.
 Proof.
@@ -55,6 +58,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Onto is compatible with class equivalence in the third argument.             *)
 Proposition EquivCompatR : forall (F A B C:Class),
   B :~: C -> Onto F A B -> Onto F A C.
 Proof.
@@ -63,11 +67,13 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* If F is a surjection from A to B, then it is a function from A to B.         *)
 Proposition IsFun : forall (F A B:Class), Onto F A B -> Fun F A B.
 Proof.
   intros F A B H1. split. 1: apply H1. apply CIN.Double, Equiv.Sym, H1.
 Qed.
 
+(* A surjection that is injective on its domain is one-to-one.                  *)
 Proposition IsOneToOne : forall (F A B:Class),
   Onto F A B                                      ->
   (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
@@ -86,6 +92,7 @@ Proof.
   intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.Equal'; assumption.
 Qed.
 
+(* Two surjections from A to B that agree pointwise on A are equal.             *)
 Proposition Equal : forall (F G A B:Class),
   Onto F A B                    ->
   Onto G A B                    ->
@@ -145,6 +152,7 @@ Proof.
   - apply FunctionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
+(* If F is a one-to-one surjection from A to B and B is small, then A is small. *)
 Proposition DomainIsSmall : forall (F A B:Class),
   Onto F A B  ->
   OneToOne F  ->
@@ -188,6 +196,7 @@ Proof.
   intros F A B a H1. apply FunctionOn.Satisfies, H1.
 Qed.
 
+(* The value of a surjection from A to B at a point of A lies in B.             *)
 Proposition IsInRange : forall (F A B:Class) (a:U),
   Onto F A B -> A a -> B F!a.
 Proof.
@@ -207,6 +216,7 @@ Proof.
   intros F A B a H1. apply FunctionOn.ImageSetCharac, H1.
 Qed.
 
+(* The domain of the composition of two surjections equals the first domain.    *)
 Proposition DomainOfCompose : forall (F G A B C:Class),
   Onto F A B              ->
   Onto G B C              ->
@@ -222,9 +232,9 @@ Qed.
 
 (* The value at a of G.F is the value at F!a of G when a in A.                  *)
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),
-  Onto F A B            ->
-  Onto G B C            ->
-  A a                   ->
+  Onto F A B              ->
+  Onto G B C              ->
+  A a                     ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
@@ -232,7 +242,6 @@ Proof.
   apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
-(* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
   Onto F A B -> B y <-> exists x, A x /\ F!x = y.
 Proof.
@@ -253,12 +262,14 @@ Proof.
   2: assumption. apply H1.
 Qed.
 
+(* A surjection from A to B is equal to its restriction to A.                   *)
 Proposition IsRestrict : forall (F A B:Class),
   Onto F A B -> F :~: F :|: A.
 Proof.
   intros F A B H1. apply FunctionOn.IsRestrict, H1.
 Qed.
 
+(* The restriction of a surjection from A to B to a subclass C is a surjection. *)
 Proposition Restrict : forall (F A B C:Class),
   Onto F A B -> C :<=: A -> Onto (F:|:C) C F:[C]:.
 Proof.
@@ -267,6 +278,7 @@ Proof.
   - apply Restrict.RangeOf.
 Qed.
 
+(* Two surjections agreeing on a common subdomain have equal restrictions to it,*)
 Proposition RestrictEqual : forall (F A B G C D E:Class),
   Onto F A B                    ->
   Onto G C D                    ->

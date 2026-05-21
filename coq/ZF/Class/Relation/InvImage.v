@@ -8,13 +8,13 @@ Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.OrdPair.
+
 Export ZF.Notation.Image.
 Export ZF.Notation.Inverse.
 
 
 Module CIN := ZF.Class.Incl.
 
-(* Inverse image of P by F is the direct image of P by F^(-1).                  *)
 Proposition Charac : forall (F P:Class) (x:U),
   F^:-1: :[P]: x <-> exists y, P y /\ F :(x,y):.
 Proof.
@@ -25,7 +25,7 @@ Proof.
     apply Converse.Charac2Rev. assumption.
 Qed.
 
-(* The inverse image is compatible with equivalences.                           *)
+(* The inverse image is compatible with class equivalence.                      *)
 Proposition EquivCompat : forall (F G P Q:Class),
   F :~: G -> P :~: Q -> F^:-1: :[P]: :~: G^:-1: :[Q]:.
 Proof.
@@ -33,7 +33,7 @@ Proof.
   apply Converse.EquivCompat. assumption.
 Qed.
 
-(* The inverse image is left-compatible with equivalences.                      *)
+(* The inverse image is left-compatible with class equivalence.                 *)
 Proposition EquivCompatL : forall (F G P:Class),
   F :~: G -> F^:-1: :[P]: :~: G^:-1: :[P]:.
 Proof.
@@ -41,7 +41,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
-(* The inverse image is right-compatible with equivalences.                     *)
+(* The inverse image is right-compatible with class equivalence.                *)
 Proposition EquivCompatR : forall (F P Q:Class),
   P :~: Q -> F^:-1: :[P]: :~: F^:-1: :[Q]:.
 Proof.
@@ -84,7 +84,6 @@ Proof.
     + apply Converse.Range.
 Qed.
 
-(* Characterisation of the inverse image F^(-1)[B] in terms of evaluations of F.*)
 Proposition Eval : forall (F B:Class), Functional F ->
   forall x, F^:-1: :[B]: x <-> domain F x /\ B F!x.
 Proof.
@@ -115,6 +114,7 @@ Proof.
   split. 2: assumption. exists x. split; assumption.
 Qed.
 
+(* If F is functional, the image of the inverse image of B is included in B.    *)
 Proposition ImageIsLess : forall (F B:Class),
   Functional F -> F:[ F^:-1::[B]: ]: :<=: B.
 Proof.

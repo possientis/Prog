@@ -26,11 +26,12 @@ Module CIN := ZF.Class.Incl.
 (* F is an injective function class from A to B.                                *)
 Definition Inj (F A B: Class) : Prop := BijectionOn F A /\ range F :<=: B.
 
+(* Inj is compatible with class equivalence in all three arguments.             *)
 Proposition EquivCompat : forall (F G A B C D:Class),
-  F :~: G   ->
-  A :~: C   ->
-  B :~: D   ->
-  Inj F A B ->
+  F :~: G     ->
+  A :~: C     ->
+  B :~: D     ->
+  Inj F A B   ->
   Inj G C D.
 Proof.
   intros F G A B C D H1 H2 H3 [H4 H5]. split.
@@ -39,6 +40,7 @@ Proof.
     apply Range.EquivCompat. assumption.
 Qed.
 
+(* Inj is compatible with class equivalence in the first argument.              *)
 Proposition EquivCompatL : forall (F G A B:Class),
   F :~: G -> Inj F A B -> Inj G A B.
 Proof.
@@ -47,6 +49,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Inj is compatible with class equivalence in the second argument.             *)
 Proposition EquivCompatM : forall (F A B C:Class),
   A :~: C -> Inj F A B -> Inj F C B.
 Proof.
@@ -55,6 +58,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Inj is compatible with class equivalence in the third argument.              *)
 Proposition EquivCompatR : forall (F A B C:Class),
   B :~: C -> Inj F A B -> Inj F A C.
 Proof.
@@ -80,6 +84,7 @@ Proof.
   intros F A B G C D [H1 _] [H2i _]. apply BijectionOn.Equal'; assumption.
 Qed.
 
+(* Two injections from A to B that agree pointwise on A are equal.              *)
 Proposition Equal : forall (F G A B:Class),
   Inj F A B                     ->
   Inj G A B                     ->
@@ -91,6 +96,7 @@ Proof.
   split. 2: assumption. apply Equiv.Refl.
 Qed.
 
+(* The image of the domain of an injection equals its range.                    *)
 Proposition ImageOfDomain : forall (F A B:Class),
   Inj F A B -> F:[A]: :~: range F.
 Proof.
@@ -118,18 +124,21 @@ Proof.
   intros F A B [H1 _]. apply BijectionOn.IsSmall. assumption.
 Qed.
 
+(* The inverse image of the range of an injection equals its domain.            *)
 Proposition InvImageOfRange : forall (F A B:Class),
   Inj F A B -> F^:-1::[range F]: :~: A.
 Proof.
   intros F A B H1. apply BijectionOn.InvImageOfRange, H1.
 Qed.
 
+(* The range of an injection defined on a small class is small.                 *)
 Proposition RangeIsSmall : forall (F A B:Class),
   Inj F A B -> Small A -> Small (range F).
 Proof.
   intros F A B H1. apply BijectionOn.RangeIsSmall, H1.
 Qed.
 
+(* If F is an injection from A to B and B is small, then A is small.            *)
 Proposition DomainIsSmall : forall (F A B:Class),
   Inj F A B -> Small B -> Small A.
 Proof.
@@ -169,6 +178,7 @@ Proof.
   intros F A B a H1. apply BijectionOn.Satisfies, H1.
 Qed.
 
+(* The value of an injection from A to B at a point of A lies in B.             *)
 Proposition IsInRange : forall (F A B:Class) (a:U),
   Inj F A B -> A a -> B F!a.
 Proof.
@@ -187,9 +197,10 @@ Proof.
   intros F A B a H1. apply BijectionOn.ImageSetCharac, H1.
 Qed.
 
+(* The domain of the composition of two injections equals the first domain.     *)
 Proposition DomainOfCompose : forall (F G A B C:Class),
-  Inj F A B ->
-  Inj G B C ->
+  Inj F A B                 ->
+  Inj G B C                 ->
   domain (G :.: F) :~: A.
 Proof.
   intros F G A B C H1 H2. assert (Inj (G :.: F) A C) as H3. {
@@ -197,10 +208,11 @@ Proof.
   destruct H3 as [[_ H3] _]. apply H3.
 Qed.
 
+(* For composed injections, the value at a equals G applied to F(a).            *)
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),
-  Inj F A B ->
-  Inj G B C ->
-  A a       ->
+  Inj F A B                 ->
+  Inj G B C                 ->
+  A a                       ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B C a [H1 H2] [H3 H4] H5.
@@ -208,13 +220,13 @@ Proof.
   apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
-(* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
   Inj F A B -> range F y <-> exists x, A x /\ F!x = y.
 Proof.
   intros F A B y H1. apply BijectionOn.RangeCharac, H1.
 Qed.
 
+(* If the domain of an injection is non-empty, then so is its range.            *)
 Proposition RangeIsNotEmpty : forall (F A B:Class),
   Inj F A B -> A :<>: :0: -> range F :<>: :0:.
 Proof.
@@ -228,6 +240,7 @@ Proof.
   intros F A B H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+(* The restriction of an injection from A to B to a subclass C is an injection. *)
 Proposition Restrict : forall (F A B C:Class),
   Inj F A B -> C :<=: A -> Inj (F:|:C) C B.
 Proof.
@@ -237,6 +250,7 @@ Proof.
     apply Restrict.RangeIsIncl.
 Qed.
 
+(* Two injections agreeing on a common subdomain have equal restrictions there. *)
 Proposition RestrictEqual : forall (F A B G C D E:Class),
   Inj F A B                     ->
   Inj G C D                     ->
@@ -268,6 +282,7 @@ Proof.
       apply CIN.Refl.
 Qed.
 
+(* The converse of an injection evaluated at a range element lies in the domain.*)
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
   Inj F A B -> range F b -> A (F^:-1:!b).
 Proof.
@@ -304,6 +319,7 @@ Proof.
   intros F A B x y H1. apply BijectionOn.EvalInjective, H1.
 Qed.
 
+(* The value F(a) lies in the image of C under an injection iff a lies in C.    *)
 Proposition EvalInImage : forall (F A B C:Class) (a:U),
   Inj F A B -> A a -> F:[C]: F!a <-> C a.
 Proof.

@@ -33,23 +33,27 @@ Proof.
   intros f x. apply Charac2. reflexivity.
 Qed.
 
+(* Every set a lies in the domain of [f].                                       *)
 Proposition DomainOf : forall (f:U -> U) (a:U), domain :[f]: a.
 Proof.
   intros f a. exists (f a). apply Satisfies.
 Qed.
 
+(* The class [f] is a relation.                                                 *)
 Proposition IsRelation : forall (f:U -> U), Relation :[f]:.
 Proof.
   intros f x H1. destruct H1 as [y H1]. subst. exists y. exists (f y).
   reflexivity.
 Qed.
 
+(* The class [f] is functional.                                                 *)
 Proposition IsFunctional : forall (f:U -> U), Functional :[f]:.
 Proof.
   intros f x y1 y2 H1 H2. apply Charac2 in H1. apply Charac2 in H2.
   subst. reflexivity.
 Qed.
 
+(* The class [f] is a function class.                                           *)
 Proposition IsFunction : forall (f:U -> U), Function :[f]:.
 Proof.
   intros f. split.
@@ -57,6 +61,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
+(* The value of the class [f] at a equals f(a).                                 *)
 Proposition Eval : forall (f:U -> U) (a:U), :[f]:!a = f a.
 Proof.
   intros f a. apply Function.Eval.

@@ -21,14 +21,15 @@ Require Import ZF.Set.Relation.ImageByClass.
 
 Module CIN := ZF.Class.Incl.
 
-(* F is a function from A to B.                                                 *)
+(* F is a function class from A to B.                                           *)
 Definition Fun (F A B:Class) : Prop := FunctionOn F A /\ range F :<=: B.
 
+(* Fun is compatible with class equivalence in all three arguments.             *)
 Proposition EquivCompat : forall (F G A B C D:Class),
-  F :~: G   ->
-  A :~: C   ->
-  B :~: D   ->
-  Fun F A B ->
+  F :~: G     ->
+  A :~: C     ->
+  B :~: D     ->
+  Fun F A B   ->
   Fun G C D.
 Proof.
   intros F G A B C D H1 H2 H3 [H4 H5]. split.
@@ -37,6 +38,7 @@ Proof.
     apply Range.EquivCompat. assumption.
 Qed.
 
+(* Fun is compatible with class equivalence in the first argument.              *)
 Proposition EquivCompatL : forall (F G A B:Class),
   F :~: G -> Fun F A B -> Fun G A B.
 Proof.
@@ -45,6 +47,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Fun is compatible with class equivalence in the second argument.             *)
 Proposition EquivCompatM : forall (F A B C:Class),
   A :~: C -> Fun F A B -> Fun F C B.
 Proof.
@@ -53,6 +56,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Fun is compatible with class equivalence in the third argument.              *)
 Proposition EquivCompatR : forall (F A B C:Class),
   B :~: C -> Fun F A B -> Fun F A C.
 Proof.
@@ -61,6 +65,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* A function from A to B that is injective on A gives a one-to-one class.      *)
 Proposition IsOneToOne : forall (F A B:Class),
   Fun F A B                                       ->
   (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
@@ -79,6 +84,7 @@ Proof.
   intros F A B G C D [H1 _] [H2 _]. apply FunctionOn.Equal'; assumption.
 Qed.
 
+(* Two functions from A to B that agree pointwise on A are equal.               *)
 Proposition Equal : forall (F G A B:Class),
   Fun F A B                     ->
   Fun G A B                     ->
@@ -136,6 +142,7 @@ Proof.
   intros F A B H1. apply FunctionOn.RangeIsSmall, H1.
 Qed.
 
+(* If F is a one-to-one function from A to B and B is small, then A is small.   *)
 Proposition DomainIsSmall : forall (F A B:Class),
   Fun F A B   ->
   OneToOne F  ->
@@ -159,7 +166,6 @@ Proof.
     apply Compose.RangeIsSmaller.
 Qed.
 
-(* Characterization of the value at a of a function defined on A when a in A.   *)
 Proposition Eval' : forall (F A B:Class) (a y:U),
   Fun F A B -> A a -> F :(a,y): <-> F!a = y.
 Proof.
@@ -173,7 +179,6 @@ Proof.
   apply H1. exists y. assumption.
 Qed.
 
-(* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
 Proposition Satisfies : forall (F A B:Class) (a:U),
   Fun F A B -> A a -> F :(a,F!a):.
 Proof.
@@ -200,7 +205,6 @@ Proof.
   intros F A B a H1. apply FunctionOn.ImageSetCharac, H1.
 Qed.
 
-(* Characterization of the domain of G.F.                                       *)
 Proposition DomainOfCompose : forall (F G A B C:Class),
   Fun F A B               ->
   Fun G B C               ->
@@ -226,7 +230,6 @@ Proof.
   apply IsInRange with A. 2: assumption. split; assumption.
 Qed.
 
-(* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
   Fun F A B -> range F y <-> exists x, A x /\ F!x = y.
 Proof.
@@ -240,12 +243,14 @@ Proof.
   intros F A B H1. apply FunctionOn.RangeIsNotEmpty, H1.
 Qed.
 
+(* A function class from A to B equals its own restriction to A.                *)
 Proposition IsRestrict : forall (F A B:Class),
   Fun F A B -> F :~: F :|: A.
 Proof.
   intros F A B H1. apply FunctionOn.IsRestrict, H1.
 Qed.
 
+(* The restriction of a function to a subdomain is a function.                  *)
 Proposition Restrict : forall (F A B C:Class),
   Fun F A B -> C :<=: A -> Fun (F:|:C) C B.
 Proof.
@@ -256,6 +261,7 @@ Proof.
     + apply H2.
 Qed.
 
+(* Two functions agreeing pointwise on E have equal restrictions to E.          *)
 Proposition RestrictEqual : forall (F A B G C D E:Class),
   Fun F A B                     ->
   Fun G C D                     ->

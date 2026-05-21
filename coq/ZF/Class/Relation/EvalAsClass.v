@@ -12,6 +12,7 @@ Definition eval (F:Class) (i:U) : Class := fun x => F :(i,x):.
 (* Notation "F$i" := (eval F i)                                                 *)
 Global Instance ClassEval2 : Eval2 Class U Class := { eval2 := eval }.
 
+(* The class-evaluation operation is compatible with class equivalence.         *)
 Proposition EquivCompat : forall (F G:Class) (i:U),
   F :~: G -> F$i :~: G$i.
 Proof.

@@ -22,9 +22,10 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageByClass.
 
-(* F is a function defined on A.                                                *)
+(* F is a function class defined on A.                                          *)
 Definition FunctionOn (F A:Class) : Prop := Function F /\ domain F :~: A.
 
+(* FunctionOn is compatible with class equivalence in both arguments.           *)
 Proposition EquivCompat : forall (F G A B:Class),
   F :~: G -> A :~: B -> FunctionOn F A -> FunctionOn G B.
 Proof.
@@ -34,6 +35,7 @@ Proof.
     apply Domain.EquivCompat. assumption.
 Qed.
 
+(* FunctionOn is compatible with class equivalence in the first argument.       *)
 Proposition EquivCompatL : forall (F G A:Class),
   F :~: G -> FunctionOn F A -> FunctionOn G A.
 Proof.
@@ -41,6 +43,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* FunctionOn is compatible with class equivalence in the second argument.      *)
 Proposition EquivCompatR : forall (F A B:Class),
   A :~: B -> FunctionOn F A -> FunctionOn F B.
 Proof.
@@ -48,6 +51,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* A function on A that is injective on A gives a one-to-one class.             *)
 Proposition IsOneToOne : forall (F A:Class),
   FunctionOn F A                                  ->
   (forall x y, A x -> A y -> F!x = F!y -> x = y)  ->
@@ -80,6 +84,7 @@ Proof.
     + intros x H8. apply H7, H2. assumption.
 Qed.
 
+(* Two functions defined on A that agree pointwise on A are equal.              *)
 Proposition Equal : forall (F G A:Class),
   FunctionOn F A                ->
   FunctionOn G A                ->
@@ -99,7 +104,7 @@ Proof.
   - apply Range.ImageOfDomain.
 Qed.
 
-(* If F is a function defined on A, then it is a subclass of A x F[A].          *)
+(* A function class defined on A is a subclass of the product A x F[A].         *)
 Proposition IsIncl : forall (F A:Class),
   FunctionOn F A -> F :<=: A :x: F:[A]:.
 Proof.
@@ -142,6 +147,7 @@ Proof.
   - apply ImageIsSmall with A; assumption.
 Qed.
 
+(* If F is a one-to-one function on A with small range, then A is small.        *)
 Proposition DomainIsSmall : forall (F A:Class),
   FunctionOn F A    ->
   OneToOne F        ->
@@ -167,7 +173,6 @@ Proof.
     apply Equiv.Sym. assumption.
 Qed.
 
-(* Characterization of the value at a of a function defined on A when a in A.   *)
 Proposition Eval' : forall (F A:Class) (a y:U),
   FunctionOn F A -> A a -> F :(a,y): <-> F!a = y.
 Proof.
@@ -182,7 +187,6 @@ Proof.
   apply H1. exists y. assumption.
 Qed.
 
-(* The ordered pair (a,F!a) satisfies the predicate F when a in A.              *)
 Proposition Satisfies : forall (F A:Class) (a:U),
   FunctionOn F A -> A a -> F :(a,F!a):.
 Proof.
@@ -220,10 +224,9 @@ Proof.
     exists x. split. 1: assumption. split. 2: assumption. apply H1. assumption.
 Qed.
 
-(* Characterization of the domain of G.F.                                       *)
 Proposition DomainOfCompose : forall (F G A B:Class) (a:U),
-  FunctionOn F A ->
-  FunctionOn G B ->
+  FunctionOn F A                        ->
+  FunctionOn G B                        ->
   domain (G :.: F) a <-> A a /\ B F!a.
 Proof.
   intros F G A B a [H1 H2] [H3 H4]. split; intros H5.
@@ -239,10 +242,10 @@ Qed.
 
 (* The value at a of G.F is the value at F!a of G when a in A and F!a in B.     *)
 Proposition ComposeEval : forall (F G A B:Class) (a:U),
-  FunctionOn F A ->
-  FunctionOn G B ->
-  A a            ->
-  B F!a          ->
+  FunctionOn F A          ->
+  FunctionOn G B          ->
+  A a                     ->
+  B F!a                   ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G A B a [H1 H2] [H3 H4] H5 H6.
@@ -251,7 +254,6 @@ Proof.
   - apply H4. assumption.
 Qed.
 
-(* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A:Class) (y:U),
   FunctionOn F A -> range F y <-> exists x, A x /\ F!x = y.
 Proof.
@@ -273,6 +275,7 @@ Proof.
   apply Equiv.NotCompatL with A. 2: assumption. apply Equiv.Sym, H1.
 Qed.
 
+(* A function defined on A equals its restriction to A.                         *)
 Proposition IsRestrict : forall (F A:Class),
   FunctionOn F A -> F :~: F :|: A.
 Proof.
@@ -281,6 +284,7 @@ Proof.
   - apply Restrict.EquivCompatR, H1.
 Qed.
 
+(* Restricting a function defined on A to a subclass B gives a function on B.   *)
 Proposition Restrict : forall (F A B:Class),
   FunctionOn F A -> B :<=: A -> FunctionOn (F:|:B) B.
 Proof.
@@ -292,6 +296,7 @@ Proof.
       apply H2, H3. assumption.
 Qed.
 
+(* Two functions agreeing pointwise on C have equal restrictions to C.          *)
 Proposition RestrictEqual : forall (F G A B C:Class),
   FunctionOn F A                ->
   FunctionOn G B                ->

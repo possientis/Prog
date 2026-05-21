@@ -23,6 +23,7 @@ Require Import ZF.Set.Relation.ImageByClass.
 (* A class is a function iff it is a relation and it is functional.             *)
 Definition Function (F:Class) : Prop := Relation F /\ Functional F.
 
+(* Function is compatible with class equivalence.                               *)
 Proposition EquivCompat : forall (F G:Class),
   F :~: G -> Function F -> Function G.
 Proof.
@@ -31,6 +32,7 @@ Proof.
   - apply Functional.EquivCompat with F; assumption.
 Qed.
 
+(* A function that is injective on its domain gives a one-to-one class.         *)
 Proposition IsOneToOne : forall (F:Class),
   Function F                                                    ->
   (forall x y, domain F x -> domain F y -> F!x = F!y -> x = y)  ->
@@ -75,6 +77,7 @@ Proof.
       rewrite <- H5. apply H2. assumption.
 Qed.
 
+(* Two functions with equal domains that agree pointwise are equal.             *)
 Proposition Equal : forall (F G:Class),
   Function F                            ->
   Function G                            ->
@@ -130,6 +133,7 @@ Proof.
   - apply ImageIsSmall; assumption.
 Qed.
 
+(* If F is one-to-one and its range is small, then its domain is small.         *)
 Proposition DomainIsSmall : forall (F:Class),
   OneToOne F -> Small (range F) -> Small (domain F).
 Proof.
@@ -179,6 +183,7 @@ Proof.
   intros F a H1. apply EvalOfClass.Satisfies, H1.
 Qed.
 
+(* When a lies in the domain of a function class F, F!a lies in the range.      *)
 Proposition IsInRange : forall (F:Class) (a:U),
   Function F -> domain F a -> range F F!a.
 Proof.
@@ -205,17 +210,19 @@ Proof.
     + apply Eval'; assumption.
 Qed.
 
+(* When F is a function, a is in domain G.F iff a is in domain F and F!a in G.  *)
 Proposition DomainOfCompose : forall (F G:Class) (a:U),
   Function F -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
   intros F G a H1. apply Compose.FunctionalDomainCharac, H1.
 Qed.
 
+(* The value at a of G.F equals the value at F!a of G, for function classes.    *)
 Proposition ComposeEval : forall (F G:Class) (a:U),
-  Function F     ->
-  Function G     ->
-  domain F a     ->
-  domain G F!a   ->
+  Function F                ->
+  Function G                ->
+  domain F a                ->
+  domain G F!a              ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [_ H1] [_ H2]. apply Compose.Eval; assumption.
@@ -238,12 +245,14 @@ Proof.
   apply Range.IsNotEmpty.
 Qed.
 
+(* A function class equals its restriction to its own domain.                   *)
 Proposition IsRestrict : forall (F:Class),
   Function F -> F :~: F :|: domain F.
 Proof.
   intros F H1. apply Restrict.RelationCharac, H1.
 Qed.
 
+(* The restriction of a function class to any class is a function class.        *)
 Proposition Restrict : forall (F A:Class),
   Function F  -> Function (F:|:A).
 Proof.
@@ -252,6 +261,7 @@ Proof.
   - apply Restrict.IsFunctional, H1.
 Qed.
 
+(* Two function classes agreeing pointwise on A have equal restrictions to A.   *)
 Proposition RestrictEqual : forall (F G A:Class),
   Function F                    ->
   Function G                    ->

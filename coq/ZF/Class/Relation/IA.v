@@ -21,7 +21,6 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
-(* I|A is the restriction of the identity class I to the class A.               *)
 Proposition Charac : forall (A:Class) (x:U),
   (I:|:A) x <-> exists y, A y /\ x = :(y,y):.
 Proof.
@@ -92,7 +91,6 @@ Proof.
   - apply IsOneToOne.
 Qed.
 
-
 (* The domain of I|A is A.                                                      *)
 Proposition Domain : forall (A:Class), domain (I:|:A) :~: A.
 Proof.
@@ -136,7 +134,6 @@ Proof.
   - apply Range.
 Qed.
 
-
 (* If x lies in A, then the value of I|A at x is x.                             *)
 Proposition Eval : forall (A:Class) (x:U),
   A x -> (I:|:A)!x = x.
@@ -146,6 +143,7 @@ Proof.
   - apply I.Eval.
 Qed.
 
+(* A function defined on A that fixes every element of A equals I|A.            *)
 Proposition Equal : forall (F A:Class),
   FunctionOn F A              ->
   (forall x, A x -> F!x = x)  ->
@@ -155,7 +153,6 @@ Proof.
   - apply IsFunctionOn.
   - intros x H3. rewrite H2. 2: assumption. symmetry. apply Eval. assumption.
 Qed.
-
 
 (* I|A is an isomorphism class from A to A w.r to R (and R).                    *)
 Proposition IsIsom : forall (R A:Class), Isom (I:|:A) R R A A.

@@ -19,6 +19,7 @@ Module CIN := ZF.Class.Incl.
 (* A class is one-to-one iff both itself and its converse are functional.       *)
 Definition OneToOne (F:Class) : Prop := Functional F /\ Functional F^:-1:.
 
+(* The one-to-one property is compatible with class equivalence.                *)
 Proposition EquivCompat : forall (F G:Class),
   F :~: G -> OneToOne F -> OneToOne G.
 Proof.
@@ -43,20 +44,20 @@ Proof.
   intros F [H1 _]. assumption.
 Qed.
 
+(* The image of a small class by a one-to-one class is small.                   *)
 Proposition ImageIsSmall : forall (F A:Class),
   OneToOne F -> Small A -> Small F:[A]:.
 Proof.
   intros F A [H1 _]. apply Image.IsSmallR. assumption.
 Qed.
 
+(* The inverse image of a small class by a one-to-one class is small.           *)
 Proposition InvImageIsSmall : forall (F B:Class),
   OneToOne F -> Small B -> Small F^:-1::[B]:.
 Proof.
   intros F B [_ H1]. apply Image.IsSmallR. assumption.
 Qed.
 
-(* When two ordered pairs belong to a one-to-one class, equality between the    *)
-(* first coordinates is equivalent to equality between the second coordinates.  *)
 Proposition CoordEquiv : forall (F:Class) (x1 x2 y1 y2:U),
   OneToOne F -> F :(x1,y1): -> F :(x2,y2): -> x1 = x2 <-> y1 = y2.
 Proof.
@@ -65,6 +66,7 @@ Proof.
   - apply CharacL with F y2; assumption.
 Qed.
 
+(* The converse of a one-to-one class is one-to-one.                            *)
 Proposition Converse : forall (F:Class),
   OneToOne F -> OneToOne F^:-1:.
 Proof.
@@ -91,6 +93,7 @@ Proof.
   intros F a [H1 _]. apply EvalOfClass.Satisfies. assumption.
 Qed.
 
+(* The value of a one-to-one class at a domain element lies in its range.       *)
 Proposition IsInRange : forall (F:Class) (a:U),
   OneToOne F -> domain F a -> range F F!a.
 Proof.
@@ -103,6 +106,7 @@ Proof.
   intros F A [H1 _]. apply EvalOfClass.ImageCharac. assumption.
 Qed.
 
+(* For a one-to-one class, the converse at a range element is in the domain.    *)
 Proposition ConverseEvalIsInDomain : forall (F:Class) (b:U),
   OneToOne F -> range F b -> domain F (F^:-1:!b).
 Proof.
@@ -147,16 +151,18 @@ Proof.
   intros F G a [H1 _]. apply Compose.FunctionalDomainCharac. assumption.
 Qed.
 
+(* The value of a composed one-to-one class at a equals G applied to F(a).      *)
 Proposition ComposeEval : forall (F G:Class) (a:U),
-  OneToOne F      ->
-  OneToOne G      ->
-  domain F a      ->
-  domain G F!a    ->
+  OneToOne F                ->
+  OneToOne G                ->
+  domain F a                ->
+  domain G F!a              ->
   (G :.: F)!a = G!(F!a).
 Proof.
   intros F G a [H1 _] [H2 _]. apply Compose.Eval; assumption.
 Qed.
 
+(* For a one-to-one class, the inverse image of the image of A equals A.        *)
 Proposition InvImageOfImage : forall (F A:Class),
   OneToOne F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
 Proof.
@@ -165,6 +171,7 @@ Proof.
   - apply InvImage.OfImageIsMore. assumption.
 Qed.
 
+(* For a one-to-one class, the image of the inverse image of B equals B.        *)
 Proposition ImageOfInvImage : forall (F B:Class),
   OneToOne F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
@@ -182,6 +189,7 @@ Proof.
   rewrite <- H4 in H6. revert H5 H6. apply CharacL. assumption.
 Qed.
 
+(* A functional class is one-to-one when it is injective on its domain.         *)
 Proposition WhenFunctional : forall (F:Class),
   Functional F                                                  ->
   (forall x y, domain F x -> domain F y -> F!x = F!y -> x = y)  ->
@@ -197,6 +205,7 @@ Proof.
   rewrite H7. symmetry. assumption.
 Qed.
 
+(* F(a) lies in the image of A under a one-to-one class iff a belongs to A.     *)
 Proposition EvalInImage : forall (F A:Class) (a:U),
   OneToOne F -> domain F a -> F:[A]: F!a <-> A a.
 Proof.
@@ -209,6 +218,7 @@ Proof.
   - exists a. split. 1: assumption. apply Satisfies; assumption.
 Qed.
 
+(* The restriction of a one-to-one class is one-to-one.                         *)
 Proposition Restrict : forall (F A:Class),
   OneToOne F  -> OneToOne (F:|:A).
 Proof.
