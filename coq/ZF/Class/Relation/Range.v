@@ -10,6 +10,7 @@ Require Import ZF.Set.OrdPair.
 (* The range of a class.                                                        *)
 Definition range (F:Class) : Class := fun y => exists x, F :(x,y):.
 
+(* The range is compatible with class equivalence.                              *)
 Proposition EquivCompat : forall (F G:Class),
   F :~: G -> range F :~: range G.
 Proof.
@@ -17,12 +18,14 @@ Proof.
   exists x; apply H1; assumption.
 Qed.
 
+(* The range is compatible with class inclusion.                                *)
 Proposition InclCompat : forall (F G:Class),
   F :<=: G -> range F :<=: range G.
 Proof.
   intros F G H1 y H2. destruct H2 as [x H2]. exists x. apply H1, H2.
 Qed.
 
+(* The direct image of the domain of a class F under F is the range of F.       *)
 Proposition ImageOfDomain : forall (F:Class),
   F:[domain F]: :~: range F.
 Proof.
@@ -31,6 +34,7 @@ Proof.
   - destruct H1 as [x H1]. exists x. split. 2: assumption. exists y. assumption.
 Qed.
 
+(* The range of a small class is a small class.                                 *)
 Proposition IsSmall : forall (F:Class),
   Small F -> Small (range F).
 Proof.
@@ -59,6 +63,7 @@ Proof.
   apply Empty.HasElem. exists y. exists x. assumption.
 Qed.
 
+(* The direct image of a class under F is a subclass of the range of F.         *)
 Proposition ImageIsIncl : forall (F A:Class),
   F:[A]: :<=: range F.
 Proof.

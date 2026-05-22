@@ -65,6 +65,7 @@ Proof.
   - apply H1.
 Qed.
 
+(* The domain of an empty class is empty.                                       *)
 Proposition WhenEmpty : forall (F:Class),
   F :~: :0: ->  domain F :~: :0:.
 Proof.
