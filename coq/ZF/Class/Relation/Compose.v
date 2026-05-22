@@ -29,6 +29,7 @@ Definition compose (G F:Class) : Class := fun u =>
 (* Notation "G :.: F" := (compose G F)                                          *)
 Global Instance ClassDot : Dot Class := { dot := compose }.
 
+(* (x,z) is in G.F iff there exists y with (x,y) in F and (y,z) in G.           *)
 Proposition Charac2 : forall (F G:Class) (x z:U),
   (G :.: F) :(x,z): <-> exists y, F :(x,y): /\ G :(y,z):.
 Proof.
@@ -70,6 +71,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* Composition of classes is associative.                                       *)
 Proposition Assoc : forall (F G H:Class),
   (H :.: G) :.: F :~: H :.: (G :.: F).
 Proof.
@@ -184,7 +186,6 @@ Proof.
     subst. exists x. assumption.
 Qed.
 
-(* Characterisation of the domain of G.F in terms of the eval F!a.              *)
 Proposition FunctionalAtDomainCharac : forall (F G:Class) (a:U),
   FunctionalAt F a -> domain (G :.: F) a <-> domain F a /\ domain G F!a.
 Proof.
@@ -262,7 +263,8 @@ Proof.
   - apply Functional.IsFunctionalAt. assumption.
 Qed.
 
-Lemma ImageByCmp : forall (F G:Class),
+(* The composition of G with F is included in the image of F x G under Cmp.     *)
+Lemma ImageUnderCmp : forall (F G:Class),
   (G :.: F) :<=: Cmp :[F :x: G]:.
 Proof.
   intros F G u H1. destruct H1 as [x [y [z [H1 [H2 H3]]]]].
@@ -272,16 +274,18 @@ Proof.
     split. 2: assumption. reflexivity.
 Qed.
 
+(* The composition of two small classes is a small class.                       *)
 Proposition IsSmall : forall (F G:Class),
   Small F -> Small G -> Small (G :.: F).
 Proof.
   intros F G H1 H2. apply Small.InclCompat with (Cmp :[F :x: G]:).
-  - apply ImageByCmp.
+  - apply ImageUnderCmp.
   - apply Image.IsSmallR.
     + apply Cmp.IsFunctional.
     + apply Prod.IsSmall; assumption.
 Qed.
 
+(* The image of A under G.F equals the image of F[A] under G.                   *)
 Proposition Image : forall (F G A:Class),
   (G :.: F) :[A]: :~: G:[F:[A]:]:.
 Proof.

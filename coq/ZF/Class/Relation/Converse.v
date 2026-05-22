@@ -19,13 +19,14 @@ Export ZF.Notation.Inverse.
 
 Module CIN := ZF.Class.Incl.
 
-(* The converse of a class is the relation of the converse of its binary class. *)
+(* The converse of a class.                                                     *)
 Definition converse (F:Class) : Class := fun x =>
   exists y z, x = :(z,y): /\ F :(y,z):.
 
 (* Notation "F ^:-1:" := (converse F)                                           *)
 Global Instance ClassInverse : Inverse Class := { inverse := converse }.
 
+(* If (y,z) is in the converse of F, then (z,y) is in F.                        *)
 Proposition Charac2 : forall (F:Class) (y z:U),
   F^:-1: :(y,z): -> F :(z,y):.
 Proof.
@@ -33,12 +34,14 @@ Proof.
   destruct H1 as [H1 H1']. subst. assumption.
 Qed.
 
+(* If (z,y) is in F, then (y,z) is in the converse of F.                        *)
 Proposition Charac2Rev : forall (F:Class) (y z:U),
   F :(z,y): -> F^:-1: :(y,z):.
 Proof.
   intros F y z H1. exists z. exists y. split. 1: reflexivity. assumption.
 Qed.
 
+(* The converse operation is compatible with class equivalence.                 *)
 Proposition EquivCompat : forall (F G:Class),
   F :~: G -> F^:-1: :~: G^:-1:.
 Proof.
@@ -46,6 +49,7 @@ Proof.
   exists y; exists z; split; try assumption; apply H1; assumption.
 Qed.
 
+(* The converse operation is compatible with class inclusion.                   *)
 Proposition InclCompat : forall (F G:Class),
   F :<=: G -> F^:-1: :<=: G^:-1:.
 Proof.
@@ -53,8 +57,8 @@ Proof.
   exists y. exists z. split. 1: reflexivity. apply H1. assumption.
 Qed.
 
-(* The converse is the direct image by Switch.                                  *)
-Lemma IsImageBySwitch : forall (F:Class),
+(* The converse is the direct image under Switch.                               *)
+Proposition ImageUnderSwitch : forall (F:Class),
  F^:-1: :~: Switch :[F]:.
 Proof.
   intros F x. split; intros H1.
@@ -67,6 +71,7 @@ Proof.
     + assumption.
 Qed.
 
+(* If F is small, then its converse is also small.                              *)
 Proposition IsSmall : forall (F:Class),
   Small F -> Small F^:-1:.
 Proof.
@@ -81,7 +86,7 @@ Proof.
 
   (* Using the equivalence converse(F) ~ Switch[F] ... *)
   apply Small.EquivCompat with Switch:[F]:.
-    1: { apply Equiv.Sym, IsImageBySwitch. }
+    1: { apply Equiv.Sym, ImageUnderSwitch. }
 
   (* It is sufficient to show that Switch[F] is small. *)
   assert (Small (Switch:[F]:)) as A. 2: apply A.

@@ -25,9 +25,10 @@ Require Import ZF.Set.Relation.ImageUnderClass.
 
 Module CIN := ZF.Class.Incl.
 
-(* F is a bijection from A to B.                                                *)
+(* F is a bijection class from A to B.                                          *)
 Definition Bij (F A B:Class) : Prop := BijectionOn F A /\ range F :~: B.
 
+(* Bij is compatible with class equivalence in all three arguments.             *)
 Proposition EquivCompat : forall (F G A B C D:Class),
   F :~: G   ->
   A :~: C   ->
@@ -41,6 +42,7 @@ Proof.
     apply Range.EquivCompat. assumption.
 Qed.
 
+(* Bij is compatible with class equivalence in the first argument.              *)
 Proposition EquivCompatL : forall (F G A B:Class),
   F :~: G -> Bij F A B -> Bij G A B.
 Proof.
@@ -49,6 +51,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Bij is compatible with class equivalence in the second argument.             *)
 Proposition EquivCompatM : forall (F A B C:Class),
   A :~: C -> Bij F A B -> Bij F C B.
 Proof.
@@ -57,6 +60,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Bij is compatible with class equivalence in the third argument.              *)
 Proposition EquivCompatR : forall (F A B C:Class),
   B :~: C -> Bij F A B -> Bij F A C.
 Proof.
@@ -65,6 +69,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* A bijection from A to B is a function from A to B.                           *)
 Proposition IsFun : forall (F A B:Class),
   Bij F A B -> Fun F A B.
 Proof.
@@ -72,18 +77,21 @@ Proof.
   split. 1: assumption. apply CIN.Double, Equiv.Sym. assumption.
 Qed.
 
+(* A bijection from A to B is a function defined on A.                          *)
 Proposition IsFunctionOn : forall (F A B:Class),
   Bij F A B -> FunctionOn F A.
 Proof.
   intros F A B H1. apply IsFun in H1. apply H1.
 Qed.
 
+(* A bijection from A to B is an injection from A to B.                         *)
 Proposition IsInj : forall (F A B:Class),
   Bij F A B -> Inj F A B.
 Proof.
   intros F A B H1. split. 1: apply H1. apply CIN.Double, Equiv.Sym, H1.
 Qed.
 
+(* A bijection from A to B is a surjection from A to B.                         *)
 Proposition IsOnto : forall (F A B:Class),
   Bij F A B -> Onto F A B.
 Proof.
@@ -100,6 +108,7 @@ Proof.
   intros F A B G C D [H1 _] [H2i _]. apply BijectionOn.Equal'; assumption.
 Qed.
 
+(* Two bijections from A to B that agree pointwise on A are equal.              *)
 Proposition Equal : forall (F G A B:Class),
   Bij F A B                     ->
   Bij G A B                     ->
@@ -110,6 +119,7 @@ Proof.
   apply (Equal' F A B G A B H1 H2). split. 2: assumption. apply Equiv.Refl.
 Qed.
 
+(* The image of A under a bijection from A to B is equal to B.                  *)
 Proposition ImageOfDomain : forall (F A B:Class),
   Bij F A B -> F:[A]: :~: B.
 Proof.
@@ -117,26 +127,28 @@ Proof.
   2: assumption. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
-(* A bijection F:A -> B is a subclass of AxB.                                   *)
+(* A bijection F:A -> B is a subclass of A x B.                                 *)
 Proposition IsIncl : forall (F A B:Class),
   Bij F A B -> F :<=: A :x: B.
 Proof.
   intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
+(* The image of a small class under a bijection from A to B is small.           *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F:[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.ImageIsSmall with A. assumption.
 Qed.
 
-(* A bijection F:A -> B defined on a small class  is small.                     *)
+(* A bijection F:A -> B defined on a small class is small.                      *)
 Proposition IsSmall : forall (F A B:Class),
   Bij F A B -> Small A -> Small F.
 Proof.
   intros F A B H1. apply BijectionOn.IsSmall, H1.
 Qed.
 
+(* The inverse image of B under a bijection from A to B is equal to A.          *)
 Proposition InvImageOfRange : forall (F A B:Class),
   Bij F A B -> F^:-1::[B]: :~: A.
 Proof.
@@ -145,6 +157,7 @@ Proof.
   - apply BijectionOn.InvImageOfRange, H1.
 Qed.
 
+(* If a bijection from A to B has a small domain A, then B is small.            *)
 Proposition RangeIsSmall : forall (F A B:Class),
   Bij F A B -> Small A -> Small B.
 Proof.
@@ -153,6 +166,7 @@ Proof.
   - apply BijectionOn.RangeIsSmall with A. 2: assumption. apply H1.
 Qed.
 
+(* If a bijection from A to B has a small codomain B, then A is small.          *)
 Proposition DomainIsSmall : forall (F A B:Class),
   Bij F A B -> Small B -> Small A.
 Proof.
@@ -161,6 +175,7 @@ Proof.
   - apply H1.
 Qed.
 
+(* The composition of two bijections is a bijection.                            *)
 Proposition Compose : forall (F G A B C:Class),
   Bij F A B -> Bij G B C -> Bij (G :.: F) A C.
 Proof.
@@ -193,6 +208,7 @@ Proof.
   intros F A B a H1. apply IsFun in H1. apply Fun.Satisfies with B. assumption.
 Qed.
 
+(* If a lies in A, the value F!a lies in B for a bijection from A to B.         *)
 Proposition IsInRange : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> B F!x.
 Proof.
@@ -211,6 +227,7 @@ Proof.
   intros F A B a H1. apply BijectionOn.ImageSetCharac, H1.
 Qed.
 
+(* The domain of the composition of two bijections equals the first domain.     *)
 Proposition DomainOfCompose : forall (F G A B C:Class),
   Bij F A B               ->
   Bij G B C               ->
@@ -220,6 +237,7 @@ Proof.
   apply Fun.DomainOfCompose with B C; assumption.
 Qed.
 
+(* The value at a of the composition G.F equals the value at F!a of G.          *)
 Proposition ComposeEval : forall (F G A B C:Class) (a:U),
   Bij F A B               ->
   Bij G B C               ->
@@ -230,7 +248,6 @@ Proof.
   apply Fun.ComposeEval with B C; apply IsFun; assumption.
 Qed.
 
-(* Characterisation of the range of F.                                          *)
 Proposition RangeCharac : forall (F A B:Class) (y:U),
   Bij F A B -> B y <-> exists x, A x /\ F!x = y.
 Proof.
@@ -239,6 +256,7 @@ Proof.
   - apply H2. apply BijectionOn.RangeCharac with A; assumption.
 Qed.
 
+(* The image of a subclass of A under a bijection from A to B is a subset of B. *)
 Proposition ImageIncl : forall (F A B C:Class),
   Bij F A B -> C :<=: A -> F:[C]: :<=: B.
 Proof.
@@ -246,18 +264,21 @@ Proof.
   destruct H3 as [x [H3 H4]]. apply H1. exists x. assumption.
 Qed.
 
+(* If the domain of a bijection from A to B is non-empty, then B is non-empty.  *)
 Proposition RangeIsNotEmpty : forall (F A B:Class),
   Bij F A B -> A :<>: :0: -> B :<>: :0:.
 Proof.
   intros F A B H1. apply Onto.RangeIsNotEmpty with F, IsOnto. assumption.
 Qed.
 
+(* A bijection from A to B equals its own restriction to A.                     *)
 Proposition IsRestrict : forall (F A B:Class),
   Bij F A B -> F :~: F:|:A.
 Proof.
   intros F A B H1. apply BijectionOn.IsRestrict, H1.
 Qed.
 
+(* The restriction of a bijection from A to B to a subclass C of A is a bij.    *)
 Proposition Restrict : forall (F A B C:Class),
   Bij F A B ->  C :<=: A -> Bij (F:|:C) C F:[C]:.
 Proof.
@@ -266,6 +287,7 @@ Proof.
   - apply Restrict.RangeOf.
 Qed.
 
+(* Two bijections that agree pointwise on E have equal restrictions to E.       *)
 Proposition RestrictEqual : forall (F A B G C D E:Class),
   Bij F A B                     ->
   Bij G C D                     ->
@@ -277,12 +299,14 @@ Proof.
   intros F A B G C D E [H1 _] [H2 _]. apply BijectionOn.RestrictEqual; assumption.
 Qed.
 
+(* The inverse image of a small class under a bijection is small.               *)
 Proposition InvImageIsSmall : forall (F A B C:Class),
   Bij F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
   intros F A B C [H1 _]. apply BijectionOn.InvImageIsSmall with A. assumption.
 Qed.
 
+(* The converse of a bijection from A to B is a bijection from B to A.          *)
 Proposition Converse : forall (F A B:Class),
   Bij F A B -> Bij F^:-1: B A.
 Proof.
@@ -292,6 +316,7 @@ Proof.
     apply Converse.Range.
 Qed.
 
+(* If y lies in B, the value of the converse at y lies in A.                    *)
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> A (F^:-1:!y).
 Proof.
@@ -299,12 +324,14 @@ Proof.
   apply Converse. assumption.
 Qed.
 
+(* Applying the converse after F recovers the original element of A.            *)
 Proposition ConverseEvalOfEval : forall (F A B:Class) (x:U),
   Bij F A B -> A x -> F^:-1:!(F!x) = x.
 Proof.
   intros F A B x H1. apply BijectionOn.ConverseEvalOfEval, H1.
 Qed.
 
+(* Applying F after the converse recovers the original element of B.            *)
 Proposition EvalOfConverseEval : forall (F A B:Class) (y:U),
   Bij F A B -> B y -> F!(F^:-1:!y) = y.
 Proof.
@@ -313,12 +340,14 @@ Proof.
   apply H2. assumption.
 Qed.
 
+(* The inverse image of the image of C under a bijection from A to B equals C.  *)
 Proposition InvImageOfImage : forall (F A B C:Class),
   Bij F A B -> C :<=: A -> F^:-1::[ F:[C]: ]: :~: C.
 Proof.
   intros F A B C [H1 H2] H3. apply BijectionOn.InvImageOfImage with A; assumption.
 Qed.
 
+(* The image of the inverse image of C under a bijection from A to B equals C.  *)
 Proposition ImageOfInvImage : forall (F A B C:Class),
   Bij F A B -> C :<=: B -> F:[ F^:-1::[C]: ]: :~: C.
 Proof.
@@ -327,12 +356,14 @@ Proof.
   apply Equiv.Sym. assumption.
 Qed.
 
+(* A bijection from A to B is injective: equal values imply equal arguments.    *)
 Proposition EvalInjective : forall (F A B:Class) (x y:U),
   Bij F A B -> A x -> A y -> F!x = F!y -> x = y.
 Proof.
   intros F A B x y H1. apply BijectionOn.EvalInjective, H1.
 Qed.
 
+(* The value F!a lies in the image of C iff a lies in C, for a bijection.       *)
 Proposition EvalInImage : forall (F A B C:Class) (a:U),
   Bij F A B -> A a -> F:[C]: F!a <-> C a.
 Proof.

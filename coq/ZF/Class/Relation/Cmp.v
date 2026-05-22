@@ -18,6 +18,7 @@ Proof.
     exists x. exists y. exists y'. exists z. rewrite H1, H2. reflexivity.
 Qed.
 
+(* The class Cmp is functional.                                                 *)
 Proposition IsFunctional : Functional Cmp.
 Proof.
   intros u v v' H1 H2. apply Charac2 in H1. apply Charac2 in H2.

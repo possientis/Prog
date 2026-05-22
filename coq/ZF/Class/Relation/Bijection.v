@@ -24,6 +24,7 @@ Require Import ZF.Set.Relation.ImageUnderClass.
 (* A class is a bijection iff it is a relation and it is one-to-one.            *)
 Definition Bijection (F:Class) : Prop := Relation F /\ OneToOne F.
 
+(* Bijection is compatible with class equivalence.                              *)
 Proposition EquivCompat : forall (F G:Class),
   F :~: G -> Bijection F -> Bijection G.
 Proof.
@@ -49,6 +50,7 @@ Proof.
   intros F G H1 H2. apply Function.Equal'; apply IsFunction; assumption.
 Qed.
 
+(* Two bijections with equal domains that agree pointwise are equal.            *)
 Proposition Equal : forall (F G:Class),
   Bijection F                           ->
   Bijection G                           ->
@@ -67,12 +69,14 @@ Proof.
   apply Range.ImageOfDomain.
 Qed.
 
+(* A bijection class is a subclass of the product of its domain and image.      *)
 Proposition IsIncl : forall (F:Class),
   Bijection F -> F :<=: (domain F) :x: F:[domain F]:.
 Proof.
   intros F H1. apply Function.IsIncl, IsFunction. assumption.
 Qed.
 
+(* The image of a small class under a bijection class is small.                 *)
 Proposition ImageIsSmall : forall (F A:Class),
   Bijection F -> Small A -> Small F:[A]:.
 Proof.
@@ -100,6 +104,7 @@ Proof.
   intros F H1. apply Function.RangeIsSmall, IsFunction. assumption.
 Qed.
 
+(* If a bijection class has a small range then its domain is small.             *)
 Proposition DomainIsSmall : forall (F:Class),
   Bijection F -> Small (range F) -> Small (domain F).
 Proof.
@@ -141,6 +146,7 @@ Proof.
   intros F a H1. apply OneToOne.Satisfies, H1.
 Qed.
 
+(* When a lies in the domain of a bijection class F, F!a lies in the range.     *)
 Proposition IsInRange : forall (F:Class) (a:U),
   Bijection F -> domain F a -> range F F!a.
 Proof.
@@ -165,6 +171,7 @@ Proof.
   intros F G a H1. apply OneToOne.DomainOfCompose, H1.
 Qed.
 
+(* The value at a of G.F equals the value at F!a of G, for bijection classes.   *)
 Proposition ComposeEval : forall (F G:Class) (a:U),
   Bijection F     ->
   Bijection G     ->
@@ -188,12 +195,14 @@ Proof.
   apply Range.IsNotEmpty.
 Qed.
 
+(* A bijection class equals its restriction to its own domain.                  *)
 Proposition IsRestrict : forall (F:Class),
   Bijection F -> F :~: F :|: domain F.
 Proof.
   intros F H1. apply Function.IsRestrict, IsFunction. assumption.
 Qed.
 
+(* The restriction of a bijection class to any class is a bijection class.      *)
 Proposition Restrict : forall (F A:Class),
   Bijection F -> Bijection (F:|:A).
 Proof.
@@ -202,6 +211,7 @@ Proof.
   - apply OneToOne.Restrict. assumption.
 Qed.
 
+(* Two bijection classes that agree pointwise on A have equal restrictions.     *)
 Proposition RestrictEqual : forall (F G A:Class),
   Bijection F                   ->
   Bijection G                   ->
@@ -214,18 +224,21 @@ Proof.
   apply Function.RestrictEqual; apply IsFunction; assumption.
 Qed.
 
+(* The inverse image of a small class under a bijection class is small.         *)
 Proposition InvImageIsSmall : forall (F B:Class),
   Bijection F -> Small B -> Small F^:-1::[B]:.
 Proof.
   intros F B [_ H1]. apply InvImageIsSmall. assumption.
 Qed.
 
+(* The converse of a bijection class is a function class.                       *)
 Proposition ConverseIsFunction : forall (F:Class),
   Bijection F -> Function F^:-1:.
 Proof.
   intros F [H1 [_ H2]]. split. 2: assumption. apply Converse.IsRelation.
 Qed.
 
+(* The converse of a bijection class is a bijection class.                      *)
 Proposition Converse : forall (F:Class),
   Bijection F -> Bijection F^:-1:.
 Proof.
@@ -242,36 +255,42 @@ Proof.
   - apply Converse.Domain. assumption.
 Qed.
 
+(* Applying the converse after F to a domain element recovers that element.     *)
 Proposition ConverseEvalOfEval : forall (F:Class) (x:U),
   Bijection F -> domain F x -> F^:-1:!(F!x) = x.
 Proof.
   intros F x H1. apply OneToOne.ConverseEvalOfEval, H1.
 Qed.
 
+(* Applying F after the converse to a range element recovers that element.      *)
 Proposition EvalOfConverseEval : forall (F:Class) (y:U),
   Bijection F -> range F y -> F!(F^:-1:!y) = y.
 Proof.
   intros F y H1. apply OneToOne.EvalOfConverseEval, H1.
 Qed.
 
+(* For a bijection class, the inverse image of the image of A equals A.         *)
 Proposition InvImageOfImage : forall (F A:Class),
   Bijection F -> A :<=: domain F -> F^:-1::[ F:[A]: ]: :~: A.
 Proof.
   intros F A H1. apply OneToOne.InvImageOfImage, H1.
 Qed.
 
+(* For a bijection class, the image of the inverse image of B equals B.         *)
 Proposition ImageOfInvImage : forall (F B:Class),
   Bijection F -> B :<=: range F -> F:[ F^:-1::[B]: ]: :~: B.
 Proof.
   intros F B H1. apply OneToOne.ImageOfInvImage, H1.
 Qed.
 
+(* A bijection class is injective: equal values imply equal domain elements.    *)
 Proposition EvalInjective : forall (F:Class) (x y:U),
   Bijection F -> domain F x -> domain F y -> F!x = F!y -> x = y.
 Proof.
   intros F x y H1. apply OneToOne.EvalInjective, H1.
 Qed.
 
+(* For a bijection class, F!a lies in the image of A iff a lies in A.           *)
 Proposition EvalInImage : forall (F A:Class) (a:U),
   Bijection F -> domain F a -> F:[A]: F!a <-> A a.
 Proof.
