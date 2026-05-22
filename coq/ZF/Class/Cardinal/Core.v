@@ -27,9 +27,9 @@ Proof.
   assert (forall c, c :< a -> c :< b) as H4. {
     intros c H4.
     assert (Cardinal c) as H5. { apply H1. assumption. }
-    assert (Ordinal c) as H6. { apply CardIsOrd. assumption. }
+    assert (Ordinal c) as H6. { apply SCC.CardIsOrd. assumption. }
     assert (Ordinal (card :U(a))) as H7. { apply SCC.IsOrdinal. }
-    assert (Ordinal b) as H8. { apply CardIsOrd. assumption. }
+    assert (Ordinal b) as H8. { apply SCC.CardIsOrd. assumption. }
     assert (card :U(a) :< b) as H9. { rewrite H2. apply Cantor. assumption. }
     assert (c :<=: card :U(a)) as H10. {
       assert (c :<=: :U(a)) as H10. {

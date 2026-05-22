@@ -44,6 +44,7 @@ Definition Ordinal (A:Class) : Prop := Transitive A /\ forall x y,
 (* The class of all sets which are ordinals.                                    *)
 Definition On : Class := fun x => Ordinal (toClass x).
 
+(* The empty class is an ordinal class.                                         *)
 Proposition Zero : Ordinal :0:.
 Proof.
   split.
@@ -51,6 +52,7 @@ Proof.
   - intros x y H1.  apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
+(* The class consisting of just the empty set is an ordinal class.              *)
 Proposition One : Ordinal :1:.
 Proof.
   split.
@@ -90,9 +92,9 @@ Qed.
 
 (* Every non-empty sub-class of an ordinal class has an E-minimal element.      *)
 Proposition HasMinimal : forall (A B:Class),
-  Ordinal A   ->
-  B :<=: A    ->
-  B :<>: :0:  ->
+  Ordinal A                                     ->
+  B :<=: A                                      ->
+  B :<>: :0:                                    ->
   exists x, B x /\ B :/\: toClass x :~: :0:.
 Proof.
   intros A B H1 H2 H3.
@@ -184,7 +186,6 @@ Proof.
     + assumption.
 Qed.
 
-(* For a transitive set, belonging to an ordinal is being a strict subclass.    *)
 Proposition LessIsElem' : forall (A:Class) (a:U),
   Ordinal A               ->
   Transitive (toClass a)  ->
@@ -211,7 +212,6 @@ Proof.
   - apply Transitive.IsLess. 2: assumption. apply H1.
 Qed.
 
-(* For an ordinal set, belonging to an ordinal is being a strict subclass.      *)
 Proposition LessIsElem : forall (A:Class) (a:U),
   Ordinal A               ->
   Ordinal (toClass a)     ->
@@ -342,6 +342,7 @@ Proof.
     + apply H1.
 Qed.
 
+(* Every ordinal class is either On or set-sized, witnessed by an ordinal.      *)
 Proposition IsOnOrOrdinal : forall (A:Class),
   Ordinal A -> A :~: On \/ exists a, On a /\ A :~: toClass a.
 Proof.
@@ -365,6 +366,7 @@ Proof.
   destruct H1 as [H1 _]. specialize (H1 a H2 x). apply H1. assumption.
 Qed.
 
+(* The successor of an ordinal is an ordinal.                                   *)
 Proposition Succ : forall (a:U), On a -> On (a :\/: :{a}:).
 Proof.
   intros a H1. split.

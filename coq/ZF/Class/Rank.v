@@ -26,6 +26,7 @@ Proof.
   apply H2. assumption.
 Qed.
 
+(* A proper class has elements of arbitrarily large rank.                       *)
 Proposition WhenProper : forall (A:Class) (a:U),
   Proper A                        ->
   Ordinal a                       ->

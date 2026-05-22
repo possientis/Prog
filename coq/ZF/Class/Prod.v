@@ -29,6 +29,7 @@ Definition prod (P Q:Class) : Class := fun x =>
 (* Notation "P :x: Q" := (prod P Q)                                             *)
 Global Instance ClassProd : Prod Class := { prod := prod }.
 
+(* An ordered pair (y,z) belongs to P x Q iff y is in P and z is in Q.          *)
 Proposition Charac2 : forall (P Q:Class) (y z:U),
   (P :x: Q) :(y,z): <-> P y /\ Q z.
 Proof.
@@ -210,8 +211,8 @@ Proof.
       * right. apply H7.
 Qed.
 
-(* The direct image of P x Q by Switch is Q x P.                                *)
-Lemma ImageBySwitch : forall (P Q:Class),
+(* The direct image of P x Q under Switch is Q x P.                             *)
+Lemma ImageUnderSwitch : forall (P Q:Class),
   Switch :[P :x: Q]: :~: Q :x: P.
 Proof.
   intros P Q x'. split; intros H1.
@@ -241,7 +242,7 @@ Proof.
   assert (Small (Q :x: P)) as A. 2: apply A.
 
   (* Using the equivalence Switch[P x Q] ~ Q x P ... *)
-  apply Small.EquivCompat with Switch:[P :x: Q]:. 1: apply ImageBySwitch.
+  apply Small.EquivCompat with Switch:[P :x: Q]:. 1: apply ImageUnderSwitch.
 
   (* It is sufficient to show that Switch[P x Q] is small. *)
   assert (Small (Switch:[P :x: Q]:)) as A. 2: apply A.
@@ -372,6 +373,7 @@ Proof.
 
 Qed.
 
+(* The intersection of two products equals the product of the intersections.    *)
 Proposition Inter2 : forall (P1 P2 Q1 Q2:Class),
   P1:x:Q1 :/\: P2:x:Q2 :~: (P1:/\:P2) :x: (Q1:/\:Q2).
 Proof.
