@@ -21,7 +21,7 @@ Module CIN := ZF.Class.Incl.
 Definition image (F:Class) (a:U) : U := truncate F:[toClass a]:.
 
 (* Notation "F :[ a ]:" := (image F a)                                          *)
-Global Instance SetByClassImage : Image Class U U := { image := image }.
+Global Instance SetUnderClassImage : Image Class U U := { image := image }.
 
 (* The class of the image equals the image of the class, when F is functional.  *)
 Proposition ToClass : forall (F:Class) (a:U),

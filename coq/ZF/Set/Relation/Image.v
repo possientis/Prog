@@ -7,7 +7,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 
 Export ZF.Notation.Image.
 
@@ -31,7 +31,7 @@ Proof.
   intros f a. apply EqualToClass.
   apply Equiv.Tran with ((toClass f) :[toClass a]:).
   - apply ToClass.
-  - apply Equiv.Sym, ImageByClass.ToClassWhenSmall, SetIsSmall.
+  - apply Equiv.Sym, ImageUnderClass.ToClassWhenSmall, SetIsSmall.
 Qed.
 
 (* y belongs to the image of a under f iff some x in a satisfies (x,y) in f.    *)

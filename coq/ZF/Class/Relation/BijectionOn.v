@@ -17,7 +17,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 
 
 (* F is a bijection defined on A.                                               *)

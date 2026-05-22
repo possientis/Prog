@@ -44,7 +44,7 @@ Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
@@ -136,7 +136,7 @@ Proof.
       intros H19. revert H14. rewrite <- H16. apply H18. assumption. }
     assert (x :< G:[a]:) as H20. {
       apply DoubleNegation. intros H20. apply H19. split; assumption. }
-      apply ImageByClass.ToClass in H20. 2: apply H3.
+      apply ImageUnderClass.ToClass in H20. 2: apply H3.
       destruct H20 as [u [H20 H21]]. exists u. assumption. }
   assert (A :~: CRR.range G) as H13. {
     destruct H12 as [H12|H12]. 1: assumption. destruct H12 as [a [H12 H13]].
@@ -154,7 +154,7 @@ Proof.
     assert (A G!a) as G2. { apply G1. assumption. }
     assert (A G!b) as G3. { apply G1. assumption. }
     assert (G:[a]: :<=: G:[b]:) as H18. {
-      apply ImageByClass.InclCompatR. 1: apply H3.
+      apply ImageUnderClass.InclCompatR. 1: apply H3.
       apply SOC.ElemIsIncl; assumption. }
     assert (A :\: G:[b]: :<=: A :\: G:[a]:) as H19. {
       apply DiffBySet.InclCompatR. assumption. }
@@ -315,7 +315,7 @@ Proof.
     assert (b :<=: a) as H31. { apply SOC.ElemIsIncl; assumption. }
     assert (c :<=: a) as H32. { apply SOC.ElemIsIncl; assumption. }
     assert (G:[b]: :<=: G:[c]:) as H33. {
-      apply ImageByClass.InclCompatR. 2: assumption. apply H5. }
+      apply ImageUnderClass.InclCompatR. 2: assumption. apply H5. }
     assert ((A :\: G:[c]:) :<=: (A :\: G:[b]:)) as H34. {
       apply DiffBySet.InclCompatR. assumption. }
     assert ((A :\: G:[c]:) G!c) as H35. {

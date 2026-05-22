@@ -26,7 +26,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 
 
 Module CIN := ZF.Class.Incl.
@@ -90,7 +90,7 @@ Proof.
         - apply Diff.EquivCompat.
           + apply Bij.ImageOfDomain, H3.
           + apply Equiv.Tran with (toClass F:[b]:).
-            * apply Equiv.Sym, ImageByClass.ToClass, H3.
+            * apply Equiv.Sym, ImageUnderClass.ToClass, H3.
             * apply EqualToClass. assumption. }
       assert (Minimal E (B :\: b) F!b) as H13. {
         apply Minimal.EquivCompatR with F:[A :\: b]:; assumption. }

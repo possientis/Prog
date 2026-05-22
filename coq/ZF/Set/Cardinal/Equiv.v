@@ -41,7 +41,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.

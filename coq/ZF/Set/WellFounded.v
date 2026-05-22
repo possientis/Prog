@@ -18,7 +18,7 @@ Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
@@ -28,7 +28,7 @@ Module CIN := ZF.Class.Incl.
 Module CRF := ZF.Class.Relation.Function.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOU := ZF.Set.Ordinal.Union.
-Module SRI := ZF.Set.Relation.ImageByClass.
+Module SRI := ZF.Set.Relation.ImageUnderClass.
 
 (* Precicate defining a well founded set.                                       *)
 Definition WellFounded (a:U) : Prop := exists b, Ordinal b /\ a :< R1!b.

@@ -16,7 +16,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Truncate.
 
 Module CIN := ZF.Class.Incl.
@@ -257,7 +257,7 @@ Proof.
   assert (F:[C]: :<=: B) as H7. {
     apply (Bij.ImageIncl F A B). 2: assumption. apply H4. }
   apply Incl.Double. split; intros y H8.
-  - apply ImageByClass.Charac in H8. 2: apply H4. destruct H8 as [x [H8 H9]].
+  - apply ImageUnderClass.Charac in H8. 2: apply H4. destruct H8 as [x [H8 H9]].
     apply (Charac R A C a) in H8; try assumption. destruct H8 as [H8 H10].
     apply (CharacRev S B F:[C]: F!a); try assumption.
     + exists x. split; assumption.
@@ -270,7 +270,7 @@ Proof.
       apply (Bij.Eval F A B). 2: assumption. apply H4. }
     rewrite <- H11 in H10. apply H4 in H10. 3: assumption.
     2: { apply H3. assumption. }
-    apply ImageByClass.CharacRev with x. 3: assumption.
+    apply ImageUnderClass.CharacRev with x. 3: assumption.
     + apply H4.
     + apply (CharacRev R A C a); assumption.
 Qed.
@@ -301,7 +301,7 @@ Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),
 Proof.
   intros F R S A B C a H1 H2 H3 H4 H5.
   rewrite <- (IsomImage F R S A B C); try assumption.
-  apply ImageByClass.WhenEmpty. assumption.
+  apply ImageUnderClass.WhenEmpty. assumption.
 Qed.
 
 (* a does not belong to its own strict initial segment.                         *)

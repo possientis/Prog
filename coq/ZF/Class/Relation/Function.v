@@ -17,7 +17,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 
 
 (* A class is a function iff it is a relation and it is functional.             *)
@@ -200,11 +200,11 @@ Proposition ImageSetCharac : forall (F:Class) (a:U), Function F ->
   forall y, y :< F:[a]: <-> exists x, x :< a /\ domain F x /\ F!x = y.
 Proof.
   intros F a H1. intros y. split; intros H2.
-  - apply ImageByClass.Charac in H2. 2: apply H1. destruct H2 as [x [H2 H3]].
+  - apply ImageUnderClass.Charac in H2. 2: apply H1. destruct H2 as [x [H2 H3]].
     assert (domain F x) as H4. { exists y. assumption. }
     exists x. split. 1: assumption. split. 1: assumption.
     apply Eval'; assumption.
-  - destruct H2 as [x [H2 [H3 H4]]]. apply ImageByClass.CharacRev with x.
+  - destruct H2 as [x [H2 [H3 H4]]]. apply ImageUnderClass.CharacRev with x.
     + apply H1.
     + assumption.
     + apply Eval'; assumption.

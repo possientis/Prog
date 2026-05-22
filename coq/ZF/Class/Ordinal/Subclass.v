@@ -16,7 +16,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Require Import ZF.Notation.Eval.

@@ -20,7 +20,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.EvalOfClass.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Specify.
@@ -55,10 +55,10 @@ Proof.
     destruct H7 as [H7|[H7|H7]]. 1: assumption.
     - exfalso. specialize (H2 b H5). rewrite <- H6 in H2.
       destruct H2 as [_ H2]. apply H2.
-      apply ImageByClass.IsIn; try apply H1; assumption.
+      apply ImageUnderClass.IsIn; try apply H1; assumption.
     - exfalso. specialize (H2 a H4). rewrite H6 in H2.
       destruct H2 as [_ H2]. apply H2.
-      apply ImageByClass.IsIn; try apply H1; assumption. }
+      apply ImageUnderClass.IsIn; try apply H1; assumption. }
   assert (Proper A) as H5. {
     intros H5.
     assert (Small (range F)) as H6. {
@@ -107,7 +107,7 @@ Proof.
     apply Class.Empty.Charac with b. apply H10. split. 2: assumption.
     rewrite H5. split; assumption. }
   assert (toClass F:[a]: :<=: A) as H14. {
-    intros y H14. apply ImageByClass.Charac in H14. 2: apply H1.
+    intros y H14. apply ImageUnderClass.Charac in H14. 2: apply H1.
     destruct H14 as [b [H14 H15]].
     assert (On b) as H16. { apply SOC.IsOrdinal with a; assumption. }
     assert (F!b = y) as H17. { apply (CFO.Eval F On); assumption. }
@@ -138,9 +138,9 @@ Proof.
     destruct H25 as [H25|[H25|H25]]. 1: assumption.
     - exfalso. specialize (H13 c H19). specialize (H3 c H22 H13).
       rewrite <- H20 in H3. destruct H3 as [_ H3]. apply H3.
-      apply ImageByClass.IsIn; try apply H1; assumption.
+      apply ImageUnderClass.IsIn; try apply H1; assumption.
     - exfalso. specialize (H13 b H18). specialize (H3 b H21 H13).
       rewrite H20 in H3. destruct H3 as [_ H3]. apply H3.
-      apply ImageByClass.IsIn; try apply H1; assumption. }
+      apply ImageUnderClass.IsIn; try apply H1; assumption. }
   exists a. split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.

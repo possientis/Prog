@@ -14,7 +14,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Union2.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 
 Export ZF.Notation.Diff.
 
@@ -162,7 +162,7 @@ Proof.
   (* The class image of A minus a, connected to the set image via ToClass.      *)
   apply Equiv.Tran with (F:[A]: :\: F:[toClass a]:).
   - apply Class.Diff.Image. assumption.
-  - apply Class.Diff.EquivCompatR. apply Equiv.Sym. apply ImageByClass.ToClass.
+  - apply Class.Diff.EquivCompatR. apply Equiv.Sym. apply ImageUnderClass.ToClass.
     assumption.
 Qed.
 

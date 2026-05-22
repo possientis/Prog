@@ -29,7 +29,7 @@ Require Import ZF.Set.Relation.Extend.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Image.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
@@ -114,10 +114,10 @@ Proof.
       apply Union.Charac. exists (initSegment R A z). split.
       + apply InitSegment.CharacRev with A; try assumption.
         apply H11. assumption.
-      + apply ImageByClass.CharacRev with z; try assumption.
+      + apply ImageUnderClass.CharacRev with z; try assumption.
         apply H4. split. 2: reflexivity. apply H11. assumption.
     - rewrite H10. apply Union.Charac in H12. destruct H12 as [z [H12 H13]].
-      apply ImageByClass.Charac in H13. destruct H13 as [u [H13 H14]].
+      apply ImageUnderClass.Charac in H13. destruct H13 as [u [H13 H14]].
       2: assumption. apply H4 in H14. destruct H14 as [H14 H15].
       rewrite H15 in H12.
       apply (InitSegment.Charac R A A) in H12; try assumption.

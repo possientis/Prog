@@ -16,7 +16,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
-Require Import ZF.Set.Relation.ImageByClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
@@ -161,8 +161,8 @@ Proof.
   intros F a H1. apply Incl.Double. split; intros y H2.
   - apply SRR.Charac in H2. destruct H2 as [x H2].
     apply Charac2 in H2. 2: assumption. destruct H2 as [H2 H3].
-    apply ImageByClass.CharacRev with x; assumption.
-  - apply ImageByClass.Charac in H2. 2: assumption. destruct H2 as [x [H2 H3]].
+    apply ImageUnderClass.CharacRev with x; assumption.
+  - apply ImageUnderClass.Charac in H2. 2: assumption. destruct H2 as [x [H2 H3]].
     apply SRR.Charac. exists x. apply Charac2Rev; assumption.
 Qed.
 
