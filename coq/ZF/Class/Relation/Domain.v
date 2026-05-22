@@ -26,16 +26,15 @@ Proof.
   intros F G H1 x H2. destruct H2 as [y H2]. exists y. apply H1, H2.
 Qed.
 
-(* The direct image of a class F by Fst is the domain of F.                     *)
+(* The direct image of a class F under Fst is the domain of F.                  *)
 Lemma ImageByFst : forall (F:Class),
   Fst :[F]: :~: domain F.
 Proof.
   intros F x. split; intros H1.
   - destruct H1 as [x' [H1 H2]]. apply Fst.Charac2 in H2.
     destruct H2 as [y [z [H2 H3]]]. exists z. subst. assumption.
-  - destruct H1 as [y H1]. exists :(x,y):. split.
-    + assumption.
-    + apply Fst.Charac2. exists x. exists y. split; reflexivity.
+  - destruct H1 as [y H1]. exists :(x,y):. split. 1: assumption.
+    apply Fst.Charac2. exists x. exists y. split; reflexivity.
 Qed.
 
 (* The domain of a small class is a small class.                                *)
