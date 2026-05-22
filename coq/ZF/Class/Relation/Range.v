@@ -27,7 +27,7 @@ Proof.
 Qed.
 
 (* The direct image of a class F under Snd is the range of F.                   *)
-Lemma ImageBySnd : forall (F:Class),
+Proposition ImageUnderSnd : forall (F:Class),
   Snd :[F]: :~: range F.
 Proof.
   (* Proof by Hermes.                                                           *)

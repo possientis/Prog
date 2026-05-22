@@ -27,7 +27,7 @@ Proof.
 Qed.
 
 (* The direct image of a class F under Fst is the domain of F.                  *)
-Lemma ImageByFst : forall (F:Class),
+Proposition ImageUnderFst : forall (F:Class),
   Fst :[F]: :~: domain F.
 Proof.
   intros F x. split; intros H1.
@@ -41,22 +41,22 @@ Qed.
 Proposition IsSmall : forall (F:Class),
   Small F -> Small (domain F).
 Proof.
-  (* Let F be an arbitrary class. *)
+  (* Let F be an arbitrary class.                                               *)
   intros F.
 
-  (* We assume that F is small. *)
+  (* We assume that F is small.                                                 *)
   intros H1. assert (Small F) as A. { apply H1. } clear A.
 
-  (* We need to show that domain(F) is small. *)
+  (* We need to show that domain(F) is small.                                   *)
   assert (Small (domain F)) as A. 2: apply A.
 
-  (* Using the equivalence Fst[F] ~ domain(F) ... *)
-  apply Small.EquivCompat with Fst:[F]:. 1: apply ImageByFst.
+  (* Using the equivalence Fst[F] ~ domain(F) ...                               *)
+  apply Small.EquivCompat with Fst:[F]:. 1: apply ImageUnderFst.
 
-  (* It is sufficient to show that Fst[F] is small. *)
+  (* It is sufficient to show that Fst[F] is small.                             *)
   assert (Small (Fst:[F]:)) as A. 2: apply A.
 
-  (* This follows from the fact that Fst is functional and F is small. *)
+  (* This follows from the fact that Fst is functional and F is small.          *)
   apply Image.IsSmallR.
 
   - apply Fst.IsFunctional.
