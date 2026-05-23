@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
@@ -22,6 +23,7 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
+Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
@@ -30,7 +32,7 @@ Module SOI := ZF.Set.Ordinal.InfOfClass.
 (* A set is infinite if and only if it is not finite.                           *)
 Definition Infinite (a:U) : Prop := ~ Finite a.
 
-(* Infiniteness is preserved under equipotence.                                 *)
+(* Being infinite is preserved under equipotence.                               *)
 Proposition EquivCompat : forall (a b:U),
   a :~: b -> Infinite a -> Infinite b.
 Proof.
@@ -43,7 +45,7 @@ Proof.
 Qed.
 
 (* The cardinal of an infinite set is not finite.                               *)
-Proposition CardNotFiniteGen : forall (a:U), Infinite a ->
+Proposition CardGen : forall (a:U), Infinite a ->
   WithOrdinal a -> :N :<=: card a.
 Proof.
   intros a H1 H2.
@@ -57,20 +59,37 @@ Proof.
 Qed.
 
 
-(* The cardinal of an infinite set is not finite.                               *)
-Proposition CardNotFinite : forall (a:U), Choice ->
+(* Assuming choice, an infinite set has cardinal at least omega.                *)
+Proposition Card : forall (a:U), Choice ->
   Infinite a <-> :N :<=: card a.
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
     apply SCE.HasOrdinal. assumption. }
   split; intros H2.
-  - apply CardNotFiniteGen; assumption.
+  - apply CardGen; assumption.
   - intros [n [H3 H4]].
     assert (card a = card n) as H5. { apply SCC.WhenEquiv. assumption. }
     assert (card n = n) as H6. { apply SCC.WhenNat. assumption. }
     assert (n :< n) as H7. { rewrite H5, H6 in H2. apply H2. assumption. }
     revert H7. apply Foundation.NoLoop1.
+Qed.
+
+(* Assuming choice, a set is infinite iff its cardinal is infinite.             *)
+Proposition Charac : forall (a:U), Choice ->
+  Infinite a <-> InfiniteCard (card a).
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a AC. split; intros H1.
+  - (* The cardinal is a cardinal number, and omega embeds into it.             *)
+    split.
+    + exists a. reflexivity.
+    + assert (:N :<=: card a) as H2. { apply Card; assumption. }
+      intros H3.
+      assert (card a :< card a) as H4. { apply H2. assumption. }
+      revert H4. apply Foundation.NoLoop1.
+  - (* An infinite cardinal contains omega, so the set cannot be finite.        *)
+    apply Card. 1: assumption. apply CCI.IsIncl. assumption.
 Qed.
 
 (* For an infinite set, the cardinal of the successor is the cardinal.          *)
@@ -84,7 +103,7 @@ Proof.
   assert (card (succ a) :<=: card a) as H4. {
     assert (WithOrdinal a \/ ~ WithOrdinal a) as [H4|H4]. {
       apply LawExcludedMiddle. }
-    - assert (:N :<=: card a) as H5. { apply CardNotFiniteGen; assumption. }
+    - assert (:N :<=: card a) as H5. { apply CardGen; assumption. }
       assert (card a :~: succ (card a)) as H6. { apply Equiv.Succ; assumption. }
       assert (succ a :~: card a) as H7. {
         apply SCE.Tran with (succ (card a)).
@@ -149,7 +168,7 @@ Proof.
   (* Proof by Hermes.                                                           *)
   intros a AC H1.
   (* The cardinal of an infinite set contains N, so a has a subset of size N.   *)
-  assert (:N :<=: card a) as H2. { apply CardNotFinite; assumption. }
+  assert (:N :<=: card a) as H2. { apply Card; assumption. }
   apply SCC.HasSubsetOfSize; assumption.
 Qed.
 
