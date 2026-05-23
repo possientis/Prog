@@ -61,6 +61,15 @@ Proof.
   split; assumption.
 Qed.
 
+Proposition FromInj : forall (f a b:U),
+  Inj f a b -> Bij f a f:[a]:.
+Proof.
+  intros f a b H1. split.
+  - apply H1.
+  - assert (domain f = a) as H2. { apply H1. }
+    rewrite <- H2. symmetry. apply Range.ImageOfDomain.
+Qed.
+
 (* A bijection from a to b is a function from a to b.                           *)
 Proposition IsFun : forall (f a b:U),
   Bij f a b -> Fun f a b.

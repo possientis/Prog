@@ -253,6 +253,25 @@ Proof.
   intros a b AC. apply InclCompatGen, Equiv.HasOrdinal. assumption.
 Qed.
 
+(* Any set whose cardinal is bounded by card(a) is equipotent to a subset of a. *)
+Proposition HasSubsetOfSize : forall (a c:U), Choice ->
+  c :<=: card a -> exists b, b :<=: a /\ b :~: c.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a c AC H1.
+  (* Choose a bijection from card(a) onto a, and take the image of c.           *)
+  assert (a :~: card a) as H2. { apply IsEquivChoice. assumption. }
+  apply Equiv.Sym in H2. destruct H2 as [f H2].
+  exists f:[c]:. split.
+  - (* Since c is contained in card(a), its image is contained in a.            *)
+    intros y H3. apply (Bij.ImageCharac f (card a) a c) in H3. 2: assumption.
+    destruct H3 as [x [H3 [H4 H5]]]. rewrite <- H5.
+    apply Bij.IsInRange with (card a); assumption.
+  - (* Restricting the bijection to c bijects c onto its image.                 *)
+    apply Equiv.Sym. exists (f:|:c).
+    apply (Bij.Restrict f (card a) a c); assumption.
+Qed.
+
 Proposition IsInclSucc : forall (a:U),
   card a :<=: card (succ a).
 Proof.

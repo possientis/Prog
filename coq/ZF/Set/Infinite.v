@@ -141,3 +141,15 @@ Proof.
       apply AddElem. assumption. }
     rewrite H3 in H5. assumption.
 Qed.
+
+(* Assuming choice, every infinite set has a countably infinite subset.         *)
+Proposition HasOmegaSubset : forall (a:U), Choice -> Infinite a ->
+  exists b, b :<=: a /\ b :~: :N.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a AC H1.
+  (* The cardinal of an infinite set contains N, so a has a subset of size N.   *)
+  assert (:N :<=: card a) as H2. { apply CardNotFinite; assumption. }
+  apply SCC.HasSubsetOfSize; assumption.
+Qed.
+
