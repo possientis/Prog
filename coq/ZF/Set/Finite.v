@@ -121,6 +121,20 @@ Proof.
   apply SCC.IsEquivChoice. assumption.
 Qed.
 
+(* A finite set with cardinal zero is empty.                                    *)
+Proposition WhenZeroCard : forall (a:U),
+  Finite a -> card a = :0: -> a = :0:.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a H1 H2.
+  (* Finiteness gives an ordinal equipotent to a, hence a is equipotent to its  *)
+  (* cardinal.                                                                  *)
+  assert (a :~: card a) as H3. {
+    apply SCC.IsEquivGen. destruct H1 as [n [H1 H3]].
+    exists n. split. 2: assumption. apply Omega.HasOrdinals. assumption. }
+  rewrite H2 in H3. apply SCE.WhenZero. assumption.
+Qed.
+
 (* Adding a new element to a finite set increments its cardinal.                *)
 Proposition AddNewElem : forall (a b:U),
   Finite a                              ->
@@ -205,9 +219,43 @@ Proof.
   apply SCE.Sym. apply SCE.ProdSingleR.
 Qed.
 
+(* The union of two finite sets is finite.                                      *)
 Proposition Union : forall (a b:U),
   Finite a -> Finite b -> Finite (a :\/: b).
 Proof.
-Admitted.
+  (* Proof by Hermes.                                                           *)
+  remember (fun n => forall a b, card a = n ->
+    Finite a -> Finite b -> Finite (a :\/: b)) as A eqn:H1.
+  assert (forall n, n :< :N -> A n) as H2. {
+    apply Omega.Induction; rewrite H1.
+    - (* If card(a) is zero, then a is empty and the union is just b.           *)
+      intros a b H2 H3 H4.
+      assert (a = :0:) as H5. { apply WhenZeroCard; assumption. }
+      rewrite H5, Union2.IdentityL. assumption.
+    - (* If card(a) is succ(n), remove one element and use the induction step.  *)
+      intros n H2 IH a b H4 H5 H6.
+      assert (card a <> :0:) as H7. { rewrite H4. apply Succ.NotZero. }
+      assert (a <> :0:) as H8. { apply SCC.NotZero. assumption. }
+      apply Empty.HasElem in H8. destruct H8 as [x H8].
+      remember (a :\: :{x}:) as c eqn:H9.
+      assert (card c = n) as H10. {
+        rewrite H9. apply RemoveElemCard; assumption. }
+      assert (Finite c) as H11. { rewrite H9. apply RemoveElem. assumption. }
+      assert (Finite (c :\/: b)) as H12. { apply IH; assumption. }
+      assert (a :\/: b = (c :\/: b) :\/: :{x}:) as H13. {
+        assert (c :\/: :{x}: = a) as H14. {
+          rewrite H9. apply Diff.RemoveAddElem. assumption. }
+        (* Reordering the unions puts the removed element back at the end.      *)
+        rewrite <- H14.
+        rewrite (Union2.Assoc c :{x}: b).
+        rewrite (Union2.Comm :{x}: b).
+        rewrite <- (Union2.Assoc c b :{x}:).
+        reflexivity. }
+      rewrite H13. apply AddElem. assumption. }
+  intros a b H3 H4.
+  (* Apply the induction statement to card(a), which is natural by finiteness.  *)
+  assert (A (card a)) as H5. { apply H2. apply CardIsNat. assumption. }
+  rewrite H1 in H5. apply H5; try assumption. reflexivity.
+Qed.
 
 

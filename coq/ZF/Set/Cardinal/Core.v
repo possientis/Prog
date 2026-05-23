@@ -354,13 +354,23 @@ Qed.
 Proposition WhenNat : forall (n:U), n :< :N ->
   card n = n.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude.                                                           *)
   intros n H1.
   (* n is an ordinal (naturals are), so n ~ card n; card n ~ n by symmetry;     *)
   (* card n is an ordinal equipotent to n, so it equals n.                      *)
   apply EqualOrdNat. 2: assumption.
   - apply IsOrdinal.
   - apply Equiv.Sym, IsEquivOrd, Omega.HasOrdinals. assumption.
+Qed.
+
+(* A set with non-empty cardinal is not empty.                                  *)
+Proposition NotZero : forall (a:U),
+  card a <> :0: -> a <> :0:.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a H1 H2.
+  (* The empty set has cardinal zero, contrary to the hypothesis.               *)
+  apply H1. rewrite H2. apply WhenNat. apply Omega.HasZero.
 Qed.
 
 (* Every natural number is a cardinal number.                                   *)
