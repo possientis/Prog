@@ -294,3 +294,18 @@ Proof.
   assert (A (card a)) as H5. { apply H2. apply CardIsNat. assumption. }
   rewrite H1 in H5. apply H5; try assumption. reflexivity.
 Qed.
+
+(* An ordinal is finite if and only if it is a natural number.                  *)
+Proposition WhenOrdinal : forall (a:U), Ordinal a ->
+  Finite a <-> a :< :N.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a H1. split; intros H2.
+  - (* A finite ordinal is equipotent to a natural number, hence equal to it.   *)
+    destruct H2 as [n [H2 H3]].
+    assert (a = n) as H4. { apply SCE.EqualOrdNat; assumption. }
+    rewrite H4. assumption.
+  - (* Conversely, every natural number is finite.                              *)
+    apply WhenNat. assumption.
+Qed.
+
