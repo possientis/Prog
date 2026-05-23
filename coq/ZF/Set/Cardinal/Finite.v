@@ -42,7 +42,9 @@ Qed.
 
 (* Adding a new element to a finite set increments its cardinal.                *)
 Proposition AddNewElem : forall (a b:U),
-  Finite a -> ~ b :< a -> card (a :\/: :{b}:) = succ (card a).
+  Finite a                              ->
+  ~ b :< a                              ->
+  card (a :\/: :{b}:) = succ (card a).
 Proof.
   (* Proof by Hermes.                                                           *)
   intros a b H1 H2.
@@ -72,7 +74,10 @@ Qed.
 
 (* Removing an element from a set of cardinal succ(n) leaves cardinal n.        *)
 Proposition RemoveElem : forall (n a b:U),
-  n :< :N -> card a = succ n -> b :< a -> card (a :\: :{b}:) = n.
+  n :< :N                   ->
+  card a = succ n           ->
+  b :< a                    ->
+  card (a :\: :{b}:) = n.
 Proof.
   (* Proof by Hermes.                                                           *)
   intros n a b H1 H2 H3.
@@ -85,7 +90,7 @@ Proof.
     exists (succ n). split.
     - apply Omega.HasSucc. assumption.
     - rewrite <- H2. assumption. }
-  assert (Finite c) as H8. { rewrite H4. apply SFI.SubElem. assumption. }
+  assert (Finite c) as H8. { rewrite H4. apply SFI.RemoveElem. assumption. }
   (* The removed element is not in the remaining set.                           *)
   assert (~ b :< c) as H9. {
     rewrite H4. intros H9. apply Diff.Charac in H9.

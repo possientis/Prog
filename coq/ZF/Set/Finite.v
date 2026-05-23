@@ -87,7 +87,7 @@ Proof.
 Qed.
 
 (* Removing an element from a finite set leaves a finite set.                   *)
-Proposition SubElem : forall (a b:U),
+Proposition RemoveElem : forall (a b:U),
   Finite a -> Finite (a :\: :{b}:).
 Proof.
   (* Proof by Claude.                                                           *)
