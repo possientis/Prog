@@ -40,7 +40,7 @@ Proof.
   intros a b y z. split; intros H1.
   - apply Charac in H1. destruct H1 as [y' [z' [H1 [Hya Hzb]]]].
     apply OrdPair.Equal in H1. destruct H1 as [H1 H2]. subst. split; assumption.
-  - destruct H1 as [Hya Hzb]. apply Charac. exists y. exists z. split.
+  - destruct H1 as [Hya Hzb]. apply Charac. exists y, z. split.
     + reflexivity.
     + split; assumption.
 Qed.
@@ -50,7 +50,7 @@ Proposition InclCompat : forall (a b c d:U),
   a :<=: b -> c :<=: d -> a :x: c :<=: b :x: d.
 Proof.
   intros a b c d H1 H2 x H3. apply Charac in H3.
-  destruct H3 as [y [z [H3 [H4 H5]]]]. apply Charac. exists y. exists z.
+  destruct H3 as [y [z [H3 [H4 H5]]]]. apply Charac. exists y, z.
   split. 1: assumption. split.
   - apply H1. assumption.
   - apply H2. assumption.
@@ -99,9 +99,9 @@ Proof.
   - apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
     apply Union2.Charac in H3. apply Union2.Charac.
     destruct H3 as [H3|H3].
-    + left. apply Charac. exists y. exists z. split. 1: assumption.
+    + left. apply Charac. exists y, z. split. 1: assumption.
       split; assumption.
-    + right. apply Charac. exists y. exists z. split. 1: assumption.
+    + right. apply Charac. exists y, z. split. 1: assumption.
       split; assumption.
   - apply Union2.Charac in H1. apply Charac.
     destruct H1 as [H1|H1]; apply Charac in H1;
@@ -120,9 +120,9 @@ Proof.
   - apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
     apply Union2.Charac in H2. apply Union2.Charac.
     destruct H2 as [H2|H2].
-    + left. apply Charac. exists y. exists z. split. 1: assumption.
+    + left. apply Charac. exists y, z. split. 1: assumption.
       split; assumption.
-    + right. apply Charac. exists y. exists z. split. 1: assumption.
+    + right. apply Charac. exists y, z. split. 1: assumption.
       split; assumption.
   - apply Union2.Charac in H1. apply Charac.
     destruct H1 as [H1|H1]; apply Charac in H1;
