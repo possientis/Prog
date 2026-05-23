@@ -2,10 +2,12 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Union2.
 Export ZF.Notation.Prod.
 
 (* We consider the set defined by the product predicate of the sets a and b     *)
@@ -70,9 +72,69 @@ Proof.
   apply Incl.Refl.
 Qed.
 
+(* The product with the empty set on the left is empty.                         *)
+Proposition ZeroL : forall (a:U), :0: :x: a = :0:.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a. apply Incl.Double. split. 2: apply Empty.IsIncl.
+  intros x H1. apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
+  apply Empty.Charac in H2. contradiction.
+Qed.
+
+(* The product with the empty set on the right is empty.                        *)
+Proposition ZeroR : forall (a:U), a :x: :0: = :0:.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a. apply Incl.Double. split. 2: apply Empty.IsIncl.
+  intros x H1. apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
+  apply Empty.Charac in H3. contradiction.
+Qed.
+
+(* Product distributes on the left over binary union.                           *)
+Proposition DistribL : forall (a b c:U),
+  a :x: (b :\/: c) = a :x: b :\/: a :x: c.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a b c. apply Incl.Double. split; intros x H1.
+  - apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
+    apply Union2.Charac in H3. apply Union2.Charac.
+    destruct H3 as [H3|H3].
+    + left. apply Charac. exists y. exists z. split. 1: assumption.
+      split; assumption.
+    + right. apply Charac. exists y. exists z. split. 1: assumption.
+      split; assumption.
+  - apply Union2.Charac in H1. apply Charac.
+    destruct H1 as [H1|H1]; apply Charac in H1;
+    destruct H1 as [y [z [H1 [H2 H3]]]]; exists y; exists z;
+    split. 1,3: assumption.
+    + split. 1: assumption. apply Union2.Charac. left. assumption.
+    + split. 1: assumption. apply Union2.Charac. right. assumption.
+Qed.
+
+(* Product distributes on the right over binary union.                          *)
+Proposition DistribR : forall (a b c:U),
+  (a :\/: b) :x: c = a :x: c :\/: b :x: c.
+Proof.
+  (* Proof by Hermes.                                                           *)
+  intros a b c. apply Incl.Double. split; intros x H1.
+  - apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
+    apply Union2.Charac in H2. apply Union2.Charac.
+    destruct H2 as [H2|H2].
+    + left. apply Charac. exists y. exists z. split. 1: assumption.
+      split; assumption.
+    + right. apply Charac. exists y. exists z. split. 1: assumption.
+      split; assumption.
+  - apply Union2.Charac in H1. apply Charac.
+    destruct H1 as [H1|H1]; apply Charac in H1;
+    destruct H1 as [y [z [H1 [H2 H3]]]]; exists y; exists z;
+    split. 1,3: assumption.
+    + split. 2: assumption. apply Union2.Charac. left. assumption.
+    + split. 2: assumption. apply Union2.Charac. right. assumption.
+Qed.
+
 (* The intersection of products equals the product of intersections.            *)
-Proposition Inter2 : forall (a1 a2 b1 b2:U),
-  a1:x:b1 :/\: a2:x:b2 = (a1:/\:a2) :x: (b1:/\:b2).
+Proposition Inter : forall (a1 a2 b1 b2:U),
+  a1 :x: b1 :/\: a2 :x: b2 = (a1 :/\: a2) :x: (b1 :/\: b2).
 Proof.
   intros a1 a2 b1 b2. apply Incl.Double. split; intros x H1.
   - apply Inter2.Charac in H1. destruct H1 as [H1 H2].

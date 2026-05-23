@@ -21,6 +21,7 @@ Require Import ZF.Notation.Eval.
 
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
+Module SPR := ZF.Set.Prod.
 
 
 (* A set is finite if and only if it is equipotent to a natural number.         *)
@@ -258,4 +259,38 @@ Proof.
   rewrite H1 in H5. apply H5; try assumption. reflexivity.
 Qed.
 
-
+(* The product of two finite sets is finite.                                    *)
+Proposition Prod : forall (a b:U),
+  Finite a -> Finite b -> Finite (a :x: b).
+Proof.
+  (* Proof by Hermes.                                                           *)
+  remember (fun n => forall a b, card a = n ->
+    Finite a -> Finite b -> Finite (a :x: b)) as A eqn:H1.
+  assert (forall n, n :< :N -> A n) as H2. {
+    apply Omega.Induction; rewrite H1.
+    - (* If card(a) is zero, then a is empty and so is its product with b.      *)
+      intros a b H2 H3 H4.
+      assert (a = :0:) as H5. { apply WhenZeroCard; assumption. }
+      rewrite H5, SPR.ZeroL. apply Zero.
+    - (* Remove one element from a and distribute product over the union.       *)
+      intros n H2 IH a b H4 H5 H6.
+      assert (card a <> :0:) as H7. { rewrite H4. apply Succ.NotZero. }
+      assert (a <> :0:) as H8. { apply SCC.NotZero. assumption. }
+      apply Empty.HasElem in H8. destruct H8 as [x H8].
+      remember (a :\: :{x}:) as c eqn:H9.
+      assert (card c = n) as H10. {
+        rewrite H9. apply RemoveElemCard; assumption. }
+      assert (Finite c) as H11. { rewrite H9. apply RemoveElem. assumption. }
+      assert (Finite (c :x: b)) as H12. { apply IH; assumption. }
+      assert (Finite (:{x}: :x: b)) as H13. { apply ProdSingleL. assumption. }
+      assert (a :x: b = c :x: b :\/: :{x}: :x: b) as H14. {
+        assert (c :\/: :{x}: = a) as H15. {
+          rewrite H9. apply Diff.RemoveAddElem. assumption. }
+        (* Distributing the product separates the removed slice from the rest.  *)
+        rewrite <- H15. apply SPR.DistribR. }
+      rewrite H14. apply Union; assumption. }
+  intros a b H3 H4.
+  (* Apply the induction statement to card(a), which is natural by finiteness.  *)
+  assert (A (card a)) as H5. { apply H2. apply CardIsNat. assumption. }
+  rewrite H1 in H5. apply H5; try assumption. reflexivity.
+Qed.
