@@ -31,14 +31,13 @@ Proof.
 Qed.
 
 (* Assuming choice, a set whose cardinal is natural is finite.                  *)
-Proposition WhenCardNat : forall (a n:U), Choice ->
-  n :< :N -> card a = n -> Finite a.
+Proposition WhenCardNat : forall (a:U), Choice ->
+  card a :< :N -> Finite a.
 Proof.
   (* Proof by Hermes.                                                           *)
-  intros a n AC H1 H2. exists n. split. 1: assumption.
+  intros a AC H1. exists (card a). split. 1: assumption.
   (* Choice gives a bijection between a and its cardinal.                       *)
-  assert (a :~: card a) as H3. { apply SCC.IsEquivChoice. assumption. }
-  rewrite H2 in H3. assumption.
+  apply SCC.IsEquivChoice. assumption.
 Qed.
 
 (* Adding a new element to a finite set increments its cardinal.                *)
