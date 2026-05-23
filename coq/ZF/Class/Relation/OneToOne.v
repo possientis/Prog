@@ -44,14 +44,14 @@ Proof.
   intros F [H1 _]. assumption.
 Qed.
 
-(* The image of a small class by a one-to-one class is small.                   *)
+(* The image of a small class under a one-to-one class is small.                *)
 Proposition ImageIsSmall : forall (F A:Class),
   OneToOne F -> Small A -> Small F:[A]:.
 Proof.
   intros F A [H1 _]. apply Image.IsSmallR. assumption.
 Qed.
 
-(* The inverse image of a small class by a one-to-one class is small.           *)
+(* The inverse image of a small class under a one-to-one class is small.        *)
 Proposition InvImageIsSmall : forall (F B:Class),
   OneToOne F -> Small B -> Small F^:-1::[B]:.
 Proof.

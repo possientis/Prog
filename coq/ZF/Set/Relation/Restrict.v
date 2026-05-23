@@ -92,7 +92,7 @@ Proof.
   intros f a H1. rewrite DomainOf. apply Inter2.WhenInclL. assumption.
 Qed.
 
-(* The range of the restriction f|a is the direct image by f of a.              *)
+(* The range of the restriction f|a is the direct image of a under f.           *)
 Proposition RangeOf : forall (f a:U),
   range (f:|:a) = f:[a]:.
 Proof.

@@ -103,7 +103,7 @@ Proof.
   intros F H1. apply Relation.IsIncl, H1.
 Qed.
 
-(* The direct image by a function of a small class is small.                    *)
+(* The direct image of a small class under a function is small.                 *)
 Proposition ImageIsSmall : forall (F A:Class),
   Function F -> Small A -> Small F:[A]:.
 Proof.

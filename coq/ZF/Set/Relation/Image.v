@@ -11,21 +11,21 @@ Require Import ZF.Set.Relation.ImageUnderClass.
 
 Export ZF.Notation.Image.
 
-(* Direct image by a set f of a set a.                                          *)
+(* Direct image of a set a under a set f.                                       *)
 Definition image (f a:U) : U := fromClass (toClass f) :[toClass a]:
   (Image.IsSmallL (toClass f) (toClass a) (SetIsSmall f)).
 
 (* Notation "f :[ a ]:" := (image f a)                                          *)
 Global Instance SetImage : Image U U U := { image := image }.
 
-(* The class of the image is the image by the class of the class.               *)
+(* The class of the image is the image under the class of the class.            *)
 Proposition ToClass : forall (f a:U),
   toClass f:[a]: :~: (toClass f) :[toClass a]:.
 Proof.
   intros F a. apply FromClass.ToClass.
 Qed.
 
-(* The image by f of a is the image by the class of f of a.                     *)
+(* The image of a under f is the image of a under the class of f.               *)
 Proposition ByClass : forall (f a:U), f:[a]: = (toClass f) :[a]:.
 Proof.
   intros f a. apply EqualToClass.

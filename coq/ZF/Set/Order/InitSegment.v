@@ -241,7 +241,7 @@ Proof.
   - apply WhenLess with A; assumption.
 Qed.
 
-(* The direct image by an isomorphism of an inital segment is an inital segment.*)
+(* The image of an initial segment under an isomorphism is initial.             *)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   WellFounded R A                                       ->
   A a                                                   ->

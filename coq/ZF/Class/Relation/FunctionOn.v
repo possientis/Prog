@@ -115,7 +115,7 @@ Proof.
   - apply Function.IsIncl, H1.
 Qed.
 
-(* The direct image of a small class by a function (defined on A) is small.     *)
+(* The direct image of a small class under a function on A is small.            *)
 Proposition ImageIsSmall : forall (F A B:Class),
   FunctionOn F A -> Small B -> Small F:[B]:.
 Proof.

@@ -76,7 +76,7 @@ Proof.
     apply Incl.EquivCompatR with R. 2: assumption. apply Equiv.Sym. assumption.
 Qed.
 
-(* Inclusion is equivalent to being either equal or strictly included.          *)
+(* Inclusion is equivalent to equality or proper inclusion.                     *)
 Proposition EquivOrLess : forall (P Q:Class),
   P :<=: Q <-> P :~: Q \/ P :<: Q.
 Proof.

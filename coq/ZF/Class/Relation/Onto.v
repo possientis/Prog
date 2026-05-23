@@ -120,7 +120,7 @@ Proof.
   intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
-(* The direct image of a small class by a surjection F:A -> B is small.         *)
+(* The direct image of a small class under a surjection F:A -> B is small.      *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   Onto F A B -> Small C -> Small F:[C]:.
 Proof.
@@ -278,7 +278,7 @@ Proof.
   - apply Restrict.RangeOf.
 Qed.
 
-(* Two surjections agreeing on a common subdomain have equal restrictions to it,*)
+(* Surjections agreeing on a common subdomain have equal restrictions to it.    *)
 Proposition RestrictEqual : forall (F A B G C D E:Class),
   Onto F A B                    ->
   Onto G C D                    ->

@@ -9,7 +9,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.Image.
 Export ZF.Notation.Image.
 
-(* Direct image of a class Q by a class P.                                      *)
+(* Direct image of a class Q under a class P.                                   *)
 Definition image (F A:Class) : Class := fun y =>
   exists x, A x /\ F :(x,y):.
 
@@ -75,37 +75,37 @@ Proposition IsSmallR : forall (F P:Class),
   Functional F -> Small P -> Small F:[P]:.
 Proof.
 
-  (* Let F and P be two arbitrary classes. *)
+  (* Let F and P be two arbitrary classes.                                      *)
   intros F P.
 
-  (* We assume that F is functional. *)
+  (* We assume that F is functional.                                            *)
   intros H1. assert (Functional F) as A. { apply H1. } clear A.
 
-  (* We assume that P is small. *)
+  (* We assume that P is small.                                                 *)
   intros H2. assert (Small P) as A. { apply H2. } clear A.
 
-  (* In particular P is equivalent to some set a. *)
+  (* In particular P is equivalent to some set a.                               *)
   assert (exists a, toClass a :~: P) as H3. { assumption. }
 
-  (* So let a be a set equivalent to the class P. *)
+  (* So let a be a set equivalent to the class P.                               *)
   destruct H3 as [a H3].
 
-  (* We need to show that the direct image of P by F is small. *)
+  (* We need to show that the direct image of P under F is small.               *)
   assert (Small F:[P]:) as A. 2: apply A.
 
-  (* The property of being small being compatible with equivalences... *)
+  (* The property of being small being compatible with equivalences...          *)
   apply Small.EquivCompat with F:[toClass a]:.
 
-  (* We first need to show the equivalence between F[a] and F[P]. *)
+  (* We first need to show the equivalence between F[a] and F[P].               *)
   - assert (F:[toClass a]: :~: F:[P]:) as A. 2: apply A.
 
-  (* Which follows from the equivalence between a and P. *)
+  (* Which follows from the equivalence between a and P.                        *)
     apply EquivCompatR, H3.
 
-  (* We next need to show that F[a] is small. *)
+  (* We next need to show that F[a] is small.                                   *)
   - assert (Small F:[toClass a]:) as A. 2: apply A.
 
-  (* Which follows from replacement and the fact F is functional. *)
+  (* Which follows from replacement and the fact F is functional.               *)
     apply Replacement, H1.
 Qed.
 
@@ -113,19 +113,19 @@ Qed.
 Proposition IsSmallL : forall (F P:Class),
     Small F -> Small F:[P]:.
 Proof.
-  (* Let F and P be two arbitrary classes. *)
+  (* Let F and P be two arbitrary classes.                                      *)
   intros F P.
 
-  (* We assume that F is small. *)
+  (* We assume that F is small.                                                 *)
   intros H1. assert (Small F) as A. { apply H1. } clear A.
 
-  (* We need to show that F[P] is small. *)
+  (* We need to show that F[P] is small.                                        *)
   assert (Small F:[P]:) as A. 2: apply A.
 
-  (* Consider the function Snd : (y,z) -> z defined on PxV. *)
+  (* Consider the function Snd : (y,z) -> z defined on PxV.                     *)
   remember (fun x => exists y z, x = :(:(y,z):,z): /\ P y) as Snd eqn:H2.
 
-  (* We claim that Snd is a functional class. *)
+  (* We claim that Snd is a functional class.                                   *)
   assert (Functional Snd) as H3. {
     intros x y z H3 H4.
     rewrite H2 in H3. destruct H3 as [y1 [z1 [H3 _]]].
@@ -135,26 +135,26 @@ Proof.
     rewrite H3 in H4. apply OrdPair.Equal in H4. destruct H4 as [H4 H7].
     subst. reflexivity. }
 
-  (* Having assumed F to be small, we have a set f. *)
+  (* Having assumed F to be small, we have a set f.                             *)
   destruct H1 as [f H1].
 
-  (* x :< f iff F x. *)
+  (* x :< f iff F x.                                                            *)
   assert (forall x, x :< f <-> F x) as A. { apply H1. } clear A.
 
-  (* Applying the replacement theorem to f and Snd, we have a set a. *)
+  (* Applying the replacement theorem to f and Snd, we have a set a.            *)
   assert (exists a, forall y, y :< a <-> exists x, x :< f /\ Snd :(x,y):) as H8. {
     apply Replacement. assumption. }
 
   destruct H8 as [a H8].
 
-  (* y :< a iff exists x, x :< f /\ (x,y) in Snd. *)
+  (* y :< a iff exists x, x :< f /\ (x,y) in Snd.                               *)
   assert (forall y, y :< a <-> exists x, x :< f /\ Snd :(x,y):) as A.
     { apply H8. } clear A.
 
-  (* We claim that the set a demonstrates that F[P] is small. *)
+  (* We claim that the set a demonstrates that F[P] is small.                   *)
   exists a.
 
-  (* So we need to show x :< a iff x in F[P]. *)
+  (* So we need to show x :< a iff x in F[P].                                   *)
   assert (forall x, x :< a <-> F:[P]: x) as A. 2: apply A.
 
   intros z. split; intros H9.

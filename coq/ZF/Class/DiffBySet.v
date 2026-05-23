@@ -124,7 +124,7 @@ Proof.
   intros A a H1. unfold diff. apply Class.Diff.WhenIncl. assumption.
 Qed.
 
-(* If the class of a is strictly included in A, the difference is non-empty.    *)
+(* If the class of a is properly included in A, the difference is non-empty.    *)
 Proposition WhenLess : forall (A:Class) (a:U),
   toClass a :<: A -> A :\: a :<>: :0:.
 Proof.

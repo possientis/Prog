@@ -114,7 +114,7 @@ Proof.
     2: apply H1. apply Equiv.Sym, ImageOfDomain with B. assumption.
 Qed.
 
-(* The direct image of a small class by a function is small.                    *)
+(* The direct image of a small class under a function is small.                 *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   Fun F A B -> Small C -> Small F:[C]:.
 Proof.

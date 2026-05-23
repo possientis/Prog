@@ -110,7 +110,7 @@ Proof.
   intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
 Qed.
 
-(* The image of a small class by an injection from any A to any B is small.     *)
+(* The image of a small class under an injection from A to B is small.          *)
 Proposition ImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F:[C]:.
 Proof.
@@ -263,7 +263,7 @@ Proof.
   apply BijectionOn.RestrictEqual; assumption.
 Qed.
 
-(* The inverse image of a small class by an injection from any A to B is small. *)
+(* The inverse image of a small class under an injection from A to B is small.  *)
 Proposition InvImageIsSmall : forall (F A B C:Class),
   Inj F A B -> Small C -> Small F^:-1::[C]:.
 Proof.
@@ -282,7 +282,7 @@ Proof.
       apply CIN.Refl.
 Qed.
 
-(* The converse of an injection evaluated at a range element lies in the domain.*)
+(* The converse value at a range element lies in the domain.                    *)
 Proposition ConverseEvalIsInDomain : forall (F A B:Class) (b:U),
   Inj F A B -> range F b -> A (F^:-1:!b).
 Proof.

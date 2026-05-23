@@ -154,7 +154,7 @@ Proof.
   - apply DomainWhenIncl; assumption.
 Qed.
 
-(* The range of the restriction f|a is the direct image by f of a.              *)
+(* The range of the restriction f|a is the direct image of a under f.           *)
 Proposition RangeOf : forall (F:Class) (a:U), CFL.Functional F ->
   SRR.range (F:|:a) = F:[a]:.
 Proof.

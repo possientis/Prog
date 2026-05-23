@@ -92,7 +92,7 @@ Proof.
     apply Charac2. split; assumption.
 Qed.
 
-(* The range of the restriction F|A is the direct image by F of A.              *)
+(* The range of the restriction F|A is the direct image of A under F.           *)
 Proposition RangeOf : forall (F A:Class),
   range (F:|:A) :~: F:[A]:.
 Proof.

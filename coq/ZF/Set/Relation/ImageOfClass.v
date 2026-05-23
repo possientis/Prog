@@ -21,7 +21,7 @@ Definition image (f:U) (A:Class) : U := fromClass (toClass f) :[A]:
 (* Notation "f :[ A ]:" := (image f A)                                          *)
 Global Instance SetOfClassImage : Image U Class U := { image := image }.
 
-(* The class of the image equals the image of the class by the class.           *)
+(* The class of the image equals the image of the class under the class.        *)
 Proposition ToClass : forall (A:Class) (f:U),
   toClass f:[A]: :~: (toClass f) :[A]:.
 Proof.

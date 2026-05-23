@@ -137,7 +137,7 @@ Proof.
   apply Charac. split. 1: assumption. apply H1 with a; assumption.
 Qed.
 
-(* The direct image by an isomorphism of an final segment is an final segment.  *)
+(* The image of a final segment under an isomorphism is final.                  *)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                                          ->
   C :<=: A                                                ->

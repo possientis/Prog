@@ -113,7 +113,7 @@ Proof.
     apply H3. split; assumption.
 Qed.
 
-(* If B is strictly included in A, then the difference A minus B is not empty.  *)
+(* If B is properly included in A, then the difference A minus B is not empty.  *)
 Proposition WhenLess : forall (A B:Class),
   B :<: A -> A :\: B :<>: :0:.
 Proof.
@@ -156,7 +156,7 @@ Qed.
 Proposition IsProper : forall (A:Class) (a:U),
   Proper A -> Proper (A :\: toClass a).
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude.                                                           *)
   intros A a H1 H2.
   (* A is included in (A :\: toClass a) \/ toClass a, which is small            *)
   apply H1.
