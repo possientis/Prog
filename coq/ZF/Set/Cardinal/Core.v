@@ -435,3 +435,13 @@ Proof.
   rewrite (Inj.ImageOfDomain f a (a :x: b)). 2: assumption. apply H3.
 Qed.
 
+(* If a is not empty, then card(b) is bounded by card(a x b).                   *)
+Proposition IsInclProdL : Choice -> forall (a b:U),
+  a <> :0: -> card b :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros AC a b H1.
+  (* Exchange the product factors and use the right-factor version.             *)
+  rewrite ProdComm. apply IsInclProdR; assumption.
+Qed.
+
