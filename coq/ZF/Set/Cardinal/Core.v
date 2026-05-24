@@ -414,8 +414,8 @@ Proof.
 Qed.
 
 (* If b is not empty, then card(a) is bounded by card(a x b).                   *)
-Proposition IsInclProdR : forall (a b:U),
-  Choice -> b <> :0: -> card a :<=: card (a :x: b).
+Proposition IsInclProdR : forall (a b:U), Choice ->
+  b <> :0: -> card a :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
@@ -436,12 +436,17 @@ Proof.
 Qed.
 
 (* If a is not empty, then card(b) is bounded by card(a x b).                   *)
-Proposition IsInclProdL : forall (a b:U),
-  Choice -> a <> :0: -> card b :<=: card (a :x: b).
+Proposition IsInclProdL : forall (a b:U), Choice ->
+  a <> :0: -> card b :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
   (* Exchange the product factors and use the right-factor version.             *)
   rewrite ProdComm. apply IsInclProdR; assumption.
 Qed.
+
+Proposition InclCompatProdR : forall (a b c:U), Choice ->
+ card b :<=: card c -> card (a :x: b) :<=: card (a :x: c).
+Proof.
+Admitted.
 
