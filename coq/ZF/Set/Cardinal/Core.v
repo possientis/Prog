@@ -12,6 +12,7 @@ Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
+Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -217,6 +218,16 @@ Qed.
 Proposition Idem : forall (a:U), card (card a) = card a.
 Proof.
   intros a. symmetry. apply WhenCardinal. exists a. reflexivity.
+Qed.
+
+(* The cardinal of a product is unchanged when the factors are exchanged.       *)
+Proposition ProdComm : forall (a b:U),
+  card (a :x: b) = card (b :x: a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b.
+  (* Exchanging the factors gives a bijection between the two products.         *)
+  apply WhenEquiv. apply Equiv.ProdComm.
 Qed.
 
 Proposition InclCompatGen : forall (a b:U), WithOrdinal b ->
