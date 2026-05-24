@@ -3,11 +3,19 @@ Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Bijection.
+Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.OneToOne.
+Require Import ZF.Set.Relation.Onto.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
@@ -103,4 +111,97 @@ Proof.
   - apply IsFunctional.
   - rewrite DomainOf. assumption.
   - apply Satisfies. assumption.
+Qed.
+
+(* If the values lie in b, then the function defined by f maps a to b.          *)
+Proposition IsFun : forall (f:U -> U) (a b:U),
+  (forall x, x :< a -> f x :< b) -> Fun (from a f) a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1. split. 1: apply IsFunctionOn.
+  (* Every value in the range is one of the displayed values f(x).              *)
+  intros y H2. apply Range.Charac in H2. destruct H2 as [x H2].
+  apply Charac2 in H2. destruct H2 as [H2 H3]. rewrite H3.
+  apply H1. assumption.
+Qed.
+
+(* If the expression is injective on a, the associated function is one-to-one.  *)
+Proposition IsOneToOne : forall (f:U -> U) (a:U),
+  (forall x y, x :< a -> y :< a -> f x = f y -> x = y) ->
+  OneToOne (from a f).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a H1. apply FunctionOn.IsOneToOne with a.
+  - apply IsFunctionOn.
+  - (* Equal values of the associated function are equal values of f.           *)
+    intros x y H2 H3 H4. rewrite Eval in H4. 2: assumption.
+    rewrite Eval in H4. 2: assumption. apply H1; assumption.
+Qed.
+
+(* If the expression is injective on a, the associated relation is a bijection. *)
+Proposition IsBijection : forall (f:U -> U) (a:U),
+  (forall x y, x :< a -> y :< a -> f x = f y -> x = y) ->
+  Bijection (from a f).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a H1. split.
+  - apply IsRelation.
+  - apply IsOneToOne. assumption.
+Qed.
+
+(* If the expression is injective on a, it is a bijection defined on a.         *)
+Proposition IsBijectionOn : forall (f:U -> U) (a:U),
+  (forall x y, x :< a -> y :< a -> f x = f y -> x = y) ->
+  BijectionOn (from a f) a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a H1. split.
+  - apply IsBijection. assumption.
+  - apply DomainOf.
+Qed.
+
+(* If the values lie in b and are injective on a, we get an injection a -> b.   *)
+Proposition IsInj : forall (f:U -> U) (a b:U),
+  (forall x, x :< a -> f x :< b)                          ->
+  (forall x y, x :< a -> y :< a -> f x = f y -> x = y)    ->
+  Inj (from a f) a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 H2. split.
+  - apply IsBijectionOn. assumption.
+  - (* The range is contained in b because every displayed value lies in b.     *)
+    intros y H3. apply Range.Charac in H3. destruct H3 as [x H3].
+    apply Charac2 in H3. destruct H3 as [H3 H4]. rewrite H4.
+    apply H1. assumption.
+Qed.
+
+(* If the expression has exactly the values in b, it is onto b.                 *)
+Proposition IsOnto : forall (f:U -> U) (a b:U),
+  (forall x, x :< a -> f x :< b)                    ->
+  (forall y, y :< b -> exists x, x :< a /\ f x = y) ->
+  Onto (from a f) a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 H2. split. 1: apply IsFunctionOn.
+  apply Incl.Double. split.
+  - (* All displayed values lie in b.                                           *)
+    intros y H3. apply Range.Charac in H3. destruct H3 as [x H3].
+    apply Charac2 in H3. destruct H3 as [H3 H4]. rewrite H4.
+    apply H1. assumption.
+  - (* Every element of b is displayed by some element of a.                    *)
+    intros y H3. apply H2 in H3. destruct H3 as [x [H3 H4]].
+    apply Range.Charac. exists x. rewrite <- H4. apply Satisfies. assumption.
+Qed.
+
+(* If the expression is injective and has values b, it is a bijection a -> b.   *)
+Proposition IsBij : forall (f:U -> U) (a b:U),
+  (forall x, x :< a -> f x :< b)                          ->
+  (forall x y, x :< a -> y :< a -> f x = f y -> x = y)    ->
+  (forall y, y :< b -> exists x, x :< a /\ f x = y)       ->
+  Bij (from a f) a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 H2 H3. split.
+  - apply IsBijectionOn. assumption.
+  - apply IsOnto; assumption.
 Qed.

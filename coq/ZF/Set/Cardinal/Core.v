@@ -11,8 +11,11 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -408,5 +411,27 @@ Proof.
     apply EqualOrdNat; assumption.
   - (* N <= card(N): card(N) <= N as N is an ordinal, so N = card(N).           *)
     apply Incl.Double. split. 1: assumption. apply IsIncl. assumption.
+Qed.
+
+(* If b is not empty, then card(a) is bounded by card(a x b).                   *)
+Proposition IsInclProdR : Choice -> forall (a b:U),
+  b <> :0: -> card a :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros AC a b H1.
+  apply Empty.HasElem in H1. destruct H1 as [y H1].
+  remember (From.from a (fun x => :(x,y):)) as f eqn:H2.
+  (* Fixing y in b embeds a into a x b by sending x to (x,y).                   *)
+  assert (Inj f a (a :x: b)) as H3. {
+    rewrite H2. apply From.IsInj.
+    - intros x H3. apply Prod.Charac2. split; assumption.
+    - intros x z H3 H4 H5.
+      apply OrdPair.Equal in H5. destruct H5 as [H5 _]. assumption. }
+  (* Hence a is bijective with its image, which lies inside a x b.              *)
+  assert (a :~: f:[a]:) as H4. { exists f. apply Bij.FromInj with (a :x: b).
+    assumption. }
+  assert (card a = card f:[a]:) as H5. { apply WhenEquiv. assumption. }
+  rewrite H5. apply InclCompat. 1: assumption.
+  rewrite (Inj.ImageOfDomain f a (a :x: b)). 2: assumption. apply H3.
 Qed.
 
