@@ -207,10 +207,10 @@ Proof.
 Qed.
 
 (* Assuming choice, two sets are equivalent iff they have the same cardinal.    *)
-Proposition EquivCharac : Choice -> forall (a b:U),
-  a :~: b <-> card a = card b.
+Proposition EquivCharac : forall (a b:U),
+  Choice -> a :~: b <-> card a = card b.
 Proof.
-  intros AC a b. split; intros H1.
+  intros a b AC. split; intros H1.
   - apply WhenEquiv. assumption.
   - apply Equiv.Tran with (card a).
     + apply IsEquivChoice. assumption.
@@ -414,11 +414,11 @@ Proof.
 Qed.
 
 (* If b is not empty, then card(a) is bounded by card(a x b).                   *)
-Proposition IsInclProdR : Choice -> forall (a b:U),
-  b <> :0: -> card a :<=: card (a :x: b).
+Proposition IsInclProdR : forall (a b:U),
+  Choice -> b <> :0: -> card a :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros AC a b H1.
+  intros a b AC H1.
   apply Empty.HasElem in H1. destruct H1 as [y H1].
   remember (From.from a (fun x => :(x,y):)) as f eqn:H2.
   (* Fixing y in b embeds a into a x b by sending x to (x,y).                   *)
@@ -436,11 +436,11 @@ Proof.
 Qed.
 
 (* If a is not empty, then card(b) is bounded by card(a x b).                   *)
-Proposition IsInclProdL : Choice -> forall (a b:U),
-  a <> :0: -> card b :<=: card (a :x: b).
+Proposition IsInclProdL : forall (a b:U),
+  Choice -> a <> :0: -> card b :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros AC a b H1.
+  intros a b AC H1.
   (* Exchange the product factors and use the right-factor version.             *)
   rewrite ProdComm. apply IsInclProdR; assumption.
 Qed.
