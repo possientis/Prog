@@ -257,7 +257,7 @@ Qed.
 Proposition HasSubsetOfSize : forall (a c:U), Choice ->
   c :<=: card a -> exists b, b :<=: a /\ b :~: c.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a c AC H1.
   (* Choose a bijection from card(a) onto a, and take the image of c.           *)
   assert (a :~: card a) as H2. { apply IsEquivChoice. assumption. }
@@ -354,7 +354,7 @@ Qed.
 Proposition WhenNat : forall (n:U), n :< :N ->
   card n = n.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros n H1.
   (* n is an ordinal (naturals are), so n ~ card n; card n ~ n by symmetry;     *)
   (* card n is an ordinal equipotent to n, so it equals n.                      *)
@@ -367,7 +367,7 @@ Qed.
 Proposition NotZero : forall (a:U),
   card a <> :0: -> a <> :0:.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1 H2.
   (* The empty set has cardinal zero, contrary to the hypothesis.               *)
   apply H1. rewrite H2. apply WhenNat. apply Omega.HasZero.
@@ -383,7 +383,7 @@ Qed.
 (* N is a cardinal number.                                                      *)
 Proposition HasOmega : Cardinal :N.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   exists :N.
   assert (Ordinal :N) as H1. { apply Omega.IsOrdinal. }
   assert (Ordinal (card :N)) as H2. { apply IsOrdinal. }

@@ -10,7 +10,7 @@ Definition Snd : Class := fun x =>
 Proposition Charac2 : forall (x x':U),
   Snd :(x,x'): <-> exists y, exists z, x = :(y,z): /\ x' = z.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros x x'. split; intros H1.
   - (* If a pair is in Snd, unpack the ordered-pair equality.                   *)
     unfold Snd in H1. destruct H1 as [y [z H1]]. apply OrdPair.Equal in H1.
@@ -23,7 +23,7 @@ Qed.
 (* The class Snd is functional.                                                 *)
 Proposition IsFunctional : Functional Snd.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros x x1 x2 H1 H2.
   (* Two Snd-values of the same ordered pair are both its second coordinate.    *)
   apply Charac2 in H1. apply Charac2 in H2.

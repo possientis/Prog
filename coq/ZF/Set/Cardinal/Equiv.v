@@ -421,7 +421,7 @@ Qed.
 Proposition WhenSingle : forall (a:U),
   :{a}: :~: :1:.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* The function sending a to 0 bijects {a} onto {0} = 1.                      *)
   intros a.
   remember (from :{a}: (fun _ => :0:)) as h eqn:Hh.
@@ -563,7 +563,7 @@ Qed.
 Proposition ProdCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Let f : a -> c and g : b -> d be the bijections given by the hypotheses.   *)
   intros a b c d [f H1] [g H2].
   (* Define h : a x b -> c x d by h(u,v) = (f(u), g(v)).                        *)
@@ -614,7 +614,7 @@ Qed.
 Proposition ProdCompatL : forall (a b c:U),
   a :~: b -> a :x: c :~: b :x: c.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* If a ~ b then a x c ~ b x c.                                               *)
   intros a b c H.
   exact (ProdCompat a c b c H (Refl c)).
@@ -624,7 +624,7 @@ Qed.
 Proposition ProdCompatR : forall (a b c:U),
   a :~: b -> c :x: a :~: c :x: b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* If a ~ b then c x a ~ c x b.                                               *)
   intros a b c H.
   exact (ProdCompat c a c b (Refl c) H).
@@ -634,7 +634,7 @@ Qed.
 Proposition SuccCompat : forall (a b:U),
   a :~: b ->  succ a :~: succ b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Let f : a -> b be the bijection given by the hypothesis.                   *)
   intros a b [f H1].
   (* Define h : succ(a) -> succ(b) by h(a) = b and h(x) = f(x) for x in a.      *)
@@ -699,7 +699,7 @@ Qed.
 Proposition SuccCompatRev : forall (a b:U),
   succ a :~: succ b -> a :~: b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Let f : succ(a) -> succ(b) be the given bijection.                         *)
   intros a b [f H1].
   assert (a :< succ a) as G1. { apply Succ.IsIn. }
@@ -815,7 +815,7 @@ Proposition DisjointUnion : forall (a b c d:U),
   a :/\: b  = :0:         ->
   a :\/: b  :~: c :+: d.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Let f : a -> c and g : b -> d be the bijections given by the hypotheses.   *)
   intros a b c d Hc Hd [f Hf] [g Hg] Hdisj.
   (* Define h : a \/ b -> {0} x c \/ {1} x d by case on membership:             *)
@@ -915,7 +915,7 @@ Qed.
 Proposition ProdComm : forall (a b:U),
   a :x: b :~: b :x: a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Define h : a x b -> b x a by h(u,v) = (v,u).                               *)
   intros a b.
   remember (from2 a b (fun u v => :(v, u):)) as h eqn:Hh.
@@ -956,7 +956,7 @@ Qed.
 (* The product a x {b} of a set a and a singleton is equipotent to a.           *)
 Proposition ProdSingleR : forall (a b:U),  a :x: :{b}: :~: a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* a x {b} ~ {b} x a since the product is commutative, and {b} x a ~ a.       *)
   intros a b. apply Tran with (:{b}: :x: a).
   - apply ProdComm.
@@ -967,7 +967,7 @@ Qed.
 Proposition Succ : forall (a:U), Ordinal a ->
   :N :<=: a -> a :~: succ a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* succ(a) = a \/ {a} = {a} \/ a ~ 1 + a = a, so a ~ succ(a) by symmetry.     *)
   intros a Ha HN. apply Sym. unfold succ. rewrite Union2.Comm.
   (* {a} and a are disjoint: a in a would contradict the axiom of foundation.   *)
@@ -1021,7 +1021,7 @@ Qed.
 Proposition WhenNatR : forall (n a:U), Ordinal a ->
   n :< :N -> :N :<=: a -> a :~: a :+: n.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* By induction on n.                                                         *)
   intros n a Ha Hn HN. revert n Hn.
   apply Omega.Induction.
@@ -1043,7 +1043,7 @@ Qed.
 Proposition ProdIsMult : forall (a b:U), Ordinal a -> Ordinal b ->
   a :x: b :~: a :*: b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* a x b ~ b x a by commutativity, and b x a ~ a * b by the Mult2 bijection.  *)
   intros a b Ha Hb. apply Tran with (b :x: a).
   - apply ProdComm.
@@ -1054,7 +1054,7 @@ Qed.
 Proposition EqualNat : forall (m n:U), m :< :N -> n :< :N ->
   m :~: n -> m = n.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Induction on n: define A n = "any m in N equipotent to n equals n".        *)
   remember (fun n => forall m, m :< :N -> m :~: n -> m = n) as A eqn:HA.
   assert (A :0:) as H1. {
@@ -1086,7 +1086,7 @@ Qed.
 Proposition NotSuccNat : forall (n:U), n :< :N ->
   ~ n :~: succ n.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros n H1 H2.
   (* succ n is also a natural number.                                           *)
   assert (succ n :< :N) as H3. { apply Omega.HasSucc. assumption. }
@@ -1101,7 +1101,7 @@ Qed.
 Proposition NoInjSuccNat : forall (n:U), n :< :N ->
   ~ exists f, Inj f (succ n) n.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros n H1 [f [H2 H3]].
   (* f bijects succ n onto its range, which lies inside n.                      *)
   assert (succ n :~: range f) as H4. {
@@ -1120,7 +1120,7 @@ Qed.
 Proposition EqualOrdNat : forall (a n:U), Ordinal a -> n :< :N ->
   a :~: n -> a = n.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a n H1 H2 H3.
   (* n is an ordinal since every element of N is an ordinal.                    *)
   assert (Ordinal n) as H4. { apply Omega.HasOrdinals. assumption. }

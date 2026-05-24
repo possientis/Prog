@@ -32,7 +32,7 @@ Proposition Charac2 : forall (r x f:U),
   (~WellOrdering r x /\ f = :0:)                                     \/
   ( WellOrdering r x /\ exists b, Ordinal b /\ Isom f r (E b) x b).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Direct unfolding of isom: membership reduces to the two-case disjunction.  *)
   (* OrdPair injectivity forces r'=r, x'=x, f'=f, collapsing the existentials.  *)
   intros r x f. unfold isom. split.
@@ -46,7 +46,7 @@ Qed.
 (* Every element of isom is an ordered pair of the form ((r,x),f).              *)
 Proposition IsRelation : CRR.Relation isom.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Any y in isom satisfies y = ((r,x),f) for some r, x, f by definition.      *)
   intros y H. unfold isom in H. destruct H as [r [x [f [H1 _]]]].
   exists :(r,x):. exists f. exact H1.
@@ -55,7 +55,7 @@ Qed.
 (* isom is functional: each input pair (r,x) determines at most one output.     *)
 Proposition IsFunctional : Functional isom.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Suppose isom(p,y) and isom(p,z). Both unpack as p = ((r,x),f) for some f;  *)
   intros p y z H1 H2.
   unfold isom in H1. destruct H1 as [r1 [x1 [f1 [Heq1 Hcase1]]]].
@@ -90,7 +90,7 @@ Proposition Satisfies : forall (r x f b:U),
   Isom f r (E b) x b    ->
   isom :(:(r,x):,f):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Unfold the definition: take the well-ordered branch with ordinal b.        *)
   intros r x f b Hwo Hb HIsom.
   unfold isom. exists r, x, f. split. 1: reflexivity.
@@ -109,7 +109,7 @@ Qed.
 (* Every ordered pair (r,x) belongs to the domain of isom.                      *)
 Proposition DomainOf : forall (r x:U), domain isom :(r,x):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Split on whether r well-orders x; provide a witness f for each case.       *)
   intros r x. unfold domain.
   assert (WellOrdering r x \/ ~ WellOrdering r x) as [Hwo|Hnwo]. {
@@ -131,7 +131,7 @@ Proposition Eval : forall (r x f b:U),
   Isom f r (E b) x b    ->
   (isom!:(r,x):) = f.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* The pair ((r,x),f) belongs to isom; convert via the eval characterisation. *)
   intros r x f b Hwo Hb HIsom.
   assert (isom :(:(r,x):,f):) as H. { eapply Satisfies; eassumption. }
@@ -144,7 +144,7 @@ Qed.
 Proposition IsOrdinal : forall (r x:U), WellOrdering r x ->
   Ordinal (isom!:(r,x):) :[x]:.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Get the ordinal order type a with isomorphism f^{-1}: x -> a; the          *)
   (* image f^{-1}[x] equals a by bijection, which is an ordinal.                *)
   intros r x Hwo.
@@ -162,7 +162,7 @@ Proposition IsIsom : forall (r x b:U),
   b = (isom!:(r,x):) :[x]:          ->
   Isom (isom!:(r,x):) r (E b) x b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* f^{-1}: x -> a is the canonical ordinal isomorphism; isom!(r,x) = f^{-1}.  *)
   intros r x b Hwo Hb.
   assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {

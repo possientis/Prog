@@ -148,7 +148,7 @@ Qed.
 Proposition RemoveAddElem : forall (a x:U),
   x :< a -> (a :\: :{x}:) :\/: :{x}: = a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a x H1. apply Incl.Double. split; intros y H2.
   - apply Union2.Charac in H2. destruct H2 as [H2|H2].
     (* y is in a \ {x}: the difference condition gives y in a directly.         *)

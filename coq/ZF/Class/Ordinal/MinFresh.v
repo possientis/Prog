@@ -22,7 +22,7 @@ Definition MinFresh (R A:Class) : Class := fun x =>
 Proposition Charac2 : forall (R A:Class) (f m:U),
   MinFresh R A :(f,m): <-> Minimal R (A :\: range f) m.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A f m. split; intros H1.
   - destruct H1 as [y [z [H1 H2]]]. apply OrdPair.Equal in H1.
     destruct H1 as [H1 H3]. subst. assumption.
@@ -33,7 +33,7 @@ Qed.
 Proposition IsFunctional : forall (R A:Class),
   Total R A -> Functional (MinFresh R A).
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A H1 x y1 y2 H2 H3.
   apply Charac2 in H2. apply Charac2 in H3. revert H2 H3.
   apply Minimal.Unique with A. 1: assumption. apply Class.Inter2.IsInclL.
@@ -42,7 +42,7 @@ Qed.
 (* MinFresh R A is a relation class.                                            *)
 Proposition IsRelation : forall (R A:Class), Relation (MinFresh R A).
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A x H1. destruct H1 as [y [z [H1 _]]].
   exists y. exists z. assumption.
 Qed.
@@ -51,7 +51,7 @@ Qed.
 Proposition IsFunction : forall (R A:Class),
   Total R A -> Function (MinFresh R A).
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A H1. split.
   - apply IsRelation.
   - apply IsFunctional. assumption.
@@ -63,7 +63,7 @@ Proposition IsMinimal : forall (R A:Class) (f:U),
   (A :\: range f) :<>: :0:                      ->
   Minimal R (A :\: range f) (MinFresh R A)!f.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A f H1 H2.
   assert (exists y, Minimal R (A :\: range f) y) as H3. {
     apply WellFoundedWellOrd.HasMinimal with A; try assumption.

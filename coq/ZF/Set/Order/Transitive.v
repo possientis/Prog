@@ -37,7 +37,7 @@ Proposition Transport : forall (f r s a b:U),
   Transitive r a      ->
   Transitive s b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2 H3 x y z H4 H5 H6 H7 H8.
   apply (Bij.RangeCharac f a b) in H4. 2: assumption.
   apply (Bij.RangeCharac f a b) in H5. 2: assumption.

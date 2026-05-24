@@ -34,7 +34,7 @@ Proposition WhenLess : forall (r a x y:U),
   :(x,y): :< r                ->
   ~ (x = y \/ :(y,x): :< r).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros r a x y [H3 H4] H1 H2 H5 H6. destruct H6 as [H6|H6].
   - subst. apply H3 with y. 1: assumption. assumption.
   - apply H3 with x. 1: assumption. apply H4 with y; assumption.
@@ -47,7 +47,7 @@ Proposition Transport : forall (f r s a b:U),
   StrictOrd r a       ->
   StrictOrd s b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2 [H3 H4]. split.
   - apply (Irreflexive.Transport f r s a b); assumption.
   - apply (Transitive.Transport f r s a b); assumption.

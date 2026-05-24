@@ -41,7 +41,7 @@ Many `Set/` proofs are direct duplicates of their `Class/` counterparts, written
 
 ## Proof and comment conventions
 
-Every proof written by Claude must begin with `(* Proof by Claude. *)`.
+Every proof written by Claude must begin with `(* Proof by Claude + sonnet 4.6 *)`; every proof written by Hermes must begin with `(* Proof by Hermes + gpt 5.5 *)`.
 
 Place a one-line informal statement of the proposition on the line **immediately above** the `Proposition`/`Lemma` keyword, at top-level indent, with the closing `*)` at column 81 (vim 1-indexed):
 

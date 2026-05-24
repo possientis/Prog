@@ -32,7 +32,7 @@ Proposition Transport : forall (f r s a b:U),
   Total r a           ->
   Total s b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2 H3 y1 y2 H4 H5.
   apply (Bij.RangeCharac f a b) in H4. 2: assumption.
   apply (Bij.RangeCharac f a b) in H5. 2: assumption.

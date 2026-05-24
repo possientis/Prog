@@ -12,7 +12,7 @@ Definition Irreflexive (R A:Class) : Prop := forall (x:U), A x -> ~ R :(x,x):.
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Irreflexive R A -> Irreflexive S B.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F R S A B H1 H2 H3 y H4 H5.
   apply (Bij.RangeCharac F A B) in H4. 2: assumption.
   destruct H4 as [a [H4 H6]].

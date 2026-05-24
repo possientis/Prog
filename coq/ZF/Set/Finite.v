@@ -31,7 +31,7 @@ Definition Finite (a:U) : Prop := exists n, n :< :N /\ a :~: n.
 Proposition EquivCompat : forall (a b:U),
   a :~: b -> Finite a -> Finite b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* a is finite so a ~ n for some n in N. Since a ~ b, b ~ a ~ n.              *)
   intros a b H1 [n [H2 H3]]. exists n. split. 1: assumption.
   apply SCE.Tran with a. 2: assumption.
@@ -66,7 +66,7 @@ Qed.
 (* The empty set is finite.                                                     *)
 Proposition Zero : Finite :0:.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* The empty set is equipotent to 0, which is a natural number.               *)
   apply WhenNat. apply Omega.HasZero.
 Qed.
@@ -75,7 +75,7 @@ Qed.
 Proposition AddElem : forall (a b:U),
   Finite a -> Finite (a :\/: :{b}:).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Apply AddElem which gives a :\/: :{b}: = a or a :\/: :{b}: ~ succ a.       *)
   intros a b [n [H1 [f H2]]].
   assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as H3. {
@@ -94,7 +94,7 @@ Qed.
 Proposition RemoveElem : forall (a b:U),
   Finite a -> Finite (a :\: :{b}:).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* a :\: :{b}: is a subset of a, hence finite.                                *)
   intros a b H1. apply InclCompat with a. 2: assumption. apply Diff.IsIncl.
 Qed.
@@ -103,7 +103,7 @@ Qed.
 Proposition CardIsNat : forall (a:U),
   Finite a -> card a :< :N.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a [n [H1 H2]].
   (* A finite set is equipotent to some natural number n.                       *)
   assert (card a = card n) as H3. { apply SCC.WhenEquiv. assumption. }
@@ -116,7 +116,7 @@ Qed.
 Proposition WhenNatCard : forall (a:U), Choice ->
   card a :< :N -> Finite a.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC H1. exists (card a). split. 1: assumption.
   (* Choice gives a bijection between a and its cardinal.                       *)
   apply SCC.IsEquivChoice. assumption.
@@ -126,7 +126,7 @@ Qed.
 Proposition WhenZeroCard : forall (a:U),
   Finite a -> card a = :0: -> a = :0:.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1 H2.
   (* Finiteness gives an ordinal equipotent to a, hence a is equipotent to its  *)
   (* cardinal.                                                                  *)
@@ -142,7 +142,7 @@ Proposition AddNewElem : forall (a b:U),
   ~ b :< a                              ->
   card (a :\/: :{b}:) = succ (card a).
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2.
   (* A finite set is equipotent to an ordinal, hence to its cardinal.           *)
   assert (WithOrdinal a) as H3. {
@@ -175,7 +175,7 @@ Proposition RemoveElemCard : forall (n a b:U),
   b :< a                    ->
   card (a :\: :{b}:) = n.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros n a b H1 H2 H3.
   remember (a :\: :{b}:) as c eqn:H4.
   (* Since card(a) is a successor, a is equipotent to its cardinal.             *)
@@ -204,7 +204,7 @@ Qed.
 Proposition ProdSingleL : forall (a b:U),
   Finite a -> Finite (:{b}: :x: a).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* {b} x a ~ a, so finiteness transfers from a to {b} x a.                    *)
   intros a b H1. apply EquivCompat with a. 2: assumption.
   apply SCE.Sym. apply SCE.ProdSingleL.
@@ -214,7 +214,7 @@ Qed.
 Proposition ProdSingleR : forall (a b:U),
   Finite a -> Finite (a :x: :{b}:).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* a x {b} ~ a, so finiteness transfers from a to a x {b}.                    *)
   intros a b H1. apply EquivCompat with a. 2: assumption.
   apply SCE.Sym. apply SCE.ProdSingleR.
@@ -224,7 +224,7 @@ Qed.
 Proposition Union : forall (a b:U),
   Finite a -> Finite b -> Finite (a :\/: b).
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   remember (fun n => forall a b, card a = n ->
     Finite a -> Finite b -> Finite (a :\/: b)) as A eqn:H1.
   assert (forall n, n :< :N -> A n) as H2. {
@@ -263,7 +263,7 @@ Qed.
 Proposition Prod : forall (a b:U),
   Finite a -> Finite b -> Finite (a :x: b).
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   remember (fun n => forall a b, card a = n ->
     Finite a -> Finite b -> Finite (a :x: b)) as A eqn:H1.
   assert (forall n, n :< :N -> A n) as H2. {
@@ -299,7 +299,7 @@ Qed.
 Proposition WhenOrdinal : forall (a:U), Ordinal a ->
   Finite a <-> a :< :N.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1. split; intros H2.
   - (* A finite ordinal is equipotent to a natural number, hence equal to it.   *)
     destruct H2 as [n [H2 H3]].

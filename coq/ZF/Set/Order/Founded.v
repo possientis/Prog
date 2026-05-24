@@ -37,7 +37,7 @@ Proposition Transport : forall (f r s a b:U),
   Founded r a         ->
   Founded s b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2 H3. apply FromClass.
   apply (COF.IsomCompat (toClass f) (toClass r) (toClass s) (toClass a) (toClass b)).
   - apply Isom.ToClass. apply Isom.Transport; assumption.

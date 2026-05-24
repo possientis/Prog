@@ -36,7 +36,7 @@ Definition Infinite (a:U) : Prop := ~ Finite a.
 Proposition EquivCompat : forall (a b:U),
   a :~: b -> Infinite a -> Infinite b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Infinite a means not Finite a. If b were finite, a ~ b would give          *)
   (* Finite a via Finite.EquivCompat, contradicting Infinite a.                 *)
   intros a b H1 H2 H3. apply H2.
@@ -79,7 +79,7 @@ Qed.
 Proposition Charac : forall (a:U), Choice ->
   Infinite a <-> InfiniteCard (card a).
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC. split; intros H1.
   - (* The cardinal is a cardinal number, and omega embeds into it.             *)
     split.
@@ -135,7 +135,7 @@ Qed.
 Proposition Dedekind : forall (a:U), Choice -> Infinite a ->
   exists b, b :<: a /\ b :~: a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a AC H1.
   (* The empty set is finite, so a is nonempty.                                 *)
   assert (a <> :0:) as H2. {
@@ -165,7 +165,7 @@ Qed.
 Proposition HasOmegaSubset : forall (a:U), Choice -> Infinite a ->
   exists b, b :<=: a /\ b :~: :N.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC H1.
   (* The cardinal of an infinite set contains N, so a has a subset of size N.   *)
   assert (:N :<=: card a) as H2. { apply Card; assumption. }

@@ -26,7 +26,7 @@ Proposition Charac2 : forall (A:Class) (f1 f2:U -> U -> U) (x y:U),
     (y = f1 u v /\   A :(u,v):  \/
      y = f2 u v /\ ~ A :(u,v):).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 x y. split.
   - intros [u [v [[H1 H2]|[H1 H2]]]].
     + apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst.
@@ -46,7 +46,7 @@ Proposition Charac3 : forall (A:Class) (f1 f2:U -> U -> U) (x y z:U),
   z = f1 x y /\   A :(x,y):  \/
   z = f2 x y /\ ~ A :(x,y):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 x y z. split.
   - intros H1. apply Charac2 in H1. destruct H1 as [u [v [H1 H2]]].
     apply OrdPair.Equal in H1. destruct H1 as [Hu Hv]. subst. exact H2.
@@ -57,7 +57,7 @@ Qed.
 Proposition Satisfies1 : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   A :(a,b): -> ifThenElse2 A f1 f2 :(:(a,b):,f1 a b):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b H1. apply Charac3. left. split. 2: assumption. reflexivity.
 Qed.
 
@@ -65,7 +65,7 @@ Qed.
 Proposition Satisfies2 : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   ~ A :(a,b): -> ifThenElse2 A f1 f2 :(:(a,b):,f2 a b):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b H1. apply Charac3. right. split. 2: assumption. reflexivity.
 Qed.
 
@@ -73,7 +73,7 @@ Qed.
 Proposition DomainOf : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   domain (ifThenElse2 A f1 f2) :(a,b):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b.
   assert (A :(a,b): \/ ~ A :(a,b):) as [H1|H1]. { apply LawExcludedMiddle. }
   - exists (f1 a b). apply Satisfies1. assumption.
@@ -84,7 +84,7 @@ Qed.
 Proposition IsRelation : forall (A:Class) (f1 f2:U -> U -> U),
   Relation (ifThenElse2 A f1 f2).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 x H1. destruct H1 as [y [z [[H1 H2]|[H1 H2]]]]; subst.
   - exists :(y,z):, (f1 y z). reflexivity.
   - exists :(y,z):, (f2 y z). reflexivity.
@@ -94,7 +94,7 @@ Qed.
 Proposition IsFunctional : forall (A:Class) (f1 f2:U -> U -> U),
   Functional (ifThenElse2 A f1 f2).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 x y1 y2 H1 H2.
   apply Charac2 in H1. destruct H1 as [u1 [v1 [Hx H1]]].
   apply Charac2 in H2. destruct H2 as [u2 [v2 [Hx' H2]]].
@@ -117,7 +117,7 @@ Qed.
 Proposition Eval1 : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   A :(a,b): -> ((ifThenElse2 A f1 f2)!:(a,b):) = f1 a b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b H1. apply Function.Eval.
   - apply IsFunction.
   - apply Satisfies1. assumption.
@@ -127,7 +127,7 @@ Qed.
 Proposition Eval2 : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   ~ A :(a,b): -> ((ifThenElse2 A f1 f2)!:(a,b):) = f2 a b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b H1. apply Function.Eval.
   - apply IsFunction.
   - apply Satisfies2. assumption.

@@ -40,7 +40,7 @@ Qed.
 Proposition Converse : forall (f r s a b:U),
   Isom f r s a b -> Isom f^:-1: s r b a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1. apply FromClass.
   apply COI.EquivCompat1 with (toClass f)^:-1:.
   - apply Equiv.Sym. apply Converse.ToClass.
@@ -53,7 +53,7 @@ Proposition Compose : forall (f g r s t a b c:U),
   Isom g s t b c ->
   Isom (g :.: f) r t a c.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f g r s t a b c [H1 H2] [H3 H4]. split.
   - apply Bij.Compose with b; assumption.
   - intros x y H5 H6. split; intros H7.
@@ -75,7 +75,7 @@ Proposition Transport : forall (f r s a b:U),
   Bij f a b           ->
   Isom f r s a b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2. split. 1: assumption.
   intros x y H3 H4. rewrite H1.
   split; intro H5; apply (Transport.Charac2f f r a b); assumption.

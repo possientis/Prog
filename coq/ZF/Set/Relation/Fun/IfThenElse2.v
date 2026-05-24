@@ -27,7 +27,7 @@ Proposition Charac : forall (A:Class) (f1 f2:U -> U -> U) (a b x:U),
     x = :(:(u,v):,f1 u v): /\ u :< a /\ v :< b /\   A :(u,v):  \/
     x = :(:(u,v):,f2 u v): /\ u :< a /\ v :< b /\ ~ A :(u,v):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* An element is a pair with first component in the product, and second       *)
   (* component determined by the branch condition on the first component.       *)
   intros A f1 f2 a b x. split; intros H1.
@@ -55,7 +55,7 @@ Proposition Charac2 : forall (A:Class) (f1 f2:U -> U -> U) (a b p q:U),
     (q = f1 u v /\   A :(u,v):  \/
      q = f2 u v /\ ~ A :(u,v):).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Pair membership unpacks the witnesses via ordered-pair injectivity.        *)
   intros A f1 f2 a b p q. split; intros H1.
   - apply Charac in H1.
@@ -79,7 +79,7 @@ Proposition Charac3 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v w:U),
     (w = f1 u v /\   A :(u,v):  \/
      w = f2 u v /\ ~ A :(u,v):).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Follows from the pair characterization via ordered-pair injectivity.       *)
   intros A f1 f2 a b u v w. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [u' [v' [H1 [H2 [H3 H4]]]]].
@@ -95,7 +95,7 @@ Proposition Satisfies1 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> A :(u,v): ->
   :(:(u,v):,f1 u v): :< ifThenElse2 a b A f1 f2.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Follows directly from the membership characterization.                     *)
   intros A f1 f2 a b u v H1 H2 H3. apply Charac3.
   split. 1: assumption. split. 1: assumption. left. split. 2: assumption.
@@ -107,7 +107,7 @@ Proposition Satisfies2 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> ~ A :(u,v): ->
   :(:(u,v):,f2 u v): :< ifThenElse2 a b A f1 f2.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Follows directly from the membership characterization.                     *)
   intros A f1 f2 a b u v H1 H2 H3. apply Charac3.
   split. 1: assumption. split. 1: assumption. right. split. 2: assumption.
@@ -118,7 +118,7 @@ Qed.
 Proposition DomainOf : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   domain (ifThenElse2 a b A f1 f2) = a :x: b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Every product element appears as a domain element via one of the branches; *)
   (* every domain element is a product element by the membership conditions.    *)
   intros A f1 f2 a b. apply Incl.Double. split; intros x H1.
@@ -137,7 +137,7 @@ Qed.
 Proposition IsRelation : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   Relation (ifThenElse2 a b A f1 f2).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Every element has the form of a pair by the membership characterization.   *)
   intros A f1 f2 a b x H1. apply Charac in H1.
   destruct H1 as [u [v [[H1 [H2 [H3 H4]]]|[H1 [H2 [H3 H4]]]]]]; subst.
@@ -149,7 +149,7 @@ Qed.
 Proposition IsFunctional : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   Functional (ifThenElse2 a b A f1 f2).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Two outputs for the same input must come from the same branch, and each    *)
   (* branch yields the same output by the function definitions.                 *)
   intros A f1 f2 a b x y1 y2 H1 H2.
@@ -166,7 +166,7 @@ Qed.
 Proposition IsFunction : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   Function (ifThenElse2 a b A f1 f2).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b. split.
   - apply IsRelation.
   - apply IsFunctional.
@@ -176,7 +176,7 @@ Qed.
 Proposition IsFunctionOn : forall (A:Class) (f1 f2:U -> U -> U) (a b:U),
   FunctionOn (ifThenElse2 a b A f1 f2) (a :x: b).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 a b. split.
   - apply IsFunction.
   - apply DomainOf.
@@ -187,7 +187,7 @@ Proposition Eval1 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> A :(u,v): ->
   (ifThenElse2 a b A f1 f2)!(:(u,v):) = f1 u v.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* The relevant pair belongs to the function; evaluation uniqueness gives     *)
   (* the result.                                                                *)
   intros A f1 f2 a b u v H1 H2 H3.
@@ -201,7 +201,7 @@ Proposition Eval2 : forall (A:Class) (f1 f2:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> ~ A :(u,v): ->
   (ifThenElse2 a b A f1 f2)!(:(u,v):) = f2 u v.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* The relevant pair belongs to the function; evaluation uniqueness gives     *)
   (* the result.                                                                *)
   intros A f1 f2 a b u v H1 H2 H3.

@@ -27,7 +27,7 @@ Global Instance ClassDiffBySet : Diff Class U := { diff := diff }.
 Proposition Charac : forall (A:Class) (a:U) (x:U),
   (A :\: a) x <-> A x /\ ~ x :< a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a x. unfold diff. split; intros H1.
   - destruct H1 as [H1 H2]. split. 1: assumption.
     intros H3. apply H2. apply H3.
@@ -39,7 +39,7 @@ Qed.
 Proposition EquivCompat : forall (A B:Class) (a:U),
   A :~: B -> A :\: a :~: B :\: a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A B a H1. unfold diff. apply Class.Diff.EquivCompatL. assumption.
 Qed.
 
@@ -47,7 +47,7 @@ Qed.
 Proposition InclCompatL : forall (A B:Class) (a:U),
   A :<=: B -> A :\: a :<=: B :\: a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A B a H1. unfold diff. apply Class.Diff.InclCompatL. assumption.
 Qed.
 
@@ -55,7 +55,7 @@ Qed.
 Proposition InclCompatR : forall (A:Class) (b c:U),
   b :<=: c -> A :\: c :<=: A :\: b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A b c H1. unfold diff. apply Class.Diff.InclCompatR. assumption.
 Qed.
 
@@ -63,7 +63,7 @@ Qed.
 Proposition IsInclL : forall (A:Class) (a:U),
   A :\: a :<=: A.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a. apply Class.Diff.IsInclL.
 Qed.
 
@@ -71,14 +71,14 @@ Qed.
 Proposition IsInclR : forall (A:Class) (a:U),
   A :\: a :<=: :¬: toClass a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a. unfold diff. apply Class.Diff.IsInclR.
 Qed.
 
 (* Removing the empty set from A leaves A unchanged.                            *)
 Proposition IdentityR : forall (A:Class), A :\: :0: :~: A.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Nothing belongs to the empty set, so no element of A is removed.           *)
   intros A x. split; intros H1.
   - apply Class.Diff.IsInclL in H1. assumption.
@@ -89,7 +89,7 @@ Qed.
 Proposition IsSmall : forall (A:Class) (a:U),
   Small A -> Small (A :\: a).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1. apply Class.Diff.IsSmall. assumption.
 Qed.
 
@@ -97,7 +97,7 @@ Qed.
 Proposition IsProper : forall (A:Class) (a:U),
   Proper A -> Proper (A :\: a).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1. apply Class.Diff.IsProper. assumption.
 Qed.
 
@@ -105,7 +105,7 @@ Qed.
 Proposition WhenEmpty : forall (A:Class) (a:U),
   A :\: a :~: :0: <-> A :<=: toClass a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a. unfold diff. apply Class.Diff.WhenEmpty.
 Qed.
 
@@ -113,14 +113,14 @@ Qed.
 Proposition WhenNotEmpty : forall (A:Class) (a:U),
   A :\: a :<>: :0: -> A :<>: toClass a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1. unfold diff in H1. apply Class.Diff.WhenNotEmpty. assumption.
 Qed.
 
 Proposition WhenIncl : forall (A:Class) (a:U),
   toClass a :<=: A -> A :\: a :<>: :0: <-> A :<>: toClass a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1. unfold diff. apply Class.Diff.WhenIncl. assumption.
 Qed.
 
@@ -128,7 +128,7 @@ Qed.
 Proposition WhenLess : forall (A:Class) (a:U),
   toClass a :<: A -> A :\: a :<>: :0:.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1. unfold diff. apply Class.Diff.WhenLess. assumption.
 Qed.
 
@@ -136,7 +136,7 @@ Qed.
 Proposition UnionR : forall (A:Class) (b c:U),
   A :\: (b:\/:c) :~: A:\:b :/\: A:\:c.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A b c x. split; intros H1.
   - (* x is in A but not in b union c, so x is in both A\b and A\c              *)
     apply Charac in H1. destruct H1 as [H1 H2]. split.
@@ -157,7 +157,7 @@ Qed.
 Proposition Image : forall (F A:Class) (a:U),
   Functional F^:-1: -> Functional F -> F:[A:\:a]: :~: F:[A]: :\: F:[a]:.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F A a H1 H2. unfold diff.
   (* The class image of A minus a, connected to the set image via ToClass.      *)
   apply Equiv.Tran with (F:[A]: :\: F:[toClass a]:).

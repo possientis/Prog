@@ -88,7 +88,7 @@ Proposition IsMinimal : forall (R A G:Class) (a:U),
   (A :\: G:[a]:) :<>: :0:         ->
   Minimal R (A :\: G:[a]:) G!a.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A G a H1 H2 H3 H4 H5.
   assert (SRR.range (G:|:a) = G:[a]:) as H6. {
     apply RestrictOfClass.RangeOf, H2. }
@@ -105,7 +105,7 @@ Proposition IsIsom' : forall (R A G:Class),
   Recursive R A G                 ->
   Isom G E R On A.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A G H1 H2 H3 H4.
   assert (forall a, On a -> (A :\: G:[a]:) :<>: :0:) as H6. {
     intros a H6. apply Proper.IsNotEmpty, DiffBySet.IsProper. assumption. }
@@ -200,7 +200,7 @@ Qed.
 Proposition IsRecursive : forall (R A:Class),
   Recursive R A (Enum R A).
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A a H1. apply Recursion.IsRecursive. assumption.
 Qed.
 
@@ -210,7 +210,7 @@ Proposition IsIsom : forall (R A:Class),
   Proper A                              ->
   Isom (Enum R A) E R On A.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A H1 H2.
   apply IsIsom'; try assumption.
   - apply IsFunctionOn.
@@ -224,7 +224,7 @@ Proposition IsUnique : forall (R A G:Class),
   Isom G E R On A                       ->
   G :~: Enum R A.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A G H1 H2 H3.
   remember (Enum R A) as F eqn:H4.
   assert (Isom F E R On A) as H5. {
@@ -260,7 +260,7 @@ Proposition WhenSmall : forall (R A:Class),
       g = (Enum R A :|: a)              ->
       Isom (toClass g) E R (toClass a) A.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A H1 H2.
   assert (WellFoundedWellOrd R A) as H3. {
     split. 2: assumption. apply WellFounded.WhenSmall. 1: assumption. apply H2. }
@@ -369,7 +369,7 @@ Proposition WhenSmallUnique : forall (R A:Class) (a b f g:U),
   Isom (toClass g) E R (toClass b) A    ->
   a = b /\ f = g.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros R A a b f g H1 H2 H3 H4 H5 H6.
   assert (toClass a :~: toClass b /\ toClass f :~: toClass g) as H7. {
     apply Isom.IsEquivGen with R A; assumption. }

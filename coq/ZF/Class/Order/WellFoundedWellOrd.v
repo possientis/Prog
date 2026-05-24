@@ -226,7 +226,7 @@ Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B ->
   WellFoundedWellOrd R A -> WellFoundedWellOrd S B.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F R S A B H1 H2 [H3 H4]. split.
   - apply (WellFounded.Transport F R S A B); assumption.
   - apply (WellOrdering.Transport F R S A B); assumption.

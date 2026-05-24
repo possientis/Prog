@@ -43,7 +43,7 @@ Qed.
 (* omega is a cardinal number not contained in itself.                          *)
 Proposition HasOmega : InfiniteCard :N.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* N is a cardinal number not a member of itself by foundation.               *)
   split.
   - apply SCC.HasOmega.
@@ -54,7 +54,7 @@ Qed.
 Proposition IsIncl : forall (a:U),  InfiniteCard a ->
   :N :<=: a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* An infinite cardinal a is an ordinal not in omega. Since ordinals are      *)
   (* totally ordered by membership, either a is in omega or omega is included   *)
   (* in a. The first is ruled out, so omega is a subset of a.                   *)
@@ -71,7 +71,7 @@ Qed.
 (* The infimum of the class of infinite cardinals is omega.                     *)
 Proposition Inf : inf InfiniteCard = :N.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* We prove double inclusion. Omega is an infinite cardinal, so the infimum   *)
   (* is at most omega. Every infinite cardinal contains omega, so omega is a    *)
   (* lower bound, and the infimum is at least omega.                            *)
@@ -93,7 +93,7 @@ Qed.
 Proposition IsLimit : forall (a:U), InfiniteCard a ->
   Limit a.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* An infinite cardinal is not zero and not a successor ordinal.              *)
   intros a H1.
   assert (Ordinal a) as H2. { apply IsOrdinal. assumption. }

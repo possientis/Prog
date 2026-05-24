@@ -28,7 +28,7 @@ Qed.
 (* The zeroth infinite cardinal is omega.                                       *)
 Proposition WhenZero : aleph :0: = :N.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* aleph(0) is the infimum of the infinite cardinals not in the image         *)
   (* aleph[0]. Since 0 is the empty set, the image aleph[0] is empty, and       *)
   (* the infimum reduces to that of all infinite cardinals, which is omega.     *)

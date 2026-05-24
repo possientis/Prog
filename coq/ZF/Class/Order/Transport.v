@@ -21,7 +21,7 @@ Proposition Charac2F : forall (F R A B:Class) (y z:U),
   A z                                         ->
   transport F R A :(F!y,F!z): <-> R :(y,z):.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F R A B y z H1 H2 H3. split; intros H4.
   - destruct H4 as [y' [z' [H4 [H5 [H6 H7]]]]].
     apply OrdPair.Equal in H4. destruct H4 as [H4 H8].

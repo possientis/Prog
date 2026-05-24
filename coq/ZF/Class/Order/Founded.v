@@ -175,7 +175,7 @@ Qed.
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Founded R A -> Founded S B.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F R S A B H1 H2 H3.
   apply (IsomCompat F R S A B). 2: assumption.
   apply Isom.Transport; assumption.

@@ -8,7 +8,7 @@ Definition Proper (P:Class) : Prop := ~Small P.
 (* A proper class is non-empty.                                                 *)
 Proposition IsNotEmpty : forall (A:Class), Proper A -> A :<>: :0:.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A H1 H2.
   (* The empty class is small; A is small by equivalence, contradiction         *)
   apply H1.

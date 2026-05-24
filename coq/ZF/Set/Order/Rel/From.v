@@ -14,7 +14,7 @@ Definition from (a:U) (r:U -> U -> Prop) : U := CORF.from r :/: a.
 Proposition Charac : forall (r:U -> U -> Prop) (a x:U),
   x :< from a r <-> exists y z, x = :(y,z): /\ y :< a /\ z :< a /\ r y z.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros r a x. unfold from. split.
   - intros H.
     apply RestrictOfClass.Charac in H.
@@ -31,7 +31,7 @@ Qed.
 Proposition Charac2 : forall (r:U -> U -> Prop) (a x y:U),
   :(x,y): :< from a r <-> x :< a /\ y :< a /\ r x y.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros r a x y. unfold from. split.
   - intros H.
     apply RestrictOfClass.Charac2 in H.

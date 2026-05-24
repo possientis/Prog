@@ -33,7 +33,7 @@ Proposition Transport : forall (f r s a b:U),
   WellOrdering r a     ->
   WellOrdering s b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2 [H3 H4]. split.
   - apply (Founded.Transport f r s a b); assumption.
   - apply (Total.Transport f r s a b); assumption.

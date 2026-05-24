@@ -36,7 +36,7 @@ Qed.
 Proposition InclCompat : forall (A B:Class),
   A :<=: B -> Small B -> Small A.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
 
   (* Let A and B be classes with A included in B, and let b witness Small B.    *)
   intros A B H1 [b H2].

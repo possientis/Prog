@@ -57,7 +57,7 @@ Proposition IsMinimal : forall (A:Class) (a:U),
   On a                                          ->
   Minimal E (A :\: (Enum A):[a]:) (Enum A)!a.
 Proof.
-  (* Proof by Claude. *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1 H2 H3.
   assert (FunctionOn (Enum A) On) as H4. { apply IsFunctionOn. }
   assert (CEN.Recursive E A (Enum A)) as H5. { apply CEN.IsRecursive. }

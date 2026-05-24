@@ -61,7 +61,7 @@ Qed.
 Proposition IsIrreflexive : forall (a:U),
   Irreflexive (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a x _ H1. apply Charac2 in H1. destruct H1 as [_ [_ H1]].
   revert H1. apply Foundation.NoLoop1.
 Qed.
@@ -70,7 +70,7 @@ Qed.
 Proposition IsTransitive : forall (a:U), Ordinal a ->
   Transitive (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a H1 x y z H2 H3 H4 H5 H6.
   apply Charac2 in H5. destruct H5 as [_ [_ H5]].
   apply Charac2 in H6. destruct H6 as [_ [_ H6]].
@@ -85,7 +85,7 @@ Qed.
 Proposition IsTotal : forall (a:U), Ordinal a ->
   Total (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a H1 x y H2 H3.
   assert (x = y \/ x :< y \/ y :< x) as H4. {
     apply ZF.Set.Ordinal.Core.IsTotal.
@@ -101,7 +101,7 @@ Qed.
 Proposition IsFounded : forall (a:U),
   Founded (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a b _ H2.
   destruct (Foundation b H2) as [x [H3 H4]].
   exists x. split. 1: assumption.
@@ -116,7 +116,7 @@ Qed.
 Proposition IsStrictOrd : forall (a:U), Ordinal a ->
   StrictOrd (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a H1. split.
   - apply IsIrreflexive.
   - apply IsTransitive. assumption.
@@ -126,7 +126,7 @@ Qed.
 Proposition IsStrictTotalOrd : forall (a:U), Ordinal a ->
   StrictTotalOrd (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a H1. split.
   - apply IsStrictOrd. assumption.
   - apply IsTotal. assumption.
@@ -136,7 +136,7 @@ Qed.
 Proposition IsWellOrdering : forall (a:U), Ordinal a ->
   WellOrdering (E a) a.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros a H1. split.
   - apply IsFounded.
   - apply IsTotal. assumption.

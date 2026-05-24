@@ -31,7 +31,7 @@ Proposition Transport : forall (f r s a b:U),
   Irreflexive r a     ->
   Irreflexive s b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r s a b H1 H2 H3 y H4 H5.
   apply (Bij.RangeCharac f a b) in H4. 2: assumption.
   destruct H4 as [x [H4 H6]].

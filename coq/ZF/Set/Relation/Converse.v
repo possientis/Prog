@@ -94,7 +94,7 @@ Qed.
 Proposition Injective : forall (f g:U), Relation f -> Relation g ->
   f^:-1: = g^:-1: -> f = g.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f g H1 H2 H3.
   apply IsIdempotent in H1. apply IsIdempotent in H2.
   rewrite <- H1, H3. exact H2.

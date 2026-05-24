@@ -156,7 +156,7 @@ Qed.
 Proposition IsProper : forall (A:Class) (a:U),
   Proper A -> Proper (A :\: toClass a).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros A a H1 H2.
   (* A is included in (A :\: toClass a) \/ toClass a, which is small            *)
   apply H1.

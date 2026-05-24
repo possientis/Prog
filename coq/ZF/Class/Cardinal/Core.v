@@ -45,7 +45,7 @@ Proposition LargerCardinal : forall (a:U),
   toClass a :<=: Cardinal                               ->
   exists b, Cardinal b /\ forall c, c :< a -> c :< b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Let b = hartogs(U(a)). For any cardinal c in a, c is a subset of U(a)      *)
   (* (each member of c is a member of some member of a). The identity on U(a)   *)
   (* restricts to an injection from c into U(a). Since c is an ordinal          *)
@@ -85,7 +85,7 @@ Qed.
 (* The class of cardinal numbers is a proper class.                             *)
 Proposition IsProper : Proper Cardinal.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* If Cardinal were small it would equal the class of elements of some set a. *)
   (* By LargerCardinal there exists a cardinal b larger than every c in a.      *)
   (* But b is itself a cardinal so b is in a, giving b < b, contradicting       *)

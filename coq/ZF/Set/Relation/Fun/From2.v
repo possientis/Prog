@@ -37,7 +37,7 @@ Proposition Charac2 : forall (f:U -> U -> U) (a b x y:U),
   :(x,y): :< from2 a b f <->
   exists u v, x = :(u,v): /\ y = f u v /\ u :< a /\ v :< b.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Membership as a pair unpacks the witnesses via ordered-pair injectivity.   *)
   intros f a b x y. split; intros H1.
   - apply Charac in H1. destruct H1 as [u [v [H1 [H2 H3]]]].
@@ -51,7 +51,7 @@ Qed.
 Proposition Charac3 : forall (f:U -> U -> U) (a b u v w:U),
   :(:(u,v):,w): :< from2 a b f <-> u :< a /\ v :< b /\ w = f u v.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Follows from the pair-level characterization by ordered-pair injectivity.  *)
   intros f a b u v w. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [u' [v' [H1 [H2 [H3 H4]]]]].
@@ -66,7 +66,7 @@ Qed.
 Proposition Satisfies : forall (f:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> :(:(u,v):, f u v): :< from2 a b f.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Follows directly from the membership characterization.                     *)
   intros f a b u v H1 H2. apply Charac3.
   split. 1: assumption. split. 1: assumption. reflexivity.
@@ -76,7 +76,7 @@ Qed.
 Proposition IsFunctionOn : forall (f:U -> U -> U) (a b:U),
   FunctionOn (from2 a b f) (a :x: b).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f a b. unfold from2.
   apply SRR.IsFunctionOn. 1: apply CF2.IsFunctional.
   intros p H1. apply Prod.Charac in H1.
@@ -88,7 +88,7 @@ Qed.
 Proposition Eval : forall (f:U -> U -> U) (a b u v:U),
   u :< a -> v :< b -> (from2 a b f)!(:(u,v):) = f u v.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f a b u v H1 H2.
   apply (FunctionOn.Eval (from2 a b f) (a :x: b)).
   - apply IsFunctionOn.

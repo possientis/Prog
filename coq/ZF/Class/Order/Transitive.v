@@ -13,7 +13,7 @@ Definition Transitive (R A:Class) : Prop := forall (x y z:U), A x -> A y -> A z 
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Transitive R A -> Transitive S B.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F R S A B H1 H2 H3 x y z H4 H5 H6 H7 H8.
   apply (Bij.RangeCharac F A B) in H4. 2: assumption.
   apply (Bij.RangeCharac F A B) in H5. 2: assumption.

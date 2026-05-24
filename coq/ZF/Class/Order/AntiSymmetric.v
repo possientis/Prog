@@ -13,7 +13,7 @@ Definition AntiSymmetric (R A:Class) : Prop := forall (x y:U), A x -> A y ->
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> AntiSymmetric R A -> AntiSymmetric S B.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros F R S A B H1 H2 H3 y1 y2 H4 H5 H6 H7.
   apply (Bij.RangeCharac F A B) in H4. 2: assumption.
   apply (Bij.RangeCharac F A B) in H5. 2: assumption.

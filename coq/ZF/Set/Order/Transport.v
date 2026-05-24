@@ -75,7 +75,7 @@ Proposition IsIncl : forall (f r a:U),
   a :<=: domain f                                   ->
   transport f r a :<=: f:[a]: :x: f:[a]:.
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   intros f r a H1 H2 x H3.
   apply Charac in H3; try assumption.
   destruct H3 as [y [z [H3 [H4 [H5 _]]]]].

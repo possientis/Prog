@@ -75,7 +75,7 @@ Qed.
 (* The product with the empty set on the left is empty.                         *)
 Proposition ZeroL : forall (a:U), :0: :x: a = :0:.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a. apply Incl.Double. split. 2: apply Empty.IsIncl.
   intros x H1. apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
   apply Empty.Charac in H2. contradiction.
@@ -84,7 +84,7 @@ Qed.
 (* The product with the empty set on the right is empty.                        *)
 Proposition ZeroR : forall (a:U), a :x: :0: = :0:.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a. apply Incl.Double. split. 2: apply Empty.IsIncl.
   intros x H1. apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
   apply Empty.Charac in H3. contradiction.
@@ -94,7 +94,7 @@ Qed.
 Proposition DistribL : forall (a b c:U),
   a :x: (b :\/: c) = a :x: b :\/: a :x: c.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
     apply Union2.Charac in H3. apply Union2.Charac.
@@ -115,7 +115,7 @@ Qed.
 Proposition DistribR : forall (a b c:U),
   (a :\/: b) :x: c = a :x: c :\/: b :x: c.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c. apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [y [z [H1 [H2 H3]]]].
     apply Union2.Charac in H2. apply Union2.Charac.

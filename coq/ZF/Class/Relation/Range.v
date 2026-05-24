@@ -30,7 +30,7 @@ Qed.
 Proposition ImageUnderSnd : forall (F:Class),
   Snd :[F]: :~: range F.
 Proof.
-  (* Proof by Hermes.                                                           *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros F y. split; intros H1.
   - (* A Snd-image of a pair in F is the second coordinate of that pair.        *)
     destruct H1 as [x' [H1 H2]]. apply Snd.Charac2 in H2.
@@ -53,7 +53,7 @@ Qed.
 Proposition IsSmall : forall (F:Class),
   Small F -> Small (range F).
 Proof.
-  (* Proof by Claude.                                                           *)
+  (* Proof by Claude + sonnet 4.6                                               *)
   (* Let F be an arbitrary class.                                               *)
   intros F.
 
