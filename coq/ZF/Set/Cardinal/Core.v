@@ -14,7 +14,11 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Compose.
+Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
@@ -445,8 +449,83 @@ Proof.
   rewrite ProdComm. apply IsInclProdR; assumption.
 Qed.
 
+(* If a and b are well-orderable, card(a) <= card(b) gives an injection a -> b. *)
+Proposition HasInjGen : forall (a b:U), WithOrdinal a -> WithOrdinal b ->
+  card a :<=: card b -> exists f, Inj f a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3.
+  (* Choose bijections a -> card(a) and card(b) -> b.                           *)
+  assert (a :~: card a) as H4. { apply IsEquivGen. assumption. }
+  assert (card b :~: b) as H5. { apply Equiv.Sym, IsEquivGen. assumption. }
+  destruct H4 as [f H4]. destruct H5 as [g H5].
+  (* The first bijection is an injection into card(a).                          *)
+  assert (Inj f a (card a)) as H6. { apply Bij.IsInj. assumption. }
+  (* Restrict the second injection to the smaller ordinal card(a).              *)
+  assert (Inj (g:|:card a) (card a) b) as H7. {
+    apply Inj.Restrict with (card b). 2: assumption.
+    apply Bij.IsInj. assumption. }
+  (* Composing the two injections embeds a into b.                              *)
+  exists ((g:|:card a) :.: f). apply Inj.Compose with (card a); assumption.
+Qed.
+
+(* Assuming choice, card(a) <= card(b) gives an injection from a into b.        *)
+Proposition HasInj : forall (a b:U), Choice ->
+  card a :<=: card b -> exists f, Inj f a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1.
+  (* Choice supplies the well-orderability assumptions needed by HasInjGen.     *)
+  assert (WithOrdinal a) as H2. { apply Equiv.HasOrdinal. assumption. }
+  assert (WithOrdinal b) as H3. { apply Equiv.HasOrdinal. assumption. }
+  apply HasInjGen; assumption.
+Qed.
+
+(* An injection into a well-orderable set gives an inequality of cardinals.     *)
+Proposition WhenInjGen : forall (a b f:U), WithOrdinal b ->
+  Inj f a b -> card a :<=: card b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1 H2.
+  (* The domain is equipotent to its image, and that image is contained in b.   *)
+  assert (a :~: f:[a]:) as H3. { exists f. apply Bij.FromInj with b. assumption. }
+  assert (card a = card f:[a]:) as H4. { apply WhenEquiv. assumption. }
+  rewrite H4. apply InclCompatGen. 1: assumption.
+  rewrite (Inj.ImageOfDomain f a b). 2: assumption. apply H2.
+Qed.
+
+(* Assuming choice, an injection gives an inequality of cardinals.              *)
+Proposition WhenInj : forall (a b f:U), Choice ->
+  Inj f a b -> card a :<=: card b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f AC H1.
+  (* Choice makes the codomain well-orderable, so the general form applies.     *)
+  apply WhenInjGen with f. 2: assumption.
+  apply Equiv.HasOrdinal. assumption.
+Qed.
+
+(* Cardinal product is monotone in its right argument.                          *)
 Proposition InclCompatProdR : forall (a b c:U), Choice ->
  card b :<=: card c -> card (a :x: b) :<=: card (a :x: c).
 Proof.
-Admitted.
-
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* From card(b) <= card(c), choose an injection f:b -> c.                     *)
+  assert (exists f, Inj f b c) as H2. { apply HasInj; assumption. }
+  destruct H2 as [f H2].
+  remember (From2.from2 a b (fun x y => :(x,f!y):)) as g eqn:H3.
+  (* Send (x,y) to (x,f(y)); this preserves the left coordinate and injects the *)
+  (* right coordinate through f.                                                *)
+  assert (Inj g (a :x: b) (a :x: c)) as H4. {
+    rewrite H3. apply From2.IsInj.
+    - intros x y H4 H5. apply Prod.Charac2. split. 1: assumption.
+      apply Inj.IsInRange with b; assumption.
+    - intros x y x' y' H4 H5 H6 H7 H8.
+      apply OrdPair.Equal in H8. destruct H8 as [H8 H9]. subst x'.
+      assert (y = y') as H10. {
+        apply Inj.EvalInjective with f b c; assumption. }
+      subst y'. reflexivity. }
+  (* The product injection gives the desired cardinal inequality.               *)
+  apply WhenInj with g; assumption.
+Qed.
