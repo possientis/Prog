@@ -507,7 +507,7 @@ Qed.
 
 (* Cardinal product is monotone in its right argument.                          *)
 Proposition InclCompatProdR : forall (a b c:U), Choice ->
- card b :<=: card c -> card (a :x: b) :<=: card (a :x: c).
+  card b :<=: card c -> card (a :x: b) :<=: card (a :x: c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
@@ -528,4 +528,27 @@ Proof.
       subst y'. reflexivity. }
   (* The product injection gives the desired cardinal inequality.               *)
   apply WhenInj with g; assumption.
+Qed.
+
+(* Cardinal product is monotone in its left argument.                           *)
+Proposition InclCompatProdL : forall (a b c:U), Choice ->
+  card a :<=: card b -> card (a :x: c) :<=: card (b :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* Exchange the product factors and use monotonicity in the right argument.   *)
+  rewrite (ProdComm a c), (ProdComm b c). apply InclCompatProdR; assumption.
+Qed.
+
+(* Cardinal product is monotone in both arguments.                              *)
+Proposition InclCompatProd : forall (a b c d:U), Choice ->
+  card a :<=: card c -> card b :<=: card d ->
+  card (a :x: b) :<=: card (c :x: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d AC H1 H2.
+  (* First enlarge the left factor, then enlarge the right factor.              *)
+  apply Incl.Tran with (card (c :x: b)).
+  - apply InclCompatProdL; assumption.
+  - apply InclCompatProdR; assumption.
 Qed.
