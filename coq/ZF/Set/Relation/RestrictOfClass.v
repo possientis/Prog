@@ -135,6 +135,18 @@ Proof.
     apply SRD.Charac. exists y. apply Charac2Rev; assumption.
 Qed.
 
+(* The domain of the restriction F|a is contained in a.                         *)
+Proposition DomainIsIncl : forall (F:Class) (a:U), CFL.Functional F ->
+  SRD.domain (F:|:a) :<=: a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1 x H2.
+  (* An element of the domain of the restriction lies in the first component of *)
+  (* the defining intersection.                                                 *)
+  rewrite DomainOf in H2. 2: assumption.
+  apply Specify.Charac in H2. apply H2.
+Qed.
+
 (* When a is contained in the domain of F, the domain of F restricted to a is a *)
 Proposition DomainWhenIncl : forall (F:Class) (a:U), CFL.Functional F ->
   toClass a :<=: CRD.domain F -> SRD.domain (F:|:a) = a.

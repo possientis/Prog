@@ -2,6 +2,7 @@ Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -17,17 +18,32 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
+Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.OneToOne.
+Require Import ZF.Set.Relation.Onto.
+Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Specify.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
+Module CRL := ZF.Class.Relation.Functional.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
+Module SRF := ZF.Set.Relation.Fun.
+Module SFL := ZF.Set.Relation.Functional.
+Module SRN := ZF.Set.Relation.Function.
+Module SRO := ZF.Set.Relation.Onto.
+Module SRR := ZF.Set.Relation.Range.
+Module SRS := ZF.Set.Relation.Restrict.
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
@@ -552,3 +568,82 @@ Proof.
   - apply InclCompatProdL; assumption.
   - apply InclCompatProdR; assumption.
 Qed.
+
+(* A surjection from a onto b makes the cardinal of b no larger than that of a. *)
+Proposition WhenOnto : forall (f a b:U), Choice ->
+  SRO.Onto f a b -> card b :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b AC H1.
+  (* Reindex the surjection by a bijection from card(a) onto a.                 *)
+  assert (card a :~: a) as H2. { apply Equiv.Sym, IsEquivChoice. assumption. }
+  destruct H2 as [e H2].
+  assert (SRO.Onto e (card a) a) as H3. { apply Bij.IsOnto. assumption. }
+  assert (SRO.Onto (f :.: e) (card a) b) as H4. {
+    apply SRO.Compose with a; assumption. }
+  remember (f :.: e) as g eqn:H5.
+  assert (SRO.Onto g (card a) b) as H6. { apply H4. }
+  remember {{ x :< card a | fun x => forall y, y :< x -> g!y <> g!x }} as d eqn:H7.
+  assert (d :<=: card a) as H8. { rewrite H7. apply Specify.IsInclL. }
+  assert (SRF.Fun g (card a) b) as H9. { apply SRO.IsFun. assumption. }
+  assert (Function g) as G1. { apply H9. }
+  assert (SFL.Functional g) as G2. { apply G1. }
+  assert (SRF.Fun (g:|:d) d b) as H10. {
+    apply SRF.Restrict with (card a); assumption. }
+  assert (OneToOne (g:|:d)) as H11. {
+    apply SRF.IsOneToOne with d b. 1: assumption.
+    intros x y H11 H12 H13.
+    rewrite (SRS.Eval g d x) in H13; try assumption.
+    rewrite (SRS.Eval g d y) in H13; try assumption.
+    assert (x :< card a) as H14. { apply H8. assumption. }
+    assert (y :< card a) as H15. { apply H8. assumption. }
+    assert (Ordinal x) as H16. { apply SOC.IsOrdinal with (card a); try assumption.
+      apply IsOrdinal. }
+    assert (Ordinal y) as H17. { apply SOC.IsOrdinal with (card a); try assumption.
+      apply IsOrdinal. }
+    assert (x = y \/ x :< y \/ y :< x) as H18. { apply SOC.IsTotal; assumption. }
+    destruct H18 as [H18|[H18|H18]]. 1: assumption.
+    - exfalso. rewrite H7 in H12. apply Specify.Charac in H12.
+      destruct H12 as [_ H12]. apply H12 with x; assumption.
+    - exfalso. rewrite H7 in H11. apply Specify.Charac in H11.
+      destruct H11 as [_ H11]. apply H11 with y. 1: assumption.
+      symmetry. assumption. }
+  assert (b :<=: SRR.range (g:|:d)) as H12. {
+    intros z H12.
+    assert (exists x, x :< card a /\ g!x = z) as H13. {
+      apply (SRO.RangeCharac g (card a) b z) in H12. 2: assumption.
+      assumption. }
+    destruct H13 as [x [H13 H14]].
+    remember (fun y => y :< card a /\ g!y = z) as A eqn:H15.
+    assert (exists n, Ordinal n /\ A n /\ forall y, A y -> n :<=: y) as H16. {
+      apply SOC.HasMinimal.
+      - rewrite H15. intros y H16. destruct H16 as [H16 _].
+        apply SOC.IsOrdinal with (card a); try assumption. apply IsOrdinal.
+      - apply CEM.HasElem. exists x. rewrite H15. split; assumption. }
+    destruct H16 as [n [H16 [H17 H18]]]. rewrite H15 in H17.
+    destruct H17 as [H17 H19].
+    assert (n :< d) as H20. {
+      rewrite H7. apply Specify.Charac. split. 1: assumption.
+      intros y H20 H21.
+      assert (y :< card a) as H22. {
+        assert (n :<=: card a) as H22. {
+          apply SOC.ElemIsIncl. 1: apply IsOrdinal. assumption. }
+        apply H22. assumption. }
+      assert (A y) as H23. { rewrite H15. split. 1: assumption.
+        rewrite H21. assumption. }
+      assert (n :<=: y) as H24. { apply H18. assumption. }
+      assert (y :< y) as H25. { apply H24. assumption. }
+      revert H25. apply Foundation.NoLoop1. }
+    apply SRR.Charac. exists n. apply SRS.Charac2. split. 1: assumption.
+    rewrite <- H19. apply SRO.Satisfies with (card a) b; assumption. }
+  assert (Bij (g:|:d) d b) as H13. { apply Bij.FromFun; assumption. }
+  assert (card b = card d) as H14. {
+    apply WhenEquiv. apply Equiv.Sym. exists (g:|:d). assumption. }
+  rewrite H14. rewrite <- (Idem a). apply InclCompat. 1: assumption. apply H8.
+Qed.
+
+Proposition Image : forall (F:Class) (a:U), Choice ->
+  CRL.Functional F -> card F:[a]: :<=: card a.
+Proof.
+Admitted.
+
