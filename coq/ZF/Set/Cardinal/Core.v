@@ -503,7 +503,7 @@ Qed.
 
 (* If a and b are well-orderable, card(b) <= card(a) gives a surjection a -> b. *)
 Proposition HasOntoGen : forall (a b:U), WellOrderable a -> WellOrderable b ->
-  b <> :0: -> card b :<=: card a -> exists f, SRO.Onto f a b.
+  b <> :0: -> card b :<=: card a -> exists f, Onto f a b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2 H3 H4.
@@ -512,26 +512,26 @@ Proof.
   assert (a :~: card a) as H5. { apply IsEquivGen. assumption. }
   assert (card b :~: b) as H6. { apply Equiv.Sym, IsEquivGen. assumption. }
   destruct H5 as [e H5]. destruct H6 as [h H6].
-  assert (SRO.Onto e a (card a)) as H7. { apply Bij.IsOnto. assumption. }
-  assert (SRO.Onto h (card b) b) as H8. { apply Bij.IsOnto. assumption. }
+  assert (Onto e a (card a)) as H7. { apply Bij.IsOnto. assumption. }
+  assert (Onto h (card b) b) as H8. { apply Bij.IsOnto. assumption. }
   assert (card b <> :0:) as H9. {
     intros H9. apply H3. apply SCE.WhenZero.
     rewrite <- H9. apply Equiv.Sym. exists h. assumption. }
-  assert (exists r, SRO.Onto r (card a) (card b)) as H10. {
+  assert (exists r, Onto r (card a) (card b)) as H10. {
     apply SOO.WhenIncl.
     - apply IsOrdinal.
     - apply IsOrdinal.
     - assumption.
     - assumption. }
   destruct H10 as [r H10].
-  assert (SRO.Onto (r :.: e) a (card b)) as H11. {
+  assert (Onto (r :.: e) a (card b)) as H11. {
     apply SRO.Compose with (card a); assumption. }
   exists (h :.: (r :.: e)). apply SRO.Compose with (card b); assumption.
 Qed.
 
 (* Assuming choice, card(b) <= card(a) gives a surjection from a onto b.        *)
 Proposition HasOnto : forall (a b:U), Choice ->
-  b <> :0: -> card b :<=: card a -> exists f, SRO.Onto f a b.
+  b <> :0: -> card b :<=: card a -> exists f, Onto f a b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1 H2.
@@ -567,15 +567,15 @@ Qed.
 
 (* A surjection from a well-orderable set gives an inequality of cardinals.     *)
 Proposition WhenOntoGen : forall (f a b:U), WellOrderable a ->
-  SRO.Onto f a b -> card b :<=: card a.
+  Onto f a b -> card b :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros f a b H1 H2.
   (* Reindex the surjection by a bijection from card(a) onto a.                 *)
   assert (card a :~: a) as H3. { apply Equiv.Sym, IsEquivGen. assumption. }
   destruct H3 as [e H3].
-  assert (SRO.Onto e (card a) a) as H4. { apply Bij.IsOnto. assumption. }
-  assert (SRO.Onto (f :.: e) (card a) b) as H5. {
+  assert (Onto e (card a) a) as H4. { apply Bij.IsOnto. assumption. }
+  assert (Onto (f :.: e) (card a) b) as H5. {
     apply SRO.Compose with a; assumption. }
   (* The ordinal-domain surjection has a bijective restriction.                 *)
   assert (exists d, d :<=: card a /\ Bij ((f :.: e) :|: d) d b) as H6. {
@@ -590,7 +590,7 @@ Qed.
 
 (* Assuming choice, a surjection gives an inequality of cardinals.              *)
 Proposition WhenOnto : forall (f a b:U), Choice ->
-  SRO.Onto f a b -> card b :<=: card a.
+  Onto f a b -> card b :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros f a b AC H1.
@@ -654,7 +654,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a AC H1.
   (* The restriction of F to a is a surjection from its domain onto its range.  *)
-  assert (SRO.Onto (F:|:a) (SRD.domain (F:|:a)) (SRR.range (F:|:a))) as H2. {
+  assert (Onto (F:|:a) (SRD.domain (F:|:a)) (SRR.range (F:|:a))) as H2. {
     split. 2: reflexivity. split. 2: reflexivity.
     apply RestrictOfClass.IsFunction. assumption. }
   (* The range of the restriction is exactly the direct image of a under F.     *)

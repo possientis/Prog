@@ -28,7 +28,7 @@ Module SRS := ZF.Set.Relation.Restrict.
 
 (* A non-empty included ordinal is the range of an ordinal retraction.          *)
 Proposition WhenIncl : forall (a b:U), Ordinal a -> Ordinal b ->
-  b <> :0: -> b :<=: a -> exists f, SRO.Onto f a b.
+  b <> :0: -> b :<=: a -> exists f, Onto f a b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2 H3 H4.
@@ -49,7 +49,7 @@ Qed.
 
 (* A surjection from an ordinal has a restriction which is a bijection.         *)
 Proposition HasRestrictBij : forall (f a b:U), Ordinal a ->
-  SRO.Onto f a b -> exists c, c :<=: a /\ SRB.Bij (f:|:c) c b.
+  Onto f a b -> exists c, c :<=: a /\ Bij (f:|:c) c b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros f a b H1 H2.
