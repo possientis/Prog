@@ -43,6 +43,7 @@ Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
 Module SRF := ZF.Set.Relation.Fun.
 Module SFL := ZF.Set.Relation.Functional.
+Module SRD := ZF.Set.Relation.Domain.
 Module SRN := ZF.Set.Relation.Function.
 Module SRO := ZF.Set.Relation.Onto.
 Module SRR := ZF.Set.Relation.Range.
@@ -646,8 +647,28 @@ Proof.
   - apply InclCompatProdR; assumption.
 Qed.
 
+(* The cardinal of the image of a set under a functional class is bounded.      *)
 Proposition Image : forall (F:Class) (a:U), Choice ->
   CRL.Functional F -> card F:[a]: :<=: card a.
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a AC H1.
+  (* The restriction of F to a is a surjection from its domain onto its range.  *)
+  assert (SRO.Onto (F:|:a) (SRD.domain (F:|:a)) (SRR.range (F:|:a))) as H2. {
+    split. 2: reflexivity. split. 2: reflexivity.
+    apply RestrictOfClass.IsFunction. assumption. }
+  (* The range of the restriction is exactly the direct image of a under F.     *)
+  assert (SRR.range (F:|:a) = F:[a]:) as H3. {
+    apply RestrictOfClass.RangeOf. assumption. }
+  (* The domain of the restriction is contained in a.                           *)
+  assert (SRD.domain (F:|:a) :<=: a) as H4. {
+    apply RestrictOfClass.DomainIsIncl. assumption. }
+  (* A surjection bounds the cardinal of its range by the cardinal of its       *)
+  (* domain, and the latter domain is bounded by a.                             *)
+  assert (card (SRR.range (F:|:a)) :<=: card (SRD.domain (F:|:a))) as H5. {
+    apply WhenOnto with (F:|:a); assumption. }
+  assert (card (SRD.domain (F:|:a)) :<=: card a) as H6. {
+    apply InclCompat; assumption. }
+  rewrite <- H3. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
+Qed.
 
