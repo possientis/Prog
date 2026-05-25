@@ -46,7 +46,7 @@ Qed.
 
 (* The cardinal of an infinite set is not finite.                               *)
 Proposition CardGen : forall (a:U), Infinite a ->
-  WithOrdinal a -> :N :<=: card a.
+  WellOrderable a -> :N :<=: card a.
 Proof.
   intros a H1 H2.
   assert (Ordinal (card a)) as G1. { apply SCC.IsOrdinal. }
@@ -65,7 +65,7 @@ Proposition Card : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply SCE.HasOrdinal. assumption. }
+    apply SCE.IsWellOrderable. assumption. }
   split; intros H2.
   - apply CardGen; assumption.
   - intros [n [H3 H4]].
@@ -101,7 +101,7 @@ Proof.
   assert (card a :<=: card (succ a)) as H2. { apply SCC.IsInclSucc. }
   assert (card (succ a) :<=: succ (card a)) as H3. { apply SCC.IsInclSucc'. }
   assert (card (succ a) :<=: card a) as H4. {
-    assert (WithOrdinal a \/ ~ WithOrdinal a) as [H4|H4]. {
+    assert (WellOrderable a \/ ~ WellOrderable a) as [H4|H4]. {
       apply LawExcludedMiddle. }
     - assert (:N :<=: card a) as H5. { apply CardGen; assumption. }
       assert (card a :~: succ (card a)) as H6. { apply Equiv.Succ; assumption. }
@@ -110,10 +110,10 @@ Proof.
         - apply SCE.SuccCompat, IsEquivGen. assumption.
         - apply SCE.Sym. assumption. }
       apply SCC.IsLowerBound; assumption.
-    - assert (~ WithOrdinal (succ a)) as H5. {
-        intros H5. apply H4. apply SCE.WithOrdinalSuccRev. assumption. }
+    - assert (~ WellOrderable (succ a)) as H5. {
+        intros H5. apply H4. apply SCE.WellOrderableSuccRev. assumption. }
       assert (card (succ a) = :0:) as H6. {
-        apply SCC.WhenNoOrdinal. assumption. }
+        apply SCC.WhenNotWellOrderable. assumption. }
       rewrite H6. apply Empty.IsIncl. }
   apply Incl.Double. split; assumption.
 Qed.

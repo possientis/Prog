@@ -69,8 +69,8 @@ Definition equiv (a b:U) : Prop := exists f, Bij f a b.
 (* Notation "a :~: b" := (equiv a b)                                            *)
 Global Instance Equiv : Equiv U := { equiv := equiv }.
 
-(* Useful predicate stating that a set is equipotent to some ordinal.           *)
-Definition WithOrdinal (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.
+(* A set is well-orderable iff it is equipotent to some ordinal.                *)
+Definition WellOrderable (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.
 
 (* Every set is equipotent to itself.                                           *)
 Proposition Refl : forall (a:U), a :~: a.
@@ -91,9 +91,9 @@ Proof.
   apply Bij.Compose with b; assumption.
 Qed.
 
-(* Assuming choice, every set is equipotent to some ordinal.                    *)
-Proposition HasOrdinal : Choice ->
-  forall (a:U), WithOrdinal a.
+(* Assuming choice, every set is well-orderable.                                *)
+Proposition IsWellOrderable : Choice ->
+  forall (a:U), WellOrderable a.
 Proof.
   intros AC a. specialize (AC :P(a)). destruct AC as [f [H1 H2]].
   remember (fun x => f!(a :\: range x)) as G eqn:H3.
@@ -384,7 +384,7 @@ Proof.
   exists g. assumption.
 Qed.
 
-(* No set is equivalent to its power set.                                       *)
+(* No set is equipotent to its power set.                                       *)
 Proposition Cantor : forall (a:U), ~ a :~: :P(a).
 Proof.
   intros a H1.
@@ -642,7 +642,7 @@ Proof.
   remember (ifThenElse (succ a) A (fun _ => b) (fun x => f!x)) as h eqn:H3.
   assert (FunctionOn h (succ a)) as H4. {
     rewrite H3. apply IfThenElse.IsFunctionOn. }
-  (* For x in a, x ≠ a by the axiom of foundation, so h(x) = f(x).              *)
+  (* For x in a, x is not a by foundation, so h(x) = f(x).                      *)
   assert (forall x, x :< a -> h!x = f!x) as G1. {
     intros x G1. rewrite H3, IfThenElse.Eval2. 1: reflexivity.
     - apply Succ.Charac. right. assumption.
@@ -674,7 +674,7 @@ Proof.
       exists x. split.
       + apply Succ.Charac. right. assumption.
       + rewrite (G1 x Hx). assumption. }
-  (* Injectivity: four cases. x = y = a is trivial. If x = a and y in a,        *)
+  (* Injectivity: four cases. x = y = a is trivial. If x = a and y lies in a,   *)
   (* h(a) = b = f(y) in b gives b in b, contradicting the axiom of foundation.  *)
   (* Both in a: f(x) = f(y) and injectivity of f give x = y.                    *)
   assert (OneToOne h) as H8. {
@@ -716,7 +716,7 @@ Proof.
   assert (forall x, x :< a -> f!x <> b -> h!x = f!x) as G5. {
     intros x H4 H5. rewrite H2, IfThenElse.Eval2. 1: reflexivity.
     all: assumption. }
-  (* If f(x) = b for x in a then f(a) ≠ b: otherwise x = a contradicts          *)
+  (* If f(x) = b for x in a, then f(a) is not b; otherwise x = a contradicts    *)
   (* foundation.                                                                *)
   assert (forall x, x :< a -> f!x = b -> f!a <> b) as G6. {
     intros x H4 H5 H6.
@@ -725,8 +725,8 @@ Proof.
       1: assumption. 1: apply G2, H4. 1: apply G1.
       rewrite H5. symmetry. assumption. }
     rewrite H7 in H4. revert H4. apply Foundation.NoLoop1. }
-  (* h takes values in b: either h(x) = f(a) with f(a) in b (since f(a) ≠ b),   *)
-  (* or h(x) = f(x) with f(x) in b (since f(x) ≠ b).                            *)
+  (* h takes values in b: either h(x) = f(a), with f(a) in b because            *)
+  (* f(a) is not b, or h(x) = f(x), with f(x) in b because f(x) is not b.       *)
   assert (range h :<=: b) as H4. {
     intros y H4.
     apply (FunctionOn.RangeCharac h a) in H4. 2: assumption.
@@ -745,7 +745,7 @@ Proof.
       + assumption. }
   assert (Fun h a b) as H5. { split; assumption. }
   (* Surjectivity: for z in b, find x in a with h(x) = z.                       *)
-  (* b is not in b by foundation, so z ≠ b.                                     *)
+  (* b is not in b by foundation, so z is not b.                                *)
   assert (b :<=: range h) as H6. {
     intros z H6.
     assert (z :< succ b) as H7. { apply Succ.Charac. right. assumption. }
@@ -765,7 +765,7 @@ Proof.
         apply (FunctionOn.RangeCharac h a). 1: assumption.
         exists v. split. 1: assumption.
         rewrite (G4 v H9 H10). assumption.
-    - (* u in a: f(u) = z, and z ≠ b since z in b, so h(u) = f(u) = z.          *)
+    - (* u lies in a: f(u) = z, and z is not b, so h(u) = f(u) = z.             *)
       apply (FunctionOn.RangeCharac h a). 1: assumption.
       exists u. split. 1: assumption.
       assert (f!u <> b) as H9. {
@@ -783,7 +783,7 @@ Proof.
         apply (Bij.EvalInjective f (succ a) (succ b)).
         1: assumption. 1: apply G2, H7. 1: apply G2, H8.
         rewrite H10, H11. reflexivity.
-      + (* f(x) = b, f(y) ≠ b: h(x) = f(a) = h(y) = f(y) gives a = y,           *)
+      + (* f(x) = b, f(y) is not b: h(x) = f(a) = h(y) = f(y) gives a = y,      *)
         (* contradicting y in a.                                                *)
         exfalso.
         rewrite (G4 x H7 H10), (G5 y H8 H11) in H9.
@@ -792,14 +792,14 @@ Proof.
           1: assumption. 1: apply G1. 1: apply G2, H8. assumption. }
         rewrite <- H12 in H8. revert H8. apply Foundation.NoLoop1.
     - assert (f!y = b \/ f!y <> b) as [H11|H11]. { apply LawExcludedMiddle. }
-      + (* f(x) ≠ b, f(y) = b: symmetric.                                       *)
+      + (* f(x) is not b, f(y) = b: symmetric.                                  *)
         exfalso.
         rewrite (G5 x H7 H10), (G4 y H8 H11) in H9.
         assert (a = x) as H12. {
           apply (Bij.EvalInjective f (succ a) (succ b)).
           1: assumption. 1: apply G1. 1: apply G2, H7. symmetry. assumption. }
         rewrite <- H12 in H7. revert H7. apply Foundation.NoLoop1.
-      + (* Both f(x) ≠ b, f(y) ≠ b: h(x) = f(x) = f(y) = h(y), inj of f.        *)
+      + (* Both f(x) and f(y) are not b: h(x) = f(x) = f(y) = h(y).             *)
         rewrite (G5 x H7 H10), (G5 y H8 H11) in H9.
         apply (Bij.EvalInjective f (succ a) (succ b)).
         1: assumption. 1: apply G2, H7. 1: apply G2, H8. assumption. }
@@ -988,8 +988,8 @@ Proof.
   - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
 Qed.
 
-Proposition WithOrdinalSucc : forall (a:U),
-  WithOrdinal a -> WithOrdinal (succ a).
+Proposition WellOrderableSucc : forall (a:U),
+  WellOrderable a -> WellOrderable (succ a).
 Proof.
   intros a [b [H1 H2]].
   assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
@@ -997,8 +997,8 @@ Proof.
   exists (succ b). split; assumption.
 Qed.
 
-Proposition WithOrdinalSuccRev : forall (a:U),
-  WithOrdinal (succ a) -> WithOrdinal a.
+Proposition WellOrderableSuccRev : forall (a:U),
+  WellOrderable (succ a) -> WellOrderable a.
 Proof.
   intros a [c [H1 H2]].
   assert (c = :0: \/ Successor c \/ Limit c) as [H3|[H3|H3]]. {
@@ -1062,11 +1062,11 @@ Proof.
     rewrite HA. intros m H1 H2. apply WhenZero. assumption. }
   assert (forall n, n :< :N -> A n -> A (succ n)) as H2. {
     rewrite HA. intros n H2 IH m H3 H4.
-    (* m :~: succ n and succ n ≠ 0, so m ≠ 0.                                   *)
+    (* m :~: succ n and succ n is not 0, so m is not 0.                         *)
     assert (m <> :0:) as H5. {
       intros H5. subst. apply Sym in H4. apply WhenZero in H4.
       apply (Succ.NotZero n). assumption. }
-    (* m :< N and m ≠ 0, so m = succ p for some p :< N.                         *)
+    (* m :< N and m is not 0, so m = succ p for some p :< N.                    *)
     assert (exists p, p :< :N /\ m = succ p) as H6. {
       apply Omega.HasPred. 1: assumption.
       apply Omega.WhenNotZero; assumption. }

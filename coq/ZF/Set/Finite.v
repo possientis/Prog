@@ -145,7 +145,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2.
   (* A finite set is equipotent to an ordinal, hence to its cardinal.           *)
-  assert (WithOrdinal a) as H3. {
+  assert (WellOrderable a) as H3. {
     destruct H1 as [n [H1 H3]]. exists n. split. 2: assumption.
     apply Omega.HasOrdinals. assumption. }
   assert (a :~: card a) as H4. { apply SCC.IsEquivGen. assumption. }

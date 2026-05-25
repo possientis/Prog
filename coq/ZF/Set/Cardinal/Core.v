@@ -60,7 +60,7 @@ Proof.
   intros a. apply SOI.IsOrdinal.
 Qed.
 
-(* The cardinal of a set is a lower bound of all ordinals equivalent to it.     *)
+(* The cardinal of a set is a lower bound of all ordinals equipotent to it.     *)
 Proposition IsLowerBound : forall (a b:U),
   Ordinal b       ->
   a :~: b         ->
@@ -82,25 +82,25 @@ Proof.
   apply SOI.IsLargest.
   - intros c H3. apply H3.
   - assert (exists c, Ordinal c /\ a :~: c) as H3. {
-      apply Equiv.HasOrdinal. assumption. }
+      apply Equiv.IsWellOrderable. assumption. }
     destruct H3 as [c H3]. apply CEM.HasElem. exists c. assumption.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
 
-(* When a set has no equivalent ordinal, its cardinal is 0.                     *)
-Proposition WhenNoOrdinal : forall (a:U),
-  ~ WithOrdinal a -> card a = :0:.
+(* When a set is not well-orderable, its cardinal is 0.                         *)
+Proposition WhenNotWellOrderable : forall (a:U),
+  ~ WellOrderable a -> card a = :0:.
 Proof.
   intros a H1. unfold card. apply SOI.IsZero. intros b. split; intros H2.
   - exfalso. destruct H2 as [H2 H3]. apply H1. exists b. assumption.
   - contradiction.
 Qed.
 
-(* If a set is equivalent to an ordinal, then it is equivalent to its cardinal. *)
-Proposition IsEquivGen : forall (a:U), WithOrdinal a ->
+(* A well-orderable set is equipotent to its cardinal.                          *)
+Proposition IsEquivGen : forall (a:U), WellOrderable a ->
   a :~: card a.
 Proof.
-  intros a K1. unfold WithOrdinal in K1.
+  intros a K1. unfold WellOrderable in K1.
   remember (fun b => Ordinal b /\ a :~: b) as A eqn:H1.
   assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
   assert (A :<>: :0:) as H3. { apply CEM.HasElem. assumption. }
@@ -109,14 +109,14 @@ Proof.
   rewrite H1 in H4. apply H4.
 Qed.
 
-(* Assuming choice, every set is equivalent to its cardinal.                    *)
+(* Assuming choice, every set is equipotent to its cardinal.                    *)
 Proposition IsEquivChoice : forall (a:U), Choice ->
   a :~: card a.
 Proof.
-  intros a AC. apply IsEquivGen, HasOrdinal. assumption.
+  intros a AC. apply IsEquivGen, IsWellOrderable. assumption.
 Qed.
 
-(* Every ordinal is equivalent to its cardinal.                                 *)
+(* Every ordinal is equipotent to its cardinal.                                 *)
 Proposition IsEquivOrd : forall (a:U), Ordinal a ->
   a :~: card a.
 Proof.
@@ -124,7 +124,7 @@ Proof.
   apply IsEquivGen. exists a. split. 1: assumption. apply Equiv.Refl.
 Qed.
 
-(* A set with non-empty cardinal is equivalent to its cardinal.                 *)
+(* A set with non-empty cardinal is equipotent to its cardinal.                 *)
 Proposition IsEquivNotZero : forall (a:U), card a <> :0: ->
   a :~: card a.
 Proof.
@@ -157,7 +157,7 @@ Proof.
     + apply IsLowerBound. 1: assumption. apply Equiv.Refl.
 Qed.
 
-(* No ordinal strictly below the cardinal of a is equivalent to a.              *)
+(* No ordinal strictly below the cardinal of a is equipotent to a.              *)
 Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
   b :< card a -> a :<>: b.
 Proof.
@@ -200,12 +200,12 @@ Proof.
   - exists a. assumption.
 Qed.
 
-(* Two equivalent sets have the same cardinal.                                  *)
+(* Two equipotent sets have the same cardinal.                                  *)
 Proposition WhenEquiv : forall (a b:U),
   a :~: b -> card a = card b.
 Proof.
   intros a b H1.
-  assert (WithOrdinal a \/ ~ WithOrdinal a) as [H2|H2]. {
+  assert (WellOrderable a \/ ~ WellOrderable a) as [H2|H2]. {
     apply LawExcludedMiddle. }
   - assert (exists c, Ordinal c /\ b :~: c) as H3. {
       destruct H2 as [c [H2 H3]]. exists c. split. 1: assumption.
@@ -224,12 +224,12 @@ Proof.
   - assert (~ exists c, Ordinal c /\ b :~: c) as H3. {
       intros H3. destruct H3 as [c [H3 H4]]. apply H2.
       exists c. split. 1: assumption. apply Equiv.Tran with b; assumption. }
-    assert (card a = :0:) as H4. { apply WhenNoOrdinal. assumption. }
-    assert (card b = :0:) as H5. { apply WhenNoOrdinal. assumption. }
+    assert (card a = :0:) as H4. { apply WhenNotWellOrderable. assumption. }
+    assert (card b = :0:) as H5. { apply WhenNotWellOrderable. assumption. }
     rewrite H4, H5. reflexivity.
 Qed.
 
-(* Assuming choice, two sets are equivalent iff they have the same cardinal.    *)
+(* Assuming choice, two sets are equipotent iff they have the same cardinal.    *)
 Proposition EquivCharac : forall (a b:U),
   Choice -> a :~: b <-> card a = card b.
 Proof.
@@ -256,7 +256,7 @@ Proof.
   apply WhenEquiv. apply Equiv.ProdComm.
 Qed.
 
-Proposition InclCompatGen : forall (a b:U), WithOrdinal b ->
+Proposition InclCompatGen : forall (a b:U), WellOrderable b ->
   a :<=: b -> card a :<=: card b.
 Proof.
   intros a b G1 H1.
@@ -287,7 +287,7 @@ Qed.
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
 Proof.
-  intros a b AC. apply InclCompatGen, Equiv.HasOrdinal. assumption.
+  intros a b AC. apply InclCompatGen, Equiv.IsWellOrderable. assumption.
 Qed.
 
 (* Any set whose cardinal is bounded by card(a) is equipotent to a subset of a. *)
@@ -313,12 +313,12 @@ Proposition IsInclSucc : forall (a:U),
   card a :<=: card (succ a).
 Proof.
   intros a.
-  assert (WithOrdinal a \/ ~ WithOrdinal a) as [H1|H1]. {
+  assert (WellOrderable a \/ ~ WellOrderable a) as [H1|H1]. {
     apply LawExcludedMiddle. }
-  - assert (WithOrdinal (succ a)) as H2. {
-      apply Equiv.WithOrdinalSucc. assumption. }
+  - assert (WellOrderable (succ a)) as H2. {
+      apply Equiv.WellOrderableSucc. assumption. }
     apply InclCompatGen. 1: assumption. apply Succ.IsIncl.
-  - assert (card a = :0:) as H2. { apply WhenNoOrdinal. assumption. }
+  - assert (card a = :0:) as H2. { apply WhenNotWellOrderable. assumption. }
     assert (Ordinal (card (succ a))) as H3. { apply IsOrdinal. }
     rewrite H2. apply Empty.IsIncl.
 Qed.
@@ -327,15 +327,15 @@ Proposition IsInclSucc' : forall (a:U),
   card (succ a) :<=: succ (card a).
 Proof.
   intros a.
-  assert (WithOrdinal a \/ ~ WithOrdinal a) as [H1|H1]. {
+  assert (WellOrderable a \/ ~ WellOrderable a) as [H1|H1]. {
     apply LawExcludedMiddle. }
   - assert (Ordinal (succ (card a))) as H2. { apply Succ.IsOrdinal, IsOrdinal. }
     assert (a :~: card a) as H3. { apply IsEquivGen. assumption. }
     assert (succ a :~: succ (card a)) as H4. { apply SuccCompat. assumption. }
     apply IsLowerBound; assumption.
-  - assert (~ WithOrdinal (succ a)) as H2. {
-      intros H2. apply H1. apply Equiv.WithOrdinalSuccRev. assumption. }
-    assert (card (succ a) = :0:) as H3. { apply WhenNoOrdinal. assumption. }
+  - assert (~ WellOrderable (succ a)) as H2. {
+      intros H2. apply H1. apply Equiv.WellOrderableSuccRev. assumption. }
+    assert (card (succ a) = :0:) as H3. { apply WhenNotWellOrderable. assumption. }
     rewrite H3. apply Empty.IsIncl.
 Qed.
 
@@ -364,7 +364,7 @@ Proposition Cantor : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply HasOrdinal. assumption. }
+    apply IsWellOrderable. assumption. }
   destruct H1 as [b [H1 H2]].
   assert (Ordinal (card b)) as G1. { apply IsOrdinal. }
   assert (Ordinal (card :P(b))) as G2. { apply IsOrdinal. }
@@ -469,7 +469,7 @@ Proof.
 Qed.
 
 (* If a and b are well-orderable, card(a) <= card(b) gives an injection a -> b. *)
-Proposition HasInjGen : forall (a b:U), WithOrdinal a -> WithOrdinal b ->
+Proposition HasInjGen : forall (a b:U), WellOrderable a -> WellOrderable b ->
   card a :<=: card b -> exists f, Inj f a b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -495,13 +495,13 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
   (* Choice supplies the well-orderability assumptions needed by HasInjGen.     *)
-  assert (WithOrdinal a) as H2. { apply Equiv.HasOrdinal. assumption. }
-  assert (WithOrdinal b) as H3. { apply Equiv.HasOrdinal. assumption. }
+  assert (WellOrderable a) as H2. { apply Equiv.IsWellOrderable. assumption. }
+  assert (WellOrderable b) as H3. { apply Equiv.IsWellOrderable. assumption. }
   apply HasInjGen; assumption.
 Qed.
 
 (* If a and b are well-orderable, card(b) <= card(a) gives a surjection a -> b. *)
-Proposition HasOntoGen : forall (a b:U), WithOrdinal a -> WithOrdinal b ->
+Proposition HasOntoGen : forall (a b:U), WellOrderable a -> WellOrderable b ->
   b <> :0: -> card b :<=: card a -> exists f, SRO.Onto f a b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -535,13 +535,13 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1 H2.
   (* Choice supplies the well-orderability assumptions needed by HasOntoGen.    *)
-  assert (WithOrdinal a) as H3. { apply Equiv.HasOrdinal. assumption. }
-  assert (WithOrdinal b) as H4. { apply Equiv.HasOrdinal. assumption. }
+  assert (WellOrderable a) as H3. { apply Equiv.IsWellOrderable. assumption. }
+  assert (WellOrderable b) as H4. { apply Equiv.IsWellOrderable. assumption. }
   apply HasOntoGen; assumption.
 Qed.
 
 (* An injection into a well-orderable set gives an inequality of cardinals.     *)
-Proposition WhenInjGen : forall (a b f:U), WithOrdinal b ->
+Proposition WhenInjGen : forall (a b f:U), WellOrderable b ->
   Inj f a b -> card a :<=: card b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -561,11 +561,11 @@ Proof.
   intros a b f AC H1.
   (* Choice makes the codomain well-orderable, so the general form applies.     *)
   apply WhenInjGen with f. 2: assumption.
-  apply Equiv.HasOrdinal. assumption.
+  apply Equiv.IsWellOrderable. assumption.
 Qed.
 
 (* A surjection from a well-orderable set gives an inequality of cardinals.     *)
-Proposition WhenOntoGen : forall (f a b:U), WithOrdinal a ->
+Proposition WhenOntoGen : forall (f a b:U), WellOrderable a ->
   SRO.Onto f a b -> card b :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -646,7 +646,7 @@ Proof.
   intros f a b AC H1.
   (* Choice makes the domain well-orderable, so the general form applies.       *)
   apply WhenOntoGen with f. 2: assumption.
-  apply Equiv.HasOrdinal. assumption.
+  apply Equiv.IsWellOrderable. assumption.
 Qed.
 
 (* Cardinal product is monotone in its right argument.                          *)
