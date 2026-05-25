@@ -41,23 +41,23 @@ Proof.
   (* Let A and B be classes with A included in B, and let b witness Small B.    *)
   intros A B H1 [b H2].
 
-  (* The binary predicate F(x,y) := (x = y) ∧ A(x) is functional.               *)
+  (* The binary predicate F(x,y) := (x = y) and A(x) is functional.             *)
   assert (Replacement.Functional (fun x y => x = y /\ A x)) as H3. {
     intros x y z [H4 _] [H5 _]. rewrite <- H4, <- H5. reflexivity.
   }
 
   (* By replacement applied to F and b, there exists a set c with               *)
-  (* y ∈ c ↔ ∃x, x ∈ b ∧ x = y ∧ A(x), which simplifies to y ∈ c ↔ A(y).        *)
+  (* y in c iff some x in b satisfies x = y and A(x), hence y in c iff A(y).    *)
   destruct (Replacement.Replacement _ H3 b) as [c H4].
 
   (* We claim c witnesses Small A.                                              *)
   exists c. intros x. split; intros H5.
 
-  (* If x ∈ c, some w ∈ b satisfies w = x and A(w), so A(x).                    *)
+  (* If x is in c, some w in b satisfies w = x and A(w), so A(x).               *)
   - apply H4 in H5. destruct H5 as [w [_ [H6 H7]]].
     rewrite <- H6. apply H7.
 
-  (* If A(x), since A ⊆ B we have B(x), so x ∈ b. Taking y = x gives x ∈ c.     *)
+  (* If A(x), then A <= B gives B(x), so x is in b, hence x is in c.            *)
   - apply H4. exists x. split.
     + apply H2, H1, H5.
     + split. 1: reflexivity. apply H5.
