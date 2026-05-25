@@ -2,8 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion3.
-Require Import ZF.Class.Relation.Domain.
-Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.Fun.From2.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -21,12 +20,12 @@ Require Import ZF.Notation.Eval.
 
 Module COC := ZF.Class.Ordinal.Core.
 Module COR := ZF.Class.Ordinal.Recursion3.
+Module FR2 := ZF.Class.Relation.Fun.From2.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SUG := ZF.Set.Ordinal.UnionGenOfClass.
 
-Definition Oracle (F:Class) : Class := fun x => exists c a,
-  x = :(:(c,a):, a :+: F!c):.
+Definition Oracle (F:Class) : Class := FR2.from2 (fun x y => y :+: F!x).
 
 (* The unique function class G defined on On by the equations:                  *)
 (* (i)    G(0)      = 0                                                         *)
@@ -34,47 +33,6 @@ Definition Oracle (F:Class) : Class := fun x => exists c a,
 (* (iii)  G(b)      = \/_{x :< b} G(x) , if b is a limit ordinal                *)
 Definition sum (F:Class) : Class := COR.Recursion (Oracle F) :0:.
 
-Lemma OracleCharac2 : forall (F:Class) (x y:U),
-  Oracle F :(x,y): <-> exists c a, x = :(c,a): /\ y = a :+: F!c.
-Proof.
-  intros F x y. split; intros H1.
-  - destruct H1 as [c [a H1]].
-    apply OrdPair.Equal in H1. destruct H1 as [H1 H2].
-    exists c, a; split; assumption.
-  - destruct H1 as [c [a [H1 H2]]]. exists c, a. subst. reflexivity.
-Qed.
-
-Lemma OracleCharac3 : forall (F:Class) (c a y:U),
-  Oracle F :(:(c,a):,y): <-> y = a :+: F!c.
-Proof.
-  intros F c a y. split; intros H1.
-  - destruct H1 as [c' [a' H1]].
-    apply OrdPair.Equal in H1. destruct H1 as [H1 H2].
-    apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
-    subst. reflexivity.
-  - exists c, a. subst. reflexivity.
-Qed.
-
-
-Lemma OracleFunctional : forall (F:Class), Functional (Oracle F).
-Proof.
-  intros F x y1 y2 H1 H2.
-  apply OracleCharac2 in H1. apply OracleCharac2 in H2.
-  destruct H1 as [c [a [H1 H3]]].
-  destruct H2 as [c' [a' [H2 H4]]].
-  subst. apply OrdPair.Equal in H2. destruct H2 as [H1 H2].
-  subst. reflexivity.
-Qed.
-
-Lemma OracleEval : forall (F:Class) (c a:U),
-  ((Oracle F)!:(c,a):) = a :+: F!c.
-Proof.
-  intros F c a.
-  apply (EvalOfClass.Charac (Oracle F)).
-  - apply OracleFunctional.
-  - exists (a :+: F!c). apply OracleCharac3. reflexivity.
-  - apply OracleCharac3. reflexivity.
-Qed.
 
 Proposition IsFunctionOn : forall (F:Class),
   FunctionOn (sum F) On.
@@ -94,7 +52,7 @@ Proof.
   intros F b H1.
   assert ((sum F)!(succ b) = (Oracle F)!:(b,(sum F)!b):) as H2. {
     apply COR.WhenSucc. assumption. }
-  rewrite OracleEval in H2. assumption.
+  unfold Oracle in H2. rewrite FR2.Eval in H2. assumption.
 Qed.
 
 Proposition WhenLimit : forall (F:Class) (b:U), Limit b ->
@@ -105,13 +63,13 @@ Qed.
 
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                                   ->
-  G!:0: = :0:                                       ->  (* (i)   *)
-  (forall b, Ordinal b -> G!(succ b) = G!b :+: F!b) ->  (* (ii)  *)
-  (forall b, Limit b   -> G!b = :\/:_{b} G)         ->  (* (iii) *)
+  G!:0: = :0:                                       ->  (* (i)                  *)
+  (forall b, Ordinal b -> G!(succ b) = G!b :+: F!b) ->  (* (ii)                 *)
+  (forall b, Limit b   -> G!b = :\/:_{b} G)         ->  (* (iii)                *)
   G :~: sum F.
 Proof.
   intros F G a H1 H2 H3. apply COR.IsUnique; try assumption.
-  intros b H4. rewrite OracleEval. apply H3. assumption.
+  intros b H4. unfold Oracle. rewrite FR2.Eval. apply H3. assumption.
 Qed.
 
 Proposition RestrictIsFunctionOn : forall (F:Class) (b:U), On b ->
