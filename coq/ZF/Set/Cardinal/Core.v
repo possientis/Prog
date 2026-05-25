@@ -11,6 +11,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
@@ -36,8 +37,10 @@ Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
 Module CRL := ZF.Class.Relation.Functional.
+Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
+Module SOO := ZF.Set.Ordinal.Onto.
 Module SRF := ZF.Set.Relation.Fun.
 Module SFL := ZF.Set.Relation.Functional.
 Module SRN := ZF.Set.Relation.Function.
@@ -497,6 +500,46 @@ Proof.
   apply HasInjGen; assumption.
 Qed.
 
+(* If a and b are well-orderable, card(b) <= card(a) gives a surjection a -> b. *)
+Proposition HasOntoGen : forall (a b:U), WithOrdinal a -> WithOrdinal b ->
+  b <> :0: -> card b :<=: card a -> exists f, SRO.Onto f a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3 H4.
+  (* Move to cardinals, retract the larger ordinal onto the smaller one, and    *)
+  (* then move back to b.                                                       *)
+  assert (a :~: card a) as H5. { apply IsEquivGen. assumption. }
+  assert (card b :~: b) as H6. { apply Equiv.Sym, IsEquivGen. assumption. }
+  destruct H5 as [e H5]. destruct H6 as [h H6].
+  assert (SRO.Onto e a (card a)) as H7. { apply Bij.IsOnto. assumption. }
+  assert (SRO.Onto h (card b) b) as H8. { apply Bij.IsOnto. assumption. }
+  assert (card b <> :0:) as H9. {
+    intros H9. apply H3. apply SCE.WhenZero.
+    rewrite <- H9. apply Equiv.Sym. exists h. assumption. }
+  assert (exists r, SRO.Onto r (card a) (card b)) as H10. {
+    apply SOO.WhenIncl.
+    - apply IsOrdinal.
+    - apply IsOrdinal.
+    - assumption.
+    - assumption. }
+  destruct H10 as [r H10].
+  assert (SRO.Onto (r :.: e) a (card b)) as H11. {
+    apply SRO.Compose with (card a); assumption. }
+  exists (h :.: (r :.: e)). apply SRO.Compose with (card b); assumption.
+Qed.
+
+(* Assuming choice, card(b) <= card(a) gives a surjection from a onto b.        *)
+Proposition HasOnto : forall (a b:U), Choice ->
+  b <> :0: -> card b :<=: card a -> exists f, SRO.Onto f a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2.
+  (* Choice supplies the well-orderability assumptions needed by HasOntoGen.    *)
+  assert (WithOrdinal a) as H3. { apply Equiv.HasOrdinal. assumption. }
+  assert (WithOrdinal b) as H4. { apply Equiv.HasOrdinal. assumption. }
+  apply HasOntoGen; assumption.
+Qed.
+
 (* An injection into a well-orderable set gives an inequality of cardinals.     *)
 Proposition WhenInjGen : forall (a b f:U), WithOrdinal b ->
   Inj f a b -> card a :<=: card b.
@@ -518,6 +561,91 @@ Proof.
   intros a b f AC H1.
   (* Choice makes the codomain well-orderable, so the general form applies.     *)
   apply WhenInjGen with f. 2: assumption.
+  apply Equiv.HasOrdinal. assumption.
+Qed.
+
+(* A surjection from a well-orderable set gives an inequality of cardinals.     *)
+Proposition WhenOntoGen : forall (f a b:U), WithOrdinal a ->
+  SRO.Onto f a b -> card b :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 H2.
+  (* Reindex the surjection by a bijection from card(a) onto a.                 *)
+  assert (card a :~: a) as H3. { apply Equiv.Sym, IsEquivGen. assumption. }
+  destruct H3 as [e H3].
+  assert (SRO.Onto e (card a) a) as H4. { apply Bij.IsOnto. assumption. }
+  assert (SRO.Onto (f :.: e) (card a) b) as H5. {
+    apply SRO.Compose with a; assumption. }
+  remember (f :.: e) as g eqn:H6.
+  assert (SRO.Onto g (card a) b) as H7. { apply H5. }
+  remember {{ x :< card a | fun x => forall y, y :< x -> g!y <> g!x }} as d eqn:H8.
+  assert (d :<=: card a) as H9. { rewrite H8. apply Specify.IsInclL. }
+  assert (SRF.Fun g (card a) b) as H10. { apply SRO.IsFun. assumption. }
+  assert (Function g) as G1. { apply H10. }
+  assert (SFL.Functional g) as G2. { apply G1. }
+  assert (SRF.Fun (g:|:d) d b) as H11. {
+    apply SRF.Restrict with (card a); assumption. }
+  assert (OneToOne (g:|:d)) as H12. {
+    apply SRF.IsOneToOne with d b. 1: assumption.
+    intros x y H12 H13 H14.
+    rewrite (SRS.Eval g d x) in H14; try assumption.
+    rewrite (SRS.Eval g d y) in H14; try assumption.
+    assert (x :< card a) as H15. { apply H9. assumption. }
+    assert (y :< card a) as H16. { apply H9. assumption. }
+    assert (Ordinal x) as H17. { apply SOC.IsOrdinal with (card a); try assumption.
+      apply IsOrdinal. }
+    assert (Ordinal y) as H18. { apply SOC.IsOrdinal with (card a); try assumption.
+      apply IsOrdinal. }
+    assert (x = y \/ x :< y \/ y :< x) as H19. { apply SOC.IsTotal; assumption. }
+    destruct H19 as [H19|[H19|H19]]. 1: assumption.
+    - exfalso. rewrite H8 in H13. apply Specify.Charac in H13.
+      destruct H13 as [_ H13]. apply H13 with x; assumption.
+    - exfalso. rewrite H8 in H12. apply Specify.Charac in H12.
+      destruct H12 as [_ H12]. apply H12 with y. 1: assumption.
+      symmetry. assumption. }
+  assert (b :<=: SRR.range (g:|:d)) as H13. {
+    intros z H13.
+    assert (exists x, x :< card a /\ g!x = z) as H14. {
+      apply (SRO.RangeCharac g (card a) b z) in H13. 2: assumption.
+      assumption. }
+    destruct H14 as [x [H14 H15]].
+    remember (fun y => y :< card a /\ g!y = z) as A eqn:H16.
+    assert (exists n, Ordinal n /\ A n /\ forall y, A y -> n :<=: y) as H17. {
+      apply SOC.HasMinimal.
+      - rewrite H16. intros y H17. destruct H17 as [H17 _].
+        apply SOC.IsOrdinal with (card a); try assumption. apply IsOrdinal.
+      - apply CEM.HasElem. exists x. rewrite H16. split; assumption. }
+    destruct H17 as [n [H17 [H18 H19]]]. rewrite H16 in H18.
+    destruct H18 as [H18 H20].
+    assert (n :< d) as H21. {
+      rewrite H8. apply Specify.Charac. split. 1: assumption.
+      intros y H21 H22.
+      assert (y :< card a) as H23. {
+        assert (n :<=: card a) as H23. {
+          apply SOC.ElemIsIncl. 1: apply IsOrdinal. assumption. }
+        apply H23. assumption. }
+      assert (A y) as H24. { rewrite H16. split. 1: assumption.
+        rewrite H22. assumption. }
+      assert (n :<=: y) as H25. { apply H19. assumption. }
+      assert (y :< y) as H26. { apply H25. assumption. }
+      revert H26. apply Foundation.NoLoop1. }
+    apply SRR.Charac. exists n. apply SRS.Charac2. split. 1: assumption.
+    rewrite <- H20. apply SRO.Satisfies with (card a) b; assumption. }
+  assert (Bij (g:|:d) d b) as H14. { apply Bij.FromFun; assumption. }
+  assert (card b = card d) as H15. {
+    apply WhenEquiv. apply Equiv.Sym. exists (g:|:d). assumption. }
+  rewrite H15. rewrite <- (Idem a). apply InclCompatGen. 2: apply H9.
+  exists (card a). split. 1: apply IsOrdinal. apply Equiv.Refl.
+Qed.
+
+(* Assuming choice, a surjection gives an inequality of cardinals.              *)
+Proposition WhenOnto : forall (f a b:U), Choice ->
+  SRO.Onto f a b -> card b :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b AC H1.
+  (* Choice makes the domain well-orderable, so the general form applies.       *)
+  apply WhenOntoGen with f. 2: assumption.
   apply Equiv.HasOrdinal. assumption.
 Qed.
 
@@ -567,79 +695,6 @@ Proof.
   apply Incl.Tran with (card (c :x: b)).
   - apply InclCompatProdL; assumption.
   - apply InclCompatProdR; assumption.
-Qed.
-
-(* A surjection from a onto b makes the cardinal of b no larger than that of a. *)
-Proposition WhenOnto : forall (f a b:U), Choice ->
-  SRO.Onto f a b -> card b :<=: card a.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros f a b AC H1.
-  (* Reindex the surjection by a bijection from card(a) onto a.                 *)
-  assert (card a :~: a) as H2. { apply Equiv.Sym, IsEquivChoice. assumption. }
-  destruct H2 as [e H2].
-  assert (SRO.Onto e (card a) a) as H3. { apply Bij.IsOnto. assumption. }
-  assert (SRO.Onto (f :.: e) (card a) b) as H4. {
-    apply SRO.Compose with a; assumption. }
-  remember (f :.: e) as g eqn:H5.
-  assert (SRO.Onto g (card a) b) as H6. { apply H4. }
-  remember {{ x :< card a | fun x => forall y, y :< x -> g!y <> g!x }} as d eqn:H7.
-  assert (d :<=: card a) as H8. { rewrite H7. apply Specify.IsInclL. }
-  assert (SRF.Fun g (card a) b) as H9. { apply SRO.IsFun. assumption. }
-  assert (Function g) as G1. { apply H9. }
-  assert (SFL.Functional g) as G2. { apply G1. }
-  assert (SRF.Fun (g:|:d) d b) as H10. {
-    apply SRF.Restrict with (card a); assumption. }
-  assert (OneToOne (g:|:d)) as H11. {
-    apply SRF.IsOneToOne with d b. 1: assumption.
-    intros x y H11 H12 H13.
-    rewrite (SRS.Eval g d x) in H13; try assumption.
-    rewrite (SRS.Eval g d y) in H13; try assumption.
-    assert (x :< card a) as H14. { apply H8. assumption. }
-    assert (y :< card a) as H15. { apply H8. assumption. }
-    assert (Ordinal x) as H16. { apply SOC.IsOrdinal with (card a); try assumption.
-      apply IsOrdinal. }
-    assert (Ordinal y) as H17. { apply SOC.IsOrdinal with (card a); try assumption.
-      apply IsOrdinal. }
-    assert (x = y \/ x :< y \/ y :< x) as H18. { apply SOC.IsTotal; assumption. }
-    destruct H18 as [H18|[H18|H18]]. 1: assumption.
-    - exfalso. rewrite H7 in H12. apply Specify.Charac in H12.
-      destruct H12 as [_ H12]. apply H12 with x; assumption.
-    - exfalso. rewrite H7 in H11. apply Specify.Charac in H11.
-      destruct H11 as [_ H11]. apply H11 with y. 1: assumption.
-      symmetry. assumption. }
-  assert (b :<=: SRR.range (g:|:d)) as H12. {
-    intros z H12.
-    assert (exists x, x :< card a /\ g!x = z) as H13. {
-      apply (SRO.RangeCharac g (card a) b z) in H12. 2: assumption.
-      assumption. }
-    destruct H13 as [x [H13 H14]].
-    remember (fun y => y :< card a /\ g!y = z) as A eqn:H15.
-    assert (exists n, Ordinal n /\ A n /\ forall y, A y -> n :<=: y) as H16. {
-      apply SOC.HasMinimal.
-      - rewrite H15. intros y H16. destruct H16 as [H16 _].
-        apply SOC.IsOrdinal with (card a); try assumption. apply IsOrdinal.
-      - apply CEM.HasElem. exists x. rewrite H15. split; assumption. }
-    destruct H16 as [n [H16 [H17 H18]]]. rewrite H15 in H17.
-    destruct H17 as [H17 H19].
-    assert (n :< d) as H20. {
-      rewrite H7. apply Specify.Charac. split. 1: assumption.
-      intros y H20 H21.
-      assert (y :< card a) as H22. {
-        assert (n :<=: card a) as H22. {
-          apply SOC.ElemIsIncl. 1: apply IsOrdinal. assumption. }
-        apply H22. assumption. }
-      assert (A y) as H23. { rewrite H15. split. 1: assumption.
-        rewrite H21. assumption. }
-      assert (n :<=: y) as H24. { apply H18. assumption. }
-      assert (y :< y) as H25. { apply H24. assumption. }
-      revert H25. apply Foundation.NoLoop1. }
-    apply SRR.Charac. exists n. apply SRS.Charac2. split. 1: assumption.
-    rewrite <- H19. apply SRO.Satisfies with (card a) b; assumption. }
-  assert (Bij (g:|:d) d b) as H13. { apply Bij.FromFun; assumption. }
-  assert (card b = card d) as H14. {
-    apply WhenEquiv. apply Equiv.Sym. exists (g:|:d). assumption. }
-  rewrite H14. rewrite <- (Idem a). apply InclCompat. 1: assumption. apply H8.
 Qed.
 
 Proposition Image : forall (F:Class) (a:U), Choice ->

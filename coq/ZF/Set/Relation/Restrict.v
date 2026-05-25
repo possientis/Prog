@@ -85,6 +85,16 @@ Proof.
     apply Domain.Charac. exists y. apply Charac2. split; assumption.
 Qed.
 
+(* The domain of the restriction f|a is contained in a.                         *)
+Proposition DomainIsIncl : forall (f a:U),
+  domain (f:|:a) :<=: a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a x H1.
+  (* The domain of the restriction is the intersection with a.                  *)
+  rewrite DomainOf in H1. apply Inter2.IsInclL in H1. apply H1.
+Qed.
+
 (* When a is contained in the domain, the domain of the restriction equals a.   *)
 Proposition DomainWhenIncl : forall (f a:U),
   a :<=: domain f -> domain (f:|:a) = a.
