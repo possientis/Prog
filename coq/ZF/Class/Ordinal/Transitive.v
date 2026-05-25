@@ -28,6 +28,7 @@ Proof.
   apply H2, H1. assumption.
 Qed.
 
+(* A class is transitive iff membership in it is downward closed.               *)
 Proposition Charac : forall (A:Class),
   Transitive A <-> forall x y, x :< y -> A y -> A x.
 Proof.
@@ -37,6 +38,7 @@ Proof.
   - intros y H2 x H3. apply H1 with y; assumption.
 Qed.
 
+(* The union of a transitive class is a subclass of it.                         *)
 Proposition UnionIncl : forall (A:Class),
   Transitive A -> :U(A) :<=: A.
 Proof.
@@ -44,16 +46,19 @@ Proof.
   apply H1. assumption.
 Qed.
 
+(* The empty class is transitive.                                               *)
 Proposition ZeroIsTransitive : Transitive :0:.
 Proof.
   intros x H1. apply Class.Empty.Charac in H1. contradiction.
 Qed.
 
+(* The singleton of the empty set is transitive.                                *)
 Proposition OneIsTransitive : Transitive :1:.
 Proof.
   intros x H1. rewrite H1. intros y H2. apply Empty.Charac in H2. contradiction.
 Qed.
 
+(* The intersection of a non-empty transitive class is a subclass of it.        *)
 Proposition InterIsIncl: forall (A:Class),
   Transitive A -> A :<>: :0: -> :I(A) :<=: A.
 Proof.

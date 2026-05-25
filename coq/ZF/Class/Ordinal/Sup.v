@@ -23,6 +23,7 @@ Proof.
   intros A B H1. apply Union.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
+(* The supremum of A equals the supremum of its ordinal part.                   *)
 Proposition InterOn : forall (A:Class), sup A :~: sup (A :/\: On).
 Proof.
   intros A.
@@ -102,6 +103,7 @@ Proof.
     + intros b [H2 H3]. apply H1; assumption.
 Qed.
 
+(* The supremum of On is On itself.                                             *)
 Proposition IsOn : sup On :~: On.
 Proof.
   apply Equiv.Tran with :U(On).
@@ -109,6 +111,7 @@ Proof.
   - apply Ordinal.Union.IsOn.
 Qed.
 
+(* If every ordinal in A is bounded by some ordinal in B, then sup A :<=: sup B.*)
 Proposition Compare : forall (A B:Class),
   (forall a, On a -> A a -> exists b, On b /\ B b /\ a :<=: b) ->
   sup A :<=: sup B.

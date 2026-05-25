@@ -33,19 +33,21 @@ Definition Oracle (F:Class) : Class := FR2.from2 (fun x y => y :+: F!x).
 (* (iii)  G(b)      = \/_{x :< b} G(x) , if b is a limit ordinal                *)
 Definition sum (F:Class) : Class := COR.Recursion (Oracle F) :0:.
 
-
+(* sum F is a function class defined on the class of ordinals.                  *)
 Proposition IsFunctionOn : forall (F:Class),
   FunctionOn (sum F) On.
 Proof.
   intros F. apply COR.IsFunctionOn.
 Qed.
 
+(* sum F evaluated at 0 is 0.                                                   *)
 Proposition WhenZero : forall (F:Class),
   (sum F)!:0: = :0:.
 Proof.
   intros F. apply COR.WhenZero.
 Qed.
 
+(* sum F at succ b equals sum F at b plus F!b.                                  *)
 Proposition WhenSucc : forall (F:Class) (b:U), Ordinal b ->
   (sum F)!(succ b) = (sum F)!b :+: F!b.
 Proof.
@@ -55,12 +57,14 @@ Proof.
   unfold Oracle in H2. rewrite FR2.Eval in H2. assumption.
 Qed.
 
+(* sum F at a limit ordinal b is the union of sum F restricted to b.            *)
 Proposition WhenLimit : forall (F:Class) (b:U), Limit b ->
   (sum F)!b = :\/:_{b} (sum F).
 Proof.
   intros F. apply COR.WhenLimit.
 Qed.
 
+(* sum F is the unique function satisfying the three recursion equations.       *)
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                                   ->
   G!:0: = :0:                                       ->  (* (i)                  *)
@@ -72,12 +76,14 @@ Proof.
   intros b H4. unfold Oracle. rewrite FR2.Eval. apply H3. assumption.
 Qed.
 
+(* The restriction of sum F to b is a function on b for every ordinal b.        *)
 Proposition RestrictIsFunctionOn : forall (F:Class) (b:U), On b ->
   SFO.FunctionOn (sum F :|: b) b.
 Proof.
   intros F. apply COR.RestrictIsFunctionOn.
 Qed.
 
+(* sum F takes ordinal values when F takes ordinal values.                      *)
 Proposition IsOrdinal : forall (F:Class) (a:U),
   On a                            ->
   (forall x, x :< a -> On F!x)    ->
@@ -106,6 +112,7 @@ Proof.
   rewrite H2 in H3. assumption.
 Qed.
 
+(* sum F and sum G agree at a when F and G agree below a.                       *)
 Proposition Equal : forall (F G:Class) (a:U),
   On a                            ->
   (forall x, x :< a -> F!x = G!x) ->
@@ -133,5 +140,4 @@ Proof.
       apply SOC.ElemElemTran with x; assumption. }
   rewrite H1 in H2. assumption.
 Qed.
-
 
