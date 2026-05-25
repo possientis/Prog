@@ -34,6 +34,7 @@ Definition Oracle (F:Class) : Class := fun x => exists c a,
 (* (iii)  G(b)      = \/_{x :< b} G(x) , if b is a limit ordinal                *)
 Definition sum (F:Class) : Class := COR.Recursion (Oracle F) :0:.
 
+(* A pair (x,y) belongs to the oracle of F iff x = (c,a) and y = a + F(c).      *)
 Lemma OracleCharac2 : forall (F:Class) (x y:U),
   Oracle F :(x,y): <-> exists c a, x = :(c,a): /\ y = a :+: F!c.
 Proof.
@@ -44,6 +45,7 @@ Proof.
   - destruct H1 as [c [a [H1 H2]]]. exists c, a. subst. reflexivity.
 Qed.
 
+(* A pair ((c,a),y) belongs to the oracle of F iff y = a + F(c).                *)
 Lemma OracleCharac3 : forall (F:Class) (c a y:U),
   Oracle F :(:(c,a):,y): <-> y = a :+: F!c.
 Proof.
@@ -55,7 +57,7 @@ Proof.
   - exists c, a. subst. reflexivity.
 Qed.
 
-
+(* The oracle relation of F is functional (single-valued).                      *)
 Lemma OracleFunctional : forall (F:Class), Functional (Oracle F).
 Proof.
   intros F x y1 y2 H1 H2.
@@ -66,6 +68,7 @@ Proof.
   subst. reflexivity.
 Qed.
 
+(* The oracle of F evaluated at (c,a) equals a + F(c).                          *)
 Lemma OracleEval : forall (F:Class) (c a:U),
   ((Oracle F)!:(c,a):) = a :+: F!c.
 Proof.
@@ -76,18 +79,21 @@ Proof.
   - apply OracleCharac3. reflexivity.
 Qed.
 
+(* sum F is a function class defined on the class of ordinals.                  *)
 Proposition IsFunctionOn : forall (F:Class),
   FunctionOn (sum F) On.
 Proof.
   intros F. apply COR.IsFunctionOn.
 Qed.
 
+(* sum F evaluated at 0 is 0.                                                   *)
 Proposition WhenZero : forall (F:Class),
   (sum F)!:0: = :0:.
 Proof.
   intros F. apply COR.WhenZero.
 Qed.
 
+(* sum F at succ b equals sum F at b plus F!b.                                  *)
 Proposition WhenSucc : forall (F:Class) (b:U), Ordinal b ->
   (sum F)!(succ b) = (sum F)!b :+: F!b.
 Proof.
@@ -97,12 +103,14 @@ Proof.
   rewrite OracleEval in H2. assumption.
 Qed.
 
+(* sum F at a limit ordinal b is the union of sum F restricted to b.            *)
 Proposition WhenLimit : forall (F:Class) (b:U), Limit b ->
   (sum F)!b = :\/:_{b} (sum F).
 Proof.
   intros F. apply COR.WhenLimit.
 Qed.
 
+(* sum F is the unique function satisfying the three recursion equations.       *)
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                                   ->
   G!:0: = :0:                                       ->  (* (i)   *)
@@ -114,12 +122,14 @@ Proof.
   intros b H4. rewrite OracleEval. apply H3. assumption.
 Qed.
 
+(* The restriction of sum F to b is a function on b for every ordinal b.        *)
 Proposition RestrictIsFunctionOn : forall (F:Class) (b:U), On b ->
   SFO.FunctionOn (sum F :|: b) b.
 Proof.
   intros F. apply COR.RestrictIsFunctionOn.
 Qed.
 
+(* sum F takes ordinal values when F takes ordinal values.                      *)
 Proposition IsOrdinal : forall (F:Class) (a:U),
   On a                            ->
   (forall x, x :< a -> On F!x)    ->
@@ -148,6 +158,7 @@ Proof.
   rewrite H2 in H3. assumption.
 Qed.
 
+(* sum F and sum G agree at a when F and G agree below a.                       *)
 Proposition Equal : forall (F G:Class) (a:U),
   On a                            ->
   (forall x, x :< a -> F!x = G!x) ->

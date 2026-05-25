@@ -14,6 +14,7 @@ Module COC := ZF.Class.Ordinal.Core.
 
 Export ZF.Notation.UnionGen.
 
+(* The generalized union of ordinal values is an ordinal class.                 *)
 Proposition IsOrdinal : forall (A B:Class),
   (forall x, A x -> On B!x) -> Ordinal :\/:_{A} B.
 Proof.

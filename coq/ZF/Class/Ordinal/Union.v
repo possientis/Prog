@@ -50,6 +50,7 @@ Proof.
     apply (H3 c); assumption.
 Qed.
 
+(* The union of the class of ordinals is the class of ordinals.                 *)
 Proposition IsOn : :U(On) :~: On.
 Proof.
   apply CIN.Double. split.

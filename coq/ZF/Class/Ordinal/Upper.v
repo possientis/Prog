@@ -31,11 +31,13 @@ Proof.
   - apply H2. 1: assumption. split; assumption.
 Qed.
 
+(* Every ordinal upper-bound of A is an ordinal.                                *)
 Proposition IsIncl : forall (A:Class), upper A :<=: On.
 Proof.
   intros A a [H1 _]. assumption.
 Qed.
 
+(* The class of upper-bounds is non-empty iff its ordinal part is non-empty.    *)
 Proposition NotEmptyOn : forall (A:Class),
   upper A :<>: :0: <-> upper A :/\: On :<>: :0:.
 Proof.
