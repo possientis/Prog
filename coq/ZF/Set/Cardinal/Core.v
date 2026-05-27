@@ -10,6 +10,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Succ.
@@ -435,6 +436,33 @@ Proof.
     apply EqualOrdNat; assumption.
   - (* N <= card(N): card(N) <= N as N is an ordinal, so N = card(N).           *)
     apply Incl.Double. split. 1: assumption. apply IsIncl. assumption.
+Qed.
+
+(* A set whose cardinal is greater than one contains two distinct elements.     *)
+Proposition HasTwoElems : forall (a:U),
+  :1: :< card a -> exists x y, x :< a /\ y :< a /\ x <> y.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* Since the cardinal is not zero, a is equipotent to its cardinal.           *)
+  assert (card a <> :0:) as H2. {
+    intros H2. rewrite H2 in H1. apply Empty.Charac in H1. contradiction. }
+  assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
+  destruct H3 as [f H3].
+  (* Since card(a) is a non-zero ordinal, it contains 0.                        *)
+  assert (:0: :< card a) as H4. {
+    apply SOC.HasZero. 1: apply IsOrdinal. assumption. }
+  assert (:1: :< card a) as H5. { assumption. }
+  (* Take their inverse images under the bijection a -> card(a).                *)
+  assert (exists x, x :< a /\ f!x = :0:) as H6. {
+    apply (Bij.RangeCharac f a (card a) :0:); assumption. }
+  assert (exists y, y :< a /\ f!y = :1:) as H7. {
+    apply (Bij.RangeCharac f a (card a) :1:); assumption. }
+  destruct H6 as [x [H6 H8]]. destruct H7 as [y [H7 H9]].
+  exists x, y. split. 1: assumption. split. 1: assumption.
+  (* Distinct values in the cardinal have distinct preimages.                   *)
+  intros H10. subst y. rewrite H8 in H9.
+  apply Natural.ZeroIsNotOne. assumption.
 Qed.
 
 (* If b is not empty, then card(a) is bounded by card(a x b).                   *)
