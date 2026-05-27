@@ -23,6 +23,7 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
+Require Import ZF.Set.Relation.Fun.IfThenElse2.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
@@ -32,6 +33,7 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Specify.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -49,6 +51,7 @@ Module SRN := ZF.Set.Relation.Function.
 Module SRO := ZF.Set.Relation.Onto.
 Module SRR := ZF.Set.Relation.Range.
 Module SRS := ZF.Set.Relation.Restrict.
+Module SFI2 := ZF.Set.Relation.Fun.IfThenElse2.
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
@@ -700,3 +703,8 @@ Proof.
   rewrite <- H3. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
 Qed.
 
+(* If a and b each have at least two elements, card(a \/ b) <= card(a x b).     *)
+Proposition UnionProd : forall (a b:U), Choice ->
+  :1: :< card a -> :1: :< card b -> card (a :\/: b) :<=: card (a :x: b).
+Proof.
+Admitted.
