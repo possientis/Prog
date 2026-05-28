@@ -30,6 +30,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Sum.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
@@ -843,25 +844,25 @@ Proof.
   (* range h <= {0} x c \/ {1} x d:                                             *)
   (*   a-side: h!x = (0, f!x) with f!x in c  =>  h!x in {0} x c.                *)
   (*   b-side: h!x = (1, g!x) with g!x in d  =>  h!x in {1} x d.                *)
-  assert (range h :<=: Plus2.sum c d) as HRangeIncl. {
+  assert (range h :<=: sum c d) as HRangeIncl. {
     intros e He.
     apply (FunctionOn.RangeCharac h (a :\/: b)) in He. 2: assumption.
     destruct He as [x [Hx Hxe]].
     apply Union2.Charac in Hx. destruct Hx as [Hxa | Hxb].
     - rewrite HEvalA in Hxe. 2: assumption. subst e.
-      unfold Plus2.sum. apply Union2.IsInclL.
+      unfold sum. apply Union2.IsInclL.
       apply Prod.Charac2. split. 1: apply Single.IsIn.
       apply Bij.IsInRange with a; assumption.
     - rewrite HEvalB in Hxe. 2: assumption. subst e.
-      unfold Plus2.sum. apply Union2.IsInclR.
+      unfold sum. apply Union2.IsInclR.
       apply Prod.Charac2. split. 1: apply Single.IsIn.
       apply Bij.IsInRange with b; assumption. }
-  assert (Fun h (a :\/: b) (Plus2.sum c d)) as HFun. { split; assumption. }
+  assert (Fun h (a :\/: b) (sum c d)) as HFun. { split; assumption. }
   (* Surjectivity: {0} x c \/ {1} x d <= range h.                               *)
   (* Every element of {0} x c \/ {1} x d is (0,e') with e' in c, or             *)
   (* (1,e') with e' in d. Surjectivity of f (resp. g) supplies the preimage.    *)
-  assert (Plus2.sum c d :<=: range h) as HSurj. {
-    intros p Hp. unfold Plus2.sum in Hp.
+  assert (sum c d :<=: range h) as HSurj. {
+    intros p Hp. unfold sum in Hp.
     apply Union2.Charac in Hp. destruct Hp as [Hp | Hp].
     - (* p in {0} x c: p = (0,e') with e' in c.                                 *)
       apply Prod.Charac in Hp. destruct Hp as [t [e' [Hpeq [Ht He']]]].
@@ -881,7 +882,7 @@ Proof.
       + rewrite (HEvalB y Hyb), Hgy. reflexivity. }
   (* Injectivity: h is one-to-one. Four cases on membership of x, y in a or b.  *)
   assert (OneToOne h) as HInj. {
-    apply (Fun.IsOneToOne h (a :\/: b) (Plus2.sum c d)). 1: assumption.
+    apply (Fun.IsOneToOne h (a :\/: b) (sum c d)). 1: assumption.
     intros x y Hx Hy Hxy.
     apply Union2.Charac in Hx. apply Union2.Charac in Hy.
     destruct Hx as [Hxa | Hxb]; destruct Hy as [Hya | Hyb].
@@ -906,7 +907,7 @@ Proof.
   (* h bijects a \/ b onto {0} x c \/ {1} x d. Composing with the bijection     *)
   (* {0} x c \/ {1} x d ~ c + d gives the required bijection a \/ b ~ c + d.    *)
   exists ((Plus2.f c d) :.: h).
-  apply Bij.Compose with (Plus2.sum c d).
+  apply Bij.Compose with (sum c d).
   - apply Bij.FromFun; assumption.
   - apply Plus2.IsBij; assumption.
 Qed.

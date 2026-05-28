@@ -23,14 +23,12 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Specify.
+Require Export ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 
 Module SOR := ZF.Set.Order.RestrictOfClass.
-
-(* Will be shown to be isomorphic to a + b when endowed with lexic order.       *)
-Definition sum (a b:U) : U := :{ :0: }: :x: a :\/: :{ :1: }: :x: b.
 
 (* Lexicographic order on sum a b.                                              *)
 Definition lex (a b:U) : U := Lex :/: (sum a b).
