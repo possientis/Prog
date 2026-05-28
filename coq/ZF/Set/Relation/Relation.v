@@ -5,7 +5,6 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Single.
@@ -48,16 +47,6 @@ Proof.
   apply H1 in H3. specialize (H3 x). apply H3 in H2. assumption.
 Qed.
 
-(* A relation is a subset of the product of its domain and image thereof.       *)
-Proposition IsIncl : forall (f:U),
-  Relation f -> f :<=: (domain f) :x: f:[domain f]:.
-Proof.
-  intros f H1 x H3. specialize (H1 x H3). destruct H1 as [y [z H1]].
-  apply Prod.Charac. exists y. exists z. split. 1: assumption.  subst. split.
-  - apply Domain.Charac. exists z. assumption.
-  - apply Image.Charac. exists y. split. 2: assumption.
-    apply Domain.Charac. exists z. assumption.
-Qed.
 
 (* The empty set is a relation.                                                 *)
 Proposition WhenEmpty : forall (f:U), f = :0: -> Relation f.

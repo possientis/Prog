@@ -5,7 +5,6 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
@@ -78,12 +77,6 @@ Proof.
   apply Range.ImageOfDomain.
 Qed.
 
-(* A function is a subset of the product of its domain and image thereof.       *)
-Proposition IsIncl : forall (f:U),
-  Function f -> f :<=: (domain f) :x: f:[domain f]:.
-Proof.
-  intros f H1. apply Relation.IsIncl, H1.
-Qed.
 
 (* The inverse image of the range is the domain. f need not be a function.      *)
 Proposition InvImageOfRange : forall (f:U),

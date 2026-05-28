@@ -6,7 +6,6 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
@@ -71,15 +70,6 @@ Proof.
   intros f a b [H1 _]. apply FunctionOn.ImageOfDomain. assumption.
 Qed.
 
-(* A function f:a -> b is a subset of a x b.                                    *)
-Proposition IsIncl : forall (f a b:U),
-  Fun f a b -> f :<=: a :x: b.
-Proof.
-  intros f a b H1. apply ZF.Set.Incl.Tran with (a :x: f:[a]:).
-  - apply FunctionOn.IsIncl, H1.
-  - apply Prod.InclCompatR. rewrite (ImageOfDomain f a b).
-    2: assumption. apply H1.
-Qed.
 
 (* The inverse image of the range is the domain.                                *)
 Proposition InvImageOfRange : forall (f a b:U),

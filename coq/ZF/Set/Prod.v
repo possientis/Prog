@@ -7,6 +7,10 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Union2.
 Export ZF.Notation.Prod.
 
@@ -70,6 +74,27 @@ Proposition InclCompatR : forall (a b c:U),
 Proof.
   intros a b c H1. apply InclCompat. 2: assumption.
   apply Incl.Refl.
+Qed.
+
+(* A relation is a subset of the product of its domain and image thereof.       *)
+Proposition IsInclRel : forall (f:U),
+  Relation f -> f :<=: (domain f) :x: f:[domain f]:.
+Proof.
+  intros f H1 x H3. specialize (H1 x H3). destruct H1 as [y [z H1]].
+  apply Charac. exists y, z. split. 1: assumption. subst. split.
+  - apply Domain.Charac. exists z. assumption.
+  - apply Image.Charac. exists y. split. 2: assumption.
+    apply Domain.Charac. exists z. assumption.
+Qed.
+
+(* A function f:a -> b is a subset of a x b.                                    *)
+Proposition IsInclFun : forall (f a b:U),
+  Fun f a b -> f :<=: a :x: b.
+Proof.
+  intros f a b H1. apply ZF.Set.Incl.Tran with (a :x: f:[a]:).
+  - destruct H1 as [[H1 H2] _]. rewrite <- H2. apply IsInclRel. apply H1.
+  - apply InclCompatR. rewrite (Fun.ImageOfDomain f a b).
+    2: assumption. apply H1.
 Qed.
 
 (* The product with the empty set on the left is empty.                         *)

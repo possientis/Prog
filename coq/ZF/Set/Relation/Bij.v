@@ -7,7 +7,6 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Compose.
@@ -110,12 +109,6 @@ Proof.
   intros f a b [H1 H2]. subst. apply BijectionOn.ImageOfDomain. assumption.
 Qed.
 
-(* A bijection f:a -> b is a subset of a x b.                                   *)
-Proposition IsIncl : forall (f a b:U),
-  Bij f a b -> f :<=: a :x: b.
-Proof.
-  intros f a b H1. apply Fun.IsIncl, IsFun. assumption.
-Qed.
 
 (* The inverse image of b under a bijection f:a -> b equals the domain a.       *)
 Proposition InvImageOfRange : forall (f a b:U),

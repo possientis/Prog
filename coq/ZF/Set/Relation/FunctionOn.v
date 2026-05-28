@@ -6,7 +6,6 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
 Require Import ZF.Set.Relation.Domain.
@@ -75,12 +74,6 @@ Proof.
   intros f a [H1 H2]. rewrite <- H2. apply Range.ImageOfDomain.
 Qed.
 
-(* If f is a function defined on a, then it is a subset of a x f[a].            *)
-Proposition IsIncl : forall (f a:U),
-  FunctionOn f a -> f :<=: a :x: f:[a]:.
-Proof.
-  intros f a [H1 H2]. rewrite <- H2. apply Function.IsIncl. assumption.
-Qed.
 
 (* The inverse image of the range is the domain.                                *)
 Proposition InvImageOfRange : forall (f a:U),

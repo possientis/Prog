@@ -7,7 +7,6 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Converse.
@@ -73,12 +72,6 @@ Proof.
   intros f a H1. apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
 Qed.
 
-(* A bijection defined on a is a subset of a times the image of a.              *)
-Proposition IsIncl : forall (f a:U),
-  BijectionOn f a -> f :<=: a :x: f:[a]:.
-Proof.
-  intros f a H1. apply FunctionOn.IsIncl, IsFunctionOn. assumption.
-Qed.
 
 (* The inverse image of the range under a bijection defined on a equals a.      *)
 Proposition InvImageOfRange : forall (f a:U),
