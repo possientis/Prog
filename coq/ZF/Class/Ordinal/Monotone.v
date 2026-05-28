@@ -34,6 +34,7 @@ Module SOC := ZF.Set.Ordinal.Core.
 Definition Monotone (F:Class) : Prop := OrdFun F /\ forall (a b:U),
   domain F a -> domain F b -> a :< b -> F!a :< F!b.
 
+(* Every strictly monotone ordinal function satisfies a :<=: F!a.               *)
 Proposition IsIncl : forall (F:Class) (a:U),
   Monotone F -> domain F a -> a :<=: F!a.
 Proof.
@@ -64,6 +65,7 @@ Proof.
     apply H12 in H16. contradiction.
 Qed.
 
+(* The recursion of a monotone function with increasing values is monotone.     *)
 Proposition FromRecursion : forall (F:Class) (a:U),
   On a                            ->
   (forall b, On b ->  b :< F!b)   ->
@@ -110,6 +112,7 @@ Proof.
   rewrite H10 in H11. assumption.
 Qed.
 
+(* An order isomorphism from an ordinal class to ordinals is monotone.          *)
 Proposition FromIsom : forall (F A B:Class),
   Isom F E E A B  ->
   COC.Ordinal A   ->

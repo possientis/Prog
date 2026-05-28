@@ -23,6 +23,7 @@ Module CRF := ZF.Class.Relation.Function.
 Definition OrdFun (F:Class) : Prop
   := Function F /\ Ordinal (domain F) /\ range F :<=: On.
 
+(* The transfinite recursion of an ordinal function is an ordinal function.     *)
 Proposition FromRecursion : forall (F:Class) (a:U),
   On a                      ->
   OrdFun F                  ->
@@ -50,6 +51,7 @@ Proof.
       * apply Recursion2.IsFunctionOn.
 Qed.
 
+(* Every element of the domain of an ordinal function is an ordinal.            *)
 Proposition WhenInDomain : forall (F:Class) (a:U), OrdFun F ->
   domain F a -> On a.
 Proof.
@@ -57,12 +59,14 @@ Proof.
   apply COC.WhenElem with (domain F); assumption.
 Qed.
 
+(* An ordinal function takes ordinal values on its domain.                      *)
 Proposition IsOrdinal : forall (F:Class) (a:U), OrdFun F ->
   domain F a -> On F!a.
 Proof.
   intros F a [H1 [H2 H3]] H4. apply H3. apply CRF.IsInRange; assumption.
 Qed.
 
+(* The domain of an ordinal function is downward closed under membership.       *)
 Proposition InDomain : forall (F:Class) (a b:U), OrdFun F ->
   a :< b  -> domain F b -> domain F a.
 Proof.

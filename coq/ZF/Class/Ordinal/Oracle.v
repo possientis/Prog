@@ -43,6 +43,7 @@ Proof.
   - exists f. exists y. split. 1: reflexivity. assumption.
 Qed.
 
+(* Oracle F a is a functional class.                                            *)
 Proposition IsFunctional : forall (F:Class) (a:U),
   CFL.Functional (Oracle F a).
 Proof.

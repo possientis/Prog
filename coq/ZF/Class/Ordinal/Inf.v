@@ -33,6 +33,7 @@ Proof.
   intros A B H1. apply Inter.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
+(* The infimum of A equals the infimum of its ordinal part.                     *)
 Proposition InterOn : forall (A:Class), inf A :~: inf (A :/\: On).
 Proof.
   intros A.
@@ -47,7 +48,7 @@ Proof.
   apply Equiv.Sym, Class.Inter2.WhenInclL. assumption.
 Qed.
 
-(* The infimum of a class is an ordinal class.                                 *)
+(* The infimum of a class is an ordinal class.                                  *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
   intros A. apply Ordinal.Inter.IsOrdinal, Class.Inter2.IsInclR.
@@ -168,6 +169,7 @@ Proof.
   destruct H5 as [H5 _]. assumption.
 Qed.
 
+(* The infimum of a non-empty class of ordinals is its E-minimal element.       *)
 Proposition IsMinimal : forall (A:Class) (a:U),
   A :<=: On                             ->
   A :<>: :0:                            ->

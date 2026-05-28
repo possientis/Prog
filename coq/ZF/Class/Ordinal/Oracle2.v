@@ -46,6 +46,7 @@ Proof.
     + right. right. assumption.
 Qed.
 
+(* Oracle F a is a functional class.                                            *)
 Proposition IsFunctional : forall (F:Class) (a:U),
   Functional (Oracle F a).
 Proof.

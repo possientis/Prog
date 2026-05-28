@@ -22,19 +22,19 @@ Module SFO := ZF.Set.Relation.FunctionOn.
 (* The function class (a * .) when a is an ordinal.                             *)
 Definition Mult (a:U) : Class := Recursion :[fun b => b :+: a]: :0:.
 
-(* Plus a is a function class defined on the class of ordinals.                 *)
+(* Mult a is a function class defined on the class of ordinals.                 *)
 Proposition IsFunctionOn : forall (a:U), CFO.FunctionOn (Mult a) On.
 Proof.
   intros a. apply Recursion2.IsFunctionOn.
 Qed.
 
-(* Mutl a evaluated at 0 is 0.                                                  *)
+(* a * 0 = 0.                                                                   *)
 Proposition WhenZero : forall (a:U), (Mult a)!:0: = :0:.
 Proof.
   intros a. apply Recursion2.WhenZero.
 Qed.
 
-(* a * (succ b) = a * b + a                                                     *)
+(* a * (succ b) = a * b + a.                                                    *)
 Proposition WhenSucc : forall (a b:U), On b ->
   (Mult a)!(succ b) = (Mult a)!b :+: a.
 Proof.
@@ -52,6 +52,7 @@ Proof.
   intros a b H1. apply Recursion2.WhenLimit. assumption.
 Qed.
 
+(* Mult a is the unique function satisfying the three recursion equations.      *)
 Proposition IsUnique : forall (G:Class) (a:U),
   CFO.FunctionOn G On                         ->
   G!:0: = :0:                                 ->
@@ -64,6 +65,7 @@ Proof.
   apply (From.Eval (fun b => b :+: a)).
 Qed.
 
+(* The restriction of Mult a to b is a function on b for every ordinal b.       *)
 Proposition Restrict : forall (a b:U), On b ->
   SFO.FunctionOn ((Mult a) :|: b) b.
 Proof.
