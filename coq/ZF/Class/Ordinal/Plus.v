@@ -29,7 +29,7 @@ Proof.
   intros a. apply Recursion2.IsFunctionOn.
 Qed.
 
-(* Plus a evaluated at 0 is a.                                                  *)
+(* a + 0 = a.                                                                   *)
 Proposition WhenZero : forall (a:U), (Plus a)!:0: = a.
 Proof.
   intros a. apply Recursion2.WhenZero.
@@ -52,6 +52,7 @@ Proof.
   intros a b H1. apply Recursion2.WhenLimit. assumption.
 Qed.
 
+(* Plus a is the unique function satisfying the three recursion equations.      *)
 Proposition IsUnique : forall (G:Class) (a:U),
   CFO.FunctionOn G On                         ->
   G!:0: = a                                   ->
