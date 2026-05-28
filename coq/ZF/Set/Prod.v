@@ -11,6 +11,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -28,11 +29,11 @@ Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
 (* Notation "a :x: b" := (prod a b)                                             *)
 Global Instance SetProd : Prod U := { prod := prod }.
 
-(* The first projection from a product to its left component.                   *)
-Definition fst (a b:U) : U := (CF2.from2 (fun x _ => x)) :|: (a :x: b).
+(* The left projection from a product to its left component.                    *)
+Definition outL (a b:U) : U := (CF2.from2 (fun x _ => x)) :|: (a :x: b).
 
-(* The second projection from a product to its right component.                 *)
-Definition snd (a b:U) : U := (CF2.from2 (fun _ y => y)) :|: (a :x: b).
+(* The right projection from a product to its right component.                  *)
+Definition outR (a b:U) : U := (CF2.from2 (fun _ y => y)) :|: (a :x: b).
 
 (* The class of the product a x b equals the product of the classes.            *)
 Proposition ToClass : forall (a b:U),
@@ -110,16 +111,17 @@ Proof.
     2: assumption. apply H1.
 Qed.
 
-(* The first projection is a function from a x b to a.                          *)
-Proposition IsFunFst : forall (a b:U), Fun (fst a b) (a :x: b) a.
+(* The left projection is a function from a x b to a.                           *)
+Proposition IsFunL : forall (a b:U), Fun (outL a b) (a :x: b) a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. split.
-  - unfold fst. apply SRF.IsFunctionOn.
+  - unfold outL. apply SRF.IsFunctionOn.
     + apply CF2.IsFunctional.
     + intros p H1. apply Charac in H1.
-      destruct H1 as [x [y [H1 [H2 H3]]]]. subst. apply CF2.DomainOf.
-  - intros y H1. unfold fst in H1. apply Range.Charac in H1.
+      destruct H1 as [x [y [H1 [H2 H3]]]]. subst p.
+      exists x. apply CF2.Satisfies.
+  - intros y H1. unfold outL in H1. apply Range.Charac in H1.
     destruct H1 as [p H1]. apply SRF.Charac2 in H1.
     2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
@@ -128,16 +130,17 @@ Proof.
     rewrite <- H2. assumption.
 Qed.
 
-(* The second projection is a function from a x b to b.                         *)
-Proposition IsFunSnd : forall (a b:U), Fun (snd a b) (a :x: b) b.
+(* The right projection is a function from a x b to b.                          *)
+Proposition IsFunR : forall (a b:U), Fun (outR a b) (a :x: b) b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. split.
-  - unfold snd. apply SRF.IsFunctionOn.
+  - unfold outR. apply SRF.IsFunctionOn.
     + apply CF2.IsFunctional.
     + intros p H1. apply Charac in H1.
-      destruct H1 as [x [y [H1 [H2 H3]]]]. subst. apply CF2.DomainOf.
-  - intros y H1. unfold snd in H1. apply Range.Charac in H1.
+      destruct H1 as [x [y [H1 [H2 H3]]]]. subst p.
+      exists y. apply CF2.Satisfies.
+  - intros y H1. unfold outR in H1. apply Range.Charac in H1.
     destruct H1 as [p H1]. apply SRF.Charac2 in H1.
     2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
@@ -146,26 +149,68 @@ Proof.
     rewrite <- H2. assumption.
 Qed.
 
-(* The first projection sends (x,y) to x.                                       *)
-Proposition EvalFst : forall (a b x y:U),
-  x :< a -> y :< b -> (fst a b)!(:(x,y):) = x.
+(* The left projection sends (x,y) to x.                                        *)
+Proposition EvalL : forall (a b x y:U),
+  x :< a -> y :< b -> (outL a b)!(:(x,y):) = x.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x y H1 H2. unfold fst. rewrite SRF.Eval.
+  intros a b x y H1 H2. unfold outL. rewrite SRF.Eval.
   - apply CF2.Eval.
   - apply CF2.IsFunctional.
   - apply Charac2. split; assumption.
 Qed.
 
-(* The second projection sends (x,y) to y.                                      *)
-Proposition EvalSnd : forall (a b x y:U),
-  x :< a -> y :< b -> (snd a b)!(:(x,y):) = y.
+(* The right projection sends (x,y) to y.                                       *)
+Proposition EvalR : forall (a b x y:U),
+  x :< a -> y :< b -> (outR a b)!(:(x,y):) = y.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x y H1 H2. unfold snd. rewrite SRF.Eval.
+  intros a b x y H1 H2. unfold outR. rewrite SRF.Eval.
   - apply CF2.Eval.
   - apply CF2.IsFunctional.
   - apply Charac2. split; assumption.
+Qed.
+
+(* The left projection is onto a when b is not empty.                           *)
+Proposition IsOntoL : forall (a b:U),
+  b <> :0: -> Onto (outL a b) (a :x: b) a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1. assert (Fun (outL a b) (a :x: b) a) as H2.
+  { apply IsFunL. }
+  split.
+  - apply H2.
+  - apply Incl.Double. split.
+    + apply H2.
+    + intros x H3. apply Empty.HasElem in H1. destruct H1 as [y H1].
+      assert (:(x,y): :< a :x: b) as H4.
+      { apply Charac2. split; assumption. }
+      assert ((outL a b)!(:(x,y):) = x) as H5.
+      { apply EvalL; assumption. }
+      assert (:(:(x,y):,(outL a b)!(:(x,y):)): :< outL a b) as H6.
+      { apply Fun.Satisfies with (a :x: b) a; assumption. }
+      rewrite H5 in H6. apply Range.Charac. exists :(x,y):. assumption.
+Qed.
+
+(* The right projection is onto b when a is not empty.                          *)
+Proposition IsOntoR : forall (a b:U),
+  a <> :0: -> Onto (outR a b) (a :x: b) b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1. assert (Fun (outR a b) (a :x: b) b) as H2.
+  { apply IsFunR. }
+  split.
+  - apply H2.
+  - apply Incl.Double. split.
+    + apply H2.
+    + intros y H3. apply Empty.HasElem in H1. destruct H1 as [x H1].
+      assert (:(x,y): :< a :x: b) as H4.
+      { apply Charac2. split; assumption. }
+      assert ((outR a b)!(:(x,y):) = y) as H5.
+      { apply EvalR; assumption. }
+      assert (:(:(x,y):,(outR a b)!(:(x,y):)): :< outR a b) as H6.
+      { apply Fun.Satisfies with (a :x: b) b; assumption. }
+      rewrite H5 in H6. apply Range.Charac. exists :(x,y):. assumption.
 Qed.
 
 (* The product with the empty set on the left is empty.                         *)
@@ -247,4 +292,3 @@ Proof.
     + assumption.
     + split; assumption.
 Qed.
-

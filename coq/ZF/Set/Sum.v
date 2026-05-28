@@ -33,8 +33,8 @@ Proposition IsInjL : forall (a b:U), Inj (inL a b) a (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. unfold inL. apply SRF.IsInj.
-  - intros x H1. change (:(:0:,x): :< sum a b). unfold sum.
-    apply Union2.Charac. left. apply Prod.Charac2. split.
+  - intros x H1. unfold sum. apply Union2.Charac. left.
+    apply Prod.Charac2. split.
     + apply Single.IsIn.
     + assumption.
   - intros x y H1 H2 H3. apply OrdPair.Equal in H3. apply H3.
@@ -45,8 +45,8 @@ Proposition IsInjR : forall (a b:U), Inj (inR a b) b (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. unfold inR. apply SRF.IsInj.
-  - intros y H1. change (:(:1:,y): :< sum a b). unfold sum.
-    apply Union2.Charac. right. apply Prod.Charac2. split.
+  - intros y H1. unfold sum. apply Union2.Charac. right.
+    apply Prod.Charac2. split.
     + apply Single.IsIn.
     + assumption.
   - intros x y H1 H2 H3. apply OrdPair.Equal in H3. apply H3.
