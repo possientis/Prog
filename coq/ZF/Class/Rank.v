@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.R1.
+Require Import ZF.Class.Ordinal.VH.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -20,7 +20,7 @@ Proposition IsSmall : forall (A:Class),
 Proof.
   intros A [a [H1 H2]].
   assert (Ordinal (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
-  apply Bounded.IsSmall. exists R1!(succ a). intros x H3.
+  apply Bounded.IsSmall. exists VH!(succ a). intros x H3.
   assert (Ordinal (rank x)) as G2. { apply Rank.IsOrdinal. }
   apply Rank.IsIn. 1: assumption. apply Succ.InclIsElem; try assumption.
   apply H2. assumption.

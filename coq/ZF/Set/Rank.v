@@ -2,7 +2,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Induction.
-Require Import ZF.Class.Ordinal.R1.
+Require Import ZF.Class.Ordinal.VH.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
@@ -25,7 +25,7 @@ Module SUG := ZF.Set.UnionGenOfClass.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 
 (* Given a set a, the class underlying the rank of a.                           *)
-Definition K (a:U) : Class := fun b => Ordinal b /\ a :< R1!(succ b).
+Definition K (a:U) : Class := fun b => Ordinal b /\ a :< VH!(succ b).
 
 (* The rank of a set a.                                                         *)
 Definition rank (a:U) : U := inf (K a).
@@ -40,21 +40,21 @@ Qed.
 Lemma IsNotEmpty : forall (a:U), K a :<>: :0:.
 Proof.
   intros a.
-  remember (fun b => Ordinal b /\ a :< R1!b) as A eqn:H1.
+  remember (fun b => Ordinal b /\ a :< VH!b) as A eqn:H1.
   assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
   assert (A :<>: :0:) as H3. {
     rewrite H1. apply CEM.HasElem. apply IsWellFounded. }
   assert (exists b, Ordinal b /\ A b /\ forall c, A c -> b :<=: c) as H4. {
     apply Core.HasMinimal; assumption. }
   destruct H4 as [b [H4 [H5 H6]]].
-  assert (a :< R1!b) as H7. { rewrite H1 in H5. apply H5. }
+  assert (a :< VH!b) as H7. { rewrite H1 in H5. apply H5. }
   assert (Successor b) as H8. {
     assert (b = :0: \/ Successor b \/ Limit b) as H8. {
       apply Limit.ThreeWay. assumption. }
     destruct H8 as [H8|[H8|H8]]. 2: assumption.
-    - exfalso. rewrite H8 in H7. rewrite R1.WhenZero in H7.
+    - exfalso. rewrite H8 in H7. rewrite VH.WhenZero in H7.
       apply Empty.Charac in H7. contradiction.
-    - exfalso. rewrite R1.WhenLimit in H7. 2: assumption.
+    - exfalso. rewrite VH.WhenLimit in H7. 2: assumption.
       apply SUG.Charac in H7. destruct H7 as [c [H7 H9]].
       assert (Ordinal c) as H10. { apply Core.IsOrdinal with b; assumption. }
       assert (A c) as H11. { rewrite H1. split; assumption. }
@@ -71,9 +71,9 @@ Proof.
   intros a. apply SOI.IsOrdinal.
 Qed.
 
-(* If the rank of a is less than ordinal b, then a belongs to R1(b).            *)
+(* If the rank of a is less than ordinal b, then a belongs to VH(b).            *)
 Proposition IsIn : forall (a b:U), Ordinal b ->
-  rank a :< b -> a :< R1!b.
+  rank a :< b -> a :< VH!b.
 Proof.
   intros a b H1 H2.
   assert (K a (rank a)) as H3. {
@@ -81,33 +81,33 @@ Proof.
     - apply IsIncl.
     - apply IsNotEmpty. }
   destruct H3 as [H3 H4].
-  apply R1.InclCompat with (succ (rank a)); try assumption.
+  apply VH.InclCompat with (succ (rank a)); try assumption.
   - apply Succ.IsOrdinal. assumption.
   - apply Succ.ElemIsIncl; assumption.
 Qed.
 
-(* If b is at most the rank of a, then a does not belong to R1(b).              *)
+(* If b is at most the rank of a, then a does not belong to VH(b).              *)
 Proposition IsNotIn : forall (a b:U), Ordinal b ->
-  b :<=: rank a -> ~ a :< R1!b.
+  b :<=: rank a -> ~ a :< VH!b.
 Proof.
   intros a b H1 H2 H3.
   assert (Ordinal (rank a)) as G1. { apply IsOrdinal. }
   assert (Ordinal (succ (rank a))) as G2. { apply Succ.IsOrdinal. assumption. }
-  remember (fun c => Ordinal c /\ a :< R1!c) as A eqn:H4.
+  remember (fun c => Ordinal c /\ a :< VH!c) as A eqn:H4.
   assert (A :<=: Ordinal) as H5. { rewrite H4. intros c H5. apply H5. }
   assert (A :<>: :0:) as H6. {
     rewrite H4. apply CEM.HasElem. apply IsWellFounded. }
   assert (exists c, Ordinal c /\ A c /\ forall d, A d -> c :<=: d) as H7. {
     apply Core.HasMinimal; assumption. }
   destruct H7 as [c [H7 [H8 H9]]].
-  assert (a :< R1!c) as H10. { rewrite H4 in H8. apply H8. }
+  assert (a :< VH!c) as H10. { rewrite H4 in H8. apply H8. }
   assert (Successor c) as H11. {
     assert (c = :0: \/ Successor c \/ Limit c) as H11. {
       apply Limit.ThreeWay. assumption. }
     destruct H11 as [H11|[H11|H11]]. 2: assumption.
-    - exfalso. rewrite H11 in H10. rewrite R1.WhenZero in H10.
+    - exfalso. rewrite H11 in H10. rewrite VH.WhenZero in H10.
       apply Empty.Charac in H10. contradiction.
-    - exfalso. rewrite R1.WhenLimit in H10. 2: assumption.
+    - exfalso. rewrite VH.WhenLimit in H10. 2: assumption.
       apply SUG.Charac in H10. destruct H10 as [d [H10 H12]].
       assert (Ordinal d) as H13. { apply Core.IsOrdinal with c; assumption. }
       assert (A d) as H14. { rewrite H4. split; assumption. }
@@ -130,9 +130,9 @@ Proof.
   revert H17. apply Foundation.NoLoop1.
 Qed.
 
-(* If a belongs to R1(b), then the rank of a is less than b.                    *)
+(* If a belongs to VH(b), then the rank of a is less than b.                    *)
 Proposition IsLowerBound : forall (a b:U), Ordinal b ->
-  a :< R1!b -> rank a :< b.
+  a :< VH!b -> rank a :< b.
 Proof.
   intros a b H1 H2.
   assert (Ordinal (rank a)) as G1. { apply IsOrdinal. }
@@ -140,26 +140,26 @@ Proof.
   assert (rank a :< b \/ b :<=: rank a) as H3. {
     apply Core.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 1: assumption.
-  assert (~ a :< R1!b) as H6. { apply IsNotIn; assumption. }
+  assert (~ a :< VH!b) as H6. { apply IsNotIn; assumption. }
   contradiction.
 Qed.
 
-(* If a does not belong to R1(b), then b is at most the rank of a.              *)
+(* If a does not belong to VH(b), then b is at most the rank of a.              *)
 Proposition IsLargest : forall (a b:U), Ordinal b ->
-  ~ a :< R1!b -> b :<=: rank a.
+  ~ a :< VH!b -> b :<=: rank a.
 Proof.
   intros a b H1 H2.
   assert (Ordinal (rank a)) as G1. { apply IsOrdinal. }
   assert (rank a :< b \/ b :<=: rank a) as H3. {
     apply Core.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
-  assert (a :< R1!b) as H4. { apply IsIn; assumption. }
+  assert (a :< VH!b) as H4. { apply IsIn; assumption. }
   contradiction.
 Qed.
 
-(* b is the rank of a iff a is not in R1(b) but a is in R1(succ b).             *)
+(* b is the rank of a iff a is not in VH(b) but a is in VH(succ b).             *)
 Proposition  Equal : forall (a b:U), Ordinal b ->
-  b = rank a <-> ~ a :< R1!b /\ a :< R1!(succ b).
+  b = rank a <-> ~ a :< VH!b /\ a :< VH!(succ b).
 Proof.
   intros a b H1.
   assert (Ordinal (succ b)) as G1. { apply Succ.IsOrdinal. assumption. }
@@ -185,10 +185,10 @@ Proof.
   assert (Ordinal (succ (rank a))) as G3. { apply Succ.IsOrdinal. assumption. }
   apply Succ.ElemIsIncl; try assumption.
   apply IsLargest. 1: assumption.
-  rewrite R1.WhenSucc. 2: assumption. intros H2.
+  rewrite VH.WhenSucc. 2: assumption. intros H2.
   apply Power.Charac in H2.
-  assert (a :< R1!(rank a)) as H3. { apply H2. assumption. }
-  assert (~ a :< R1!(rank a)) as H4. { apply IsNotIn. 1: assumption. apply Incl.Refl. }
+  assert (a :< VH!(rank a)) as H3. { apply H2. assumption. }
+  assert (~ a :< VH!(rank a)) as H4. { apply IsNotIn. 1: assumption. apply Incl.Refl. }
   contradiction.
 Qed.
 
@@ -211,7 +211,7 @@ Proof.
     rewrite WhenSucc. 2: assumption. apply Power.Charac. intros x H6.
     assert (Ordinal (rank x)) as K2. { apply IsOrdinal. }
     assert (Ordinal (succ (rank x))) as K3. { apply Succ.IsOrdinal. assumption. }
-    apply R1.InclCompat with (succ (rank x)); try assumption.
+    apply VH.InclCompat with (succ (rank x)); try assumption.
     + apply Succ.ElemIsIncl; try assumption. apply H5. assumption.
     + apply IsIn. 1: assumption. apply Succ.IsIn.
   - apply SOI.IsLowerBound. 1: assumption. rewrite H1. split. 1: assumption.

@@ -3,7 +3,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Induction.
-Require Import ZF.Class.Ordinal.R1.
+Require Import ZF.Class.Ordinal.VH.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Fun.From.
@@ -31,14 +31,14 @@ Module SOU := ZF.Set.Ordinal.Union.
 Module SRI := ZF.Set.Relation.ImageUnderClass.
 
 (* Precicate defining a well founded set.                                       *)
-Definition WellFounded (a:U) : Prop := exists b, Ordinal b /\ a :< R1!b.
+Definition WellFounded (a:U) : Prop := exists b, Ordinal b /\ a :< VH!b.
 
 (* When all elements are well founded, the set is well founded.                 *)
 Proposition WhenElems : forall (a:U),
   (forall x, x :< a -> WellFounded x) -> WellFounded a.
 Proof.
   intros a H1.
-  remember (fun x => fun b => Ordinal b /\ x :< R1!b) as A eqn:H2.
+  remember (fun x => fun b => Ordinal b /\ x :< VH!b) as A eqn:H2.
   remember (:[fun x => inf (A x)]:) as F eqn:H3.
   assert (Functional F) as G1. { rewrite H3. apply From.IsFunctional. }
   assert (Function F) as G2. { rewrite H3. apply From.IsFunction. }
@@ -58,8 +58,8 @@ Proof.
     - apply SOU.IsUpperBound. 1: assumption.
       apply SRI.CharacRev with x; try assumption.
       apply CRF.Satisfies. 1: assumption. rewrite H3. apply From.DomainOf. }
-  assert (forall x, x :< a -> R1!(F!x) :<=: R1!b) as H11. {
-    intros x H11. apply R1.InclCompat. 2: assumption.
+  assert (forall x, x :< a -> VH!(F!x) :<=: VH!b) as H11. {
+    intros x H11. apply VH.InclCompat. 2: assumption.
     - apply H9. assumption.
     - apply Core.ElemIsIncl. 1: assumption. apply H10. assumption. }
   assert (forall x, x :< a -> A x (inf (A x))) as H12. {
@@ -68,13 +68,13 @@ Proof.
     - apply CEM.HasElem. rewrite H2. apply H1. assumption. }
   assert (forall x, x :< a -> A x F!x) as H13. {
     intros x H13. rewrite H3, From.Eval. apply H12. assumption. }
-  assert (forall x, x :< a -> x :< R1!(F!x)) as H14. {
+  assert (forall x, x :< a -> x :< VH!(F!x)) as H14. {
     intros x H14. rewrite H2 in H13. apply H13. assumption. }
-  assert (forall x, x :< a -> x :< R1!b) as H15. {
+  assert (forall x, x :< a -> x :< VH!b) as H15. {
     intros x H15. apply (H11 x). 1: assumption. apply H14. assumption. }
-  assert (a :<=: R1!b) as H16. { intros x H16. apply H15. assumption. }
-  assert (a :< R1!(succ b)) as H17. {
-    rewrite R1.WhenSucc. 2: assumption. apply Power.Charac. assumption. }
+  assert (a :<=: VH!b) as H16. { intros x H16. apply H15. assumption. }
+  assert (a :< VH!(succ b)) as H17. {
+    rewrite VH.WhenSucc. 2: assumption. apply Power.Charac. assumption. }
   assert (Ordinal (succ b)) as H18. { apply Succ.IsOrdinal. assumption. }
   exists (succ b). split; assumption.
 Qed.

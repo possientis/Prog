@@ -20,56 +20,56 @@ Require Import ZF.Notation.Eval.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module COC := ZF.Class.Ordinal.Core.
 
-(* Function class needed to define the rank of a set.                           *)
-(* (i)   R1(0)      = 0                                                         *)
-(* (ii)  R1(succ a) = P(R1(a))  [Power set of R1(a)]                            *)
-(* (iii) R1(a)      = \/_{x :< a} R1(x), if a i sa limit ordinal                *)
-Definition R1 : Class := Recursion :[fun a => :P(a)]: :0:.
+(* The cumulative hierarchy assigns a rank-initial segment to each ordinal.     *)
+(* (i)   VH(0)      = 0                                                         *)
+(* (ii)  VH(succ a) = P(VH(a))                                                  *)
+(* (iii) VH(a)      = \/_{x :< a} VH(x), when a is a limit ordinal              *)
+Definition VH : Class := Recursion :[fun a => :P(a)]: :0:.
 
-(* R1 is a function class defined on the class of ordinals.                     *)
-Proposition IsFunctionOn : CFO.FunctionOn R1 On.
+(* VH is a function class defined on the class of ordinals.                     *)
+Proposition IsFunctionOn : CFO.FunctionOn VH On.
 Proof.
   apply Recursion2.IsFunctionOn.
 Qed.
 
-(* R1 evaluated at 0 is 0.                                                      *)
-Proposition WhenZero : R1!:0: = :0:.
+(* VH evaluated at 0 is 0.                                                      *)
+Proposition WhenZero : VH!:0: = :0:.
 Proof.
   apply Recursion2.WhenZero.
 Qed.
 
-(* R1 evaluated at succ a is the power set of R1!a.                             *)
+(* VH evaluated at succ a is the power set of VH!a.                             *)
 Proposition WhenSucc : forall a, On a ->
-  R1!(succ a) = :P(R1!a).
+  VH!(succ a) = :P(VH!a).
 Proof.
   intros a H1.
-  assert (R1!(succ a) = :[fun b => :P(b)]:!(R1!a)) as H2. {
+  assert (VH!(succ a) = :[fun b => :P(b)]:!(VH!a)) as H2. {
     apply Recursion2.WhenSucc. assumption. }
   rewrite H2. apply From.Eval.
 Qed.
 
-(* R1 evaluated at a limit ordinal a is the union of R1 restricted to a.        *)
+(* VH evaluated at a limit ordinal a is the union of VH restricted to a.        *)
 Proposition WhenLimit : forall (a:U), Limit a ->
-  R1!a = :\/:_{a} R1.
+  VH!a = :\/:_{a} VH.
 Proof.
   intros a H1. apply Recursion2.WhenLimit. assumption.
 Qed.
 
-(* R1 is the unique function satisfying the three recursion equations.          *)
+(* VH is the unique function satisfying the three recursion equations.          *)
 Proposition IsUnique : forall (G:Class),
   CFO.FunctionOn G On                       ->
   G!:0: = :0:                               ->
   (forall a, On a -> G!(succ a) = :P(G!a))  ->
   (forall a, Limit a -> G!a = :\/:_{a} G)   ->
-  G :~: R1.
+  G :~: VH.
 Proof.
   intros G H1 H2 H3. apply Recursion2.IsUnique; try assumption.
   intros b H4. symmetry. rewrite H3. 2: assumption. apply From.Eval.
 Qed.
 
-(* For every ordinal a, R1(a) is a super-transitive set.                        *)
+(* For every ordinal a, VH(a) is a super-transitive set.                        *)
 Proposition IsSuper : forall (a:U), On a ->
-  Super R1!a.
+  Super VH!a.
 Proof.
   apply Induction2.Induction.
   - rewrite WhenZero. apply Super.WhenZero. reflexivity.
@@ -79,37 +79,37 @@ Proof.
     apply Super.WhenUnion. assumption.
 Qed.
 
-(* For every ordinal a, R1(a) is a transitive set.                              *)
+(* For every ordinal a, VH(a) is a transitive set.                              *)
 Proposition IsTransitive : forall (a:U), On a ->
-  Transitive R1!a.
+  Transitive VH!a.
 Proof.
   intros a H1. apply IsSuper. assumption.
 Qed.
 
-(* R1(a) is a member of R1(succ a) for every ordinal a.                         *)
+(* VH(a) is a member of VH(succ a) for every ordinal a.                         *)
 Proposition ElemSucc : forall (a:U), On a ->
-  R1!a :< R1!(succ a).
+  VH!a :< VH!(succ a).
 Proof.
   intros a H1. rewrite WhenSucc. 2: assumption. apply Power.Charac, Incl.Refl.
 Qed.
 
-(* R1(a) is a subset of  R1(succ a) for every ordinal a.                        *)
+(* VH(a) is a subset of  VH(succ a) for every ordinal a.                        *)
 Proposition InclSucc : forall (a:U), On a ->
-  R1!a :<=: R1!(succ a).
+  VH!a :<=: VH!(succ a).
 Proof.
   intros a H1 x H2.
-  apply IsTransitive with R1!a. 2: assumption.
+  apply IsTransitive with VH!a. 2: assumption.
   - apply Succ.IsOrdinal. assumption.
   - apply ElemSucc. assumption.
 Qed.
 
-(* R1 is strictly increasing: a :< b implies R1(a) :< R1(b).                    *)
+(* VH is strictly increasing: a :< b implies VH(a) :< VH(b).                    *)
 Proposition ElemCompat : forall (a b:U), On a -> On b ->
-  a :< b -> R1!a :< R1!b.
+  a :< b -> VH!a :< VH!b.
 Proof.
-  intros a b H1. revert b
+  intros a b H1. revert b.
   assert (On (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
-  assert (forall b, On b -> succ a :<=: b -> R1!a :< R1!b) as H2. {
+  assert (forall b, On b -> succ a :<=: b -> VH!a :< VH!b) as H2. {
     apply Induction2.Induction'. 1: assumption.
     - apply ElemSucc. assumption.
     - intros b H2 H3 IH. apply InclSucc; assumption.
@@ -122,15 +122,15 @@ Proof.
   apply Succ.ElemIsIncl; assumption.
 Qed.
 
-(* R1 is increasing: a :<=: b implies R1(a) :<=: R1(b).                         *)
+(* VH is increasing: a :<=: b implies VH(a) :<=: VH(b).                         *)
 Proposition InclCompat : forall (a b:U), On a -> On b ->
-  a :<=: b -> R1!a :<=: R1!b.
+  a :<=: b -> VH!a :<=: VH!b.
 Proof.
   intros a b H1 H2 H3.
   apply Core.EqualOrElem in H3; try assumption.
   destruct H3 as [H3|H3].
   - subst. apply Incl.Refl.
   - intros x H4.
-    apply IsTransitive with R1!a; try assumption.
+    apply IsTransitive with VH!a; try assumption.
     apply ElemCompat; assumption.
 Qed.
