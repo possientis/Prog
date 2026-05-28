@@ -21,18 +21,24 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module COC := ZF.Class.Ordinal.Core.
 
 (* Function class needed to define the rank of a set.                           *)
+(* (i)   R1(0)      = 0                                                         *)
+(* (ii)  R1(succ a) = P(R1(a))  [Power set of R1(a)]                            *)
+(* (iii) R1(a)      = \/_{x :< a} R1(x), if a i sa limit ordinal                *)
 Definition R1 : Class := Recursion :[fun a => :P(a)]: :0:.
 
+(* R1 is a function class defined on the class of ordinals.                     *)
 Proposition IsFunctionOn : CFO.FunctionOn R1 On.
 Proof.
   apply Recursion2.IsFunctionOn.
 Qed.
 
+(* R1 evaluated at 0 is 0.                                                      *)
 Proposition WhenZero : R1!:0: = :0:.
 Proof.
   apply Recursion2.WhenZero.
 Qed.
 
+(* R1 evaluated at succ a is the power set of R1!a.                             *)
 Proposition WhenSucc : forall a, On a ->
   R1!(succ a) = :P(R1!a).
 Proof.
@@ -42,12 +48,14 @@ Proof.
   rewrite H2. apply From.Eval.
 Qed.
 
+(* R1 evaluated at a limit ordinal a is the union of R1 restricted to a.        *)
 Proposition WhenLimit : forall (a:U), Limit a ->
   R1!a = :\/:_{a} R1.
 Proof.
   intros a H1. apply Recursion2.WhenLimit. assumption.
 Qed.
 
+(* R1 is the unique function satisfying the three recursion equations.          *)
 Proposition IsUnique : forall (G:Class),
   CFO.FunctionOn G On                       ->
   G!:0: = :0:                               ->
@@ -59,6 +67,7 @@ Proof.
   intros b H4. symmetry. rewrite H3. 2: assumption. apply From.Eval.
 Qed.
 
+(* For every ordinal a, R1(a) is a super-transitive set.                        *)
 Proposition IsSuper : forall (a:U), On a ->
   Super R1!a.
 Proof.
@@ -70,18 +79,21 @@ Proof.
     apply Super.WhenUnion. assumption.
 Qed.
 
+(* For every ordinal a, R1(a) is a transitive set.                              *)
 Proposition IsTransitive : forall (a:U), On a ->
   Transitive R1!a.
 Proof.
   intros a H1. apply IsSuper. assumption.
 Qed.
 
+(* R1(a) is a member of R1(succ a) for every ordinal a.                         *)
 Proposition ElemSucc : forall (a:U), On a ->
   R1!a :< R1!(succ a).
 Proof.
   intros a H1. rewrite WhenSucc. 2: assumption. apply Power.Charac, Incl.Refl.
 Qed.
 
+(* R1(a) is a subset of  R1(succ a) for every ordinal a.                        *)
 Proposition InclSucc : forall (a:U), On a ->
   R1!a :<=: R1!(succ a).
 Proof.
@@ -91,10 +103,11 @@ Proof.
   - apply ElemSucc. assumption.
 Qed.
 
+(* R1 is strictly increasing: a :< b implies R1(a) :< R1(b).                    *)
 Proposition ElemCompat : forall (a b:U), On a -> On b ->
   a :< b -> R1!a :< R1!b.
 Proof.
-  intros a b H1. revert b.
+  intros a b H1. revert b
   assert (On (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
   assert (forall b, On b -> succ a :<=: b -> R1!a :< R1!b) as H2. {
     apply Induction2.Induction'. 1: assumption.
@@ -109,6 +122,7 @@ Proof.
   apply Succ.ElemIsIncl; assumption.
 Qed.
 
+(* R1 is increasing: a :<=: b implies R1(a) :<=: R1(b).                         *)
 Proposition InclCompat : forall (a b:U), On a -> On b ->
   a :<=: b -> R1!a :<=: R1!b.
 Proof.

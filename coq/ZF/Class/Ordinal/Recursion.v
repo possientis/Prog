@@ -311,6 +311,7 @@ Proof.
   - apply DomainIsOn.
 Qed.
 
+(* The restriction of Recursion F to an ordinal a is a function on a.           *)
 Lemma RestrictIsFunctionOn : forall (F:Class) (a:U), On a ->
   SFO.FunctionOn ((Recursion F) :|: a) a.
 Proof.
