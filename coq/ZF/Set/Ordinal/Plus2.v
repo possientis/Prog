@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Order.Le.
+Require Import ZF.Class.Ordinal.Order.Lex.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
@@ -33,7 +33,7 @@ Module SOR := ZF.Set.Order.RestrictOfClass.
 Definition sum (a b:U) : U := :{ :0: }: :x: a :\/: :{ :1: }: :x: b.
 
 (* Lexicographic order on sum a b.                                              *)
-Definition le (a b:U) : U := Le :/: (sum a b).
+Definition le (a b:U) : U := Lex :/: (sum a b).
 
 (* The order induced by :< on the ordinal a + b.                                *)
 Definition r (a b:U) : U := E (a :+: b).
@@ -68,8 +68,8 @@ Proposition le00Charac2 : forall (a b c d:U),
   :( :(:0:,c): , :(:0:,d): ): :< le a b <-> c :< a /\ d :< a /\ c :< d.
 Proof.
   intros a b c d. split; intros H1.
-  - apply (SOR.Charac2 Le (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
-    apply Le.Charac4 in H3. destruct H3 as [H3|H3].
+  - apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
+    apply Lex.Charac4 in H3. destruct H3 as [H3|H3].
     1: { exfalso. revert H3. apply Foundation.NoLoop1. } destruct H3 as [_ H3].
     apply Union2.Charac in H1. apply Union2.Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2];
@@ -81,20 +81,20 @@ Proof.
     + exfalso. revert H1. apply Natural.ZeroIsNotOne.
     + exfalso. revert H1. apply Natural.ZeroIsNotOne.
   - destruct H1 as [H1 [H2 H3]].
-    apply (SOR.Charac2 Le (sum a b)). split.
+    apply (SOR.Charac2 Lex (sum a b)). split.
     + apply Union2.Charac. left. apply Prod.Charac2. split. 2: assumption.
       apply Single.Charac. reflexivity.
     + split.
       * apply Union2.Charac. left. apply Prod.Charac2. split. 2: assumption.
         apply Single.Charac. reflexivity.
-      * apply Le.Charac4. right. split. 2: assumption. reflexivity.
+      * apply Lex.Charac4. right. split. 2: assumption. reflexivity.
 Qed.
 
 Proposition le01Charac2 : forall (a b c d:U),
   :( :(:0:,c): , :(:1:,d): ): :< le a b <-> c :< a /\ d :< b.
 Proof.
   intros a b c d. split; intros H1.
-  - apply (SOR.Charac2 Le (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
+  - apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
     apply Union2.Charac in H1. apply Union2.Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2];
     apply Prod.Charac2 in H1; apply Prod.Charac2 in H2;
@@ -105,21 +105,21 @@ Proof.
     + exfalso. symmetry in H2. revert H2. apply Natural.ZeroIsNotOne.
     + exfalso. revert H1. apply Natural.ZeroIsNotOne.
   - destruct H1 as [H1 H2].
-    apply (SOR.Charac2 Le (sum a b)). split.
+    apply (SOR.Charac2 Lex (sum a b)). split.
     + apply Union2.Charac. left. apply Prod.Charac2. split. 2: assumption.
       apply Single.Charac. reflexivity.
     + split.
       * apply Union2.Charac. right. apply Prod.Charac2. split. 2: assumption.
         apply Single.Charac. reflexivity.
-      * apply Le.Charac4. left. apply Succ.IsIn.
+      * apply Lex.Charac4. left. apply Succ.IsIn.
 Qed.
 
 Proposition le10Charac2 : forall (a b c d:U),
   ~ :( :(:1:,c): , :(:0:,d): ): :< le a b.
 Proof.
   intros a b c d H1.
-  apply (SOR.Charac2 Le (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
-  apply Le.Charac4 in H3. destruct H3 as [H3|H3].
+  apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
+  apply Lex.Charac4 in H3. destruct H3 as [H3|H3].
   - apply Empty.Charac in H3. assumption.
   - destruct H3 as [H3 H4].
     symmetry in H3. revert H3. apply Natural.ZeroIsNotOne.
@@ -129,8 +129,8 @@ Proposition le11Charac2 : forall (a b c d:U),
   :( :(:1:,c): , :(:1:,d): ): :< le a b <-> c :< b /\ d :< b /\ c :< d.
 Proof.
   intros a b c d. split; intros H1.
-  - apply (SOR.Charac2 Le (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
-    apply Le.Charac4 in H3. destruct H3 as [H3|H3].
+  - apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
+    apply Lex.Charac4 in H3. destruct H3 as [H3|H3].
     1: { exfalso. revert H3. apply Foundation.NoLoop1. } destruct H3 as [_ H3].
     apply Union2.Charac in H1. apply Union2.Charac in H2.
     destruct H1 as [H1|H1]; destruct H2 as [H2|H2];
@@ -142,13 +142,13 @@ Proof.
     + exfalso. symmetry in H2. revert H2. apply Natural.ZeroIsNotOne.
     + split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 H3]].
-    apply (SOR.Charac2 Le (sum a b)). split.
+    apply (SOR.Charac2 Lex (sum a b)). split.
     + apply Union2.Charac. right. apply Prod.Charac2. split. 2: assumption.
       apply Single.Charac. reflexivity.
     + split.
       * apply Union2.Charac. right. apply Prod.Charac2. split. 2: assumption.
         apply Single.Charac. reflexivity.
-      * apply Le.Charac4. right. split. 2: assumption. reflexivity.
+      * apply Lex.Charac4. right. split. 2: assumption. reflexivity.
 Qed.
 
 Proposition Charac2 : forall (a b x y:U), Ordinal a -> Ordinal b ->

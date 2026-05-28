@@ -31,11 +31,11 @@ Module COC := ZF.Class.Ordinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* Lexicographical order on On x On.                                            *)
-Definition Le : Class := fun x =>
+Definition Lex : Class := fun x =>
   exists a b c d, x = :( :(a,b): , :(c,d): ): /\ (a :< c \/ (a = c /\ b :< d)).
 
 Proposition Charac2 : forall (x y:U),
-  Le :(x,y): <->
+  Lex :(x,y): <->
   exists a b c d, x = :(a,b): /\ y = :(c,d): /\ (a :< c \/ (a = c /\ b :< d)).
 Proof.
   intros x y. split; intros H1.
@@ -49,7 +49,7 @@ Proof.
 Qed.
 
 Proposition Charac4 : forall (a b c d:U),
-  Le :( :(a,b): , :(c,d): ): <-> a :< c \/ (a = c /\ b :< d).
+  Lex :( :(a,b): , :(c,d): ): <-> a :< c \/ (a = c /\ b :< d).
 Proof.
   intros a b c d. split; intros H1.
   - apply Charac2 in H1. destruct H1 as [a' [b' [c' [d' [H1 [H2 H3]]]]]].
@@ -60,7 +60,7 @@ Proof.
     split. 1: reflexivity. split. 1: reflexivity. assumption.
 Qed.
 
-(* A non-empty subclass of On x On has an Le-minimal element.                   *)
+(* A non-empty subclass of On x On has a Lex-minimal element.                   *)
 Proposition HasMinimal : forall (A:Class),
   A :<=: On :x: On          ->
   A :<>: :0:                ->
@@ -68,7 +68,7 @@ Proposition HasMinimal : forall (A:Class),
   exists a b,
     On a                    /\
     On b                    /\
-    Minimal Le A :(a,b):.
+    Minimal Lex A :(a,b):.
 Proof.
   intros A H1 H2.
   assert (domain A :<>: :0:) as H3. {
@@ -91,7 +91,7 @@ Proof.
   assert (exists b, On b /\ B b /\ forall z, B z -> b :<=: z) as H11. {
     apply SOC.HasMinimal; assumption. }
   destruct H11 as [b [H11 [H12 H13]]].
-  assert (Minimal Le A :(a,b):) as H14. {
+  assert (Minimal Lex A :(a,b):) as H14. {
     split.
     - rewrite H8 in H12. assumption.
     - intros x H14 H15. assert (H16 := H14). apply H1 in H14.
@@ -102,18 +102,18 @@ Proof.
   exists a. exists b. split. 1: assumption. split; assumption.
 Qed.
 
-(* Le is founded on On x On.                                                    *)
-Proposition IsFounded : Founded Le (On :x: On).
+(* Lex is founded on On x On.                                                   *)
+Proposition IsFounded : Founded Lex (On :x: On).
 Proof.
   intros x H1 H2.
-  assert (exists a b, On a /\ On b /\ Minimal Le (toClass x) :(a,b):) as H3. {
+  assert (exists a b, On a /\ On b /\ Minimal Lex (toClass x) :(a,b):) as H3. {
     apply HasMinimal. 1: assumption. apply Empty.NotEmptyToClass. assumption. }
   destruct H3 as [a [b [H3 [H4 H5]]]].
   exists :(a,b):. assumption.
 Qed.
 
-(* Le is total om On x On.                                                      *)
-Proposition IsTotal : Total Le (On :x: On).
+(* Lex is total on On x On.                                                     *)
+Proposition IsTotal : Total Lex (On :x: On).
 Proof.
   intros x y H1 H2.
   destruct H1 as [a [b [H1 [H3 H4]]]]. destruct H2 as [c [d [H2 [H5 H6]]]]. subst.
@@ -130,16 +130,16 @@ Proof.
   - right. right. apply Charac4. left. assumption.
 Qed.
 
-(* Le is a well-ordering on On x On.                                            *)
-Proposition IsWellOrdering : WellOrdering Le (On :x: On).
+(* Lex is a well-ordering on On x On.                                           *)
+Proposition IsWellOrdering : WellOrdering Lex (On :x: On).
 Proof.
   split.
   - apply IsFounded.
   - apply IsTotal.
 Qed.
 
-(* Le is not well-founded on On x On.                                           *)
-Proposition IsNotWellFounded : ~ WellFounded Le (On :x: On).
+(* Lex is not well-founded on On x On.                                          *)
+Proposition IsNotWellFounded : ~ WellFounded Lex (On :x: On).
 Proof.
   intros [_ H1].
   assert ((On :x: On) :(:1:,:0:):) as H2. {
@@ -155,7 +155,7 @@ Proof.
       split. 2: assumption. reflexivity.
     - destruct H3 as [H3 H4]. subst. exists z.
       split. 1: assumption. reflexivity. }
-  assert (A :~: initSegment Le (On :x: On) :(:1:,:0:):) as H4. {
+  assert (A :~: initSegment Lex (On :x: On) :(:1:,:0:):) as H4. {
     intros x. split; intros H4.
     - rewrite H2 in H4. destruct H4 as [a [H4 H5]].
       apply InitSegment.Charac. split.
@@ -194,7 +194,7 @@ Proof.
     - rewrite H2 in H9. destruct H9 as [a [H9 H10]].
       exists a. apply H6. split; assumption. }
   assert (Small (range F)) as H10. {
-    apply Small.EquivCompat with (initSegment Le (On :x: On) :(:1:,:0:):).
+    apply Small.EquivCompat with (initSegment Lex (On :x: On) :(:1:,:0:):).
     2: assumption. apply Equiv.Tran with A; apply Equiv.Sym; assumption. }
   assert (Small On) as H11. {
     apply Small.EquivCompat with (domain F). 1: assumption.

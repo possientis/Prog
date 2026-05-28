@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Order.Le.
+Require Import ZF.Class.Ordinal.Order.Lex.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
@@ -32,7 +32,7 @@ Module SOR := ZF.Set.Order.RestrictOfClass.
 Module SPR := ZF.Set.Prod.
 
 (* Lexicographic order on b x a.                                                *)
-Definition le (a b:U) : U := Le :/: (b :x: a).
+Definition le (a b:U) : U := Lex :/: (b :x: a).
 
 (* The order induced by :< on the ordinal a * b.                                *)
 Definition r (a b:U) : U := E (a :*: b).
@@ -69,14 +69,14 @@ Proof.
   - apply SOR.Charac2 in H1. destruct H1 as [H1 [H2 H3]].
     apply SPR.Charac2 in H1. destruct H1 as [H1 H4].
     apply SPR.Charac2 in H2. destruct H2 as [H2 H5].
-    apply Le.Charac4 in H3. split. 1: assumption. split. 1: assumption.
+    apply Lex.Charac4 in H3. split. 1: assumption. split. 1: assumption.
     split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 [H3 [H4 H5]]]].
     apply SOR.Charac2. split.
     + apply SPR.Charac2. split; assumption.
     + split.
       * apply SPR.Charac2. split; assumption.
-      * apply Le.Charac4. assumption.
+      * apply Lex.Charac4. assumption.
 Qed.
 
 Lemma Inequality : forall (a b c d:U),

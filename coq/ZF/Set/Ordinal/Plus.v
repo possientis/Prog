@@ -3,7 +3,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Induction2.
-Require Import ZF.Class.Ordinal.Order.Le.
+Require Import ZF.Class.Ordinal.Order.Lex.
 Require Import ZF.Class.Ordinal.Plus.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
