@@ -3,7 +3,6 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -69,12 +68,6 @@ Proof.
   apply Range.ImageOfDomain.
 Qed.
 
-(* A bijection class is a subclass of the product of its domain and image.      *)
-Proposition IsIncl : forall (F:Class),
-  Bijection F -> F :<=: (domain F) :x: F:[domain F]:.
-Proof.
-  intros F H1. apply Function.IsIncl, IsFunction. assumption.
-Qed.
 
 (* The image of a small class under a bijection class is small.                 *)
 Proposition ImageIsSmall : forall (F A:Class),

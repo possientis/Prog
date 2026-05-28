@@ -4,7 +4,6 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.BijectionOn.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -103,12 +102,6 @@ Proof.
   intros F A B H1. apply BijectionOn.ImageOfDomain, H1.
 Qed.
 
-(* An injection F:A -> B is a subclass of AxB.                                  *)
-Proposition IsIncl : forall (F A B:Class),
-  Inj F A B -> F :<=: A :x: B.
-Proof.
-  intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
-Qed.
 
 (* The image of a small class under an injection from A to B is small.          *)
 Proposition ImageIsSmall : forall (F A B C:Class),

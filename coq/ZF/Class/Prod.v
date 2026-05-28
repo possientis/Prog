@@ -4,6 +4,8 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Relation.Range.
+Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Proper.
@@ -95,6 +97,32 @@ Proposition InclCompatR : forall (P Q R:Class),
 Proof.
   intros P Q R H1. apply InclCompat. 2: assumption.
   apply CIN.Refl.
+Qed.
+
+(* A relation is a subclass of the product of its domain and image thereof.     *)
+Proposition IsInclRel : forall (F:Class),
+  Relation F -> F :<=: (domain F) :x: F:[domain F]:.
+Proof.
+  intros F H1 x H3. specialize (H1 x H3). destruct H1 as [y [z H1]].
+  exists y, z. split. 1: assumption. subst. split.
+  - exists z. assumption.
+  - exists y. split. 2: assumption. exists z. assumption.
+Qed.
+
+(* A function F:A -> B is a subclass of A x B.                                  *)
+Proposition IsInclFun : forall (F A B:Class),
+  Relation F -> domain F :~: A -> range F :<=: B -> F :<=: A :x: B.
+Proof.
+  intros F A B H1 H2 H3. apply CIN.Tran with (A :x: F:[A]:).
+  - apply Incl.EquivCompatR with (domain F :x: F:[domain F]:).
+    + apply EquivCompat.
+      * apply H2.
+      * apply Image.EquivCompatR, H2.
+    + apply IsInclRel. apply H1.
+  - apply InclCompatR, Incl.EquivCompatL with (range F).
+    2: apply H3. apply Equiv.Tran with (F:[domain F]:).
+    + apply Equiv.Sym, Range.ImageOfDomain.
+    + apply Image.EquivCompatR, H2.
 Qed.
 
 (* The product of two small classes is a small class.                           *)

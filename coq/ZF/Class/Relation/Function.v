@@ -2,7 +2,6 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -96,12 +95,6 @@ Proof.
   apply Range.ImageOfDomain.
 Qed.
 
-(* A function is a subclass of the product of its domain and image thereof.     *)
-Proposition IsIncl : forall (F:Class),
-  Function F -> F :<=: (domain F) :x: F:[domain F]:.
-Proof.
-  intros F H1. apply Relation.IsIncl, H1.
-Qed.
 
 (* The direct image of a small class under a function is small.                 *)
 Proposition ImageIsSmall : forall (F A:Class),

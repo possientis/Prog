@@ -3,7 +3,6 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bijection.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
@@ -87,12 +86,6 @@ Proof.
   apply FunctionOn.ImageOfDomain, IsFunctionOn. assumption.
 Qed.
 
-(* A bijection class F defined on A is a subclass of the product A x F[A].      *)
-Proposition IsIncl : forall (F A:Class),
-  BijectionOn F A -> F :<=: A :x: F:[A]:.
-Proof.
-  intros F A H1. apply FunctionOn.IsIncl, IsFunctionOn. assumption.
-Qed.
 
 (* The image of a small class under a bijection defined on any A is small.      *)
 Proposition ImageIsSmall : forall (F A B:Class),

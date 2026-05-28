@@ -2,7 +2,6 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Compose.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -113,12 +112,6 @@ Proof.
   - apply H1.
 Qed.
 
-(* A surjection F:A -> B is a subclass of AxB.                                  *)
-Proposition IsIncl : forall (F A B:Class),
-  Onto F A B -> F :<=: A :x: B.
-Proof.
-  intros F A B H1. apply Fun.IsIncl, IsFun. assumption.
-Qed.
 
 (* The direct image of a small class under a surjection F:A -> B is small.      *)
 Proposition ImageIsSmall : forall (F A B C:Class),
