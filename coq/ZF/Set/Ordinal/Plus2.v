@@ -33,7 +33,7 @@ Module SOR := ZF.Set.Order.RestrictOfClass.
 Definition sum (a b:U) : U := :{ :0: }: :x: a :\/: :{ :1: }: :x: b.
 
 (* Lexicographic order on sum a b.                                              *)
-Definition le (a b:U) : U := Lex :/: (sum a b).
+Definition lex (a b:U) : U := Lex :/: (sum a b).
 
 (* The order induced by :< on the ordinal a + b.                                *)
 Definition r (a b:U) : U := E (a :+: b).
@@ -64,8 +64,8 @@ Proof.
     + right. split. 2: assumption. subst. reflexivity.
 Qed.
 
-Proposition le00Charac2 : forall (a b c d:U),
-  :( :(:0:,c): , :(:0:,d): ): :< le a b <-> c :< a /\ d :< a /\ c :< d.
+Proposition lex00Charac2 : forall (a b c d:U),
+  :( :(:0:,c): , :(:0:,d): ): :< lex a b <-> c :< a /\ d :< a /\ c :< d.
 Proof.
   intros a b c d. split; intros H1.
   - apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
@@ -90,8 +90,8 @@ Proof.
       * apply Lex.Charac4. right. split. 2: assumption. reflexivity.
 Qed.
 
-Proposition le01Charac2 : forall (a b c d:U),
-  :( :(:0:,c): , :(:1:,d): ): :< le a b <-> c :< a /\ d :< b.
+Proposition lex01Charac2 : forall (a b c d:U),
+  :( :(:0:,c): , :(:1:,d): ): :< lex a b <-> c :< a /\ d :< b.
 Proof.
   intros a b c d. split; intros H1.
   - apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
@@ -114,8 +114,8 @@ Proof.
       * apply Lex.Charac4. left. apply Succ.IsIn.
 Qed.
 
-Proposition le10Charac2 : forall (a b c d:U),
-  ~ :( :(:1:,c): , :(:0:,d): ): :< le a b.
+Proposition lex10Charac2 : forall (a b c d:U),
+  ~ :( :(:1:,c): , :(:0:,d): ): :< lex a b.
 Proof.
   intros a b c d H1.
   apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
@@ -125,8 +125,8 @@ Proof.
     symmetry in H3. revert H3. apply Natural.ZeroIsNotOne.
 Qed.
 
-Proposition le11Charac2 : forall (a b c d:U),
-  :( :(:1:,c): , :(:1:,d): ): :< le a b <-> c :< b /\ d :< b /\ c :< d.
+Proposition lex11Charac2 : forall (a b c d:U),
+  :( :(:1:,c): , :(:1:,d): ): :< lex a b <-> c :< b /\ d :< b /\ c :< d.
 Proof.
   intros a b c d. split; intros H1.
   - apply (SOR.Charac2 Lex (sum a b)) in H1. destruct H1 as [H1 [H2 H3]].
@@ -337,7 +337,7 @@ Qed.
 
 (* f a b is an order isomorphism from sum a b to a + b.                         *)
 Proposition IsIsom : forall (a b:U), Ordinal a -> Ordinal b ->
-  Isom (f a b) (le a b) (r a b) (sum a b) (a :+: b).
+  Isom (f a b) (lex a b) (r a b) (sum a b) (a :+: b).
 Proof.
   intros a b H1 H2. split. 1: { apply IsBij; assumption. }
   intros x y H3 H4. apply Union2.Charac in H3. apply Union2.Charac in H4.
@@ -346,22 +346,22 @@ Proof.
   destruct H3 as [x1 [c [H3 [H5 H6]]]]; apply Single.Charac in H5;
   destruct H4 as [x2 [d [H4 [H7 H8]]]]; apply Single.Charac in H7;
   subst; split; intros H9.
-  - apply le00Charac2 in H9. destruct H9 as [H9 [H10 H11]].
+  - apply lex00Charac2 in H9. destruct H9 as [H9 [H10 H11]].
     rewrite Eval0, Eval0; try assumption. apply E.Charac2. split.
     + apply Plus.IsInclR; assumption.
     + split. 2: assumption. apply Plus.IsInclR; assumption.
   - rewrite Eval0, Eval0 in H9; try assumption.
     apply E.Charac2 in H9. destruct H9 as [H9 [H10 H11]].
-    apply le00Charac2. split. 1: assumption. split; assumption.
-  - apply le01Charac2 in H9. destruct H9 as [H9 H10].
+    apply lex00Charac2. split. 1: assumption. split; assumption.
+  - apply lex01Charac2 in H9. destruct H9 as [H9 H10].
     rewrite Eval0, Eval1; try assumption. apply E.Charac2. split.
     + apply Plus.IsInclR; assumption.
     + assert (Ordinal d) as H11. { apply Core.IsOrdinal with b; assumption. }
       split.
       * apply Plus.ElemCompatR; assumption.
       * apply Plus.IsInclR; assumption.
-  - apply le01Charac2. split; assumption.
-  - apply le10Charac2 in H9. contradiction.
+  - apply lex01Charac2. split; assumption.
+  - apply lex10Charac2 in H9. contradiction.
   - exfalso. rewrite Eval0, Eval1 in H9; try assumption. apply E.Charac2 in H9.
     destruct H9 as [H9 [H10 H11]].
     assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }
@@ -371,7 +371,7 @@ Proof.
       apply Plus.IsInclR; try assumption.
       apply Core.ElemElemTran with d; assumption. }
     revert H15. apply Foundation.NoLoop1.
-  - apply le11Charac2 in H9. destruct H9 as [H9 [H10 H11]].
+  - apply lex11Charac2 in H9. destruct H9 as [H9 [H10 H11]].
     rewrite Eval1, Eval1; try assumption. apply E.Charac2.
     assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }
     assert (Ordinal d) as H13. { apply Core.IsOrdinal with b; assumption. }
@@ -379,7 +379,7 @@ Proof.
     + apply Plus.ElemCompatR; assumption.
     + split; apply Plus.ElemCompatR; assumption.
   - rewrite Eval1, Eval1 in H9; try assumption. apply E.Charac2 in H9.
-    destruct H9 as [H9 [H10 H11]]. apply le11Charac2.
+    destruct H9 as [H9 [H10 H11]]. apply lex11Charac2.
     assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }
     assert (Ordinal d) as H13. { apply Core.IsOrdinal with b; assumption. }
     split. 1: assumption. split. 1: assumption.
