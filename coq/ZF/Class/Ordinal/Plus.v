@@ -64,8 +64,8 @@ Proof.
   intros b H4. symmetry. rewrite H3. 2: assumption. apply From.Eval.
 Qed.
 
-Proposition RestrictIsFunctionOn : forall (a b:U), On b ->
+Proposition Restrict : forall (a b:U), On b ->
   SFO.FunctionOn ((Plus a) :|: b) b.
 Proof.
-  intros a b. apply Recursion2.RestrictIsFunctionOn.
+  intros a b. apply Recursion2.Restrict.
 Qed.

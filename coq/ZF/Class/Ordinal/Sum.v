@@ -77,10 +77,10 @@ Proof.
 Qed.
 
 (* The restriction of sum F to b is a function on b for every ordinal b.        *)
-Proposition RestrictIsFunctionOn : forall (F:Class) (b:U), On b ->
+Proposition Restrict : forall (F:Class) (b:U), On b ->
   SFO.FunctionOn (sum F :|: b) b.
 Proof.
-  intros F. apply COR.RestrictIsFunctionOn.
+  intros F. apply COR.Restrict.
 Qed.
 
 (* sum F takes ordinal values when F takes ordinal values.                      *)

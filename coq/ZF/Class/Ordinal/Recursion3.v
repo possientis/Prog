@@ -105,8 +105,8 @@ Proof.
       rewrite H4, WhenLimit; assumption.
 Qed.
 
-Proposition RestrictIsFunctionOn : forall (F:Class) (a b:U), On b ->
+Proposition Restrict : forall (F:Class) (a b:U), On b ->
   SFO.FunctionOn (Recursion F a :|: b) b.
 Proof.
-  intros F a b. apply COR.RestrictIsFunctionOn.
+  intros F a b. apply COR.Restrict.
 Qed.

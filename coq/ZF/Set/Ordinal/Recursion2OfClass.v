@@ -26,7 +26,7 @@ Definition recursion (F:Class) (a b:U) : U := (Recursion F a) :|: b.
 Proposition IsFunctionOn : forall (F:Class) (a b:U), Ordinal b ->
   FunctionOn (recursion F a b) b.
 Proof.
-  apply Recursion2.RestrictIsFunctionOn.
+  apply Recursion2.Restrict.
 Qed.
 
 (* The recursion set of F and a b has initial value a.                          *)

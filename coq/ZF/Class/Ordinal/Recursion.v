@@ -312,7 +312,7 @@ Proof.
 Qed.
 
 (* The restriction of Recursion F to an ordinal a is a function on a.           *)
-Lemma RestrictIsFunctionOn : forall (F:Class) (a:U), On a ->
+Proposition Restrict : forall (F:Class) (a:U), On a ->
   SFO.FunctionOn ((Recursion F) :|: a) a.
 Proof.
   intros F a H1. split.
@@ -329,7 +329,7 @@ Lemma K_Restrict : forall (F:Class) (f a:U),
 Proof.
   intros F f a H1. assert (H2 := H1). destruct H2 as [H2 [H3 H4]].
   apply SFO.Equal with a a. 1: assumption.
-  - apply RestrictIsFunctionOn. assumption.
+  - apply Restrict. assumption.
   - reflexivity.
   - intros x H5.
     assert (((Recursion F) :|: a)!x = (Recursion F)!x) as H6. {

@@ -63,7 +63,7 @@ Qed.
 Proposition IsFunctionOn : forall (F:Class) (a:U), Ordinal a ->
   FunctionOn (recursion F a) a.
 Proof.
-  intros F a H1. apply RestrictIsFunctionOn. assumption.
+  intros F a H1. apply Recursion.Restrict. assumption.
 Qed.
 
 (* The recursion set of F and a is F-recursive, when a is an ordinal.           *)
@@ -78,7 +78,7 @@ Proof.
     apply FunctionOn.Equal with b b. 3: reflexivity.
     - apply FunctionOn.Restrict with a. 2: assumption.
       apply IsFunctionOn. assumption.
-    - apply RestrictIsFunctionOn. apply Core.IsOrdinal with a; assumption.
+    - apply Recursion.Restrict. apply Core.IsOrdinal with a; assumption.
     - intros x H5. unfold recursion. rewrite RestrictOfClass.TowerProperty.
       + reflexivity.
       + apply Recursion.IsFunctionOn.

@@ -64,8 +64,8 @@ Proof.
   apply (From.Eval (fun b => b :+: a)).
 Qed.
 
-Proposition RestrictIsFunctionOn : forall (a b:U), On b ->
+Proposition Restrict : forall (a b:U), On b ->
   SFO.FunctionOn ((Mult a) :|: b) b.
 Proof.
-  intros a b. apply Recursion2.RestrictIsFunctionOn.
+  intros a b. apply Recursion2.Restrict.
 Qed.
