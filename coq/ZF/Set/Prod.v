@@ -1,5 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Relation.Fun.From2.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -10,9 +11,15 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
+Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Union2.
+Require Import ZF.Notation.Eval.
 Export ZF.Notation.Prod.
+
+Module CF2 := ZF.Class.Relation.Fun.From2.
+Module SRF := ZF.Set.Relation.RestrictOfClass.
 
 (* We consider the set defined by the product predicate of the sets a and b     *)
 Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
@@ -20,6 +27,12 @@ Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
 
 (* Notation "a :x: b" := (prod a b)                                             *)
 Global Instance SetProd : Prod U := { prod := prod }.
+
+(* The first projection from a product to its left component.                   *)
+Definition fst (a b:U) : U := (CF2.from2 (fun x _ => x)) :|: (a :x: b).
+
+(* The second projection from a product to its right component.                 *)
+Definition snd (a b:U) : U := (CF2.from2 (fun _ y => y)) :|: (a :x: b).
 
 (* The class of the product a x b equals the product of the classes.            *)
 Proposition ToClass : forall (a b:U),
@@ -95,6 +108,64 @@ Proof.
   - destruct H1 as [[H1 H2] _]. rewrite <- H2. apply IsInclRel. apply H1.
   - apply InclCompatR. rewrite (Fun.ImageOfDomain f a b).
     2: assumption. apply H1.
+Qed.
+
+(* The first projection is a function from a x b to a.                          *)
+Proposition IsFunFst : forall (a b:U), Fun (fst a b) (a :x: b) a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b. split.
+  - unfold fst. apply SRF.IsFunctionOn.
+    + apply CF2.IsFunctional.
+    + intros p H1. apply Charac in H1.
+      destruct H1 as [x [y [H1 [H2 H3]]]]. subst. apply CF2.DomainOf.
+  - intros y H1. unfold fst in H1. apply Range.Charac in H1.
+    destruct H1 as [p H1]. apply SRF.Charac2 in H1.
+    2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
+    apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
+    apply CF2.Charac2 in H2. destruct H2 as [u' [v' [H2 H5]]]. subst y.
+    rewrite H1 in H2. apply OrdPair.Equal in H2. destruct H2 as [H2 _].
+    rewrite <- H2. assumption.
+Qed.
+
+(* The second projection is a function from a x b to b.                         *)
+Proposition IsFunSnd : forall (a b:U), Fun (snd a b) (a :x: b) b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b. split.
+  - unfold snd. apply SRF.IsFunctionOn.
+    + apply CF2.IsFunctional.
+    + intros p H1. apply Charac in H1.
+      destruct H1 as [x [y [H1 [H2 H3]]]]. subst. apply CF2.DomainOf.
+  - intros y H1. unfold snd in H1. apply Range.Charac in H1.
+    destruct H1 as [p H1]. apply SRF.Charac2 in H1.
+    2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
+    apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
+    apply CF2.Charac2 in H2. destruct H2 as [u' [v' [H2 H5]]]. subst y.
+    rewrite H1 in H2. apply OrdPair.Equal in H2. destruct H2 as [_ H2].
+    rewrite <- H2. assumption.
+Qed.
+
+(* The first projection sends (x,y) to x.                                       *)
+Proposition EvalFst : forall (a b x y:U),
+  x :< a -> y :< b -> (fst a b)!(:(x,y):) = x.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b x y H1 H2. unfold fst. rewrite SRF.Eval.
+  - apply CF2.Eval.
+  - apply CF2.IsFunctional.
+  - apply Charac2. split; assumption.
+Qed.
+
+(* The second projection sends (x,y) to y.                                      *)
+Proposition EvalSnd : forall (a b x y:U),
+  x :< a -> y :< b -> (snd a b)!(:(x,y):) = y.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b x y H1 H2. unfold snd. rewrite SRF.Eval.
+  - apply CF2.Eval.
+  - apply CF2.IsFunctional.
+  - apply Charac2. split; assumption.
 Qed.
 
 (* The product with the empty set on the left is empty.                         *)
