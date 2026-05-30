@@ -15,6 +15,7 @@ Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
+Module SSU := ZF.Set.Sum.
 
 (* The either map applies f on the left summand and g on the right.             *)
 Definition either (a b f g:U) : U :=
@@ -82,7 +83,6 @@ Proof.
     apply ZeroIsNotOne. assumption.
 Qed.
 
-(*
 (* Composing either with the left injection gives the left component.           *)
 Proposition ComposeL : forall (a b c f g:U),
   Fun f a c                           ->
@@ -98,12 +98,11 @@ Proof.
   - intros x H3.
     rewrite (Fun.ComposeEval (inL a b) (either a b f g) a (a :++: b) c x).
     4: assumption.
-    + replace ((inL a b)!x) with (:(:0:,x):).
-      * apply (EvalL a b c f g x); assumption.
-      * symmetry. apply Sum.EvalL. assumption.
+    + rewrite SSU.EvalL, (EvalL a b c); try assumption. reflexivity.
     + apply Sum.IsFunL.
     + apply IsFun; assumption.
 Qed.
+
 
 (* Composing either with the right injection gives the right component.         *)
 Proposition ComposeR : forall (a b c f g:U),
@@ -120,13 +119,11 @@ Proof.
   - intros y H3.
     rewrite (Fun.ComposeEval (inR a b) (either a b f g) b (a :++: b) c y).
     4: assumption.
-    + replace ((inR a b)!y) with (:(:1:,y):).
-      * apply (EvalR a b c f g x); assumption.
-      * symmetry. apply Sum.EvalR. assumption.
+    + rewrite SSU.EvalR, (EvalR a b c); try assumption. reflexivity.
     + apply Sum.IsFunR.
     + apply IsFun; assumption.
 Qed.
-*)
+
 (* The either map is a map from map(a,c) x map(b,c) to map(a ++ b,c).           *)
 Proposition IsFunMap : forall (a b c:U),
   Fun (eitherMap a b c) ((map a c) :x: (map b c)) (map (a :++: b) c).
@@ -137,3 +134,4 @@ Proof.
   - apply CharacMap. assumption.
   - apply CharacMap. assumption.
 Qed.
+
