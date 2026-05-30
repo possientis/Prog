@@ -1,4 +1,5 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
@@ -61,4 +62,54 @@ Proof.
   - apply Specify.Charac in H1. destruct H1 as [_ H1]. assumption.
   - apply Specify.Charac. split. 2: assumption.
     apply CharacMap. apply Bij.IsFun. assumption.
+Qed.
+
+(* The set of maps from a to b is included in the power set of a x b.           *)
+Proposition IsInclPower : forall (a b:U),
+  map a b :<=: :P(a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1. apply Specify.Charac in H1. apply H1.
+Qed.
+
+(* The set of surjections from a onto b is included in the set of maps.         *)
+Proposition IsInclOnto : forall (a b:U),
+  onto a b :<=: map a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1. apply Specify.Charac in H1. apply H1.
+Qed.
+
+(* The set of injections from a to b is included in the set of maps.            *)
+Proposition IsInclInj : forall (a b:U),
+  inj a b :<=: map a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1. apply Specify.Charac in H1. apply H1.
+Qed.
+
+(* The set of bijections from a to b is included in the set of maps.            *)
+Proposition IsInclBij : forall (a b:U),
+  bij a b :<=: map a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1. apply Specify.Charac in H1. apply H1.
+Qed.
+
+(* The set of bijections from a to b is included in the set of surjections.     *)
+Proposition IsInclBijOnto : forall (a b:U),
+  bij a b :<=: onto a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1.
+  apply CharacOnto. apply Bij.IsOnto. apply CharacBij. assumption.
+Qed.
+
+(* The set of bijections from a to b is included in the set of injections.      *)
+Proposition IsInclBijInj : forall (a b:U),
+  bij a b :<=: inj a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b f H1.
+  apply CharacInj. apply Bij.IsInj. apply CharacBij. assumption.
 Qed.
