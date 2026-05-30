@@ -45,6 +45,14 @@ Proof.
     apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* An injection remains an injection after enlarging the codomain.              *)
+Proposition InclCompatR : forall (f a b c:U),
+  b :<=: c -> Inj f a b -> Inj f a c.
+Proof.
+  intros f a b c H1 [H2 H3]. split. 1: assumption.
+  apply Incl.Tran with b; assumption.
+Qed.
+
 (* If f is an injection from a to b, then it is a function from a to b.         *)
 Proposition IsFun : forall (f a b:U), Inj f a b -> Fun f a b.
 Proof.

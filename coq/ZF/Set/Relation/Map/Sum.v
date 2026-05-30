@@ -8,7 +8,9 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
+Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Map.
+Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
@@ -81,6 +83,41 @@ Proof.
   - intros H4. apply Prod.Charac2 in H4. destruct H4 as [H4 H5].
     apply Single.Charac in H4. symmetry in H4.
     apply ZeroIsNotOne. assumption.
+Qed.
+
+(* The either of two identities maps the sum onto the union.                    *)
+Proposition IsOntoUnion : forall (a b:U),
+  Onto (either a b (id a) (id b)) (a :++: b) (a :\/: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b.
+  assert (Fun (id a) a (a :\/: b)) as H1. {
+    apply Fun.InclCompatR with a.
+    - apply Union2.IsInclL.
+    - apply Id.IsFun. }
+  assert (Fun (id b) b (a :\/: b)) as H2. {
+    apply Fun.InclCompatR with b.
+    - apply Union2.IsInclR.
+    - apply Id.IsFun. }
+  assert (Fun (either a b (id a) (id b)) (a :++: b) (a :\/: b)) as H3. {
+    apply IsFun; assumption. }
+  assert (range (either a b (id a) (id b)) = a :\/: b) as H4. {
+    apply Incl.Double. split.
+    - apply H3.
+    - intros y H5. apply Union2.Charac in H5. destruct H5 as [H5|H5].
+      + apply Fun.RangeCharac with (a :++: b) (a :\/: b). 1: assumption.
+        exists (:(:0:,y):). split.
+        * unfold sum. apply Union2.Charac. left.
+          apply Prod.Charac2. split. 2: assumption. apply Single.IsIn.
+        * rewrite (EvalL a b (a :\/: b)); try assumption.
+          apply Id.Eval. assumption.
+      + apply Fun.RangeCharac with (a :++: b) (a :\/: b). 1: assumption.
+        exists (:(:1:,y):). split.
+        * unfold sum. apply Union2.Charac. right.
+          apply Prod.Charac2. split. 2: assumption. apply Single.IsIn.
+        * rewrite (EvalR a b (a :\/: b)); try assumption.
+          apply Id.Eval. assumption. }
+  split. 1: apply H3. assumption.
 Qed.
 
 (* Composing either with the left injection gives the left component.           *)

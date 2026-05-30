@@ -43,6 +43,14 @@ Proof.
     2: assumption. apply Equiv.Sym, Range.ToClass.
 Qed.
 
+(* A function remains a function after enlarging the codomain.                  *)
+Proposition InclCompatR : forall (f a b c:U),
+  b :<=: c -> Fun f a b -> Fun f a c.
+Proof.
+  intros f a b c H1 [H2 H3]. split. 1: assumption.
+  apply Incl.Tran with b; assumption.
+Qed.
+
 (* A function f:a -> b that is injective on a is one-to-one.                    *)
 Proposition IsOneToOne : forall (f a b:U),
   Fun f a b                                             ->
