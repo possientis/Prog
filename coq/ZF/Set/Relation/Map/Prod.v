@@ -26,6 +26,19 @@ Proof.
   - apply Fun.IsInRange with c; assumption.
 Qed.
 
+(* Evaluating the fork gives the pair of the component values.                  *)
+Proposition Eval : forall (c a b f g x:U),
+  Fun f c a                          ->
+  Fun g c b                          ->
+  x :< c                             ->
+  (fork c f g)!x = :(f!x,g!x):.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros c a b f g x H1 H2 H3. unfold fork.
+  rewrite From.Eval. 2: assumption.
+  reflexivity.
+Qed.
+
 (* Composing the fork with the left projection gives the left component.        *)
 Proposition ComposeL : forall (c a b f g:U),
   Fun f c a                          ->
