@@ -28,7 +28,9 @@ Qed.
 
 (* Composing the fork with the left projection gives the left component.        *)
 Proposition ComposeL : forall (c a b f g:U),
-  Fun f c a -> Fun g c b -> (outL a b) :.: (fork c f g) = f.
+  Fun f c a                          ->
+  Fun g c b                          ->
+  (outL a b) :.: (fork c f g) = f.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros c a b f g H1 H2. apply Fun.Equal with c a c a.
@@ -46,6 +48,30 @@ Proof.
       * apply Fun.IsInRange with c; assumption.
     + apply IsFun; assumption.
     + apply Prod.IsFunL.
+Qed.
+
+(* Composing the fork with the right projection gives the right component.      *)
+Proposition ComposeR : forall (c a b f g:U),
+  Fun f c a                          ->
+  Fun g c b                          ->
+  (outR a b) :.: (fork c f g) = g.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros c a b f g H1 H2. apply Fun.Equal with c b c b.
+  2: assumption. 2: reflexivity.
+  - apply Fun.Compose with (a :x: b).
+    + apply IsFun; assumption.
+    + apply Prod.IsFunR.
+  - intros x H3.
+    rewrite (Fun.ComposeEval (fork c f g) (outR a b) c (a :x: b) b x).
+    4: assumption.
+    + unfold fork. rewrite From.Eval. 2: assumption.
+      rewrite Prod.EvalR.
+      * reflexivity.
+      * apply Fun.IsInRange with c; assumption.
+      * apply Fun.IsInRange with c; assumption.
+    + apply IsFun; assumption.
+    + apply Prod.IsFunR.
 Qed.
 
 (* The fork map is a map from map(c,a) x map(c,b) to map(c,a x b).              *)
