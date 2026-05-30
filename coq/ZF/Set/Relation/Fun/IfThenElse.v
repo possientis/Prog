@@ -3,11 +3,17 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Bijection.
+Require Import ZF.Set.Relation.BijectionOn.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.OneToOne.
+Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
@@ -17,10 +23,22 @@ Module CFI := ZF.Class.Relation.Fun.IfThenElse.
 Module SOR := ZF.Set.Relation.RestrictOfClass.
 
 (* The function defined on the set a by:                                        *)
-(* f(x) = f1 x if   A x                                                           *)
-(* f(x) = f2 x if ~ A X                                                         *)
+(* f(x) = f1 x if   A x                                                         *)
+(* f(x) = f2 x if ~ A x                                                         *)
 Definition ifThenElse (a:U)(A:Class)(f1 f2:U -> U) : U
   := (CFI.ifThenElse A f1 f2) :|: a.
+
+(* The two branches have all their values in the target set.                    *)
+Definition MapsTo (a b:U) (A:Class) (f1 f2:U -> U) : Prop :=
+  (forall x, x :< a ->   A x -> f1 x :< b)  /\
+  (forall x, x :< a -> ~ A x -> f2 x :< b).
+
+(* The two branch expressions separate arguments on the domain.                 *)
+Definition Injective (a:U) (A:Class) (f1 f2:U -> U) : Prop :=
+  (forall x y, x :< a -> y :< a ->   A x ->   A y -> f1 x = f1 y -> x = y)  /\
+  (forall x y, x :< a -> y :< a ->   A x -> ~ A y -> f1 x = f2 y -> x = y)  /\
+  (forall x y, x :< a -> y :< a -> ~ A x ->   A y -> f2 x = f1 y -> x = y)  /\
+  (forall x y, x :< a -> y :< a -> ~ A x -> ~ A y -> f2 x = f2 y -> x = y).
 
 Proposition Charac : forall (A:Class) (f1 f2:U -> U) (a x:U),
   x :< ifThenElse a A f1 f2 <-> exists y,
@@ -141,4 +159,71 @@ Proof.
   - apply IsFunctional.
   - rewrite DomainOf. assumption.
   - apply Satisfies2; assumption.
+Qed.
+
+(* If the branch values lie in b, the piecewise function maps a to b.           *)
+Proposition IsFun : forall (a b:U) (A:Class) (f1 f2:U -> U),
+  MapsTo a b A f1 f2 -> Fun (ifThenElse a A f1 f2) a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b A f1 f2 H1. destruct H1 as [H1 H2]. split. 1: apply IsFunctionOn.
+  (* Every value in the range is one of the two displayed branch values.        *)
+  intros y H3. apply Range.Charac in H3. destruct H3 as [x H3].
+  apply Charac2 in H3. destruct H3 as [[H3 [H4 H5]]|[H3 [H4 H5]]]; rewrite H3.
+  - apply H1; assumption.
+  - apply H2; assumption.
+Qed.
+
+(* If the branch expressions are injective on a, it is one-to-one.              *)
+Proposition IsOneToOne : forall (a:U) (A:Class) (f1 f2:U -> U),
+  Injective a A f1 f2 -> OneToOne (ifThenElse a A f1 f2).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a A f1 f2 H1. apply FunctionOn.IsOneToOne with a.
+  - apply IsFunctionOn.
+  - intros x y H2 H3 H4.
+    assert (A x \/ ~ A x) as H5. { apply LawExcludedMiddle. }
+    assert (A y \/ ~ A y) as H6. { apply LawExcludedMiddle. }
+    destruct H1 as [H1 [H7 [H8 H9]]].
+    destruct H5 as [H5|H5]; destruct H6 as [H6|H6].
+    + rewrite Eval1 in H4; try assumption. rewrite Eval1 in H4; try assumption.
+      apply H1; assumption.
+    + rewrite Eval1 in H4; try assumption. rewrite Eval2 in H4; try assumption.
+      apply H7; assumption.
+    + rewrite Eval2 in H4; try assumption. rewrite Eval1 in H4; try assumption.
+      apply H8; assumption.
+    + rewrite Eval2 in H4; try assumption. rewrite Eval2 in H4; try assumption.
+      apply H9; assumption.
+Qed.
+
+(* If the branch expressions are injective on a, it is a bijection.             *)
+Proposition IsBijection : forall (a:U) (A:Class) (f1 f2:U -> U),
+  Injective a A f1 f2 -> Bijection (ifThenElse a A f1 f2).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a A f1 f2 H1. split.
+  - apply IsRelation.
+  - apply IsOneToOne. assumption.
+Qed.
+
+(* If the branch expressions are injective on a, it is a bijection on a.        *)
+Proposition IsBijectionOn : forall (a:U) (A:Class) (f1 f2:U -> U),
+  Injective a A f1 f2 -> BijectionOn (ifThenElse a A f1 f2) a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a A f1 f2 H1. split.
+  - apply IsBijection. assumption.
+  - apply DomainOf.
+Qed.
+
+(* If the branch values lie in b and are injective, we get an injection a -> b. *)
+Proposition IsInj : forall (a b:U) (A:Class) (f1 f2:U -> U),
+  MapsTo a b A f1 f2                ->
+  Injective a A f1 f2               ->
+  Inj (ifThenElse a A f1 f2) a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b A f1 f2 H1 H2. split.
+  - apply IsBijectionOn. assumption.
+  - apply IsFun. assumption.
 Qed.

@@ -28,6 +28,22 @@ Module SRR := ZF.Set.Relation.RestrictOfClass.
 (* argument sets, we define the associated function with domain a x b.          *)
 Definition from2 (a b:U) (f:U -> U -> U) : U := (CF2.from2 f) :|: (a :x: b).
 
+(* The binary expression has all its values in the target set.                  *)
+Definition MapsTo (f:U -> U -> U) (a b c:U) : Prop :=
+  forall u v, u :< a -> v :< b -> f u v :< c.
+
+(* The binary expression separates pairs of arguments on the domain product.    *)
+Definition Injective (f:U -> U -> U) (a b:U) : Prop :=
+  forall u v u' v',
+    u  :< a -> v  :< b ->
+    u' :< a -> v' :< b ->
+    f u v = f u' v' -> :(u,v): = :(u',v'):.
+
+(* The binary expression displays every element of the target set.              *)
+Definition Surjective (f:U -> U -> U) (a b c:U) : Prop :=
+  forall w, w :< c -> exists u v, u :< a /\ v :< b /\ f u v = w.
+
+
 (* x belongs to from2 iff x = ((u,v), f u v) for some u in a and v in b.        *)
 Proposition Charac : forall (f:U -> U -> U) (a b x:U),
   x :< from2 a b f <-> exists u v, x = :(:(u,v):,f u v): /\ u :< a /\ v :< b.
@@ -151,21 +167,6 @@ Proof.
   assert (FunctionOn (from2 a b f) (a :x: b)) as H1. { apply IsFunctionOn. }
   apply H1.
 Qed.
-
-(* The binary expression has all its values in the target set.                  *)
-Definition MapsTo (f:U -> U -> U) (a b c:U) : Prop :=
-  forall u v, u :< a -> v :< b -> f u v :< c.
-
-(* The binary expression separates pairs of arguments on the domain product.    *)
-Definition Injective (f:U -> U -> U) (a b:U) : Prop :=
-  forall u v u' v',
-    u  :< a -> v  :< b ->
-    u' :< a -> v' :< b ->
-    f u v = f u' v' -> :(u,v): = :(u',v'):.
-
-(* The binary expression displays every element of the target set.              *)
-Definition Surjective (f:U -> U -> U) (a b c:U) : Prop :=
-  forall w, w :< c -> exists u v, u :< a /\ v :< b /\ f u v = w.
 
 (* If all values lie in c, then from2 defines a function a x b -> c.            *)
 Proposition IsFun : forall (f:U -> U -> U) (a b c:U),

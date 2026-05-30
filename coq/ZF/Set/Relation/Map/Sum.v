@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Natural.
@@ -6,10 +7,13 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Relation.Id.
+Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.
+Require Import ZF.Set.Relation.Map.Prod.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Single.
@@ -85,6 +89,118 @@ Proof.
     apply ZeroIsNotOne. assumption.
 Qed.
 
+(* Composing either with the left injection gives the left component.           *)
+Proposition ComposeL : forall (a b c f g:U),
+  Fun f a c                           ->
+  Fun g b c                           ->
+  (either a b f g) :.: (inL a b) = f.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g H1 H2. apply Fun.Equal with a c a c.
+  2: assumption. 2: reflexivity.
+  - apply Fun.Compose with (a :++: b).
+    + apply Sum.IsFunL.
+    + apply IsFun; assumption.
+  - intros x H3.
+    rewrite (Fun.ComposeEval (inL a b) (either a b f g) a (a :++: b) c x).
+    4: assumption.
+    + rewrite SSU.EvalL, (EvalL a b c); try assumption. reflexivity.
+    + apply Sum.IsFunL.
+    + apply IsFun; assumption.
+Qed.
+
+(* Composing either with the right injection gives the right component.         *)
+Proposition ComposeR : forall (a b c f g:U),
+  Fun f a c                           ->
+  Fun g b c                           ->
+  (either a b f g) :.: (inR a b) = g.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g H1 H2. apply Fun.Equal with b c b c.
+  2: assumption. 2: reflexivity.
+  - apply Fun.Compose with (a :++: b).
+    + apply Sum.IsFunR.
+    + apply IsFun; assumption.
+  - intros y H3.
+    rewrite (Fun.ComposeEval (inR a b) (either a b f g) b (a :++: b) c y).
+    4: assumption.
+    + rewrite SSU.EvalR, (EvalR a b c); try assumption. reflexivity.
+    + apply Sum.IsFunR.
+    + apply IsFun; assumption.
+Qed.
+
+(* If two injections have disjoint ranges, either is an injection from the sum. *)
+Proposition IsInj : forall (a b c f g:U),
+  Inj f a c                                      ->
+  Inj g b c                                      ->
+  (forall x y, x :< a -> y :< b -> f!x <> g!y)   ->
+  Inj (either a b f g) (a :++: b) c.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g H1 H2 H3.
+  remember (either a b f g) as h eqn:H4.
+  assert (Fun f a c) as H5. { apply Inj.IsFun. assumption. }
+  assert (Fun g b c) as H6. { apply Inj.IsFun. assumption. }
+  assert (Fun h (a :++: b) c) as H7. { rewrite H4. apply IsFun; assumption. }
+  (* Equal values determine the summand tag and then the original element.      *)
+  assert (forall z t, z :< a :++: b -> t :< a :++: b -> h!z = h!t -> z = t)
+    as H8. {
+    intros z t H8 H9 H10. rewrite H4 in H10.
+    apply Union2.Charac in H8. apply Union2.Charac in H9.
+    destruct H8 as [H8|H8]; destruct H9 as [H9|H9].
+    - apply Prod.Charac in H8. destruct H8 as [u [v [H8 [H11 H12]]]].
+      apply Prod.Charac in H9. destruct H9 as [r [s [H9 [H13 H14]]]].
+      subst z. subst t. apply Single.Charac in H11. apply Single.Charac in H13.
+      subst u. subst r.
+      rewrite (EvalL a b c) in H10; try assumption.
+      rewrite (EvalL a b c) in H10; try assumption.
+      assert (v = s) as H11. { apply (Inj.EvalInjective f a c); assumption. }
+      subst v. reflexivity.
+    - apply Prod.Charac in H8. destruct H8 as [u [v [H8 [H11 H12]]]].
+      apply Prod.Charac in H9. destruct H9 as [r [s [H9 [H13 H14]]]].
+      subst z. subst t. apply Single.Charac in H11. apply Single.Charac in H13.
+      subst u. subst r.
+      rewrite (EvalL a b c) in H10; try assumption.
+      rewrite (EvalR a b c) in H10; try assumption.
+      assert (f!v <> g!s) as H11. { apply H3; assumption. }
+      contradiction.
+    - apply Prod.Charac in H8. destruct H8 as [u [v [H8 [H11 H12]]]].
+      apply Prod.Charac in H9. destruct H9 as [r [s [H9 [H13 H14]]]].
+      subst z. subst t. apply Single.Charac in H11. apply Single.Charac in H13.
+      subst u. subst r.
+      rewrite (EvalR a b c) in H10; try assumption.
+      rewrite (EvalL a b c) in H10; try assumption.
+      assert (f!s <> g!v) as H11. { apply H3; assumption. }
+      symmetry in H10. contradiction.
+    - apply Prod.Charac in H8. destruct H8 as [u [v [H8 [H11 H12]]]].
+      apply Prod.Charac in H9. destruct H9 as [r [s [H9 [H13 H14]]]].
+      subst z. subst t. apply Single.Charac in H11. apply Single.Charac in H13.
+      subst u. subst r.
+      rewrite (EvalR a b c) in H10; try assumption.
+      rewrite (EvalR a b c) in H10; try assumption.
+      assert (v = s) as H11. { apply (Inj.EvalInjective g b c); assumption. }
+      subst v. reflexivity. }
+  (* Pointwise separation turns the function on the sum into an injection.      *)
+  split. 2: apply H7. split.
+  - split.
+    + apply H7.
+    + apply FunctionOn.IsOneToOne with (a :++: b).
+      1: apply H7.
+      assumption.
+  - apply H7.
+Qed.
+
+(* The either map is a map from map(a,c) x map(b,c) to map(a ++ b,c).           *)
+Proposition IsFunMap : forall (a b c:U),
+  Fun (eitherMap a b c) ((map a c) :x: (map b c)) (map (a :++: b) c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c. unfold eitherMap. apply From2.IsFun.
+  intros f g H1 H2. apply CharacMap. apply IsFun.
+  - apply CharacMap. assumption.
+  - apply CharacMap. assumption.
+Qed.
+
 (* The either of two identities maps the sum onto the union.                    *)
 Proposition Union : forall (a b:U),
   Onto (either a b (id a) (id b)) (a :++: b) (a :\/: b).
@@ -120,55 +236,62 @@ Proof.
   split. 1: apply H3. assumption.
 Qed.
 
-(* Composing either with the left injection gives the left component.           *)
-Proposition ComposeL : forall (a b c f g:U),
-  Fun f a c                           ->
-  Fun g b c                           ->
-  (either a b f g) :.: (inL a b) = f.
+(* If both summands have two elements, their sum injects into their product.    *)
+Proposition HasInj : forall (a b:U),
+  (exists x y, x :< a /\ y :< a /\ x <> y)  ->
+  (exists x y, x :< b /\ y :< b /\ x <> y)  ->
+  exists f, Inj f (a :++: b) (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c f g H1 H2. apply Fun.Equal with a c a c.
-  2: assumption. 2: reflexivity.
-  - apply Fun.Compose with (a :++: b).
-    + apply Sum.IsFunL.
-    + apply IsFun; assumption.
-  - intros x H3.
-    rewrite (Fun.ComposeEval (inL a b) (either a b f g) a (a :++: b) c x).
-    4: assumption.
-    + rewrite SSU.EvalL, (EvalL a b c); try assumption. reflexivity.
-    + apply Sum.IsFunL.
-    + apply IsFun; assumption.
+  intros a b [x1 [x2 [H1 [H2 H3]]]] [y1 [y2 [H4 [H5 H6]]]].
+  remember (fun y => y <> y1) as A eqn:H8.
+  remember (fun y => :(x1,y):) as g1 eqn:H9.
+  remember (fun y:U => :(x2,y2):) as g2 eqn:H10.
+  remember (From.from a (fun x => :(x,y1):)) as f eqn:H11.
+  remember (SFI.ifThenElse b A g1 g2) as g eqn:H12.
+  (* The left branch is the horizontal line at y1.                              *)
+  assert (Inj f a (a :x: b)) as H13. {
+    rewrite H11. apply From.IsInj.
+    - intros x H13. apply Prod.Charac2. split; assumption.
+    - intros x y H13 H14 H15. apply OrdPair.Equal in H15. apply H15. }
+  (* The right branch is a vertical line, except that y1 is moved aside.        *)
+  assert (SFI.Injective b A g1 g2) as H14. {
+    rewrite H8. rewrite H9. rewrite H10. split.
+    - intros y z H14 H15 H16 H17 H18. apply OrdPair.Equal in H18. apply H18.
+    - split.
+      + intros y z H14 H15 H16 H17 H18.
+        apply OrdPair.Equal in H18. destruct H18 as [H18 H19].
+        assert (x1 <> x2) as H20. { assumption. }
+        contradiction.
+      + split.
+        * intros y z H14 H15 H16 H17 H18.
+          apply OrdPair.Equal in H18. destruct H18 as [H18 H19].
+          assert (x2 <> x1) as H20. {
+            intros H20. symmetry in H20. contradiction. }
+          contradiction.
+        * intros y z H14 H15 H16 H17 H18.
+          assert (y = y1) as H19. {
+            apply DoubleNegation. intro H19. contradiction. }
+          assert (z = y1) as H20. {
+            apply DoubleNegation. intro H20. contradiction. }
+          subst. reflexivity. }
+  assert (Inj g b (a :x: b)) as H15. {
+    rewrite H12. apply SFI.IsInj.
+    - rewrite H8. rewrite H9. rewrite H10. split.
+      + intros y H15 H16. apply Prod.Charac2. split; assumption.
+      + intros y H15 H16. apply Prod.Charac2. split; assumption.
+    - apply H14. }
+  (* The horizontal and modified vertical branches have disjoint values.        *)
+  assert (forall x y, x :< a -> y :< b -> f!x <> g!y) as H16. {
+    intros x y H16 H17 H18. rewrite H11 in H18. rewrite H12 in H18.
+    rewrite From.Eval in H18. 2: assumption.
+    assert (A y \/ ~ A y) as H19. { apply LawExcludedMiddle. }
+    destruct H19 as [H19|H19].
+    - rewrite SFI.Eval1 in H18; try assumption.
+      rewrite H9 in H18. apply OrdPair.Equal in H18. destruct H18 as [H18 H20].
+      rewrite H8 in H19. symmetry in H20. contradiction.
+    - rewrite SFI.Eval2 in H18; try assumption.
+      rewrite H10 in H18. apply OrdPair.Equal in H18. destruct H18 as [H18 H20].
+      contradiction. }
+  exists (either a b f g). apply IsInj; assumption.
 Qed.
-
-
-(* Composing either with the right injection gives the right component.         *)
-Proposition ComposeR : forall (a b c f g:U),
-  Fun f a c                           ->
-  Fun g b c                           ->
-  (either a b f g) :.: (inR a b) = g.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c f g H1 H2. apply Fun.Equal with b c b c.
-  2: assumption. 2: reflexivity.
-  - apply Fun.Compose with (a :++: b).
-    + apply Sum.IsFunR.
-    + apply IsFun; assumption.
-  - intros y H3.
-    rewrite (Fun.ComposeEval (inR a b) (either a b f g) b (a :++: b) c y).
-    4: assumption.
-    + rewrite SSU.EvalR, (EvalR a b c); try assumption. reflexivity.
-    + apply Sum.IsFunR.
-    + apply IsFun; assumption.
-Qed.
-
-(* The either map is a map from map(a,c) x map(b,c) to map(a ++ b,c).           *)
-Proposition IsFunMap : forall (a b c:U),
-  Fun (eitherMap a b c) ((map a c) :x: (map b c)) (map (a :++: b) c).
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c. unfold eitherMap. apply From2.IsFun.
-  intros f g H1 H2. apply CharacMap. apply IsFun.
-  - apply CharacMap. assumption.
-  - apply CharacMap. assumption.
-Qed.
-
