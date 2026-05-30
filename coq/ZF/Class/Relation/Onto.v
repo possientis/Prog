@@ -250,8 +250,7 @@ Proof.
   intros F A B H1 H2 H3.
   assert (range F :~: :0:) as H4. {
     apply Equiv.Tran with B. 2: assumption. apply H1. }
-  revert H4. replace (range F :~: :0: -> False) with (range F :<>: :0:).
-  2: reflexivity. apply FunctionOn.RangeIsNotEmpty with A.
+  revert H4. apply FunctionOn.RangeIsNotEmpty with A.
   2: assumption. apply H1.
 Qed.
 
