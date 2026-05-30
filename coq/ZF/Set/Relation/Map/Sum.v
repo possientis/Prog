@@ -1,7 +1,10 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Compose.
+Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
@@ -10,7 +13,6 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
-Require Import ZF.Notation.Eval.
 
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 
@@ -43,6 +45,88 @@ Proof.
       destruct H4 as [H4|H4]. 2: assumption. contradiction.
 Qed.
 
+(* Evaluating either on the left summand gives the left value.                  *)
+Proposition EvalL : forall (a b c f g x:U),
+  Fun f a c                           ->
+  Fun g b c                           ->
+  x :< a                              ->
+  (either a b f g)!(:(:0:,x):) = f!x.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g x H1 H2 H3. unfold either. rewrite SFI.Eval1.
+  - rewrite Prod.EvalR. 1: reflexivity. 2: assumption.
+    apply Single.IsIn.
+  - unfold sum. apply Union2.Charac. left.
+    apply Prod.Charac2. split. 2: assumption.
+    apply Single.IsIn.
+  - apply Prod.Charac2. split. 2: assumption.
+    apply Single.IsIn.
+Qed.
+
+(* Evaluating either on the right summand gives the right value.                *)
+Proposition EvalR : forall (a b c f g y:U),
+  Fun f a c                           ->
+  Fun g b c                           ->
+  y :< b                              ->
+  (either a b f g)!(:(:1:,y):) = g!y.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g y H1 H2 H3. unfold either. rewrite SFI.Eval2.
+  - rewrite Prod.EvalR. 1: reflexivity. 2: assumption.
+    apply Single.IsIn.
+  - unfold sum. apply Union2.Charac. right.
+    apply Prod.Charac2. split. 2: assumption.
+    apply Single.IsIn.
+  - intros H4. apply Prod.Charac2 in H4. destruct H4 as [H4 H5].
+    apply Single.Charac in H4. symmetry in H4.
+    apply ZeroIsNotOne. assumption.
+Qed.
+
+(*
+(* Composing either with the left injection gives the left component.           *)
+Proposition ComposeL : forall (a b c f g:U),
+  Fun f a c                           ->
+  Fun g b c                           ->
+  (either a b f g) :.: (inL a b) = f.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g H1 H2. apply Fun.Equal with a c a c.
+  2: assumption. 2: reflexivity.
+  - apply Fun.Compose with (a :++: b).
+    + apply Sum.IsFunL.
+    + apply IsFun; assumption.
+  - intros x H3.
+    rewrite (Fun.ComposeEval (inL a b) (either a b f g) a (a :++: b) c x).
+    4: assumption.
+    + replace ((inL a b)!x) with (:(:0:,x):).
+      * apply (EvalL a b c f g x); assumption.
+      * symmetry. apply Sum.EvalL. assumption.
+    + apply Sum.IsFunL.
+    + apply IsFun; assumption.
+Qed.
+
+(* Composing either with the right injection gives the right component.         *)
+Proposition ComposeR : forall (a b c f g:U),
+  Fun f a c                           ->
+  Fun g b c                           ->
+  (either a b f g) :.: (inR a b) = g.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f g H1 H2. apply Fun.Equal with b c b c.
+  2: assumption. 2: reflexivity.
+  - apply Fun.Compose with (a :++: b).
+    + apply Sum.IsFunR.
+    + apply IsFun; assumption.
+  - intros y H3.
+    rewrite (Fun.ComposeEval (inR a b) (either a b f g) b (a :++: b) c y).
+    4: assumption.
+    + replace ((inR a b)!y) with (:(:1:,y):).
+      * apply (EvalR a b c f g x); assumption.
+      * symmetry. apply Sum.EvalR. assumption.
+    + apply Sum.IsFunR.
+    + apply IsFun; assumption.
+Qed.
+*)
 (* The either map is a map from map(a,c) x map(b,c) to map(a ++ b,c).           *)
 Proposition IsFunMap : forall (a b c:U),
   Fun (eitherMap a b c) ((map a c) :x: (map b c)) (map (a :++: b) c).
