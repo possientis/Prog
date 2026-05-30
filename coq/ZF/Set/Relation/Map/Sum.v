@@ -86,7 +86,7 @@ Proof.
 Qed.
 
 (* The either of two identities maps the sum onto the union.                    *)
-Proposition IsOntoUnion : forall (a b:U),
+Proposition Union : forall (a b:U),
   Onto (either a b (id a) (id b)) (a :++: b) (a :\/: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
