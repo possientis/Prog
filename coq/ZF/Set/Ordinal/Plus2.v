@@ -30,22 +30,22 @@ Require Import ZF.Notation.Eval.
 
 Module SOR := ZF.Set.Order.RestrictOfClass.
 
-(* Lexicographic order on sum a b.                                              *)
-Definition lex (a b:U) : U := Lex :/: (sum a b).
+(* Lexicographic order on a :++: b.                                             *)
+Definition lex (a b:U) : U := Lex :/: (a :++: b).
 
-(* The order induced by :< on the ordinal a + b.                                *)
+(* The order induced by :< on the ordinal a :+: b.                              *)
 Definition r (a b:U) : U := E (a :+: b).
 
-(* Helper class to define isomorphism from sum a b to a + b.                    *)
+(* Helper class to define isomorphism from a :++: b to a :+: b.                 *)
 (* F(0,c) = c     when c :< a                                                   *)
-(* F(1,c) = a + c when c :< b                                                   *)
+(* F(1,c) = a :+: c when c :< b                                                 *)
 Definition F (a b:U) : Class := fun x =>
   exists c,
     (x = :( :( :0: , c ): , c ):       /\ c :< a) \/
     (x = :( :( :1: , c ): , a :+: c ): /\ c :< b).
 
 (* Our isomorphism candidate.                                                   *)
-Definition f (a b:U) : U := {{ x :< (sum a b) :x: (a :+: b) | F a b }}.
+Definition f (a b:U) : U := {{ x :< (a :++: b) :x: (a :+: b) | F a b }}.
 
 Proposition FCharac2 : forall (a b x y:U),
   F a b :(x,y): <-> exists c,
@@ -242,7 +242,7 @@ Qed.
 
 (* The domain of f a b is the disjoint sum of a and b.                          *)
 Proposition DomainOf : forall (a b:U), Ordinal a -> Ordinal b ->
-  domain (f a b) = sum a b.
+  domain (f a b) = a :++: b.
 Proof.
   intros a b H1 H2. apply Incl.Double. split; intros x H3.
   - apply Domain.Charac in H3. destruct H3 as [y H3].
@@ -263,14 +263,14 @@ Qed.
 
 (* The set f a b is a bijection on the disjoint sum of a and b.                 *)
 Proposition IsBijectionOn : forall (a b:U), Ordinal a -> Ordinal b ->
-  BijectionOn (f a b) (sum a b).
+  BijectionOn (f a b) (a :++: b).
 Proof.
   intros a b H1 H2. split.
   - apply IsBijection; assumption.
   - apply DomainOf; assumption.
 Qed.
 
-(* The range of f a b is a + b.                                                 *)
+(* The range of f a b is a :+: b.                                               *)
 Proposition RangeOf : forall (a b:U), Ordinal a -> Ordinal b ->
   range (f a b) = a :+: b.
 Proof.
@@ -300,9 +300,9 @@ Proof.
       * split; reflexivity.
 Qed.
 
-(* f a b is a bijection from sum a b to a + b.                                  *)
+(* f a b is a bijection from a :++: b to a :+: b.                               *)
 Proposition IsBij : forall (a b:U), Ordinal a -> Ordinal b ->
-  Bij (f a b) (sum a b) (a :+: b).
+  Bij (f a b) (a :++: b) (a :+: b).
 Proof.
   intros a b H1 H2. split.
   - apply IsBijectionOn; assumption.
@@ -321,7 +321,7 @@ Proof.
     split. 1: assumption. split; reflexivity.
 Qed.
 
-(* The value of f a b at (1,c) is a+c, when c is in b.                          *)
+(* The value of f a b at (1,c) is a :+: c, when c is in b.                      *)
 Proposition Eval1 : forall (a b c:U), Ordinal a -> Ordinal b ->
   c :< b -> (f a b)!(:(:1:,c):) = a :+: c.
 Proof.
@@ -333,9 +333,9 @@ Proof.
     split. 1: assumption. split; reflexivity.
 Qed.
 
-(* f a b is an order isomorphism from sum a b to a + b.                         *)
+(* f a b is an order isomorphism from a :++: b to a :+: b.                      *)
 Proposition IsIsom : forall (a b:U), Ordinal a -> Ordinal b ->
-  Isom (f a b) (lex a b) (r a b) (sum a b) (a :+: b).
+  Isom (f a b) (lex a b) (r a b) (a :++: b) (a :+: b).
 Proof.
   intros a b H1 H2. split. 1: { apply IsBij; assumption. }
   intros x y H3 H4. apply Union2.Charac in H3. apply Union2.Charac in H4.
