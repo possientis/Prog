@@ -44,6 +44,7 @@ Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
@@ -64,6 +65,7 @@ Module CFF := ZF.Class.Relation.Fun.From.
 Module SOO := ZF.Set.Ordinal.Order.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
+Module SMS := ZF.Set.Relation.Map.Sum.
 
 Definition equiv (a b:U) : Prop := exists f, Bij f a b.
 
@@ -650,10 +652,17 @@ Proof.
 Qed.
 
 
+(* Equipotence is compatible with disjoint sums.                                *)
 Proposition SumCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :++: b :~: c :++: d.
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d [f H1] [g H2].
+  remember ((inL c d) :.: f) as f' eqn:H3.
+  remember ((inR c d) :.: g) as g' eqn:H4.
+  (* The induced either map is a bijection between the two disjoint sums.       *)
+  exists (either a b f' g'). apply (SMS.IsBij a b c d f g); assumption.
+Qed.
 
 Proposition SumCompatL : forall (a b c:U),
   a :~: b -> a :++: c :~: b :++: c.

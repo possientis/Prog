@@ -1,11 +1,13 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
@@ -188,6 +190,81 @@ Proof.
       1: apply H7.
       assumption.
   - apply H7.
+Qed.
+
+(* Bijections on the two summands induce a bijection between disjoint sums.     *)
+Proposition IsBij : forall (a b c d f g f' g':U),
+  Bij f a c                                         ->
+  Bij g b d                                         ->
+  f' = (inL c d) :.: f                              ->
+  g' = (inR c d) :.: g                              ->
+  Bij (either a b f' g') (a :++: b) (c :++: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d f g f' g' H1 H2 H3 H4.
+  remember (either a b f' g') as h eqn:H5.
+  (* The two branches inject into the left and right target summands.           *)
+  assert (Inj f' a (c :++: d)) as H6. {
+    rewrite H3. apply Inj.Compose with c.
+    - apply Bij.IsInj. assumption.
+    - apply SSU.IsInjL. }
+  assert (Inj g' b (c :++: d)) as H7. {
+    rewrite H4. apply Inj.Compose with d.
+    - apply Bij.IsInj. assumption.
+    - apply SSU.IsInjR. }
+  (* Distinct target tags make the two branch ranges disjoint.                  *)
+  assert (forall x y, x :< a -> y :< b -> f'!x <> g'!y) as H8. {
+    intros x y H8 H9 H10.
+    rewrite H3 in H10. rewrite H4 in H10.
+    rewrite (Inj.ComposeEval f (inL c d) a c (c :++: d) x) in H10.
+    2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjL. 2: assumption.
+    rewrite (Inj.ComposeEval g (inR c d) b d (c :++: d) y) in H10.
+    2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjR. 2: assumption.
+    assert (f!x :< c) as H11. { apply Bij.IsInRange with a; assumption. }
+    assert (g!y :< d) as H12. { apply Bij.IsInRange with b; assumption. }
+    rewrite SSU.EvalL in H10. 2: assumption.
+    rewrite SSU.EvalR in H10. 2: assumption.
+    apply OrdPair.Equal in H10. destruct H10 as [H10 _].
+    apply ZeroIsNotOne. assumption. }
+  (* Hence the either map is injective on the disjoint sum.                     *)
+  assert (Inj h (a :++: b) (c :++: d)) as H9. {
+    rewrite H5. apply IsInj; assumption. }
+  assert (Fun h (a :++: b) (c :++: d)) as H10. {
+    apply Inj.IsFun. assumption. }
+  (* Every tagged target value is hit by using the matching branch bijection.   *)
+  assert ((c :++: d) :<=: range h) as H11. {
+    intros z H11. unfold sum in H11. apply Union2.Charac in H11.
+    destruct H11 as [H11|H11].
+    - apply Prod.Charac in H11. destruct H11 as [u [v [H11 [H12 H13]]]].
+      apply Single.Charac in H12. subst u.
+      apply (Bij.RangeCharac f a c v) in H13. 2: assumption.
+      destruct H13 as [x [H13 H14]].
+      apply (Fun.RangeCharac h (a :++: b) (c :++: d)). 1: assumption.
+      exists (:(:0:,x):). split.
+      + unfold sum. apply Union2.Charac. left. apply Prod.Charac2.
+        split. 2: assumption. apply Single.IsIn.
+      + rewrite H5, (EvalL a b (c :++: d) f' g' x);
+        try apply Inj.IsFun; try assumption.
+        rewrite H3. rewrite (Inj.ComposeEval f (inL c d) a c (c :++: d) x).
+        2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjL. 2: assumption.
+        rewrite SSU.EvalL. 2: apply Bij.IsInRange with a; assumption.
+        rewrite H14. symmetry. apply H11.
+    - apply Prod.Charac in H11. destruct H11 as [u [v [H11 [H12 H13]]]].
+      apply Single.Charac in H12. subst u.
+      apply (Bij.RangeCharac g b d v) in H13. 2: assumption.
+      destruct H13 as [y [H13 H14]].
+      apply (Fun.RangeCharac h (a :++: b) (c :++: d)). 1: assumption.
+      exists (:(:1:,y):). split.
+      + unfold sum. apply Union2.Charac. right. apply Prod.Charac2.
+        split. 2: assumption. apply Single.IsIn.
+      + rewrite H5, (EvalR a b (c :++: d) f' g' y);
+        try apply Inj.IsFun; try assumption.
+        rewrite H4. rewrite (Inj.ComposeEval g (inR c d) b d (c :++: d) y).
+        2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjR. 2: assumption.
+        rewrite SSU.EvalR. 2: apply Bij.IsInRange with b; assumption.
+        rewrite H14. symmetry. apply H11. }
+  apply Bij.FromFun. 1: assumption. 2: assumption.
+  apply H9.
 Qed.
 
 (* The either map is a map from map(a,c) x map(b,c) to map(a ++ b,c).           *)
