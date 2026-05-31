@@ -143,6 +143,16 @@ Proof.
   exfalso. apply H2. exists x. apply H3.
 Qed.
 
+(* A set with non-empty cardinal is well-orderable.                             *)
+Proposition WellOrderableNotZero : forall (a:U), card a <> :0: ->
+  WellOrderable a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* Its cardinal is an ordinal representative equipotent to the set.           *)
+  exists (card a). split. 1: apply IsOrdinal. apply IsEquivNotZero. assumption.
+Qed.
+
 Proposition Charac : forall (a:U),
   Cardinal a  <-> Ordinal a /\
     forall b, Ordinal b -> a :~: b -> a :<=: b.
@@ -736,11 +746,47 @@ Proof.
   apply WhenOnto with f; assumption.
 Qed.
 
+(* If a and b each have at least two elements, card(a ++ b) <= card(a x b).     *)
+Proposition SumProd : forall (a b:U),
+  :1: :< card a                         ->
+  :1: :< card b                         ->
+  card (a :++: b) :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* A non-zero cardinal makes each set equipotent to its cardinal.             *)
+  assert (card a <> :0:) as H3. {
+    intros H3. rewrite H3 in H1. apply Empty.Charac in H1. contradiction. }
+  assert (card b <> :0:) as H4. {
+    intros H4. rewrite H4 in H2. apply Empty.Charac in H2. contradiction. }
+  assert (WellOrderable a) as H5. { apply WellOrderableNotZero. assumption. }
+  assert (WellOrderable b) as H6. { apply WellOrderableNotZero. assumption. }
+  (* The product is well-orderable, so an injection into it gives a bound.      *)
+  assert (WellOrderable (a :x: b)) as H7. {
+    apply SCE.WellOrderableProd; assumption. }
+  assert (exists f, Inj f (a :++: b) (a :x: b)) as H8. {
+    apply SMS.HasInj; apply HasTwoElems; assumption. }
+  destruct H8 as [f H8].
+  apply WhenInjGen with f; assumption.
+Qed.
+
 (* If a and b each have at least two elements, card(a \/ b) <= card(a x b).     *)
 Proposition UnionProd : forall (a b:U),
-  Choice                                ->
   :1: :< card a                         ->
   :1: :< card b                         ->
   card (a :\/: b) :<=: card (a :x: b).
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* The hypotheses make both sets well-orderable, without global choice.       *)
+  assert (card a <> :0:) as H3. {
+    intros H3. rewrite H3 in H1. apply Empty.Charac in H1. contradiction. }
+  assert (card b <> :0:) as H4. {
+    intros H4. rewrite H4 in H2. apply Empty.Charac in H2. contradiction. }
+  assert (WellOrderable a) as H5. { apply WellOrderableNotZero. assumption. }
+  assert (WellOrderable b) as H6. { apply WellOrderableNotZero. assumption. }
+  (* The union is bounded by the sum, and the sum by the product.               *)
+  apply Incl.Tran with (card (a :++: b)).
+  - apply UnionSumGen; assumption.
+  - apply SumProd; assumption.
+Qed.
