@@ -704,7 +704,10 @@ Proof.
 Qed.
 
 (* If a and b each have at least two elements, card(a \/ b) <= card(a x b).     *)
-Proposition UnionProd : forall (a b:U), Choice ->
-  :1: :< card a -> :1: :< card b -> card (a :\/: b) :<=: card (a :x: b).
+Proposition UnionProd : forall (a b:U),
+  Choice                                ->
+  :1: :< card a                         ->
+  :1: :< card b                         ->
+  card (a :\/: b) :<=: card (a :x: b).
 Proof.
 Admitted.
