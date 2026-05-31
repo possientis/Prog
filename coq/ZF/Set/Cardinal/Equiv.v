@@ -632,10 +632,22 @@ Proof.
   exact (ProdCompat c a c b (Refl c) H).
 Qed.
 
+(* The cartesian product of two well-orderable sets is well-orderable.          *)
 Proposition WellOrderableProd : forall (a b:U),
   WellOrderable a -> WellOrderable b -> WellOrderable (a :x: b).
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b [c [H1 H2]] [d [H3 H4]].
+  (* Replace both factors by ordinals, preserving the cartesian product.        *)
+  assert (a :x: b :~: c :x: d) as H5. { apply ProdCompat; assumption. }
+  (* The ordinal product orders d x c as the ordinal d*c.                       *)
+  assert (c :x: d :~: d :*: c) as H6. {
+    exists (Mult2.f d c). apply Mult2.IsBij; assumption. }
+  (* Transporting the bijections gives an ordinal representative.               *)
+  exists (d :*: c). split.
+  - apply Mult.IsOrdinal; assumption.
+  - apply Tran with (c :x: d); assumption.
+Qed.
 
 
 Proposition SumCompat : forall (a b c d:U),
