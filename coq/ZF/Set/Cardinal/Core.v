@@ -25,14 +25,17 @@ Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Fun.IfThenElse2.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
+Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Specify.
+Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
@@ -51,7 +54,8 @@ Module SRN := ZF.Set.Relation.Function.
 Module SRO := ZF.Set.Relation.Onto.
 Module SRR := ZF.Set.Relation.Range.
 Module SRS := ZF.Set.Relation.Restrict.
-Module SFI2 := ZF.Set.Relation.Fun.IfThenElse2.
+Module SF2 := ZF.Set.Relation.Fun.IfThenElse2.
+Module SMS := ZF.Set.Relation.Map.Sum.
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
@@ -701,6 +705,19 @@ Proof.
   assert (card (SRD.domain (F:|:a)) :<=: card a) as H6. {
     apply InclCompat; assumption. }
   rewrite <- H3. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
+Qed.
+
+(* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
+Proposition UnionSum : forall (a b:U), Choice ->
+  card (a :\/: b) :<=: card (a :++: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC.
+  remember (either a b (id a) (id b)) as f eqn:H1.
+  (* The either map from the disjoint sum onto the ordinary union is onto.      *)
+  assert (Onto f (a :++: b) (a :\/: b)) as H2. { rewrite H1. apply SMS.HasOnto. }
+  (* A surjection bounds the cardinal of its codomain by that of its domain.    *)
+  apply WhenOnto with f; assumption.
 Qed.
 
 (* If a and b each have at least two elements, card(a \/ b) <= card(a x b).     *)
