@@ -302,6 +302,32 @@ Proof.
   rewrite H8, H9. apply Incl.Tran with c; assumption.
 Qed.
 
+(* An ordinal is below a cardinal iff its cardinal is below that cardinal.      *)
+Proposition CardLess : forall (a b:U),
+  Ordinal a  ->
+  Cardinal b ->
+  card a :< b <-> a :< b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* A cardinal is an ordinal, so a and b are comparable by membership.         *)
+  assert (Ordinal b) as H3. { apply CardIsOrd. assumption. }
+  split; intros H4.
+  - assert (a :< b \/ b :<=: a) as H5. { apply SOC.ElemOrIncl; assumption. }
+    destruct H5 as [H5|H5]. 1: assumption.
+    (* If b were included in a, then the cardinal b would be below card(a).     *)
+    assert (WellOrderable a) as H6. { apply SCE.WellOrderableOrd. assumption. }
+    assert (card b :<=: card a) as H7. { apply InclCompatGen; assumption. }
+    assert (b = card b) as H8. { apply WhenCardinal. assumption. }
+    rewrite <- H8 in H7.
+    assert (card a :< card a) as H9. { apply H7. assumption. }
+    exfalso. revert H9. apply Foundation.NoLoop1.
+  - (* Since card(a) is included in a, membership of a in b carries card(a).    *)
+    apply SOC.InclElemTran with a; try assumption.
+    + apply IsOrdinal.
+    + apply IsIncl. assumption.
+Qed.
+
 (* Assuming choice, inclusion implies inequality of cardinals.                  *)
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.

@@ -81,6 +81,16 @@ Proof.
   intros a. exists (id a). apply Id.IsBij.
 Qed.
 
+(* Every ordinal is well-orderable.                                             *)
+Proposition WellOrderableOrd : forall (a:U),
+  Ordinal a -> WellOrderable a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* The ordinal itself is an ordinal representative of its cardinality.        *)
+  exists a. split. 1: assumption. apply Refl.
+Qed.
+
 (* Equipotence is symmetric.                                                    *)
 Proposition Sym : forall (a b:U), a :~: b -> b :~: a.
 Proof.
