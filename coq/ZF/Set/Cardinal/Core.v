@@ -707,10 +707,21 @@ Proof.
   rewrite <- H3. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
 Qed.
 
+(* For well-orderable sets, a union is bounded by the disjoint sum.             *)
 Proposition UnionSumGen : forall (a b:U), WellOrderable a -> WellOrderable b ->
   card (a :\/: b) :<=: card (a :++: b).
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* The disjoint sum of the two sets is again well-orderable.                  *)
+  assert (WellOrderable (a :++: b)) as H3. {
+    apply SCE.WellOrderableSum; assumption. }
+  remember (either a b (id a) (id b)) as f eqn:H4.
+  (* The either map from the disjoint sum onto the ordinary union is onto.      *)
+  assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply SMS.HasOnto. }
+  (* A surjection from a well-orderable domain bounds its range cardinal.       *)
+  apply WhenOntoGen with f; assumption.
+Qed.
 
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
 Proposition UnionSum : forall (a b:U), Choice ->
