@@ -563,7 +563,7 @@ Proof.
 Qed.
 
 
-(* Equipotence is compatible with cartesian products.                           *)
+(* Cartesian product is compatible with equipotence.                            *)
 Proposition ProdCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
 Proof.
@@ -614,7 +614,7 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
-(* Equipotence is left-compatible with cartesian product.                       *)
+(* Taking product with a fixed right factor preserves equipotence.              *)
 Proposition ProdCompatL : forall (a b c:U),
   a :~: b -> a :x: c :~: b :x: c.
 Proof.
@@ -624,7 +624,7 @@ Proof.
   exact (ProdCompat a c b c H (Refl c)).
 Qed.
 
-(* Equipotence is right-compatible with cartesian product.                      *)
+(* Taking product with a fixed left factor preserves equipotence.               *)
 Proposition ProdCompatR : forall (a b c:U),
   a :~: b -> c :x: a :~: c :x: b.
 Proof.
@@ -652,7 +652,7 @@ Proof.
 Qed.
 
 
-(* Equipotence is compatible with disjoint sums.                                *)
+(* Disjoint sum is compatible with equipotence.                                 *)
 Proposition SumCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :++: b :~: c :++: d.
 Proof.
@@ -664,7 +664,7 @@ Proof.
   exists (either a b f' g'). apply (SMS.IsBij a b c d f g); assumption.
 Qed.
 
-(* Equipotence is left-compatible with disjoint sums.                            *)
+(* Adding a fixed right summand preserves equipotence.                          *)
 Proposition SumCompatL : forall (a b c:U),
   a :~: b -> a :++: c :~: b :++: c.
 Proof.
@@ -674,7 +674,7 @@ Proof.
   apply SumCompat. 1: assumption. apply Refl.
 Qed.
 
-(* Equipotence is right-compatible with disjoint sums.                           *)
+(* Adding a fixed left summand preserves equipotence.                           *)
 Proposition SumCompatR : forall (a b c:U),
   a :~: b -> c :++: a :~: c :++: b.
 Proof.
@@ -684,7 +684,7 @@ Proof.
   apply SumCompat. 2: assumption. apply Refl.
 Qed.
 
-(* The disjoint sum of two well-orderable sets is well-orderable.                *)
+(* The disjoint sum of two well-orderable sets is well-orderable.               *)
 Proposition WellOrderableSum : forall (a b:U),
   WellOrderable a -> WellOrderable b -> WellOrderable (a :++: b).
 Proof.
@@ -702,7 +702,7 @@ Proof.
 Qed.
 
 
-(* Equipotence is compatible with the successor operation.                      *)
+(* The successor operation is compatible with equipotence.                      *)
 Proposition SuccCompat : forall (a b:U),
   a :~: b ->  succ a :~: succ b.
 Proof.
