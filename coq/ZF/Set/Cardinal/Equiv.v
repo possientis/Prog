@@ -664,20 +664,42 @@ Proof.
   exists (either a b f' g'). apply (SMS.IsBij a b c d f g); assumption.
 Qed.
 
+(* Equipotence is left-compatible with disjoint sums.                            *)
 Proposition SumCompatL : forall (a b c:U),
   a :~: b -> a :++: c :~: b :++: c.
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1.
+  (* Keep the right summand fixed and use the identity bijection there.         *)
+  apply SumCompat. 1: assumption. apply Refl.
+Qed.
 
+(* Equipotence is right-compatible with disjoint sums.                           *)
 Proposition SumCompatR : forall (a b c:U),
   a :~: b -> c :++: a :~: c :++: b.
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1.
+  (* Keep the left summand fixed and use the identity bijection there.          *)
+  apply SumCompat. 2: assumption. apply Refl.
+Qed.
 
+(* The disjoint sum of two well-orderable sets is well-orderable.                *)
 Proposition WellOrderableSum : forall (a b:U),
   WellOrderable a -> WellOrderable b -> WellOrderable (a :++: b).
 Proof.
-Admitted.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b [c [H1 H2]] [d [H3 H4]].
+  (* Replace both summands by ordinals, preserving the disjoint sum.            *)
+  assert (a :++: b :~: c :++: d) as H5. { apply SumCompat; assumption. }
+  (* The ordinal sum orders c ++ d as the ordinal c+d.                          *)
+  assert (c :++: d :~: c :+: d) as H6. {
+    exists (Plus2.f c d). apply Plus2.IsBij; assumption. }
+  (* Transporting the bijections gives an ordinal representative.               *)
+  exists (c :+: d). split.
+  - apply Plus.IsOrdinal; assumption.
+  - apply Tran with (c :++: d); assumption.
+Qed.
 
 
 (* Equipotence is compatible with the successor operation.                      *)
