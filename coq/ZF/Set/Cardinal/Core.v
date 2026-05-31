@@ -707,6 +707,11 @@ Proof.
   rewrite <- H3. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
 Qed.
 
+Proposition UnionSumGen : forall (a b:U), WellOrderable a -> WellOrderable b ->
+  card (a :\/: b) :<=: card (a :++: b).
+Proof.
+Admitted.
+
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
 Proposition UnionSum : forall (a b:U), Choice ->
   card (a :\/: b) :<=: card (a :++: b).

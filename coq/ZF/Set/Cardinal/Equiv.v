@@ -560,6 +560,7 @@ Proof.
   apply Sym. assumption.
 Qed.
 
+
 (* Equipotence is compatible with cartesian products.                           *)
 Proposition ProdCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
@@ -630,6 +631,33 @@ Proof.
   intros a b c H.
   exact (ProdCompat c a c b (Refl c) H).
 Qed.
+
+Proposition WellOrderableProd : forall (a b:U),
+  WellOrderable a -> WellOrderable b -> WellOrderable (a :x: b).
+Proof.
+Admitted.
+
+
+Proposition SumCompat : forall (a b c d:U),
+  a :~: c -> b :~: d -> a :++: b :~: c :++: d.
+Proof.
+Admitted.
+
+Proposition SumCompatL : forall (a b c:U),
+  a :~: b -> a :++: c :~: b :++: c.
+Proof.
+Admitted.
+
+Proposition SumCompatR : forall (a b c:U),
+  a :~: b -> c :++: a :~: c :++: b.
+Proof.
+Admitted.
+
+Proposition WellOrderableSum : forall (a b:U),
+  WellOrderable a -> WellOrderable b -> WellOrderable (a :++: b).
+Proof.
+Admitted.
+
 
 (* Equipotence is compatible with the successor operation.                      *)
 Proposition SuccCompat : forall (a b:U),
@@ -807,6 +835,15 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
+Proposition WellOrderableSucc : forall (a:U),
+  WellOrderable a -> WellOrderable (succ a).
+Proof.
+  intros a [b [H1 H2]].
+  assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
+  assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
+  exists (succ b). split; assumption.
+Qed.
+
 (* If a and b are disjoint, a ~ c and b ~ d, then a \/ b ~ c + d.               *)
 Proposition DisjointUnion : forall (a b c d:U),
   Ordinal c               ->
@@ -912,6 +949,51 @@ Proof.
   - apply Plus2.IsBij; assumption.
 Qed.
 
+(* If a is an ordinal with N <= a, then a is equipotent to its successor.       *)
+Proposition Succ : forall (a:U), Ordinal a ->
+  :N :<=: a -> a :~: succ a.
+Proof.
+  (* Proof by Claude + sonnet 4.6                                               *)
+  (* succ(a) = a \/ {a} = {a} \/ a ~ 1 + a = a, so a ~ succ(a) by symmetry.     *)
+  intros a Ha HN. apply Sym. unfold succ. rewrite Union2.Comm.
+  (* {a} and a are disjoint: a in a would contradict the axiom of foundation.   *)
+  assert (:{a}: :/\: a = :0:) as Hdisj. {
+    apply Incl.Double. split. 2: apply Empty.IsIncl.
+    intros x Hx. apply Inter2.Charac in Hx. destruct Hx as [Hxa Ha'].
+    apply Single.Charac in Hxa. subst x. exfalso.
+    revert Ha'. apply Foundation.NoLoop1. }
+  apply Tran with (:1: :+: a).
+  (* {a} \/ a ~ 1 + a via DisjointUnion, using {a} ~ 1 and a ~ a.               *)
+  - apply DisjointUnion.
+    + apply Natural.OneIsOrdinal.
+    + exact Ha.
+    + apply WhenSingle.
+    + apply Refl.
+    + exact Hdisj.
+  (* 1 + a = a since 1 in N and N <= a, so the result follows.                  *)
+  - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
+Qed.
+
+Proposition WellOrderableSuccRev : forall (a:U),
+  WellOrderable (succ a) -> WellOrderable a.
+Proof.
+  intros a [c [H1 H2]].
+  assert (c = :0: \/ Successor c \/ Limit c) as [H3|[H3|H3]]. {
+    apply Limit.ThreeWay. assumption. }
+  - exfalso. subst.
+    assert (succ a = :0:) as H4. { apply WhenZero. assumption. }
+    revert H4. apply Succ.NotZero.
+  - destruct H3 as [b [H5 H4]]. subst.
+    assert (a :~: b) as H6. { apply SuccCompatRev. assumption. }
+    exists b. split; assumption.
+  - assert (Ordinal c) as H4. { apply H3. }
+    assert (:N :<=: c) as H5. { apply Omega.IsInclLimit. assumption. }
+    assert (c :~: succ c) as H6. { apply Succ; assumption. }
+    assert (succ a :~: succ c) as H7. { apply Tran with c; assumption. }
+    assert (a :~: c) as H8. { apply SuccCompatRev. assumption. }
+    exists c. split; assumption.
+Qed.
+
 (* The cartesian product is commutative up to equipotence.                      *)
 Proposition ProdComm : forall (a b:U),
   a :x: b :~: b :x: a.
@@ -962,60 +1044,6 @@ Proof.
   intros a b. apply Tran with (:{b}: :x: a).
   - apply ProdComm.
   - apply ProdSingleL.
-Qed.
-
-(* If a is an ordinal with N <= a, then a is equipotent to its successor.       *)
-Proposition Succ : forall (a:U), Ordinal a ->
-  :N :<=: a -> a :~: succ a.
-Proof.
-  (* Proof by Claude + sonnet 4.6                                               *)
-  (* succ(a) = a \/ {a} = {a} \/ a ~ 1 + a = a, so a ~ succ(a) by symmetry.     *)
-  intros a Ha HN. apply Sym. unfold succ. rewrite Union2.Comm.
-  (* {a} and a are disjoint: a in a would contradict the axiom of foundation.   *)
-  assert (:{a}: :/\: a = :0:) as Hdisj. {
-    apply Incl.Double. split. 2: apply Empty.IsIncl.
-    intros x Hx. apply Inter2.Charac in Hx. destruct Hx as [Hxa Ha'].
-    apply Single.Charac in Hxa. subst x. exfalso.
-    revert Ha'. apply Foundation.NoLoop1. }
-  apply Tran with (:1: :+: a).
-  (* {a} \/ a ~ 1 + a via DisjointUnion, using {a} ~ 1 and a ~ a.               *)
-  - apply DisjointUnion.
-    + apply Natural.OneIsOrdinal.
-    + exact Ha.
-    + apply WhenSingle.
-    + apply Refl.
-    + exact Hdisj.
-  (* 1 + a = a since 1 in N and N <= a, so the result follows.                  *)
-  - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
-Qed.
-
-Proposition WellOrderableSucc : forall (a:U),
-  WellOrderable a -> WellOrderable (succ a).
-Proof.
-  intros a [b [H1 H2]].
-  assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
-  assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
-  exists (succ b). split; assumption.
-Qed.
-
-Proposition WellOrderableSuccRev : forall (a:U),
-  WellOrderable (succ a) -> WellOrderable a.
-Proof.
-  intros a [c [H1 H2]].
-  assert (c = :0: \/ Successor c \/ Limit c) as [H3|[H3|H3]]. {
-    apply Limit.ThreeWay. assumption. }
-  - exfalso. subst.
-    assert (succ a = :0:) as H4. { apply WhenZero. assumption. }
-    revert H4. apply Succ.NotZero.
-  - destruct H3 as [b [H5 H4]]. subst.
-    assert (a :~: b) as H6. { apply SuccCompatRev. assumption. }
-    exists b. split; assumption.
-  - assert (Ordinal c) as H4. { apply H3. }
-    assert (:N :<=: c) as H5. { apply Omega.IsInclLimit. assumption. }
-    assert (c :~: succ c) as H6. { apply Succ; assumption. }
-    assert (succ a :~: succ c) as H7. { apply Tran with c; assumption. }
-    assert (a :~: c) as H8. { apply SuccCompatRev. assumption. }
-    exists c. split; assumption.
 Qed.
 
 (* Any ordinal a containing N is equipotent to a + n for every natural n.       *)
