@@ -35,6 +35,7 @@ Proof.
   apply H6, H2; assumption.
 Qed.
 
+(* Principle of transfinite induction.                                          *)
 Proposition Induction : forall (A:Class),
   (forall a, On a -> (forall x, x :< a -> A x) -> A a) ->
    forall a, On a -> A a.

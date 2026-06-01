@@ -42,6 +42,7 @@ Definition OnZero : Class := fun x => exists y z,
 Definition Exp (a:U) : Class := fun x =>
   (a = :0: /\ OnZero x) \/ (a <> :0: /\ Exp' a x).
 
+(* Characterization of OnZero at an ordered pair.                               *)
 Proposition OnZeroCharac2 : forall (x y:U),
   OnZero :(x,y): <-> On x /\ ((x = :0: /\ y = :1:) \/ (:0: :< x /\ y = :0:)).
 Proof.
@@ -56,6 +57,7 @@ Proof.
       right. split. 1: assumption. reflexivity.
 Qed.
 
+(* When a = 0, Exp a at a pair coincides with OnZero.                           *)
 Proposition WhenZeroCharac2 : forall (a y z:U), a = :0: ->
   Exp a :(y,z): <-> OnZero :(y, z):.
 Proof.
@@ -64,6 +66,7 @@ Proof.
   - left. split; assumption.
 Qed.
 
+(* When a is nonzero, Exp a at a pair coincides with Exp' a.                    *)
 Proposition WhenNotZeroCharac2 : forall (a y z:U), a <> :0: ->
   Exp a :(y,z): <-> Exp' a :(y,z):.
 Proof.
@@ -72,6 +75,7 @@ Proof.
   - right. split; assumption.
 Qed.
 
+(* When a = 0, the function class Exp a is equivalent to OnZero.                *)
 Proposition WhenZeroL : forall (a:U),
   a = :0: -> Exp a :~: OnZero.
 Proof.
@@ -80,6 +84,7 @@ Proof.
   - left. split; assumption.
 Qed.
 
+(* When a is nonzero, the function class Exp a is equivalent to Exp' a.         *)
 Proposition WhenNotZeroL : forall (a:U),
   a <> :0: -> Exp a :~: Exp' a.
 Proof.
@@ -88,11 +93,13 @@ Proof.
   - right. split; assumption.
 Qed.
 
+(* Exp' a is a function class defined on the class of ordinals.                 *)
 Proposition IsFunctionOn' : forall (a:U), CFO.FunctionOn (Exp' a) On.
 Proof.
   intros a. apply Recursion2.IsFunctionOn.
 Qed.
 
+(* Exp a is a relation.                                                         *)
 Proposition IsRelation : forall (a:U), Relation (Exp a).
 Proof.
   intros a x [[H1 H2]|[H1 H2]].
@@ -101,6 +108,7 @@ Proof.
     apply H3. assumption.
 Qed.
 
+(* OnZero is a functional relation.                                             *)
 Proposition OnZeroIsFunctional : Functional OnZero.
 Proof.
   intros x y1 y2 H1 H2.
@@ -112,6 +120,7 @@ Proof.
   - apply Empty.Charac in H3. contradiction.
 Qed.
 
+(* Exp a is a functional relation.                                              *)
 Proposition IsFunctional : forall (a:U), Functional (Exp a).
 Proof.
   intros a x y1 y2 H1 H2.
@@ -126,6 +135,7 @@ Proof.
     apply H5 with x; assumption.
 Qed.
 
+(* Exp a is a function.                                                         *)
 Proposition IsFunction : forall (a:U), Function (Exp a).
 Proof.
   intros a. split.
@@ -133,6 +143,7 @@ Proof.
   - apply IsFunctional.
 Qed.
 
+(* The domain of Exp a is the class of all ordinals.                            *)
 Proposition DomainOf : forall (a:U), domain (Exp a) :~: On.
 Proof.
   intros a.
@@ -157,6 +168,7 @@ Proof.
       apply WhenNotZeroCharac2; assumption.
 Qed.
 
+(* Exp a is a function class defined on the class of ordinals.                  *)
 Proposition IsFunctionOn : forall (a:U), CFO.FunctionOn (Exp a) On.
 Proof.
   intros a. split.
@@ -164,6 +176,7 @@ Proof.
   - apply DomainOf.
 Qed.
 
+(* a ^ 0 = 1 for every ordinal a.                                               *)
 Proposition WhenZero : forall (a:U), (Exp a)!:0: = :1:.
 Proof.
   intros a.
@@ -184,6 +197,7 @@ Proof.
     apply Recursion2.WhenZero.
 Qed.
 
+(* a ^ (succ b) = a ^ b * a for every ordinal b.                                *)
 Proposition WhenSucc : forall (a b:U), On b ->
   (Exp a)!(succ b) = (Exp a)!b :*: a.
 Proof.
@@ -208,6 +222,7 @@ Proof.
     apply Recursion2.WhenSucc. assumption.
 Qed.
 
+(* 0 ^ b = 0 when b is a limit ordinal.                                         *)
 Proposition WhenLimitZero : forall (a b:U), Limit b ->
   a = :0: -> (Exp a)!b = :0:.
 Proof.
@@ -224,6 +239,7 @@ Proof.
     + right. split. 2: reflexivity. apply Limit.HasZero. assumption.
 Qed.
 
+(* a ^ b = \/_{c :< b} a ^ c when a is nonzero and b is a limit ordinal.        *)
 Proposition WhenLimit : forall (a b:U), Limit b ->
   a <> :0: -> (Exp a)!b = :\/:_{b} (Exp a).
 Proof.

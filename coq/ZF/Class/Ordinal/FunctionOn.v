@@ -36,6 +36,7 @@ Module SRF := ZF.Class.Relation.Function.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRO := ZF.Set.Relation.OneToOne.
 
+(* An ordinal function choosing fresh values from A implies A is a proper class.*)
 Proposition WhenFreshValue : forall (F A:Class),
   CFO.FunctionOn F On                             ->
   (forall a, On a -> (A :\: F:[a]:) F!a)          ->
@@ -70,6 +71,7 @@ Proof.
   split. 1: assumption. split; assumption.
 Qed.
 
+(* A fresh-value ordinal function on a small class exhausts it in finite steps. *)
 Proposition WhenFreshAndSmall : forall (F A:Class),
   CFO.FunctionOn F On                                                     ->
   Small A                                                                 ->

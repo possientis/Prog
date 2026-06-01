@@ -13,6 +13,7 @@ Require Import ZF.Set.Union.
 Module COC := ZF.Class.Ordinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 
+(* Transfinite induction by cases: zero, successor, and limit ordinal cases.    *)
 Proposition Induction : forall (A:Class),
   A :0:                                                     ->
   (forall a, On a    -> A a -> A (succ a))                  ->
@@ -29,6 +30,7 @@ Proof.
   - apply H3; assumption.
 Qed.
 
+(* Transfinite induction above b: A holds at b and propagates to all a >= b.    *)
 Proposition Induction' : forall (A:Class) (b:U),
   On b                                                       ->
   A b                                                        ->
