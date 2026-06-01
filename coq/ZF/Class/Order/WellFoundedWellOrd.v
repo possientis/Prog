@@ -26,6 +26,7 @@ Module CIN := ZF.Class.Incl.
 Definition WellFoundedWellOrd (R A:Class) : Prop :=
   WellFounded R A /\ WellOrdering R A.
 
+(* If R is a well-founded well-ordering on B, it is one on any subclass A of B. *)
 Proposition InclCompat : forall (R A B:Class),
   A :<=: B -> WellFoundedWellOrd R B -> WellFoundedWellOrd R A.
 Proof.
@@ -34,12 +35,14 @@ Proof.
   - apply WellOrdering.InclCompat with B; assumption.
 Qed.
 
+(* A well-founded well-ordering on A is irreflexive on A.                       *)
 Proposition IsIrreflexive : forall (R A:Class),
   WellFoundedWellOrd R A -> Irreflexive R A.
 Proof.
   intros R A H1. apply WellOrdering.IsIrreflexive, H1.
 Qed.
 
+(* A well-founded well-ordering on A is transitive on A.                        *)
 Proposition IsTransitive : forall (R A:Class),
   WellFoundedWellOrd R A -> Transitive R A.
 Proof.
@@ -187,6 +190,7 @@ Proof.
       apply H11, H8. assumption.
 Qed.
 
+(* A down-closed subclass of A is either all of A or an initial segment of A.   *)
 Proposition IsAllOrInitSegment : forall (R A B:Class),
   WellFoundedWellOrd R A                        ->
   B :<=: A                                      ->

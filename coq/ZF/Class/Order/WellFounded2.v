@@ -16,6 +16,7 @@ Require Import ZF.Set.Specify.
 Module CEM := ZF.Class.Empty.
 Module COT := ZF.Class.Order.TranClosure.
 
+(* Well-foundedness implies every non-empty subclass of A has a minimal element.*)
 Proposition HasMinimal : forall (R A B:Class),
   WellFounded R A             ->
   B :<=: A                    ->

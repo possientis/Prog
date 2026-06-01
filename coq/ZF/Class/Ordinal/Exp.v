@@ -42,7 +42,6 @@ Definition OnZero : Class := fun x => exists y z,
 Definition Exp (a:U) : Class := fun x =>
   (a = :0: /\ OnZero x) \/ (a <> :0: /\ Exp' a x).
 
-(* Characterization of OnZero at an ordered pair.                               *)
 Proposition OnZeroCharac2 : forall (x y:U),
   OnZero :(x,y): <-> On x /\ ((x = :0: /\ y = :1:) \/ (:0: :< x /\ y = :0:)).
 Proof.
@@ -135,7 +134,7 @@ Proof.
     apply H5 with x; assumption.
 Qed.
 
-(* Exp a is a function.                                                         *)
+(* Exp a is a function class.                                                   *)
 Proposition IsFunction : forall (a:U), Function (Exp a).
 Proof.
   intros a. split.

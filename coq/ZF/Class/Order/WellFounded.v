@@ -22,11 +22,11 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 
-(* Predicate expressing the fact that R is a well-founded class on A. R is well *)
-(* founded on A iff it is founded on A and all initial segments are small.      *)
+(* Predicate expressing the fact that R is a well-founded class on A.           *)
 Definition WellFounded (R A:Class) : Prop :=
   Founded R A /\ forall (a:U), A a -> Small (initSegment R A a).
 
+(* The initial segment of R on a subclass of A at any element of A is small.    *)
 Proposition IsSmall : forall (R A B:Class) (a:U),
   WellFounded R A             ->
   A a                         ->
@@ -39,6 +39,7 @@ Proof.
   - apply H1. assumption.
 Qed.
 
+(* The reflexive initial segment of R on a subset of A at a point of A is small *)
 Proposition IsSmallRefl : forall (R A B:Class) (a:U),
   WellFounded R A                   ->
   A a                               ->
@@ -84,7 +85,7 @@ Proof.
   apply SetIsSmall.
 Qed.
 
-(* If R is well-founded on A superclass of B, then it is well-founded on B.     *)
+(* If R is well-founded on a superclass of A, then it is well-founded on A.     *)
 Proposition InclCompat : forall (R A B:Class),
   A :<=: B -> WellFounded R B -> WellFounded R A.
 Proof.
@@ -95,6 +96,7 @@ Proof.
     + apply H3, H1. assumption.
 Qed.
 
+(* Well-foundedness is preserved and reflected by order isomorphisms.           *)
 Proposition IsomCompat : forall (F R S A B: Class),
   Isom F R S A B -> WellFounded R A <-> WellFounded S B.
 Proof.
@@ -248,7 +250,6 @@ Proof.
     (* Which is a consequence of our well-foundedness assumption.               *)
     apply H1; assumption.
 Qed.
-
 
 (* Well-foundedness is preserved under transport by a bijection.                *)
 Proposition Transport : forall (F R S A B:Class),

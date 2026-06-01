@@ -21,9 +21,18 @@ Require Import ZF.Set.UnionGenOfClass.
 Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 
+(* This module shows that monotonicity is not preserved by ordinal recursion    *)
+(* from an arbitrary monotone step function. The step function F used below is  *)
+(* strictly monotone on the ordinals, but its recursively generated iterate G,  *)
+(* with G(0) = 0, G(a + 1) = F(G(a)), and limit values defined by unions,       *)
+(* satisfies G(N) = G(N + 1). Thus G is not strictly monotone. This explains    *)
+(* why Monotone.FromRecursion assumes not only that the step function is        *)
+(* monotone, but also that every ordinal b is strictly below F!b.               *)
+
 (* F0 : On -> On is the successor function class.                               *)
 Definition F0 : Class := fun x => exists (y z:U), x = :(y,succ y): /\ On y.
 
+(* F0 relates a pair (y,z) iff y is an ordinal and z is the successor of y.     *)
 Proposition F0Charac2 : forall (y z:U),
   F0 :(y,z): <-> On y /\ z = succ y.
 Proof.
@@ -238,6 +247,7 @@ Proof.
   rewrite GN, GWhenSucc. 2: apply Omega.IsOrdinal. rewrite GN, FN. reflexivity.
 Qed.
 
+(* G is not a strictly monotone ordinal function.                               *)
 Lemma GNotMonotone : ~ Monotone G.
 Proof.
   intros [_ H1]. specialize (H1 :N (succ :N)).

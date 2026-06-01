@@ -20,9 +20,9 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Tuple.
 
 (* Predicate expressing the fact that R is a well-ordering class on A.          *)
-(* R is a well-ordering on A iff it is founded on A and total on A.             *)
 Definition WellOrdering (R A:Class) : Prop :=  Founded R A /\ Total R A.
 
+(* A well-ordering on B is  a well-ordering on any subclass A of B.             *)
 Proposition InclCompat : forall (R A B:Class),
   A :<=: B -> WellOrdering R B -> WellOrdering R A.
 Proof.
@@ -31,6 +31,7 @@ Proof.
   - apply TotalIncl with B; assumption.
 Qed.
 
+(* A well-ordering on A is irreflexive on A.                                    *)
 Proposition IsIrreflexive : forall (R A:Class),
   WellOrdering R A -> Irreflexive R A.
 Proof.
@@ -43,6 +44,7 @@ Proof.
   apply Single.Charac in H5. subst. apply H4, Single.IsIn.
 Qed.
 
+(* A well-ordering on A is transitive on A.                                     *)
 Proposition IsTransitive : forall (R A:Class),
   WellOrdering R A -> Transitive R A.
 Proof.
@@ -65,6 +67,7 @@ Proof.
       contradiction.
 Qed.
 
+(* A well-ordering on A is a strict order on A.                                 *)
 Proposition IsStrictOrd : forall (R A:Class),
   WellOrdering R A -> StrictOrd R A.
 Proof.
@@ -73,6 +76,7 @@ Proof.
   - apply IsTransitive. assumption.
 Qed.
 
+(* A well-ordering on A is a strict total order on A.                           *)
 Proposition IsStrictTotalOrd :  forall (R A:Class),
   WellOrdering R A -> StrictTotalOrd R A.
 Proof.
@@ -81,6 +85,7 @@ Proof.
   - apply H1.
 Qed.
 
+(* In a well-ordering on A, x < y iff neither x = y nor y < x.                  *)
 Proposition WhenLess : forall (R A:Class) (x y:U),
   A x                ->
   A y                ->
@@ -92,6 +97,7 @@ Proof.
   apply IsStrictTotalOrd. assumption.
 Qed.
 
+(* No element of A belongs to its own initial segment in a well-ordering.       *)
 Proposition IsNotIn : forall (R A:Class) (a:U),
   WellOrdering R A -> ~ initSegment R A a a.
 Proof.
@@ -100,6 +106,7 @@ Proof.
   apply InitSegment.IsIn in H3. apply H1; assumption.
 Qed.
 
+(* Well-ordering is preserved and reflected by order isomorphisms.              *)
 Proposition WhenIsom : forall (F R S A B:Class),
   Isom F R S A B -> WellOrdering R A <-> WellOrdering S B.
 Proof.
@@ -110,6 +117,7 @@ Proof.
   - apply (TotalIsom F R S A B); assumption.
 Qed.
 
+(* An isomorphism does not map the initial segment at a to a set containing F!a *)
 Proposition NotInImage : forall (F R S A B:Class) (a:U),
   WellOrdering S B ->
   Isom F R S A B   ->
