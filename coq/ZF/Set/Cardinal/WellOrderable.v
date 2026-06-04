@@ -39,7 +39,7 @@ Module SRR := ZF.Set.Relation.RestrictOfClass.
 Definition WellOrderable (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.
 
 (* Every ordinal is well-orderable.                                             *)
-Proposition WellOrderableOrd : forall (a:U),
+Proposition WhenOrdinal : forall (a:U),
   Ordinal a -> WellOrderable a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -49,7 +49,7 @@ Proof.
 Qed.
 
 (* Assuming choice, every set is well-orderable.                                *)
-Proposition IsWellOrderable : Choice ->
+Proposition WithChoice : Choice ->
   forall (a:U), WellOrderable a.
 Proof.
   intros AC a. specialize (AC :P(a)). destruct AC as [f [H1 H2]].
@@ -100,7 +100,7 @@ Proof.
 Qed.
 
 (* The cartesian product of two well-orderable sets is well-orderable.          *)
-Proposition WellOrderableProd : forall (a b:U),
+Proposition Prod : forall (a b:U),
   WellOrderable a -> WellOrderable b -> WellOrderable (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -118,7 +118,7 @@ Qed.
 
 
 (* The disjoint sum of two well-orderable sets is well-orderable.               *)
-Proposition WellOrderableSum : forall (a b:U),
+Proposition Sum : forall (a b:U),
   WellOrderable a -> WellOrderable b -> WellOrderable (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -136,7 +136,7 @@ Qed.
 
 
 (* The successor of a well-orderable set is well-orderable.                     *)
-Proposition WellOrderableSucc : forall (a:U),
+Proposition Succ : forall (a:U),
   WellOrderable a -> WellOrderable (succ a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -147,7 +147,7 @@ Proof.
 Qed.
 
 (* A set is well-orderable when its successor is well-orderable.                *)
-Proposition WellOrderableSuccRev : forall (a:U),
+Proposition SuccRev : forall (a:U),
   WellOrderable (succ a) -> WellOrderable a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)

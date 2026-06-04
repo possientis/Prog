@@ -67,7 +67,7 @@ Proposition Card : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply SCW.IsWellOrderable. assumption. }
+    apply SCW.WithChoice. assumption. }
   split; intros H2.
   - apply CardGen; assumption.
   - intros [n [H3 H4]].
@@ -113,7 +113,7 @@ Proof.
         - apply SCE.Sym. assumption. }
       apply SCC.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
-        intros H5. apply H4. apply SCW.WellOrderableSuccRev. assumption. }
+        intros H5. apply H4. apply SCW.SuccRev. assumption. }
       assert (card (succ a) = :0:) as H6. {
         apply SCC.WhenNotWellOrderable. assumption. }
       rewrite H6. apply Empty.IsIncl. }
