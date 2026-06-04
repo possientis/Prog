@@ -11,6 +11,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
@@ -26,6 +27,7 @@ Module CEM := ZF.Class.Empty.
 Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
+Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 
@@ -65,7 +67,7 @@ Proposition Card : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply SCE.IsWellOrderable. assumption. }
+    apply SCW.IsWellOrderable. assumption. }
   split; intros H2.
   - apply CardGen; assumption.
   - intros [n [H3 H4]].
@@ -111,7 +113,7 @@ Proof.
         - apply SCE.Sym. assumption. }
       apply SCC.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
-        intros H5. apply H4. apply SCE.WellOrderableSuccRev. assumption. }
+        intros H5. apply H4. apply SCW.WellOrderableSuccRev. assumption. }
       assert (card (succ a) = :0:) as H6. {
         apply SCC.WhenNotWellOrderable. assumption. }
       rewrite H6. apply Empty.IsIncl. }

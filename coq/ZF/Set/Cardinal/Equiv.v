@@ -72,23 +72,10 @@ Definition equiv (a b:U) : Prop := exists f, Bij f a b.
 (* Notation "a :~: b" := (equiv a b)                                            *)
 Global Instance Equiv : Equiv U := { equiv := equiv }.
 
-(* A set is well-orderable iff it is equipotent to some ordinal.                *)
-Definition WellOrderable (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.
-
 (* Every set is equipotent to itself.                                           *)
 Proposition Refl : forall (a:U), a :~: a.
 Proof.
   intros a. exists (id a). apply Id.IsBij.
-Qed.
-
-(* Every ordinal is well-orderable.                                             *)
-Proposition WellOrderableOrd : forall (a:U),
-  Ordinal a -> WellOrderable a.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a H1.
-  (* The ordinal itself is an ordinal representative of its cardinality.        *)
-  exists a. split. 1: assumption. apply Refl.
 Qed.
 
 (* Equipotence is symmetric.                                                    *)
@@ -102,57 +89,6 @@ Proposition Tran : forall (a b c:U), a :~: b -> b :~: c -> a :~: c.
 Proof.
   intros a b c [f H1] [g H2]. exists (g :.: f).
   apply Bij.Compose with b; assumption.
-Qed.
-
-(* Assuming choice, every set is well-orderable.                                *)
-Proposition IsWellOrderable : Choice ->
-  forall (a:U), WellOrderable a.
-Proof.
-  intros AC a. specialize (AC :P(a)). destruct AC as [f [H1 H2]].
-  remember (fun x => f!(a :\: range x)) as G eqn:H3.
-  remember (Recursion (CFF.from G)) as F eqn:H4.
-  assert (forall x,
-    a :\: range x <> :0: -> f!(a :\: range x) :< a :\: range x) as H5. {
-      intros x H5. apply H2. 2: assumption.
-      apply Power.Charac, Diff.IsIncl. }
-  assert (forall b, Ordinal b -> F!b = :[G]:!(F:|:b)) as H6. {
-    intros b H6. rewrite H4. apply Recursion.IsRecursive. assumption. }
-  assert (forall b , Ordinal b ->
-    a :\: range (F:|:b) <> :0: -> F!b :< a :\: range (F:|:b)) as H7. {
-      intros b H7 H8. rewrite H6, CFF.Eval, H3. 2: assumption.
-      apply H5. assumption. }
-  assert (CFO.FunctionOn F Ordinal) as G1. {
-    rewrite H4. apply Recursion.IsFunctionOn. }
-  assert (Small (toClass a)) as G2. { apply Small.SetIsSmall. }
-  assert (CRD.domain F :~: Ordinal) as G3. { apply G1. }
-  assert (forall b, Ordinal b               ->
-    (toClass a :\: F:[b]:) :<>: :0: ->
-    (toClass a :\: F:[b]:) F!b) as H8. {
-      intros b H8 H9.
-      assert (range (F:|:b) = F:[b]:) as H10. {
-        apply RestrictOfClass.RangeOf, G1. }
-      apply Diff.ToClass. rewrite <- H10. apply H7. 1: assumption.
-      intros H11. apply H9.
-      apply CEQ.Tran with (toClass (a :\: range (F:|:b))).
-      - apply CEQ.Sym. rewrite <- H10. apply Diff.ToClass.
-      - apply Empty.EmptyToClass. assumption. }
-  assert (exists b,
-    Ordinal b                                                     /\
-    (forall c, c :< b -> (toClass a :\: F:[c]:) :<>: :0:) /\
-    toClass F:[b]: :~: toClass a                                  /\
-    SRO.OneToOne (F:|:b)) as H9. { apply COF.WhenFreshAndSmall; assumption. }
-  destruct H9 as [b [H9 [H10 [H11 H12]]]].
-  assert (F:[b]: = a) as H13. { apply CEQ.EqualToClass. assumption. }
-  assert (range (F:|:b) = a) as H14. {
-    rewrite <- H13. apply RestrictOfClass.RangeOf, G1. }
-  assert (domain (F:|:b) = b) as H15. {
-    apply RestrictOfClass.DomainWhenIncl.
-    - apply G1.
-    - intros c H15. apply G3. apply SOC.IsOrdinal with b; assumption. }
-  assert (Bij (F:|:b) b a) as H16. {
-    split. 2: assumption. split. 2: assumption. split. 2: assumption.
-    apply SRR.IsRelation, G1. }
-  exists b. split. 1: assumption. apply Sym. exists (F:|:b). assumption.
 Qed.
 
 (* A subset of an ordinal is equipotent to some ordinal within it.              *)
@@ -644,24 +580,6 @@ Proof.
   exact (ProdCompat c a c b (Refl c) H).
 Qed.
 
-(* The cartesian product of two well-orderable sets is well-orderable.          *)
-Proposition WellOrderableProd : forall (a b:U),
-  WellOrderable a -> WellOrderable b -> WellOrderable (a :x: b).
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b [c [H1 H2]] [d [H3 H4]].
-  (* Replace both factors by ordinals, preserving the cartesian product.        *)
-  assert (a :x: b :~: c :x: d) as H5. { apply ProdCompat; assumption. }
-  (* The ordinal product orders d x c as the ordinal d*c.                       *)
-  assert (c :x: d :~: d :*: c) as H6. {
-    exists (Mult2.f d c). apply Mult2.IsBij; assumption. }
-  (* Transporting the bijections gives an ordinal representative.               *)
-  exists (d :*: c). split.
-  - apply Mult.IsOrdinal; assumption.
-  - apply Tran with (c :x: d); assumption.
-Qed.
-
-
 (* Disjoint sum is compatible with equipotence.                                 *)
 Proposition SumCompat : forall (a b c d:U),
   a :~: c -> b :~: d -> a :++: b :~: c :++: d.
@@ -693,24 +611,6 @@ Proof.
   (* Keep the left summand fixed and use the identity bijection there.          *)
   apply SumCompat. 2: assumption. apply Refl.
 Qed.
-
-(* The disjoint sum of two well-orderable sets is well-orderable.               *)
-Proposition WellOrderableSum : forall (a b:U),
-  WellOrderable a -> WellOrderable b -> WellOrderable (a :++: b).
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b [c [H1 H2]] [d [H3 H4]].
-  (* Replace both summands by ordinals, preserving the disjoint sum.            *)
-  assert (a :++: b :~: c :++: d) as H5. { apply SumCompat; assumption. }
-  (* The ordinal sum orders c ++ d as the ordinal c+d.                          *)
-  assert (c :++: d :~: c :+: d) as H6. {
-    exists (Plus2.f c d). apply Plus2.IsBij; assumption. }
-  (* Transporting the bijections gives an ordinal representative.               *)
-  exists (c :+: d). split.
-  - apply Plus.IsOrdinal; assumption.
-  - apply Tran with (c :++: d); assumption.
-Qed.
-
 
 (* The successor operation is compatible with equipotence.                      *)
 Proposition SuccCompat : forall (a b:U),
@@ -888,15 +788,6 @@ Proof.
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
-Proposition WellOrderableSucc : forall (a:U),
-  WellOrderable a -> WellOrderable (succ a).
-Proof.
-  intros a [b [H1 H2]].
-  assert (succ a :~: succ b) as H3. { apply SuccCompat. assumption. }
-  assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
-  exists (succ b). split; assumption.
-Qed.
-
 (* If a and b are disjoint, a ~ c and b ~ d, then a \/ b ~ c + d.               *)
 Proposition DisjointUnion : forall (a b c d:U),
   Ordinal c               ->
@@ -1025,26 +916,6 @@ Proof.
     + exact Hdisj.
   (* 1 + a = a since 1 in N and N <= a, so the result follows.                  *)
   - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
-Qed.
-
-Proposition WellOrderableSuccRev : forall (a:U),
-  WellOrderable (succ a) -> WellOrderable a.
-Proof.
-  intros a [c [H1 H2]].
-  assert (c = :0: \/ Successor c \/ Limit c) as [H3|[H3|H3]]. {
-    apply Limit.ThreeWay. assumption. }
-  - exfalso. subst.
-    assert (succ a = :0:) as H4. { apply WhenZero. assumption. }
-    revert H4. apply Succ.NotZero.
-  - destruct H3 as [b [H5 H4]]. subst.
-    assert (a :~: b) as H6. { apply SuccCompatRev. assumption. }
-    exists b. split; assumption.
-  - assert (Ordinal c) as H4. { apply H3. }
-    assert (:N :<=: c) as H5. { apply Omega.IsInclLimit. assumption. }
-    assert (c :~: succ c) as H6. { apply Succ; assumption. }
-    assert (succ a :~: succ c) as H7. { apply Tran with c; assumption. }
-    assert (a :~: c) as H8. { apply SuccCompatRev. assumption. }
-    exists c. split; assumption.
 Qed.
 
 (* The cartesian product is commutative up to equipotence.                      *)

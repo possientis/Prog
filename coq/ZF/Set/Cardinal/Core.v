@@ -4,6 +4,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
@@ -44,6 +45,7 @@ Require Import ZF.Notation.Image.
 Module CEM := ZF.Class.Empty.
 Module CRL := ZF.Class.Relation.Functional.
 Module SCE := ZF.Set.Cardinal.Equiv.
+Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
@@ -91,7 +93,7 @@ Proof.
   apply SOI.IsLargest.
   - intros c H3. apply H3.
   - assert (exists c, Ordinal c /\ a :~: c) as H3. {
-      apply Equiv.IsWellOrderable. assumption. }
+      apply SCW.IsWellOrderable. assumption. }
     destruct H3 as [c H3]. apply CEM.HasElem. exists c. assumption.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
@@ -316,7 +318,7 @@ Proof.
   - assert (a :< b \/ b :<=: a) as H5. { apply SOC.ElemOrIncl; assumption. }
     destruct H5 as [H5|H5]. 1: assumption.
     (* If b were included in a, then the cardinal b would be below card(a).     *)
-    assert (WellOrderable a) as H6. { apply SCE.WellOrderableOrd. assumption. }
+    assert (WellOrderable a) as H6. { apply SCW.WellOrderableOrd. assumption. }
     assert (card b :<=: card a) as H7. { apply InclCompatGen; assumption. }
     assert (b = card b) as H8. { apply WhenCardinal. assumption. }
     rewrite <- H8 in H7.
@@ -332,7 +334,7 @@ Qed.
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
 Proof.
-  intros a b AC. apply InclCompatGen, Equiv.IsWellOrderable. assumption.
+  intros a b AC. apply InclCompatGen, SCW.IsWellOrderable. assumption.
 Qed.
 
 (* Any set whose cardinal is bounded by card(a) is equipotent to a subset of a. *)
@@ -361,7 +363,7 @@ Proof.
   assert (WellOrderable a \/ ~ WellOrderable a) as [H1|H1]. {
     apply LawExcludedMiddle. }
   - assert (WellOrderable (succ a)) as H2. {
-      apply Equiv.WellOrderableSucc. assumption. }
+      apply SCW.WellOrderableSucc. assumption. }
     apply InclCompatGen. 1: assumption. apply Succ.IsIncl.
   - assert (card a = :0:) as H2. { apply WhenNotWellOrderable. assumption. }
     assert (Ordinal (card (succ a))) as H3. { apply IsOrdinal. }
@@ -379,7 +381,7 @@ Proof.
     assert (succ a :~: succ (card a)) as H4. { apply SuccCompat. assumption. }
     apply IsLowerBound; assumption.
   - assert (~ WellOrderable (succ a)) as H2. {
-      intros H2. apply H1. apply Equiv.WellOrderableSuccRev. assumption. }
+      intros H2. apply H1. apply SCW.WellOrderableSuccRev. assumption. }
     assert (card (succ a) = :0:) as H3. { apply WhenNotWellOrderable. assumption. }
     rewrite H3. apply Empty.IsIncl.
 Qed.
@@ -567,8 +569,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
   (* Choice supplies the well-orderability assumptions needed by HasInjGen.     *)
-  assert (WellOrderable a) as H2. { apply Equiv.IsWellOrderable. assumption. }
-  assert (WellOrderable b) as H3. { apply Equiv.IsWellOrderable. assumption. }
+  assert (WellOrderable a) as H2. { apply SCW.IsWellOrderable. assumption. }
+  assert (WellOrderable b) as H3. { apply SCW.IsWellOrderable. assumption. }
   apply HasInjGen; assumption.
 Qed.
 
@@ -607,8 +609,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1 H2.
   (* Choice supplies the well-orderability assumptions needed by HasOntoGen.    *)
-  assert (WellOrderable a) as H3. { apply Equiv.IsWellOrderable. assumption. }
-  assert (WellOrderable b) as H4. { apply Equiv.IsWellOrderable. assumption. }
+  assert (WellOrderable a) as H3. { apply SCW.IsWellOrderable. assumption. }
+  assert (WellOrderable b) as H4. { apply SCW.IsWellOrderable. assumption. }
   apply HasOntoGen; assumption.
 Qed.
 
@@ -633,7 +635,7 @@ Proof.
   intros a b f AC H1.
   (* Choice makes the codomain well-orderable, so the general form applies.     *)
   apply WhenInjGen with f. 2: assumption.
-  apply Equiv.IsWellOrderable. assumption.
+  apply SCW.IsWellOrderable. assumption.
 Qed.
 
 (* A surjection from a well-orderable set gives an inequality of cardinals.     *)
@@ -667,7 +669,7 @@ Proof.
   intros f a b AC H1.
   (* Choice makes the domain well-orderable, so the general form applies.       *)
   apply WhenOntoGen with f. 2: assumption.
-  apply Equiv.IsWellOrderable. assumption.
+  apply SCW.IsWellOrderable. assumption.
 Qed.
 
 (* Cardinal product is monotone in its right argument.                          *)
@@ -751,7 +753,7 @@ Proof.
   intros a b H1 H2.
   (* The disjoint sum of the two sets is again well-orderable.                  *)
   assert (WellOrderable (a :++: b)) as H3. {
-    apply SCE.WellOrderableSum; assumption. }
+    apply SCW.WellOrderableSum; assumption. }
   remember (either a b (id a) (id b)) as f eqn:H4.
   (* The either map from the disjoint sum onto the ordinary union is onto.      *)
   assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply SMS.HasOnto. }
@@ -789,7 +791,7 @@ Proof.
   assert (WellOrderable b) as H6. { apply WellOrderableNotZero. assumption. }
   (* The product is well-orderable, so an injection into it gives a bound.      *)
   assert (WellOrderable (a :x: b)) as H7. {
-    apply SCE.WellOrderableProd; assumption. }
+    apply SCW.WellOrderableProd; assumption. }
   assert (exists f, Inj f (a :++: b) (a :x: b)) as H8. {
     apply SMS.HasInj; apply HasTwoElems; assumption. }
   destruct H8 as [f H8].
