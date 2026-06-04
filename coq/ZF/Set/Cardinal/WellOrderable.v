@@ -34,7 +34,6 @@ Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SRO := ZF.Set.Relation.OneToOne.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
-Module SMS := ZF.Set.Relation.Map.Sum.
 
 (* A set is well-orderable iff it is equipotent to some ordinal.                *)
 Definition WellOrderable (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.

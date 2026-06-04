@@ -45,13 +45,9 @@ Require Import ZF.Set.Union2.
 Require Import ZF.Notation.Equiv.
 Export ZF.Notation.Equiv.
 
-Module CEQ := ZF.Class.Equiv.
-Module CFO := ZF.Class.Relation.FunctionOn.
-Module COF := ZF.Class.Ordinal.FunctionOn.
 Module CFF := ZF.Class.Relation.Fun.From.
 Module SOO := ZF.Set.Ordinal.Order.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
-Module SRR := ZF.Set.Relation.RestrictOfClass.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
 Definition equiv (a b:U) : Prop := exists f, Bij f a b.
