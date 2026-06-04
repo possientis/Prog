@@ -9,6 +9,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Finite.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
+Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
@@ -26,6 +27,7 @@ Require Import ZF.Set.Union2.
 Module CEM := ZF.Class.Empty.
 Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module SCC := ZF.Set.Cardinal.Core.
+Module SCH := ZF.Set.Cardinal.Choice.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
@@ -57,7 +59,7 @@ Proof.
     apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   apply H1. exists (card a). split. 1: assumption.
-  apply SCC.IsEquivGen. assumption.
+  apply SCC.IsEquiv. assumption.
 Qed.
 
 
@@ -109,7 +111,7 @@ Proof.
       assert (card a :~: succ (card a)) as H6. { apply Equiv.Succ; assumption. }
       assert (succ a :~: card a) as H7. {
         apply SCE.Tran with (succ (card a)).
-        - apply SCE.SuccCompat, IsEquivGen. assumption.
+        - apply SCE.SuccCompat, SCC.IsEquiv. assumption.
         - apply SCE.Sym. assumption. }
       apply SCC.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
@@ -151,7 +153,7 @@ Proof.
     + exists x. split. 1: assumption.
       intros H3. apply Diff.Charac in H3. destruct H3 as [_ H3].
       apply H3. apply Single.IsIn.
-  - apply SCC.EquivCharac. 1: assumption.
+  - apply SCH.EquivCharac. 1: assumption.
     assert ((a :\: :{x}:) :\/: :{x}: = a) as H3. {
       apply Diff.RemoveAddElem. assumption. }
     (* b is infinite: if finite, a = b u {x} would also be finite.              *)
@@ -171,6 +173,6 @@ Proof.
   intros a AC H1.
   (* The cardinal of an infinite set contains N, so a has a subset of size N.   *)
   assert (:N :<=: card a) as H2. { apply Card; assumption. }
-  apply SCC.HasSubsetOfSize; assumption.
+  apply SCH.HasSubsetOfSize; assumption.
 Qed.
 

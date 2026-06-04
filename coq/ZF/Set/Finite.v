@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
@@ -21,6 +22,7 @@ Require Import ZF.Notation.Eval.
 
 
 Module SCC := ZF.Set.Cardinal.Core.
+Module SCH := ZF.Set.Cardinal.Choice.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SPR := ZF.Set.Prod.
 
@@ -120,7 +122,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC H1. exists (card a). split. 1: assumption.
   (* Choice gives a bijection between a and its cardinal.                       *)
-  apply SCC.IsEquivChoice. assumption.
+  apply SCH.IsEquiv. assumption.
 Qed.
 
 (* A finite set with cardinal zero is empty.                                    *)
@@ -132,7 +134,7 @@ Proof.
   (* Finiteness gives an ordinal equipotent to a, hence a is equipotent to its  *)
   (* cardinal.                                                                  *)
   assert (a :~: card a) as H3. {
-    apply SCC.IsEquivGen. destruct H1 as [n [H1 H3]].
+    apply SCC.IsEquiv. destruct H1 as [n [H1 H3]].
     exists n. split. 2: assumption. apply Omega.HasOrdinals. assumption. }
   rewrite H2 in H3. apply SCE.WhenZero. assumption.
 Qed.
@@ -149,7 +151,7 @@ Proof.
   assert (WellOrderable a) as H3. {
     destruct H1 as [n [H1 H3]]. exists n. split. 2: assumption.
     apply Omega.HasOrdinals. assumption. }
-  assert (a :~: card a) as H4. { apply SCC.IsEquivGen. assumption. }
+  assert (a :~: card a) as H4. { apply SCC.IsEquiv. assumption. }
   (* Since b is new, adjoining b gives a set equipotent to succ(a).             *)
   assert (a :\/: :{b}: :~: succ a) as H5. {
     assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as [H5|H5]. {

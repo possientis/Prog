@@ -4,6 +4,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Hartogs.
 Require Import ZF.Set.Ordinal.Core.
@@ -14,6 +15,7 @@ Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Union.
 
 Module SCC := ZF.Set.Cardinal.Core.
+Module SCH := ZF.Set.Cardinal.Choice.
 
 (* There is always a cardinal number larger than all cardinals of a given set.  *)
 Proposition LargerCardinalChoice : forall (a:U),
@@ -30,12 +32,12 @@ Proof.
     assert (Ordinal c) as H6. { apply SCC.CardIsOrd. assumption. }
     assert (Ordinal (card :U(a))) as H7. { apply SCC.IsOrdinal. }
     assert (Ordinal b) as H8. { apply SCC.CardIsOrd. assumption. }
-    assert (card :U(a) :< b) as H9. { rewrite H2. apply Cantor. assumption. }
+    assert (card :U(a) :< b) as H9. { rewrite H2. apply SCH.Cantor. assumption. }
     assert (c :<=: card :U(a)) as H10. {
       assert (c :<=: :U(a)) as H10. {
         intros x H10. apply Union.Charac. exists c. split; assumption. }
       assert (c = card c) as H11. { apply WhenCardinal. assumption. }
-      rewrite H11. apply InclCompat; assumption. }
+      rewrite H11. apply SCH.InclCompat; assumption. }
     apply SOC.InclElemTran with (card :U(a)); assumption. }
   split; assumption.
 Qed.
