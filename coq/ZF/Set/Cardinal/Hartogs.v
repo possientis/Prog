@@ -8,7 +8,6 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Transitive.
-Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Restrict.

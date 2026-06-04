@@ -2,13 +2,11 @@ Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Proper.
-Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Hartogs.
 Require Import ZF.Set.Ordinal.Core.
-Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.

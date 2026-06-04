@@ -1,26 +1,18 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Cardinal.InfiniteCard.
-Require Import ZF.Class.Empty.
-Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Finite.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
-Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
-Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.Core.
-Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
-Require Import ZF.Set.Relation.Bij.
-Require Import ZF.Set.Relation.Image.
-Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 

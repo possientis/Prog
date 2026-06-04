@@ -3,9 +3,7 @@ Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Proper.
 Require Import ZF.Set.Cardinal.Core.
-Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.

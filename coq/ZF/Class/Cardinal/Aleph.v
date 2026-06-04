@@ -1,14 +1,10 @@
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Monotone.
-Require Import ZF.Class.Ordinal.Subclass.
-Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.

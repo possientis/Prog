@@ -1,7 +1,6 @@
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.DiffBySet.
-Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
