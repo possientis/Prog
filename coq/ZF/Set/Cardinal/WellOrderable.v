@@ -1,45 +1,28 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.FunctionOn.
 Require Import ZF.Class.Ordinal.Recursion.
-Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
-Require Import ZF.Set.Empty.
-Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
-Require Import ZF.Set.Ordinal.Mult2.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
-Require Import ZF.Set.Ordinal.Plus2.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
-Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Domain.
-Require Import ZF.Set.Relation.Eval.
-Require Import ZF.Set.Relation.Fun.
-Require Import ZF.Set.Relation.Fun.From.
-Require Import ZF.Set.Relation.Function.
-Require Import ZF.Set.Relation.FunctionOn.
-Require Import ZF.Set.Relation.ImageUnderClass.
-Require Import ZF.Set.Relation.Map.Sum.
-Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Sum.
 
 Require Import ZF.Notation.Eval.
-Require Import ZF.Notation.Equiv.
 Require Import ZF.Notation.Image.
 
 Module CEQ := ZF.Class.Equiv.

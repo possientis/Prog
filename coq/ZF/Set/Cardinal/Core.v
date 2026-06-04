@@ -124,7 +124,7 @@ Qed.
 Proposition IsEquivChoice : forall (a:U), Choice ->
   a :~: card a.
 Proof.
-  intros a AC. apply IsEquivGen, IsWellOrderable. assumption.
+  intros a AC. apply IsEquivGen, SCW.IsWellOrderable. assumption.
 Qed.
 
 (* Every ordinal is equipotent to its cardinal.                                 *)
@@ -411,7 +411,7 @@ Proposition Cantor : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply IsWellOrderable. assumption. }
+    apply SCW.IsWellOrderable. assumption. }
   destruct H1 as [b [H1 H2]].
   assert (Ordinal (card b)) as G1. { apply IsOrdinal. }
   assert (Ordinal (card :P(b))) as G2. { apply IsOrdinal. }
