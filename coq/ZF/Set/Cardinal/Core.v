@@ -14,15 +14,10 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Id.
-Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
-Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Onto.
-Require Import ZF.Set.Relation.Range.
-Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Relation.RestrictOfClass.
-Require Import ZF.Set.Specify.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
