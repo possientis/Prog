@@ -4,6 +4,7 @@ Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Natural.
@@ -13,6 +14,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
+Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
@@ -30,6 +32,7 @@ Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
+Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SRO := ZF.Set.Relation.Onto.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
@@ -427,6 +430,63 @@ Proof.
   assert (card a = card f:[a]:) as H4. { apply WhenEquiv. assumption. }
   rewrite H4. apply InclCompat. 1: assumption.
   rewrite (Inj.ImageOfDomain f a b). 2: assumption. apply H2.
+Qed.
+(* If a is an ordinal above one, then succ(a) is bounded by a x a.              *)
+Proposition SuccSquare : forall (a:U),
+  Ordinal a -> :1: :< a -> card (succ a) :<=: card (a :x: a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1 H2.
+  (* Both zero and one lie in a, and the square is well-orderable.              *)
+  assert (:0: :< a) as H3. {
+    apply SOC.ElemElemTran with :1:; try assumption.
+    - apply SOC.Zero.
+    - apply Natural.OneIsOrdinal.
+    - apply Succ.IsIn. }
+  assert (WellOrderable a) as H4. { apply SCW.WhenOrdinal. assumption. }
+  assert (WellOrderable (a :x: a)) as H5. { apply SCW.Prod; assumption. }
+  remember (SFI.ifThenElse (succ a) (fun x => x :< a)
+    (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as f eqn:H6.
+  (* Both displayed branch values lie in the square a x a.                      *)
+  assert (SFI.MapsTo (succ a) (a :x: a) (fun x => x :< a)
+    (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as H7. {
+    split; intros x H7 H8; apply Prod.Charac2; split; assumption. }
+  (* Equal old-branch values have the same second coordinate.                   *)
+  assert (forall x y, x :< succ a -> y :< succ a -> x :< a -> y :< a ->
+    :(:0:,x): = :(:0:,y): -> x = y) as H8. {
+    intros x y H8 H9 H10 H11 H12.
+    apply OrdPair.Equal in H12. destruct H12 as [_ H12]. assumption. }
+  (* The old branch cannot meet the new-point branch.                           *)
+  assert (forall x y, x :< succ a -> y :< succ a -> x :< a -> ~ y :< a ->
+    :(:0:,x): = :(:1:,:0:): -> x = y) as H9. {
+    intros x y H9 H10 H11 H12 H13.
+    exfalso. apply OrdPair.Equal in H13. destruct H13 as [H13 _].
+    apply Natural.ZeroIsNotOne. assumption. }
+  (* The new-point branch cannot meet the old branch.                           *)
+  assert (forall x y, x :< succ a -> y :< succ a -> ~ x :< a -> y :< a ->
+    :(:1:,:0:): = :(:0:,y): -> x = y) as H10. {
+    intros x y H10 H11 H12 H13 H14.
+    exfalso. apply OrdPair.Equal in H14. destruct H14 as [H14 _].
+    apply Natural.ZeroIsNotOne. symmetry. assumption. }
+  (* The only element of succ(a) outside a is a itself.                         *)
+  assert (forall x y, x :< succ a -> y :< succ a -> ~ x :< a -> ~ y :< a ->
+    :(:1:,:0:): = :(:1:,:0:): -> x = y) as H11. {
+    intros x y H11 H12 H13 H14 H15.
+    apply Succ.Charac in H11. destruct H11 as [H11|H11]. 2: contradiction.
+    apply Succ.Charac in H12. destruct H12 as [H12|H12]. 2: contradiction.
+    subst. reflexivity. }
+  (* These branch facts show that the piecewise map is injective.               *)
+  assert (SFI.Injective (succ a) (fun x => x :< a)
+    (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as H12. {
+    repeat split; intros x y K1 K2 K3 K4 K5.
+    - apply H8; assumption.
+    - apply H9; assumption.
+    - apply H10; assumption.
+    - apply H11; assumption. }
+  assert (Inj f (succ a) (a :x: a)) as H13. {
+    rewrite H6. apply SFI.IsInj; assumption. }
+  (* An injection into the well-orderable square gives the cardinal bound.      *)
+  apply WhenInj with f; assumption.
 Qed.
 (* A surjection from a well-orderable set gives an inequality of cardinals.     *)
 Proposition WhenOnto : forall (f a b:U), WellOrderable a ->
