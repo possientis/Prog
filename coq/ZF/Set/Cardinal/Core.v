@@ -343,23 +343,28 @@ Proof.
   intros n H1. exists n. symmetry. apply WhenNat. assumption.
 Qed.
 
-(* N is a cardinal number.                                                      *)
-Proposition HasOmega : Cardinal :N.
+(* The cardinal of N is N.                                                      *)
+Proposition WhenOmega : card :N = :N.
 Proof.
-  (* Proof by Claude + sonnet 4.6                                               *)
-  exists :N.
+  (* Proof by Hermes + gpt 5.5                                                  *)
   assert (Ordinal :N) as H1. { apply Omega.IsOrdinal. }
   assert (Ordinal (card :N)) as H2. { apply IsOrdinal. }
-  (* By ordinal trichotomy, card(N) < N or N <= card(N).                        *)
+  (* By ordinal trichotomy, card(N) is either below N or contains N.            *)
   assert (card :N :< :N \/ :N :<=: card :N) as H3. {
     apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3].
-  - (* card(N) < N: N ~ card(N) as N is an ordinal, and any ordinal in          *)
-    (* bijection with a natural number equals it, giving N = card(N).           *)
+  - (* If card(N) is a natural number, equipotence forces it to be N itself.    *)
     assert (:N :~: card :N) as H4. { apply IsEquivOrd. assumption. }
-    apply EqualOrdNat; assumption.
-  - (* N <= card(N): card(N) <= N as N is an ordinal, so N = card(N).           *)
-    apply Incl.Double. split. 1: assumption. apply IsIncl. assumption.
+    symmetry. apply EqualOrdNat; assumption.
+  - (* Otherwise, the two ordinal inclusions give equality.                     *)
+    apply Incl.Double. split. 2: assumption. apply IsIncl. assumption.
+Qed.
+
+(* N is a cardinal number.                                                      *)
+Proposition HasOmega : Cardinal :N.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  exists :N. symmetry. apply WhenOmega.
 Qed.
 
 (* A set whose cardinal is greater than one contains two distinct elements.     *)
