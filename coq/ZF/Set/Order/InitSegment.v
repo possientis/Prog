@@ -6,6 +6,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.ReflClosure.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.Founded.
+Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Image.
@@ -21,6 +22,7 @@ Require Import ZF.Set.Specify.
 Require Import ZF.Set.Truncate.
 
 Module CIN := ZF.Class.Incl.
+Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Order.InitSegment.
 
 (* initial segment of (R,A) at a.                                               *)
@@ -334,6 +336,18 @@ Proof.
   - (* Conversely, a member of a satisfying A is in the E-initial segment.      *)
     apply Specify.Charac in H4. destruct H4 as [H4 H5].
     apply (CharacRev E V A a); try assumption. apply E.Charac2. assumption.
+Qed.
+
+(* The E-initial segment of On at an ordinal a is a itself.                     *)
+Proposition EOn : forall (a:U),
+  On a -> initSegment E On a = a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* By EA, the initial segment is the subset of a consisting of ordinals.      *)
+  rewrite EA. apply Specify.IsA.
+  (* Every element of an ordinal is an ordinal.                                 *)
+  apply COC.IsIncl. assumption.
 Qed.
 
 (* The initial segment of the membership relation V at a equals a itself.       *)
