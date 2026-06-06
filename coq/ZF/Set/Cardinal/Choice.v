@@ -59,11 +59,7 @@ Qed.
 Proposition EquivCharac : forall (a b:U), Choice ->
   a :~: b <-> card a = card b.
 Proof.
-  intros a b AC. split; intros H1.
-  - apply SCC.WhenEquiv. assumption.
-  - apply Equiv.Tran with (card a).
-    + apply IsEquiv. assumption.
-    + rewrite H1. apply Equiv.Sym, IsEquiv. assumption.
+  intros a b AC. apply SCC.EquivCharac; apply SCW.WithChoice; assumption.
 Qed.
 
 

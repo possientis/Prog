@@ -201,6 +201,21 @@ Proof.
     assert (card b = :0:) as H5. { apply WhenNotWellOrderable. assumption. }
     rewrite H4, H5. reflexivity.
 Qed.
+
+(* Well-orderable sets are equipotent iff they have the same cardinal.          *)
+Proposition EquivCharac : forall (a b:U),
+  WellOrderable a -> WellOrderable b -> a :~: b <-> card a = card b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2. split; intros H3.
+  - (* Equipotent sets always have the same cardinal.                           *)
+    apply WhenEquiv. assumption.
+  - (* The two sets are both equipotent to their common cardinal.               *)
+    apply Equiv.Tran with (card a).
+    + apply IsEquiv. assumption.
+    + rewrite H3. apply Equiv.Sym, IsEquiv. assumption.
+Qed.
+
 (* The cardinal of a cardinal is itself.                                        *)
 Proposition Idem : forall (a:U), card (card a) = card a.
 Proof.
