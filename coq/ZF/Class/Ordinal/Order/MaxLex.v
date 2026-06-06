@@ -41,8 +41,9 @@ Definition MaxLex : Class := fun x =>
     (a :\/: b :< c :\/: d                                     \/
     (a :\/: b  = c :\/: d /\ Lex :( :(a,b): , :(c,d): ): )).
 
-(* Will be seen to be an order isomorphism from On x On to On.                  *)
-Definition J0 : Class := (Enum.Enum MaxLex (On :x: On))^:-1:.
+(* The ordinal pairing associated with MaxLex maps On x On onto On.             *)
+(* This is the max-lexicographic form of a Godel pairing function.              *)
+Definition Pairing : Class := (Enum MaxLex (On :x: On))^:-1:.
 
 Proposition Charac2 : forall (x y:U),
   MaxLex :(x,y): <->
@@ -226,8 +227,8 @@ Proof.
   - apply IsWellOrdering.
 Qed.
 
-(* J0 is an order isomorphism from On x On to On.                               *)
-Proposition IsIsom : Isom J0 MaxLex E (On :x: On) On.
+(* Pairing is an order isomorphism from On x On to On.                          *)
+Proposition IsIsom : Isom Pairing MaxLex E (On :x: On) On.
 Proof.
   apply Isom.Converse, Enum.IsIsom.
   - apply IsWellFoundedWellOrd.
