@@ -313,6 +313,17 @@ Proof.
     assert (card (succ a) = :0:) as H3. { apply WhenNotWellOrderable. assumption. }
     rewrite H3. apply Empty.IsIncl.
 Qed.
+
+(* An infinite ordinal has the same cardinal as its successor.                  *)
+Proposition Succ : forall (a:U), Ordinal a ->
+  :N :<=: a -> card a = card (succ a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1 H2.
+  (* The ordinal is equipotent to its successor, so their cardinals coincide.   *)
+  apply WhenEquiv. apply SCE.Succ; assumption.
+Qed.
+
 (* The cardinal of a natural number is itself.                                  *)
 Proposition WhenNat : forall (n:U), n :< :N ->
   card n = n.
