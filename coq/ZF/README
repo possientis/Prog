@@ -3,4 +3,20 @@ This is a Coq formalisation of the Zermelo-Fraenkel set theory
 
 Gaisi Takeuti, Wilson M. Zaring, Introduction to Axiomatic Set Theory,
 Graduate Texts in Mathematics, Second Edition, Springer-Verlag, 1981.
+
+Current Hermes workflow:
+1. Find the next proposition.
+2. Update the next proposition cache.
+3. Choose the location.
+4. Choose the local name.
+5. Update the next proposition cache.
+6. Read the book proof/outline if present.
+7. Design and explain my own proof/API outline.
+8. Audit the formal API against that outline.
+9. Implement the agreed plan.
+10. Code review checkpoint.
+11. Update the shared current page state.
+12. Update the shared last proposition state.
+13. Loop back to item 1.
+
  
