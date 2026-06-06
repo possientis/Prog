@@ -17,6 +17,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageUnderClass.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Truncate.
 
 Module CIN := ZF.Class.Incl.
@@ -314,6 +315,25 @@ Proof.
   intros R A B a H1 H2 H3 H4.
   assert (R :(a,a):) as H5. { apply IsLess with A B; assumption. }
   revert H5. apply (Founded.NoLoop1 R A). 2: assumption. apply H1.
+Qed.
+
+(* The E-initial segment of a class at a is its restriction to a.               *)
+Proposition EA : forall (A:Class) (a:U),
+  initSegment E A a = {{ x :< a | A }}.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros A a.
+  assert (WellFounded E V) as H1. { apply E.IsWellFounded. }
+  assert (V a) as H2. { apply I. }
+  assert (A :<=: V) as H3. { apply V.IsIncl. }
+  apply Incl.Double. split; intros x H4.
+  - (* Membership in the initial segment means being in A and below a.          *)
+    apply (Charac E V A a) in H4; try assumption.
+    apply Specify.Charac. destruct H4 as [H4 H5]. split. 2: assumption.
+    apply E.Charac2. assumption.
+  - (* Conversely, a member of a satisfying A is in the E-initial segment.      *)
+    apply Specify.Charac in H4. destruct H4 as [H4 H5].
+    apply (CharacRev E V A a); try assumption. apply E.Charac2. assumption.
 Qed.
 
 (* The initial segment of the membership relation V at a equals a itself.       *)
