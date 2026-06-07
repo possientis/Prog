@@ -1,6 +1,7 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.InitSegment.
@@ -14,6 +15,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Order.Lex.
 Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Prod.
+Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -26,6 +28,9 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Union2.
+
+Require Import ZF.Notation.Eval.
+Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
@@ -192,6 +197,35 @@ Proof.
   - apply IsTotal.
 Qed.
 
+(* The MaxLex predecessors of a pair lie in the next square above its maximum.  *)
+Proposition InitSquareIncl : forall (a b c:U),
+  On a                                                              ->
+  On b                                                              ->
+  c = succ (a :\/: b)                                               ->
+  initSegment MaxLex (On :x: On) :(a,b): :<=: toClass (c :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1 H2 H3. subst c.
+  (* The maximum of two ordinals and its successor are ordinals.                *)
+  assert (On (a :\/: b)) as H3. { apply Max.IsOrdinal; assumption. }
+  assert (On (succ (a :\/: b))) as H4. { apply Succ.IsOrdinal. assumption. }
+  intros x H5. apply InitSegment.Charac in H5.
+  destruct H5 as [[y [z [H5 [H6 H7]]]] H8]. subst.
+  (* A predecessor in MaxLex has maximum at most that of the target pair.       *)
+  apply Charac4 in H8. apply SPR.Charac2.
+  assert (y :\/: z :<=: a :\/: b) as H9. {
+    destruct H8 as [H8|[H8 _]].
+    - apply SOC.ElemIsIncl; assumption.
+    - rewrite H8. apply SIN.Refl. }
+  (* Hence each coordinate is below the successor of that maximum.              *)
+  assert (y :<=: a :\/: b) as H10. {
+    apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclL. }
+  assert (z :<=: a :\/: b) as H11. {
+    apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
+  split; apply SOC.InclElemTran with (a :\/: b); try assumption;
+  apply Succ.IsIn.
+Qed.
+
 
 (* MaxLex is well-founded on On x On.                                           *)
 Proposition IsWellFounded : WellFounded MaxLex (On :x: On).
@@ -199,22 +233,8 @@ Proof.
   split. 1: apply IsFounded. intros x H1.
   destruct H1 as [a [b [H1 [H2 H3]]]]. subst.
   remember (succ (a :\/: b)) as c eqn:H4.
-  assert (On (a :\/:b)) as G1. { apply Max.IsOrdinal; assumption. }
-  assert (On (succ (a :\/: b))) as G2. { apply Succ.IsOrdinal. assumption. }
   assert (initSegment MaxLex (On :x: On) :(a,b): :<=: toClass (c :x: c)) as H5. {
-    intros x H5. apply InitSegment.Charac in H5.
-    destruct H5 as [[y [z [H5 [H6 H7]]]] H8]. subst.
-    apply Charac4 in H8. apply SPR.Charac2.
-    assert (y :\/: z :<=: a :\/: b) as H9. {
-      destruct H8 as [H8|[H8 _]].
-      - apply SOC.ElemIsIncl; assumption.
-      - rewrite H8. apply SIN.Refl. }
-    assert (y :<=: a :\/: b) as H10. {
-      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclL. }
-    assert (z :<=: a :\/: b) as H11. {
-      apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
-    split; apply SOC.InclElemTran with (a :\/: b); try assumption;
-    apply Succ.IsIn. }
+    apply InitSquareIncl; assumption. }
   apply Small.InclCompat with (toClass (c :x: c)). 1: assumption.
   apply Small.SetIsSmall.
 Qed.
@@ -233,4 +253,35 @@ Proof.
   apply Isom.Converse, Enum.IsIsom.
   - apply IsWellFoundedWellOrd.
   - apply Core.IsProperSquare.
+Qed.
+
+(* Pairing maps the MaxLex initial segment of a pair onto its ordinal value.    *)
+Proposition PairingInit : forall (a b:U),
+  On a                                                 ->
+  On b                                                 ->
+  Pairing:[(initSegment MaxLex (On :x: On) :(a,b):)]: :~:
+  toClass (Pairing!:(a,b):).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* The pair belongs to the ordered square of the ordinal class.               *)
+  assert ((On :x: On) :(a,b):) as H3. { apply CPR.Charac2. split; assumption. }
+  (* Its value under the pairing is therefore an ordinal.                       *)
+  assert (On (Pairing!:(a,b):)) as H4. {
+    destruct IsIsom as [H4 _].
+    apply (ZF.Class.Relation.Bij.IsInRange Pairing (On :x: On) On :(a,b):);
+    assumption. }
+  (* Intersecting an ordinal with the class of ordinals does not change it.     *)
+  assert (On :/\: toClass (Pairing!:(a,b):) :~:
+    toClass (Pairing!:(a,b):)) as H5. {
+    intros x. split; intros H5.
+    - apply H5.
+    - split. 2: assumption. apply SOC.IsOrdinal with (Pairing!:(a,b):);
+      assumption. }
+  (* Isomorphisms carry initial segments to initial segments.                   *)
+  apply Equiv.Tran with (initSegment E On Pairing!:(a,b):).
+  - apply InitSegment.IsomFullImage. 1: apply IsIsom. assumption.
+  - apply Equiv.Tran with (On :/\: toClass (Pairing!:(a,b):)).
+    + apply E.InitSegmentEA.
+    + assumption.
 Qed.
