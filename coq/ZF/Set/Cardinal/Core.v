@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Induction.
+Require Import ZF.Class.Ordinal.Order.MaxLex.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.OneToOne.
@@ -752,6 +753,10 @@ Proof.
   assert (forall a, Ordinal a -> A a) as H2. {
     apply Induction.Induction. intros a H2 IH. rewrite H1 in IH.
     assert (WellOrderable a) as G1. { apply SCW.WhenOrdinal. assumption. }
+    assert (WellOrderable (a :x: a)) as G2. { apply SCW.Prod; assumption. }
+    assert (CRO.OneToOne Pairing) as G3. { apply MaxLex.IsIsom. }
+    assert (toClass (a :x: a) :<=: CRD.domain Pairing) as G4. { admit. }
+    assert (Ordinal :N) as G5. { apply Omega.IsOrdinal. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
       intros b H3.
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -759,42 +764,58 @@ Proof.
     assert ((exists b, b :< a /\ card b = card a) \/
           ~(exists b, b :< a /\ card b = card a)) as [H4|H4]. {
       apply LawExcludedMiddle. }
-      - destruct H4 as [b [H4 H5]].
+    - destruct H4 as [b [H4 H5]].
+      assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+      assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
+      assert (card (b :x: b) = card (a :x: a)) as K3. {
+        apply ProdCompat; assumption. }
+      specialize (IH b H4). destruct IH as [IH|IH]; rewrite H1.
+      + left. apply NatCharac. 1: assumption. rewrite <- H5.
+        apply NatCharac; assumption.
+      + right. rewrite <- K3, IH. assumption.
+    - assert (forall b, b :< a -> card b :< card a) as H5. {
+        intros b H5.
         assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
-        assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
-        assert (card (b :x: b) = card (a :x: a)) as K3. {
-          apply ProdCompat; assumption. }
-        specialize (IH b H4). destruct IH as [IH|IH]; rewrite H1.
-        + left. apply NatCharac. 1: assumption. rewrite <- H5.
-          apply NatCharac; assumption.
-        + right. rewrite <- K3, IH. assumption.
-      - assert (forall b, b :< a -> card b :< card a) as H5. {
-          intros b H5.
-          assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
-          assert (Ordinal (card a)) as K2. { apply IsOrdinal. }
-          assert (Ordinal (card b)) as K3. { apply IsOrdinal. }
-          assert (card b = card a \/ card b :< card a) as K4. {
-            apply SOC.EqualOrElem; try assumption. apply H3. assumption. }
-          destruct K4 as [K4|K4]. 2: assumption. exfalso. apply H4.
-          exists b. split; assumption. }
-        assert (forall b,
-          b :< a        ->
-          :N :<=: b     ->
-          card (succ b :x: succ b) = card (succ b)) as H6. {
-          intros b H6 H7.
-          assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
-          assert (Ordinal (succ b)) as K2. { apply Succ.IsOrdinal. assumption. }
-          assert (Cardinal (card a)) as K3. { exists a. reflexivity. }
-          assert (card b = card (succ b)) as K4. { apply Succ; assumption. }
-          assert (Ordinal (card a)) as K5. { apply IsOrdinal. }
-          assert (succ b :< card a) as H8. {
-            apply CardLess; try assumption. rewrite <- K4. apply H5. assumption. }
-          assert (succ b :< a) as H9. {
-            apply SOC.ElemInclTran with (card a); try assumption.
-            apply IsIncl. assumption. }
-          specialize (IH (succ b) H9).
-          destruct IH as [IH|IH]. 2: assumption. exfalso.
-          assert (succ b :< b) as H10. { apply H7. assumption. }
-          assert (succ b :< succ b) as H11. { apply Succ.IsIncl. assumption. }
-          revert H11. apply Foundation.NoLoop1. }
+        assert (Ordinal (card a)) as K2. { apply IsOrdinal. }
+        assert (Ordinal (card b)) as K3. { apply IsOrdinal. }
+        assert (card b = card a \/ card b :< card a) as K4. {
+          apply SOC.EqualOrElem; try assumption. apply H3. assumption. }
+        destruct K4 as [K4|K4]. 2: assumption. exfalso. apply H4.
+        exists b. split; assumption. }
+      assert (forall b,
+        b :< a        ->
+        :N :<=: b     ->
+        card (succ b :x: succ b) = card (succ b)) as H6. {
+        intros b H6 H7.
+        assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+        assert (Ordinal (succ b)) as K2. { apply Succ.IsOrdinal. assumption. }
+        assert (Cardinal (card a)) as K3. { exists a. reflexivity. }
+        assert (card b = card (succ b)) as K4. { apply Succ; assumption. }
+        assert (Ordinal (card a)) as K5. { apply IsOrdinal. }
+        assert (succ b :< card a) as H8. {
+          apply CardLess; try assumption. rewrite <- K4. apply H5. assumption. }
+        assert (succ b :< a) as H9. {
+          apply SOC.ElemInclTran with (card a); try assumption.
+          apply IsIncl. assumption. }
+        specialize (IH (succ b) H9).
+        destruct IH as [IH|IH]. 2: assumption. exfalso.
+        assert (succ b :< b) as H10. { apply H7. assumption. }
+        assert (succ b :< succ b) as H11. { apply Succ.IsIncl. assumption. }
+        revert H11. apply Foundation.NoLoop1. }
+      assert (Pairing:[a :x: a]: :<=: card a) as H7. { admit. }
+      assert (card (Pairing :[a :x: a]:) = card (a :x: a)) as H8. {
+        apply ImageInj; assumption. }
+      assert (card (Pairing :[a :x: a]:) :<=: card a) as H9. { admit. }
+      assert (card (a :x: a) :<=: card a) as H10. {
+        rewrite <- H8. assumption. }
+      rewrite H1. assert (a :< :N \/ :N :<=: a) as H11. {
+        apply SOC.ElemOrIncl; assumption. }
+      destruct H11 as [H11|H11]. 1: { left. assumption. } right.
+      assert (card a :<=: card (a :x: a)) as H12. {
+        apply SquareHigher; assumption. }
+      apply Incl.Double. split; assumption. }
+  intros a H3 H4. rewrite H1 in H2. specialize (H2 a H3).
+  destruct H2 as [H2|H2]. 2: assumption.
+  assert (a :< a) as H5. { apply H4. assumption. }
+  exfalso. revert H5. apply Foundation.NoLoop1.
 Admitted.
