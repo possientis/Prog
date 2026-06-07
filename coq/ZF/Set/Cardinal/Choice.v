@@ -48,14 +48,12 @@ Proof.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
 
-
 (* Assuming choice, every set is equipotent to its cardinal.                    *)
 Proposition IsEquiv : forall (a:U), Choice ->
   a :~: card a.
 Proof.
   intros a AC. apply SCC.IsEquiv, SCW.WithChoice. assumption.
 Qed.
-
 
 (* Assuming choice, two sets are equipotent iff they have the same cardinal.    *)
 Proposition EquivCharac : forall (a b:U), Choice ->
@@ -64,7 +62,6 @@ Proof.
   intros a b AC. apply SCC.EquivCharac; apply SCW.WithChoice; assumption.
 Qed.
 
-
 (* Assuming choice, inclusion implies inequality of cardinals.                  *)
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
@@ -72,6 +69,38 @@ Proof.
   intros a b AC. apply SCC.InclCompat, SCW.WithChoice. assumption.
 Qed.
 
+(* Assuming choice, cardinal equality is compatible with products.              *)
+Proposition ProdCompat : forall (a b c d:U),
+  Choice                              ->
+  card a = card c                     ->
+  card b = card d                     ->
+  card (a :x: b) = card (c :x: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d AC H1 H2.
+  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
+  apply SCC.ProdCompat; try assumption; apply SCW.WithChoice; assumption.
+Qed.
+
+(* Assuming choice, cardinal equality is compatible with product on the right.  *)
+Proposition ProdCompatL : forall (a b c:U), Choice ->
+  card a = card b -> card (a :x: c) = card (b :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* Keep the right factor fixed and use reflexivity on its cardinal.           *)
+  apply ProdCompat; try assumption. reflexivity.
+Qed.
+
+(* Assuming choice, cardinal equality is compatible with product on the left.   *)
+Proposition ProdCompatR : forall (a b c:U), Choice ->
+  card a = card b -> card (c :x: a) = card (c :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* Keep the left factor fixed and use reflexivity on its cardinal.            *)
+  apply ProdCompat; try assumption. reflexivity.
+Qed.
 
 (* Any set whose cardinal is bounded by card(a) is equipotent to a subset of a. *)
 Proposition HasSubsetOfSize : forall (a c:U), Choice ->
@@ -92,7 +121,6 @@ Proof.
     apply (Bij.Restrict f (card a) a c); assumption.
 Qed.
 
-
 (* Assuming choice, the Cantor-Schroeder-Bernstein theorem holds.               *)
 Proposition CantorShroderBernstein : forall (a b c d:U),
   Choice    ->
@@ -111,7 +139,6 @@ Proof.
   - rewrite H5. assumption.
   - rewrite H6. assumption.
 Qed.
-
 
 (* Assuming choice, the cardinal of a is strictly smaller than card(P(a)).      *)
 Proposition Cantor : forall (a:U), Choice ->
@@ -142,7 +169,6 @@ Proof.
   rewrite H3, H4. assumption.
 Qed.
 
-
 (* If b is not empty, then card(a) is bounded by card(a x b).                   *)
 Proposition IsInclProdR : forall (a b:U), Choice ->
   b <> :0: -> card a :<=: card (a :x: b).
@@ -165,7 +191,6 @@ Proof.
   rewrite (Inj.ImageOfDomain f a (a :x: b)). 2: assumption. apply H3.
 Qed.
 
-
 (* If a is not empty, then card(b) is bounded by card(a x b).                   *)
 Proposition IsInclProdL : forall (a b:U), Choice ->
   a <> :0: -> card b :<=: card (a :x: b).
@@ -175,7 +200,6 @@ Proof.
   (* Exchange the product factors and use the right-factor version.             *)
   rewrite SCC.ProdComm. apply IsInclProdR; assumption.
 Qed.
-
 
 (* Assuming choice, card(a) <= card(b) gives an injection from a into b.        *)
 Proposition HasInj : forall (a b:U), Choice ->
@@ -189,7 +213,6 @@ Proof.
   apply SCC.HasInj; assumption.
 Qed.
 
-
 (* Assuming choice, card(b) <= card(a) gives a surjection from a onto b.        *)
 Proposition HasOnto : forall (a b:U), Choice ->
   b <> :0: -> card b :<=: card a -> exists f, Onto f a b.
@@ -202,7 +225,6 @@ Proof.
   apply SCC.HasOnto; assumption.
 Qed.
 
-
 (* Assuming choice, an injection gives an inequality of cardinals.              *)
 Proposition WhenInj : forall (a b f:U), Choice ->
   Inj f a b -> card a :<=: card b.
@@ -214,7 +236,6 @@ Proof.
   apply SCW.WithChoice. assumption.
 Qed.
 
-
 (* Assuming choice, a surjection gives an inequality of cardinals.              *)
 Proposition WhenOnto : forall (f a b:U), Choice ->
   Onto f a b -> card b :<=: card a.
@@ -225,7 +246,6 @@ Proof.
   apply SCC.WhenOnto with f. 2: assumption.
   apply SCW.WithChoice. assumption.
 Qed.
-
 
 (* Cardinal product is monotone in its right argument.                          *)
 Proposition InclCompatProdR : forall (a b c:U), Choice ->
@@ -252,7 +272,6 @@ Proof.
   apply WhenInj with g; assumption.
 Qed.
 
-
 (* Cardinal product is monotone in its left argument.                           *)
 Proposition InclCompatProdL : forall (a b c:U), Choice ->
   card a :<=: card b -> card (a :x: c) :<=: card (b :x: c).
@@ -263,7 +282,6 @@ Proof.
   rewrite (SCC.ProdComm a c), (SCC.ProdComm b c).
   apply InclCompatProdR; assumption.
 Qed.
-
 
 (* Cardinal product is monotone in both arguments.                              *)
 Proposition InclCompatProd : forall (a b c d:U), Choice ->
@@ -277,7 +295,6 @@ Proof.
   - apply InclCompatProdL; assumption.
   - apply InclCompatProdR; assumption.
 Qed.
-
 
 (* The cardinal of the image of a set under a functional class is bounded.      *)
 Proposition ImageIncl : forall (F:Class) (a:U), Choice ->
@@ -301,7 +318,6 @@ Proof.
   (* applies.                                                                   *)
   apply SCC.ImageInj; try assumption. apply SCW.WithChoice. assumption.
 Qed.
-
 
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
 Proposition UnionSum : forall (a b:U), Choice ->

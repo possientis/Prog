@@ -678,6 +678,57 @@ Proof.
   - apply SuccSquare; assumption.
 Qed.
 
+(* Cardinal equality is compatible with products of well-orderable sets.        *)
+Proposition ProdCompat : forall (a b c d:U),
+  WellOrderable a                   ->
+  WellOrderable b                   ->
+  WellOrderable c                   ->
+  WellOrderable d                   ->
+  card a = card c                   ->
+  card b = card d                   ->
+  card (a :x: b) = card (c :x: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d H1 H2 H3 H4 H5 H6.
+  (* The two product sets are well-orderable.                                   *)
+  apply EquivCharac.
+  - apply SCW.Prod; assumption.
+  - apply SCW.Prod; assumption.
+  - (* Equal cardinals identify each pair of corresponding factors up to        *)
+    (* equipotence, and products preserve equipotence.                          *)
+    apply SCE.ProdCompat.
+    + apply EquivCharac; assumption.
+    + apply EquivCharac; assumption.
+Qed.
+
+(* Cardinal equality is compatible with a product on the right.                 *)
+Proposition ProdCompatL : forall (a b c:U),
+  WellOrderable a                   ->
+  WellOrderable b                   ->
+  WellOrderable c                   ->
+  card a = card b                   ->
+  card (a :x: c) = card (b :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1 H2 H3 H4.
+  (* Keep the right factor fixed and use reflexivity on its cardinal.           *)
+  apply ProdCompat; try assumption. reflexivity.
+Qed.
+
+(* Cardinal equality is compatible with a product on the left.                  *)
+Proposition ProdCompatR : forall (a b c:U),
+  WellOrderable a                   ->
+  WellOrderable b                   ->
+  WellOrderable c                   ->
+  card a = card b                   ->
+  card (c :x: a) = card (c :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1 H2 H3 H4.
+  (* Keep the left factor fixed and use reflexivity on its cardinal.            *)
+  apply ProdCompat; try assumption. reflexivity.
+Qed.
+
 Proposition Square : forall (a:U), Ordinal a ->
   :N :<=: a -> card (a :x: a) = card a.
 Proof.
@@ -697,4 +748,3 @@ Proof.
         assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
         assert (b :~: a) as K3. { apply EquivCharac; assumption. }
 Admitted.
-
