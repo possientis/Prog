@@ -666,6 +666,21 @@ Proof.
   rewrite <- H7 in H8. revert H8. apply Foundation.NoLoop1.
 Qed.
 
+Proposition NatCharac : forall (a:U), Ordinal a ->
+  card a :< :N <-> a :< :N.
+Proof.
+  intros a H1.
+  assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
+  split; intros H2.
+  - assert (a :< :N \/ :N :<=: a) as H3. { apply SOC.ElemOrIncl; assumption. }
+    destruct H3 as [H3|H3]. 1: assumption.
+    apply CardOrdinal in H3. 2: assumption. exfalso.
+    assert (card a :< card a) as H4. { apply H3. assumption. } revert H4.
+    apply Foundation.NoLoop1.
+  - assert (card a = a) as H3. { apply WhenNat. assumption. }
+    rewrite H3. assumption.
+Qed.
+
 (* Lower half of Square: an infinite ordinal embeds cardinally in its square.   *)
 Proposition SquareHigher : forall (a:U), Ordinal a ->
   :N :<=: a -> card a :<=: card (a :x: a).
@@ -729,12 +744,13 @@ Proof.
   apply ProdCompat; try assumption. reflexivity.
 Qed.
 
+
 Proposition Square : forall (a:U), Ordinal a ->
   :N :<=: a -> card (a :x: a) = card a.
 Proof.
   remember (fun a => a :< :N \/ card (a :x: a) = card a) as A eqn:H1.
   assert (forall a, Ordinal a -> A a) as H2. {
-    apply Induction.Induction. intros a H2 IH.
+    apply Induction.Induction. intros a H2 IH. rewrite H1 in IH.
     assert (WellOrderable a) as G1. { apply SCW.WhenOrdinal. assumption. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
       intros b H3.
@@ -746,5 +762,39 @@ Proof.
       - destruct H4 as [b [H4 H5]].
         assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
         assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
-        assert (b :~: a) as K3. { apply EquivCharac; assumption. }
+        assert (card (b :x: b) = card (a :x: a)) as K3. {
+          apply ProdCompat; assumption. }
+        specialize (IH b H4). destruct IH as [IH|IH]; rewrite H1.
+        + left. apply NatCharac. 1: assumption. rewrite <- H5.
+          apply NatCharac; assumption.
+        + right. rewrite <- K3, IH. assumption.
+      - assert (forall b, b :< a -> card b :< card a) as H5. {
+          intros b H5.
+          assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+          assert (Ordinal (card a)) as K2. { apply IsOrdinal. }
+          assert (Ordinal (card b)) as K3. { apply IsOrdinal. }
+          assert (card b = card a \/ card b :< card a) as K4. {
+            apply SOC.EqualOrElem; try assumption. apply H3. assumption. }
+          destruct K4 as [K4|K4]. 2: assumption. exfalso. apply H4.
+          exists b. split; assumption. }
+        assert (forall b,
+          b :< a        ->
+          :N :<=: b     ->
+          card (succ b :x: succ b) = card (succ b)) as H6. {
+          intros b H6 H7.
+          assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+          assert (Ordinal (succ b)) as K2. { apply Succ.IsOrdinal. assumption. }
+          assert (Cardinal (card a)) as K3. { exists a. reflexivity. }
+          assert (card b = card (succ b)) as K4. { apply Succ; assumption. }
+          assert (Ordinal (card a)) as K5. { apply IsOrdinal. }
+          assert (succ b :< card a) as H8. {
+            apply CardLess; try assumption. rewrite <- K4. apply H5. assumption. }
+          assert (succ b :< a) as H9. {
+            apply SOC.ElemInclTran with (card a); try assumption.
+            apply IsIncl. assumption. }
+          specialize (IH (succ b) H9).
+          destruct IH as [IH|IH]. 2: assumption. exfalso.
+          assert (succ b :< b) as H10. { apply H7. assumption. }
+          assert (succ b :< succ b) as H11. { apply Succ.IsIncl. assumption. }
+          revert H11. apply Foundation.NoLoop1. }
 Admitted.
