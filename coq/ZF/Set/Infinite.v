@@ -5,6 +5,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Finite.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
 Require Import ZF.Set.Cardinal.Core.
@@ -40,6 +41,19 @@ Proof.
   apply SCE.Sym. assumption.
 Qed.
 
+(* An ordinal containing omega is infinite.                                     *)
+Proposition WhenOrdinal : forall (a:U),
+  Ordinal a -> :N :<=: a -> Infinite a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1 H2 H3.
+  (* A finite ordinal would be a natural number.                                *)
+  assert (a :< :N) as H4. { apply Finite.WhenOrdinal; assumption. }
+  (* Since omega is contained in a, this would put a in itself.                 *)
+  assert (a :< a) as H5. { apply H2. assumption. }
+  revert H5. apply Foundation.NoLoop1.
+Qed.
+
 (* The cardinal of an infinite set is not finite.                               *)
 Proposition CardGen : forall (a:U), Infinite a ->
   WellOrderable a -> :N :<=: card a.
@@ -52,6 +66,18 @@ Proof.
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   apply H1. exists (card a). split. 1: assumption.
   apply SCC.IsEquiv. assumption.
+Qed.
+
+(* The cardinal of an ordinal containing omega contains omega.                  *)
+Proposition CardOrdinal : forall (a:U),
+  Ordinal a -> :N :<=: a -> :N :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1 H2.
+  (* Such an ordinal is infinite, and every ordinal is well-orderable.          *)
+  apply CardGen.
+  - apply WhenOrdinal; assumption.
+  - apply SCW.WhenOrdinal. assumption.
 Qed.
 
 
