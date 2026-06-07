@@ -68,19 +68,6 @@ Proof.
   apply SCC.IsEquiv. assumption.
 Qed.
 
-(* The cardinal of an ordinal containing omega contains omega.                  *)
-Proposition CardOrdinal : forall (a:U),
-  Ordinal a -> :N :<=: a -> :N :<=: card a.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a H1 H2.
-  (* Such an ordinal is infinite, and every ordinal is well-orderable.          *)
-  apply CardGen.
-  - apply WhenOrdinal; assumption.
-  - apply SCW.WhenOrdinal. assumption.
-Qed.
-
-
 (* Assuming choice, an infinite set has cardinal at least omega.                *)
 Proposition Card : forall (a:U), Choice ->
   Infinite a <-> :N :<=: card a.

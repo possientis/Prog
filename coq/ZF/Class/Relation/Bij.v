@@ -12,6 +12,7 @@ Require Import ZF.Class.Relation.Fun.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Class.Relation.Image.
 Require Import ZF.Class.Relation.Inj.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Onto.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Relation.Restrict.
@@ -74,6 +75,14 @@ Proposition IsFun : forall (F A B:Class),
 Proof.
   intros F A B [H1 H2]. apply BijectionOn.IsFunctionOn in H1.
   split. 1: assumption. apply CIN.Double, Equiv.Sym. assumption.
+Qed.
+
+(* A bijection from A to B is one-to-one as a class relation.                   *)
+Proposition IsOneToOne : forall (F A B:Class),
+  Bij F A B -> OneToOne F.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F A B [[[H1 H2] H3] H4]. assumption.
 Qed.
 
 (* A bijection from A to B is a function defined on A.                          *)

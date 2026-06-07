@@ -646,3 +646,33 @@ Proof.
   - apply UnionSum; assumption.
   - apply SumProd; assumption.
 Qed.
+
+(* The cardinal of an ordinal containing omega also contains omega.             *)
+Proposition CardOrdinal : forall (a:U),
+  Ordinal a -> :N :<=: a -> :N :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1 H2.
+  assert (Ordinal (card a)) as H3. { apply IsOrdinal. }
+  assert (Ordinal :N) as H4. { apply Omega.IsOrdinal. }
+  assert (card a :< :N \/ :N :<=: card a) as H5. {
+    apply SOC.ElemOrIncl; assumption. }
+  destruct H5 as [H5|H5]. 2: assumption.
+  exfalso.
+  assert (a :~: card a) as H6. { apply IsEquivOrd. assumption. }
+  assert (a = card a) as H7. { apply SCE.EqualOrdNat; assumption. }
+  assert (card a :< a) as H8. { apply H2. assumption. }
+  rewrite <- H7 in H8. revert H8. apply Foundation.NoLoop1.
+Qed.
+
+(* Lower half of Square: an infinite ordinal embeds cardinally in its square.   *)
+Proposition SquareLower : forall (a:U),
+  Ordinal a -> :N :<=: a -> card a :<=: card (a :x: a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1 H2.
+  assert (:1: :< a) as H3. { apply H2. apply Omega.HasOne. }
+  apply Incl.Tran with (card (succ a)).
+  - apply IsInclSucc.
+  - apply SuccSquare; assumption.
+Qed.
