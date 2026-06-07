@@ -99,6 +99,28 @@ Proof.
   exists b. split. 1: assumption. apply SCE.Sym. exists (F:|:b). assumption.
 Qed.
 
+(* Being well-orderable is preserved by inclusion.                              *)
+Proposition InclCompat : forall (a b:U),
+  a :<=: b -> WellOrderable b -> WellOrderable a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 [c [H2 H3]].
+  destruct H3 as [f H3].
+  (* The image of a under the bijection b -> c is a subset of the ordinal c.    *)
+  assert (f:[a]: :<=: c) as H4. {
+    intros y H4. apply (Bij.ImageCharac f b c) in H4. 2: assumption.
+    destruct H4 as [x [H4 [H5 H6]]].
+    apply (Bij.RangeCharac f b c). 1: assumption. exists x. split; assumption. }
+  (* That image has an ordinal representative inside c.                         *)
+  assert (exists d, Ordinal d /\ d :<=: c /\ f:[a]: :~: d) as H5. {
+    apply SCE.OrdinalSubset; assumption. }
+  destruct H5 as [d [H5 [_ H6]]].
+  (* Restricting the bijection to a bijects a with that image.                  *)
+  assert (a :~: f:[a]:) as H7. {
+    exists (f:|:a). apply (Bij.Restrict f b c); assumption. }
+  exists d. split. 1: assumption. apply SCE.Tran with f:[a]:; assumption.
+Qed.
+
 (* The cartesian product of two well-orderable sets is well-orderable.          *)
 Proposition Prod : forall (a b:U),
   WellOrderable a -> WellOrderable b -> WellOrderable (a :x: b).

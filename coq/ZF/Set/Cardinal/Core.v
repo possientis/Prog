@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
@@ -27,12 +28,15 @@ Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
+Module CRL := ZF.Class.Relation.Functional.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
+Module SRD := ZF.Set.Relation.Domain.
+Module SRR := ZF.Set.Relation.Range.
 Module SRO := ZF.Set.Relation.Onto.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
@@ -540,6 +544,30 @@ Proof.
     apply WhenEquiv. apply Equiv.Sym. exists ((f :.: e) :|: d). assumption. }
   rewrite H8. rewrite <- (Idem a). apply InclCompat. 2: assumption.
   exists (card a). split. 1: apply IsOrdinal. apply Equiv.Refl.
+Qed.
+(* The cardinal of an image of a well-orderable set is bounded.                 *)
+Proposition Image : forall (F:Class) (a:U), WellOrderable a ->
+  CRL.Functional F -> card F:[a]: :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1 H2.
+  (* The restriction of F to a surjects from its domain onto its range.         *)
+  assert (Onto (F:|:a) (SRD.domain (F:|:a)) (SRR.range (F:|:a))) as H3. {
+    split. 2: reflexivity. split. 2: reflexivity.
+    apply RestrictOfClass.IsFunction. assumption. }
+  (* That range is the image of a, and its domain is contained in a.            *)
+  assert (SRR.range (F:|:a) = F:[a]:) as H4. {
+    apply RestrictOfClass.RangeOf. assumption. }
+  assert (SRD.domain (F:|:a) :<=: a) as H5. {
+    apply RestrictOfClass.DomainIsIncl. assumption. }
+  (* The subdomain is well-orderable, so the surjection gives the bound.        *)
+  assert (WellOrderable (SRD.domain (F:|:a))) as H6. {
+    apply SCW.InclCompat with a; assumption. }
+  assert (card (SRR.range (F:|:a)) :<=: card (SRD.domain (F:|:a))) as H7. {
+    apply WhenOnto with (F:|:a); assumption. }
+  assert (card (SRD.domain (F:|:a)) :<=: card a) as H8. {
+    apply InclCompat; assumption. }
+  rewrite <- H4. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
 Qed.
 (* For well-orderable sets, a union is bounded by the disjoint sum.             *)
 Proposition UnionSum : forall (a b:U), WellOrderable a -> WellOrderable b ->

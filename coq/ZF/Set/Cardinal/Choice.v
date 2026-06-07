@@ -25,8 +25,6 @@ Module CRL := ZF.Class.Relation.Functional.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
-Module SRD := ZF.Set.Relation.Domain.
-Module SRR := ZF.Set.Relation.Range.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
 
@@ -283,23 +281,8 @@ Proposition Image : forall (F:Class) (a:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a AC H1.
-  (* The restriction of F to a is a surjection from its domain onto its range.  *)
-  assert (Onto (F:|:a) (SRD.domain (F:|:a)) (SRR.range (F:|:a))) as H2. {
-    split. 2: reflexivity. split. 2: reflexivity.
-    apply RestrictOfClass.IsFunction. assumption. }
-  (* The range of the restriction is exactly the direct image of a under F.     *)
-  assert (SRR.range (F:|:a) = F:[a]:) as H3. {
-    apply RestrictOfClass.RangeOf. assumption. }
-  (* The domain of the restriction is contained in a.                           *)
-  assert (SRD.domain (F:|:a) :<=: a) as H4. {
-    apply RestrictOfClass.DomainIsIncl. assumption. }
-  (* A surjection bounds the cardinal of its range by the cardinal of its       *)
-  (* domain, and the latter domain is bounded by a.                             *)
-  assert (card (SRR.range (F:|:a)) :<=: card (SRD.domain (F:|:a))) as H5. {
-    apply WhenOnto with (F:|:a); assumption. }
-  assert (card (SRD.domain (F:|:a)) :<=: card a) as H6. {
-    apply InclCompat; assumption. }
-  rewrite <- H3. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
+  (* Choice makes a well-orderable, so the general image bound applies.         *)
+  apply SCC.Image. 2: assumption. apply SCW.WithChoice. assumption.
 Qed.
 
 
