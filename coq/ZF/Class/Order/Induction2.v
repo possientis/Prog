@@ -11,6 +11,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Set.Core.
 
 
+Module CDF := ZF.Class.Diff.
 Module CIN := ZF.Class.Incl.
 Module CIT := ZF.Class.Inter2.
 Module COI := ZF.Class.Order.InitSegment.
@@ -43,7 +44,7 @@ Proof.
   apply CIN.Double. split. 2: assumption. assert (A :<=: B) as X. 2: apply X.
 
   (* Or equivalently that A\B = 0. *)
-  apply Diff.WhenEmpty. assert (A:\:B :~: :0:) as X. 2: apply X.
+  apply CDF.WhenEmpty. assert (A:\:B :~: :0:) as X. 2: apply X.
 
   (* Suppose to the contrary that A\B <> 0. *)
   apply DoubleNegation. intros H5. assert (~ A:\:B :~: :0:) as X. apply H5. clear X.

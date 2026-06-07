@@ -1,6 +1,8 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
@@ -28,7 +30,9 @@ Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
+Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
+Module CRO := ZF.Class.Relation.OneToOne.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
@@ -546,7 +550,7 @@ Proof.
   exists (card a). split. 1: apply IsOrdinal. apply Equiv.Refl.
 Qed.
 (* The cardinal of an image of a well-orderable set is bounded.                 *)
-Proposition Image : forall (F:Class) (a:U), WellOrderable a ->
+Proposition ImageIncl : forall (F:Class) (a:U), WellOrderable a ->
   CRL.Functional F -> card F:[a]: :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -568,6 +572,20 @@ Proof.
   assert (card (SRD.domain (F:|:a)) :<=: card a) as H8. {
     apply InclCompat; assumption. }
   rewrite <- H4. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
+Qed.
+
+(* A one-to-one class preserves the cardinal of a well-orderable set.           *)
+Proposition ImageInj : forall (F:Class) (a:U),
+  WellOrderable a              ->
+  CRO.OneToOne F               ->
+  toClass a :<=: CRD.domain F  ->
+  card F:[a]: = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1 H2 H3.
+  (* The restriction of F maps a bijectively onto the image F[a].               *)
+  apply WhenEquiv. apply Equiv.Sym. exists (F:|:a).
+  apply RestrictOfClass.IsBij; assumption.
 Qed.
 (* For well-orderable sets, a union is bounded by the disjoint sum.             *)
 Proposition UnionSum : forall (a b:U), WellOrderable a -> WellOrderable b ->

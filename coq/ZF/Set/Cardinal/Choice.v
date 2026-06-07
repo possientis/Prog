@@ -1,5 +1,7 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
@@ -21,7 +23,9 @@ Require Import ZF.Set.Union2.
 
 Module SCC := ZF.Set.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
+Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
+Module CRO := ZF.Class.Relation.OneToOne.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
@@ -276,13 +280,26 @@ Qed.
 
 
 (* The cardinal of the image of a set under a functional class is bounded.      *)
-Proposition Image : forall (F:Class) (a:U), Choice ->
+Proposition ImageIncl : forall (F:Class) (a:U), Choice ->
   CRL.Functional F -> card F:[a]: :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a AC H1.
   (* Choice makes a well-orderable, so the general image bound applies.         *)
-  apply SCC.Image. 2: assumption. apply SCW.WithChoice. assumption.
+  apply SCC.ImageIncl. 2: assumption. apply SCW.WithChoice. assumption.
+Qed.
+
+(* A one-to-one class preserves the cardinal of a set in its domain.            *)
+Proposition ImageInj : forall (F:Class) (a:U), Choice ->
+  CRO.OneToOne F               ->
+  toClass a :<=: CRD.domain F  ->
+  card F:[a]: = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a AC H1 H2.
+  (* Choice makes a well-orderable, so the general injective image result       *)
+  (* applies.                                                                   *)
+  apply SCC.ImageInj; try assumption. apply SCW.WithChoice. assumption.
 Qed.
 
 

@@ -10,6 +10,9 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Bijection.
+Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -17,6 +20,7 @@ Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.ImageUnderClass.
+Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Relation.
 Require Import ZF.Set.Relation.Restrict.
@@ -32,10 +36,12 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Range.
+Module CRO := ZF.Class.Relation.OneToOne.
 
 Module SRD := ZF.Set.Relation.Domain.
 Module SFL := ZF.Set.Relation.Functional.
 Module SRR := ZF.Set.Relation.Range.
+Module SRO := ZF.Set.Relation.OneToOne.
 
 Definition restrict (F:Class) (a:U) : U := truncate (F:|:toClass a).
 
@@ -168,7 +174,7 @@ Qed.
 
 (* The range of the restriction f|a is the direct image of a under f.           *)
 Proposition RangeOf : forall (F:Class) (a:U), CFL.Functional F ->
-  SRR.range (F:|:a) = F:[a]:.
+  range (F:|:a) = F:[a]:.
 Proof.
   intros F a H1. apply Incl.Double. split; intros y H2.
   - apply SRR.Charac in H2. destruct H2 as [x H2].
@@ -177,10 +183,59 @@ Proof.
   - apply ImageUnderClass.Charac in H2. 2: assumption. destruct H2 as [x [H2 H3]].
     apply SRR.Charac. exists x. apply Charac2Rev; assumption.
 Qed.
+(* The restriction of a one-to-one class by a set is one-to-one.                *)
+Proposition IsOneToOne : forall (F:Class) (a:U),
+  CRO.OneToOne F -> OneToOne (F:|:a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1.
+  (* The set restriction represents the class restriction of F to a.            *)
+  apply SRO.FromClass. apply CRO.EquivCompat with (F:|:toClass a).
+  - apply Equiv.Sym, ToClass. apply H1.
+  - (* A class restriction of a one-to-one class is one-to-one.                 *)
+    apply CRO.Restrict. assumption.
+Qed.
+
+(* The restriction of a one-to-one class by a set is a bijection.               *)
+Proposition IsBijection : forall (F:Class) (a:U),
+  CRO.OneToOne F -> Bijection (F:|:a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1. split.
+  - apply IsRelation. apply H1.
+  - apply IsOneToOne. assumption.
+Qed.
+
+(* If a lies in the domain, the restriction is a bijection defined on a.        *)
+Proposition IsBijectionOn : forall (F:Class) (a:U),
+  CRO.OneToOne F                 ->
+  toClass a :<=: CRD.domain F    ->
+  BijectionOn (F:|:a) a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1 H2. split.
+  - apply IsBijection. assumption.
+  - apply DomainWhenIncl.
+    + apply H1.
+    + assumption.
+Qed.
+
+(* If a lies in the domain, the restriction maps a bijectively onto F[a].       *)
+Proposition IsBij : forall (F:Class) (a:U),
+  CRO.OneToOne F                 ->
+  toClass a :<=: CRD.domain F    ->
+  Bij (F:|:a) a F:[a]:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1 H2. split.
+  - apply IsBijectionOn; assumption.
+  - apply RangeOf. apply H1.
+Qed.
+
 
 (* Any element of the range of the restriction also belongs to the range of F.  *)
 Proposition RangeIsIncl : forall (F:Class) (a y:U), CFL.Functional F ->
-  y :< SRR.range (F:|:a) -> CRR.range F y.
+  y :< range (F:|:a) -> CRR.range F y.
 Proof.
   intros F a y H1 H2. apply SRR.Charac in H2. destruct H2 as [x H2].
   apply Charac2 in H2. 2: assumption. destruct H2 as [H2 H3].
@@ -268,4 +323,5 @@ Proof.
   assert ((G:|:c)!x = G!x) as H10. { apply Eval. 2: assumption. apply H2. }
   rewrite H9, H10. apply H5. assumption.
 Qed.
+
 

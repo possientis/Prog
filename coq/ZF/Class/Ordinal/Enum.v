@@ -52,6 +52,7 @@ Module CMF := ZF.Class.Ordinal.MinFresh.
 Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module COF := ZF.Class.Ordinal.FunctionOn.
+Module CBJ := ZF.Class.Relation.Bij.
 Module CRB := ZF.Class.Relation.Bijection.
 Module CBO := ZF.Class.Relation.BijectionOn.
 Module CRD := ZF.Class.Relation.Domain.
@@ -143,7 +144,7 @@ Proof.
     exfalso. apply H11. apply Small.EquivCompat with (initSegment R A a).
     - apply Equiv.Sym. assumption.
     - apply H1. assumption. }
-  assert (Bij G On A) as H14. {
+  assert (CBJ.Bij G On A) as H14. {
     split.
     - split. 2: apply H3. split. 2: assumption. apply H3.
     - apply Equiv.Sym. assumption. }
@@ -166,7 +167,7 @@ Proof.
       - apply Class.Inter2.IsInclL.
       - apply H7. assumption. }
     destruct H21 as [H21|H21]. 2: assumption. exfalso.
-    assert (a = b) as H22. { apply (Bij.EvalInjective G On A); assumption. }
+    assert (a = b) as H22. { apply (CBJ.EvalInjective G On A); assumption. }
     subst. revert H17. apply Foundation.NoLoop1. }
   assert (Irreflexive R A) as H16. {
     apply WellFoundedWellOrd.IsIrreflexive. assumption. }
@@ -238,15 +239,15 @@ Proof.
   assert (forall a, On a -> G!a = F!a) as H10. {
     intros a H10.
     assert (F!(H!a) = G!a) as H11. {
-      rewrite H7. rewrite (Bij.ComposeEval _ _ On A On); try assumption.
-      - rewrite (Bij.EvalOfConverseEval F On A). 1: reflexivity.
+      rewrite H7. rewrite (CBJ.ComposeEval _ _ On A On); try assumption.
+      - rewrite (CBJ.EvalOfConverseEval F On A). 1: reflexivity.
         + apply H5.
-        + apply H3. exists a. apply (Bij.Satisfies _ On A). 2: assumption.
+        + apply H3. exists a. apply (CBJ.Satisfies _ On A). 2: assumption.
           apply H3.
       - apply H3.
       - apply H6. }
     rewrite H9 in H11. 2: assumption. symmetry. assumption. }
-  apply (Bij.Equal G F On A). 3: assumption.
+  apply (CBJ.Equal G F On A). 3: assumption.
   - apply H3.
   - apply H5.
 Qed.
@@ -302,7 +303,7 @@ Proof.
     apply Equiv.Tran with (toClass (SRR.range g)).
     - apply Equiv.Sym, SRR.ToClass.
     - rewrite H20. assumption. }
-  assert (Bij (toClass g) (toClass a) A) as H22. { split; assumption. }
+  assert (CBJ.Bij (toClass g) (toClass a) A) as H22. { split; assumption. }
   assert (forall b c, b :< a -> c :< a -> b :< c -> R :(g!b,g!c):) as H23. {
     intros b c H23 H24 H25.
     assert (On b) as H26. { apply SOC.IsOrdinal with a; assumption. }
@@ -336,7 +337,7 @@ Proof.
   assert (Transitive R A) as H25. {
     apply WellOrdering.IsTransitive. assumption. }
   assert (forall b, b :< a -> A g!b) as G3. {
-    intros b G3. apply (Bij.IsInRange (toClass g) (toClass a) A); assumption. }
+    intros b G3. apply (CBJ.IsInRange (toClass g) (toClass a) A); assumption. }
   assert (forall b c, b :< a -> c :< a -> R :(g!b,g!c): -> b :< c) as H26. {
     intros b c H26 H27 H28.
     assert (On b) as H29. { apply SOC.IsOrdinal with a; assumption. }
