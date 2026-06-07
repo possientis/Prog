@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.OneToOne.
@@ -648,8 +649,8 @@ Proof.
 Qed.
 
 (* The cardinal of an ordinal containing omega also contains omega.             *)
-Proposition CardOrdinal : forall (a:U),
-  Ordinal a -> :N :<=: a -> :N :<=: card a.
+Proposition CardOrdinal : forall (a:U), Ordinal a ->
+  :N :<=: a -> :N :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1 H2.
@@ -666,8 +667,8 @@ Proof.
 Qed.
 
 (* Lower half of Square: an infinite ordinal embeds cardinally in its square.   *)
-Proposition SquareLower : forall (a:U),
-  Ordinal a -> :N :<=: a -> card a :<=: card (a :x: a).
+Proposition SquareHigher : forall (a:U), Ordinal a ->
+  :N :<=: a -> card a :<=: card (a :x: a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1 H2.
@@ -676,3 +677,24 @@ Proof.
   - apply IsInclSucc.
   - apply SuccSquare; assumption.
 Qed.
+
+Proposition Square : forall (a:U), Ordinal a ->
+  :N :<=: a -> card (a :x: a) = card a.
+Proof.
+  remember (fun a => a :< :N \/ card (a :x: a) = card a) as A eqn:H1.
+  assert (forall a, Ordinal a -> A a) as H2. {
+    apply Induction.Induction. intros a H2 IH.
+    assert (WellOrderable a) as G1. { apply SCW.WhenOrdinal. assumption. }
+    assert (forall b, b :< a -> card b :<=: card a) as H3. {
+      intros b H3.
+      assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+      apply InclCompat. 1: assumption. apply SOC.ElemIsIncl; assumption. }
+    assert ((exists b, b :< a /\ card b = card a) \/
+          ~(exists b, b :< a /\ card b = card a)) as [H4|H4]. {
+      apply LawExcludedMiddle. }
+      - destruct H4 as [b [H4 H5]].
+        assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+        assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
+        assert (b :~: a) as K3. { apply EquivCharac; assumption. }
+Admitted.
+
