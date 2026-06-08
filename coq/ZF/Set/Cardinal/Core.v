@@ -813,9 +813,9 @@ Proof.
           Ordinal b                                         ->
           Ordinal c                                         ->
           Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:  =
-          Pairing!:(b,c):) as H7. {
-
+          Pairing!:(b,c):) as H7. { apply MaxLex.PairingInit. }
 Admitted.
+
 (*
       assert (card (Pairing :[a :x: a]:) = card (a :x: a)) as H8. {
         apply ImageInj; assumption. }
