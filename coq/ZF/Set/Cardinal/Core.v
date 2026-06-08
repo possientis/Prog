@@ -9,13 +9,14 @@ Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
@@ -755,8 +756,13 @@ Proof.
     assert (WellOrderable a) as G1. { apply SCW.WhenOrdinal. assumption. }
     assert (WellOrderable (a :x: a)) as G2. { apply SCW.Prod; assumption. }
     assert (CRO.OneToOne Pairing) as G3. { apply MaxLex.IsIsom. }
-    assert (toClass (a :x: a) :<=: CRD.domain Pairing) as G4. { admit. }
+    assert (toClass (a :x: a) :<=: CRD.domain Pairing) as G4. {
+      apply MaxLex.IsIncl; assumption. }
     assert (Ordinal :N) as G5. { apply Omega.IsOrdinal. }
+    assert (Ordinal (card a)) as G6. { apply IsOrdinal. }
+    assert (WellOrderable (card a)) as G7. {
+      apply SCW.WhenOrdinal. assumption. }
+    assert (card (card a) = card a) as G8. { apply Idem. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
       intros b H3.
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -802,10 +808,19 @@ Proof.
         assert (succ b :< b) as H10. { apply H7. assumption. }
         assert (succ b :< succ b) as H11. { apply Succ.IsIncl. assumption. }
         revert H11. apply Foundation.NoLoop1. }
-      assert (Pairing:[a :x: a]: :<=: card a) as H7. { admit. }
+      assert (Pairing:[a :x: a]: :<=: card a) as H7. {
+        assert (forall b c,
+          Ordinal b                                         ->
+          Ordinal c                                         ->
+          Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:  =
+          Pairing!:(b,c):) as H7. {
+
+Admitted.
+(*
       assert (card (Pairing :[a :x: a]:) = card (a :x: a)) as H8. {
         apply ImageInj; assumption. }
-      assert (card (Pairing :[a :x: a]:) :<=: card a) as H9. { admit. }
+      assert (card (Pairing :[a :x: a]:) :<=: card a) as H9. {
+        rewrite <- G8. apply InclCompat; assumption. }
       assert (card (a :x: a) :<=: card a) as H10. {
         rewrite <- H8. assumption. }
       rewrite H1. assert (a :< :N \/ :N :<=: a) as H11. {
@@ -819,3 +834,4 @@ Proof.
   assert (a :< a) as H5. { apply H4. assumption. }
   exfalso. revert H5. apply Foundation.NoLoop1.
 Admitted.
+*)

@@ -16,17 +16,21 @@ Require Import ZF.Class.Ordinal.Order.Lex.
 Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Bij.
+Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Max.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
@@ -34,9 +38,12 @@ Require Import ZF.Notation.Image.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
+Module COI := ZF.Class.Order.InitSegment.
 Module CPR := ZF.Class.Prod.
+Module CRB := ZF.Class.Relation.Bij.
 Module SIN := ZF.Set.Incl.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SOI := ZF.Set.Order.InitSegment.
 Module SOS := ZF.Set.Ordinal.Succ.
 Module SPR := ZF.Set.Prod.
 
@@ -202,14 +209,14 @@ Proposition InitSquareIncl : forall (a b c:U),
   On a                                                              ->
   On b                                                              ->
   c = succ (a :\/: b)                                               ->
-  initSegment MaxLex (On :x: On) :(a,b): :<=: toClass (c :x: c).
+  COI.initSegment MaxLex (On :x: On) :(a,b): :<=: toClass (c :x: c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c H1 H2 H3. subst c.
   (* The maximum of two ordinals and its successor are ordinals.                *)
   assert (On (a :\/: b)) as H3. { apply Max.IsOrdinal; assumption. }
   assert (On (succ (a :\/: b))) as H4. { apply Succ.IsOrdinal. assumption. }
-  intros x H5. apply InitSegment.Charac in H5.
+  intros x H5. apply COI.Charac in H5.
   destruct H5 as [[y [z [H5 [H6 H7]]]] H8]. subst.
   (* A predecessor in MaxLex has maximum at most that of the target pair.       *)
   apply Charac4 in H8. apply SPR.Charac2.
@@ -233,7 +240,8 @@ Proof.
   split. 1: apply IsFounded. intros x H1.
   destruct H1 as [a [b [H1 [H2 H3]]]]. subst.
   remember (succ (a :\/: b)) as c eqn:H4.
-  assert (initSegment MaxLex (On :x: On) :(a,b): :<=: toClass (c :x: c)) as H5. {
+  assert (COI.initSegment MaxLex (On :x: On) :(a,b): :<=:
+    toClass (c :x: c)) as H5. {
     apply InitSquareIncl; assumption. }
   apply Small.InclCompat with (toClass (c :x: c)). 1: assumption.
   apply Small.SetIsSmall.
@@ -259,7 +267,7 @@ Qed.
 Proposition PairingInit : forall (a b:U),
   On a                                                 ->
   On b                                                 ->
-  Pairing:[(initSegment MaxLex (On :x: On) :(a,b):)]: :~:
+  Pairing:[(COI.initSegment MaxLex (On :x: On) :(a,b):)]: :~:
   toClass (Pairing!:(a,b):).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -279,9 +287,26 @@ Proof.
     - split. 2: assumption. apply SOC.IsOrdinal with (Pairing!:(a,b):);
       assumption. }
   (* Isomorphisms carry initial segments to initial segments.                   *)
-  apply Equiv.Tran with (initSegment E On Pairing!:(a,b):).
-  - apply InitSegment.IsomFullImage. 1: apply IsIsom. assumption.
+  apply Equiv.Tran with (COI.initSegment E On Pairing!:(a,b):).
+  - apply COI.IsomFullImage. 1: apply IsIsom. assumption.
   - apply Equiv.Tran with (On :/\: toClass (Pairing!:(a,b):)).
     + apply E.InitSegmentEA.
     + assumption.
+Qed.
+
+(* The product of two ordinals is a subset of the domain of Pairing.            *)
+Proposition IsIncl : forall (a b:U),
+  On a                                    ->
+  On b                                    ->
+  toClass (a :x: b) :<=: domain Pairing.
+Proof.
+  intros a b H1 H2 z H3.
+  apply Prod.Charac in H3. destruct H3 as [x [y [H3 [H4 H5]]]].
+  exists Pairing!:(x,y):. rewrite H3.
+  apply CRB.Satisfies with (On :x: On) On.
+  - apply IsIsom.
+  - apply CPR.Charac2.
+    assert (On x) as H6. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On y) as H7. { apply SOC.IsOrdinal with b; assumption. }
+    split; assumption.
 Qed.
