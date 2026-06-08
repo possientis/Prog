@@ -31,11 +31,13 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageUnderClass.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
+Module CIN := ZF.Class.Incl.
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Order.InitSegment.
@@ -205,7 +207,7 @@ Proof.
 Qed.
 
 (* The MaxLex predecessors of a pair lie in the next square above its maximum.  *)
-Proposition InitSquareIncl : forall (a b c:U),
+Proposition InitSquareIncl' : forall (a b c:U),
   On a                                                              ->
   On b                                                              ->
   c = succ (a :\/: b)                                               ->
@@ -242,9 +244,24 @@ Proof.
   remember (succ (a :\/: b)) as c eqn:H4.
   assert (COI.initSegment MaxLex (On :x: On) :(a,b): :<=:
     toClass (c :x: c)) as H5. {
-    apply InitSquareIncl; assumption. }
+    apply InitSquareIncl'; assumption. }
   apply Small.InclCompat with (toClass (c :x: c)). 1: assumption.
   apply Small.SetIsSmall.
+Qed.
+
+(* The MaxLex predecessors of a pair lie in the next square above its maximum.  *)
+Proposition InitSquareIncl : forall (a b c:U),
+  On a                                                  ->
+  On b                                                  ->
+  c = succ (a :\/: b)                                   ->
+  initSegment MaxLex (On :x: On) :(a,b): :<=: c :x: c.
+Proof.
+  intros a b c H1 H2 H3 d H4.
+  apply (InitSquareIncl' a b c); try assumption.
+  apply (SOI.ToClass MaxLex (On :x: On)). 4: assumption.
+  - apply IsWellFounded.
+  - apply CPR.Charac2. split; assumption.
+  - apply CIN.Refl.
 Qed.
 
 (* MaxLex is a well-founded well-ordering on On x On.                           *)
@@ -264,34 +281,25 @@ Proof.
 Qed.
 
 (* Pairing maps the MaxLex initial segment of a pair onto its ordinal value.    *)
-Proposition PairingInit : forall (a b:U),
-  On a                                                 ->
-  On b                                                 ->
-  Pairing:[(COI.initSegment MaxLex (On :x: On) :(a,b):)]: :~:
-  toClass (Pairing!:(a,b):).
+Proposition PairingInit : forall (a b:U), On a -> On b ->
+  Pairing:[initSegment MaxLex (On :x: On) :(a,b):]: = Pairing!:(a,b):.
 Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2.
-  (* The pair belongs to the ordered square of the ordinal class.               *)
-  assert ((On :x: On) :(a,b):) as H3. { apply CPR.Charac2. split; assumption. }
-  (* Its value under the pairing is therefore an ordinal.                       *)
-  assert (On (Pairing!:(a,b):)) as H4. {
-    destruct IsIsom as [H4 _].
-    apply (ZF.Class.Relation.Bij.IsInRange Pairing (On :x: On) On :(a,b):);
-    assumption. }
-  (* Intersecting an ordinal with the class of ordinals does not change it.     *)
-  assert (On :/\: toClass (Pairing!:(a,b):) :~:
-    toClass (Pairing!:(a,b):)) as H5. {
-    intros x. split; intros H5.
-    - apply H5.
-    - split. 2: assumption. apply SOC.IsOrdinal with (Pairing!:(a,b):);
-      assumption. }
-  (* Isomorphisms carry initial segments to initial segments.                   *)
-  apply Equiv.Tran with (COI.initSegment E On Pairing!:(a,b):).
-  - apply COI.IsomFullImage. 1: apply IsIsom. assumption.
-  - apply Equiv.Tran with (On :/\: toClass (Pairing!:(a,b):)).
-    + apply E.InitSegmentEA.
-    + assumption.
+  assert ((On :x: On) :(a,b):) as G1. {
+    apply CPR.Charac2. split; assumption. }
+  assert (Ordinal Pairing!:(a,b):) as G2. {
+    apply CRB.IsInRange with (On :x: On). 2: assumption.
+    apply IsIsom. }
+  assert (
+    Pairing:[initSegment MaxLex (On :x: On) :(a,b):]:
+    =
+    initSegment E On Pairing!:(a,b):) as H3. {
+    apply SOI.IsomFullImage. 2: assumption.
+    - apply IsWellFounded.
+    - apply IsIsom. }
+  rewrite H3, SOI.EA.
+  apply Specify.IsA. intros c H4.
+  apply SOC.IsOrdinal with Pairing!:(a,b):; assumption.
 Qed.
 
 (* The product of two ordinals is a subset of the domain of Pairing.            *)
@@ -310,3 +318,4 @@ Proof.
     assert (On y) as H7. { apply SOC.IsOrdinal with b; assumption. }
     split; assumption.
 Qed.
+

@@ -26,7 +26,7 @@ Proof.
   - exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
-Lemma InitSegmentEA : forall (A:Class) (a:U),
+Proposition InitSegmentEA : forall (A:Class) (a:U),
   initSegment E A a :~: A :/\: toClass a.
 Proof.
   intros A a x. split; intros [H1 H2].
@@ -39,7 +39,7 @@ Proof.
 Qed.
 
 
-Lemma InitSegmentEV : forall (a:U),
+Proposition InitSegmentEV : forall (a:U),
   initSegment E V a :~: toClass a.
 Proof.
   intros a. apply Equiv.Tran with (V :/\: toClass a).
