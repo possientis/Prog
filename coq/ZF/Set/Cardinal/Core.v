@@ -763,6 +763,7 @@ Proof.
     assert (WellOrderable (card a)) as G7. {
       apply SCW.WhenOrdinal. assumption. }
     assert (card (card a) = card a) as G8. { apply Idem. }
+    assert (CRO.OneToOne Pairing) as G10. { apply IsIsom. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
       intros b H3.
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -808,12 +809,21 @@ Proof.
         assert (succ b :< b) as H10. { apply H7. assumption. }
         assert (succ b :< succ b) as H11. { apply Succ.IsIncl. assumption. }
         revert H11. apply Foundation.NoLoop1. }
+      assert (a :< :N \/ :N :<=: a) as G9. { apply SOC.ElemOrIncl; assumption. }
+      destruct G9 as [G9|G9]. 1: { rewrite H1. left. assumption. }
       assert (Pairing:[a :x: a]: :<=: card a) as H7. {
-        assert (forall b c,
-          Ordinal b                                         ->
-          Ordinal c                                         ->
-          Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:  =
-          Pairing!:(b,c):) as H7. { apply MaxLex.PairingInit. }
+        intros d H7.
+        apply (CRB.ImageSetCharac _ (Ordinal :x: Ordinal) Ordinal) in H7.
+        2: apply IsIsom. destruct H7 as [x [H7 [H8 H9]]].
+        apply Prod.Charac in H7. destruct H7 as [b [c [H7 [H10 H11]]]].
+        subst x d. apply CPR.Charac2 in H8. destruct H8 as [H8 H12].
+
+        assert (Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:  =
+          Pairing!:(b,c):) as H7. { apply MaxLex.PairingInit; assumption. }
+        assert (
+          card (Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:) =
+          card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):)) as H13. {
+          apply ImageInj.
 Admitted.
 
 (*
