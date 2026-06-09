@@ -577,18 +577,16 @@ Proof.
   rewrite <- H4. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
 Qed.
 
-(* A one-to-one class preserves the cardinal of a well-orderable set.           *)
+(* A one-to-one class preserves the cardinal of a set contained in its domain.  *)
 Proposition ImageInj : forall (F:Class) (a:U),
-  WellOrderable a              ->
   CRO.OneToOne F               ->
   toClass a :<=: CRD.domain F  ->
   card F:[a]: = card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros F a H1 H2 H3.
-  (* The restriction of F maps a bijectively onto the image F[a].               *)
-  apply WhenEquiv. apply Equiv.Sym. exists (F:|:a).
-  apply RestrictOfClass.IsBij; assumption.
+  intros F a H1 H2.
+  (* The set and its image are equipotent, so their cardinals agree.            *)
+  apply WhenEquiv. apply Equiv.Sym. apply Equiv.ImageInj; assumption.
 Qed.
 (* For well-orderable sets, a union is bounded by the disjoint sum.             *)
 Proposition UnionSum : forall (a b:U), WellOrderable a -> WellOrderable b ->
@@ -844,4 +842,4 @@ Admitted.
   assert (a :< a) as H5. { apply H4. assumption. }
   exfalso. revert H5. apply Foundation.NoLoop1.
 Admitted.
-*)
+                                                                                *)

@@ -306,19 +306,6 @@ Proof.
   apply SCC.ImageIncl. 2: assumption. apply SCW.WithChoice. assumption.
 Qed.
 
-(* A one-to-one class preserves the cardinal of a set in its domain.            *)
-Proposition ImageInj : forall (F:Class) (a:U), Choice ->
-  CRO.OneToOne F               ->
-  toClass a :<=: CRD.domain F  ->
-  card F:[a]: = card a.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros F a AC H1 H2.
-  (* Choice makes a well-orderable, so the general injective image result       *)
-  (* applies.                                                                   *)
-  apply SCC.ImageInj; try assumption. apply SCW.WithChoice. assumption.
-Qed.
-
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
 Proposition UnionSum : forall (a b:U), Choice ->
   card (a :\/: b) :<=: card (a :++: b).

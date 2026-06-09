@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Incl.
@@ -46,6 +47,8 @@ Require Import ZF.Notation.Equiv.
 Export ZF.Notation.Equiv.
 
 Module CFF := ZF.Class.Relation.Fun.From.
+Module CRD := ZF.Class.Relation.Domain.
+Module CRO := ZF.Class.Relation.OneToOne.
 Module SOO := ZF.Set.Ordinal.Order.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Module SMS := ZF.Set.Relation.Map.Sum.
@@ -72,6 +75,16 @@ Proposition Tran : forall (a b c:U), a :~: b -> b :~: c -> a :~: c.
 Proof.
   intros a b c [f H1] [g H2]. exists (g :.: f).
   apply Bij.Compose with b; assumption.
+Qed.
+
+(* A one-to-one class bijects a set contained in its domain with its image.     *)
+Proposition ImageInj : forall (F:Class) (a:U),
+  CRO.OneToOne F              ->
+  toClass a :<=: CRD.domain F ->
+  a :~: F:[a]:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a H1 H2. exists (F:|:a). apply RestrictOfClass.IsBij; assumption.
 Qed.
 
 (* A subset of an ordinal is equipotent to some ordinal within it.              *)
