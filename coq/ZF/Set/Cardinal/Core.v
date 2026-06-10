@@ -817,11 +817,18 @@ Proof.
         subst x d. apply CPR.Charac2 in H8. destruct H8 as [H8 H12].
 
         assert (Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:  =
-          Pairing!:(b,c):) as H7. { apply MaxLex.PairingInit; assumption. }
+          Pairing!:(b,c):) as H7. { apply MaxLex.ImageInit; assumption. }
         assert (
           card (Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:) =
           card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):)) as H13. {
-          apply ImageInj.
+          apply ImageInj. 1: assumption. apply MaxLex.DomainInit; assumption. }
+        assert (card (Pairing!:(b,c):) =
+          card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):)) as H14. {
+          rewrite H7 in H13. assumption. }
+        remember (b :\/: c) as m eqn:H15.
+        assert (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c): :<=:
+          (succ m :x: succ m)) as H16. {
+          apply MaxLex.IsInclInit; try assumption. rewrite H15. reflexivity. }
 Admitted.
 
 (*

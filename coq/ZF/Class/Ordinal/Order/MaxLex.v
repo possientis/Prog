@@ -207,7 +207,7 @@ Proof.
 Qed.
 
 (* The MaxLex predecessors of a pair lie in the next square above its maximum.  *)
-Proposition InitSquareIncl' : forall (a b c:U),
+Proposition IsInclInit' : forall (a b c:U),
   On a                                                              ->
   On b                                                              ->
   c = succ (a :\/: b)                                               ->
@@ -244,20 +244,20 @@ Proof.
   remember (succ (a :\/: b)) as c eqn:H4.
   assert (COI.initSegment MaxLex (On :x: On) :(a,b): :<=:
     toClass (c :x: c)) as H5. {
-    apply InitSquareIncl'; assumption. }
+    apply IsInclInit'; assumption. }
   apply Small.InclCompat with (toClass (c :x: c)). 1: assumption.
   apply Small.SetIsSmall.
 Qed.
 
 (* The MaxLex predecessors of a pair lie in the next square above its maximum.  *)
-Proposition InitSquareIncl : forall (a b c:U),
+Proposition IsInclInit : forall (a b c:U),
   On a                                                  ->
   On b                                                  ->
   c = succ (a :\/: b)                                   ->
   initSegment MaxLex (On :x: On) :(a,b): :<=: c :x: c.
 Proof.
   intros a b c H1 H2 H3 d H4.
-  apply (InitSquareIncl' a b c); try assumption.
+  apply (IsInclInit' a b c); try assumption.
   apply (SOI.ToClass MaxLex (On :x: On)). 4: assumption.
   - apply IsWellFounded.
   - apply CPR.Charac2. split; assumption.
@@ -281,7 +281,7 @@ Proof.
 Qed.
 
 (* Pairing maps the MaxLex initial segment of a pair onto its ordinal value.    *)
-Proposition PairingInit : forall (a b:U), On a -> On b ->
+Proposition ImageInit : forall (a b:U), On a -> On b ->
   Pairing:[initSegment MaxLex (On :x: On) :(a,b):]: = Pairing!:(a,b):.
 Proof.
   intros a b H1 H2.
@@ -303,9 +303,7 @@ Proof.
 Qed.
 
 (* The product of two ordinals is a subset of the domain of Pairing.            *)
-Proposition IsIncl : forall (a b:U),
-  On a                                    ->
-  On b                                    ->
+Proposition IsIncl : forall (a b:U), On a -> On b ->
   toClass (a :x: b) :<=: domain Pairing.
 Proof.
   intros a b H1 H2 z H3.
@@ -318,4 +316,19 @@ Proof.
     assert (On y) as H7. { apply SOC.IsOrdinal with b; assumption. }
     split; assumption.
 Qed.
+
+Proposition DomainInit : forall (a b:U), On a -> On b ->
+  toClass (initSegment MaxLex (On :x: On) :(a,b):) :<=: domain Pairing.
+Proof.
+  intros a b H1 H2 x H3.
+  assert (WellFounded MaxLex (On :x: On)) as G1. { apply IsWellFounded. }
+  assert ((On :x: On) :(a,b):) as G2. { apply CPR.Charac2. split; assumption. }
+  assert (On :x: On :<=: On :x: On) as G3. { apply CIN.Refl. }
+  apply (SOI.Charac _ (On :x: On)) in H3; try assumption. destruct H3 as [H3 H4].
+  destruct H3 as [u [v [H3 [H5 H6]]]]. subst x.
+  exists Pairing!:(u,v):. apply (CRB.Satisfies _ (On :x: On) On).
+  - apply IsIsom.
+  - apply CPR.Charac2. split; assumption.
+Qed.
+
 
