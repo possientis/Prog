@@ -829,9 +829,13 @@ Proof.
         assert (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c): :<=:
           (succ m :x: succ m)) as H16. {
           apply MaxLex.IsInclInit; try assumption. rewrite H15. reflexivity. }
-Admitted.
+        assert (Ordinal m) as H17. { admit. }
+        assert (m :< a) as H18. { admit. }
+        assert (m :< :N \/ :N :<=: m) as H19. { apply SOC.ElemOrIncl; assumption. }
+        destruct H19 as [H19|H19].
+        - admit.
+        - admit. }
 
-(*
       assert (card (Pairing :[a :x: a]:) = card (a :x: a)) as H8. {
         apply ImageInj; assumption. }
       assert (card (Pairing :[a :x: a]:) :<=: card a) as H9. {
@@ -849,4 +853,3 @@ Admitted.
   assert (a :< a) as H5. { apply H4. assumption. }
   exfalso. revert H5. apply Foundation.NoLoop1.
 Admitted.
-                                                                                *)
