@@ -331,4 +331,11 @@ Proof.
   - apply CPR.Charac2. split; assumption.
 Qed.
 
-
+Proposition IsOrdinal : forall (a b:U), On a -> On b ->
+  Ordinal Pairing!:(a,b):.
+Proof.
+  intros a b H1 H2.
+  apply CRB.IsInRange with (Ordinal :x: Ordinal).
+  - apply IsIsom.
+  - apply CPR.Charac2. split; assumption.
+Qed.

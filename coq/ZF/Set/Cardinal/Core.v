@@ -12,6 +12,8 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
+Require Import ZF.Set.Ordinal.Mult.
+Require Import ZF.Set.Ordinal.Mult2.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Onto.
@@ -744,6 +746,20 @@ Proof.
   apply ProdCompat; try assumption. reflexivity.
 Qed.
 
+Proposition ProdNat : forall (n m:U), n :< :N -> m :< :N ->
+  card (n :x: m) :< :N.
+Proof.
+  intros n m H1 H2.
+  assert (Ordinal n) as G1. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal m) as G2. { apply Omega.HasOrdinals. assumption. }
+  assert (n :x: m :~: m :*: n) as H3. {
+    exists (Mult2.f m n). apply Mult2.IsBij; assumption. }
+  assert (card (n :x: m) = card (m :*: n)) as H4. {
+    apply WhenEquiv. assumption. }
+  assert (m :*: n :< :N) as H5. { apply Mult.InOmega; assumption. }
+  assert (card (m :*: n) :< :N) as H6. { rewrite WhenNat; assumption. }
+  rewrite H4. assumption.
+Qed.
 
 Proposition Square : forall (a:U), Ordinal a ->
   :N :<=: a -> card (a :x: a) = card a.
@@ -761,7 +777,7 @@ Proof.
     assert (WellOrderable (card a)) as G7. {
       apply SCW.WhenOrdinal. assumption. }
     assert (card (card a) = card a) as G8. { apply Idem. }
-    assert (CRO.OneToOne Pairing) as G10. { apply IsIsom. }
+    assert (CRO.OneToOne Pairing) as G10. { apply MaxLex.IsIsom. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
       intros b H3.
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -769,6 +785,7 @@ Proof.
     assert ((exists b, b :< a /\ card b = card a) \/
           ~(exists b, b :< a /\ card b = card a)) as [H4|H4]. {
       apply LawExcludedMiddle. }
+    (* exists b, b :< a /\ card b = card a *)
     - destruct H4 as [b [H4 H5]].
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
       assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
@@ -778,6 +795,7 @@ Proof.
       + left. apply NatCharac. 1: assumption. rewrite <- H5.
         apply NatCharac; assumption.
       + right. rewrite <- K3, IH. assumption.
+    (* ~ exists b, b :< a /\ card b = card a *)
     - assert (forall b, b :< a -> card b :< card a) as H5. {
         intros b H5.
         assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -787,9 +805,7 @@ Proof.
           apply SOC.EqualOrElem; try assumption. apply H3. assumption. }
         destruct K4 as [K4|K4]. 2: assumption. exfalso. apply H4.
         exists b. split; assumption. }
-      assert (forall b,
-        b :< a        ->
-        :N :<=: b     ->
+      assert (forall b, b :< a -> :N :<=: b ->
         card (succ b :x: succ b) = card (succ b)) as H6. {
         intros b H6 H7.
         assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -809,13 +825,13 @@ Proof.
         revert H11. apply Foundation.NoLoop1. }
       assert (a :< :N \/ :N :<=: a) as G9. { apply SOC.ElemOrIncl; assumption. }
       destruct G9 as [G9|G9]. 1: { rewrite H1. left. assumption. }
+      (* case :N :<=: a *)
       assert (Pairing:[a :x: a]: :<=: card a) as H7. {
         intros d H7.
         apply (CRB.ImageSetCharac _ (Ordinal :x: Ordinal) Ordinal) in H7.
-        2: apply IsIsom. destruct H7 as [x [H7 [H8 H9]]].
+        2: apply MaxLex.IsIsom. destruct H7 as [x [H7 [H8 H9]]].
         apply Prod.Charac in H7. destruct H7 as [b [c [H7 [H10 H11]]]].
         subst x d. apply CPR.Charac2 in H8. destruct H8 as [H8 H12].
-
         assert (Pairing :[initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):]:  =
           Pairing!:(b,c):) as H7. { apply MaxLex.ImageInit; assumption. }
         assert (
@@ -825,17 +841,57 @@ Proof.
         assert (card (Pairing!:(b,c):) =
           card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):)) as H14. {
           rewrite H7 in H13. assumption. }
+        assert (Ordinal Pairing!:(b,c):) as H30. {
+          apply MaxLex.IsOrdinal; assumption. }
         remember (b :\/: c) as m eqn:H15.
         assert (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c): :<=:
           (succ m :x: succ m)) as H16. {
           apply MaxLex.IsInclInit; try assumption. rewrite H15. reflexivity. }
-        assert (Ordinal m) as H17. { admit. }
-        assert (m :< a) as H18. { admit. }
+        assert (Ordinal m) as H17. {
+          rewrite H15. apply Max.IsOrdinal; assumption. }
+        assert (m :< a) as H18. {
+          rewrite H15. apply Max.ElemCompat; assumption. }
         assert (m :< :N \/ :N :<=: m) as H19. { apply SOC.ElemOrIncl; assumption. }
-        destruct H19 as [H19|H19].
-        - admit.
-        - admit. }
-
+        assert (Ordinal (succ m)) as H20. { apply Succ.IsOrdinal. assumption. }
+        assert (WellOrderable (succ m :x: succ m)) as H21. {
+          apply SCW.Prod; apply SCW.WhenOrdinal; assumption. }
+        assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<=:
+          card (succ m :x: succ m)) as H22. {
+          apply InclCompat; assumption. }
+         destruct H19 as [H19|H19].
+        (* case m :< :N *)
+        - assert ((Pairing!:( b, c ):) :< card a) as X. 2: apply X.
+          assert (succ m :< :N) as H23. { apply Omega.HasSucc. assumption. }
+          assert (card (succ m :x: succ m) :< :N) as H27. {
+            apply ProdNat; assumption. }
+          assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<
+            :N) as H28. {
+            apply SOC.InclElemTran with (card (succ m :x: succ m));
+            try assumption; apply IsOrdinal. }
+          assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<
+            card a) as H29. {
+            apply SOC.ElemInclTran with :N; try assumption.
+            + apply IsOrdinal.
+            + apply CardOrdinal; assumption. }
+          apply CardLess. 1: assumption.
+          + exists a. reflexivity.
+          + rewrite H14. assumption.
+        (* case :N :<=: m *)
+        - assert ((Pairing!:( b, c ):) :< card a) as X. 2: apply X.
+          assert (card (succ m :x: succ m) = card (succ m)) as H23. {
+            apply H6; assumption. }
+          assert (card (succ m) = card m) as H24. {
+            symmetry. apply Succ; assumption. }
+          assert (card m :< card a) as H25. { apply H5. assumption. }
+          assert (card (succ m :x: succ m) :< card a) as H26. {
+            rewrite H23, H24. assumption. }
+          assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<
+            card a) as H27. {
+            apply SOC.InclElemTran with (card (succ m :x: succ m));
+            try assumption; apply IsOrdinal. }
+          apply CardLess. 1: assumption.
+          + exists a. reflexivity.
+          + rewrite H14. assumption. }
       assert (card (Pairing :[a :x: a]:) = card (a :x: a)) as H8. {
         apply ImageInj; assumption. }
       assert (card (Pairing :[a :x: a]:) :<=: card a) as H9. {
@@ -852,4 +908,5 @@ Proof.
   destruct H2 as [H2|H2]. 2: assumption.
   assert (a :< a) as H5. { apply H4. assumption. }
   exfalso. revert H5. apply Foundation.NoLoop1.
-Admitted.
+Qed.
+
