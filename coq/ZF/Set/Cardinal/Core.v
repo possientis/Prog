@@ -169,6 +169,20 @@ Proof.
   intros b [a H1]. subst. apply IsOrdinal.
 Qed.
 
+(* The maximum of two cardinals is a cardinal.                                  *)
+Proposition Max : forall (a b:U),
+  Cardinal a -> Cardinal b -> Cardinal (a :\/: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* Since cardinals are ordinals, their maximum is one of the two cardinals.   *)
+  assert (Ordinal a) as H3. { apply CardIsOrd. assumption. }
+  assert (Ordinal b) as H4. { apply CardIsOrd. assumption. }
+  assert (a :\/: b = a \/ a :\/: b = b) as H5. {
+    apply Max.IsLeftOrRight; assumption. }
+  destruct H5 as [H5|H5]; rewrite H5; assumption.
+Qed.
+
 (* A set is a cardinal iff it equals its own cardinal.                          *)
 Proposition WhenCardinal : forall (a:U), Cardinal a <-> a = card a.
 Proof.
@@ -1143,5 +1157,59 @@ Proof.
   assert (card (card a :x: card a) = card (card a)) as H5. {
     apply SquareOrd. 2: assumption. apply IsOrdinal. }
   rewrite H4, H5. apply Idem.
+Qed.
+
+(* The product of an infinite cardinal and a non-empty cardinal is their max.   *)
+Proposition ProdMax : forall (a b:U),
+  :N :<=: card a                          ->
+  :0: :< card b                           ->
+  card (a :x: b) = card a :\/: card b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  remember (card a :\/: card b) as m eqn:H3.
+  (* The positive cardinal hypotheses make both factors well-orderable and      *)
+  (* non-empty.                                                                 *)
+  assert (card a <> :0:) as H4. {
+    apply Empty.HasElem. exists :0:. apply H1. apply Omega.HasZero. }
+  assert (card b <> :0:) as H5. {
+    apply Empty.HasElem. exists :0:. assumption. }
+  assert (WellOrderable a) as H6. { apply WellOrderableNotZero. assumption. }
+  assert (WellOrderable b) as H7. { apply WellOrderableNotZero. assumption. }
+  assert (a <> :0:) as H8. { apply NotZero. assumption. }
+  assert (b <> :0:) as H9. { apply NotZero. assumption. }
+  (* The maximum of two cardinals is again an ordinal cardinal.                 *)
+  assert (Ordinal m) as H10. {
+    rewrite H3. apply Max.IsOrdinal; apply IsOrdinal. }
+  assert (Cardinal m) as H11. {
+    rewrite H3. apply Max.
+    - exists a. reflexivity.
+    - exists b. reflexivity. }
+  assert (WellOrderable m) as H12. { apply SCW.WhenOrdinal. assumption. }
+  assert (card m = m) as H13. { symmetry. apply WhenCardinal. assumption. }
+  (* The maximum is infinite because it contains card(a), which contains omega. *)
+  assert (:N :<=: m) as H14. {
+    rewrite H3. apply Incl.Tran with (card a). 1: assumption.
+    apply Max.IsInclL. }
+  (* The product is bounded above by the square of the maximum.                 *)
+  assert (card a :<=: card m) as H15. {
+    rewrite H13, H3. apply Max.IsInclL. }
+  assert (card b :<=: card m) as H16. {
+    rewrite H13, H3. apply Max.IsInclR. }
+  assert (card (a :x: b) :<=: card (m :x: m)) as H17. {
+    apply InclCompatProd; assumption. }
+  assert (card (m :x: m) = card m) as H18. {
+    apply SquareOrd; assumption. }
+  assert (card (m :x: m) = m) as H19. { rewrite H18. apply H13. }
+  assert (card (a :x: b) :<=: m) as H20. { rewrite <- H19. assumption. }
+  (* Conversely, each factor embeds into the product by fixing a point in the   *)
+  (* other non-empty factor.                                                    *)
+  assert (card a :<=: card (a :x: b)) as H21. {
+    apply IsInclProdR; assumption. }
+  assert (card b :<=: card (a :x: b)) as H22. {
+    apply IsInclProdL; assumption. }
+  assert (m :<=: card (a :x: b)) as H23. {
+    rewrite H3. apply Union2.IsIncl; assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
 
