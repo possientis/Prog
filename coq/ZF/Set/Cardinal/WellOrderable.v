@@ -17,9 +17,12 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Sum.
 
 Require Import ZF.Notation.Eval.
@@ -32,7 +35,9 @@ Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SOO := ZF.Set.Ordinal.Onto.
 Module SRO := ZF.Set.Relation.OneToOne.
+Module STO := ZF.Set.Relation.Onto.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
 
 (* A set is well-orderable iff it is equipotent to some ordinal.                *)
@@ -119,6 +124,31 @@ Proof.
   assert (a :~: f:[a]:) as H7. {
     exists (f:|:a). apply (Bij.Restrict f b c); assumption. }
   exists d. split. 1: assumption. apply SCE.Tran with f:[a]:; assumption.
+Qed.
+
+(* Being well-orderable is preserved by surjections.                            *)
+Proposition OntoCompat : forall (f a b:U),
+  Onto f a b -> WellOrderable a -> WellOrderable b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 [c [H2 H3]].
+  (* Reindex the surjection by an ordinal representative of the domain.         *)
+  assert (c :~: a) as H4. { apply SCE.Sym. assumption. }
+  destruct H4 as [e H4].
+  assert (Onto e c a) as H5. { apply Bij.IsOnto. assumption. }
+  assert (Onto (f :.: e) c b) as H6. { apply STO.Compose with a; assumption. }
+  (* A surjection from an ordinal has a bijective restriction.                  *)
+  assert (exists d, d :<=: c /\ Bij ((f :.: e) :|: d) d b) as H7. {
+    apply SOO.HasRestrictBij; assumption. }
+  destruct H7 as [d [H7 H8]].
+  (* The restricted domain has an ordinal representative inside the domain.     *)
+  assert (exists r, Ordinal r /\ r :<=: c /\ d :~: r) as H9. {
+    apply SCE.OrdinalSubset; assumption. }
+  destruct H9 as [r [H9 [_ H10]]].
+  (* Transport the bijection from the codomain to that ordinal representative.  *)
+  exists r. split. 1: assumption. apply SCE.Tran with d.
+  - apply SCE.Sym. exists ((f :.: e) :|: d). assumption.
+  - assumption.
 Qed.
 
 (* The cartesian product of two well-orderable sets is well-orderable.          *)
