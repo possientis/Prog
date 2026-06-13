@@ -24,6 +24,7 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
+Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
@@ -594,6 +595,34 @@ Proof.
   assert (card a = card f:[a]:) as H4. { apply WhenEquiv. assumption. }
   rewrite H4. apply InclCompat. 1: assumption.
   rewrite (Inj.ImageOfDomain f a b). 2: assumption. apply H2.
+Qed.
+(* If b is not empty, then card(a) is bounded by card(a x b).                   *)
+Proposition IsInclProdR : forall (a b:U), WellOrderable a -> WellOrderable b ->
+  b <> :0: -> card a :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3.
+  (* The product is well-orderable, and b supplies a fixed second coordinate.   *)
+  assert (WellOrderable (a :x: b)) as H4. { apply SCW.Prod; assumption. }
+  apply Empty.HasElem in H3. destruct H3 as [y H3].
+  remember (From.from a (fun x => :(x,y):)) as f eqn:H5.
+  (* Fixing y in b embeds a into the product by sending x to (x,y).             *)
+  assert (Inj f a (a :x: b)) as H6. {
+    rewrite H5. apply From.IsInj.
+    - intros x H6. apply Prod.Charac2. split; assumption.
+    - intros x z H6 H7 H8.
+      apply OrdPair.Equal in H8. destruct H8 as [H8 _]. assumption. }
+  (* An injection into the well-orderable product gives the cardinal bound.     *)
+  apply WhenInj with f; assumption.
+Qed.
+(* If a is not empty, then card(b) is bounded by card(a x b).                   *)
+Proposition IsInclProdL : forall (a b:U), WellOrderable a -> WellOrderable b ->
+  a <> :0: -> card b :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3.
+  (* Exchange the product factors and use the right-factor version.             *)
+  rewrite ProdComm. apply IsInclProdR; assumption.
 Qed.
 (* If a is an ordinal above one, then succ(a) is bounded by a x a.              *)
 Proposition SuccSquare : forall (a:U),

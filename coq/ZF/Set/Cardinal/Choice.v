@@ -175,20 +175,8 @@ Proposition IsInclProdR : forall (a b:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
-  apply Empty.HasElem in H1. destruct H1 as [y H1].
-  remember (From.from a (fun x => :(x,y):)) as f eqn:H2.
-  (* Fixing y in b embeds a into a x b by sending x to (x,y).                   *)
-  assert (Inj f a (a :x: b)) as H3. {
-    rewrite H2. apply From.IsInj.
-    - intros x H3. apply Prod.Charac2. split; assumption.
-    - intros x z H3 H4 H5.
-      apply OrdPair.Equal in H5. destruct H5 as [H5 _]. assumption. }
-  (* Hence a is bijective with its image, which lies inside a x b.              *)
-  assert (a :~: f:[a]:) as H4. { exists f. apply Bij.FromInj with (a :x: b).
-    assumption. }
-  assert (card a = card f:[a]:) as H5. { apply SCC.WhenEquiv. assumption. }
-  rewrite H5. apply InclCompat. 1: assumption.
-  rewrite (Inj.ImageOfDomain f a (a :x: b)). 2: assumption. apply H3.
+  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
+  apply SCC.IsInclProdR; try assumption; apply SCW.WithChoice; assumption.
 Qed.
 
 (* If a is not empty, then card(b) is bounded by card(a x b).                   *)
@@ -197,8 +185,8 @@ Proposition IsInclProdL : forall (a b:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
-  (* Exchange the product factors and use the right-factor version.             *)
-  rewrite SCC.ProdComm. apply IsInclProdR; assumption.
+  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
+  apply SCC.IsInclProdL; try assumption; apply SCW.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, card(a) <= card(b) gives an injection from a into b.        *)
