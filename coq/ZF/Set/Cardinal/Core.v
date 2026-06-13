@@ -1254,7 +1254,59 @@ Proof.
 Qed.
 (* The union with an infinite cardinal has cardinality the maximum cardinal.    *)
 Proposition UnionMax : forall (a b:U),
-  :N :<=: card a                    ->
+  :N :<=: card a                          ->
+  WellOrderable b                         ->
   card (a :\/: b) = card a :\/: card b.
-Admitted.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* The infinite lower bound makes a non-empty and well-orderable.             *)
+  assert (card a <> :0:) as H3. {
+    apply Empty.HasElem. exists :0:. apply H1. apply Omega.HasZero. }
+  assert (WellOrderable a) as H4. { apply WellOrderableNotZero. assumption. }
+  assert (WellOrderable (a :\/: b)) as H5. { apply SCW.Union; assumption. }
+  (* The same lower bound also says that card(a) contains one.                  *)
+  assert (:1: :< card a) as H6. { apply H1. apply Omega.HasOne. }
+  assert (:1: :<=: card a) as H7. {
+    apply SOC.ElemIsIncl. 2: assumption. apply IsOrdinal. }
+  assert (card b = :0: \/ card b <> :0:) as [H8|H8]. {
+    apply LawExcludedMiddle. }
+  - (* If b has cardinal zero and is well-orderable, then b is empty.           *)
+    assert (b :~: card b) as H9. { apply IsEquiv. assumption. }
+    assert (b :~: :0:) as H10. { rewrite <- H8. assumption. }
+    assert (b = :0:) as H11. { apply SCE.WhenZero. assumption. }
+    assert (card (a :\/: b) = card a) as H12. {
+      rewrite H11, Union2.IdentityR. reflexivity. }
+    assert (card a :\/: card b = card a) as H13. {
+      rewrite H8, Union2.IdentityR. reflexivity. }
+    rewrite H12, H13. reflexivity.
+  - (* Otherwise card(b) is positive, so it is either one or contains one.      *)
+    assert (:0: :< card b) as H9. {
+      apply SOC.HasZero. 2: assumption. apply IsOrdinal. }
+    assert (card b = :1: \/ :1: :< card b) as [H10|H10]. {
+      apply Natural.OneOrElem. 2: assumption. apply IsOrdinal. }
+    + (* If b is singleton-sized, adjoining it to a does not change card(a).    *)
+      assert (exists x, b = :{x}:) as H11. { apply WhenOne. assumption. }
+      destruct H11 as [x H11].
+      assert (card (a :\/: b) = card a) as H12. {
+        rewrite H11. symmetry. apply AddElem. assumption. }
+      assert (card a :\/: card b = card a) as H13. {
+        rewrite H10. symmetry. apply Union2.WhenEqualL. assumption. }
+      rewrite H12, H13. reflexivity.
+    + (* If b has at least two elements, compare the union with the product.    *)
+      assert (card (a :\/: b) :<=: card (a :x: b)) as H11. {
+        apply UnionProd; assumption. }
+      assert (card (a :x: b) = card a :\/: card b) as H12. {
+        apply ProdMax; assumption. }
+      assert (card (a :\/: b) :<=: card a :\/: card b) as H13. {
+        rewrite <- H12. assumption. }
+      (* Conversely, both summands are contained in the union.                  *)
+      assert (card a :<=: card (a :\/: b)) as H14. {
+        apply InclCompat. 1: assumption. apply Union2.IsInclL. }
+      assert (card b :<=: card (a :\/: b)) as H15. {
+        apply InclCompat. 1: assumption. apply Union2.IsInclR. }
+      assert (card a :\/: card b :<=: card (a :\/: b)) as H16. {
+        apply Union2.IsIncl; assumption. }
+      apply Incl.Double. split; assumption.
+Qed.
 

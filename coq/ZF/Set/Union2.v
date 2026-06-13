@@ -88,6 +88,21 @@ Proof.
       * apply H2.
 Qed.
 
+(* a equals a \/ b iff b is a subset of a.                                      *)
+Proposition WhenEqualL : forall (a b:U),
+  a = a :\/: b <-> b :<=: a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b. split; intros H1.
+  - (* If a absorbs the union, the right set is contained in a.                 *)
+    intros x H2. rewrite H1. apply Charac. right. apply H2.
+  - (* If the right set is contained in a, the union adds no new elements.      *)
+    apply Extensionality. intros x. split; intros H2.
+    + apply Charac. left. apply H2.
+    + apply Charac in H2. destruct H2 as [H2|H2]. 1: assumption.
+      apply H1. assumption.
+Qed.
+
 (* The union of two sets contains the left set.                                 *)
 Proposition IsInclL : forall (a b:U), a :<=: a:\/:b.
 Proof.
