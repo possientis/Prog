@@ -683,7 +683,7 @@ Proof.
     rewrite H3. assumption.
 Qed.
 
-(* Lower half of Square: an infinite ordinal embeds cardinally in its square.   *)
+(* Lower half of SquareOrd: an infinite ordinal embeds in its square.           *)
 Proposition SquareHigher : forall (a:U), Ordinal a ->
   :N :<=: a -> card a :<=: card (a :x: a).
 Proof.
@@ -761,7 +761,8 @@ Proof.
   rewrite H4. assumption.
 Qed.
 
-Proposition Square : forall (a:U), Ordinal a ->
+(* The square of an infinite ordinal has the same cardinal.                     *)
+Proposition SquareOrd : forall (a:U), Ordinal a ->
   :N :<=: a -> card (a :x: a) = card a.
 Proof.
   remember (fun a => a :< :N \/ card (a :x: a) = card a) as A eqn:H1.
@@ -785,7 +786,7 @@ Proof.
     assert ((exists b, b :< a /\ card b = card a) \/
           ~(exists b, b :< a /\ card b = card a)) as [H4|H4]. {
       apply LawExcludedMiddle. }
-    (* exists b, b :< a /\ card b = card a *)
+    (* exists b, b :< a /\ card b = card a                                      *)
     - destruct H4 as [b [H4 H5]].
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
       assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
@@ -795,7 +796,7 @@ Proof.
       + left. apply NatCharac. 1: assumption. rewrite <- H5.
         apply NatCharac; assumption.
       + right. rewrite <- K3, IH. assumption.
-    (* ~ exists b, b :< a /\ card b = card a *)
+    (* ~ exists b, b :< a /\ card b = card a                                    *)
     - assert (forall b, b :< a -> card b :< card a) as H5. {
         intros b H5.
         assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
@@ -825,7 +826,7 @@ Proof.
         revert H11. apply Foundation.NoLoop1. }
       assert (a :< :N \/ :N :<=: a) as G9. { apply SOC.ElemOrIncl; assumption. }
       destruct G9 as [G9|G9]. 1: { rewrite H1. left. assumption. }
-      (* case :N :<=: a *)
+      (* case :N :<=: a                                                         *)
       assert (Pairing:[a :x: a]: :<=: card a) as H7. {
         intros d H7.
         apply (CRB.ImageSetCharac _ (Ordinal :x: Ordinal) Ordinal) in H7.
@@ -859,7 +860,7 @@ Proof.
           card (succ m :x: succ m)) as H22. {
           apply InclCompat; assumption. }
          destruct H19 as [H19|H19].
-        (* case m :< :N *)
+        (* case m :< :N                                                         *)
         - assert ((Pairing!:( b, c ):) :< card a) as X. 2: apply X.
           assert (succ m :< :N) as H23. { apply Omega.HasSucc. assumption. }
           assert (card (succ m :x: succ m) :< :N) as H27. {
@@ -876,7 +877,7 @@ Proof.
           apply CardLess. 1: assumption.
           + exists a. reflexivity.
           + rewrite H14. assumption.
-        (* case :N :<=: m *)
+        (* case :N :<=: m                                                       *)
         - assert ((Pairing!:( b, c ):) :< card a) as X. 2: apply X.
           assert (card (succ m :x: succ m) = card (succ m)) as H23. {
             apply H6; assumption. }
@@ -908,5 +909,28 @@ Proof.
   destruct H2 as [H2|H2]. 2: assumption.
   assert (a :< a) as H5. { apply H4. assumption. }
   exfalso. revert H5. apply Foundation.NoLoop1.
+Qed.
+
+(* The square of an infinite set has the same cardinal.                         *)
+Proposition Square : forall (a:U),
+  :N :<=: card a -> card (a :x: a) = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* Since omega contains zero, an infinite cardinal is not empty.              *)
+  assert (card a <> :0:) as H2. {
+    intros H2.
+    assert (:0: :< card a) as H3. { apply H1. apply Omega.HasZero. }
+    rewrite H2 in H3. apply Empty.Charac in H3. contradiction. }
+  (* The set is equipotent to its non-empty cardinal representative.            *)
+  assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
+  (* Squaring preserves equipotence, hence preserves cardinality.               *)
+  assert (card (a :x: a) = card (card a :x: card a)) as H4. {
+    apply WhenEquiv. apply SCE.ProdCompat; assumption. }
+  (* The representative is an infinite ordinal, so the ordinal square law       *)
+  (* applies to it.                                                             *)
+  assert (card (card a :x: card a) = card (card a)) as H5. {
+    apply SquareOrd. 2: assumption. apply IsOrdinal. }
+  rewrite H4, H5. apply Idem.
 Qed.
 
