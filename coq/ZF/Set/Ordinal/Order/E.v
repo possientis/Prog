@@ -109,7 +109,7 @@ Proof.
   apply Charac2 in H6. destruct H6 as [_ [_ H6]].
   assert (y :< x :/\: b) as H7. {
     apply Inter2.Charac. split; assumption. }
-  rewrite H4 in H7. apply Empty.Charac in H7. exact H7.
+  rewrite H4 in H7. apply Empty.Charac in H7. assumption.
 Qed.
 
 (* The relation E a is a strict order on the ordinal a.                         *)

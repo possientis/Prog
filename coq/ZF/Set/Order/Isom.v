@@ -44,7 +44,7 @@ Proof.
   intros f r s a b H1. apply FromClass.
   apply COI.EquivCompat1 with (toClass f)^:-1:.
   - apply Equiv.Sym. apply Converse.ToClass.
-  - apply COI.Converse. apply ToClass. exact H1.
+  - apply COI.Converse. apply ToClass. assumption.
 Qed.
 
 (* The composition of two isomorphisms is an isomorphism.                       *)

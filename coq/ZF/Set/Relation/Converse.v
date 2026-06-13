@@ -97,7 +97,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   intros f g H1 H2 H3.
   apply IsIdempotent in H1. apply IsIdempotent in H2.
-  rewrite <- H1, H3. exact H2.
+  rewrite <- H1, H3. assumption.
 Qed.
 
 (* The domain of the converse is the range.                                     *)

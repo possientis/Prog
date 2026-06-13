@@ -49,7 +49,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Any y in isom satisfies y = ((r,x),f) for some r, x, f by definition.      *)
   intros y H. unfold isom in H. destruct H as [r [x [f [H1 _]]]].
-  exists :(r,x):. exists f. exact H1.
+  exists :(r,x):. exists f. assumption.
 Qed.
 
 (* isom is functional: each input pair (r,x) determines at most one output.     *)
@@ -171,7 +171,7 @@ Proof.
   assert ((isom!:(r,x):) = f^:-1:) as Heq. { eapply Eval; eassumption. }
   (* f^{-1}[x] = a by bijection, so b = isom!(r,x)[x] gives b = a.              *)
   assert (f^:-1::[x]: = a) as Himg. { apply Bij.ImageOfDomain. apply HIsom. }
-  assert (b = a) as Hba. { rewrite Hb, Heq. exact Himg. }
+  assert (b = a) as Hba. { rewrite Hb, Heq. assumption. }
   (* The claim then follows directly from the isomorphism already established.  *)
-  rewrite Heq, Hba. exact HIsom.
+  rewrite Heq, Hba. assumption.
 Qed.

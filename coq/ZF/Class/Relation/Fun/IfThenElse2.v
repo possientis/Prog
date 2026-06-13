@@ -49,8 +49,8 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   intros A f1 f2 x y z. split.
   - intros H1. apply Charac2 in H1. destruct H1 as [u [v [H1 H2]]].
-    apply OrdPair.Equal in H1. destruct H1 as [Hu Hv]. subst. exact H2.
-  - intros H1. apply Charac2. exists x, y. split. 1: reflexivity. exact H1.
+    apply OrdPair.Equal in H1. destruct H1 as [Hu Hv]. subst. assumption.
+  - intros H1. apply Charac2. exists x, y. split. 1: reflexivity. assumption.
 Qed.
 
 (* When the condition holds, the first-branch value belongs to ifThenElse2.     *)

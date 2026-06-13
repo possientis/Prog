@@ -387,7 +387,7 @@ Proof.
     intros y Hy.
     rewrite Natural.OneExtension in Hy. apply Single.Charac in Hy. subst y.
     apply (FunctionOn.RangeCharac h :{a}:). 1: assumption.
-    exists a. split. 1: apply Single.IsIn. exact G1. }
+    exists a. split. 1: apply Single.IsIn. assumption. }
   (* Injectivity: {a} has only one element, so any two elements are equal.      *)
   assert (OneToOne h) as H5. {
     apply (FunctionOn.IsOneToOne h :{a}:). 1: assumption.
@@ -527,8 +527,8 @@ Proof.
     apply Prod.Charac in Hp. destruct Hp as [u [v [Hp [Hu Hv]]]].
     rewrite <- Hpy, Hp, (G1 u v Hu Hv).
     apply Prod.Charac2. split.
-    - exact (Bij.IsInRange f a c u H1 Hu).
-    - exact (Bij.IsInRange g b d v H2 Hv). }
+    - apply (Bij.IsInRange f a c); assumption.
+    - apply (Bij.IsInRange g b d); assumption. }
   assert (Fun h (a :x: b) (c :x: d)) as H5. { split; assumption. }
   (* Surjectivity: for (c1,d1) in c x d, find u in a with f(u) = c1 and         *)
   (* v in b with g(v) = d1 (by surjectivity of f and g); then h(u,v) = (c1,d1). *)
@@ -540,7 +540,7 @@ Proof.
     apply (FunctionOn.RangeCharac h (a :x: b)). 1: assumption.
     exists :(u,v):. split.
     - apply Prod.Charac2. split; assumption.
-    - rewrite (G1 u v Hu Hv), Hfu, Hgv. symmetry. exact Hz. }
+    - rewrite (G1 u v Hu Hv), Hfu, Hgv. symmetry. assumption. }
   (* Injectivity: h(u1,v1) = h(u2,v2) gives (f(u1),g(v1)) = (f(u2),g(v2)),      *)
   (* hence u1 = u2 and v1 = v2 by injectivity of f and g respectively.          *)
   assert (OneToOne h) as H7. {
@@ -563,7 +563,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* If a ~ b then a x c ~ b x c.                                               *)
   intros a b c H.
-  exact (CompatProd a c b c H (Refl c)).
+  apply (CompatProd a c b c). 1: assumption. apply Refl.
 Qed.
 
 (* Taking product with a fixed left factor preserves equipotence.               *)
@@ -573,7 +573,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* If a ~ b then c x a ~ c x b.                                               *)
   intros a b c H.
-  exact (CompatProd c a c b (Refl c) H).
+  apply (CompatProd c a c b). 2: assumption. apply Refl.
 Qed.
 
 (* Disjoint sum is compatible with equipotence.                                 *)
@@ -639,14 +639,14 @@ Proof.
     apply Succ.Charac in H5. destruct H5 as [H5|H5].
     - rewrite <- H6, H5, G2. apply Succ.IsIn.
     - rewrite <- H6, (G1 x H5). apply Succ.Charac. right.
-      exact (Bij.IsInRange f a b x H1 H5). }
+      apply (Bij.IsInRange f a b); assumption. }
   assert (Fun h (succ a) (succ b)) as H6. { split; assumption. }
   (* Surjectivity: b in succ(b) has preimage a since h(a) = b; for y in b,      *)
   (* surjectivity of f gives x in a with f(x) = y, hence h(x) = y.              *)
   assert (succ b :<=: range h) as H7. {
     intros y H7. apply Succ.Charac in H7. destruct H7 as [H7|H7].
     - rewrite H7. apply (FunctionOn.RangeCharac h (succ a)). 1: assumption.
-      exists a. split. 1: apply Succ.IsIn. exact G2.
+      exists a. split. 1: apply Succ.IsIn. assumption.
     - apply (Bij.RangeCharac f a b y H1) in H7. destruct H7 as [x [Hx Hfx]].
       apply (FunctionOn.RangeCharac h (succ a)). 1: assumption.
       exists x. split.
@@ -663,14 +663,14 @@ Proof.
     - subst. reflexivity.
     - subst. exfalso.
       rewrite G2, (G1 y H9) in H10.
-      assert (f!y :< b) as H11. { exact (Bij.IsInRange f a b y H1 H9). }
+      assert (f!y :< b) as H11. { apply (Bij.IsInRange f a b); assumption. }
       rewrite <- H10 in H11. revert H11. apply Foundation.NoLoop1.
     - subst. exfalso.
       rewrite (G1 x H8), G2 in H10.
-      assert (f!x :< b) as H11. { exact (Bij.IsInRange f a b x H1 H8). }
+      assert (f!x :< b) as H11. { apply (Bij.IsInRange f a b); assumption. }
       rewrite H10 in H11. revert H11. apply Foundation.NoLoop1.
     - rewrite (G1 x H8), (G1 y H9) in H10.
-      exact (Bij.EvalInjective f a b x y H1 H8 H9 H10). }
+      apply (Bij.EvalInjective f a b); assumption. }
   exists h. apply Bij.FromFun; assumption.
 Qed.
 
@@ -866,21 +866,21 @@ Proof.
     - (* x, y both in a: (0,f!x) = (0,f!y) => f!x = f!y, then f injective.      *)
       rewrite (HEvalA x Hxa), (HEvalA y Hya) in Hxy.
       apply OrdPair.Equal in Hxy. destruct Hxy as [_ Hfxy].
-      exact (Bij.EvalInjective f a c x y Hf Hxa Hya Hfxy).
+      apply (Bij.EvalInjective f a c); assumption.
     - (* x in a, y in b: (0,f!x) = (1,g!y) => 0 = 1, a contradiction.           *)
       exfalso.
       rewrite (HEvalA x Hxa), (HEvalB y Hyb) in Hxy.
       apply OrdPair.Equal in Hxy. destruct Hxy as [H01 _].
-      exact (Natural.ZeroIsNotOne H01).
+      apply Natural.ZeroIsNotOne. assumption.
     - (* x in b, y in a: (1,g!x) = (0,f!y) => 1 = 0, a contradiction.           *)
       exfalso.
       rewrite (HEvalB x Hxb), (HEvalA y Hya) in Hxy.
       apply OrdPair.Equal in Hxy. destruct Hxy as [H10 _].
-      exact (Natural.ZeroIsNotOne (eq_sym H10)).
+      apply Natural.ZeroIsNotOne. symmetry. assumption.
     - (* x, y both in b: (1,g!x) = (1,g!y) => g!x = g!y, then g injective.      *)
       rewrite (HEvalB x Hxb), (HEvalB y Hyb) in Hxy.
       apply OrdPair.Equal in Hxy. destruct Hxy as [_ Hgxy].
-      exact (Bij.EvalInjective g b d x y Hg Hxb Hyb Hgxy). }
+      apply (Bij.EvalInjective g b d); assumption. }
   (* h bijects a \/ b onto {0} x c \/ {1} x d. Composing with the bijection     *)
   (* {0} x c \/ {1} x d ~ c + d gives the required bijection a \/ b ~ c + d.    *)
   exists ((Plus2.f c d) :.: h).
@@ -904,12 +904,10 @@ Proof.
     revert Ha'. apply Foundation.NoLoop1. }
   apply Tran with (:1: :+: a).
   (* {a} \/ a ~ 1 + a via DisjointUnion, using {a} ~ 1 and a ~ a.               *)
-  - apply DisjointUnion.
+  - apply DisjointUnion; try assumption.
     + apply Natural.OneIsOrdinal.
-    + exact Ha.
     + apply WhenSingle.
     + apply Refl.
-    + exact Hdisj.
   (* 1 + a = a since 1 in N and N <= a, so the result follows.                  *)
   - rewrite (Plus.WhenNatL :1: a Ha Omega.HasOne HN). apply Refl.
 Qed.
@@ -942,7 +940,7 @@ Proof.
     apply (FunctionOn.RangeCharac h (a :x: b)). 1: assumption.
     exists :(u,v):. split.
     - apply Prod.Charac2. split; assumption.
-    - rewrite (G1 u v Hu Hv). symmetry. exact Hz. }
+    - rewrite (G1 u v Hu Hv). symmetry. assumption. }
   (* Injectivity: h(u1,v1) = h(u2,v2) gives (v1,u1) = (v2,u2),                  *)
   (* so u1 = u2 and v1 = v2 by equality of ordered pairs.                       *)
   assert (OneToOne h) as H5. {
@@ -979,13 +977,13 @@ Proof.
   (* Step: by induction a ~ a + n, and N <= a <= a + n, so Succ gives           *)
   (* a + n ~ succ(a + n) = a + succ(n). Transitivity completes the step.        *)
   - intros n Hn IH.
-    assert (Ordinal n) as Hn_ord. { apply Omega.HasOrdinals. exact Hn. }
+    assert (Ordinal n) as Hn_ord. { apply Omega.HasOrdinals. assumption. }
     rewrite (Plus.WhenSuccR a n Hn_ord).
-    apply Tran with (a :+: n). 1: exact IH.
+    apply Tran with (a :+: n). 1: assumption.
     apply Succ.
-    + apply Plus.IsOrdinal. 1: exact Ha. exact Hn_ord.
-    + apply Incl.Tran with a. 1: exact HN.
-      apply Plus.IsInclR. 1: exact Ha. exact Hn_ord.
+    + apply Plus.IsOrdinal; assumption.
+    + apply Incl.Tran with a. 1: assumption.
+      apply Plus.IsInclR; assumption.
 Qed.
 
 (* For ordinals a and b, the cartesian product a x b is equipotent to a * b.    *)
@@ -1054,7 +1052,7 @@ Proof.
   intros n H1 [f [H2 H3]].
   (* f bijects succ n onto its range, which lies inside n.                      *)
   assert (succ n :~: range f) as H4. {
-    exists f. split. 1: exact H2. reflexivity. }
+    exists f. split. 1: assumption. reflexivity. }
   (* n is a subset of succ n.                                                   *)
   assert (n :<=: succ n) as H5. { apply Succ.IsIncl. }
   (* By Cantor-Schroeder-Bernstein, succ n is equipotent to n.                  *)
