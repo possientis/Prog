@@ -456,6 +456,30 @@ Proof.
     rewrite H1, H5, <- H4. apply WhenEquiv. assumption.
 Qed.
 
+(* A left factor of cardinal one does not change the cardinal of a product.     *)
+Proposition ProdSingleL : forall (a b:U),
+  card b = :1: -> card (b :x: a) = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1.
+  (* A set of cardinal one is a singleton, so the product is a singleton        *)
+  (* product and hence equipotent to the other factor.                          *)
+  apply WhenOne in H1. destruct H1 as [c H1]. rewrite H1.
+  apply WhenEquiv. apply Equiv.ProdSingleL.
+Qed.
+
+(* A right factor of cardinal one does not change the cardinal of a product.    *)
+Proposition ProdSingleR : forall (a b:U),
+  card b = :1: -> card (a :x: b) = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1.
+  (* A set of cardinal one is a singleton, so the product is a singleton        *)
+  (* product and hence equipotent to the other factor.                          *)
+  apply WhenOne in H1. destruct H1 as [c H1]. rewrite H1.
+  apply WhenEquiv. apply Equiv.ProdSingleR.
+Qed.
+
 (* Every natural number is a cardinal number.                                   *)
 Proposition NatIsCardinal : forall (n:U),
   n :< :N -> Cardinal n.
