@@ -846,7 +846,7 @@ Proof.
 Qed.
 
 (* Cardinal equality is compatible with products of well-orderable sets.        *)
-Proposition ProdCompat : forall (a b c d:U),
+Proposition EqualCompatProd : forall (a b c d:U),
   WellOrderable a                   ->
   WellOrderable b                   ->
   WellOrderable c                   ->
@@ -863,13 +863,13 @@ Proof.
   - apply SCW.Prod; assumption.
   - (* Equal cardinals identify each pair of corresponding factors up to        *)
     (* equipotence, and products preserve equipotence.                          *)
-    apply SCE.ProdCompat.
+    apply SCE.CompatProd.
     + apply EquivCharac; assumption.
     + apply EquivCharac; assumption.
 Qed.
 
 (* Cardinal equality is compatible with a product on the right.                 *)
-Proposition ProdCompatL : forall (a b c:U),
+Proposition EqualCompatProdL : forall (a b c:U),
   WellOrderable a                   ->
   WellOrderable b                   ->
   WellOrderable c                   ->
@@ -879,11 +879,11 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c H1 H2 H3 H4.
   (* Keep the right factor fixed and use reflexivity on its cardinal.           *)
-  apply ProdCompat; try assumption. reflexivity.
+  apply EqualCompatProd; try assumption. reflexivity.
 Qed.
 
 (* Cardinal equality is compatible with a product on the left.                  *)
-Proposition ProdCompatR : forall (a b c:U),
+Proposition EqualCompatProdR : forall (a b c:U),
   WellOrderable a                   ->
   WellOrderable b                   ->
   WellOrderable c                   ->
@@ -893,7 +893,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c H1 H2 H3 H4.
   (* Keep the left factor fixed and use reflexivity on its cardinal.            *)
-  apply ProdCompat; try assumption. reflexivity.
+  apply EqualCompatProd; try assumption. reflexivity.
 Qed.
 
 (* Cardinal product is monotone in its right argument.                          *)
@@ -1002,7 +1002,7 @@ Proof.
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
       assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
       assert (card (b :x: b) = card (a :x: a)) as K3. {
-        apply ProdCompat; assumption. }
+        apply EqualCompatProd; assumption. }
       specialize (IH b H4). destruct IH as [IH|IH]; rewrite H1.
       + left. apply NatCharac. 1: assumption. rewrite <- H5.
         apply NatCharac; assumption.
@@ -1137,7 +1137,7 @@ Proof.
   assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
   (* Squaring preserves equipotence, hence preserves cardinality.               *)
   assert (card (a :x: a) = card (card a :x: card a)) as H4. {
-    apply WhenEquiv. apply SCE.ProdCompat; assumption. }
+    apply WhenEquiv. apply SCE.CompatProd; assumption. }
   (* The representative is an infinite ordinal, so the ordinal square law       *)
   (* applies to it.                                                             *)
   assert (card (card a :x: card a) = card (card a)) as H5. {

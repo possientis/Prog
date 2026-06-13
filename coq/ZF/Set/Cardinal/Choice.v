@@ -70,7 +70,7 @@ Proof.
 Qed.
 
 (* Assuming choice, cardinal equality is compatible with products.              *)
-Proposition ProdCompat : forall (a b c d:U),
+Proposition EqualCompatProd : forall (a b c d:U),
   Choice                              ->
   card a = card c                     ->
   card b = card d                     ->
@@ -79,27 +79,27 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d AC H1 H2.
   (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.ProdCompat; try assumption; apply SCW.WithChoice; assumption.
+  apply SCC.EqualCompatProd; try assumption; apply SCW.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, cardinal equality is compatible with product on the right.  *)
-Proposition ProdCompatL : forall (a b c:U), Choice ->
+Proposition EqualCompatProdL : forall (a b c:U), Choice ->
   card a = card b -> card (a :x: c) = card (b :x: c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
   (* Keep the right factor fixed and use reflexivity on its cardinal.           *)
-  apply ProdCompat; try assumption. reflexivity.
+  apply EqualCompatProd; try assumption. reflexivity.
 Qed.
 
 (* Assuming choice, cardinal equality is compatible with product on the left.   *)
-Proposition ProdCompatR : forall (a b c:U), Choice ->
+Proposition EqualCompatProdR : forall (a b c:U), Choice ->
   card a = card b -> card (c :x: a) = card (c :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
   (* Keep the left factor fixed and use reflexivity on its cardinal.            *)
-  apply ProdCompat; try assumption. reflexivity.
+  apply EqualCompatProd; try assumption. reflexivity.
 Qed.
 
 (* Any set whose cardinal is bounded by card(a) is equipotent to a subset of a. *)

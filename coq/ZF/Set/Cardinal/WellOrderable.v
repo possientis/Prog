@@ -128,7 +128,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b [c [H1 H2]] [d [H3 H4]].
   (* Replace both factors by ordinals, preserving the cartesian product.        *)
-  assert (a :x: b :~: c :x: d) as H5. { apply SCE.ProdCompat; assumption. }
+  assert (a :x: b :~: c :x: d) as H5. { apply SCE.CompatProd; assumption. }
   (* The ordinal product orders d x c as the ordinal d*c.                       *)
   assert (c :x: d :~: d :*: c) as H6. {
     exists (Mult2.f d c). apply Mult2.IsBij; assumption. }

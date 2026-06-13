@@ -506,7 +506,7 @@ Qed.
 
 
 (* Cartesian product is compatible with equipotence.                            *)
-Proposition ProdCompat : forall (a b c d:U),
+Proposition CompatProd : forall (a b c d:U),
   a :~: c -> b :~: d -> a :x: b :~: c :x: d.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
@@ -557,23 +557,23 @@ Proof.
 Qed.
 
 (* Taking product with a fixed right factor preserves equipotence.              *)
-Proposition ProdCompatL : forall (a b c:U),
+Proposition CompatProdL : forall (a b c:U),
   a :~: b -> a :x: c :~: b :x: c.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* If a ~ b then a x c ~ b x c.                                               *)
   intros a b c H.
-  exact (ProdCompat a c b c H (Refl c)).
+  exact (CompatProd a c b c H (Refl c)).
 Qed.
 
 (* Taking product with a fixed left factor preserves equipotence.               *)
-Proposition ProdCompatR : forall (a b c:U),
+Proposition CompatProdR : forall (a b c:U),
   a :~: b -> c :x: a :~: c :x: b.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* If a ~ b then c x a ~ c x b.                                               *)
   intros a b c H.
-  exact (ProdCompat c a c b (Refl c) H).
+  exact (CompatProd c a c b (Refl c) H).
 Qed.
 
 (* Disjoint sum is compatible with equipotence.                                 *)
