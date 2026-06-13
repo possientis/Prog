@@ -28,6 +28,7 @@ Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
@@ -358,6 +359,40 @@ Proof.
   intros a H1 H2.
   (* The empty set has cardinal zero, contrary to the hypothesis.               *)
   apply H1. rewrite H2. apply WhenNat. apply Omega.HasZero.
+Qed.
+
+(* A set has cardinal 1 iff it is a singleton.                                  *)
+Proposition WhenOne : forall (a:U),
+  card a = :1: <-> exists b, a = :{b}:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a. split; intros H1.
+  - (* A set of cardinal 1 is equipotent to 1, so choose the preimage of 0.     *)
+    assert (card a <> :0:) as H2. {
+      rewrite H1. intros H2. symmetry in H2.
+      apply Natural.ZeroIsNotOne. assumption. }
+    assert (a :~: :1:) as H3. {
+      apply Equiv.Tran with (card a).
+      + apply IsEquivNotZero. assumption.
+      + rewrite H1. apply Equiv.Refl. }
+    destruct H3 as [f H3].
+    assert (exists b, b :< a /\ f!b = :0:) as H4. {
+      apply (Bij.RangeCharac f a :1: :0:). 1: assumption.
+      rewrite Natural.OneExtension. apply Single.IsIn. }
+    destruct H4 as [b [H4 H5]]. exists b. apply Incl.Double. split.
+    + (* Every element has the same image as b, hence equals b by injectivity.  *)
+      intros x H6. apply Single.Charac.
+      assert (f!x :< :1:) as H7. {
+        apply (Bij.IsInRange f a :1:); assumption. }
+      rewrite Natural.OneExtension in H7. apply Single.Charac in H7.
+      assert (f!x = f!b) as H8. { rewrite H7, H5. reflexivity. }
+      apply (Bij.EvalInjective f a :1:); assumption.
+    + (* Conversely the chosen point belongs to the set.                        *)
+      intros x H6. apply Single.Charac in H6. subst. assumption.
+  - (* A singleton is equipotent to 1, so the cardinal is 1.                    *)
+    destruct H1 as [b H1]. rewrite H1.
+    rewrite <- (WhenNat :1:). 2: apply Omega.HasOne.
+    apply WhenEquiv. apply SCE.WhenSingle.
 Qed.
 
 (* Every natural number is a cardinal number.                                   *)
