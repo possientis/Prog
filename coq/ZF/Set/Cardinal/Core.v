@@ -25,6 +25,7 @@ Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Fun.From2.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
@@ -893,6 +894,67 @@ Proof.
   intros a b c H1 H2 H3 H4.
   (* Keep the left factor fixed and use reflexivity on its cardinal.            *)
   apply ProdCompat; try assumption. reflexivity.
+Qed.
+
+(* Cardinal product is monotone in its right argument.                          *)
+Proposition InclCompatProdR : forall (a b c:U),
+  WellOrderable a                   ->
+  WellOrderable b                   ->
+  WellOrderable c                   ->
+  card b :<=: card c                ->
+  card (a :x: b) :<=: card (a :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1 H2 H3 H4.
+  (* The cardinal inequality gives an injection from b into c.                  *)
+  assert (exists f, Inj f b c) as H5. { apply HasInj; assumption. }
+  destruct H5 as [f H5].
+  remember (From2.from2 a b (fun x y => :(x,f!y):)) as g eqn:H6.
+  (* Send (x,y) to (x,f(y)); this is an injection between the products.         *)
+  assert (Inj g (a :x: b) (a :x: c)) as H7. {
+    rewrite H6. apply From2.IsInj.
+    - intros x y H7 H8. apply Prod.Charac2. split. 1: assumption.
+      apply Inj.IsInRange with b; assumption.
+    - intros x y x' y' H7 H8 H9 H10 H11.
+      apply OrdPair.Equal in H11. destruct H11 as [H11 H12]. subst x'.
+      assert (y = y') as H13. {
+        apply Inj.EvalInjective with f b c; assumption. }
+      subst y'. reflexivity. }
+  (* The codomain product is well-orderable, so the injection gives the bound.  *)
+  apply WhenInj with g. 2: assumption. apply SCW.Prod; assumption.
+Qed.
+
+(* Cardinal product is monotone in its left argument.                           *)
+Proposition InclCompatProdL : forall (a b c:U),
+  WellOrderable a                   ->
+  WellOrderable b                   ->
+  WellOrderable c                   ->
+  card a :<=: card b                ->
+  card (a :x: c) :<=: card (b :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1 H2 H3 H4.
+  (* Exchange the product factors and use monotonicity in the right argument.   *)
+  rewrite (ProdComm a c), (ProdComm b c).
+  apply InclCompatProdR; assumption.
+Qed.
+
+(* Cardinal product is monotone in both arguments.                              *)
+Proposition InclCompatProd : forall (a b c d:U),
+  WellOrderable a                   ->
+  WellOrderable b                   ->
+  WellOrderable c                   ->
+  WellOrderable d                   ->
+  card a :<=: card c                ->
+  card b :<=: card d                ->
+  card (a :x: b) :<=: card (c :x: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d H1 H2 H3 H4 H5 H6.
+  (* First enlarge the left factor, then enlarge the right factor.              *)
+  apply Incl.Tran with (card (c :x: b)).
+  - apply InclCompatProdL; assumption.
+  - apply InclCompatProdR; assumption.
 Qed.
 
 Proposition ProdNat : forall (n m:U), n :< :N -> m :< :N ->

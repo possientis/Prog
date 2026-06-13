@@ -241,23 +241,8 @@ Proposition InclCompatProdR : forall (a b c:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
-  (* From card(b) <= card(c), choose an injection f:b -> c.                     *)
-  assert (exists f, Inj f b c) as H2. { apply HasInj; assumption. }
-  destruct H2 as [f H2].
-  remember (From2.from2 a b (fun x y => :(x,f!y):)) as g eqn:H3.
-  (* Send (x,y) to (x,f(y)); this preserves the left coordinate and injects the *)
-  (* right coordinate through f.                                                *)
-  assert (Inj g (a :x: b) (a :x: c)) as H4. {
-    rewrite H3. apply From2.IsInj.
-    - intros x y H4 H5. apply Prod.Charac2. split. 1: assumption.
-      apply Inj.IsInRange with b; assumption.
-    - intros x y x' y' H4 H5 H6 H7 H8.
-      apply OrdPair.Equal in H8. destruct H8 as [H8 H9]. subst x'.
-      assert (y = y') as H10. {
-        apply Inj.EvalInjective with f b c; assumption. }
-      subst y'. reflexivity. }
-  (* The product injection gives the desired cardinal inequality.               *)
-  apply WhenInj with g; assumption.
+  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
+  apply SCC.InclCompatProdR; try assumption; apply SCW.WithChoice; assumption.
 Qed.
 
 (* Cardinal product is monotone in its left argument.                           *)
@@ -266,9 +251,8 @@ Proposition InclCompatProdL : forall (a b c:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
-  (* Exchange the product factors and use monotonicity in the right argument.   *)
-  rewrite (SCC.ProdComm a c), (SCC.ProdComm b c).
-  apply InclCompatProdR; assumption.
+  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
+  apply SCC.InclCompatProdL; try assumption; apply SCW.WithChoice; assumption.
 Qed.
 
 (* Cardinal product is monotone in both arguments.                              *)
