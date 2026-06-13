@@ -346,13 +346,34 @@ Proof.
 Qed.
 
 (* An infinite ordinal has the same cardinal as its successor.                  *)
-Proposition Succ : forall (a:U), Ordinal a ->
+Proposition SuccOrd : forall (a:U), Ordinal a ->
   :N :<=: a -> card a = card (succ a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1 H2.
   (* The ordinal is equipotent to its successor, so their cardinals coincide.   *)
   apply WhenEquiv. apply SCE.Succ; assumption.
+Qed.
+
+(* An infinite set has the same cardinal as its successor.                      *)
+Proposition Succ : forall (a:U),
+  :N :<=: card a -> card a = card (succ a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* The infinite lower bound makes the cardinal non-empty.                     *)
+  assert (card a <> :0:) as H2. {
+    apply Empty.HasElem. exists :0:. apply H1. apply Omega.HasZero. }
+  (* Thus a is equipotent to its cardinal, and successors preserve equipotence. *)
+  assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
+  assert (succ a :~: succ (card a)) as H4. { apply SCE.SuccCompat. assumption. }
+  (* The successor of a has the same cardinal as the successor of card a.       *)
+  assert (card (succ a) = card (succ (card a))) as H5. {
+    apply WhenEquiv. assumption. }
+  (* Since card a is an infinite ordinal, the ordinal case applies.             *)
+  assert (card (card a) = card (succ (card a))) as H6. {
+    apply SuccOrd. 2: assumption. apply IsOrdinal. }
+  rewrite Idem in H6. rewrite H5. assumption.
 Qed.
 
 (* The cardinal of a natural number is itself.                                  *)
@@ -1037,7 +1058,7 @@ Proof.
         assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
         assert (Ordinal (succ b)) as K2. { apply Succ.IsOrdinal. assumption. }
         assert (Cardinal (card a)) as K3. { exists a. reflexivity. }
-        assert (card b = card (succ b)) as K4. { apply Succ; assumption. }
+        assert (card b = card (succ b)) as K4. { apply SuccOrd; assumption. }
         assert (Ordinal (card a)) as K5. { apply IsOrdinal. }
         assert (succ b :< card a) as H8. {
           apply CardLess; try assumption. rewrite <- K4. apply H5. assumption. }
@@ -1107,7 +1128,7 @@ Proof.
           assert (card (succ m :x: succ m) = card (succ m)) as H23. {
             apply H6; assumption. }
           assert (card (succ m) = card m) as H24. {
-            symmetry. apply Succ; assumption. }
+            symmetry. apply SuccOrd; assumption. }
           assert (card m :< card a) as H25. { apply H5. assumption. }
           assert (card (succ m :x: succ m) :< card a) as H26. {
             rewrite H23, H24. assumption. }
