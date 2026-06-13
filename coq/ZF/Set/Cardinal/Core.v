@@ -19,6 +19,7 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Pair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
@@ -393,6 +394,66 @@ Proof.
     destruct H1 as [b H1]. rewrite H1.
     rewrite <- (WhenNat :1:). 2: apply Omega.HasOne.
     apply WhenEquiv. apply SCE.WhenSingle.
+Qed.
+
+(* A set has cardinal 2 iff it is a pair of two distinct sets.                  *)
+Proposition WhenTwo : forall (a:U),
+  card a = :2: <-> exists b c, a = :{b,c}: /\ b <> c.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a. split; intros H1.
+  - (* A set of cardinal 2 is equipotent to 2, so choose preimages of 0 and 1.  *)
+    assert (card a <> :0:) as H2. { rewrite H1. apply Succ.NotZero. }
+    assert (a :~: :2:) as H3. {
+      apply Equiv.Tran with (card a).
+      + apply IsEquivNotZero. assumption.
+      + rewrite H1. apply Equiv.Refl. }
+    destruct H3 as [f H3].
+    assert (exists b, b :< a /\ f!b = :0:) as H4. {
+      apply (Bij.RangeCharac f a :2: :0:). 1: assumption.
+      rewrite Natural.TwoExtension. apply Pair.IsInL. }
+    assert (exists c, c :< a /\ f!c = :1:) as H5. {
+      apply (Bij.RangeCharac f a :2: :1:). 1: assumption.
+      rewrite Natural.TwoExtension. apply Pair.IsInR. }
+    destruct H4 as [b [H4 H6]]. destruct H5 as [c [H5 H7]].
+    assert (a :<=: :{b,c}:) as H8. {
+      intros x H8. apply Pair.Charac.
+      assert (f!x = :0: \/ f!x = :1:) as H9. {
+        assert (f!x :< :2:) as H9. {
+          apply (Bij.IsInRange f a :2:); assumption. }
+        rewrite Natural.TwoExtension in H9. apply Pair.Charac. assumption. }
+      assert (f!x = :0: -> x = b) as H10. {
+        intros H10. apply (Bij.EvalInjective f a :2:); try assumption.
+        rewrite H10, H6. reflexivity. }
+      assert (f!x = :1: -> x = c) as H11. {
+        intros H11. apply (Bij.EvalInjective f a :2:); try assumption.
+        rewrite H11, H7. reflexivity. }
+      destruct H9 as [H9|H9]; [left; apply H10 | right; apply H11];
+        assumption. }
+    assert (:{b,c}: :<=: a) as H9. {
+      intros x H9. apply Pair.Charac in H9.
+      destruct H9 as [H9|H9]; subst; assumption. }
+    assert (a = :{b,c}:) as H10. { apply Incl.Double. split; assumption. }
+    assert (b <> c) as H11. {
+      intros H11. subst. rewrite H6 in H7.
+      apply Natural.ZeroIsNotOne. assumption. }
+    exists b, c. split; assumption.
+  - (* A pair of distinct elements is equipotent to 2.                          *)
+    destruct H1 as [b [c [H1 H2]]].
+    assert (:2: :< :N) as H3. { apply Omega.HasSucc, Omega.HasOne. }
+    assert (card :2: = :2:) as H4. { apply WhenNat. assumption. }
+    assert (:{b,c}: = :{b}: :\/: :{c}:) as H5. { apply PairAsUnion2. }
+    assert (:{b}: :\/: :{c}: :~: :2:) as H6. {
+      destruct (SCE.AddElem :{b}: c) as [H6|H6].
+      + exfalso. apply H2.
+        assert (c :< :{b}:) as H7. {
+          rewrite <- H6. apply Union2.Charac. right. apply Single.IsIn. }
+        apply Single.Charac in H7. symmetry. assumption.
+      + assert (:2: = succ :1:) as H7. { reflexivity. }
+        assert (succ :{b}: :~: succ :1:) as H8. {
+          apply SCE.SuccCompat. apply SCE.WhenSingle. }
+        rewrite H7. apply Equiv.Tran with (succ :{b}:); assumption. }
+    rewrite H1, H5, <- H4. apply WhenEquiv. assumption.
 Qed.
 
 (* Every natural number is a cardinal number.                                   *)
