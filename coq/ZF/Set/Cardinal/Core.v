@@ -1212,4 +1212,9 @@ Proof.
     rewrite H3. apply Union2.IsIncl; assumption. }
   apply Incl.Double. split; assumption.
 Qed.
+(* The union with an infinite cardinal has cardinality the maximum cardinal.    *)
+Proposition UnionMax : forall (a b:U),
+  :N :<=: card a                    ->
+  card (a :\/: b) = card a :\/: card b.
+Admitted.
 
