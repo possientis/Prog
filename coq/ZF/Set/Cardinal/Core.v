@@ -376,6 +376,25 @@ Proof.
   rewrite Idem in H6. rewrite H5. assumption.
 Qed.
 
+(* Adding one element to an infinite set does not change its cardinal.          *)
+Proposition AddElem : forall (a b:U),
+  :N :<=: card a -> card a = card (a :\/: :{b}:).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1.
+  (* Adding b either changes nothing, or gives a set equipotent to succ a.      *)
+  assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as H2. {
+    apply SCE.AddElem. }
+  destruct H2 as [H2|H2].
+  - rewrite H2. reflexivity.
+  - (* In the successor case, the new set has the cardinal of succ a.           *)
+    assert (card (a :\/: :{b}:) = card (succ a)) as H3. {
+      apply WhenEquiv. assumption. }
+    (* Infinite sets have the same cardinal as their successors.                *)
+    assert (card a = card (succ a)) as H4. { apply Succ. assumption. }
+    rewrite H3. assumption.
+Qed.
+
 (* The cardinal of a natural number is itself.                                  *)
 Proposition WhenNat : forall (n:U), n :< :N ->
   card n = n.
