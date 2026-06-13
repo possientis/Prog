@@ -19,11 +19,14 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Id.
+Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Sum.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -36,6 +39,7 @@ Module CRD := ZF.Class.Relation.Domain.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOO := ZF.Set.Ordinal.Onto.
+Module SMS := ZF.Set.Relation.Map.Sum.
 Module SRO := ZF.Set.Relation.OneToOne.
 Module STO := ZF.Set.Relation.Onto.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
@@ -186,6 +190,20 @@ Proof.
   - apply SCE.Tran with (c :++: d); assumption.
 Qed.
 
+(* The union of two well-orderable sets is well-orderable.                      *)
+Proposition Union : forall (a b:U),
+  WellOrderable a -> WellOrderable b -> WellOrderable (a :\/: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  (* The disjoint sum is well-orderable.                                        *)
+  assert (WellOrderable (a :++: b)) as H3. { apply Sum; assumption. }
+  remember (either a b (id a) (id b)) as f eqn:H4.
+  (* The either map from the disjoint sum onto the ordinary union is onto.      *)
+  assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply SMS.HasOnto. }
+  (* A surjection preserves well-orderability of the codomain.                  *)
+  apply OntoCompat with f (a :++: b); assumption.
+Qed.
 
 (* The successor of a well-orderable set is well-orderable.                     *)
 Proposition Succ : forall (a:U),
