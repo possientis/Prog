@@ -82,14 +82,14 @@ Proof.
 Qed.
 
 (* Currying identifies maps into a function set with maps on a product.         *)
-Proposition Curry : forall (a b c:U),
+Proposition Assoc : forall (a b c:U),
   (a :^^: b) :^^: c :~: a :^^: (b :x: c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c. unfold exp.
   (* First use the standard currying bijection with the product ordered c x b.  *)
   assert (map c (map b a) :~: map (c :x: b) a) as H1. {
-    apply Equiv.Sym. exists (curryMap c b a). apply IsBijMap. }
+    apply Equiv.Sym. exists (curryMap c b a). apply Curry.IsBijMap. }
   (* Then commute the product inside the exponent.                              *)
   assert (map (c :x: b) a :~: map (b :x: c) a) as H2. {
     apply CompatR. apply Equiv.ProdComm. }
