@@ -137,12 +137,12 @@ Qed.
 
 (* The set of maps is compatible with equipotence in both arguments.            *)
 Proposition Compat : forall (a b c d:U),
-  a :~: c -> b :~: d -> map b a :~: map d c.
+  a :~: c -> b :~: d -> map a b :~: map c d.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d H1 H2.
   (* First change the codomain, then change the domain.                         *)
-  apply SCE.Tran with (map b c).
+  apply SCE.Tran with (map a d).
   - apply CompatR. assumption.
   - apply CompatL. assumption.
 Qed.
