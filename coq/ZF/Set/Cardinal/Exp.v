@@ -1,4 +1,5 @@
 Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Map.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
@@ -20,6 +21,36 @@ Definition exp (a b:U) : U := map b a.
 
 (* Notation "a :^^: b" := (exp a b)                                             *)
 Global Instance SetExp2 : Exp2 U := { exp2 := exp }.
+
+(* Exponentiation is compatible with equipotence in both arguments.             *)
+Proposition Compat : forall (a b c d:U),
+  a :~: c -> b :~: d -> a :^^: b :~: c :^^: d.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d H1 H2.
+  (* This is exactly compatibility of the corresponding set of maps.            *)
+  apply Map.Compat; assumption.
+Qed.
+
+(* Exponentiation is left-compatible with equipotence.                          *)
+Proposition CompatL : forall (a b c:U),
+  a :~: b -> a :^^: c :~: b :^^: c.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1.
+  (* Changing the base changes the codomain of the map set.                     *)
+  apply Map.CompatR. assumption.
+Qed.
+
+(* Exponentiation is right-compatible with equipotence.                         *)
+Proposition CompatR : forall (a b c:U),
+  b :~: c -> a :^^: b :~: a :^^: c.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c H1.
+  (* Changing the exponent changes the domain of the map set.                   *)
+  apply Map.CompatL. assumption.
+Qed.
 
 (* The set of maps from a into two is equipotent to the power set of a.         *)
 Proposition OfTwo : forall (a:U),
