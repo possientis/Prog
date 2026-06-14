@@ -5,6 +5,7 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Relation.Charac.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Specify.
 
 Module SRC := ZF.Set.Relation.Charac.
@@ -47,4 +48,41 @@ Proof.
     + rewrite H2. apply H1. assumption.
     + apply SRC.EvalIn. 2: assumption.
       apply H1. assumption.
+Qed.
+
+(* Binary-valued functions with the same fiber over one are equal.              *)
+Proposition EqualOfOne : forall (a f g:U),
+  Fun f a :2:               ->
+  Fun g a :2:               ->
+  fiber f :1: = fiber g :1: ->
+  f = g.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a f g H1 H2 H3.
+  apply Fun.Equal with a :2: a :2:; try assumption.
+  - reflexivity.
+  - intros x H4.
+    assert (f!x :< :2:) as H5. { apply Fun.IsInRange with a; assumption. }
+    assert (g!x :< :2:) as H6. { apply Fun.IsInRange with a; assumption. }
+    assert (f!x = :0: \/ f!x = :1:) as H7. {
+      rewrite Natural.TwoExtension in H5. apply Pair.Charac. assumption. }
+    assert (g!x = :0: \/ g!x = :1:) as H8. {
+      rewrite Natural.TwoExtension in H6. apply Pair.Charac. assumption. }
+    destruct H7 as [H7|H7]; destruct H8 as [H8|H8].
+    + rewrite H7, H8. reflexivity.
+    + (* If g sends x to one, then x lies in the common fiber over one.         *)
+      assert (x :< fiber g :1:) as H9. {
+        apply Charac. split. 2: assumption.
+        assert (domain g = a) as H9. { apply H2. }
+        rewrite H9. assumption. }
+      rewrite <- H3 in H9. apply Charac in H9. destruct H9 as [_ H9].
+      rewrite H7 in H9. exfalso. apply Natural.ZeroIsNotOne. assumption.
+    + (* If f sends x to one, then x lies in the common fiber over one.         *)
+      assert (x :< fiber f :1:) as H9. {
+        apply Charac. split. 2: assumption.
+        assert (domain f = a) as H9. { apply H1. }
+        rewrite H9. assumption. }
+      rewrite H3 in H9. apply Charac in H9. destruct H9 as [_ H9].
+      rewrite H8 in H9. exfalso. apply Natural.ZeroIsNotOne. assumption.
+    + rewrite H7, H8. reflexivity.
 Qed.
