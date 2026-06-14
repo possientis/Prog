@@ -4,6 +4,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Power.
+Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Charac.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Fiber.
@@ -11,6 +12,7 @@ Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Map.
+Require Import ZF.Set.Relation.Map.Curry.
 
 Require Import ZF.Notation.Exp2.
 Export ZF.Notation.Exp2.
@@ -77,4 +79,19 @@ Proof.
       + apply CharacMap. apply Charac.IsFun.
       + apply Fiber.OfCharac. assumption. }
   exists h. assumption.
+Qed.
+
+(* Currying identifies maps into a function set with maps on a product.         *)
+Proposition Curry : forall (a b c:U),
+  (a :^^: b) :^^: c :~: a :^^: (b :x: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c. unfold exp.
+  (* First use the standard currying bijection with the product ordered c x b.  *)
+  assert (map c (map b a) :~: map (c :x: b) a) as H1. {
+    apply Equiv.Sym. exists (curryMap c b a). apply IsBijMap. }
+  (* Then commute the product inside the exponent.                              *)
+  assert (map (c :x: b) a :~: map (b :x: c) a) as H2. {
+    apply CompatR. apply Equiv.ProdComm. }
+  apply Equiv.Tran with (map (c :x: b) a); assumption.
 Qed.
