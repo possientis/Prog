@@ -7,11 +7,15 @@ Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Transport.
+Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Order.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
@@ -38,7 +42,11 @@ Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SOA := ZF.Set.Ordinal.Order.
+Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOO := ZF.Set.Ordinal.Onto.
+Module SOT := ZF.Set.Order.Transport.
+Module SOW := ZF.Set.Order.WellOrdering.
 Module SMS := ZF.Set.Relation.Map.Sum.
 Module SRO := ZF.Set.Relation.OneToOne.
 Module STO := ZF.Set.Relation.Onto.
@@ -55,6 +63,25 @@ Proof.
   intros a H1.
   (* The ordinal itself is an ordinal representative of its cardinality.        *)
   exists a. split. 1: assumption. apply SCE.Refl.
+Qed.
+
+(* A set is well-orderable iff it admits an explicit well-ordering relation.    *)
+Proposition HasWellOrdering : forall (a:U),
+  WellOrderable a <-> exists r, WellOrdering r a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a. split; intros H1.
+  - destruct H1 as [b [H1 H2]].
+    (* Choose a bijection from the ordinal representative onto the set.         *)
+    apply SCE.Sym in H2. destruct H2 as [f H2].
+    (* Transport the ordinal membership well-ordering along that bijection.     *)
+    exists (SOT.transport f (SOE.E b) b).
+    apply SOW.Transport with f (SOE.E b) b. 1: reflexivity. 1: assumption.
+    apply SOE.IsWellOrdering. assumption.
+  - destruct H1 as [r H1].
+    (* A well-ordered set is isomorphic to an ordinal, hence equipotent to it.  *)
+    apply SOA.Exists in H1. destruct H1 as [f [b [H1 H2]]].
+    exists b. split. 1: assumption. apply SCE.Sym. exists f. apply H2.
 Qed.
 
 (* Assuming choice, every set is well-orderable.                                *)

@@ -6,6 +6,7 @@ Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.WellOrdering.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.OrdPair.
@@ -53,6 +54,16 @@ Proposition IsEquiv : forall (a:U), Choice ->
   a :~: card a.
 Proof.
   intros a AC. apply SCC.IsEquiv, SCW.WithChoice. assumption.
+Qed.
+
+(* Assuming choice, every set admits an explicit well-ordering relation.        *)
+Proposition HasWellOrdering : forall (a:U),
+  Choice -> exists r, WellOrdering r a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC.
+  (* Choice makes the set well-orderable, then transport gives the relation.    *)
+  apply SCW.HasWellOrdering. apply SCW.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, two sets are equipotent iff they have the same cardinal.    *)
