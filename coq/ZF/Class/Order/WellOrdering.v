@@ -28,7 +28,7 @@ Proposition InclCompat : forall (R A B:Class),
 Proof.
   intros R A B H1 [H2 H3]. split.
   - apply Founded.InclCompat with B; assumption.
-  - apply TotalIncl with B; assumption.
+  - apply Total.InclCompat with B; assumption.
 Qed.
 
 (* A well-ordering on A is irreflexive on A.                                    *)

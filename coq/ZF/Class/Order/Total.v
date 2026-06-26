@@ -13,11 +13,13 @@ Require Import ZF.Set.OrdPair.
 Definition Total (R A:Class) : Prop := forall (x y:U), A x -> A y ->
   x = y \/ R :(x,y): \/ R :(y,x):.
 
-(* If R is total on A and B is a subclass of A, then R is total on B.           *)
-Proposition TotalIncl : forall (R A B:Class),
-  Total R A -> B :<=: A -> Total R B.
+(* If B is contained in A, totality on A restricts to totality on B.            *)
+Proposition InclCompat : forall (R A B:Class),
+  B :<=: A -> Total R A -> Total R B.
 Proof.
-  intros R A B H1 H2 x y H3 H4. apply H1; apply H2; assumption.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Any two elements of B are also elements of A, so totality on A applies.    *)
+  intros R A B H1 H2 x y H3 H4. apply H2; apply H1; assumption.
 Qed.
 
 (* Totality is preserved and reflected by order isomorphisms.                   *)
