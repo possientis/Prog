@@ -7,6 +7,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Order.InitSegment.
 Require Import ZF.Class.Order.Irreflexive.
+Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
@@ -33,6 +34,19 @@ Proof.
   intros R A B H1 [H2 H3]. split.
   - apply WellFounded.InclCompat with B; assumption.
   - apply WellOrdering.InclCompat with B; assumption.
+Qed.
+
+(* Well-founded well-ordering is preserved and reflected by order isomorphisms. *)
+Proposition IsomCompat : forall (F R S A B:Class),
+  Isom F R S A B -> WellFoundedWellOrd R A <-> WellFoundedWellOrd S B.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Both components are preserved and reflected by the same order isomorphism. *)
+  intros F R S A B H1. split; intros [H2 H3]; split.
+  - apply (WellFounded.IsomCompat F R S A B); assumption.
+  - apply (WellOrdering.IsomCompat F R S A B); assumption.
+  - apply (WellFounded.IsomCompat F R S A B); assumption.
+  - apply (WellOrdering.IsomCompat F R S A B); assumption.
 Qed.
 
 (* A well-founded well-ordering on A is irreflexive on A.                       *)

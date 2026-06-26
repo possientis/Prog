@@ -107,7 +107,7 @@ Proof.
 Qed.
 
 (* Well-ordering is preserved and reflected by order isomorphisms.              *)
-Proposition WhenIsom : forall (F R S A B:Class),
+Proposition IsomCompat : forall (F R S A B:Class),
   Isom F R S A B -> WellOrdering R A <-> WellOrdering S B.
 Proof.
   intros F R S A B H1. split; intros [H2 H3]; split.
@@ -125,7 +125,7 @@ Proposition NotInImage : forall (F R S A B:Class) (a:U),
   ~ F:[initSegment R A a]: F!a.
 Proof.
   intros F R S A B a H1 H2 H3 H4. apply (IsNotIn R A a).
-  - apply (WhenIsom F R S A B); assumption.
+  - apply (IsomCompat F R S A B); assumption.
   - apply (Bij.EvalInImage F A B); try assumption. apply H2.
 Qed.
 
