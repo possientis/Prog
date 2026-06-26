@@ -3,8 +3,11 @@ Require Import ZF.Class.Order.Reflexive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.Eval.
 
 Module COR := ZF.Class.Order.Reflexive.
 
@@ -32,6 +35,29 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   (* Elements of b are elements of a, so the larger-domain property applies.    *)
   intros r a b H1 H2 x H3. apply H2, H1. assumption.
+Qed.
+
+(* Reflexivity is preserved and reflected by order isomorphisms.                *)
+Proposition IsomCompat : forall (f r s a b:U),
+  Isom f r s a b -> Reflexive r a <-> Reflexive s b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* It is sufficient to prove one implication.                                 *)
+  assert (forall (f r s a b:U),
+    Isom f r s a b -> Reflexive r a -> Reflexive s b) as L. {
+    intros f r s a b H1 H2 y H3.
+    assert (H4 := H1). destruct H4 as [H4 H5].
+    remember (eval (f^:-1:) y) as x eqn:H6.
+    assert (x :< a) as H7. { rewrite H6.
+      apply Bij.ConverseEvalIsInDomain with b; assumption. }
+    assert (y = f!x) as H8. { rewrite H6. symmetry.
+      apply Bij.EvalOfConverseEval with a b; assumption. }
+    rewrite H8. apply H5; try assumption. apply H2. assumption.
+  }
+  (* The converse direction follows from applying the same implication to f^-1. *)
+  intros f r s a b H1. split.
+  - apply L with f. assumption.
+  - apply L with f^:-1:, Isom.Converse. assumption.
 Qed.
 
 (* Reflexivity is preserved under transport by a bijection.                     *)

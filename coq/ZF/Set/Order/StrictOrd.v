@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.StrictOrd.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Irreflexive.
 Require Import ZF.Set.Order.Transitive.
 Require Import ZF.Set.Order.Transport.
@@ -36,6 +37,19 @@ Proof.
   intros r a b H1 [H2 H3]. split.
   - apply Irreflexive.InclCompat with a; assumption.
   - apply Transitive.InclCompat with a; assumption.
+Qed.
+
+(* Strict order is preserved and reflected by order isomorphisms.               *)
+Proposition IsomCompat : forall (f r s a b:U),
+  Isom f r s a b -> StrictOrd r a <-> StrictOrd s b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Both components are preserved and reflected by the same order isomorphism. *)
+  intros f r s a b H1. split; intros [H2 H3]; split.
+  - apply (Irreflexive.IsomCompat f r s a b); assumption.
+  - apply (Transitive.IsomCompat f r s a b); assumption.
+  - apply (Irreflexive.IsomCompat f r s a b); assumption.
+  - apply (Transitive.IsomCompat f r s a b); assumption.
 Qed.
 
 (* In a strict order, if x < y then neither x = y nor y < x holds.              *)

@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Founded.
 Require Import ZF.Set.Order.Total.
 Require Import ZF.Set.Order.Transport.
@@ -36,6 +37,19 @@ Proof.
   intros r a b H1 [H2 H3]. split.
   - apply Founded.InclCompat with a; assumption.
   - apply Total.InclCompat with a; assumption.
+Qed.
+
+(* Well-ordering is preserved and reflected by order isomorphisms.              *)
+Proposition IsomCompat : forall (f r s a b:U),
+  Isom f r s a b -> WellOrdering r a <-> WellOrdering s b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Both components are preserved and reflected by the same order isomorphism. *)
+  intros f r s a b H1. split; intros [H2 H3]; split.
+  - apply (Founded.IsomCompat f r s a b); assumption.
+  - apply (Total.IsomCompat f r s a b); assumption.
+  - apply (Founded.IsomCompat f r s a b); assumption.
+  - apply (Total.IsomCompat f r s a b); assumption.
 Qed.
 
 (* Well-ordering is preserved under transport by a bijection.                   *)

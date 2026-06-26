@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bij.
@@ -33,6 +34,20 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   (* Elements of b are elements of a, so the larger-domain property applies.    *)
   intros r a b H1 H2 x y H3 H4. apply H2; apply H1; assumption.
+Qed.
+
+(* Totality is preserved and reflected by order isomorphisms.                   *)
+Proposition IsomCompat : forall (f r s a b:U),
+  Isom f r s a b -> Total r a <-> Total s b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f r s a b H1.
+  assert (COT.Total (toClass r) (toClass a) <->
+    COT.Total (toClass s) (toClass b)) as H2. {
+    apply (COT.IsomCompat (toClass f) (toClass r) (toClass s)
+      (toClass a) (toClass b)).
+    apply Isom.ToClass. assumption. }
+  split; intros H3; apply FromClass; apply H2; apply ToClass; assumption.
 Qed.
 
 (* Totality is preserved under transport by a bijection.                        *)

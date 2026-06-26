@@ -40,6 +40,20 @@ Proof.
   apply Incl.Tran with b; assumption.
 Qed.
 
+(* Foundedness is preserved and reflected by order isomorphisms.                *)
+Proposition IsomCompat : forall (f r s a b:U),
+  Isom f r s a b -> Founded r a <-> Founded s b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f r s a b H1.
+  assert (COF.Founded (toClass r) (toClass a) <->
+    COF.Founded (toClass s) (toClass b)) as H2. {
+    apply (COF.IsomCompat (toClass f) (toClass r) (toClass s)
+      (toClass a) (toClass b)).
+    apply Isom.ToClass. assumption. }
+  split; intros H3; apply FromClass; apply H2; apply ToClass; assumption.
+Qed.
+
 (* Foundedness is preserved under transport by a bijection.                     *)
 Proposition Transport : forall (f r s a b:U),
   s = transport f r a ->

@@ -3,8 +3,11 @@ Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Converse.
+Require Import ZF.Set.Relation.Eval.
 
 Module COI := ZF.Class.Order.Irreflexive.
 
@@ -32,6 +35,31 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   (* Elements of b are elements of a, so the larger-domain property applies.    *)
   intros r a b H1 H2 x H3. apply H2, H1. assumption.
+Qed.
+
+(* Irreflexivity is preserved and reflected by order isomorphisms.              *)
+Proposition IsomCompat : forall (f r s a b:U),
+  Isom f r s a b -> Irreflexive r a <-> Irreflexive s b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* It is sufficient to prove one implication.                                 *)
+  assert (forall (f r s a b:U),
+    Isom f r s a b -> Irreflexive r a -> Irreflexive s b) as L. {
+    intros f r s a b H1 H2 y H3 H4.
+    assert (H5 := H1). destruct H5 as [H5 H6].
+    remember (eval (f^:-1:) y) as x eqn:H7.
+    assert (x :< a) as H8. { rewrite H7.
+      apply Bij.ConverseEvalIsInDomain with b; assumption. }
+    assert (y = f!x) as H9. { rewrite H7. symmetry.
+      apply Bij.EvalOfConverseEval with a b; assumption. }
+    assert (:(x,x): :< r) as H10. {
+      apply H6; try assumption. rewrite <- H9. assumption. }
+    revert H10. apply H2. assumption.
+  }
+  (* The converse direction follows from applying the same implication to f^-1. *)
+  intros f r s a b H1. split.
+  - apply L with f. assumption.
+  - apply L with f^:-1:, Isom.Converse. assumption.
 Qed.
 
 (* Irreflexivity is preserved under transport by a bijection.                   *)
