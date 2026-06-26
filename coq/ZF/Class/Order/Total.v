@@ -23,10 +23,10 @@ Proof.
 Qed.
 
 (* Totality is preserved and reflected by order isomorphisms.                   *)
-Proposition TotalIsom : forall (F R S A B:Class),
+Proposition IsomCompat : forall (F R S A B:Class),
   Isom F R S A B -> Total R A <-> Total S B.
 Proof.
-  (* It is sufficient to prove -> *)
+  (* It is sufficient to prove one implication.                                 *)
   assert (forall (F R S A B:Class),
     Isom F R S A B -> Total R A -> Total S B) as L. {
     intros F R S A B H1 H2 y1 y2 H3 H4. assert (H5 := H1). destruct H5 as [H5 H6].
@@ -45,7 +45,7 @@ Proof.
     - right. left.  rewrite H11, H12. specialize (H6 x1 x2 H9 H10). apply H6. assumption.
     - right. right. rewrite H11, H12. specialize (H6 x2 x1 H10 H9). apply H6. assumption.
   }
-  (* The proof of the equivalence follows. *)
+  (* The proof of the equivalence follows.                                      *)
   intros F R S A B H1. split.
   - apply L with F. assumption.
   - apply L with F^:-1:, Isom.Converse. assumption.

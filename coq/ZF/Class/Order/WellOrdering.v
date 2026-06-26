@@ -112,9 +112,9 @@ Proposition WhenIsom : forall (F R S A B:Class),
 Proof.
   intros F R S A B H1. split; intros [H2 H3]; split.
   - apply (Founded.IsomCompat F R S A B); assumption.
-  - apply (TotalIsom F R S A B); assumption.
+  - apply (Total.IsomCompat F R S A B); assumption.
   - apply (Founded.IsomCompat F R S A B); assumption.
-  - apply (TotalIsom F R S A B); assumption.
+  - apply (Total.IsomCompat F R S A B); assumption.
 Qed.
 
 (* An isomorphism does not map the initial segment at a to a set containing F!a *)
