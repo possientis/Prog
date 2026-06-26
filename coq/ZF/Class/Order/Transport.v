@@ -10,11 +10,10 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
-(* Transporting a 'relation R on A' by F.                                       *)
+(* Transporting a 'relation R on A' under F.                                    *)
 Definition transport (F R A:Class) : Class := fun x =>
   exists y z, x = :(F!y,F!z): /\ A y /\ A z /\ R :(y,z):.
 
-(* :(F!y,F!z): is in (transport F R A) iff R :(y,z):, given y,z in A.           *)
 Proposition Charac2F : forall (F R A B:Class) (y z:U),
   Bij F A B                                   ->
   A y                                         ->
@@ -31,6 +30,7 @@ Proof.
   - exists y, z. split. 1: reflexivity. split. 1: assumption. split; assumption.
 Qed.
 
+(* The transported relation on A is a subclass of F:[A] x F:[A].                *)
 Proposition IsIncl : forall (F R A:Class),
   Functional F                                ->
   A :<=: domain F                             ->
@@ -45,6 +45,7 @@ Proof.
     apply H2. assumption.
 Qed.
 
+(* If A is small and F is functional on A, the transported relation is small.   *)
 Proposition IsSmall : forall (F R A:Class),
   Functional F                                ->
   A :<=: domain F                             ->

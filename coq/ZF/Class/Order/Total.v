@@ -13,12 +13,14 @@ Require Import ZF.Set.OrdPair.
 Definition Total (R A:Class) : Prop := forall (x y:U), A x -> A y ->
   x = y \/ R :(x,y): \/ R :(y,x):.
 
+(* If R is total on A and B is a subclass of A, then R is total on B.           *)
 Proposition TotalIncl : forall (R A B:Class),
   Total R A -> B :<=: A -> Total R B.
 Proof.
   intros R A B H1 H2 x y H3 H4. apply H1; apply H2; assumption.
 Qed.
 
+(* Totality is preserved and reflected by order isomorphisms.                   *)
 Proposition TotalIsom : forall (F R S A B:Class),
   Isom F R S A B -> Total R A <-> Total S B.
 Proof.
@@ -47,6 +49,7 @@ Proof.
   - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
+(* If R is total on A, then the converse of R is also total on A.               *)
 Proposition Converse : forall (R A:Class),
   Total R A -> Total R^:-1: A.
 Proof.
@@ -57,6 +60,7 @@ Proof.
   - right. left. apply Converse.Charac2Rev. assumption.
 Qed.
 
+(* Totality is preserved when transporting a relation via a bijection.          *)
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Total R A -> Total S B.
 Proof.

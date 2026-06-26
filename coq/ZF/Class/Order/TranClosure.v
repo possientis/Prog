@@ -74,8 +74,8 @@ Definition closure (R A:Class) (a:U) : Class := fun x =>
 
 (* Existence of R-transitive closure of a subset a of A.                        *)
 Proposition Exists : forall (R A:Class) (a:U),
-  WellFounded R A   ->
-  toClass a :<=: A  ->
+  WellFounded R A               ->
+  toClass a :<=: A              ->
   exists b, IsClosure R A a b.
 Proof.
   intros R A a H1 H2.
@@ -268,7 +268,7 @@ Proof.
     apply H29 with n; assumption.
 Qed.
 
-(* The RA-closure of the set a (viewed as a class) is small.                    *)
+(* The R-transitive closure (viewed as a class) of a set a in A  is small.      *)
 Proposition IsSmall : forall (R A:Class) (a:U),
   Small (closure R A a).
 Proof.
@@ -311,6 +311,7 @@ Proof.
   intros R A a b H1. apply H1.
 Qed.
 
+(* Each element of the closure of a lies at the end of a decreasing path from a.*)
 Proposition DecreasingPath : forall (R A:Class) (a b x:U),
   IsClosure R A a b                             ->
   x :< b                                        ->
@@ -336,6 +337,7 @@ Proof.
   apply H5; assumption.
 Qed.
 
+(* The R-transitive closure of a set a in A is unique.                          *)
 Proposition IsUnique : forall (R A:Class) (a b c:U),
   IsClosure R A a b -> IsClosure R A a c -> b = c.
 Proof.
