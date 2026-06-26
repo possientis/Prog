@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Founded.
 Require Import ZF.Set.Order.Total.
 Require Import ZF.Set.Order.Transport.
@@ -24,6 +25,17 @@ Proposition FromClass : forall (r a:U),
   COW.WellOrdering (toClass r) (toClass a) -> WellOrdering r a.
 Proof.
   intros r a H1. assumption.
+Qed.
+
+(* Well-ordering on a restricts to well-ordering on any subset b.               *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> WellOrdering r a -> WellOrdering r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Both components restrict separately to the subset b.                       *)
+  intros r a b H1 [H2 H3]. split.
+  - apply Founded.InclCompat with a; assumption.
+  - apply Total.InclCompat with a; assumption.
 Qed.
 
 (* Well-ordering is preserved under transport by a bijection.                   *)

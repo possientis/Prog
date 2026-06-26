@@ -49,7 +49,7 @@ Proof.
   apply Equiv.Sym. assumption.
 Qed.
 
-(* If R is founded on A superclass of B, then it is founded on B.               *)
+(* If A is contained in B, foundedness on B restricts to foundedness on A.      *)
 Proposition InclCompat : forall (R A B:Class),
   A :<=: B -> Founded R B -> Founded R A.
 Proof.
@@ -60,7 +60,7 @@ Qed.
 Proposition IsomCompat : forall (F R S A B:Class),
   Isom F R S A B -> Founded R A <-> Founded S B.
 Proof.
-  (* It is sufficient to prove -> *)
+  (* It is sufficient to prove one implication.                                 *)
   assert (forall (F R S A B:Class),
     Isom F R S A B -> Founded R A -> Founded S B) as L. {
     intros F R S A B H1 H2 b H3 H4.
@@ -97,7 +97,7 @@ Proof.
     1: assumption. apply Minimal.IsomImage with R A B; try assumption.
     apply H7, Minimal.IsIn with R. assumption. }
 
-  (* The proof of the equivalence follows. *)
+  (* The proof of the equivalence follows.                                      *)
   intros F R S A B H1. split.
   - apply L with F. assumption.
   - apply L with F^:-1:, Isom.Converse. assumption.

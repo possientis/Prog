@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bij.
@@ -28,6 +29,16 @@ Proposition FromClass : forall (r a:U),
   COT.Transitive (toClass r) (toClass a) -> Transitive r a.
 Proof.
   intros r a H1. assumption.
+Qed.
+
+(* Transitivity on a restricts to transitivity on any subset b.                 *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> Transitive r a -> Transitive r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Elements of b are elements of a, so the larger-domain property applies.    *)
+  intros r a b H1 H2 x y z H3 H4 H5 H6 H7.
+  apply H2 with y; try assumption; apply H1; assumption.
 Qed.
 
 (* Transitivity is preserved under transport by a bijection.                    *)

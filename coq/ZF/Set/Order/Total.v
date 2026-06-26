@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bij.
@@ -23,6 +24,15 @@ Proposition FromClass : forall (r a:U),
   COT.Total (toClass r) (toClass a) -> Total r a.
 Proof.
   intros r a H1. assumption.
+Qed.
+
+(* Totality on a restricts to totality on any subset b.                         *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> Total r a -> Total r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Elements of b are elements of a, so the larger-domain property applies.    *)
+  intros r a b H1 H2 x y H3 H4. apply H2; apply H1; assumption.
 Qed.
 
 (* Totality is preserved under transport by a bijection.                        *)

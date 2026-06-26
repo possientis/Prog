@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.StrictOrd.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Irreflexive.
 Require Import ZF.Set.Order.Transitive.
 Require Import ZF.Set.Order.Transport.
@@ -24,6 +25,17 @@ Proposition FromClass : forall (r a:U),
   COS.StrictOrd (toClass r) (toClass a) -> StrictOrd r a.
 Proof.
   intros r a H1. assumption.
+Qed.
+
+(* Strict order on a restricts to strict order on any subset b.                 *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> StrictOrd r a -> StrictOrd r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Both components restrict separately to the subset b.                       *)
+  intros r a b H1 [H2 H3]. split.
+  - apply Irreflexive.InclCompat with a; assumption.
+  - apply Transitive.InclCompat with a; assumption.
 Qed.
 
 (* In a strict order, if x < y then neither x = y nor y < x holds.              *)

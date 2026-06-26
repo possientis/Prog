@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Reflexive.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Relation.Bij.
@@ -22,6 +23,15 @@ Proposition FromClass : forall (r a:U),
   COR.Reflexive (toClass r) (toClass a) -> Reflexive r a.
 Proof.
   intros r a H1. assumption.
+Qed.
+
+(* Reflexivity on a restricts to reflexivity on any subset b.                   *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> Reflexive r a -> Reflexive r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Elements of b are elements of a, so the larger-domain property applies.    *)
+  intros r a b H1 H2 x H3. apply H2, H1. assumption.
 Qed.
 
 (* Reflexivity is preserved under transport by a bijection.                     *)

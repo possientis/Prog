@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.Irreflexive.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Relation.Bij.
@@ -22,6 +23,15 @@ Proposition FromClass : forall (r a:U),
   COI.Irreflexive (toClass r) (toClass a) -> Irreflexive r a.
 Proof.
   intros r a H1. assumption.
+Qed.
+
+(* Irreflexivity on a restricts to irreflexivity on any subset b.               *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> Irreflexive r a -> Irreflexive r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Elements of b are elements of a, so the larger-domain property applies.    *)
+  intros r a b H1 H2 x H3. apply H2, H1. assumption.
 Qed.
 
 (* Irreflexivity is preserved under transport by a bijection.                   *)

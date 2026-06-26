@@ -30,6 +30,16 @@ Proof.
   intros r a H1. assumption.
 Qed.
 
+(* Foundedness on a restricts to foundedness on any subset b.                   *)
+Proposition InclCompat : forall (r a b:U),
+  b :<=: a -> Founded r a -> Founded r b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  (* Every non-empty subset of b is also a non-empty subset of a.               *)
+  intros r a b H1 H2 c H3 H4. apply H2. 2: assumption.
+  apply Incl.Tran with b; assumption.
+Qed.
+
 (* Foundedness is preserved under transport by a bijection.                     *)
 Proposition Transport : forall (f r s a b:U),
   s = transport f r a ->
