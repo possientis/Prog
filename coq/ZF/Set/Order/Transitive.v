@@ -54,9 +54,9 @@ Proof.
     Isom f r s a b -> Transitive r a -> Transitive s b) as L. {
     intros f r s a b H1 H2 z1 z2 z3 H3 H4 H5 H6 H7.
     assert (H8 := H1). destruct H8 as [H8 H9].
-    remember (eval (f^:-1:) z1) as y1 eqn:H10.
-    remember (eval (f^:-1:) z2) as y2 eqn:H11.
-    remember (eval (f^:-1:) z3) as y3 eqn:H12.
+    remember (f^:-1:!z1) as y1 eqn:H10.
+    remember (f^:-1:!z2) as y2 eqn:H11.
+    remember (f^:-1:!z3) as y3 eqn:H12.
     assert (y1 :< a) as H13. { rewrite H10.
       apply Bij.ConverseEvalIsInDomain with b; assumption. }
     assert (y2 :< a) as H14. { rewrite H11.

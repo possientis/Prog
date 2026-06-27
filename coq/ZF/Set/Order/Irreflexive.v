@@ -47,7 +47,7 @@ Proof.
     Isom f r s a b -> Irreflexive r a -> Irreflexive s b) as L. {
     intros f r s a b H1 H2 y H3 H4.
     assert (H5 := H1). destruct H5 as [H5 H6].
-    remember (eval (f^:-1:) y) as x eqn:H7.
+    remember (f^:-1:!y) as x eqn:H7.
     assert (x :< a) as H8. { rewrite H7.
       apply Bij.ConverseEvalIsInDomain with b; assumption. }
     assert (y = f!x) as H9. { rewrite H7. symmetry.

@@ -49,8 +49,8 @@ Proof.
     Isom f r s a b -> AntiSymmetric r a -> AntiSymmetric s b) as L. {
     intros f r s a b H1 H2 y1 y2 H3 H4 H5 H6.
     assert (H7 := H1). destruct H7 as [H7 H8].
-    remember (eval (f^:-1:) y1) as x1 eqn:H9.
-    remember (eval (f^:-1:) y2) as x2 eqn:H10.
+    remember (f^:-1:!y1) as x1 eqn:H9.
+    remember (f^:-1:!y2) as x2 eqn:H10.
     assert (x1 :< a) as H11. { rewrite H9.
       apply Bij.ConverseEvalIsInDomain with b; assumption. }
     assert (x2 :< a) as H12. { rewrite H10.
