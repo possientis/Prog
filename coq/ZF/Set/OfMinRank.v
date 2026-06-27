@@ -56,3 +56,12 @@ Proof.
   - apply ToClass.
   - apply CMR.WhenZero. assumption.
 Qed.
+
+Proposition SameRank : forall (A:Class) (x y:U),
+  x :< ofMinRank A -> y :< ofMinRank A -> rank x = rank y.
+Proof.
+  intros A x y H1 H2. apply Incl.Double. split.
+  - apply (Charac A x). 1: assumption. apply IsIncl. assumption.
+  - apply (Charac A y). 1: assumption. apply IsIncl. assumption.
+Qed.
+
