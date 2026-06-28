@@ -1,9 +1,11 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.WellOrdering.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Founded.
+Require Import ZF.Set.Order.Minimal.
 Require Import ZF.Set.Order.Total.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Relation.Bij.
@@ -63,4 +65,13 @@ Proof.
   intros f r s a b H1 H2 [H3 H4]. split.
   - apply (Founded.Transport f r s a b); assumption.
   - apply (Total.Transport f r s a b); assumption.
+Qed.
+
+Proposition HasMinimal : forall (r a b:U),
+  WellOrdering r a          ->
+  b :<=: a                  ->
+  b <> :0:                  ->
+  exists x, Minimal r b x.
+Proof.
+  intros r a b H1 H2 H3. apply H1; assumption.
 Qed.
