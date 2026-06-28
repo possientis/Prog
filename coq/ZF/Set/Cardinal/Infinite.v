@@ -4,7 +4,7 @@ Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Finite.
+Require Import ZF.Set.Cardinal.Finite.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
