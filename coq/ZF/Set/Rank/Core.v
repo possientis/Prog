@@ -2,7 +2,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Ordinal.Induction.
-Require Import ZF.Class.Ordinal.VH.
+Require Import ZF.Class.Rank.VH.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
@@ -14,7 +14,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
-Require Import ZF.Set.WellFounded.
+Require Import ZF.Set.Rank.WellFounded.
 
 Require Import ZF.Notation.Eval.
 

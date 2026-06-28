@@ -3,7 +3,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Induction.
-Require Import ZF.Class.Ordinal.VH.
+Require Import ZF.Class.Rank.VH.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Fun.From.

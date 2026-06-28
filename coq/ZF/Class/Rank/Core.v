@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.VH.
+Require Import ZF.Class.Rank.VH.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
