@@ -5,8 +5,8 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.OfMinRank.
-Require Import ZF.Set.Rank.
+Require Import ZF.Set.Rank.OfMinRank.
+Require Import ZF.Set.Rank.Core.
 
 
 Module CEM := Class.Empty.

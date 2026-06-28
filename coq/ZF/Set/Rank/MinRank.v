@@ -1,17 +1,18 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.MinRank.
+Require Import ZF.Class.Rank.MinRank.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.OfMinRank.
+Require Import ZF.Set.Rank.OfMinRank.
 Require Import ZF.Set.Ordinal.Core.
-Require Import ZF.Set.Rank.
+Require Import ZF.Set.Rank.Core.
 
 
-Module CMR := ZF.Class.MinRank.
+Module CMR := ZF.Class.Rank.MinRank.
+Module SRC := ZF.Set.Rank.Core.
 
 (* The minimal rank of the elements of A.                                       *)
 Definition minRank (A:Class) : U := fromClass (CMR.minRank A) (CMR.IsSmall A).
@@ -65,7 +66,7 @@ Proof.
   - assert (ofMinRank A <> :0:) as H2. {
       apply OfMinRank.IsNotEmpty. assumption. }
     apply Empty.HasElem in H2. destruct H2 as [y H2].
-    rewrite (Equal A y). 2: assumption. apply Rank.IsOrdinal.
+    rewrite (Equal A y). 2: assumption. apply SRC.IsOrdinal.
 Qed.
 
 (* A non-empty class has an element whose rank is the minimal rank.             *)
@@ -132,6 +133,6 @@ Proof.
   (* The minimal rank is below rank zero, and rank zero is zero.                *)
   intros A H1.
   assert ((minRank A) :<=: rank :0:) as H2. { apply IsLowerBound. assumption. }
-  rewrite Rank.WhenOrdinal in H2. 2: apply Core.Zero.
+  rewrite SRC.WhenOrdinal in H2. 2: apply Core.Zero.
   apply Empty.WhenIncl. assumption.
 Qed.

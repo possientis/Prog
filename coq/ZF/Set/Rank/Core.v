@@ -21,6 +21,7 @@ Require Import ZF.Notation.Eval.
 Module CEM := ZF.Class.Empty.
 Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Ordinal.Induction.
+Module SOC := ZF.Set.Ordinal.Core.
 Module SUG := ZF.Set.UnionGenOfClass.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 
@@ -45,7 +46,7 @@ Proof.
   assert (A :<>: :0:) as H3. {
     rewrite H1. apply CEM.HasElem. apply IsWellFounded. }
   assert (exists b, Ordinal b /\ A b /\ forall c, A c -> b :<=: c) as H4. {
-    apply Core.HasMinimal; assumption. }
+    apply SOC.HasMinimal; assumption. }
   destruct H4 as [b [H4 [H5 H6]]].
   assert (a :< VH!b) as H7. { rewrite H1 in H5. apply H5. }
   assert (Successor b) as H8. {
@@ -56,7 +57,7 @@ Proof.
       apply Empty.Charac in H7. contradiction.
     - exfalso. rewrite VH.WhenLimit in H7. 2: assumption.
       apply SUG.Charac in H7. destruct H7 as [c [H7 H9]].
-      assert (Ordinal c) as H10. { apply Core.IsOrdinal with b; assumption. }
+      assert (Ordinal c) as H10. { apply SOC.IsOrdinal with b; assumption. }
       assert (A c) as H11. { rewrite H1. split; assumption. }
       assert (c :< c) as H12. { apply H6; assumption. }
       revert H12. apply Foundation.NoLoop1. }
@@ -98,7 +99,7 @@ Proof.
   assert (A :<>: :0:) as H6. {
     rewrite H4. apply CEM.HasElem. apply IsWellFounded. }
   assert (exists c, Ordinal c /\ A c /\ forall d, A d -> c :<=: d) as H7. {
-    apply Core.HasMinimal; assumption. }
+    apply SOC.HasMinimal; assumption. }
   destruct H7 as [c [H7 [H8 H9]]].
   assert (a :< VH!c) as H10. { rewrite H4 in H8. apply H8. }
   assert (Successor c) as H11. {
@@ -109,7 +110,7 @@ Proof.
       apply Empty.Charac in H10. contradiction.
     - exfalso. rewrite VH.WhenLimit in H10. 2: assumption.
       apply SUG.Charac in H10. destruct H10 as [d [H10 H12]].
-      assert (Ordinal d) as H13. { apply Core.IsOrdinal with c; assumption. }
+      assert (Ordinal d) as H13. { apply SOC.IsOrdinal with c; assumption. }
       assert (A d) as H14. { rewrite H4. split; assumption. }
       assert (d :< d) as H15. { apply H9; assumption. }
       revert H15. apply Foundation.NoLoop1. }
@@ -138,7 +139,7 @@ Proof.
   assert (Ordinal (rank a)) as G1. { apply IsOrdinal. }
   assert (Ordinal (succ (rank a))) as G2. { apply Succ.IsOrdinal. assumption. }
   assert (rank a :< b \/ b :<=: rank a) as H3. {
-    apply Core.ElemOrIncl; assumption. }
+    apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 1: assumption.
   assert (~ a :< VH!b) as H6. { apply IsNotIn; assumption. }
   contradiction.
@@ -151,7 +152,7 @@ Proof.
   intros a b H1 H2.
   assert (Ordinal (rank a)) as G1. { apply IsOrdinal. }
   assert (rank a :< b \/ b :<=: rank a) as H3. {
-    apply Core.ElemOrIncl; assumption. }
+    apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   assert (a :< VH!b) as H4. { apply IsIn; assumption. }
   contradiction.

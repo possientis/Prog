@@ -2,15 +2,16 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Rank.
+Require Import ZF.Class.Rank.Core.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
-Require Import ZF.Set.Rank.
+Require Import ZF.Set.Rank.Core.
 
 Module CEM := ZF.Class.Empty.
-Module CRA := ZF.Class.Rank.
+Module CRA := ZF.Class.Rank.Core.
+Module SRC := ZF.Set.Rank.Core.
 
 (* The class of elements of the class A with minmal rank.                       *)
 Definition ofMinRank (A:Class) : Class := fun x =>
@@ -32,7 +33,7 @@ Proof.
   remember (fun b => exists x, A x /\ b = rank x) as B eqn:H2.
   assert (B :<=: Ordinal) as H3. {
     intros b H3. rewrite H2 in H3. destruct H3 as [x [H3 H4]].
-    subst. apply Rank.IsOrdinal. }
+    subst. apply SRC.IsOrdinal. }
   assert (B :<>: :0:) as H4. {
     apply CEM.HasElem. exists (rank a). rewrite H2. exists a.
     split. 1: assumption. reflexivity. }
@@ -65,6 +66,6 @@ Proof.
     + apply CEM.IsSmall.
   - apply CEM.HasElem in H1. destruct H1 as [a H1].
     apply CRA.IsSmall. exists (rank a). split.
-    + apply Rank.IsOrdinal.
+    + apply SRC.IsOrdinal.
     + intros x [H4 H5]. apply H5. assumption.
 Qed.

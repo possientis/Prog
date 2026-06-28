@@ -1,14 +1,14 @@
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.OfMinRank.
+Require Import ZF.Class.Rank.OfMinRank.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Rank.
+Require Import ZF.Set.Rank.Core.
 
 Module CEM := ZF.Class.Empty.
-Module CMR := ZF.Class.OfMinRank.
+Module CMR := ZF.Class.Rank.OfMinRank.
 
 
 (* The set of elements of the class A with minimal rank.                        *)

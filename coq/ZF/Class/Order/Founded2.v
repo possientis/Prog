@@ -8,7 +8,7 @@ Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.OfMinRank.
+Require Import ZF.Set.Rank.OfMinRank.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
@@ -18,7 +18,7 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Range.
-Require Import ZF.Set.Rank.
+Require Import ZF.Set.Rank.Core.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
