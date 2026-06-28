@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Classic.
+Require Import ZF.Class.Bounded.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Small.
@@ -10,7 +11,7 @@ Require Import ZF.Set.Rank.
 
 Module CEM := Class.Empty.
 
-
+(* The minimal rank (as a class) of the elements of A.                          *)
 Definition minRank (A:Class) : Class := fun x =>
   exists y, y :< ofMinRank A /\ x :< rank y.
 
@@ -32,6 +33,14 @@ Proof.
     apply Small.EquivCompat with :0:.
     + apply Equiv.Sym. assumption.
     + apply CEM.IsSmall.
-  -
-Admitted.
+  - assert (ofMinRank A <> :0:) as H2. {
+      apply OfMinRank.IsNotEmpty. assumption. }
+    apply Empty.HasElem in H2. destruct H2 as [y H2].
+    assert (Bounded (minRank A)) as H3. {
+      exists (rank y). intros x H3. destruct H3 as [z [H3 H4]].
+      assert (rank y = rank z) as H5. {
+        apply OfMinRank.SameRank with A; assumption. }
+      rewrite H5. assumption. }
+    apply Bounded.IsSmall. assumption.
+Qed.
 
