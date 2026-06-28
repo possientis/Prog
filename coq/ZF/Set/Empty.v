@@ -16,9 +16,17 @@ Definition empty : U := fromClass :0: Empty.IsSmall.
 (* Notation ":0:" := emptySet                                                   *)
 Global Instance SetZero : Zero U := { zero := empty }.
 
+(* The class of the empty set is the empty class.                               *)
+Proposition ToClass : toClass :0: :~: :0:.
+Proof.
+  intros x. split; intros H1.
+  - apply FromClass.Charac in H1. assumption.
+  - apply FromClass.Charac. assumption.
+Qed.
+
 Proposition Charac : forall x, x :< :0: <-> False.
 Proof.
-  apply FromClass.Charac.
+  apply ToClass.
 Qed.
 
 (* The empty set is a subset of all sets.                                       *)
@@ -86,14 +94,6 @@ Proof.
   intros a. apply PairIsNotEmpty.
 Qed.
 
-(* The class of the empty set is the empty class.                               *)
-Proposition ToClass : toClass :0: :~: :0:.
-Proof.
-  intros x. split; intros H1.
-  - apply Charac in H1. contradiction.
-  - apply Class.Empty.Charac in H1. contradiction.
-Qed.
-
 (* A set is empty if and only if its associated class is the empty class.       *)
 Proposition EmptyToClass : forall (a:U),
   a = :0: <-> toClass a :~: :0:.
@@ -118,3 +118,4 @@ Proof.
   intros a H1. apply Incl.Double. split. 1: assumption.
   intros x H2. apply Charac in H2. contradiction.
 Qed.
+
