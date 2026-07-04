@@ -107,7 +107,7 @@ Proof.
 Qed.
 
 (* If R is total on A the minimal element of a subclass of A is unique.         *)
-Proposition Unique : forall (R A B:Class) (x y:U),
+Proposition IsUnique : forall (R A B:Class) (x y:U),
   Total R A       ->
   B :<=: A        ->
   Minimal R B x   ->

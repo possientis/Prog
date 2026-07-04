@@ -78,7 +78,7 @@ Proof.
 Qed.
 
 (* If r is total on a then the minimal element of a subset of a is unique.      *)
-Proposition Unique : forall (r a b x y:U),
+Proposition IsUnique : forall (r a b x y:U),
   Total r a       ->
   b :<=: a        ->
   Minimal r b x   ->

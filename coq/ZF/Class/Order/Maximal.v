@@ -142,7 +142,7 @@ Proof.
 Qed.
 
 (* If R is total on A the maximal element of a subclass of A is unique.         *)
-Proposition Unique : forall (R A B:Class) (x y:U),
+Proposition IsUnique : forall (R A B:Class) (x y:U),
   Total R A       ->
   B :<=: A        ->
   Maximal R B x   ->
@@ -151,6 +151,6 @@ Proposition Unique : forall (R A B:Class) (x y:U),
 Proof.
   intros R A B x y H1 H2 H3 H4.
   apply Total.Converse in H1. apply IsMinimal in H3. apply IsMinimal in H4.
-  apply Minimal.Unique with R^:-1: A B; assumption.
+  apply Minimal.IsUnique with R^:-1: A B; assumption.
 Qed.
 

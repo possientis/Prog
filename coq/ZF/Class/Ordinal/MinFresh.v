@@ -36,7 +36,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   intros R A H1 x y1 y2 H2 H3.
   apply Charac2 in H2. apply Charac2 in H3. revert H2 H3.
-  apply Minimal.Unique with A. 1: assumption. apply Class.Inter2.IsInclL.
+  apply Minimal.IsUnique with A. 1: assumption. apply Class.Inter2.IsInclL.
 Qed.
 
 (* MinFresh R A is a relation class.                                            *)
