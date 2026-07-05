@@ -20,10 +20,6 @@ Definition Cofinal (a b:U) : Prop :=
 Proposition WhenZero : forall (a:U),
   Cofinal a :0: <-> a = :0:.
 Proof.
-  intros a. split; intros H1.
-  - destruct H1 as [H1 [f [H2 [H3 H4]]]].
-Admitted.
-(*
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a. split; intros H1.
   - (* Any element of a would be bounded by a value indexed by zero.            *)
@@ -41,6 +37,5 @@ Admitted.
         { apply Fun.WhenZero. reflexivity. }
         intros c H2. apply Empty.Charac in H2. contradiction.
 Qed.
-*)
 
 
