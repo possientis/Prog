@@ -273,11 +273,11 @@ Proof.
 Qed.
 
 (* The empty set is one-to-one.                                                 *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> OneToOne f.
 Proof.
   intros f H1. split.
-  - apply Functional.WhenEmpty. assumption.
-  - rewrite Converse.WhenEmpty. 2: assumption.
-    apply Functional.WhenEmpty. reflexivity.
+  - apply Functional.WhenZero. assumption.
+  - rewrite Converse.WhenZero. 2: assumption.
+    apply Functional.WhenZero. reflexivity.
 Qed.

@@ -49,10 +49,10 @@ Proof.
 Qed.
 
 (* The empty function is decreasing.                                            *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> Decreasing f.
 Proof.
   intros f H1 x y H2. exfalso.
-  rewrite Domain.WhenEmpty in H2. 2: assumption.
+  rewrite Domain.WhenZero in H2. 2: assumption.
   apply Empty.Charac in H2. contradiction.
 Qed.

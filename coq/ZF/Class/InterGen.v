@@ -45,10 +45,10 @@ Proof.
 Qed.
 
 (* This is a consequence of the choice made when defining the intersection.     *)
-Proposition WhenEmpty : forall (A B:Class),
+Proposition WhenZero : forall (A B:Class),
   A :~: :0: -> :/\:_{A} B :~: :0:.
 Proof.
-  intros A B H1. apply Inter.WhenEmpty. intros y. split; intros H2.
+  intros A B H1. apply Inter.WhenZero. intros y. split; intros H2.
   - destruct H2 as [x [H2 H3]]. apply H1 in H2. contradiction.
   - contradiction.
 Qed.

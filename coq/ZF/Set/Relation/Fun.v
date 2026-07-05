@@ -217,10 +217,10 @@ Proof.
 Qed.
 
 (* The empty set is a function from the empty set to any set b.                 *)
-Proposition WhenEmpty : forall (f b:U),
+Proposition WhenZero : forall (f b:U),
   f = :0: -> Fun f :0: b.
 Proof.
   intros f b H1. split.
-  - apply FunctionOn.WhenEmpty. assumption.
-  - rewrite Range.WhenEmpty. 2: assumption. apply Empty.IsIncl.
+  - apply FunctionOn.WhenZero. assumption.
+  - rewrite Range.WhenZero. 2: assumption. apply Empty.IsIncl.
 Qed.

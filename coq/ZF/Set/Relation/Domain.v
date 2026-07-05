@@ -39,7 +39,7 @@ Proof.
 Qed.
 
 (* The domain of the empty set is the empty set.                                *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> domain f = :0:.
 Proof.
   intros F H1. apply Incl.Double. split; intros x H2.

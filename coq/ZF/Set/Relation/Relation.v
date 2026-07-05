@@ -49,7 +49,7 @@ Qed.
 
 
 (* The empty set is a relation.                                                 *)
-Proposition WhenEmpty : forall (f:U), f = :0: -> Relation f.
+Proposition WhenZero : forall (f:U), f = :0: -> Relation f.
 Proof.
   intros f H1 x H2. exfalso. subst. apply Empty.Charac in H2. contradiction.
 Qed.

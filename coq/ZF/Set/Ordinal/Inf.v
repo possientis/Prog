@@ -71,10 +71,10 @@ Proof.
 Qed.
 
 (* The infimum of the empty set is 0.                                           *)
-Proposition WhenEmpty : inf :0: = :0:.
+Proposition WhenZero : inf :0: = :0:.
 Proof.
   rewrite WhenOrdinals.
-  - apply SIN.WhenEmpty.
+  - apply SIN.WhenZero.
   - intros x H1. apply Empty.Charac in H1. contradiction.
 Qed.
 

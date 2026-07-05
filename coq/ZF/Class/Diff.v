@@ -81,7 +81,7 @@ Proof.
 Qed.
 
 (* The difference A minus B is empty if and only if A is included in B.         *)
-Proposition WhenEmpty : forall (A B:Class),
+Proposition WhenZero : forall (A B:Class),
   A :\: B  :~: :0: <-> A :<=: B.
 Proof.
   intros A B. split; intros H1.

@@ -34,7 +34,7 @@ Proof.
 Qed.
 
 (* The union of the empty set is the empty set.                                 *)
-Proposition WhenEmpty : :U(:0:) = :0:.
+Proposition WhenZero : :U(:0:) = :0:.
 Proof.
   apply Incl.Double. split; intros x H1.
   - apply Charac in H1. destruct H1 as [y [_ H1]].

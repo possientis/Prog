@@ -102,11 +102,11 @@ Proof.
 Qed.
 
 (* The difference A minus a is empty iff A is included in the class of a.       *)
-Proposition WhenEmpty : forall (A:Class) (a:U),
+Proposition WhenZero : forall (A:Class) (a:U),
   A :\: a :~: :0: <-> A :<=: toClass a.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
-  intros A a. unfold diff. apply Class.Diff.WhenEmpty.
+  intros A a. unfold diff. apply Class.Diff.WhenZero.
 Qed.
 
 (* If the difference is non-empty, A is not equivalent to the class of a.       *)

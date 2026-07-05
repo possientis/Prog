@@ -167,7 +167,7 @@ Proof.
 Qed.
 
 (* The restriction of any set by an empty class is the empty set.               *)
-Proposition WhenEmpty : forall (A:Class) (f:U),
+Proposition WhenZero : forall (A:Class) (f:U),
   A :~: :0: -> f:|:A = :0:.
 Proof.
   intros A f H1. apply Incl.Double. split; intros x H2.

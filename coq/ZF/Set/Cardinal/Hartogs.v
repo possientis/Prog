@@ -84,7 +84,7 @@ Proposition HasZero : forall (a:U), :0: :< hartogs a.
 Proof.
   intros a. apply Charac. split.
   - apply SOC.Zero.
-  - exists :0:. apply Inj.WhenEmpty. reflexivity.
+  - exists :0:. apply Inj.WhenZero. reflexivity.
 Qed.
 
 (* The cardinal of a is strictly less than the Hartogs number of a.             *)

@@ -32,13 +32,13 @@ Proof.
 Qed.
 
 (* A function is on the empty set iff it is itself the empty set.               *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: <-> OrdFunOn f :0:.
 Proof.
   intros f. split; intros H1.
   - split.
-    + apply OrdFun.WhenEmpty. assumption.
-    + apply Domain.WhenEmpty. assumption.
+    + apply OrdFun.WhenZero. assumption.
+    + apply Domain.WhenZero. assumption.
   - destruct H1 as [[H1 _] H2].
     assert (f = :0: \/ f <> :0:) as H3. { apply LawExcludedMiddle. }
     destruct H3 as [H3|H3]. 1: assumption. exfalso.

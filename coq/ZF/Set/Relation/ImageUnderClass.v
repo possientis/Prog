@@ -87,10 +87,10 @@ Proof.
 Qed.
 
 (* The image of the empty set under any class is the empty set.                 *)
-Proposition WhenEmpty : forall (F:Class) (a:U),
+Proposition WhenZero : forall (F:Class) (a:U),
   a = :0: -> F:[a]: = :0:.
 Proof.
-  intros F a H1. rewrite H1. apply Truncate.WhenEmpty.
+  intros F a H1. rewrite H1. apply Truncate.WhenZero.
   intros x. split; intros H2.
   - destruct H2 as [y [H2 H3]]. apply Empty.Charac in H2. contradiction.
   - contradiction.

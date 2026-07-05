@@ -30,7 +30,7 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply Incl.EquivCompatL with :0:.
-    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenZero. assumption.
     + intros x H3. contradiction.
   - apply Incl.EquivCompatL with (inter' A).
     + apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
@@ -58,7 +58,7 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply Transitive.EquivCompat with :0:.
-    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenZero. assumption.
     + intros x H3. contradiction.
   - apply Transitive.EquivCompat with (inter' A).
     + apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
@@ -84,7 +84,7 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
   - apply COC.EquivCompat with :0:.
-    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenZero. assumption.
     + apply COC.Zero.
   - apply COC.EquivCompat with (inter' A).
     + apply Equiv.Sym, WhenNotEmpty. assumption.
@@ -107,7 +107,7 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H3 as [H3|H3].
   - apply Incl.EquivCompatL with :0:.
-    + apply Equiv.Sym, Inter.WhenEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenZero. assumption.
     + intros x H4. contradiction.
   - apply Incl.EquivCompatL with (inter' A).
     + apply Equiv.Sym, WhenNotEmpty. assumption.

@@ -271,10 +271,10 @@ Proof.
 Qed.
 
 (* The empty set is a bijection on the empty set.                               *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> BijectionOn f :0:.
 Proof.
   intros f H1. split.
-  - apply Bijection.WhenEmpty. assumption.
-  - apply Domain.WhenEmpty. assumption.
+  - apply Bijection.WhenZero. assumption.
+  - apply Domain.WhenZero. assumption.
 Qed.

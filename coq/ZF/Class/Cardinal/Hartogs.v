@@ -73,7 +73,7 @@ Proof.
           rewrite H3. rewrite IfThenElse2.Eval2 by assumption. reflexivity. }
         assert (y = :0:) as H10. { rewrite <- H5, H9. reflexivity. }
         unfold hartogs. rewrite H10. split. 1: apply Core.Zero.
-        exists :0:. apply Inj.WhenEmpty. reflexivity.
+        exists :0:. apply Inj.WhenZero. reflexivity.
     - destruct H4 as [H4 [i H5]].
       remember (range i) as x eqn:H6.
       assert (x :<=: a) as H7. { rewrite H6. apply H5. }

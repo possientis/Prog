@@ -50,7 +50,7 @@ Proof.
 Qed.
 
 (* If A is equivalent to the empty class, its truncation is the empty set.      *)
-Proposition WhenEmpty : forall (A:Class), A :~: :0: -> truncate A = :0:.
+Proposition WhenZero : forall (A:Class), A :~: :0: -> truncate A = :0:.
 Proof.
   intros A H1. apply Incl.Double. split; intros x H2.
   - apply Charac in H2. destruct H2 as [_ H2]. apply H1 in H2. contradiction.

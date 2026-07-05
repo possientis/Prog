@@ -116,7 +116,7 @@ Proof.
     assert ((A :\: F:[b]:) :<>: :0:) as H18. { apply H13. assumption. }
     assert ((A :\: F:[b]:) F!b) as H19. { apply H3; assumption. }
     rewrite H17 in H19. apply H19. }
-  assert (A :<=: toClass F:[a]:) as H15. { apply DiffBySet.WhenEmpty. assumption. }
+  assert (A :<=: toClass F:[a]:) as H15. { apply DiffBySet.WhenZero. assumption. }
   assert (toClass F:[a]: :~: A) as H16. {
     apply CIN.Double. split; assumption. }
   assert (SFO.FunctionOn (F:|:a) a) as H17. {

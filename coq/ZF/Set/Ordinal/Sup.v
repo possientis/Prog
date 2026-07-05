@@ -48,10 +48,10 @@ Proof.
 Qed.
 
 (* The supremum of the empty set is 0.                                          *)
-Proposition WhenEmpty : sup :0: = :0:.
+Proposition WhenZero : sup :0: = :0:.
 Proof.
   rewrite WhenOrdinals.
-  - apply Union.WhenEmpty.
+  - apply Union.WhenZero.
   - intros x H1. apply Empty.Charac in H1. contradiction.
 Qed.
 

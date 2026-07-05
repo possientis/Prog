@@ -113,14 +113,14 @@ Proof.
 Qed.
 
 (* The initial segment is empty iff there is no x in A which is less than a.    *)
-Proposition WhenEmpty : forall (R A:Class) (a x:U),
+Proposition WhenZero : forall (R A:Class) (a x:U),
   initSegment R A a :~: :0: -> A x -> ~ R :(x,a):.
 Proof.
   intros R A a x H1 H2 H3. apply Class.Empty.Charac with x. apply H1.
   apply Charac. split; assumption.
 Qed.
 
-Proposition WhenEmptyRev : forall (R A:Class) (a:U),
+Proposition WhenZeroRev : forall (R A:Class) (a:U),
   (forall x, A x -> ~ R :(x,a):) -> initSegment R A a :~: :0:.
 Proof.
   intros R A a H1 x. split; intros H2.
@@ -182,7 +182,7 @@ Proof.
   - apply EquivCompatR, Bij.ImageOfDomain, H1.
 Qed.
 
-Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),
+Proposition IsomWhenZero : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                    ->
   C :<=: A                          ->
   A a                               ->

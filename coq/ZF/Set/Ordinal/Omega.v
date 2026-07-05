@@ -277,7 +277,7 @@ Proof.
   assert (Ordinal :U(n)) as G3. { apply UnionOf.IsOrdinal. assumption. }
   assert (n = :0: \/ :0: :< n) as H2. { apply Core.ZeroOrElem. assumption. }
   destruct H2 as [H2|H2].
-  - subst. rewrite Union.WhenEmpty. assumption.
+  - subst. rewrite Union.WhenZero. assumption.
   - apply HasSuccRev. rewrite SuccOfUnion; assumption.
 Qed.
 

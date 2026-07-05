@@ -35,7 +35,7 @@ Proof.
   assert (CCA.Aleph!:0: = inf (InfiniteCard :\: CCA.Aleph:[:0:]:)) as H1. {
     apply CCA.IsInf. apply SOC.Zero. }
   assert (CCA.Aleph:[:0:]: = :0:) as H2. {
-    apply ImageUnderClass.WhenEmpty. reflexivity. }
+    apply ImageUnderClass.WhenZero. reflexivity. }
   rewrite H1, H2. transitivity (inf InfiniteCard).
   - apply SOI.EquivCompat. apply DiffBySet.IdentityR.
   - apply CCI.Inf.

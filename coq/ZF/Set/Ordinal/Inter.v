@@ -55,7 +55,7 @@ Proof.
   intros a H1.
   assert (a = :0: \/ a <> :0:) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  - subst. apply Inter.WhenEmpty.
+  - subst. apply Inter.WhenZero.
   - apply Incl.Double. split; intros x H3.
     + apply Inter.Charac with a. 1: assumption.
       apply SOC.HasZero; assumption.

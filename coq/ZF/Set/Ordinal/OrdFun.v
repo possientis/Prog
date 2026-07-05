@@ -67,16 +67,16 @@ Proof.
 Qed.
 
 (* The empty set is an ordinal function.                                        *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> OrdFun f.
 Proof.
   intros f H1. split.
-  - apply Function.WhenEmpty. assumption.
+  - apply Function.WhenZero. assumption.
   - split.
-    + assert (domain f = :0:) as H2. { apply Domain.WhenEmpty. assumption. }
+    + assert (domain f = :0:) as H2. { apply Domain.WhenZero. assumption. }
       rewrite H2. apply Core.Zero.
     + intros y H2.
-      assert (range f = :0:) as H3. { apply Range.WhenEmpty. assumption. }
+      assert (range f = :0:) as H3. { apply Range.WhenZero. assumption. }
       rewrite H3 in H2. apply Empty.Charac in H2. contradiction.
 Qed.
 

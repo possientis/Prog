@@ -72,7 +72,7 @@ Proof.
 Qed.
 
 (* The image of the empty set under any function is the empty set.              *)
-Proposition WhenEmpty : forall (f a:U),
+Proposition WhenZero : forall (f a:U),
   a = :0: -> f:[a]: = :0:.
 Proof.
   intros f a H1. apply Incl.Double. split; intros y H2.

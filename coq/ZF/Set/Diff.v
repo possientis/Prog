@@ -75,7 +75,7 @@ Proof.
 Qed.
 
 (* The difference a \ b is empty if and only if a is a subset of b.             *)
-Proposition WhenEmpty : forall (a b:U),
+Proposition WhenZero : forall (a b:U),
   a :\: b = :0: <-> a :<=: b.
 Proof.
   intros a b. split; intros H1.

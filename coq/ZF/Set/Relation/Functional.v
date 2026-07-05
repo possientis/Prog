@@ -44,7 +44,7 @@ Proof.
 Qed.
 
 (* The empty set is functional.                                                 *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> Functional f.
 Proof.
   intros f H1 x y1 y2 H2 H3. exfalso. subst.

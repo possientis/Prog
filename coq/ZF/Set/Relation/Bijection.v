@@ -265,10 +265,10 @@ Proof.
 Qed.
 
 (* The empty set is a bijection.                                                *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> Bijection f.
 Proof.
   intros f H1. split.
-  - apply Relation.WhenEmpty. assumption.
-  - apply OneToOne.WhenEmpty. assumption.
+  - apply Relation.WhenZero. assumption.
+  - apply OneToOne.WhenZero. assumption.
 Qed.

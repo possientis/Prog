@@ -114,7 +114,7 @@ Proposition Induction : forall (A:Class),
   (forall n, (:N : Class) n -> A n -> A (succ n)) ->
   :N :<=: A.
 Proof.
-  intros A H1 H2. apply Diff.WhenEmpty, DoubleNegation. intros H3.
+  intros A H1 H2. apply Diff.WhenZero, DoubleNegation. intros H3.
   assert (:N :\: A :<=: On) as H4. {
     apply CIN.Tran with :N.
     - apply Class.Inter2.IsInclL.

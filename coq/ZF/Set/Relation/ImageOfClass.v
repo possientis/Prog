@@ -72,7 +72,7 @@ Proof.
 Qed.
 
 (* The image of an empty class under any function is the empty set.             *)
-Proposition WhenEmpty : forall (A:Class) (f:U),
+Proposition WhenZero : forall (A:Class) (f:U),
   A :~: :0: -> f:[A]: = :0:.
 Proof.
   intros A f H1. apply Incl.Double. split; intros y H2.

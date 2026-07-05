@@ -25,7 +25,7 @@ Definition inter' (A:Class) : Class := fun x =>
 Global Instance ClassInter : Inter Class := { inter := inter }.
 
 (* The class I(A) reduces to 0 when A is empty.                                 *)
-Proposition WhenEmpty : forall (A:Class),
+Proposition WhenZero : forall (A:Class),
   A :~: :0: -> :I(A) :~: :0:.
 Proof.
   intros A H1 a. split; intros H2.
@@ -37,7 +37,7 @@ Qed.
 (* The intersection of the empty class is itself the empty class.               *)
 Proposition IsZero : :I(:0:) :~: :0:.
 Proof.
-  apply WhenEmpty, Equiv.Refl.
+  apply WhenZero, Equiv.Refl.
 Qed.
 
 (* The class I(A) coincides with inter' A when A is not empty.                  *)
@@ -88,7 +88,7 @@ Proof.
     apply LawExcludedMiddle. }
   destruct H1 as [H1|H1].
   - apply Small.EquivCompat with :0:.
-    + apply Equiv.Sym, WhenEmpty. assumption.
+    + apply Equiv.Sym, WhenZero. assumption.
     + apply Small.EquivCompat with (toClass :0:).
       * apply ZF.Set.Empty.ToClass.
       * apply SetIsSmall.

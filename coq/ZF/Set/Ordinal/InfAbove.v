@@ -69,8 +69,8 @@ Proposition IsZero : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2 H3.
   rewrite WhenOrdinal; try assumption.
-  assert (a :\: b = :0:) as H4. { apply Diff.WhenEmpty. assumption. }
-  rewrite H4. apply SIN.WhenEmpty.
+  assert (a :\: b = :0:) as H4. { apply Diff.WhenZero. assumption. }
+  rewrite H4. apply SIN.WhenZero.
 Qed.
 
 (* The infimum of a above b equals b when b is in a.                            *)
@@ -86,7 +86,7 @@ Proof.
   - apply SOI.IsLargest.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Core.IsOrdinal with a; assumption.
-    + intros H4. apply Diff.WhenEmpty in H4. apply Foundation.NoLoop1 with b.
+    + intros H4. apply Diff.WhenZero in H4. apply Foundation.NoLoop1 with b.
       apply H4. assumption.
     + intros c H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       assert (Ordinal c) as H6. { apply Core.IsOrdinal with a; assumption. }

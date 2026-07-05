@@ -521,8 +521,8 @@ Proof.
   destruct H5 as [H5|H5].
   - exists :0:, :0:, :0:.
     assert (:0: :< :N) as H6. { apply Omega.HasZero. }
-    assert (OrdFunOn :0: :0:) as H7. { apply OrdFunOn.WhenEmpty. reflexivity. }
-    assert (Decreasing :0:) as H8. { apply Decreasing.WhenEmpty. reflexivity. }
+    assert (OrdFunOn :0: :0:) as H7. { apply OrdFunOn.WhenZero. reflexivity. }
+    assert (Decreasing :0:) as H8. { apply Decreasing.WhenZero. reflexivity. }
     assert (forall i, i :< :0: -> :0: :< :0:!i) as H9. {
       intros i H9. apply Empty.Charac in H9. contradiction. }
     assert (forall i, i :< :0: -> :0:!i :< a) as H10. {
@@ -669,10 +669,10 @@ Proof.
         assert (:0: :< :0:) as H19. { apply H17. assumption. }
         apply Empty.Charac in H19. contradiction. }
         rewrite <- H15 in H6. rewrite <- H15 in H7.
-        assert (c = :0:) as H20. { apply OrdFunOn.WhenEmpty. assumption. }
-        assert (d = :0:) as H21. { apply OrdFunOn.WhenEmpty. assumption. }
-        assert (e = :0:) as H22. { apply OrdFunOn.WhenEmpty. assumption. }
-        assert (f = :0:) as H23. { apply OrdFunOn.WhenEmpty. assumption. }
+        assert (c = :0:) as H20. { apply OrdFunOn.WhenZero. assumption. }
+        assert (d = :0:) as H21. { apply OrdFunOn.WhenZero. assumption. }
+        assert (e = :0:) as H22. { apply OrdFunOn.WhenZero. assumption. }
+        assert (f = :0:) as H23. { apply OrdFunOn.WhenZero. assumption. }
         assert (c = e) as H24. { subst. reflexivity. }
         assert (d = f) as H25. { subst. reflexivity. }
         split. 1: assumption. split; assumption.

@@ -102,8 +102,8 @@ Proposition EmptySegment : forall (R A:Class) (a:U),
   Minimal R A a <-> A a /\ initSegment R A a :~: :0:.
 Proof.
   intros R A a. split; intros [H1 H2].
-  - split. 1: assumption. apply InitSegment.WhenEmptyRev. assumption.
-  - split. 1: assumption. intros x. apply InitSegment.WhenEmpty. assumption.
+  - split. 1: assumption. apply InitSegment.WhenZeroRev. assumption.
+  - split. 1: assumption. intros x. apply InitSegment.WhenZero. assumption.
 Qed.
 
 (* If R is total on A the minimal element of a subclass of A is unique.         *)

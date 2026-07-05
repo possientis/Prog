@@ -203,13 +203,13 @@ Proposition LesserThanRangeOfRestrict : forall (F A:Class),
   (exists a, A :\: range (F:|:toClass a) :~: :0:) ->
   Small A.
 Proof.
-  intros F A H1 [a H2]. apply Diff.WhenEmpty in H2.
+  intros F A H1 [a H2]. apply Diff.WhenZero in H2.
   apply LesserThanRangeIsSmall with F (toClass a); try assumption.
   apply SetIsSmall.
 Qed.
 
 (* The restriction of any class to the empty class is the empty class.          *)
-Proposition WhenEmpty : forall (F A:Class),
+Proposition WhenZero : forall (F A:Class),
   A :~: :0: -> F :|: A :~: :0:.
 Proof.
   intros F A H1 x. split; intros H2.

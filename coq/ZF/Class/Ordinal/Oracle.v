@@ -65,7 +65,7 @@ Qed.
 
 Lemma WhenZero : forall (F G:Class) (a:U), (Oracle F a)!(G :|: :0:) = a.
 Proof.
-  intros F G a. rewrite RestrictOfClass.WhenEmpty. 2: reflexivity.
+  intros F G a. rewrite RestrictOfClass.WhenZero. 2: reflexivity.
   assert (Oracle F a :(:0:,a):) as H1. { apply Charac2. left. split; reflexivity. }
   apply EvalOfClass.Charac. 3: assumption.
   - apply IsFunctional.
@@ -86,7 +86,7 @@ Proof.
   assert (succ b <> :0:) as H7. { apply Succ.NotZero. }
   assert (sup (succ b) = b) as H8. { apply SupOf.WhenSucc. assumption. }
   assert (g <> :0:) as H9. {
-    intros H9. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
+    intros H9. apply H7. rewrite <- H5. apply SRD.WhenZero. assumption. }
   assert (g!b = G!b) as H10. {
     rewrite H4. apply RestrictOfClass.Eval. 1: assumption. apply Succ.IsIn. }
   assert (Oracle F a :(g,F!(G!b)):) as H11. {
@@ -110,7 +110,7 @@ Proof.
     rewrite H4. apply RestrictOfClass.DomainWhenIncl; assumption. }
   assert (b <> :0:) as H7. { apply Limit.Charac. 2: assumption. apply H1. }
   assert (g <> :0:) as H8. {
-    intros H8. apply H7. rewrite <- H5. apply SRD.WhenEmpty. assumption. }
+    intros H8. apply H7. rewrite <- H5. apply SRD.WhenZero. assumption. }
   assert (:\/:_{b} g = :\/:_{b} G)as H9. {
     apply UnionGenOfClass.Equal. intros x H9.
     rewrite H4. apply RestrictOfClass.Eval; assumption. }

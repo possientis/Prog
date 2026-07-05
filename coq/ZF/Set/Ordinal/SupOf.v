@@ -31,7 +31,7 @@ Qed.
 (* The supremum of the empty set is 0.                                          *)
 Proposition WhenZero : sup :0: = :0:.
 Proof.
-  apply Sup.WhenEmpty.
+  apply Sup.WhenZero.
 Qed.
 
 (* The supremum of the successor of an ordinal is the ordinal.                  *)

@@ -180,7 +180,7 @@ Proof.
   - right. apply (IsLess R A B); assumption.
 Qed.
 
-Proposition WhenEmpty : forall (R A B:Class) (a x:U),
+Proposition WhenZero : forall (R A B:Class) (a x:U),
   WellFounded R A         ->
   A a                     ->
   B :<=: A                ->
@@ -192,7 +192,7 @@ Proof.
   rewrite <- H4. apply CharacRev with A; try assumption.
 Qed.
 
-Proposition WhenEmptyRev : forall (R A B:Class) (a:U),
+Proposition WhenZeroRev : forall (R A B:Class) (a:U),
   WellFounded R A                 ->
   A a                             ->
   B :<=: A                        ->
@@ -294,7 +294,7 @@ Proof.
 Qed.
 
 (* An isomorphism preserves the emptiness of initial segments.                  *)
-Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),
+Proposition IsomWhenZero : forall (F R S A B C:Class) (a:U),
   WellFounded R A                   ->
   A a                               ->
   C :<=: A                          ->
@@ -304,7 +304,7 @@ Proposition IsomWhenEmpty : forall (F R S A B C:Class) (a:U),
 Proof.
   intros F R S A B C a H1 H2 H3 H4 H5.
   rewrite <- (IsomImage F R S A B C); try assumption.
-  apply ImageUnderClass.WhenEmpty. assumption.
+  apply ImageUnderClass.WhenZero. assumption.
 Qed.
 
 (* a does not belong to its own strict initial segment.                         *)

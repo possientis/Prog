@@ -217,12 +217,12 @@ Proof.
 Qed.
 
 (* The empty set is a function.                                                 *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> Function f.
 Proof.
   intros f H1. split.
-  - apply Relation.WhenEmpty. assumption.
-  - apply Functional.WhenEmpty. assumption.
+  - apply Relation.WhenZero. assumption.
+  - apply Functional.WhenZero. assumption.
 Qed.
 
 (* A singleton set containing a single ordered pair is a function.              *)

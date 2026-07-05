@@ -286,10 +286,10 @@ Proof.
 Qed.
 
 (* The restriction of any class to the empty set is the empty set.              *)
-Proposition WhenEmpty : forall (F:Class) (a:U),
+Proposition WhenZero : forall (F:Class) (a:U),
   a = :0: -> F :|: a = :0:.
 Proof.
-  intros F a H1. apply Truncate.WhenEmpty. intros x. split; intros H2.
+  intros F a H1. apply Truncate.WhenZero. intros x. split; intros H2.
   - destruct H2 as [y [z [_ [H2 _]]]]. rewrite H1 in H2.
     apply Empty.Charac in H2. contradiction.
   - contradiction.

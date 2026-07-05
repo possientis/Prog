@@ -69,7 +69,7 @@ Proof.
 Qed.
 
 (* The range of the empty set is the empty set.                                 *)
-Proposition WhenEmpty : forall (f:U),
+Proposition WhenZero : forall (f:U),
   f = :0: -> range f = :0:.
 Proof.
   intros f H1. apply Incl.Double. split; intros y H2; exfalso.

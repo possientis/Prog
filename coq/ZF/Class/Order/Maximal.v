@@ -121,8 +121,8 @@ Proposition EmptySegment : forall (R A:Class) (a:U),
   Maximal R A a <-> A a /\ finalSegment R A a :~: :0:.
 Proof.
   intros R A a. split; intros [H1 H2].
-  - split. 1: assumption. apply FinalSegment.WhenEmptyRev. assumption.
-  - split. 1: assumption. intros x. apply FinalSegment.WhenEmpty. assumption.
+  - split. 1: assumption. apply FinalSegment.WhenZeroRev. assumption.
+  - split. 1: assumption. intros x. apply FinalSegment.WhenZero. assumption.
 Qed.
 
 Proposition InitRefl : forall (R A:Class) (a:U),
