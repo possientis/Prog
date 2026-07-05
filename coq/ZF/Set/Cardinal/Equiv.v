@@ -827,11 +827,11 @@ Proof.
     destruct He as [x [Hx Hxe]].
     apply Union2.Charac in Hx. destruct Hx as [Hxa | Hxb].
     - rewrite HEvalA in Hxe. 2: assumption. subst e.
-      unfold sum. apply Union2.IsInclL.
+      apply Union2.IsInclL.
       apply Prod.Charac2. split. 1: apply Single.IsIn.
       apply Bij.IsInRange with a; assumption.
     - rewrite HEvalB in Hxe. 2: assumption. subst e.
-      unfold sum. apply Union2.IsInclR.
+      apply Union2.IsInclR.
       apply Prod.Charac2. split. 1: apply Single.IsIn.
       apply Bij.IsInRange with b; assumption. }
   assert (Fun h (a :\/: b) (sum c d)) as HFun. { split; assumption. }
@@ -839,8 +839,7 @@ Proof.
   (* Every element of {0} x c \/ {1} x d is (0,e') with e' in c, or             *)
   (* (1,e') with e' in d. Surjectivity of f (resp. g) supplies the preimage.    *)
   assert (sum c d :<=: range h) as HSurj. {
-    intros p Hp. unfold sum in Hp.
-    apply Union2.Charac in Hp. destruct Hp as [Hp | Hp].
+    intros p Hp. apply Union2.Charac in Hp. destruct Hp as [Hp | Hp].
     - (* p in {0} x c: p = (0,e') with e' in c.                                 *)
       apply Prod.Charac in Hp. destruct Hp as [t [e' [Hpeq [Ht He']]]].
       apply Single.Charac in Ht. subst t. subst p.

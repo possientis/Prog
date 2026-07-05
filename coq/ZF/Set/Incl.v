@@ -30,7 +30,7 @@ Qed.
 Proposition Double : forall (a b:U),
   a = b <-> a :<=: b /\ b :<=: a.
 Proof.
-  intros a b. unfold Incl. split.
+  intros a b. split.
   - intros H1. split; intros x Hx.
     + rewrite <- H1. apply Hx.
     + rewrite H1. apply Hx.

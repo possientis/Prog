@@ -27,7 +27,7 @@ Proposition EvalIn : forall (a b x:U),
   x :< a -> x :< b -> (charac a b)!x = :1:.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x H1 H2. unfold charac. apply IfThenElse.Eval1; assumption.
+  intros a b x H1 H2. apply IfThenElse.Eval1; assumption.
 Qed.
 
 (* The characteristic function has value zero away from b.                      *)
@@ -35,5 +35,5 @@ Proposition EvalOut : forall (a b x:U),
   x :< a -> ~ x :< b -> (charac a b)!x = :0:.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x H1 H2. unfold charac. apply IfThenElse.Eval2; assumption.
+  intros a b x H1 H2. apply IfThenElse.Eval2; assumption.
 Qed.

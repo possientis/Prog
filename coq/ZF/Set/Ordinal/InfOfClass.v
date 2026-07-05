@@ -60,7 +60,7 @@ Qed.
 Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> inf A = inter A.
 Proof.
-  intros A H1. unfold inf. apply SIC.EquivCompat.
+  intros A H1. apply SIC.EquivCompat.
   apply Class.Inter2.WhenInclL. assumption.
 Qed.
 

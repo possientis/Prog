@@ -165,7 +165,7 @@ Qed.
 (* F is a strictly increasing ordinal function.                                 *)
 Lemma FMonotone : Monotone F.
 Proof.
-  unfold F. apply Monotone.FromRecursion.
+  apply Monotone.FromRecursion.
   - apply OneIsOrdinal.
   - intros b H1. rewrite F0Eval. 2: assumption. apply IsIn.
   - apply F0Monotone.

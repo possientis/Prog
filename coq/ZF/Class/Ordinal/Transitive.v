@@ -33,8 +33,7 @@ Proposition Charac : forall (A:Class),
   Transitive A <-> forall x y, x :< y -> A y -> A x.
 Proof.
   intros A. split; intros H1.
-  - intros x y H2 H3. unfold Transitive in H1.
-    specialize (H1 y H3 x). apply H1. assumption.
+  - intros x y H2 H3. specialize (H1 y H3 x). apply H1. assumption.
   - intros y H2 x H3. apply H1 with y; assumption.
 Qed.
 

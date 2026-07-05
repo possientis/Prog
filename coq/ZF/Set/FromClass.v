@@ -32,7 +32,7 @@ Qed.
 Proposition ProofIrrelevant : forall (A:Class) (p q:Small A),
   fromClass A p = fromClass A q.
 Proof.
-  intros A p q. unfold fromClass. apply Define.ProofIrrelevant.
+  intros A p q. apply Define.ProofIrrelevant.
 Qed.
 
 (* The set defined by the class associated with a set is the set itself.        *)

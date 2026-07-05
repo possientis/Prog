@@ -37,7 +37,7 @@ Proposition Charac2 : forall (F:Class) (a f y:U),
    (f <> :0: /\ NonLimit (domain f) /\ y = F!(f!(sup (domain f)))) \/
    (f <> :0: /\ Limit    (domain f) /\ y = :\/:_{domain f} f     )  ).
 Proof.
-  intros F a f y. unfold Oracle. split; intros H1.
+  intros F a f y. split; intros H1.
   - destruct H1 as [g [z [H1 H2]]].
     apply OrdPair.Equal in H1. destruct H1 as [H1 H3]. subst. assumption.
   - exists f. exists y. split. 1: reflexivity. assumption.

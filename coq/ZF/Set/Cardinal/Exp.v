@@ -59,8 +59,8 @@ Proposition OfTwo : forall (a:U),
   :2: :^^: a :~: :P(a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a. unfold exp.
   (* Send a two-valued function to its fiber over one.                          *)
+  intros a.
   remember (from (map a :2:) (fun f => fiber f :1:)) as h eqn:H1.
   assert (Bij h (map a :2:) :P(a)) as H2. {
     rewrite H1. apply From.IsBij.
@@ -86,8 +86,8 @@ Proposition Assoc : forall (a b c:U),
   (a :^^: b) :^^: c :~: a :^^: (b :x: c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c. unfold exp.
   (* First use the standard currying bijection with the product ordered c x b.  *)
+  intros a b c.
   assert (map c (map b a) :~: map (c :x: b) a) as H1. {
     apply Equiv.Sym. exists (curryMap c b a). apply Curry.IsBijMap. }
   (* Then commute the product inside the exponent.                              *)

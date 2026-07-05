@@ -23,7 +23,7 @@ Notation ":{ a , b , c , d }:" := (tuple4 a b c d)
 Proposition Tuple3Charac : forall (a1 a2 a3:U),
   forall x, x :< :{a1,a2,a3}: <-> x = a1 \/ x = a2 \/ x = a3.
 Proof.
-  intros a1 a2 a3 x. unfold tuple3. split.
+  intros a1 a2 a3 x. split.
   - intros H1. apply Union2.Charac in H1. destruct H1 as [H1|H1].
     + apply Pair.Charac in H1. destruct H1 as [H1|H1]; auto.
     + apply Single.Charac in H1. auto.
@@ -76,7 +76,7 @@ Qed.
 Proposition Tuple4Charac : forall (a1 a2 a3 a4:U),
   forall x, x :< :{a1,a2,a3,a4}: <-> x = a1 \/ x = a2 \/ x = a3 \/ x = a4.
 Proof.
-  intros a1 a2 a3 a4 x. unfold tuple4. split.
+  intros a1 a2 a3 a4 x. split.
   - intros H1. apply Union2.Charac in H1. destruct H1 as [H1|H1].
     + apply Tuple3Charac in H1. destruct H1 as [H1|[H1|H1]]; auto.
     + apply Single.Charac in H1. auto.

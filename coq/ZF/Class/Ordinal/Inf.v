@@ -44,7 +44,7 @@ Qed.
 Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> :I(A) :~: inf A.
 Proof.
-  intros A H1. unfold inf. apply Inter.EquivCompat.
+  intros A H1. apply Inter.EquivCompat.
   apply Equiv.Sym, Class.Inter2.WhenInclL. assumption.
 Qed.
 

@@ -195,7 +195,7 @@ Lemma Restrict : forall (R A F:Class) (a f:U),
   f = (Recursion R A F) :|: a                   ->
   K R A F f a.
 Proof.
-  intros R A F a f H1 H2 H3 H4. unfold K.
+  intros R A F a f H1 H2 H3 H4.
   assert (toClass a :<=: A) as H5. {
     apply CIN.Tran with (CRD.domain (Recursion R A F)). 1: assumption.
     apply IsIncl1. }
@@ -271,7 +271,7 @@ Lemma Extend : forall (R A F:Class) (a b c f g:U),
   K R A F f b                                       ->
   K R A F g c.
 Proof.
-  intros R A F a b c f g H1 H2 H3 H4 H5 [H6 [H7 [H8 H9]]]. unfold K.
+  intros R A F a b c f g H1 H2 H3 H4 H5 [H6 [H7 [H8 H9]]].
   assert (A :<=: A) as G1. { apply CIN.Refl. }
   assert (domain f = b) as G2. { apply H8. }
   assert (toClass c :<=: A) as H10. {

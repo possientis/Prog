@@ -10,8 +10,6 @@ Definition Ru : Class := fun x => ~x :< x.
 (* Then this is a proper class                                                  *)
 Proposition ProperRu : Proper Ru.
 Proof.
-  unfold Proper, Small, Ru.
-
   (* We need to show there is no set a with x :< a <-> ~ x :< x *)
   assert (~ exists a, forall x, x :< a <-> ~ x :< x ) as A. 2: apply A.
 
@@ -51,9 +49,8 @@ Proof.
   apply ProperRu.
 
   (* So we need to show that Ru is a small class *)
-  assert (Small Ru) as A. 2: apply A. unfold Small.
-
-  (* i.e. We need to show the existence of b such that x :< b <-> Ru x *)
+  (* The smallness goal asks for a set whose elements are exactly Ru.           *)
+  assert (Small Ru) as A. 2: apply A.
   assert (exists b, forall x, x :< b <-> Ru x) as A. 2: apply A.
 
   (* Consider the set b = {x :< a | Ru x } *)

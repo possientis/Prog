@@ -116,12 +116,12 @@ Proposition IsFunL : forall (a b:U), Fun (outL a b) (a :x: b) a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. split.
-  - unfold outL. apply SRF.IsFunctionOn.
+  - apply SRF.IsFunctionOn.
     + apply CF2.IsFunctional.
     + intros p H1. apply Charac in H1.
       destruct H1 as [x [y [H1 [H2 H3]]]]. subst p.
       exists x. apply CF2.Satisfies.
-  - intros y H1. unfold outL in H1. apply Range.Charac in H1.
+  - intros y H1. apply Range.Charac in H1.
     destruct H1 as [p H1]. apply SRF.Charac2 in H1.
     2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
@@ -135,12 +135,12 @@ Proposition IsFunR : forall (a b:U), Fun (outR a b) (a :x: b) b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. split.
-  - unfold outR. apply SRF.IsFunctionOn.
+  - apply SRF.IsFunctionOn.
     + apply CF2.IsFunctional.
     + intros p H1. apply Charac in H1.
       destruct H1 as [x [y [H1 [H2 H3]]]]. subst p.
       exists y. apply CF2.Satisfies.
-  - intros y H1. unfold outR in H1. apply Range.Charac in H1.
+  - intros y H1. apply Range.Charac in H1.
     destruct H1 as [p H1]. apply SRF.Charac2 in H1.
     2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].

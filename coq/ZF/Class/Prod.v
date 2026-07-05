@@ -36,7 +36,7 @@ Proposition Charac2 : forall (P Q:Class) (y z:U),
   (P :x: Q) :(y,z): <-> P y /\ Q z.
 Proof.
   intros P Q y z. split; intros H1.
-  - unfold prod in H1. destruct H1 as [y' [z' [H1 [H2 H3]]]].
+  - destruct H1 as [y' [z' [H1 [H2 H3]]]].
     apply OrdPair.Equal in H1. destruct H1 as [H1 H1'].
     subst. split; assumption.
   - destruct H1 as [H1 H2]. exists y. exists z. split.
@@ -411,7 +411,7 @@ Proof.
     destruct H2 as [y2 [z2 [G2 [H2 H2']]]].
     subst. apply OrdPair.Equal in G2. destruct G2 as [G1 G2]. subst.
     apply Charac2. split; split; assumption.
-  - unfold prod in H1. destruct H1 as [y [z [H1 [[H2 H2'] [H3 H3']]]]].
+  - destruct H1 as [y [z [H1 [[H2 H2'] [H3 H3']]]]].
     split; exists y; exists z; split.
     + apply H1.
     + split; assumption.

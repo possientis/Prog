@@ -20,7 +20,7 @@ Proposition IsFun : forall (c a b f g:U),
   Fun f c a -> Fun g c b -> Fun (fork c f g) c (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros c a b f g H1 H2. unfold fork. apply From.IsFun.
+  intros c a b f g H1 H2. apply From.IsFun.
   intros x H3. apply Prod.Charac2. split.
   - apply Fun.IsInRange with c; assumption.
   - apply Fun.IsInRange with c; assumption.
@@ -92,7 +92,7 @@ Proposition IsFunMap : forall (c a b:U),
   Fun (forkMap c a b) ((map c a) :x: (map c b)) (map c (a :x: b)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros c a b. unfold forkMap. apply From2.IsFun.
+  intros c a b. apply From2.IsFun.
   intros f g H1 H2. apply CharacMap. apply IsFun.
   - apply CharacMap. assumption.
   - apply CharacMap. assumption.

@@ -30,20 +30,19 @@ Proposition WhenHasValueAt : forall (F:Class) (a y:U),
 Proof.
   intros F a y H1. split; intros H2.
   - intros x. split; intros H3.
-    + unfold eval in H3. destruct H3 as [y' [H3 H4]]. unfold IsValueAt in H4.
-      destruct H4 as [H4 H5].
+    + destruct H3 as [y' [H3 H4]]. destruct H4 as [H4 H5].
       assert (y = y') as H6. { apply H5; assumption. } subst. assumption.
-    + unfold HasValueAt in H1. destruct H1 as [y' [H1 H4]].
-      unfold eval. exists y. split. 1: assumption. unfold IsValueAt.
-      split; assumption.
-  - destruct H1 as [y' [H1 H3]]. assert (y = y') as H4. 2: { subst. assumption. }
+    + destruct H1 as [y' [H1 H4]].
+      exists y. split. 1: assumption. split; assumption.
+  - destruct H1 as [y' [H1 H3]].
+    assert (y = y') as H4. 2: { subst. assumption. }
     apply EqualToClass. apply Equiv.Tran with (eval F a).
     + apply Equiv.Sym. assumption.
     + clear H2 y. intros x. split; intros H4.
-      * unfold eval in H4. destruct H4 as [y [H4 H5]]. unfold IsValueAt in H5.
-        destruct H5 as [H5 H6]. assert (y' = y) as H7. { apply H6; assumption. }
+      * destruct H4 as [y [H4 H5]]. destruct H5 as [H5 H6].
+        assert (y' = y) as H7. { apply H6; assumption. }
         subst. assumption.
-      * exists y'. split. 1: assumption. unfold IsValueAt. split; assumption.
+      * exists y'. split. 1: assumption. split; assumption.
 Qed.
 
 (* If F is functional at a and a lies in domain then F (a,y) iff eval F a = y.  *)
@@ -67,7 +66,7 @@ Proposition WhenNotHasValueAt : forall (F:Class) (a:U),
   ~ HasValueAt F a -> eval F a :~: :0:.
 Proof.
   intros F a H1 x. split; intros H2.
-  - apply H1. unfold eval in H2. destruct H2 as [y [H2 H3]].
+  - apply H1. destruct H2 as [y [H2 H3]].
     destruct H3 as [H3 H4]. exists y. split; assumption.
   - apply Empty.Charac in H2. contradiction.
 Qed.

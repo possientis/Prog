@@ -56,7 +56,6 @@ Proof.
       assert (WO :(r,x): \/ ~ WO :(r,x):) as [H8|H8]. { apply LawExcludedMiddle. }
       + assert ((f!:(r,x):) = (CCI.isom!:(r,x):) :[x]:) as H9. {
           rewrite H3. rewrite IfThenElse2.Eval1 by assumption. reflexivity. }
-        unfold hartogs.
         assert (Ordinal y) as H10. {
           rewrite <- H5, H9. apply Isom.IsOrdinal, H2. assumption. }
         remember (CCI.isom!:(r,x):) as g eqn:H11.
@@ -72,7 +71,7 @@ Proof.
       + assert ((f!:(r,x):) = :0:) as H9. {
           rewrite H3. rewrite IfThenElse2.Eval2 by assumption. reflexivity. }
         assert (y = :0:) as H10. { rewrite <- H5, H9. reflexivity. }
-        unfold hartogs. rewrite H10. split. 1: apply Core.Zero.
+        rewrite H10. split. 1: apply Core.Zero.
         exists :0:. apply Inj.WhenZero. reflexivity.
     - destruct H4 as [H4 [i H5]].
       remember (range i) as x eqn:H6.

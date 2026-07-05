@@ -35,7 +35,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Direct unfolding of isom: membership reduces to the two-case disjunction.  *)
   (* OrdPair injectivity forces r'=r, x'=x, f'=f, collapsing the existentials.  *)
-  intros r x f. unfold isom. split.
+  intros r x f. split.
   - intros [r' [x' [f' [H1 H2]]]].
     apply OrdPair.Equal in H1. destruct H1 as [H1 H3].
     apply OrdPair.Equal in H1. destruct H1 as [H1 H4].
@@ -48,7 +48,7 @@ Proposition IsRelation : CRR.Relation isom.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Any y in isom satisfies y = ((r,x),f) for some r, x, f by definition.      *)
-  intros y H. unfold isom in H. destruct H as [r [x [f [H1 _]]]].
+  intros y H. destruct H as [r [x [f [H1 _]]]].
   exists :(r,x):. exists f. assumption.
 Qed.
 
@@ -58,8 +58,8 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Suppose isom(p,y) and isom(p,z). Both unpack as p = ((r,x),f) for some f;  *)
   intros p y z H1 H2.
-  unfold isom in H1. destruct H1 as [r1 [x1 [f1 [Heq1 Hcase1]]]].
-  unfold isom in H2. destruct H2 as [r2 [x2 [f2 [Heq2 Hcase2]]]].
+  destruct H1 as [r1 [x1 [f1 [Heq1 Hcase1]]]].
+  destruct H2 as [r2 [x2 [f2 [Heq2 Hcase2]]]].
   (* pair injectivity forces r and x to agree, reducing to showing f1 = f2.     *)
   apply OrdPair.Equal in Heq1. destruct Heq1 as [Hp1 Hy].
   apply OrdPair.Equal in Heq2. destruct Heq2 as [Hp2 Hz].
@@ -93,7 +93,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Unfold the definition: take the well-ordered branch with ordinal b.        *)
   intros r x f b Hwo Hb HIsom.
-  unfold isom. exists r, x, f. split. 1: reflexivity.
+  exists r, x, f. split. 1: reflexivity.
   right. split. 1: assumption.
   exists b. split; assumption.
 Qed.
@@ -111,16 +111,16 @@ Proposition DomainOf : forall (r x:U), domain isom :(r,x):.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Split on whether r well-orders x; provide a witness f for each case.       *)
-  intros r x. unfold domain.
-  assert (WellOrdering r x \/ ~ WellOrdering r x) as [Hwo|Hnwo]. {
-    apply LawExcludedMiddle. }
+  intros r x.
+    assert (WellOrdering r x \/ ~ WellOrdering r x) as [Hwo|Hnwo]. {
+      apply LawExcludedMiddle. }
   - (* The ordinal order type of (x, r) exists; its converse is the witness.    *)
     assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
       apply SOO.Exists. assumption. }
     apply Isom.Converse in HIsom.
     exists f^:-1:. eapply Satisfies; eassumption.
   - (* Non-WO: the empty set witnesses membership in isom for (r,x).            *)
-    exists :0:. unfold isom. exists r, x, :0:. split. 1: reflexivity.
+    exists :0:. exists r, x, :0:. split. 1: reflexivity.
     left. split. 1: assumption. reflexivity.
 Qed.
 

@@ -41,16 +41,16 @@ Proposition IsFun : forall (a b c f g:U),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c f g H1 H2. split.
-  - unfold either. apply SFI.IsFunctionOn.
+  - apply SFI.IsFunctionOn.
   - intros y H3. apply Range.Charac in H3. destruct H3 as [z H3].
-    unfold either in H3. apply SFI.Charac2 in H3.
+    apply SFI.Charac2 in H3.
     destruct H3 as [[H3 [H4 H5]]|[H3 [H4 H5]]].
     + rewrite H3. apply Fun.IsInRange with a. 1: assumption.
       apply Fun.IsInRange with (:{ :0: }: :x: a). 2: assumption.
       apply Prod.IsFunR.
     + rewrite H3. apply Fun.IsInRange with b. 1: assumption.
       apply Fun.IsInRange with (:{ :1: }: :x: b). 1: apply Prod.IsFunR.
-      unfold sum in H4. apply Union2.Charac in H4.
+      apply Union2.Charac in H4.
       destruct H4 as [H4|H4]. 2: assumption. contradiction.
 Qed.
 
@@ -65,7 +65,7 @@ Proof.
   intros a b c f g x H1 H2 H3. unfold either. rewrite SFI.Eval1.
   - rewrite Prod.EvalR. 1: reflexivity. 2: assumption.
     apply Single.IsIn.
-  - unfold sum. apply Union2.Charac. left.
+  - apply Union2.Charac. left.
     apply Prod.Charac2. split. 2: assumption.
     apply Single.IsIn.
   - apply Prod.Charac2. split. 2: assumption.
@@ -83,7 +83,7 @@ Proof.
   intros a b c f g y H1 H2 H3. unfold either. rewrite SFI.Eval2.
   - rewrite Prod.EvalR. 1: reflexivity. 2: assumption.
     apply Single.IsIn.
-  - unfold sum. apply Union2.Charac. right.
+  - apply Union2.Charac. right.
     apply Prod.Charac2. split. 2: assumption.
     apply Single.IsIn.
   - intros H4. apply Prod.Charac2 in H4. destruct H4 as [H4 H5].
@@ -233,7 +233,7 @@ Proof.
     apply Inj.IsFun. assumption. }
   (* Every tagged target value is hit by using the matching branch bijection.   *)
   assert ((c :++: d) :<=: range h) as H11. {
-    intros z H11. unfold sum in H11. apply Union2.Charac in H11.
+    intros z H11. apply Union2.Charac in H11.
     destruct H11 as [H11|H11].
     - apply Prod.Charac in H11. destruct H11 as [u [v [H11 [H12 H13]]]].
       apply Single.Charac in H12. subst u.
@@ -241,7 +241,7 @@ Proof.
       destruct H13 as [x [H13 H14]].
       apply (Fun.RangeCharac h (a :++: b) (c :++: d)). 1: assumption.
       exists (:(:0:,x):). split.
-      + unfold sum. apply Union2.Charac. left. apply Prod.Charac2.
+      + apply Union2.Charac. left. apply Prod.Charac2.
         split. 2: assumption. apply Single.IsIn.
       + rewrite H5, (EvalL a b (c :++: d) f' g' x);
         try apply Inj.IsFun; try assumption.
@@ -255,7 +255,7 @@ Proof.
       destruct H13 as [y [H13 H14]].
       apply (Fun.RangeCharac h (a :++: b) (c :++: d)). 1: assumption.
       exists (:(:1:,y):). split.
-      + unfold sum. apply Union2.Charac. right. apply Prod.Charac2.
+      + apply Union2.Charac. right. apply Prod.Charac2.
         split. 2: assumption. apply Single.IsIn.
       + rewrite H5, (EvalR a b (c :++: d) f' g' y);
         try apply Inj.IsFun; try assumption.
@@ -272,7 +272,7 @@ Proposition IsFunMap : forall (a b c:U),
   Fun (eitherMap a b c) ((map a c) :x: (map b c)) (map (a :++: b) c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c. unfold eitherMap. apply From2.IsFun.
+  intros a b c. apply From2.IsFun.
   intros f g H1 H2. apply CharacMap. apply IsFun.
   - apply CharacMap. assumption.
   - apply CharacMap. assumption.
@@ -300,13 +300,13 @@ Proof.
     - intros y H5. apply Union2.Charac in H5. destruct H5 as [H5|H5].
       + apply Fun.RangeCharac with (a :++: b) (a :\/: b). 1: assumption.
         exists (:(:0:,y):). split.
-        * unfold sum. apply Union2.Charac. left.
+        * apply Union2.Charac. left.
           apply Prod.Charac2. split. 2: assumption. apply Single.IsIn.
         * rewrite (EvalL a b (a :\/: b)); try assumption.
           apply Id.Eval. assumption.
       + apply Fun.RangeCharac with (a :++: b) (a :\/: b). 1: assumption.
         exists (:(:1:,y):). split.
-        * unfold sum. apply Union2.Charac. right.
+        * apply Union2.Charac. right.
           apply Prod.Charac2. split. 2: assumption. apply Single.IsIn.
         * rewrite (EvalR a b (a :\/: b)); try assumption.
           apply Id.Eval. assumption. }

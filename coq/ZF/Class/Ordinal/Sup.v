@@ -34,7 +34,7 @@ Qed.
 Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> :U(A) :~: sup A.
 Proof.
-  intros A H1. unfold sup. apply Union.EquivCompat.
+  intros A H1. apply Union.EquivCompat.
   intros x. split; intros H2.
   - split. 1: assumption. apply H1. assumption.
   - apply H2.

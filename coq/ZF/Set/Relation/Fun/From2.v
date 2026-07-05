@@ -106,8 +106,7 @@ Proposition IsFunctionOn : forall (f:U -> U -> U) (a b:U),
   FunctionOn (from2 a b f) (a :x: b).
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
-  intros f a b. unfold from2.
-  apply SRR.IsFunctionOn. 1: apply CF2.IsFunctional.
+  intros f a b. apply SRR.IsFunctionOn. 1: apply CF2.IsFunctional.
   intros p H1. apply Prod.Charac in H1.
   destruct H1 as [u [v [H1 [H2 H3]]]]. subst.
   apply CF2.DomainOf.

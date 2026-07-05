@@ -68,8 +68,7 @@ Proposition WhenLimit : forall (F:Class) (a b c:U),
 Proof.
   intros F a b c H1 H2 H3.
   assert (:\/:_{c} (recursion F a b) = :\/:_{c} (Recursion F a)) as H4. {
-    apply UnionGenOfClass.Equal. intros x H4. unfold recursion.
-    apply RestrictOfClass.Eval.
+    apply UnionGenOfClass.Equal. intros x H4. apply RestrictOfClass.Eval.
     - apply Recursion2.IsFunctionOn.
     - apply Core.ElemIsIncl in H3. 2: assumption. apply H3. assumption. }
   rewrite H4. unfold recursion. rewrite RestrictOfClass.Eval. 3: assumption.

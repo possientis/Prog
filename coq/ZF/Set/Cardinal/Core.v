@@ -79,7 +79,7 @@ Qed.
 Proposition WhenNotWellOrderable : forall (a:U),
   ~ WellOrderable a -> card a = :0:.
 Proof.
-  intros a H1. unfold card. apply SOI.IsZero. intros b. split; intros H2.
+  intros a H1. apply SOI.IsZero. intros b. split; intros H2.
   - exfalso. destruct H2 as [H2 H3]. apply H1. exists b. assumption.
   - contradiction.
 Qed.

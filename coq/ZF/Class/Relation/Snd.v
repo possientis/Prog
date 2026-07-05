@@ -13,10 +13,10 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros x x'. split; intros H1.
   - (* If a pair is in Snd, unpack the ordered-pair equality.                   *)
-    unfold Snd in H1. destruct H1 as [y [z H1]]. apply OrdPair.Equal in H1.
+    destruct H1 as [y [z H1]]. apply OrdPair.Equal in H1.
     exists y. exists z. assumption.
   - (* Conversely, rebuild the defining ordered pair of Snd.                    *)
-    destruct H1 as [y [z [H1 H2]]]. unfold Snd. exists y. exists z.
+    destruct H1 as [y [z [H1 H2]]]. exists y. exists z.
     rewrite H1, H2. reflexivity.
 Qed.
 

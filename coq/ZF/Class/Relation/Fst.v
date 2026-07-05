@@ -11,9 +11,9 @@ Proposition Charac2 : forall (x x':U),
   Fst :(x,x'): <-> exists y, exists z, x = :(y,z): /\ x' = y.
 Proof.
   intros x x'. split; intros H1.
-  - unfold Fst in H1. destruct H1 as [y [z H1]]. apply OrdPair.Equal in H1.
+  - destruct H1 as [y [z H1]]. apply OrdPair.Equal in H1.
     exists y. exists z. assumption.
-  - destruct H1 as [y [z [H1 H2]]]. unfold Fst. exists y. exists z.
+  - destruct H1 as [y [z [H1 H2]]]. exists y. exists z.
     rewrite H1, H2. reflexivity.
 Qed.
 

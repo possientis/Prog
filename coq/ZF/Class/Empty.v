@@ -19,7 +19,7 @@ Global Instance ClassZero : Zero Class := { zero := empty }.
 (* No set belongs to the empty class.                                           *)
 Proposition Charac : forall (x:U), :0: x <-> False.
 Proof.
-  intros x. unfold zero, ClassZero, empty. split; auto.
+  intros x. split; auto.
 Qed.
 
 (* The empty class is small.                                                    *)

@@ -9,7 +9,7 @@ Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.
 (* The class associated with a set is small.                                    *)
 Proposition SetIsSmall : forall (a:U), Small (toClass a).
 Proof.
-  intros a. exists a. intro x. unfold toClass. split; auto.
+  intros a. exists a. intro x. split; auto.
 Qed.
 
 (* A class is small if and only if it is equivalent to some set.                *)

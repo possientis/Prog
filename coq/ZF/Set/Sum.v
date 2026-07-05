@@ -32,8 +32,8 @@ Definition inR (a b:U) : U := SRF.from b (fun y => :(:1:,y):).
 Proposition IsInjL : forall (a b:U), Inj (inL a b) a (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b. unfold inL. apply SRF.IsInj.
-  - intros x H1. unfold sum. apply Union2.Charac. left.
+  intros a b. apply SRF.IsInj.
+  - intros x H1. apply Union2.Charac. left.
     apply Prod.Charac2. split.
     + apply Single.IsIn.
     + assumption.
@@ -44,8 +44,8 @@ Qed.
 Proposition IsInjR : forall (a b:U), Inj (inR a b) b (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b. unfold inR. apply SRF.IsInj.
-  - intros y H1. unfold sum. apply Union2.Charac. right.
+  intros a b. apply SRF.IsInj.
+  - intros y H1. apply Union2.Charac. right.
     apply Prod.Charac2. split.
     + apply Single.IsIn.
     + assumption.
@@ -71,7 +71,7 @@ Proposition EvalL : forall (a b x:U),
   x :< a -> (inL a b)!x = :(:0:,x):.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x H1. unfold inL. apply SRF.Eval. assumption.
+  intros a b x H1. apply SRF.Eval. assumption.
 Qed.
 
 (* The right injection sends y to the right-tagged pair (1,y).                  *)
@@ -79,5 +79,5 @@ Proposition EvalR : forall (a b y:U),
   y :< b -> (inR a b)!y = :(:1:,y):.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b y H1. unfold inR. apply SRF.Eval. assumption.
+  intros a b y H1. apply SRF.Eval. assumption.
 Qed.

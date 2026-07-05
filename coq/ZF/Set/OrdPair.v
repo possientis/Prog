@@ -15,7 +15,7 @@ Notation ":( a , b ):" := (ordPair a b)
 Lemma Charac : forall (a b:U),
   forall x, x :< :(a,b): <-> x = :{a}: \/ x = :{a,b}:.
 Proof.
-  intros a b. unfold ordPair. apply Pair.Charac.
+  intros a b. apply Pair.Charac.
 Qed.
 
 (* If the singleton {a} equals the pair {b,c}, then a = b and a = c.            *)
@@ -47,8 +47,8 @@ Proof.
         { apply Single.Charac. rewrite <- H1. apply Pair.IsInR. }
       subst. clear H1.
       assert (:{a,d}: :< :(a,a):) as H1.
-        { rewrite H. unfold ordPair. apply Pair.IsInR. }
-      unfold ordPair in H1. apply Pair.Charac in H1.
+        { rewrite H. apply Pair.IsInR. }
+      apply Pair.Charac in H1.
       fold single in H1. destruct H1 as [H1|H1].
       * symmetry. apply Single.Charac. rewrite <- H1. apply Pair.IsInR.
       * symmetry in H1. apply ABC in H1. destruct H1 as [H1 H2]. apply H2.

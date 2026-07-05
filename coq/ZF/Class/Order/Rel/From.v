@@ -11,7 +11,7 @@ Proposition Charac2 : forall (r:U -> U -> Prop) (x y:U),
   from r :(x,y): <-> r x y.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
-  intros r x y. unfold from. split.
+  intros r x y. split.
   - intros [a [b [H1 H2]]].
     apply OrdPair.Equal in H1. destruct H1 as [Ha Hb].
     subst. assumption.
