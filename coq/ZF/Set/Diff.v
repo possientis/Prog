@@ -90,7 +90,7 @@ Proof.
 Qed.
 
 (* If a \ b is non-empty then a and b are distinct.                             *)
-Proposition WhenNotEmpty : forall (a b:U),
+Proposition WhenNotZero : forall (a b:U),
   a :\: b <> :0: -> a <> b.
 Proof.
   intros a b H1 H2. subst. apply Empty.HasElem in H1. destruct H1 as [x H1].

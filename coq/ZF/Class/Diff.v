@@ -94,7 +94,7 @@ Proof.
 Qed.
 
 (* If the difference A minus B is not empty, then A and B are not equivalent.   *)
-Proposition WhenNotEmpty : forall (A B:Class),
+Proposition WhenNotZero : forall (A B:Class),
   A :\: B :<>: :0: -> A :<>: B.
 Proof.
   intros A B H1 H2. apply Class.Empty.HasElem in H1.

@@ -102,7 +102,7 @@ Proof.
           exists a. assert (A a) as H15. {
             destruct H1 as [H1 _]. apply (H1 b); assumption. }
           split. 1: assumption. split. 1: assumption. apply H8, H14.
-        - apply Equiv.NotSym, DiffBySet.WhenNotEmpty, Class.Empty.HasElem.
+        - apply Equiv.NotSym, DiffBySet.WhenNotZero, Class.Empty.HasElem.
           exists F!b. apply Minimal.IsIn with E. assumption. }
       assert (Minimal E (B :\: b) b) as H15. {
         apply IsMinimal; assumption. }

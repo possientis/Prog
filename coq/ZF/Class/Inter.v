@@ -41,7 +41,7 @@ Proof.
 Qed.
 
 (* The class I(A) coincides with inter' A when A is not empty.                  *)
-Proposition WhenNotEmpty : forall (A:Class),
+Proposition WhenNotZero : forall (A:Class),
   A :<>: :0: -> :I(A) :~: inter' A.
 Proof.
   intros A H1 x. split; intros H2.
@@ -93,7 +93,7 @@ Proof.
       * apply ZF.Set.Empty.ToClass.
       * apply SetIsSmall.
   - apply Small.EquivCompat with (inter' A).
-    + apply Equiv.Sym, WhenNotEmpty. assumption.
+    + apply Equiv.Sym, WhenNotZero. assumption.
     + apply IsSmall'. assumption.
 Qed.
 

@@ -33,7 +33,7 @@ Proof.
     + apply Equiv.Sym, Inter.WhenZero. assumption.
     + intros x H3. contradiction.
   - apply Incl.EquivCompatL with (inter' A).
-    + apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenNotZero. assumption.
     + apply IsIncl'; assumption.
 Qed.
 
@@ -61,7 +61,7 @@ Proof.
     + apply Equiv.Sym, Inter.WhenZero. assumption.
     + intros x H3. contradiction.
   - apply Transitive.EquivCompat with (inter' A).
-    + apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
+    + apply Equiv.Sym, Inter.WhenNotZero. assumption.
     + apply IsTransitive'. assumption.
 Qed.
 
@@ -87,7 +87,7 @@ Proof.
     + apply Equiv.Sym, Inter.WhenZero. assumption.
     + apply COC.Zero.
   - apply COC.EquivCompat with (inter' A).
-    + apply Equiv.Sym, WhenNotEmpty. assumption.
+    + apply Equiv.Sym, WhenNotZero. assumption.
     + apply IsOrdinal'; assumption.
 Qed.
 
@@ -110,7 +110,7 @@ Proof.
     + apply Equiv.Sym, Inter.WhenZero. assumption.
     + intros x H4. contradiction.
   - apply Incl.EquivCompatL with (inter' A).
-    + apply Equiv.Sym, WhenNotEmpty. assumption.
+    + apply Equiv.Sym, WhenNotZero. assumption.
     + apply IsLowerBound'; assumption.
 Qed.
 
@@ -132,6 +132,6 @@ Proposition IsLargest : forall (A:Class) (a:U),
   toClass a :<=: :I(A).
 Proof.
   intros A a H1 H2 H3. apply Incl.EquivCompatR with (inter' A).
-  - apply Equiv.Sym, Inter.WhenNotEmpty. assumption.
+  - apply Equiv.Sym, Inter.WhenNotZero. assumption.
   - apply IsLargest'; assumption.
 Qed.

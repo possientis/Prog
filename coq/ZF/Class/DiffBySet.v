@@ -110,11 +110,11 @@ Proof.
 Qed.
 
 (* If the difference is non-empty, A is not equivalent to the class of a.       *)
-Proposition WhenNotEmpty : forall (A:Class) (a:U),
+Proposition WhenNotZero : forall (A:Class) (a:U),
   A :\: a :<>: :0: -> A :<>: toClass a.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
-  intros A a H1. apply Class.Diff.WhenNotEmpty. assumption.
+  intros A a H1. apply Class.Diff.WhenNotZero. assumption.
 Qed.
 
 Proposition WhenIncl : forall (A:Class) (a:U),
