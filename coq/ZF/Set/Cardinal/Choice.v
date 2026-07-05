@@ -1,5 +1,6 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Choice.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Cardinal.WellOrderable.
@@ -12,7 +13,10 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
@@ -20,10 +24,12 @@ Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Sum.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 
 Module SCC := ZF.Set.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
+Module CRC := ZF.Class.Relation.Choice.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
@@ -224,6 +230,59 @@ Proof.
   apply SCC.HasOnto; assumption.
 Qed.
 
+(* Assuming choice, select injections from each member of a into b.             *)
+Proposition InjSelect : forall (a b:U),
+  Choice                                    ->
+  (forall x, x :< a -> card x :<=: card b)  ->
+  exists f,
+    FunctionOn f a                          /\
+    forall x, x :< a -> Inj (f!x) x b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1.
+  remember (fun z => exists x y, z = :(x,y): /\ Inj y x b) as A eqn:H2.
+  (* For each x in a, the cardinal bound gives some injection from x into b.    *)
+  assert (forall x, x :< a -> exists y, A :(x,y):) as H3. {
+    intros x H3.
+    assert (exists y, Inj y x b) as H4. {
+      apply HasInj. 1: assumption. apply H1. assumption. }
+    destruct H4 as [y H4]. exists y. rewrite H2. exists x, y.
+    split. 2: assumption. reflexivity. }
+  (* Class choice assembles the injections into one indexing function.          *)
+  assert (exists f, FunctionOn f a /\ forall x, x :< a -> A :(x,f!x):) as H4. {
+    apply CRC.FunctionOn; assumption. }
+  destruct H4 as [f [H4 H5]]. exists f. split. 1: assumption.
+  intros x H6.
+  assert (A :(x,f!x):) as H7. { apply H5. assumption. }
+  rewrite H2 in H7. destruct H7 as [u [v [H7 H8]]].
+  apply OrdPair.Equal in H7. destruct H7 as [H7 H9]. subst. assumption.
+Qed.
+
+(* Assuming choice, select a member of a containing each union element.         *)
+Proposition UnionSelect : forall (a:U), Choice ->
+  exists f,
+    FunctionOn f :U(a)                            /\
+    forall x, x :< :U(a) -> x :< f!x /\ f!x :< a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC.
+  remember (fun z => exists x y, z = :(x,y): /\ x :< y /\ y :< a) as A eqn:H1.
+  (* Each element of the union lies in at least one member of a.                *)
+  assert (forall x, x :< :U(a) -> exists y, A :(x,y):) as H2. {
+    intros x H2. apply Union.Charac in H2. destruct H2 as [y [H2 H3]].
+    exists y. rewrite H1. exists x, y. split. 2: split; assumption.
+    reflexivity. }
+  (* Class choice turns these containing sets into a selector function.         *)
+  assert (exists f,
+    FunctionOn f :U(a)  /\
+    forall x, x :< :U(a) -> A :(x,f!x):) as H3. {
+      apply CRC.FunctionOn; assumption. }
+  destruct H3 as [f [H3 H4]]. exists f. split. 1: assumption.
+  intros x H5. assert (A :(x,f!x):) as H6. { apply H4. assumption. }
+  rewrite H1 in H6. destruct H6 as [u [v [H6 [H7 H8]]]].
+  apply OrdPair.Equal in H6. destruct H6 as [H6 H9]. subst. split; assumption.
+Qed.
+
 (* Assuming choice, an injection gives an inequality of cardinals.              *)
 Proposition WhenInj : forall (a b f:U), Choice ->
   Inj f a b -> card a :<=: card b.
@@ -300,5 +359,45 @@ Proof.
   assert (Onto f (a :++: b) (a :\/: b)) as H2. { rewrite H1. apply SMS.HasOnto. }
   (* A surjection bounds the cardinal of its codomain by that of its domain.    *)
   apply WhenOnto with f; assumption.
+Qed.
+
+(* The cardinal of a union is bounded by the cardinal of a product.             *)
+Proposition UnionProd : forall (a b:U),
+  Choice                                      ->
+  (forall x, x :< a -> card x :<=: card b)    ->
+  card :U(a) :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1.
+  (* Choose, for each member of a, an injection into b.                         *)
+  assert (exists f, FunctionOn f a /\ forall x, x :< a -> Inj (f!x) x b) as H2. {
+    apply InjSelect; assumption. }
+  destruct H2 as [f [H2 H3]].
+  (* Choose, for each element of the union, a member of a containing it.        *)
+  assert (exists h, FunctionOn h :U(a) /\
+    forall x, x :< :U(a) -> x :< h!x /\ h!x :< a) as H4. {
+    apply UnionSelect. assumption. }
+  destruct H4 as [h [H4 H5]].
+  remember (From.from :U(a) (fun x => :(h!x, (f!(h!x))!x):)) as g eqn:H6.
+  (* The displayed map sends each union element into a x b and is injective.    *)
+  assert (Inj g :U(a) (a :x: b)) as H7. {
+    rewrite H6. apply From.IsInj.
+    - intros x H7. assert (x :< h!x /\ h!x :< a) as H8. {
+        apply H5. assumption. }
+      destruct H8 as [H8 H9]. apply Prod.Charac2. split. 1: assumption.
+      assert (Inj (f!(h!x)) (h!x) b) as H10. { apply H3. assumption. }
+      apply Inj.IsInRange with (h!x); assumption.
+    - intros x y H7 H8 H9.
+      assert (x :< h!x /\ h!x :< a) as H10. { apply H5. assumption. }
+      assert (y :< h!y /\ h!y :< a) as H11. { apply H5. assumption. }
+      destruct H10 as [H10 H12]. destruct H11 as [H11 H13].
+      apply OrdPair.Equal in H9. destruct H9 as [H9 H14].
+      rewrite <- H9 in H14.
+      assert (Inj (f!(h!x)) (h!x) b) as H15. { apply H3. assumption. }
+      apply (BijectionOn.EvalInjective (f!(h!x)) (h!x)); try assumption.
+      + apply H15.
+      + rewrite H9. assumption. }
+  (* An injection into the product gives the desired cardinal bound.            *)
+  apply WhenInj with g; assumption.
 Qed.
 

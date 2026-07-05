@@ -63,7 +63,7 @@ Proof.
   - apply SUG.IsIncl. assumption.
 Qed.
 
-Proposition Choice : forall (A:Class) (a:U), Choice ->
+Proposition FunctionOn : forall (A:Class) (a:U), Choice ->
   (forall x, x :< a -> exists y, A :(x,y):)  ->
   exists f, FunctionOn f a                   /\
   forall x, x :< a -> A :(x,f!x):.
