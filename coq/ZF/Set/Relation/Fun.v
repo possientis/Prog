@@ -216,11 +216,20 @@ Proof.
     intros z H3. apply Single.Charac in H3. subst. assumption.
 Qed.
 
-(* The empty set is a function from the empty set to any set b.                 *)
+(* A set is a function from the empty set to b exactly when it is empty.        *)
 Proposition WhenZero : forall (f b:U),
-  f = :0: -> Fun f :0: b.
+  f = :0: <-> Fun f :0: b.
 Proof.
-  intros f b H1. split.
-  - apply FunctionOn.WhenZero. assumption.
-  - rewrite Range.WhenZero. 2: assumption. apply Empty.IsIncl.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f b. split; intros H1.
+  - split.
+    + apply FunctionOn.WhenZero. assumption.
+    + rewrite Range.WhenZero. 2: assumption. apply Empty.IsIncl.
+  - destruct H1 as [[[H1 _] H2] _]. apply Empty.WhenIncl.
+    (* Every member of f is an ordered pair whose first component lies in the   *)
+    (* domain, so an empty domain leaves no possible members of f.              *)
+    intros x H3. assert (x :< f) as H4. { assumption. }
+    apply H1 in H4. destruct H4 as [y [z H4]]. subst.
+    assert (y :< domain f) as H5. { apply Domain.Charac. exists z. assumption. }
+    rewrite H2 in H5. apply Empty.Charac in H5. contradiction.
 Qed.
