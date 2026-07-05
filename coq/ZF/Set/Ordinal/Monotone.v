@@ -1,6 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Ordinal.Core.
@@ -17,6 +18,20 @@ Module SOE := ZF.Set.Ordinal.Order.E.
 (* A strictly monotone ordinal function.                                        *)
 Definition Monotone (f:U) : Prop := OrdFun f  /\ forall (a b:U),
   a :< domain f -> b :< domain f -> a :< b  -> f!a :< f!b.
+
+(* The empty set is a strictly monotone ordinal function.                       *)
+Proposition WhenZero : forall (f:U),
+  f = :0: -> Monotone f.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f H1. split.
+  - (* The empty relation is an ordinal function.                               *)
+    apply OrdFun.WhenZero. assumption.
+  - (* There are no elements in its domain, so order preservation is vacuous.   *)
+    intros a b H2 H3 H4.
+    assert (domain f = :0:) as H5. { apply Domain.WhenZero. assumption. }
+    rewrite H5 in H2. apply Empty.Charac in H2. contradiction.
+Qed.
 
 (* If the set is monotone, then so is the class.                                *)
 Proposition ToClass : forall (f:U),
