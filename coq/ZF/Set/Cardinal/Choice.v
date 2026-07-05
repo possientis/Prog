@@ -2,6 +2,7 @@ Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Choice.
 Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Cardinal.Core.
@@ -15,6 +16,7 @@ Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
@@ -399,5 +401,35 @@ Proof.
       + rewrite H9. assumption. }
   (* An injection into the product gives the desired cardinal bound.            *)
   apply WhenInj with g; assumption.
+Qed.
+
+(* The cardinal of the union of an image is bounded by a product.               *)
+Proposition UnionProdImage : forall (F:Class) (a b:U),
+  Choice                                          ->
+  Functional F                                    ->
+  (forall x, x :< a -> card (F!x) :<=: card b)    ->
+  card :U(F:[a]:) :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F a b AC H1 H2.
+  (* Every member of the image has cardinal bounded by b.                       *)
+  assert (forall y, y :< F:[a]: -> card y :<=: card b) as H3. {
+    intros y H3.
+    (* Such a member is a value F!x for some x in a.                            *)
+    assert (exists x, x :< a /\ F :(x,y):) as H4. {
+      apply ImageUnderClass.Charac; assumption. }
+    destruct H4 as [x [H4 H5]].
+    assert (CRD.domain F x) as H6. { exists y. assumption. }
+    assert (F!x = y) as H7. {
+      apply EvalOfClass.Charac; assumption. }
+    rewrite <- H7. apply H2. assumption. }
+  (* First bound the union of the image by its own index product.               *)
+  assert (card :U(F:[a]:) :<=: card (F:[a]: :x: b)) as H4. {
+    apply UnionProd; assumption. }
+  (* The image index set has cardinal at most the original index set.           *)
+  assert (card F:[a]: :<=: card a) as H5. { apply ImageIncl; assumption. }
+  assert (card (F:[a]: :x: b) :<=: card (a :x: b)) as H6. {
+    apply InclCompatProdL; assumption. }
+  apply Incl.Tran with (card (F:[a]: :x: b)); assumption.
 Qed.
 
