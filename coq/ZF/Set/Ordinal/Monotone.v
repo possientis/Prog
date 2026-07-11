@@ -69,6 +69,28 @@ Proof.
   - apply Domain.ToClass. assumption.
 Qed.
 
+(* A strictly monotone ordinal function is weakly monotone.                     *)
+Proposition Relax : forall (f x y:U),
+  Monotone f     ->
+  x :< domain f  ->
+  y :< domain f  ->
+  x :<=: y       ->
+  f!x :<=: f!y.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f x y H1 H2 H3 H4.
+  assert (Ordinal (domain f)) as H5. { apply OrdFun.DomainOf. apply H1. }
+  assert (Ordinal x) as H6. { apply Core.IsOrdinal with (domain f); assumption. }
+  assert (Ordinal y) as H7. { apply Core.IsOrdinal with (domain f); assumption. }
+  assert (Ordinal f!y) as H8. { apply OrdFun.IsOrdinal. 1: apply H1. assumption. }
+  assert (x = y \/ x :< y) as H9. { apply Core.EqualOrElem; assumption. }
+  destruct H9 as [H9|H9].
+  - (* Equal arguments have equal values.                                       *)
+    subst. apply Incl.Refl.
+  - (* A strictly larger argument gives a strictly larger value.                *)
+    apply Core.ElemIsIncl. 1: assumption. apply H1; assumption.
+Qed.
+
 (* A function between ordinals is monotone when it preserves membership.        *)
 Proposition FromFun : forall (f a b:U),
   Ordinal a                                                   ->
