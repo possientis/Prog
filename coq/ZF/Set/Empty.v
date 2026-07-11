@@ -66,7 +66,7 @@ Proof.
 Qed.
 
 (* If a has no element, it is the empty set.                                    *)
-Proposition IfNoElemThenEmpty : forall (a:U),
+Proposition WhenNoElem : forall (a:U),
   (forall x, ~ x :< a) -> a = :0:.
 Proof.
   intros a Ha. apply Extensionality. intros x. split; intros H1.
