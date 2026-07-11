@@ -78,6 +78,18 @@ Proof.
   intros f a b [H1 _]. apply FunctionOn.ImageOfDomain. assumption.
 Qed.
 
+(* The image of any subset of the domain lies inside the codomain.              *)
+Proposition ImageIncl : forall (f a b c:U),
+  Fun f a b -> c :<=: a -> f:[c]: :<=: b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f a b c H1 H2.
+  (* Every image element lies in the range, and the range lies in the codomain. *)
+  apply Incl.Tran with (range f).
+  - apply Range.ImageIsIncl.
+  - apply H1.
+Qed.
+
 
 (* The inverse image of the range is the domain.                                *)
 Proposition InvImageOfRange : forall (f a b:U),

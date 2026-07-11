@@ -10,6 +10,8 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
 
@@ -156,5 +158,37 @@ Proof.
       apply Core.InclElemTran with (f!(succ d)); try assumption.
       apply Succ.IsOrdinal. assumption. }
     apply Limit.WhenHasSucc; assumption.
+Qed.
+
+(* A limit ordinal cofinal with b is the union of a function image of b.        *)
+Proposition UnionImage : forall (a b:U),
+  Limit a   ->
+  Cofinal a b ->
+  exists f, Fun f b a /\ a = :U(f:[b]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2.
+  (* Use the function that already witnesses the cofinality of a by b.          *)
+  destruct H2 as [_ [f [_ [H2 H3]]]]. exists f. split. 1: assumption.
+  assert (a :<=: :U(f:[b]:)) as H4. {
+    (* Each element of a belongs to a value of the cofinal image.               *)
+    intros c H4. apply Union.Charac.
+    assert (succ c :< a) as H5. { apply Limit.HasSucc; assumption. }
+    assert (exists d, d :< b /\ succ c :<=: f!d) as H6. {
+      apply H3. assumption. }
+    destruct H6 as [d [H6 H7]]. exists f!d. split.
+    - apply H7. apply Succ.IsIn.
+    - apply Image.Charac. exists d. split. 1: assumption.
+      apply Fun.Satisfies with b a; assumption. }
+  assert (:U(f:[b]:) :<=: a) as H5. {
+    (* Conversely, every value in the image already lies below a.               *)
+    intros c H5. apply Union.Charac in H5. destruct H5 as [d [H5 H6]].
+    assert (f:[b]: :<=: a) as H7. {
+      apply (Fun.ImageIncl f b a b); try assumption. apply Incl.Refl. }
+    assert (d :< a) as H8. { apply H7. assumption. }
+    assert (Ordinal a) as H9. { apply H1. }
+    apply Core.Charac in H9. destruct H9 as [H9 _].
+    apply H9 with d; assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
 
