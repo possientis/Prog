@@ -2,6 +2,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
@@ -43,7 +44,10 @@ Qed.
 
 (* Successor ordinals are cofinal when the second is contained in the first.    *)
 Proposition WhenSuccessor : forall (a b:U),
-  Successor a -> Successor b -> b :<=: a -> Cofinal a b.
+  Successor a   ->
+  Successor b   ->
+  b :<=: a      ->
+  Cofinal a b.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b H1 H2 H3.
@@ -63,3 +67,18 @@ Proof.
   - subst. apply Incl.Refl.
   - apply Core.ElemIsIncl; assumption.
 Qed.
+
+(* A successor ordinal containing one is cofinal with one.                      *)
+Proposition WhenOne : forall (a:U),
+  :1: :<=: a      ->
+  Successor a     ->
+  Cofinal a :1:.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1 H2.
+  (* Since one is the successor of zero, the successor case applies directly.   *)
+  apply WhenSuccessor; try assumption.
+  apply Succ.IsSuccessor. apply Natural.Zero.
+Qed.
+
+
