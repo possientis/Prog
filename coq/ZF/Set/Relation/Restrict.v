@@ -118,7 +118,7 @@ Qed.
 Proposition RangeIsIncl : forall (f a:U),
   range (f:|:a) :<=: range f.
 Proof.
-  intros f a. rewrite RangeOf. apply Range.ImageIsIncl.
+  intros f a. rewrite RangeOf. apply Range.ImageIncl.
 Qed.
 
 (* A restriction is a subset of the original set.                               *)

@@ -86,7 +86,7 @@ Proof.
   intros f a b c H1 H2.
   (* Every image element lies in the range, and the range lies in the codomain. *)
   apply Incl.Tran with (range f).
-  - apply Range.ImageIsIncl.
+  - apply Range.ImageIncl.
   - apply H1.
 Qed.
 

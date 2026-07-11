@@ -61,7 +61,7 @@ Proof.
 Qed.
 
 (* The image of any set under f is a subset of the range.                       *)
-Proposition ImageIsIncl: forall (f a:U),
+Proposition ImageIncl : forall (f a:U),
   f:[a]: :<=: range f.
 Proof.
   intros f a y H1. apply Image.Charac in H1. destruct H1 as [x [H1 H2]].

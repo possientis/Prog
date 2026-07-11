@@ -108,7 +108,7 @@ Proposition RangeIsIncl : forall (F A:Class),
 Proof.
   intros F A. apply Incl.EquivCompatL with F:[A]:.
   - apply Equiv.Sym, RangeOf.
-  - apply Range.ImageIsIncl.
+  - apply Range.ImageIncl.
 Qed.
 
 (* The restriction of a functional class to a small class is small.             *)

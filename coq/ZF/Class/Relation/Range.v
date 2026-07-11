@@ -79,7 +79,7 @@ Proof.
 Qed.
 
 (* The direct image of a class under F is a subclass of the range of F.         *)
-Proposition ImageIsIncl : forall (F A:Class),
+Proposition ImageIncl : forall (F A:Class),
   F:[A]: :<=: range F.
 Proof.
   intros F A y H1. destruct H1 as [x [H1 H2]]. exists x. assumption.
