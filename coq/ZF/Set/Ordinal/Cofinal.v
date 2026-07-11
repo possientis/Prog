@@ -2,6 +2,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 
@@ -40,4 +41,25 @@ Proof.
       intros c H3. exfalso. apply Empty.Charac in H3. contradiction.
 Qed.
 
-
+(* Successor ordinals are cofinal when the second is contained in the first.    *)
+Proposition WhenSuccessor : forall (a b:U),
+  Successor a -> Successor b -> b :<=: a -> Cofinal a b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  destruct H1 as [a' [H1 H4]]. destruct H2 as [b' [H2 H5]]. subst.
+  assert (b' :<=: a') as H6. { apply Succ.InclCompatRev; assumption. }
+  assert (exists f,
+    Monotone f                /\
+    Fun f (succ b') (succ a') /\
+    f!b' = a') as H7. {
+      apply SOM.HasSuccFun; assumption. }
+  destruct H7 as [f [H7 [H8 H9]]]. split. 1: assumption.
+  exists f. split. 1: assumption. split. 1: assumption.
+  intros c H10.
+  (* The top element of b maps to the top element of a, so it bounds c.         *)
+  exists b'. split. 1: apply Succ.IsIn. rewrite H9.
+  apply Succ.Charac in H10. destruct H10 as [H10|H10].
+  - subst. apply Incl.Refl.
+  - apply Core.ElemIsIncl; assumption.
+Qed.

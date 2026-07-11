@@ -2,16 +2,21 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.OrdFun.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Fun.IfThenElse.
 
 Module COI := ZF.Class.Order.Isom.
 Module COM := ZF.Class.Ordinal.Monotone.
+Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SOE := ZF.Set.Ordinal.Order.E.
 
 
@@ -62,6 +67,75 @@ Proof.
   intros f a H1 H2. apply COM.IsIncl.
   - apply ToClass. assumption.
   - apply Domain.ToClass. assumption.
+Qed.
+
+(* A function between ordinals is monotone when it preserves membership.        *)
+Proposition FromFun : forall (f a b:U),
+  Ordinal a                                                   ->
+  Ordinal b                                                   ->
+  Fun f a b                                                   ->
+  (forall x y, x :< a -> y :< a -> x :< y -> f!x :< f!y)      ->
+  Monotone f.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f a b H1 H2 H3 H4. destruct H3 as [H3 H5]. split.
+  - (* The domain is the source ordinal and all values lie in the target.       *)
+    split. 1: apply H3. split.
+    + assert (domain f = a) as H6. { apply H3. }
+      rewrite H6. assumption.
+    + intros y H6. apply Core.IsOrdinal with b. 1: assumption. apply H5.
+      assumption.
+  - (* Order preservation over the domain is the displayed hypothesis.          *)
+    intros x y H6 H7 H8.
+    assert (domain f = a) as H9. { apply H3. }
+    rewrite H9 in H6. rewrite H9 in H7. apply H4; assumption.
+Qed.
+
+(* There is a monotone function from succ a to succ b sending a to b.           *)
+Proposition HasSuccFun : forall (a b:U),
+  Ordinal a -> Ordinal b -> a :<=: b -> exists f,
+    Monotone f /\ Fun f (succ a) (succ b) /\ f!a = b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  remember (SFI.ifThenElse (succ a) (fun x => x :< a)
+    (fun x => x) (fun _ => b)) as f eqn:H4.
+  exists f.
+  assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal (succ b)) as H6. { apply Succ.IsOrdinal. assumption. }
+  assert (Fun f (succ a) (succ b)) as H7. {
+    rewrite H4. apply SFI.IsFun. split.
+    - (* Points below a remain below succ b.                                    *)
+      intros x H7 H8. apply Succ.Charac. right. apply H3. assumption.
+    - (* The remaining point is sent to the top of succ b.                      *)
+      intros x H7 H8. apply Succ.IsIn. }
+  assert (Monotone f) as H8. {
+    apply FromFun with (succ a) (succ b); try assumption.
+    (* The piecewise function strictly preserves the order on succ a.           *)
+    intros x y H8 H9 H10.
+    apply Succ.Charac in H9. destruct H9 as [H9|H9].
+    - (* If y is the top point a, the value of y is b.                          *)
+      subst y.
+      assert (x :< a) as H9. { assumption. }
+      assert (~ a :< a) as H11. { apply Foundation.NoLoop1. }
+      assert (f!x = x) as H12. { rewrite H4. apply SFI.Eval1; assumption. }
+      assert (f!a = b) as H13. {
+        rewrite H4. apply SFI.Eval2. 1: apply Succ.IsIn. assumption. }
+      rewrite H12, H13.
+      apply H3. assumption.
+    - (* If y is below a, then x is also below a and both values are unchanged. *)
+      assert (Ordinal y) as H11. { apply Core.IsOrdinal with a; assumption. }
+      assert (Ordinal x) as H12. { apply Core.IsOrdinal with y; assumption. }
+      assert (x :< a) as H13. { apply Core.ElemElemTran with y; assumption. }
+      assert (f!x = x) as H14. { rewrite H4. apply SFI.Eval1; assumption. }
+      assert (f!y = y) as H15. {
+        rewrite H4. apply SFI.Eval1. 2: assumption.
+        apply Succ.Charac. right. assumption. }
+      rewrite H14, H15.
+      assumption. }
+  split. 1: assumption. split. 1: assumption.
+  rewrite H4. apply SFI.Eval2. 1: apply Succ.IsIn.
+  apply Foundation.NoLoop1.
 Qed.
 
 Proposition FromIsom : forall (f a b:U),
