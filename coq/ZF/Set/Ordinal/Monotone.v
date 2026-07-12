@@ -13,6 +13,7 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
+Require Import ZF.Set.Relation.Id.
 
 Module COI := ZF.Class.Order.Isom.
 Module COM := ZF.Class.Ordinal.Monotone.
@@ -111,6 +112,17 @@ Proof.
     intros x y H6 H7 H8.
     assert (domain f = a) as H9. { apply H3. }
     rewrite H9 in H6. rewrite H9 in H7. apply H4; assumption.
+Qed.
+
+(* The identity on an ordinal is a strictly monotone ordinal function.          *)
+Proposition WhenId : forall (a:U),
+  Ordinal a -> Monotone (id a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  apply FromFun with a a; try assumption. 1: apply Id.IsFun.
+  intros x y H2 H3 H4. rewrite Id.Eval; try assumption.
+  rewrite Id.Eval; assumption.
 Qed.
 
 (* There is a monotone function from succ a to succ b sending a to b.           *)

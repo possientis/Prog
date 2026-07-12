@@ -10,6 +10,7 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Union.
 
@@ -190,5 +191,20 @@ Proof.
     apply Core.Charac in H9. destruct H9 as [H9 _].
     apply H9 with d; assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* Every ordinal is cofinal with itself.                                        *)
+Proposition Refl : forall (a:U),
+  Ordinal a -> Cofinal a a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* The identity on a is the cofinal map from a into itself.                   *)
+  split. 1: apply Incl.Refl.
+  exists (id a). split. 1: apply SOM.WhenId; assumption.
+  split. 1: apply Id.IsFun.
+  (* Each element of a is bounded by its own identity value.                    *)
+  intros c H2. exists c. split. 1: assumption.
+  rewrite Id.Eval; try assumption. apply Incl.Refl.
 Qed.
 
