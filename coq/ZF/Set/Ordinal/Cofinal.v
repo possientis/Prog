@@ -9,6 +9,7 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Image.
@@ -206,5 +207,40 @@ Proof.
   (* Each element of a is bounded by its own identity value.                    *)
   intros c H2. exists c. split. 1: assumption.
   rewrite Id.Eval; try assumption. apply Incl.Refl.
+Qed.
+
+(* Cofinality is transitive on ordinals.                                        *)
+Proposition Tran : forall (a b c:U),
+  Ordinal a     ->
+  Ordinal b     ->
+  Ordinal c     ->
+  Cofinal a b   ->
+  Cofinal b c   ->
+  Cofinal a c.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c H1 H2 H3 H4 H5.
+  destruct H4 as [H4 [f [H6 [H7 H8]]]].
+  destruct H5 as [H5 [g [H9 [H10 H11]]]].
+  (* The composed cofinal maps have source c and target a.                      *)
+  assert (c :<=: a) as H12. { apply Incl.Tran with b; assumption. }
+  split. 1: assumption.
+  assert (Fun (f :.: g) c a) as H13. { apply Fun.Compose with b; assumption. }
+  exists (f :.: g). split.
+  - apply SOM.Compose with c b a; assumption.
+  - split. 1: assumption.
+    intros x H14.
+    (* First bound x by a value of f, then bound that index by a value of g.    *)
+    assert (exists y, y :< b /\ x :<=: f!y) as H15. { apply H8. assumption. }
+    destruct H15 as [y [H15 H16]].
+    assert (exists z, z :< c /\ y :<=: g!z) as H17. { apply H11. assumption. }
+    destruct H17 as [z [H17 H18]]. exists z. split. 1: assumption.
+    assert (f!y :<=: f!(g!z)) as H19. {
+      apply SOM.Relax; try assumption.
+      - assert (domain f = b) as H19. { apply H7. } rewrite H19. assumption.
+      - assert (domain f = b) as H19. { apply H7. } rewrite H19.
+        apply Fun.IsInRange with c; assumption. }
+    assert (x :<=: f!(g!z)) as H20. { apply Incl.Tran with (f!y); assumption. }
+    rewrite Fun.ComposeEval with g f c b a z; try assumption.
 Qed.
 

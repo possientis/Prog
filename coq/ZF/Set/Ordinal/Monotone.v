@@ -9,6 +9,7 @@ Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
@@ -123,6 +124,36 @@ Proof.
   apply FromFun with a a; try assumption. 1: apply Id.IsFun.
   intros x y H2 H3 H4. rewrite Id.Eval; try assumption.
   rewrite Id.Eval; assumption.
+Qed.
+
+(* The composition of two strictly monotone ordinal functions is monotone.      *)
+Proposition Compose : forall (f g a b c:U),
+  Ordinal a             ->
+  Ordinal b             ->
+  Ordinal c             ->
+  Fun f a b             ->
+  Fun g b c             ->
+  Monotone f            ->
+  Monotone g            ->
+  Monotone (g :.: f).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f g a b c H1 H2 H3 H4 H5 H6 H7.
+  assert (Fun (g :.: f) a c) as H8. { apply Fun.Compose with b; assumption. }
+  apply FromFun with a c; try assumption.
+  intros x y H9 H10 H11.
+  (* Strict increase is preserved first by f and then by g.                     *)
+  rewrite Fun.ComposeEval with f g a b c x; try assumption.
+  rewrite Fun.ComposeEval with f g a b c y; try assumption.
+  apply H7.
+  - assert (domain g = b) as H12. { apply H5. }
+    rewrite H12. apply Fun.IsInRange with a; assumption.
+  - assert (domain g = b) as H12. { apply H5. }
+    rewrite H12. apply Fun.IsInRange with a; assumption.
+  - assert (domain f = a) as H12. { apply H4. }
+    assert (x :< domain f) as H13. { rewrite H12. assumption. }
+    assert (y :< domain f) as H14. { rewrite H12. assumption. }
+    apply H6; assumption.
 Qed.
 
 (* There is a monotone function from succ a to succ b sending a to b.           *)
