@@ -4,18 +4,21 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Proper.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Sup.
 
 Module CCC := ZF.Class.Cardinal.Core.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
+Module SOS := ZF.Set.Ordinal.Sup.
 
 (* The class of infinite cardinal numbers.                                      *)
 Definition InfiniteCard : Class := Cardinal :\: :N.
@@ -85,6 +88,30 @@ Proof.
       apply Class.Empty.HasElem. exists :N. apply HasOmega.
     + (* Every infinite cardinal contains omega.                                *)
       intros a H1. apply IsIncl. assumption.
+Qed.
+
+(* The supremum of a non-empty set of infinite cardinals is infinite.           *)
+Proposition Sup : forall (a:U),
+  toClass a :<=: InfiniteCard   ->
+  a <> :0:                      ->
+  InfiniteCard (sup a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1 H2.
+  split.
+  - (* The supremum is a cardinal because all members are cardinals.            *)
+    apply SCC.Sup. intros b H3. apply IsCardinal, H1. assumption.
+  - (* A member of the set contains omega, and is contained in the supremum.    *)
+    apply ZF.Set.Empty.HasElem in H2. destruct H2 as [b H2].
+    assert (InfiniteCard b) as H3. { apply H1. assumption. }
+    assert (:N :<=: b) as H4. { apply IsIncl. assumption. }
+    assert (toClass a :<=: Ordinal) as H5. {
+      intros c H5. apply IsOrdinal, H1. assumption. }
+    assert (b :<=: sup a) as H6. { apply SOS.IsUpperBound; assumption. }
+    assert (:N :<=: sup a) as H7. { apply Incl.Tran with b; assumption. }
+    intros H8.
+    assert (sup a :< sup a) as H9. { apply H7. assumption. }
+    revert H9. apply Foundation.NoLoop1.
 Qed.
 
 (* Every infinite cardinal is a limit ordinal.                                  *)
