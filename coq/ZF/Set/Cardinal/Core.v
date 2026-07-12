@@ -18,6 +18,7 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Ordinal.Sup.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Prod.
@@ -47,6 +48,7 @@ Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
+Module SOS := ZF.Set.Ordinal.Sup.
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRR := ZF.Set.Relation.Range.
@@ -288,6 +290,35 @@ Proof.
   assert (card x = card c) as H9. { apply WhenEquiv. assumption. }
   assert (card c :<=: c) as H10. { apply IsIncl. assumption. }
   rewrite H8, H9. apply Incl.Tran with c; assumption.
+Qed.
+
+(* The supremum of a set of cardinals is a cardinal.                            *)
+Proposition Sup : forall (a:U),
+  toClass a :<=: Cardinal -> Cardinal (sup a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1. apply Charac. split.
+  - (* A supremum of ordinals is an ordinal.                                    *)
+    apply SOS.IsOrdinal.
+  - intros b H2 H3.
+    (* It suffices to show that every cardinal in a is bounded by b.            *)
+    apply SOS.IsSmallest.
+    + intros c H4. apply CardIsOrd, H1. assumption.
+    + intros c H4.
+      assert (Cardinal c) as H5. { apply H1. assumption. }
+      assert (Ordinal c) as H6. { apply CardIsOrd. assumption. }
+      assert (c :<=: sup a) as H7. {
+        apply SOS.IsUpperBound. 2: assumption. intros d H7.
+        apply CardIsOrd, H1. assumption. }
+      assert (WellOrderable (sup a)) as H8. {
+        apply SCW.WhenOrdinal. apply SOS.IsOrdinal. }
+      assert (card c :<=: card (sup a)) as H9. {
+        apply InclCompat; assumption. }
+      assert (c = card c) as H10. { apply WhenCardinal. assumption. }
+      assert (card (sup a) = card b) as H11. { apply WhenEquiv. assumption. }
+      assert (card b :<=: b) as H12. { apply IsIncl. assumption. }
+      rewrite <- H10, H11 in H9.
+      apply Incl.Tran with (card b); assumption.
 Qed.
 
 (* An ordinal is below a cardinal iff its cardinal is below that cardinal.      *)

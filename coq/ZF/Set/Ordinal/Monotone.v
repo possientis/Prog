@@ -14,9 +14,12 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
+Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module COI := ZF.Class.Order.Isom.
+Module CRD := ZF.Class.Relation.Domain.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SOE := ZF.Set.Ordinal.Order.E.
@@ -60,6 +63,32 @@ Proof.
   - intros a b H3 H4 H5. apply H2. 3: assumption.
     + apply Domain.ToClass. assumption.
     + apply Domain.ToClass. assumption.
+Qed.
+
+(* Restricting a class monotone function to an ordinal is monotone.             *)
+Proposition ClassRestrict : forall (F:Class) (a:U),
+  Ordinal a                     ->
+  COM.Monotone F                ->
+  toClass a :<=: CRD.domain F   ->
+  Monotone (F:|:a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros F a H1 [H2 H3] H4. split.
+  - apply OrdFun.ClassRestrict; assumption.
+  - intros x y H5 H6 H7.
+    (* Values of the restriction agree with the class values on its domain.     *)
+    assert (domain (F:|:a) = a) as H8. {
+      apply RestrictOfClass.DomainWhenIncl. 2: assumption.
+      destruct H2 as [[_ H2] _]. apply H2. }
+    rewrite H8 in H5. rewrite H8 in H6.
+    assert ((F:|:a)!x = F!x) as H9. {
+      apply RestrictOfClass.Eval. 2: assumption.
+      destruct H2 as [[_ H2] _]. apply H2. }
+    assert ((F:|:a)!y = F!y) as H10. {
+      apply RestrictOfClass.Eval. 2: assumption.
+      destruct H2 as [[_ H2] _]. apply H2. }
+    rewrite H9, H10.
+    apply H3; try assumption; apply H4; assumption.
 Qed.
 
 (* A strictly monotone ordinal function satisfies a <= f(a) for all a.          *)

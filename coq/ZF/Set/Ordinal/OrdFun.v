@@ -11,7 +11,10 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Function.
+Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Range.
+Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 
 Module COC := ZF.Class.Ordinal.Core.
@@ -47,6 +50,28 @@ Proof.
     + apply Core.FromClass. apply COC.EquivCompat with (CRD.domain (toClass f)).
       2: assumption. apply Equiv.Sym, Domain.ToClass.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
+Qed.
+
+(* Restricting a class ordinal function to an ordinal is an ordinal function.   *)
+Proposition ClassRestrict : forall (F:Class) (a:U),
+  Ordinal a                     ->
+  COO.OrdFun F                  ->
+  toClass a :<=: CRD.domain F   ->
+  OrdFun (F:|:a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros F a H1 [H2 [H3 H4]] H5.
+  assert (FunctionOn (F:|:a) a) as H6. {
+    apply RestrictOfClass.IsFunctionOn. 1: apply H2. assumption. }
+  split. 1: apply H6. split.
+  - (* Its set-theoretic domain is exactly that ordinal.                        *)
+    assert (domain (F:|:a) = a) as H7. { apply H6. }
+    rewrite H7. assumption.
+  - intros y H7.
+    (* Its values are values of the original class ordinal function.            *)
+    rewrite RestrictOfClass.RangeOf in H7. 2: apply H2.
+    apply ImageUnderClass.Charac in H7. 2: apply H2.
+    destruct H7 as [x [H7 H8]]. apply H4. exists x. assumption.
 Qed.
 
 (* The value of an ordinal function at any domain element is an ordinal.        *)
