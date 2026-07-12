@@ -3,6 +3,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Founded.
 Require Import ZF.Class.Order.Irreflexive.
+Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.StrictOrd.
 Require Import ZF.Class.Order.StrictTotalOrd.
 Require Import ZF.Class.Order.Total.
@@ -14,6 +15,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.OrdPair.
 
@@ -47,6 +49,22 @@ Proof.
   - left. assumption.
   - right. left. apply E.Charac2. assumption.
   - right. right. apply E.Charac2. assumption.
+Qed.
+
+(* An E-minimal element of an ordinal class is below each element of the class. *)
+Proposition WhenMinimal : forall (A:Class) (a b:U),
+  A :<=: On -> Minimal E A a -> A b -> a :<=: b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros A a b H1 [H2 H3] H4.
+  assert (Ordinal a) as H5. { apply H1. assumption. }
+  assert (Ordinal b) as H6. { apply H1. assumption. }
+  assert (a = b \/ a :< b \/ b :< a) as H7. {
+    apply SOC.IsTotal; assumption. }
+  destruct H7 as [H7|[H7|H7]].
+  - subst. apply ZF.Set.Incl.Refl.
+  - apply SOC.ElemIsIncl; assumption.
+  - exfalso. apply H3 with b. 1: assumption. apply E.Charac2. assumption.
 Qed.
 
 (* The order :< is founded on any class A.                                      *)
