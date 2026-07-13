@@ -1,5 +1,6 @@
 Require Import ZF.Class.Cardinal.Core.
 Require Import ZF.Class.DiffBySet.
+Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Proper.
 Require Import ZF.Set.Cardinal.Core.
@@ -12,13 +13,18 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.UnionGenOfClass.
 
 Module CCC := ZF.Class.Cardinal.Core.
+Module CEM := ZF.Class.Empty.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
+Module SEM := ZF.Set.Empty.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOS := ZF.Set.Ordinal.Sup.
+Module SUG := ZF.Set.UnionGenOfClass.
 
 (* The class of infinite cardinal numbers.                                      *)
 Definition InfiniteCard : Class := Cardinal :\: :N.
@@ -85,7 +91,7 @@ Proof.
     apply SOI.IsLargest.
     + intros a H1. apply IsOrdinal. assumption.
     + (* The class of infinite cardinals is non-empty, as it contains omega.    *)
-      apply Class.Empty.HasElem. exists :N. apply HasOmega.
+      apply CEM.HasElem. exists :N. apply HasOmega.
     + (* Every infinite cardinal contains omega.                                *)
       intros a H1. apply IsIncl. assumption.
 Qed.
@@ -102,15 +108,40 @@ Proof.
   - (* The supremum is a cardinal because all members are cardinals.            *)
     apply SCC.Sup. intros b H3. apply IsCardinal, H1. assumption.
   - (* A member of the set contains omega, and is contained in the supremum.    *)
-    apply ZF.Set.Empty.HasElem in H2. destruct H2 as [b H2].
-    assert (InfiniteCard b) as H3. { apply H1. assumption. }
-    assert (:N :<=: b) as H4. { apply IsIncl. assumption. }
-    assert (toClass a :<=: Ordinal) as H5. {
-      intros c H5. apply IsOrdinal, H1. assumption. }
-    assert (b :<=: sup a) as H6. { apply SOS.IsUpperBound; assumption. }
-    assert (:N :<=: sup a) as H7. { apply Incl.Tran with b; assumption. }
+    assert (exists b, b :< a) as H3. {
+      apply SEM.HasElem. assumption. }
+    destruct H3 as [b H3].
+    assert (InfiniteCard b) as H4. { apply H1. assumption. }
+    assert (:N :<=: b) as H5. { apply IsIncl. assumption. }
+    assert (toClass a :<=: Ordinal) as H6. {
+      intros c H6. apply IsOrdinal, H1. assumption. }
+    assert (b :<=: sup a) as H7. { apply SOS.IsUpperBound; assumption. }
+    assert (:N :<=: sup a) as H8. { apply Incl.Tran with b; assumption. }
+    intros H9.
+    assert (sup a :< sup a) as H10. { apply H8. assumption. }
+    revert H10. apply Foundation.NoLoop1.
+Qed.
+
+(* A non-empty union of set-indexed infinite cardinals is infinite.             *)
+Proposition UnionGen : forall (A:Class) (a:U),
+  (forall x, x :< a -> InfiniteCard (A!x))  ->
+  a <> :0:                                  ->
+  InfiniteCard (:\/:_{a} A).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros A a H1 H2. split.
+  - (* The union is a cardinal because every value is a cardinal.               *)
+    apply SCC.UnionGen. intros x H3. apply IsCardinal, H1. assumption.
+  - (* One value contains omega, and that value is included in the union.       *)
+    assert (exists b, b :< a) as H3. { apply SEM.HasElem. assumption. }
+    destruct H3 as [b H3].
+    assert (InfiniteCard (A!b)) as H4. { apply H1. assumption. }
+    assert (:N :<=: A!b) as H5. { apply IsIncl. assumption. }
+    assert (A!b :<=: :\/:_{a} A) as H6. { apply SUG.IsIncl. assumption. }
+    assert (:N :<=: :\/:_{a} A) as H7. {
+      apply Incl.Tran with (A!b); assumption. }
     intros H8.
-    assert (sup a :< sup a) as H9. { apply H7. assumption. }
+    assert (:\/:_{a} A :< :\/:_{a} A) as H9. { apply H7. assumption. }
     revert H9. apply Foundation.NoLoop1.
 Qed.
 

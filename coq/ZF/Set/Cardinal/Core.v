@@ -19,6 +19,7 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.
+Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Prod.
@@ -35,6 +36,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
+Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
@@ -49,10 +51,12 @@ Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
 Module SOS := ZF.Set.Ordinal.Sup.
+Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRR := ZF.Set.Relation.Range.
 Module SRO := ZF.Set.Relation.Onto.
+Module SUG := ZF.Set.UnionGenOfClass.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
@@ -319,6 +323,32 @@ Proof.
       assert (card b :<=: b) as H12. { apply IsIncl. assumption. }
       rewrite <- H10, H11 in H9.
       apply Incl.Tran with (card b); assumption.
+Qed.
+
+(* The union of a set-indexed family of cardinals is a cardinal.                *)
+Proposition UnionGen : forall (A:Class) (a:U),
+  (forall x, x :< a -> Cardinal A!x) -> Cardinal (:\/:_{a} A).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros A a H1. apply Charac. split.
+  - (* A union of ordinal values is an ordinal.                                 *)
+    apply SOU.IsOrdinal. intros x H2. apply CardIsOrd, H1. assumption.
+  - intros b H2 H3.
+    (* It suffices to bound each cardinal value by b.                           *)
+    apply SUG.WhenSetBounded. intros x H4.
+    assert (Cardinal A!x) as H5. { apply H1. assumption. }
+    assert (Ordinal A!x) as H6. { apply CardIsOrd. assumption. }
+    assert (A!x :<=: :\/:_{a} A) as H7. { apply SUG.IsIncl. assumption. }
+    assert (WellOrderable (:\/:_{a} A)) as H8. {
+      apply SCW.WhenOrdinal. apply SOU.IsOrdinal.
+      intros y H8. apply CardIsOrd, H1. assumption. }
+    assert (card (A!x) :<=: card (:\/:_{a} A)) as H9. {
+      apply InclCompat; assumption. }
+    assert (A!x = card (A!x)) as H10. { apply WhenCardinal. assumption. }
+    assert (card (:\/:_{a} A) = card b) as H11. { apply WhenEquiv. assumption. }
+    assert (card b :<=: b) as H12. { apply IsIncl. assumption. }
+    rewrite <- H10, H11 in H9.
+    apply Incl.Tran with (card b); assumption.
 Qed.
 
 (* An ordinal is below a cardinal iff its cardinal is below that cardinal.      *)
