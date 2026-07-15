@@ -44,12 +44,6 @@ Proof.
   apply Succ.IsSuccessor. assumption.
 Qed.
 
-(* Limit is a class of ordinals.                                                *)
-Proposition HasOrdinals : Limit :<=: Ordinal.
-Proof.
-  apply Class.Inter2.IsInclL.
-Qed.
-
 (* An ordinal is a limit ordinal iff it is not empty and is equal to its union. *)
 Proposition Charac : forall (a:U), Ordinal a ->
   Limit a <-> a <> :0: /\ a = :U(a).
@@ -97,15 +91,13 @@ Qed.
 Proposition HasSucc : forall (a b:U),
   Limit a -> b :< a -> succ b :< a.
 Proof.
-  intros a b H1 H2. assert (Ordinal a) as H3. {
-    apply HasOrdinals. assumption. }
-    apply Charac in H1; try assumption.
+  intros a b H1 H2.
+  assert (Ordinal a) as H3. { apply H1. }
+  apply Charac in H1; try assumption.
   destruct H1 as [_ H1]. assert (H4 := H2). rewrite H1 in H4.
   apply Union.Charac in H4. destruct H4 as [c [H4 H5]].
-  assert (Ordinal b) as H6. {
-    apply Core.IsOrdinal with a; assumption. }
-  assert (Ordinal c) as H7. {
-    apply Core.IsOrdinal with a; assumption. }
+  assert (Ordinal b) as H6. { apply Core.IsOrdinal with a; assumption. }
+  assert (Ordinal c) as H7. { apply Core.IsOrdinal with a; assumption. }
   apply InclElemTran with c; try assumption.
   - apply Succ.IsOrdinal. assumption.
   - apply Succ.ElemIsIncl; assumption.

@@ -298,7 +298,7 @@ Proposition IsInclLimit : forall (a:U), Limit a -> :N :<=: a.
 Proof.
   intros a H1. assert (a :< :N \/ :N :<=: a) as H2. {
     apply ElemOrIncl.
-    - apply Limit.HasOrdinals. assumption.
+    - apply H1.
     - apply IsOrdinal. }
   destruct H2 as [H2|H2]. 2: assumption. exfalso.
   apply H1. apply Charac in H2. apply H2, Succ.IsIn.

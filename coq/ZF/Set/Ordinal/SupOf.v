@@ -48,7 +48,7 @@ Proposition WhenLimit : forall (a:U),
   Limit a -> sup a = a.
 Proof.
   intros a H1.
-  assert (Ordinal a) as H2. { apply Limit.HasOrdinals. assumption. }
+  assert (Ordinal a) as H2. { apply H1. }
   rewrite WhenOrdinal. 2: assumption. symmetry. apply Limit.Charac in H1.
   2: assumption. destruct H1 as [_ H1]. assumption.
 Qed.
