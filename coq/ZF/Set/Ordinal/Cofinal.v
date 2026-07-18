@@ -1,5 +1,6 @@
 Require Import ZF.Set.Core.
 Require Import ZF.Class.Empty.
+Require Import ZF.Set.Cardinal.Equiv.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
@@ -335,5 +336,28 @@ Proof.
   exists e. split. 1: assumption. split.
   - apply Incl.Tran with b; assumption.
   - exists (f :.: h). split. 1: assumption. split; assumption.
+Qed.
+
+(* An equipotent subordinal contains a cofinal subordinal.                      *)
+Proposition ExtractEquiv : forall (a b:U),
+  Ordinal a   ->
+  Ordinal b   ->
+  b :<=: a    ->
+  b :~: a     ->
+  exists c, c :<=: b /\ Cofinal a c.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3 H4.
+  destruct H4 as [f H4].
+  assert (Fun f b a) as H5. { apply Bij.IsFun. assumption. }
+  assert (forall c, c :< a -> exists d, d :< b /\ c :<=: f!d) as H6. {
+    intros c H6.
+    (* The bijection reaches every element of a from some index in b.           *)
+    assert (exists d, d :< b /\ f!d = c) as H7. {
+      apply (Bij.RangeCharac f b a c). 1: assumption. assumption. }
+    destruct H7 as [d [H7 H8]]. exists d. split. 1: assumption.
+    rewrite H8. apply Incl.Refl. }
+  (* The weakly cofinal bijection now feeds the extraction theorem.             *)
+  apply Extract; try assumption. exists f. split; assumption.
 Qed.
 
