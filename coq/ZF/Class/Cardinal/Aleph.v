@@ -12,12 +12,15 @@ Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGenOfClass.
@@ -28,9 +31,12 @@ Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.
+Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SEM := ZF.Set.Empty.
 Module SOC := ZF.Set.Ordinal.Core.
+Module SOI := ZF.Set.Ordinal.InfOfClass.
+Module SOM := ZF.Set.Ordinal.Monotone.
 Module SUG := ZF.Set.UnionGenOfClass.
 
 (* MinFresh picks the E-minimal element of InfiniteCard not already in range.   *)
@@ -88,7 +94,7 @@ Proof.
 Qed.
 
 (* Aleph is strictly monotone.                                                  *)
-Proposition IsMonotone : Monotone Aleph.
+Proposition IsMonotone : COM.Monotone Aleph.
 Proof.
   apply COS.IsMonotone.
   - apply CCI.IsProper.
@@ -131,8 +137,22 @@ Proof.
   - apply DomainOf. assumption.
 Qed.
 
+(* The zeroth infinite cardinal is omega.                                       *)
+Proposition WhenZero : Aleph!:0: = :N.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  (* Aleph(0) is the infimum of the infinite cardinals not already attained.    *)
+  assert (Aleph!:0: = inf (InfiniteCard :\: Aleph:[:0:]:)) as H1. {
+    apply IsInf. apply SOC.Zero. }
+  assert (Aleph:[:0:]: = :0:) as H2. {
+    apply ImageUnderClass.WhenZero. reflexivity. }
+  rewrite H1, H2. transitivity (inf InfiniteCard).
+  - apply SOI.EquivCompat. apply DiffBySet.IdentityR.
+  - apply CCI.Inf.
+Qed.
+
 (* At a limit ordinal, Aleph is the union of its earlier values.                *)
-Proposition WhenLimit : forall (a:U), Limit a -> Aleph!a = :\/:_{a} Aleph.
+Proposition Continuous : forall (a:U), Limit a -> Aleph!a = :\/:_{a} Aleph.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a H1.
@@ -178,5 +198,56 @@ Proof.
     apply SOC.ElemIsIncl. 2: assumption.
     apply CCI.IsOrdinal, IsInfiniteCard. assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* At a limit index, the corresponding aleph is cofinal with that index.        *)
+Proposition IsCofinal : forall (a:U), Limit a -> Cofinal (Aleph!a) a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  assert (Ordinal a) as H2. { apply H1. }
+  remember (Aleph:|:a) as f eqn:Hf.
+  split.
+  - (* Every index lies below its aleph value.                                  *)
+    apply IsIncl. assumption.
+  - exists f.
+    assert (SOM.Monotone f) as H3. {
+      rewrite Hf.
+      apply SOM.ClassRestrict. 1: assumption.
+      - apply IsMonotone.
+      - intros x H3. apply DomainOf.
+        apply (SOC.IsOrdinal a); assumption. }
+    split. 1: assumption.
+    assert (CFO.FunctionOn Aleph Ordinal) as G2. { apply IsFunctionOn. }
+    assert (Fun f a (Aleph!a)) as H4. {
+      split.
+      - rewrite Hf. apply RestrictOfClass.IsFunctionOn. 1: apply G2.
+        intros x H4. apply DomainOf. apply (SOC.IsOrdinal a); assumption.
+      - intros y H4.
+        assert (CFL.Functional Aleph) as G1. { apply G2. }
+        rewrite Hf in H4. rewrite RestrictOfClass.RangeOf in H4. 2: assumption.
+        apply ImageUnderClass.Charac in H4. 2: assumption.
+        destruct H4 as [x [H4 H5]].
+        assert (Ordinal x) as H6. { apply (SOC.IsOrdinal a); assumption. }
+        assert (Aleph!x = y) as H7. {
+          apply (CFO.Eval Aleph Ordinal); try apply IsFunctionOn; assumption. }
+        rewrite <- H7.
+        assert (COM.Monotone Aleph) as H8. { apply IsMonotone. }
+        destruct H8 as [_ H8].
+        assert (Aleph!x :< Aleph!a) as H9. {
+          apply H8; try apply DomainOf; assumption. }
+        assumption. }
+    split. 1: assumption. intros c H5.
+    (* Continuity turns any smaller ordinal into an earlier aleph value.        *)
+    assert (Aleph!a = :\/:_{a} Aleph) as H6. {
+      apply Continuous. assumption. }
+    rewrite H6 in H5.
+    apply SUG.Charac in H5. destruct H5 as [d [H7 H8]].
+    exists d. split. 1: assumption.
+    assert (Ordinal d) as H9. { apply (SOC.IsOrdinal a); assumption. }
+    assert (f!d = Aleph!d) as H10. {
+      rewrite Hf. apply RestrictOfClass.Eval. 2: assumption. apply G2. }
+    rewrite H10. apply SOC.ElemIsIncl. 2: assumption.
+    apply CCI.IsOrdinal, IsInfiniteCard. assumption.
 Qed.
 
