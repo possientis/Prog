@@ -1,23 +1,33 @@
 Require Import ZF.Set.Core.
+Require Import ZF.Class.Empty.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Order.
+Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
 
 Module SOM := ZF.Set.Ordinal.Monotone.
+Module SOO := ZF.Set.Ordinal.Order.
+Module SOE := ZF.Set.Ordinal.Order.E.
+Module CEM := ZF.Class.Empty.
 
 
 (* Predicate expressing the fact that a is cofinal with b.                      *)
@@ -242,5 +252,88 @@ Proof.
         apply Fun.IsInRange with c; assumption. }
     assert (x :<=: f!(g!z)) as H20. { apply Incl.Tran with (f!y); assumption. }
     rewrite Fun.ComposeEval with g f c b a z; try assumption.
+Qed.
+
+(* A weakly cofinal map on b contains a cofinal monotone submap.                *)
+Proposition Extract : forall (a b:U),
+  Ordinal a                                               ->
+  Ordinal b                                               ->
+  b :<=: a                                                ->
+  (exists f, Fun f b a /\
+    forall c, c :< a -> exists d, d :< b /\ c :<=: f!d)   ->
+  exists e, e :<=: b /\ Cofinal a e.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3 H4.
+  destruct H4 as [f [H4 H5]].
+  (* The proof uses the indices where f strictly beats all earlier values.      *)
+  (* This local set extracts the monotone cofinal subsequence.                  *)
+  remember (fun d => forall x, x :< d -> f!x :< f!d) as A eqn:HA.
+  remember {{ d :< b | A }} as r eqn:Hr.
+  assert (r :<=: b) as H6. { rewrite Hr. apply Specify.IsInclL. }
+  assert (exists e h, Ordinal e /\ e :<=: b /\ Isom h (E e) (E r) e r) as H7. {
+    apply SOO.OrdinalSubset; assumption. }
+  destruct H7 as [e [h [H7 [H8 H9]]]].
+  assert (Bij h e r) as H10. { apply H9. }
+  assert (Fun h e r) as H11. { apply Bij.IsFun. assumption. }
+  assert (Fun h e b) as H12. { apply Fun.InclCompatR with r; assumption. }
+  assert (Fun (f :.: h) e a) as H13. { apply Fun.Compose with b; assumption. }
+  assert (Monotone (f :.: h)) as H14. {
+    apply SOM.FromFun with e a; try assumption.
+    intros x y H14 H15 H16.
+    (* The isomorphism lists record indices in increasing order.                *)
+    rewrite Fun.ComposeEval with h f e b a x; try assumption.
+    rewrite Fun.ComposeEval with h f e b a y; try assumption.
+    destruct H9 as [_ H9].
+    assert (:( h!x , h!y ): :< E r) as H17. {
+      apply H9; try assumption. apply SOE.Charac2. split. 1: assumption.
+      split; assumption. }
+    apply SOE.Charac2 in H17. destruct H17 as [H17 [H18 H19]].
+    rewrite Hr in H18. apply Specify.Charac in H18.
+    destruct H18 as [_ H18]. rewrite HA in H18. apply H18. assumption. }
+  assert (forall c, c :< a -> exists d, d :< e /\ c :<=: (f :.: h)!d) as H15. {
+    intros c H15.
+    assert (Ordinal c) as H16. { apply Core.IsOrdinal with a; assumption. }
+    (* First choose the least index whose f-value bounds c.                     *)
+    remember (fun d => d :< b /\ c :<=: f!d) as B eqn:HB.
+    assert (B :<=: Ordinal) as H17. {
+      intros d H17. rewrite HB in H17. destruct H17 as [H17 _].
+      apply Core.IsOrdinal with b; assumption. }
+    assert (exists d, Ordinal d /\ B d /\ forall x, B x -> d :<=: x) as H18. {
+      apply Core.HasMinimal. 1: assumption. apply CEM.HasElem.
+      assert (exists d, d :< b /\ c :<=: f!d) as G1. { apply H5. assumption. }
+      destruct G1 as [d G1]. exists d. rewrite HB. assumption. }
+    destruct H18 as [d [H18 [H19 H20]]]. rewrite HB in H19.
+    destruct H19 as [H19 H21].
+    assert (f!d :< a) as G1. { apply Fun.IsInRange with b; assumption. }
+    assert (Ordinal (f!d)) as G2. { apply Core.IsOrdinal with a; assumption. }
+    assert (d :< r) as H22. {
+      rewrite Hr. apply Specify.Charac. split. 1: assumption. rewrite HA.
+      intros x H22.
+      assert (Ordinal x) as G3. { apply Core.IsOrdinal with d; assumption. }
+      assert (x :< b) as G4. { apply Core.ElemElemTran with d; assumption. }
+      assert (f!x :< a) as G5. { apply Fun.IsInRange with b; assumption. }
+      assert (Ordinal (f!x)) as G6. { apply Core.IsOrdinal with a; assumption. }
+      (* Minimality says no earlier index already bounds c.                     *)
+      assert (~ c :<=: f!x) as H23. {
+        intros H23.
+        assert (B x) as H24. { rewrite HB. split; assumption. }
+        assert (d :<=: x) as H25. { apply H20. assumption. }
+        assert (d :< d) as H26. {
+          apply Core.InclElemTran with x; assumption. }
+        apply Foundation.NoLoop1 with d. assumption. }
+      assert (f!x :< c) as H24. {
+        assert (f!x :< c \/ c :<=: f!x) as H25. {
+          apply Core.ElemOrIncl; assumption. }
+        destruct H25 as [H25|H25]. 1: assumption. contradiction. }
+      apply Core.ElemInclTran with c; assumption. }
+    assert (exists v, v :< e /\ h!v = d) as H23. {
+      apply (Bij.RangeCharac h e r d). 1: assumption. assumption. }
+    destruct H23 as [v [H23 H24]]. exists v. split. 1: assumption.
+    rewrite Fun.ComposeEval with h f e b a v; try assumption. rewrite H24.
+    assumption. }
+  exists e. split. 1: assumption. split.
+  - apply Incl.Tran with b; assumption.
+  - exists (f :.: h). split. 1: assumption. split; assumption.
 Qed.
 
