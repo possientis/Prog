@@ -1,12 +1,14 @@
-Require Import ZF.Set.Core.
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Natural.
@@ -18,6 +20,7 @@ Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Specify.
@@ -359,5 +362,91 @@ Proof.
     rewrite H8. apply Incl.Refl. }
   (* The weakly cofinal bijection now feeds the extraction theorem.             *)
   apply Extract; try assumption. exists f. split; assumption.
+Qed.
+
+(* A smaller cofinal parameter contains one cofinal in the larger parameter.    *)
+Proposition ExtractIncl : forall (a b c:U),
+  Ordinal a     ->
+  Ordinal b     ->
+  Ordinal c     ->
+  Cofinal a b   ->
+  Cofinal a c   ->
+  c :<=: b      ->
+  exists d, d :<=: c /\ Cofinal b d.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c H1 H2 H3 H4 H5 H6.
+  destruct H4 as [H4 [f [H7 [H8 H9]]]].
+  destruct H5 as [H5 [g [H10 [H11 H12]]]].
+  (* For each index of c, record the b-indices whose f-values bound g there.    *)
+  remember (fun d x => g!d :<=: f!x) as A eqn:HA.
+  (* The set F d collects the b-indices whose f-values bound g at d.            *)
+  remember (fun d => {{ x :< b | A d }}) as F eqn:HF.
+  (* The candidate comparison map sends d to the least index in F d.            *)
+  remember (fun d => inf (F d)) as G eqn:HG.
+  remember (from c G) as h eqn:Hh.
+  assert (forall d, d :< c -> F d <> :0:) as H13. {
+    intros d H13. apply Empty.HasElem.
+    assert (g!d :< a) as H14. { apply Fun.IsInRange with c; assumption. }
+    assert (exists x, x :< b /\ g!d :<=: f!x) as H15. {
+      apply H9. assumption. }
+    destruct H15 as [x [H15 H16]]. exists x. rewrite HF. apply Specify.Charac.
+    split. 1: assumption. rewrite HA. assumption. }
+  assert (forall d, d :< c -> toClass (F d) :<=: Ordinal) as H14. {
+      intros d H14 x H15. rewrite HF in H15. apply Specify.Charac in H15.
+      destruct H15 as [H15 _]. apply Core.IsOrdinal with b; assumption. }
+  assert (forall d, d :< c -> h!d :< b) as H15. {
+    intros d H15.
+    assert (h!d = G d) as H16. { rewrite Hh. apply From.Eval. assumption. }
+    rewrite H16, HG.
+    assert (inf (F d) :< F d) as H17. {
+      apply Inf.IsIn. 1: apply H14; assumption. apply H13. assumption. }
+    rewrite HF in H17. rewrite HF.
+    apply Specify.Charac in H17. apply H17. }
+  assert (forall d, d :< c -> g!d :<=: f!(h!d)) as H16. {
+    intros d H16.
+    assert (h!d = G d) as H17. { rewrite Hh. apply From.Eval. assumption. }
+    rewrite H17, HG.
+    assert (inf (F d) :< F d) as H18. {
+      apply Inf.IsIn. 1: apply H14; assumption. apply H13. assumption. }
+    rewrite HF in H18. rewrite HF.
+    apply Specify.Charac in H18. destruct H18 as [_ H18].
+    rewrite HA in H18. rewrite HA. apply H18. }
+  assert (Fun h c b) as H17. {
+    rewrite Hh. apply From.IsFun. intros d H17. rewrite HG.
+    assert (inf (F d) :< F d) as H18. {
+      apply Inf.IsIn. 1: apply H14; assumption. apply H13. assumption. }
+    rewrite HF in H18. rewrite HF.
+    apply Specify.Charac in H18. apply H18. }
+  assert (forall v, v :< b -> exists d, d :< c /\ v :<=: h!d) as H18. {
+    intros v H18.
+    assert (f!v :< a) as H19. { apply Fun.IsInRange with b; assumption. }
+    assert (exists d, d :< c /\ f!v :<=: g!d) as H20. { apply H12. assumption. }
+    destruct H20 as [d [H20 H21]]. exists d. split. 1: assumption.
+    assert (Ordinal v) as H22. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal h!d) as H23. { apply Core.IsOrdinal with b. 1: assumption.
+      apply H15. assumption. }
+    assert (h!d :< v \/ v :<=: h!d) as H24. {
+      apply Core.ElemOrIncl; assumption. }
+    destruct H24 as [H24|H24]. 2: assumption. exfalso.
+    assert (f!(h!d) :< f!v) as H25. {
+      apply H7.
+      - assert (domain f = b) as H25. { apply H8. } rewrite H25.
+        apply H15. assumption.
+      - assert (domain f = b) as H25. { apply H8. } rewrite H25. assumption.
+      - assumption. }
+    assert (f!(h!d) :< a) as H26. { apply Fun.IsInRange with b. 1: assumption.
+      apply H15. assumption. }
+    assert (Ordinal f!(h!d)) as H27. { apply Core.IsOrdinal with a; assumption. }
+    assert (Ordinal f!v) as H28. { apply Core.IsOrdinal with a; assumption. }
+    assert (g!d :< a) as H29. { apply Fun.IsInRange with c; assumption. }
+    assert (Ordinal g!d) as H30. { apply Core.IsOrdinal with a; assumption. }
+    assert (f!(h!d) :< g!d) as H31. {
+      apply Core.ElemInclTran with (f!v); assumption. }
+    assert (f!(h!d) :< f!(h!d)) as H32. {
+      apply Core.ElemInclTran with (g!d); try assumption. apply H16. assumption. }
+    apply Foundation.NoLoop1 with (f!(h!d)). assumption. }
+  (* The weakly cofinal map h now feeds the existing extraction theorem.        *)
+  apply Extract; try assumption. exists h. split; assumption.
 Qed.
 
