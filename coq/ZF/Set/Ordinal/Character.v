@@ -5,7 +5,9 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inf.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
 
@@ -82,6 +84,37 @@ Proof.
         apply Succ.NotZero with a. assumption. }
       assert (:0: :< x) as H10. { apply Core.HasZero; assumption. }
       apply Natural.HasZeroRev; assumption. }
+    unfold charac. rewrite <- Hr. apply Inf.IsLargest; assumption. }
+  apply Incl.Double. split; assumption.
+Qed.
+
+(* The character of cofinality of omega is omega.                               *)
+Proposition WhenOmega : charac :N = :N.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  (* The candidates are the ordinals below succ N cofinal with N.               *)
+  remember {{ x :< succ :N | Cofinal :N }} as r eqn:Hr.
+  assert (charac :N :<=: :N) as H1. { apply IsIncl. apply Omega.IsOrdinal. }
+  assert (toClass r :<=: Ordinal) as H2. {
+    intros x H2. rewrite Hr in H2. apply Specify.Charac in H2.
+    destruct H2 as [H2 _]. apply Core.IsOrdinal with (succ :N). 2: assumption.
+    apply Succ.IsOrdinal. apply Omega.IsOrdinal. }
+  assert (:N :< r) as H3. {
+    rewrite Hr. apply Specify.Charac. split.
+    - apply Succ.IsIn.
+    - apply Cofinal.Refl. apply Omega.IsOrdinal. }
+  assert (:N :<=: charac :N) as H4. {
+    assert (r <> :0:) as H4. { apply Empty.HasElem. exists :N. assumption. }
+    assert (forall x, x :< r -> :N :<=: x) as H5. {
+      intros x H5. rewrite Hr in H5. apply Specify.Charac in H5.
+      destruct H5 as [H5 H6].
+      assert (Ordinal x) as H7. { apply H2. rewrite Hr. apply Specify.Charac.
+        split; assumption. }
+      assert (Limit x) as H8. {
+        assert (Limit :N <-> Limit x) as H8. {
+          apply Cofinal.LimitCompat; try assumption. apply Omega.IsOrdinal. }
+        apply H8. apply Omega.IsLimit. }
+      apply Omega.IsInclLimit. assumption. }
     unfold charac. rewrite <- Hr. apply Inf.IsLargest; assumption. }
   apply Incl.Double. split; assumption.
 Qed.
