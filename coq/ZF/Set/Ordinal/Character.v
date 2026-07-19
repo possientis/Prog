@@ -1,5 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Core.
@@ -28,4 +29,11 @@ Proof.
     - apply Cofinal.Refl. assumption. }
   (* Since a is one of the candidates, their infimum is below a.                *)
   unfold charac. rewrite <- Hr. apply Inf.IsLowerBound; assumption.
+Qed.
+
+(* The character of cofinality of zero is zero.                                 *)
+Proposition WhenZero : charac :0: = :0:.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  apply Empty.WhenIncl. apply IsIncl. apply Core.Zero.
 Qed.
