@@ -75,6 +75,17 @@ Proof.
   apply H3. assumption.
 Qed.
 
+(* A cardinal containing omega is an infinite cardinal.                         *)
+Proposition WhenIncl : forall (a:U),
+  Cardinal a -> :N :<=: a -> InfiniteCard a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1 H2. apply DiffBySet.Charac. split. 1: assumption.
+  (* Otherwise a would be a natural number containing itself.                   *)
+  intros H3. assert (a :< a) as H4. { apply H2. assumption. }
+  apply Foundation.NoLoop1 with a. assumption.
+Qed.
+
 (* The infimum of the class of infinite cardinals is omega.                     *)
 Proposition Inf : inf InfiniteCard = :N.
 Proof.
