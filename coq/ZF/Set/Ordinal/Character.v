@@ -21,6 +21,29 @@ Proof.
   intros a. apply Inf.IsOrdinal.
 Qed.
 
+(* The character of cofinality is below every cofinal ordinal.                  *)
+Proposition IsLowerBound : forall (a b:U), Ordinal a -> Ordinal b ->
+  Cofinal a b -> charac a :<=: b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  (* The candidate set consists of ordinals below succ a cofinal with a.        *)
+  remember {{ x :< succ a | Cofinal a }} as r eqn:Hr.
+  assert (toClass r :<=: Ordinal) as H4. {
+    intros x H4. rewrite Hr in H4. apply Specify.Charac in H4.
+    destruct H4 as [H4 _]. apply Core.IsOrdinal with (succ a). 2: assumption.
+    apply Succ.IsOrdinal. assumption. }
+  assert (b :< r) as H5. {
+    assert (b :<=: a) as H5. { apply H3. }
+    assert (b :< succ a) as H6. {
+      apply Core.InclElemTran with a; try assumption.
+      - apply Succ.IsOrdinal. assumption.
+      - apply Succ.IsIn. }
+    rewrite Hr. apply Specify.Charac. split; assumption. }
+  (* The infimum of all candidates is below this particular candidate.          *)
+  unfold charac. rewrite <- Hr. apply Inf.IsLowerBound; assumption.
+Qed.
+
 (* The character of cofinality of an ordinal is contained in the ordinal.       *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   charac a :<=: a.
