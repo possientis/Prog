@@ -14,6 +14,13 @@ Require Import ZF.Set.Specify.
 (* The character of cofinality of the ordinal a.                                *)
 Definition charac (a:U) : U := inf {{ x :< succ a | Cofinal a }}.
 
+(* The character of cofinality is an ordinal.                                   *)
+Proposition IsOrdinal : forall (a:U), Ordinal (charac a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a. apply Inf.IsOrdinal.
+Qed.
+
 (* The character of cofinality of an ordinal is contained in the ordinal.       *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   charac a :<=: a.
