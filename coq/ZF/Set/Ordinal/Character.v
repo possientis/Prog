@@ -44,6 +44,33 @@ Proof.
   unfold charac. rewrite <- Hr. apply Inf.IsLowerBound; assumption.
 Qed.
 
+(* The character of cofinality contains every common lower bound.               *)
+Proposition IsLargest : forall (a b:U), Ordinal a -> Ordinal b ->
+  (forall c, Ordinal c -> Cofinal a c -> b :<=: c) -> b :<=: charac a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  (* The candidate set is non-empty because a is cofinal with itself.           *)
+  remember {{ x :< succ a | Cofinal a }} as r eqn:Hr.
+  assert (toClass r :<=: Ordinal) as H4. {
+    intros x H4. rewrite Hr in H4. apply Specify.Charac in H4.
+    destruct H4 as [H4 _]. apply Core.IsOrdinal with (succ a). 2: assumption.
+    apply Succ.IsOrdinal. assumption. }
+  assert (a :< r) as H5. {
+    rewrite Hr. apply Specify.Charac. split.
+    - apply Succ.IsIn.
+    - apply Cofinal.Refl. assumption. }
+  assert (r <> :0:) as H6. { apply Empty.HasElem. exists a. assumption. }
+  assert (forall c, c :< r -> b :<=: c) as H7. {
+    intros c H7. rewrite Hr in H7. apply Specify.Charac in H7.
+    destruct H7 as [H7 H8].
+    assert (Ordinal c) as H9. { apply H4. rewrite Hr. apply Specify.Charac.
+      split; assumption. }
+    apply H3; assumption. }
+  (* The infimum is the largest ordinal below every candidate.                  *)
+  unfold charac. rewrite <- Hr. apply Inf.IsLargest; assumption.
+Qed.
+
 (* The character of cofinality of an ordinal is contained in the ordinal.       *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   charac a :<=: a.
