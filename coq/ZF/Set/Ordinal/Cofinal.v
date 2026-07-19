@@ -42,6 +42,18 @@ Definition Cofinal (a b:U) : Prop :=
     Fun f b a                                           /\
     forall c, c :< a -> exists d, d :< b /\ c :<=: f!d.
 
+(* The cofinal parameter is an ordinal.                                         *)
+Proposition IsOrdinal : forall (a b:U), Cofinal a b -> Ordinal b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1.
+  (* A cofinal witness is monotone, so its domain is ordinal; that domain is b. *)
+  destruct H1 as [_ [f [H1 [H2 _]]]]. destruct H1 as [H1 _].
+  destruct H1 as [_ [H1 _]]. destruct H2 as [H2 _].
+  assert (domain f = b) as H3. { apply H2. }
+  rewrite H3 in H1. assumption.
+Qed.
+
 (* A set is cofinal with zero exactly when it is zero.                          *)
 Proposition WhenZero : forall (a:U),
   Cofinal a :0: <-> a = :0:.
