@@ -34,6 +34,29 @@ Proof.
   unfold charac. rewrite <- Hr. apply Inf.IsLowerBound; assumption.
 Qed.
 
+(* The character of cofinality of an ordinal is cofinal in that ordinal.        *)
+Proposition IsCofinal : forall (a:U), Ordinal a ->
+  Cofinal a (charac a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* The candidates are the ordinals below succ a cofinal with a.               *)
+  remember {{ x :< succ a | Cofinal a }} as r eqn:Hr.
+  assert (toClass r :<=: Ordinal) as H2. {
+    intros x H2. rewrite Hr in H2. apply Specify.Charac in H2.
+    destruct H2 as [H2 _]. apply Core.IsOrdinal with (succ a). 2: assumption.
+    apply Succ.IsOrdinal. assumption. }
+  assert (a :< r) as H3. {
+    rewrite Hr. apply Specify.Charac. split.
+    - apply Succ.IsIn.
+    - apply Cofinal.Refl. assumption. }
+  assert (r <> :0:) as H4. { apply Empty.HasElem. exists a. assumption. }
+  assert (inf r :< r) as H5. { apply Inf.IsIn; assumption. }
+  (* The infimum is itself a candidate, hence cofinal with a.                   *)
+  unfold charac. rewrite Hr in H5.
+  apply Specify.Charac in H5. destruct H5 as [_ H5]. assumption.
+Qed.
+
 (* The character of cofinality of zero is zero.                                 *)
 Proposition WhenZero : charac :0: = :0:.
 Proof.
