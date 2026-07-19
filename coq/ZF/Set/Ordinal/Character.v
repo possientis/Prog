@@ -1,3 +1,4 @@
+Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Cardinal.Equiv.
@@ -14,6 +15,7 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
 
+Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
@@ -149,6 +151,24 @@ Proof.
   apply SCC.Charac. split; assumption.
 Qed.
 
+(* The character of cofinality of an infinite cardinal is infinite.             *)
+Proposition IsInfiniteCard : forall (a:U),
+  InfiniteCard a -> InfiniteCard (charac a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  assert (Ordinal a) as H2. { apply CCI.IsOrdinal. assumption. }
+  assert (Ordinal (charac a)) as H3. { apply IsOrdinal. }
+  assert (Limit a) as H4. { apply CCI.IsLimit. assumption. }
+  assert (Cofinal a (charac a)) as H5. { apply IsCofinal. assumption. }
+  (* Cofinality transports the limit property from a to its character.          *)
+  assert (Limit (charac a)) as H7. {
+    apply (Cofinal.LimitCompat a); assumption. }
+  assert (:N :<=: charac a) as H8. { apply Omega.IsInclLimit. assumption. }
+  assert (Cardinal (charac a)) as H9. { apply IsCardinal. assumption. }
+  apply CCI.WhenIncl; assumption.
+Qed.
+
 (* The character of cofinality of zero is zero.                                 *)
 Proposition WhenZero : charac :0: = :0:.
 Proof.
@@ -195,3 +215,4 @@ Proof.
     apply Omega.IsInclLimit. assumption. }
   apply Incl.Double. split; assumption.
 Qed.
+
