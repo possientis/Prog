@@ -5,6 +5,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Inf.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
 
@@ -36,4 +37,51 @@ Proposition WhenZero : charac :0: = :0:.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   apply Empty.WhenIncl. apply IsIncl. apply Core.Zero.
+Qed.
+
+(* The character of cofinality of a successor ordinal is one.                   *)
+Proposition WhenSucc : forall (a:U), Ordinal a ->
+  charac (succ a) = :1:.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* The candidates are the ordinals below succ (succ a) cofinal with succ a.   *)
+  remember {{ x :< succ (succ a) | Cofinal (succ a) }} as r eqn:Hr.
+  assert (toClass r :<=: Ordinal) as H2. {
+    intros x H2. rewrite Hr in H2. apply Specify.Charac in H2.
+    destruct H2 as [H2 _]. apply Core.IsOrdinal with (succ (succ a)).
+    2: assumption. apply Succ.IsOrdinal, Succ.IsOrdinal. assumption. }
+  assert (:1: :< r) as H3. {
+    assert (:1: :< succ (succ a)) as H3. {
+      assert (Ordinal (succ a)) as H3. { apply Succ.IsOrdinal. assumption. }
+      assert (:1: :<=: succ a) as H4. {
+        apply Natural.HasZeroRev. 1: assumption. apply Succ.HasZero. assumption. }
+      apply Core.InclElemTran with (succ a); try assumption.
+      + apply Natural.OneIsOrdinal.
+      + apply Succ.IsOrdinal. assumption.
+      + apply Succ.IsIn. }
+    assert (Cofinal (succ a) :1:) as H4. {
+      apply Cofinal.WhenOne.
+      - apply Natural.HasZeroRev.
+        + apply Succ.IsOrdinal. assumption.
+        + apply Succ.HasZero. assumption.
+      - apply Succ.IsSuccessor. assumption. }
+    rewrite Hr. apply Specify.Charac. split; assumption. }
+  assert (charac (succ a) :<=: :1:) as H4. {
+    unfold charac. rewrite <- Hr. apply Inf.IsLowerBound; assumption. }
+  assert (:1: :<=: charac (succ a)) as H5. {
+    assert (r <> :0:) as H5. { apply Empty.HasElem. exists :1:. assumption. }
+    assert (forall x, x :< r -> :1: :<=: x) as H6. {
+      intros x H6. rewrite Hr in H6. apply Specify.Charac in H6.
+      destruct H6 as [H6 H7].
+      assert (Ordinal x) as H8. {
+        apply Core.IsOrdinal with (succ (succ a)). 2: assumption.
+        apply Succ.IsOrdinal, Succ.IsOrdinal. assumption. }
+      assert (x <> :0:) as H9. {
+        intros H9. subst. apply Cofinal.WhenZero in H7.
+        apply Succ.NotZero with a. assumption. }
+      assert (:0: :< x) as H10. { apply Core.HasZero; assumption. }
+      apply Natural.HasZeroRev; assumption. }
+    unfold charac. rewrite <- Hr. apply Inf.IsLargest; assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
