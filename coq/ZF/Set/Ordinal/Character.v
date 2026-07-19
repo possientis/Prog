@@ -11,15 +11,12 @@ Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
-Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Ordinal.Succ.
-Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Specify.
 
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
-Module SOF := ZF.Set.Ordinal.OrdFun.
 
 (* The character of cofinality of the ordinal a.                                *)
 Definition charac (a:U) : U := inf {{ x :< succ a | Cofinal a }}.
@@ -133,17 +130,13 @@ Proof.
       apply SOC.ElemOrIncl; assumption. }
     destruct H5 as [H5|H5]. 2: assumption. exfalso.
     (* If a smaller ordinal were equipotent to charac a, it would contain an    *)
-    (* evan smaller cofinal ordinal, contradicting minimality of charac a.      *)
+    (* even smaller cofinal ordinal, contradicting minimality of charac a.      *)
     assert (b :<=: charac a) as H6. { apply SOC.ElemIsIncl; assumption. }
     assert (exists c, c :<=: b /\ Cofinal (charac a) c) as H7. {
       apply Cofinal.ExtractEquiv; try assumption. apply SCE.Sym. assumption. }
     destruct H7 as [c [H7 H8]].
     assert (Ordinal c) as H9. {
-      assert (Cofinal (charac a) c) as G1. { assumption. }
-      destruct G1 as [_ [f [G1 [G2 _]]]]. destruct G1 as [G1 _].
-      assert (Ordinal (domain f)) as G3. { apply SOF.DomainOf. assumption. }
-      assert (domain f = c) as G4. { apply G2. } rewrite G4 in G3.
-      assumption. }
+      apply Cofinal.IsOrdinal with (charac a). assumption. }
     assert (Cofinal a c) as H10. {
       apply Cofinal.Tran with (charac a); try assumption. apply IsCofinal.
       assumption. }
