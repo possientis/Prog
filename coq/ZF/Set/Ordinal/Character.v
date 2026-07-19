@@ -119,6 +119,35 @@ Proof.
   apply Specify.Charac in H5. destruct H5 as [_ H5]. assumption.
 Qed.
 
+(* Cofinal ordinals have the same character of cofinality.                      *)
+Proposition CofinalCompat : forall (a b:U),
+  Ordinal a               ->
+  Ordinal b               ->
+  Cofinal a b             ->
+  charac a = charac b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  assert (Ordinal (charac a)) as H4. { apply IsOrdinal. }
+  assert (Cofinal a (charac a)) as H5. { apply IsCofinal. assumption. }
+  assert (charac a :<=: b) as H6. { apply IsLowerBound; assumption. }
+  assert (charac a :<=: charac b) as H7. {
+    apply IsLargest; try assumption.
+    intros c H7 H8.
+    (* Any ordinal cofinal in b is also cofinal in a by transitivity.           *)
+    assert (Cofinal a c) as H9. { apply Cofinal.Tran with b; assumption. }
+    apply IsLowerBound; assumption. }
+  assert (charac b :<=: charac a) as H8. {
+    (* Extract from charac a a smaller ordinal already cofinal in b.            *)
+    assert (exists c, c :<=: charac a /\ Cofinal b c) as H8. {
+      apply Cofinal.ExtractIncl with a; assumption. }
+    destruct H8 as [c [H8 H9]].
+    assert (Ordinal c) as H10. { apply Cofinal.IsOrdinal with b. assumption. }
+    assert (charac b :<=: c) as H11. { apply IsLowerBound; assumption. }
+    apply Incl.Tran with c; assumption. }
+  apply Incl.Double. split; assumption.
+Qed.
+
 (* The character of cofinality of an ordinal is a cardinal.                     *)
 Proposition IsCardinal : forall (a:U), Ordinal a ->
   Cardinal (charac a).
