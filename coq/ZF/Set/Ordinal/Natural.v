@@ -206,3 +206,14 @@ Proof.
   intros a H1 H2. apply H2, Succ.IsIn.
 Qed.
 
+(* An ordinal that contains 0 as an element also contains 1 as a subset.        *)
+Proposition HasZeroRev : forall (a:U), Ordinal a ->
+  :0: :< a -> :1: :<=: a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1 H2.
+  apply OneOrElem in H2. 2: assumption. destruct H2 as [H2|H2].
+  - subst. apply Incl.Refl.
+  - apply Core.ElemIsIncl; assumption.
+Qed.
+

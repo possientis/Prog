@@ -199,16 +199,17 @@ Proof.
   apply Equiv.Sym, Empty.ToClass.
 Qed.
 
-(* Every non-empty ordinal contains 0.                                          *)
+(* An ordinal contains zero exactly when it is non-empty.                       *)
 Proposition HasZero : forall (a:U), Ordinal a ->
-  a <> :0: -> :0: :< a.
+  :0: :< a <-> a <> :0:.
 Proof.
-  intros a H1 H2.
-  assert (:0: :< a \/ a :<=: :0:) as H3. {
-    apply ElemOrIncl. 2: assumption. apply Zero. }
-  destruct H3 as [H3|H3]. 1: assumption. exfalso.
-  apply Empty.HasElem in H2. destruct H2 as [x H2].
-  apply Empty.Charac with x. apply H3. assumption.
+  intros a H1. split; intros H2.
+  - intros H3. subst. apply Empty.Charac in H2. contradiction.
+  - assert (:0: :< a \/ a :<=: :0:) as H3. {
+      apply ElemOrIncl. 2: assumption. apply Zero. }
+    destruct H3 as [H3|H3]. 1: assumption. exfalso.
+    apply Empty.HasElem in H2. destruct H2 as [x H2].
+    apply Empty.Charac with x. apply H3. assumption.
 Qed.
 
 (* Every ordinal is either 0 or contains 0.                                     *)
