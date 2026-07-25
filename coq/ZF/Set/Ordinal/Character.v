@@ -1,7 +1,7 @@
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -17,7 +17,6 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Specify.
 
-Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* The character of cofinality of the ordinal a.                                *)
@@ -177,7 +176,7 @@ Proof.
     assert (charac a :< charac a) as H13. {
       apply SOC.InclElemTran with c; assumption. }
     apply Foundation.NoLoop1 with (charac a). assumption. }
-  apply SCC.Charac. split; assumption.
+  apply Number.Charac. split; assumption.
 Qed.
 
 (* The character of cofinality of an infinite cardinal is infinite.             *)

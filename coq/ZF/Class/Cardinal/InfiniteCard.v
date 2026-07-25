@@ -3,7 +3,7 @@ Require Import ZF.Class.DiffBySet.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Proper.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -18,7 +18,6 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Module CCC := ZF.Class.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
-Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SEM := ZF.Set.Empty.
 Module SOS := ZF.Set.Ordinal.Sup.
@@ -42,7 +41,7 @@ Qed.
 Proposition IsOrdinal : forall (a:U), InfiniteCard a ->
   Ordinal a.
 Proof.
-  intros a H1. apply SCC.CardIsOrd, IsCardinal. assumption.
+  intros a H1. apply Number.CardIsOrd, IsCardinal. assumption.
 Qed.
 
 (* omega is a cardinal number not contained in itself.                          *)
@@ -51,7 +50,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* N is a cardinal number not a member of itself by foundation.               *)
   split.
-  - apply SCC.HasOmega.
+  - apply Number.HasOmega.
   - apply Foundation.NoLoop1.
 Qed.
 
@@ -115,7 +114,7 @@ Proof.
   intros a H1 H2.
   split.
   - (* The supremum is a cardinal because all members are cardinals.            *)
-    apply SCC.Sup. intros b H3. apply IsCardinal, H1. assumption.
+    apply Number.Sup. intros b H3. apply IsCardinal, H1. assumption.
   - (* A member of the set contains omega, and is contained in the supremum.    *)
     assert (exists b, b :< a) as H3. {
       apply SEM.HasElem. assumption. }
@@ -140,7 +139,7 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A a H1 H2. split.
   - (* The union is a cardinal because every value is a cardinal.               *)
-    apply SCC.UnionGen. intros x H3. apply IsCardinal, H1. assumption.
+    apply Number.UnionGen. intros x H3. apply IsCardinal, H1. assumption.
   - (* One value contains omega, and that value is included in the union.       *)
     assert (exists b, b :< a) as H3. { apply SEM.HasElem. assumption. }
     destruct H3 as [b H3].
@@ -180,8 +179,8 @@ Proof.
     assert (b :~: succ b) as H6. { apply Equip.Succ; assumption. }
     (* But b is strictly below a = card a, contradicting that a is a cardinal.  *)
     assert (succ b = card (succ b)) as H7. {
-      apply SCC.WhenCardinal, IsCardinal. assumption. }
-    apply (SCC.IsNotEquiv (succ b) b); try assumption.
+      apply Number.WhenCardinal, IsCardinal. assumption. }
+    apply (Number.IsNotEquiv (succ b) b); try assumption.
     + rewrite <- H7. apply Succ.IsIn.
     + apply Equip.Sym. assumption.
 Qed.

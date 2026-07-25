@@ -2,14 +2,13 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Proper.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Hartogs.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Union.
 
-Module SCC := ZF.Set.Cardinal.Core.
 
 (* There is always a cardinal number larger than all cardinals of a given set.  *)
 Proposition LargerCardinal : forall (a:U),
@@ -28,7 +27,7 @@ Proof.
   assert (forall c, c :< a -> c :< b) as H4. {
     intros c H4.
     assert (Cardinal c) as H5. { apply H1. assumption. }
-    assert (Ordinal c) as H6. { apply SCC.CardIsOrd. assumption. }
+    assert (Ordinal c) as H6. { apply Number.CardIsOrd. assumption. }
     assert (c :<=: :U(a)) as H7. {
       intros x H7. apply Union.Charac. exists c. split; assumption. }
     assert (Inj (id c) c (:U(a))) as H8. {

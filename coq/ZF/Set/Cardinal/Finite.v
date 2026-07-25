@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Cardinal.Choice.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Diff.
@@ -18,7 +18,6 @@ Require Import ZF.Set.Union2.
 
 
 
-Module SCC := ZF.Set.Cardinal.Core.
 Module SCH := ZF.Set.Cardinal.Choice.
 Module SPR := ZF.Set.Prod.
 
@@ -105,9 +104,9 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a [n [H1 H2]].
   (* A finite set is equipotent to some natural number n.                       *)
-  assert (card a = card n) as H3. { apply SCC.WhenEquiv. assumption. }
+  assert (card a = card n) as H3. { apply Number.WhenEquiv. assumption. }
   (* Natural numbers are their own cardinals.                                   *)
-  assert (card n = n) as H4. { apply SCC.WhenNat. assumption. }
+  assert (card n = n) as H4. { apply Number.WhenNat. assumption. }
   rewrite H3, H4. assumption.
 Qed.
 
@@ -130,7 +129,7 @@ Proof.
   (* Finiteness gives an ordinal equipotent to a, hence a is equipotent to its  *)
   (* cardinal.                                                                  *)
   assert (a :~: card a) as H3. {
-    apply SCC.IsEquiv. destruct H1 as [n [H1 H3]].
+    apply Number.IsEquiv. destruct H1 as [n [H1 H3]].
     exists n. split. 2: assumption. apply Omega.HasOrdinals. assumption. }
   rewrite H2 in H3. apply Equip.WhenZero. assumption.
 Qed.
@@ -147,7 +146,7 @@ Proof.
   assert (WellOrderable a) as H3. {
     destruct H1 as [n [H1 H3]]. exists n. split. 2: assumption.
     apply Omega.HasOrdinals. assumption. }
-  assert (a :~: card a) as H4. { apply SCC.IsEquiv. assumption. }
+  assert (a :~: card a) as H4. { apply Number.IsEquiv. assumption. }
   (* Since b is new, adjoining b gives a set equipotent to succ(a).             *)
   assert (a :\/: :{b}: :~: succ a) as H5. {
     assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as [H5|H5]. {
@@ -160,11 +159,11 @@ Proof.
   assert (a :\/: :{b}: :~: succ (card a)) as H7. {
     apply Equip.Tran with (succ a); assumption. }
   assert (card (a :\/: :{b}:) = card (succ (card a))) as H8. {
-    apply SCC.WhenEquiv. assumption. }
+    apply Number.WhenEquiv. assumption. }
   assert (card a :< :N) as H9. { apply CardIsNat. assumption. }
   assert (succ (card a) :< :N) as H10. { apply Omega.HasSucc. assumption. }
   assert (card (succ (card a)) = succ (card a)) as H11. {
-    apply SCC.WhenNat. assumption. }
+    apply Number.WhenNat. assumption. }
   rewrite H8, H11. reflexivity.
 Qed.
 
@@ -180,7 +179,7 @@ Proof.
   remember (a :\: :{b}:) as c eqn:H4.
   (* Since card(a) is a successor, a is equipotent to its cardinal.             *)
   assert (card a <> :0:) as H5. { rewrite H2. apply Succ.NotZero. }
-  assert (a :~: card a) as H6. { apply SCC.IsEquivNotZero. assumption. }
+  assert (a :~: card a) as H6. { apply Number.IsEquivNotZero. assumption. }
   (* Thus a is finite, being equipotent to the natural number succ(n).          *)
   assert (Finite a) as H7. {
     exists (succ n). split.
@@ -236,7 +235,7 @@ Proof.
     - (* If card(a) is succ(n), remove one element and use the induction step.  *)
       intros n H2 IH a b H4 H5 H6.
       assert (card a <> :0:) as H7. { rewrite H4. apply Succ.NotZero. }
-      assert (a <> :0:) as H8. { apply SCC.NotZero. assumption. }
+      assert (a <> :0:) as H8. { apply Number.NotZero. assumption. }
       apply Empty.HasElem in H8. destruct H8 as [x H8].
       remember (a :\: :{x}:) as c eqn:H9.
       assert (card c = n) as H10. {
@@ -275,7 +274,7 @@ Proof.
     - (* Remove one element from a and distribute product over the union.       *)
       intros n H2 IH a b H4 H5 H6.
       assert (card a <> :0:) as H7. { rewrite H4. apply Succ.NotZero. }
-      assert (a <> :0:) as H8. { apply SCC.NotZero. assumption. }
+      assert (a <> :0:) as H8. { apply Number.NotZero. assumption. }
       apply Empty.HasElem in H8. destruct H8 as [x H8].
       remember (a :\: :{x}:) as c eqn:H9.
       assert (card c = n) as H10. {

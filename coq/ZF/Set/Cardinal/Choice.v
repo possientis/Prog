@@ -5,7 +5,7 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Set.Cardinal.WellOrderable.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.WellOrdering.
@@ -29,7 +29,6 @@ Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 
-Module SCC := ZF.Set.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
 Module CRC := ZF.Class.Relation.Choice.
 Module CRD := ZF.Class.Relation.Domain.
@@ -59,7 +58,7 @@ Qed.
 Proposition IsEquiv : forall (a:U), Choice ->
   a :~: card a.
 Proof.
-  intros a AC. apply SCC.IsEquiv, WellOrderable.WithChoice. assumption.
+  intros a AC. apply Number.IsEquiv, WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, every set admits an explicit well-ordering relation.        *)
@@ -78,14 +77,14 @@ Proposition EquivCharac : forall (a b:U), Choice ->
   a :~: b <-> card a = card b.
 Proof.
   intros a b AC.
-  apply SCC.EquivCharac; apply WellOrderable.WithChoice; assumption.
+  apply Number.EquivCharac; apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, inclusion implies inequality of cardinals.                  *)
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
 Proof.
-  intros a b AC. apply SCC.InclCompat, WellOrderable.WithChoice. assumption.
+  intros a b AC. apply Number.InclCompat, WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, cardinal equality is compatible with products.              *)
@@ -97,8 +96,8 @@ Proposition EqualCompatProd : forall (a b c d:U),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d AC H1 H2.
-  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.EqualCompatProd; try assumption;
+  (* Choice supplies the well-orderability assumptions needed by Number.        *)
+  apply Number.EqualCompatProd; try assumption;
   apply WellOrderable.WithChoice; assumption.
 Qed.
 
@@ -168,8 +167,8 @@ Proof.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
     apply WellOrderable.WithChoice. assumption. }
   destruct H1 as [b [H1 H2]].
-  assert (Ordinal (card b)) as G1. { apply SCC.IsOrdinal. }
-  assert (Ordinal (card :P(b))) as G2. { apply SCC.IsOrdinal. }
+  assert (Ordinal (card b)) as G1. { apply Number.IsOrdinal. }
+  assert (Ordinal (card :P(b))) as G2. { apply Number.IsOrdinal. }
   assert (card a = card b) as H3. { apply EquivCharac; assumption. }
   assert (card :P(a) = card :P(b)) as H4. {
     apply EquivCharac, Equip.PowerCompat; assumption. }
@@ -195,8 +194,8 @@ Proposition IsInclProdR : forall (a b:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
-  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.IsInclProdR; try assumption;
+  (* Choice supplies the well-orderability assumptions needed by Number.        *)
+  apply Number.IsInclProdR; try assumption;
   apply WellOrderable.WithChoice; assumption.
 Qed.
 
@@ -206,8 +205,8 @@ Proposition IsInclProdL : forall (a b:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
-  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.IsInclProdL; try assumption;
+  (* Choice supplies the well-orderability assumptions needed by Number.        *)
+  apply Number.IsInclProdL; try assumption;
     apply WellOrderable.WithChoice; assumption.
 Qed.
 
@@ -217,12 +216,12 @@ Proposition HasInj : forall (a b:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
-  (* Choice supplies the well-orderability assumptions needed by SCC.HasInj.    *)
+  (* Choice supplies the well-orderability assumptions needed by Number.HasInj. *)
   assert (WellOrderable a) as H2. {
     apply WellOrderable.WithChoice. assumption. }
   assert (WellOrderable b) as H3. {
     apply WellOrderable.WithChoice. assumption. }
-  apply SCC.HasInj; assumption.
+  apply Number.HasInj; assumption.
 Qed.
 
 (* Assuming choice, card(b) <= card(a) gives a surjection from a onto b.        *)
@@ -231,12 +230,12 @@ Proposition HasOnto : forall (a b:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1 H2.
-  (* Choice supplies the well-orderability assumptions needed by SCC.HasOnto.   *)
+  (* Choice supplies the well-orderability assumptions needed by Number.HasOnto.*)
   assert (WellOrderable a) as H3. {
     apply WellOrderable.WithChoice. assumption. }
   assert (WellOrderable b) as H4. {
     apply WellOrderable.WithChoice. assumption. }
-  apply SCC.HasOnto; assumption.
+  apply Number.HasOnto; assumption.
 Qed.
 
 (* Assuming choice, select injections from each member of a into b.             *)
@@ -299,7 +298,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b f AC H1.
   (* Choice makes the codomain well-orderable, so the general form applies.     *)
-  apply SCC.WhenInj with f. 2: assumption.
+  apply Number.WhenInj with f. 2: assumption.
   apply WellOrderable.WithChoice. assumption.
 Qed.
 
@@ -310,7 +309,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros f a b AC H1.
   (* Choice makes the domain well-orderable, so the general form applies.       *)
-  apply SCC.WhenOnto with f. 2: assumption.
+  apply Number.WhenOnto with f. 2: assumption.
   apply WellOrderable.WithChoice. assumption.
 Qed.
 
@@ -320,8 +319,8 @@ Proposition InclCompatProdR : forall (a b c:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
-  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.InclCompatProdR; try assumption;
+  (* Choice supplies the well-orderability assumptions needed by Number.        *)
+  apply Number.InclCompatProdR; try assumption;
     apply WellOrderable.WithChoice; assumption.
 Qed.
 
@@ -331,8 +330,8 @@ Proposition InclCompatProdL : forall (a b c:U), Choice ->
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
-  (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.InclCompatProdL; try assumption;
+  (* Choice supplies the well-orderability assumptions needed by Number.        *)
+  apply Number.InclCompatProdL; try assumption;
     apply WellOrderable.WithChoice; assumption.
 Qed.
 
@@ -356,7 +355,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a AC H1.
   (* Choice makes a well-orderable, so the general image bound applies.         *)
-  apply SCC.ImageIncl. 2: assumption.
+  apply Number.ImageIncl. 2: assumption.
   apply WellOrderable.WithChoice. assumption.
 Qed.
 

@@ -8,7 +8,7 @@ Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Class.Ordinal.Order.E.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.FunctionOn.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
@@ -130,7 +130,7 @@ Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal Aleph!a.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros a H1. apply SCC.CardIsOrd, IsCardinal. assumption.
+  intros a H1. apply Number.CardIsOrd, IsCardinal. assumption.
 Qed.
 
 (* Aleph(a) is no less than a.                                                  *)

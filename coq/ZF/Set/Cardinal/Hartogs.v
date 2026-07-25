@@ -2,7 +2,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Cardinal.Hartogs.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
@@ -14,7 +14,6 @@ Require Import ZF.Set.Relation.Restrict.
 
 
 Module CCH := ZF.Class.Cardinal.Hartogs.
-Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 
 Definition hartogs (a:U) : U := fromClass (CCH.hartogs a) (CCH.IsSmall a).
@@ -63,7 +62,7 @@ Qed.
 (* hartogs(a) is a cardinal number.                                             *)
 Proposition IsCardinal : forall (a:U), Cardinal (hartogs a).
 Proof.
-  intros a. apply SCC.Charac. split. 1: apply IsOrdinal.
+  intros a. apply Number.Charac. split. 1: apply IsOrdinal.
   intros b H1 H2.
   assert (Ordinal (hartogs a)) as G1. { apply IsOrdinal. }
   destruct H2 as [f H2].
@@ -91,7 +90,7 @@ Qed.
 Proposition IsMore : forall (a:U), card a :< hartogs a.
 Proof.
   intros a.
-  assert (Ordinal (card a)) as H1. { apply SCC.IsOrdinal. }
+  assert (Ordinal (card a)) as H1. { apply Number.IsOrdinal. }
   assert (Ordinal (hartogs a)) as H2. { apply IsOrdinal. }
   assert (card a = :0: \/ card a <> :0:) as H3. { apply LawExcludedMiddle. }
   destruct H3 as [H3|H3].

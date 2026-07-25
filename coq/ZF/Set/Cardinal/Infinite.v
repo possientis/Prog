@@ -8,7 +8,7 @@ Require Import ZF.Set.Cardinal.Finite.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
-Require Import ZF.Set.Cardinal.Core.
+Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Ordinal.Core.
@@ -18,7 +18,6 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
-Module SCC := ZF.Set.Cardinal.Core.
 Module SCH := ZF.Set.Cardinal.Choice.
 Module SOC := ZF.Set.Ordinal.Core.
 
@@ -55,13 +54,13 @@ Proposition CardGen : forall (a:U), Infinite a ->
   WellOrderable a -> :N :<=: card a.
 Proof.
   intros a H1 H2.
-  assert (Ordinal (card a)) as G1. { apply SCC.IsOrdinal. }
+  assert (Ordinal (card a)) as G1. { apply Number.IsOrdinal. }
   assert (Ordinal :N) as G2. { apply Omega.IsOrdinal. }
   assert (card a :< :N \/ :N :<=: card a) as H3. {
     apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   apply H1. exists (card a). split. 1: assumption.
-  apply SCC.IsEquiv. assumption.
+  apply Number.IsEquiv. assumption.
 Qed.
 
 (* Assuming choice, an infinite set has cardinal at least omega.                *)
@@ -74,8 +73,8 @@ Proof.
   split; intros H2.
   - apply CardGen; assumption.
   - intros [n [H3 H4]].
-    assert (card a = card n) as H5. { apply SCC.WhenEquiv. assumption. }
-    assert (card n = n) as H6. { apply SCC.WhenNat. assumption. }
+    assert (card a = card n) as H5. { apply Number.WhenEquiv. assumption. }
+    assert (card n = n) as H6. { apply Number.WhenNat. assumption. }
     assert (n :< n) as H7. { rewrite H5, H6 in H2. apply H2. assumption. }
     revert H7. apply Foundation.NoLoop1.
 Qed.
@@ -102,9 +101,9 @@ Proposition CardOfSucc : forall (a:U), Infinite a ->
   card (succ a) = card a.
 Proof.
   intros a H1.
-  assert (Ordinal (card a)) as G1. { apply SCC.IsOrdinal. }
-  assert (card a :<=: card (succ a)) as H2. { apply SCC.IsInclSucc. }
-  assert (card (succ a) :<=: succ (card a)) as H3. { apply SCC.IsInclSucc'. }
+  assert (Ordinal (card a)) as G1. { apply Number.IsOrdinal. }
+  assert (card a :<=: card (succ a)) as H2. { apply Number.IsInclSucc. }
+  assert (card (succ a) :<=: succ (card a)) as H3. { apply Number.IsInclSucc'. }
   assert (card (succ a) :<=: card a) as H4. {
     assert (WellOrderable a \/ ~ WellOrderable a) as [H4|H4]. {
       apply LawExcludedMiddle. }
@@ -112,13 +111,13 @@ Proof.
       assert (card a :~: succ (card a)) as H6. { apply Equip.Succ; assumption. }
       assert (succ a :~: card a) as H7. {
         apply Equip.Tran with (succ (card a)).
-        - apply Equip.SuccCompat, SCC.IsEquiv. assumption.
+        - apply Equip.SuccCompat, Number.IsEquiv. assumption.
         - apply Equip.Sym. assumption. }
-      apply SCC.IsLowerBound; assumption.
+      apply Number.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
         intros H5. apply H4. apply WellOrderable.SuccRev. assumption. }
       assert (card (succ a) = :0:) as H6. {
-        apply SCC.WhenNotWellOrderable. assumption. }
+        apply Number.WhenNotWellOrderable. assumption. }
       rewrite H6. apply Empty.IsIncl. }
   apply Incl.Double. split; assumption.
 Qed.
@@ -132,7 +131,7 @@ Proof.
     apply Equip.AddElem. }
   - rewrite H2. reflexivity.
   - assert (card (a :\/: :{b}:) = card (succ a)) as H3. {
-      apply SCC.WhenEquiv. assumption. }
+      apply Number.WhenEquiv. assumption. }
     rewrite H3. symmetry. apply CardOfSucc. assumption.
 Qed.
 
