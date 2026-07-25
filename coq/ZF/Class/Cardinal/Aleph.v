@@ -12,8 +12,6 @@ Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Character.
-Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
@@ -208,68 +206,3 @@ Proof.
     apply IsOrdinal. assumption. }
   apply Incl.Double. split; assumption.
 Qed.
-
-(* At a limit index, the corresponding aleph is cofinal with that index.        *)
-Proposition IsCofinal : forall (a:U), Limit a -> Cofinal (Aleph!a) a.
-Proof.
-(* Proof by Hermes + gpt 5.5                                                    *)
-  intros a H1.
-  assert (Ordinal a) as H2. { apply H1. }
-  remember (Aleph:|:a) as f eqn:Hf.
-  split.
-  - (* Every index lies below its aleph value.                                  *)
-    apply IsIncl. assumption.
-  - exists f.
-    assert (SOM.Monotone f) as H3. {
-      rewrite Hf.
-      apply SOM.ClassRestrict. 1: assumption.
-      - apply IsMonotone.
-      - intros x H3. apply DomainOf.
-        apply (SOC.IsOrdinal a); assumption. }
-    split. 1: assumption.
-    assert (CFO.FunctionOn Aleph Ordinal) as G2. { apply IsFunctionOn. }
-    assert (Fun f a (Aleph!a)) as H4. {
-      split.
-      - rewrite Hf. apply RestrictOfClass.IsFunctionOn. 1: apply G2.
-        intros x H4. apply DomainOf. apply (SOC.IsOrdinal a); assumption.
-      - intros y H4.
-        assert (CFL.Functional Aleph) as G1. { apply G2. }
-        rewrite Hf in H4. rewrite RestrictOfClass.RangeOf in H4. 2: assumption.
-        apply ImageUnderClass.Charac in H4. 2: assumption.
-        destruct H4 as [x [H4 H5]].
-        assert (Ordinal x) as H6. { apply (SOC.IsOrdinal a); assumption. }
-        assert (Aleph!x = y) as H7. {
-          apply (CFO.Eval Aleph Ordinal); try apply IsFunctionOn; assumption. }
-        rewrite <- H7.
-        assert (COM.Monotone Aleph) as H8. { apply IsMonotone. }
-        destruct H8 as [_ H8].
-        assert (Aleph!x :< Aleph!a) as H9. {
-          apply H8; try apply DomainOf; assumption. }
-        assumption. }
-    split. 1: assumption. intros c H5.
-    (* Continuity turns any smaller ordinal into an earlier aleph value.        *)
-    assert (Aleph!a = :\/:_{a} Aleph) as H6. {
-      apply Continuous. assumption. }
-    rewrite H6 in H5.
-    apply SUG.Charac in H5. destruct H5 as [d [H7 H8]].
-    exists d. split. 1: assumption.
-    assert (Ordinal d) as H9. { apply (SOC.IsOrdinal a); assumption. }
-    assert (f!d = Aleph!d) as H10. {
-      rewrite Hf. apply RestrictOfClass.Eval. 2: assumption. apply G2. }
-    rewrite H10. apply SOC.ElemIsIncl. 2: assumption.
-    apply IsOrdinal. assumption.
-Qed.
-
-(* A limit index and its aleph value have the same character of cofinality.     *)
-Proposition Character : forall (a:U), Limit a ->
-  charac a = charac (Aleph!a).
-Proof.
-(* Proof by Hermes + gpt 5.5                                                    *)
-  intros a H1.
-  assert (Ordinal a) as H2. { apply H1. }
-  assert (Ordinal Aleph!a) as H3. { apply IsOrdinal. assumption. }
-  assert (Cofinal (Aleph!a) a) as H4. { apply IsCofinal. assumption. }
-  (* Cofinal ordinals have the same least cofinal ordinal.                      *)
-  symmetry. apply CofinalCompat; assumption.
-Qed.
-

@@ -1,3 +1,4 @@
+Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Cardinal.Core.
@@ -13,6 +14,7 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Specify.
 
 Module CCI := ZF.Class.Cardinal.InfiniteCard.
@@ -243,5 +245,18 @@ Proof.
     assert (Limit a) as H5. { apply H4. apply Omega.IsLimit. }
     apply Omega.IsInclLimit. assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* A limit index and its aleph value have the same character of cofinality.     *)
+Proposition WhenAleph : forall (a:U), Limit a ->
+  charac (Aleph!a) = charac a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  assert (Ordinal a) as H2. { apply H1. }
+  assert (Ordinal Aleph!a) as H3. { apply Aleph.IsOrdinal. assumption. }
+  assert (Cofinal (Aleph!a) a) as H4. { apply Cofinal.WhenAleph. assumption. }
+  (* Cofinal ordinals have the same least cofinal ordinal.                      *)
+  apply CofinalCompat; assumption.
 Qed.
 
