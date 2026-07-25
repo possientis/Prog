@@ -48,7 +48,6 @@ Module CRO := ZF.Class.Relation.OneToOne.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOO := ZF.Set.Ordinal.Onto.
 Module SOS := ZF.Set.Ordinal.Sup.
 Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
@@ -68,7 +67,7 @@ Definition Cardinal : Class := fun b => exists a, b = card a.
 (* The cardinal of a set is an ordinal.                                         *)
 Proposition IsOrdinal : forall (a:U), Ordinal (card a).
 Proof.
-  intros a. apply SOI.IsOrdinal.
+  intros a. apply InfOfClass.IsOrdinal.
 Qed.
 
 (* The cardinal of a set is a lower bound of all ordinals equipotent to it.     *)
@@ -77,7 +76,7 @@ Proposition IsLowerBound : forall (a b:U),
   a :~: b         ->
   card a :<=: b.
 Proof.
-  intros a b H1 H2. apply SOI.IsLowerBound.
+  intros a b H1 H2. apply InfOfClass.IsLowerBound.
   - intros c H3. apply H3.
   - split; assumption.
 Qed.
@@ -85,7 +84,7 @@ Qed.
 Proposition WhenNotWellOrderable : forall (a:U),
   ~ WellOrderable a -> card a = :0:.
 Proof.
-  intros a H1. apply SOI.IsZero. intros b. split; intros H2.
+  intros a H1. apply InfOfClass.IsZero. intros b. split; intros H2.
   - exfalso. destruct H2 as [H2 H3]. apply H1. exists b. assumption.
   - contradiction.
 Qed.
@@ -99,7 +98,7 @@ Proof.
   assert (A :<=: Ordinal) as H2. { rewrite H1. intros b H2. apply H2. }
   assert (A :<>: :0:) as H3. { apply CEM.HasElem. assumption. }
   assert (A (card a)) as H4. {
-    unfold card. rewrite <- H1. apply SOI.IsIn; assumption. }
+    unfold card. rewrite <- H1. apply InfOfClass.IsIn; assumption. }
   rewrite H1 in H4. apply H4.
 Qed.
 (* Every ordinal is equipotent to its cardinal.                                 *)
@@ -116,7 +115,7 @@ Proposition IsEquivNotZero : forall (a:U), card a <> :0: ->
 Proof.
   intros a H1.
   apply IsEquiv. apply Classic.DoubleNegation. intros H2.
-  apply H1. apply SOI.IsZero. intros x. split; intros H3. 2: contradiction.
+  apply H1. apply InfOfClass.IsZero. intros x. split; intros H3. 2: contradiction.
   exfalso. apply H2. exists x. apply H3.
 Qed.
 

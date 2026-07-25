@@ -23,7 +23,6 @@ Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Ordinal.Induction.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SUG := ZF.Set.UnionGenOfClass.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 
 (* Given a set a, the class underlying the rank of a.                           *)
 Definition K (a:U) : Class := fun b => Ordinal b /\ a :< VH!(succ b).
@@ -69,7 +68,7 @@ Qed.
 (* The rank of any set is an ordinal.                                           *)
 Proposition IsOrdinal : forall (a:U), Ordinal (rank a).
 Proof.
-  intros a. apply SOI.IsOrdinal.
+  intros a. apply InfOfClass.IsOrdinal.
 Qed.
 
 (* If the rank of a is less than ordinal b, then a belongs to VH(b).            *)
@@ -78,7 +77,7 @@ Proposition IsIn : forall (a b:U), Ordinal b ->
 Proof.
   intros a b H1 H2.
   assert (K a (rank a)) as H3. {
-    apply (SOI.IsIn (K a)).
+    apply (InfOfClass.IsIn (K a)).
     - apply IsIncl.
     - apply IsNotEmpty. }
   destruct H3 as [H3 H4].
@@ -120,7 +119,7 @@ Proof.
     apply Succ.IsIn. }
   assert (succ (rank a) :<=: c) as H14. {
     rewrite H11. apply Succ.InclCompat; try assumption.
-    apply SOI.IsLowerBound.
+    apply InfOfClass.IsLowerBound.
     - apply IsIncl.
     - split. 1: assumption. rewrite <- H11. assumption. }
   assert (c = succ (rank a)) as H15. {
@@ -205,7 +204,7 @@ Proof.
     apply CEM.HasElem. exists (rank a). rewrite H1. split. 1: assumption.
     intros x H3. apply ElemCompat. assumption. }
   apply Incl.Double. split.
-  - apply SOI.IsLargest; try assumption. rewrite H1. intros b [H4 H5].
+  - apply InfOfClass.IsLargest; try assumption. rewrite H1. intros b [H4 H5].
     assert (Ordinal (succ b)) as K1. { apply Succ.IsOrdinal. assumption. }
     apply Succ.InclIsElem; try assumption.
     apply IsLowerBound. 1: assumption.
@@ -215,7 +214,7 @@ Proof.
     apply VH.InclCompat with (succ (rank x)); try assumption.
     + apply Succ.ElemIsIncl; try assumption. apply H5. assumption.
     + apply IsIn. 1: assumption. apply Succ.IsIn.
-  - apply SOI.IsLowerBound. 1: assumption. rewrite H1. split. 1: assumption.
+  - apply InfOfClass.IsLowerBound. 1: assumption. rewrite H1. split. 1: assumption.
     intros x H4. apply ElemCompat. assumption.
 Qed.
 
@@ -233,16 +232,16 @@ Proof.
       intros c H7. rewrite <- (IH c). 2: assumption. apply H6. assumption.
     - rewrite H3 in H5. destruct H5 as [H5 H6]. rewrite H2. split. 1: assumption.
       intros c H7. rewrite (IH c). 2: assumption. apply H6. assumption. }
-  assert (inf A = inf B) as H6. { apply SOI.EquivCompat. assumption. }
+  assert (inf A = inf B) as H6. { apply InfOfClass.EquivCompat. assumption. }
   assert (B :<=: Ordinal) as H7. { rewrite H3. intros x H7. apply H7. }
   assert (B :<>: :0:) as H8. {
     apply CEM.HasElem. exists a. rewrite H3. split. 1: assumption.
     apply Incl.Refl. }
   assert (inf B = a) as H9. {
     apply Incl.Double. split.
-    - apply SOI.IsLowerBound. 1: assumption. rewrite H3. split. 1: assumption.
+    - apply InfOfClass.IsLowerBound. 1: assumption. rewrite H3. split. 1: assumption.
       apply Incl.Refl.
-    - apply SOI.IsLargest; try assumption. intros b H9.
+    - apply InfOfClass.IsLargest; try assumption. intros b H9.
       rewrite H3 in H9. apply H9. }
   rewrite H4, H6, H9. reflexivity.
 Qed.
@@ -264,5 +263,5 @@ Proof.
   assert (B :<=: A) as H8. {
     rewrite H2, H3. intros c [H8 H9]. split. 1: assumption. intros x H10.
     apply H9, H1. assumption. }
-  rewrite H4, H5. apply SOI.InclCompat; assumption.
+  rewrite H4, H5. apply InfOfClass.InclCompat; assumption.
 Qed.

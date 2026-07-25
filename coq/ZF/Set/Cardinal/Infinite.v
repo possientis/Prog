@@ -23,7 +23,6 @@ Module SCH := ZF.Set.Cardinal.Choice.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 
 (* A set is infinite if and only if it is not finite.                           *)
 Definition Infinite (a:U) : Prop := ~ Finite a.

@@ -33,7 +33,6 @@ Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SEM := ZF.Set.Empty.
 Module SOC := ZF.Set.Ordinal.Core.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOM := ZF.Set.Ordinal.Monotone.
 Module SUG := ZF.Set.UnionGenOfClass.
 
@@ -153,7 +152,7 @@ Proof.
   assert (Aleph:[:0:]: = :0:) as H2. {
     apply ImageUnderClass.WhenZero. reflexivity. }
   rewrite H1, H2. transitivity (inf InfiniteCard).
-  - apply SOI.EquivCompat. apply DiffBySet.IdentityR.
+  - apply InfOfClass.EquivCompat. apply DiffBySet.IdentityR.
   - apply InfiniteCard.Inf.
 Qed.
 

@@ -22,7 +22,6 @@ Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SCE := ZF.Set.Cardinal.Equiv.
 Module SEM := ZF.Set.Empty.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOS := ZF.Set.Ordinal.Sup.
 Module SUG := ZF.Set.UnionGenOfClass.
 
@@ -95,11 +94,11 @@ Proof.
   (* lower bound, and the infimum is at least omega.                            *)
   apply Incl.Double. split.
   - (* The infimum is at most omega, since omega is an infinite cardinal.       *)
-    apply SOI.IsLowerBound.
+    apply InfOfClass.IsLowerBound.
     + intros a H1. apply IsOrdinal. assumption.
     + apply HasOmega.
   - (* The infimum is at least omega: omega is a lower bound of the class.      *)
-    apply SOI.IsLargest.
+    apply InfOfClass.IsLargest.
     + intros a H1. apply IsOrdinal. assumption.
     + (* The class of infinite cardinals is non-empty, as it contains omega.    *)
       apply CEM.HasElem. exists :N. apply HasOmega.

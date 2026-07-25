@@ -37,7 +37,6 @@ Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
 
@@ -49,7 +48,7 @@ Proposition IsLargest : forall (a b:U),
   b :<=: card a.
 Proof.
   intros a b AC H1 H2.
-  apply SOI.IsLargest.
+  apply InfOfClass.IsLargest.
   - intros c H3. apply H3.
   - assert (exists c, Ordinal c /\ a :~: c) as H3. {
       apply SCW.WithChoice. assumption. }

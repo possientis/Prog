@@ -26,7 +26,6 @@ Require Import ZF.Notation.Eval.
 Module CEM := ZF.Class.Empty.
 Module CIN := ZF.Class.Incl.
 Module CRF := ZF.Class.Relation.Function.
-Module SOI := ZF.Set.Ordinal.InfOfClass.
 Module SOU := ZF.Set.Ordinal.Union.
 Module SRI := ZF.Set.Relation.ImageUnderClass.
 
@@ -45,13 +44,13 @@ Proof.
   assert (toClass F:[a]: :<=: Ordinal) as H4. {
     intros b H4. apply SRI.ToClass in H4. 2: assumption.
     destruct H4 as [x [H4 H5]]. rewrite H3 in H5.
-    apply From.Charac2 in H5. rewrite H5. apply SOI.IsOrdinal. }
+    apply From.Charac2 in H5. rewrite H5. apply InfOfClass.IsOrdinal. }
   assert (Ordinal :U(F:[a]:)) as H6. { apply SOU.IsOrdinal. assumption. }
   remember (succ :U(F:[a]:)) as b eqn:H7.
   assert (Ordinal b) as H8. {
     rewrite H7. apply Succ.IsOrdinal. assumption. }
   assert (forall x, x :< a -> Ordinal F!x) as H9. {
-    intros x H9. rewrite H3, From.Eval. apply SOI.IsOrdinal. }
+    intros x H9. rewrite H3, From.Eval. apply InfOfClass.IsOrdinal. }
   assert (forall x, x :< a -> F!x :< b) as H10. {
     intros x H10. rewrite H7. apply Succ.InclIsElem. 2: assumption.
     - apply H9. assumption.
@@ -63,7 +62,7 @@ Proof.
     - apply H9. assumption.
     - apply Core.ElemIsIncl. 1: assumption. apply H10. assumption. }
   assert (forall x, x :< a -> A x (inf (A x))) as H12. {
-    intros x H12. apply SOI.IsIn.
+    intros x H12. apply InfOfClass.IsIn.
     - rewrite H2. intros u [H13 H14]. assumption.
     - apply CEM.HasElem. rewrite H2. apply H1. assumption. }
   assert (forall x, x :< a -> A x F!x) as H13. {
