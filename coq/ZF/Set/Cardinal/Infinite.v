@@ -60,7 +60,7 @@ Proof.
     apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   apply H1. exists (card a). split. 1: assumption.
-  apply Number.IsEquiv. assumption.
+  apply Number.IsEquip. assumption.
 Qed.
 
 (* Assuming choice, an infinite set has cardinal at least omega.                *)
@@ -73,7 +73,7 @@ Proof.
   split; intros H2.
   - apply CardGen; assumption.
   - intros [n [H3 H4]].
-    assert (card a = card n) as H5. { apply Number.WhenEquiv. assumption. }
+    assert (card a = card n) as H5. { apply Number.WhenEquip. assumption. }
     assert (card n = n) as H6. { apply Number.WhenNat. assumption. }
     assert (n :< n) as H7. { rewrite H5, H6 in H2. apply H2. assumption. }
     revert H7. apply Foundation.NoLoop1.
@@ -111,7 +111,7 @@ Proof.
       assert (card a :~: succ (card a)) as H6. { apply Equip.Succ; assumption. }
       assert (succ a :~: card a) as H7. {
         apply Equip.Tran with (succ (card a)).
-        - apply Equip.SuccCompat, Number.IsEquiv. assumption.
+        - apply Equip.SuccCompat, Number.IsEquip. assumption.
         - apply Equip.Sym. assumption. }
       apply Number.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
@@ -131,7 +131,7 @@ Proof.
     apply Equip.AddElem. }
   - rewrite H2. reflexivity.
   - assert (card (a :\/: :{b}:) = card (succ a)) as H3. {
-      apply Number.WhenEquiv. assumption. }
+      apply Number.WhenEquip. assumption. }
     rewrite H3. symmetry. apply CardOfSucc. assumption.
 Qed.
 
@@ -153,7 +153,7 @@ Proof.
     + exists x. split. 1: assumption.
       intros H3. apply Diff.Charac in H3. destruct H3 as [_ H3].
       apply H3. apply Single.IsIn.
-  - apply SCH.EquivCharac. 1: assumption.
+  - apply SCH.EquipCharac. 1: assumption.
     assert ((a :\: :{x}:) :\/: :{x}: = a) as H3. {
       apply Diff.RemoveAddElem. assumption. }
     (* b is infinite: if finite, a = b u {x} would also be finite.              *)

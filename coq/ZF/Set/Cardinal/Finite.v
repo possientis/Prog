@@ -104,7 +104,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a [n [H1 H2]].
   (* A finite set is equipotent to some natural number n.                       *)
-  assert (card a = card n) as H3. { apply Number.WhenEquiv. assumption. }
+  assert (card a = card n) as H3. { apply Number.WhenEquip. assumption. }
   (* Natural numbers are their own cardinals.                                   *)
   assert (card n = n) as H4. { apply Number.WhenNat. assumption. }
   rewrite H3, H4. assumption.
@@ -117,7 +117,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC H1. exists (card a). split. 1: assumption.
   (* Choice gives a bijection between a and its cardinal.                       *)
-  apply SCH.IsEquiv. assumption.
+  apply SCH.IsEquip. assumption.
 Qed.
 
 (* A finite set with cardinal zero is empty.                                    *)
@@ -129,7 +129,7 @@ Proof.
   (* Finiteness gives an ordinal equipotent to a, hence a is equipotent to its  *)
   (* cardinal.                                                                  *)
   assert (a :~: card a) as H3. {
-    apply Number.IsEquiv. destruct H1 as [n [H1 H3]].
+    apply Number.IsEquip. destruct H1 as [n [H1 H3]].
     exists n. split. 2: assumption. apply Omega.HasOrdinals. assumption. }
   rewrite H2 in H3. apply Equip.WhenZero. assumption.
 Qed.
@@ -146,7 +146,7 @@ Proof.
   assert (WellOrderable a) as H3. {
     destruct H1 as [n [H1 H3]]. exists n. split. 2: assumption.
     apply Omega.HasOrdinals. assumption. }
-  assert (a :~: card a) as H4. { apply Number.IsEquiv. assumption. }
+  assert (a :~: card a) as H4. { apply Number.IsEquip. assumption. }
   (* Since b is new, adjoining b gives a set equipotent to succ(a).             *)
   assert (a :\/: :{b}: :~: succ a) as H5. {
     assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as [H5|H5]. {
@@ -159,7 +159,7 @@ Proof.
   assert (a :\/: :{b}: :~: succ (card a)) as H7. {
     apply Equip.Tran with (succ a); assumption. }
   assert (card (a :\/: :{b}:) = card (succ (card a))) as H8. {
-    apply Number.WhenEquiv. assumption. }
+    apply Number.WhenEquip. assumption. }
   assert (card a :< :N) as H9. { apply CardIsNat. assumption. }
   assert (succ (card a) :< :N) as H10. { apply Omega.HasSucc. assumption. }
   assert (card (succ (card a)) = succ (card a)) as H11. {
@@ -179,7 +179,7 @@ Proof.
   remember (a :\: :{b}:) as c eqn:H4.
   (* Since card(a) is a successor, a is equipotent to its cardinal.             *)
   assert (card a <> :0:) as H5. { rewrite H2. apply Succ.NotZero. }
-  assert (a :~: card a) as H6. { apply Number.IsEquivNotZero. assumption. }
+  assert (a :~: card a) as H6. { apply Number.IsEquipNotZero. assumption. }
   (* Thus a is finite, being equipotent to the natural number succ(n).          *)
   assert (Finite a) as H7. {
     exists (succ n). split.

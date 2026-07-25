@@ -55,10 +55,10 @@ Proof.
 Qed.
 
 (* Assuming choice, every set is equipotent to its cardinal.                    *)
-Proposition IsEquiv : forall (a:U), Choice ->
+Proposition IsEquip : forall (a:U), Choice ->
   a :~: card a.
 Proof.
-  intros a AC. apply Number.IsEquiv, WellOrderable.WithChoice. assumption.
+  intros a AC. apply Number.IsEquip, WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, every set admits an explicit well-ordering relation.        *)
@@ -73,11 +73,11 @@ Proof.
 Qed.
 
 (* Assuming choice, two sets are equipotent iff they have the same cardinal.    *)
-Proposition EquivCharac : forall (a b:U), Choice ->
+Proposition EquipCharac : forall (a b:U), Choice ->
   a :~: b <-> card a = card b.
 Proof.
   intros a b AC.
-  apply Number.EquivCharac; apply WellOrderable.WithChoice; assumption.
+  apply Number.EquipCharac; apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, inclusion implies inequality of cardinals.                  *)
@@ -128,7 +128,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a c AC H1.
   (* Choose a bijection from card(a) onto a, and take the image of c.           *)
-  assert (a :~: card a) as H2. { apply IsEquiv. assumption. }
+  assert (a :~: card a) as H2. { apply IsEquip. assumption. }
   apply Equip.Sym in H2. destruct H2 as [f H2].
   exists f:[c]:. split.
   - (* Since c is contained in card(a), its image is contained in a.            *)
@@ -150,11 +150,11 @@ Proposition CantorShroderBernstein : forall (a b c d:U),
   a :~: b.
 Proof.
   intros a b c d AC H1 H2 H3 H4.
-  assert (card a = card c) as H5. { apply EquivCharac; assumption. }
-  assert (card b = card d) as H6. { apply EquivCharac; assumption. }
+  assert (card a = card c) as H5. { apply EquipCharac; assumption. }
+  assert (card b = card d) as H6. { apply EquipCharac; assumption. }
   assert (card c :<=: card b) as H7. { apply InclCompat; assumption. }
   assert (card d :<=: card a) as H8. { apply InclCompat; assumption. }
-  apply EquivCharac. assumption. apply Incl.Double. split.
+  apply EquipCharac. assumption. apply Incl.Double. split.
   - rewrite H5. assumption.
   - rewrite H6. assumption.
 Qed.
@@ -169,9 +169,9 @@ Proof.
   destruct H1 as [b [H1 H2]].
   assert (Ordinal (card b)) as G1. { apply Number.IsOrdinal. }
   assert (Ordinal (card :P(b))) as G2. { apply Number.IsOrdinal. }
-  assert (card a = card b) as H3. { apply EquivCharac; assumption. }
+  assert (card a = card b) as H3. { apply EquipCharac; assumption. }
   assert (card :P(a) = card :P(b)) as H4. {
-    apply EquivCharac, Equip.PowerCompat; assumption. }
+    apply EquipCharac, Equip.PowerCompat; assumption. }
   assert (card b :< card :P(b)) as H5. {
     assert (b :<=: :P(b)) as H5. {
       intros c H5.
@@ -183,7 +183,7 @@ Proof.
   assert (card b = card :P(b) \/ card b :< card :P(b)) as H7. {
     apply SOC.EqualOrElem; assumption. }
   destruct H7 as [H7|H7]. 2:assumption. exfalso.
-  assert (b :~: :P(b)) as H8. { apply EquivCharac; assumption. }
+  assert (b :~: :P(b)) as H8. { apply EquipCharac; assumption. }
   apply Equip.Cantor with b. assumption. }
   rewrite H3, H4. assumption.
 Qed.

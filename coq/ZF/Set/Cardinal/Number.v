@@ -88,7 +88,7 @@ Proof.
 Qed.
 
 (* A well-orderable set is equipotent to its cardinal.                          *)
-Proposition IsEquiv : forall (a:U), WellOrderable a ->
+Proposition IsEquip : forall (a:U), WellOrderable a ->
   a :~: card a.
 Proof.
   intros a K1. unfold WellOrderable in K1.
@@ -100,19 +100,19 @@ Proof.
   rewrite H1 in H4. apply H4.
 Qed.
 (* Every ordinal is equipotent to its cardinal.                                 *)
-Proposition IsEquivOrd : forall (a:U), Ordinal a ->
+Proposition IsEquipOrd : forall (a:U), Ordinal a ->
   a :~: card a.
 Proof.
   intros a H1.
-  apply IsEquiv. exists a. split. 1: assumption. apply Equip.Refl.
+  apply IsEquip. exists a. split. 1: assumption. apply Equip.Refl.
 Qed.
 
 (* A set with non-empty cardinal is equipotent to its cardinal.                 *)
-Proposition IsEquivNotZero : forall (a:U), card a <> :0: ->
+Proposition IsEquipNotZero : forall (a:U), card a <> :0: ->
   a :~: card a.
 Proof.
   intros a H1.
-  apply IsEquiv. apply Classic.DoubleNegation. intros H2.
+  apply IsEquip. apply Classic.DoubleNegation. intros H2.
   apply H1. apply InfOfClass.IsZero. intros x. split; intros H3. 2: contradiction.
   exfalso. apply H2. exists x. apply H3.
 Qed.
@@ -124,7 +124,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1.
   (* Its cardinal is an ordinal representative equipotent to the set.           *)
-  exists (card a). split. 1: apply IsOrdinal. apply IsEquivNotZero. assumption.
+  exists (card a). split. 1: apply IsOrdinal. apply IsEquipNotZero. assumption.
 Qed.
 
 Proposition Charac : forall (a:U),
@@ -138,7 +138,7 @@ Proof.
     assert (a = :0: \/ a <> :0:) as [H5|H5]. { apply LawExcludedMiddle. }
     + rewrite H5. apply Empty.IsIncl.
     + assert (b :~: card b) as H6. {
-        apply IsEquivNotZero. rewrite <- H1. assumption. }
+        apply IsEquipNotZero. rewrite <- H1. assumption. }
       assert (b :~: c) as H7. {
         apply Equip.Tran with (card b). 1: assumption.
         rewrite <- H1. assumption. }
@@ -146,12 +146,12 @@ Proof.
   - destruct H1 as [H1 H2]. exists a. apply Incl.Double. split.
     + apply H2.
       * apply IsOrdinal.
-      * apply IsEquivOrd. assumption.
+      * apply IsEquipOrd. assumption.
     + apply IsLowerBound. 1: assumption. apply Equip.Refl.
 Qed.
 
 (* No ordinal strictly below the cardinal of a is equipotent to a.              *)
-Proposition IsNotEquiv : forall (a b:U), Ordinal b ->
+Proposition IsNotEquip : forall (a b:U), Ordinal b ->
   b :< card a -> a :<>: b.
 Proof.
   intros a b H1 H2 H3.
@@ -200,15 +200,15 @@ Proof.
       * remember (card a) as c eqn:H3. rewrite H1, H3.
         apply IsLowerBound. 1: apply IsOrdinal.
         apply Equip.Tran with a.
-        { rewrite H1. apply IsEquivNotZero. rewrite <- H1.
+        { rewrite H1. apply IsEquipNotZero. rewrite <- H1.
           apply Empty.HasElem. exists :0:. assumption. }
-        { apply IsEquivOrd. assumption. }
+        { apply IsEquipOrd. assumption. }
     + apply IsIncl. assumption.
   - exists a. assumption.
 Qed.
 
 (* Two equipotent sets have the same cardinal.                                  *)
-Proposition WhenEquiv : forall (a b:U),
+Proposition WhenEquip : forall (a b:U),
   a :~: b -> card a = card b.
 Proof.
   intros a b H1.
@@ -217,8 +217,8 @@ Proof.
   - assert (exists c, Ordinal c /\ b :~: c) as H3. {
       destruct H2 as [c [H2 H3]]. exists c. split. 1: assumption.
       apply Equip.Tran with a. 2: assumption. apply Equip.Sym. assumption. }
-    assert (a :~: card a) as H4. { apply IsEquiv. assumption. }
-    assert (b :~: card b) as H5. { apply IsEquiv. assumption. }
+    assert (a :~: card a) as H4. { apply IsEquip. assumption. }
+    assert (b :~: card b) as H5. { apply IsEquip. assumption. }
     assert (card a :<=: card b) as H7. {
       apply IsLowerBound.
       - apply IsOrdinal.
@@ -237,17 +237,17 @@ Proof.
 Qed.
 
 (* Well-orderable sets are equipotent iff they have the same cardinal.          *)
-Proposition EquivCharac : forall (a b:U),
+Proposition EquipCharac : forall (a b:U),
   WellOrderable a -> WellOrderable b -> a :~: b <-> card a = card b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2. split; intros H3.
   - (* Equipotent sets always have the same cardinal.                           *)
-    apply WhenEquiv. assumption.
+    apply WhenEquip. assumption.
   - (* The two sets are both equipotent to their common cardinal.               *)
     apply Equip.Tran with (card a).
-    + apply IsEquiv. assumption.
-    + rewrite H3. apply Equip.Sym, IsEquiv. assumption.
+    + apply IsEquip. assumption.
+    + rewrite H3. apply Equip.Sym, IsEquip. assumption.
 Qed.
 
 (* The cardinal of a cardinal is itself.                                        *)
@@ -263,14 +263,14 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b.
   (* Exchanging the factors gives a bijection between the two products.         *)
-  apply WhenEquiv. apply Equip.ProdComm.
+  apply WhenEquip. apply Equip.ProdComm.
 Qed.
 
 Proposition InclCompat : forall (a b:U), WellOrderable b ->
   a :<=: b -> card a :<=: card b.
 Proof.
   intros a b G1 H1.
-  assert (b :~: card b) as H2. { apply IsEquiv. assumption. }
+  assert (b :~: card b) as H2. { apply IsEquip. assumption. }
   destruct H2 as [f H2].
   assert (exists x, x :<=: card b /\ a :~: x) as H3. {
     exists f:[a]:.
@@ -287,8 +287,8 @@ Proof.
   assert (exists c, Ordinal c /\ c :<=: card b /\ x :~: c) as H5. {
     apply Equip.OrdinalSubset. 2: assumption. apply IsOrdinal. }
   destruct H5 as [c [H5 [H6 H7]]].
-  assert (card a = card x) as H8. { apply WhenEquiv. assumption. }
-  assert (card x = card c) as H9. { apply WhenEquiv. assumption. }
+  assert (card a = card x) as H8. { apply WhenEquip. assumption. }
+  assert (card x = card c) as H9. { apply WhenEquip. assumption. }
   assert (card c :<=: c) as H10. { apply IsIncl. assumption. }
   rewrite H8, H9. apply Incl.Tran with c; assumption.
 Qed.
@@ -316,7 +316,7 @@ Proof.
       assert (card c :<=: card (sup a)) as H9. {
         apply InclCompat; assumption. }
       assert (c = card c) as H10. { apply WhenCardinal. assumption. }
-      assert (card (sup a) = card b) as H11. { apply WhenEquiv. assumption. }
+      assert (card (sup a) = card b) as H11. { apply WhenEquip. assumption. }
       assert (card b :<=: b) as H12. { apply IsIncl. assumption. }
       rewrite <- H10, H11 in H9.
       apply Incl.Tran with (card b); assumption.
@@ -342,7 +342,7 @@ Proof.
     assert (card (A!x) :<=: card (:\/:_{a} A)) as H9. {
       apply InclCompat; assumption. }
     assert (A!x = card (A!x)) as H10. { apply WhenCardinal. assumption. }
-    assert (card (:\/:_{a} A) = card b) as H11. { apply WhenEquiv. assumption. }
+    assert (card (:\/:_{a} A) = card b) as H11. { apply WhenEquip. assumption. }
     assert (card b :<=: b) as H12. { apply IsIncl. assumption. }
     rewrite <- H10, H11 in H9.
     apply Incl.Tran with (card b); assumption.
@@ -395,7 +395,7 @@ Proof.
   assert (WellOrderable a \/ ~ WellOrderable a) as [H1|H1]. {
     apply LawExcludedMiddle. }
   - assert (Ordinal (succ (card a))) as H2. { apply Succ.IsOrdinal, IsOrdinal. }
-    assert (a :~: card a) as H3. { apply IsEquiv. assumption. }
+    assert (a :~: card a) as H3. { apply IsEquip. assumption. }
     assert (succ a :~: succ (card a)) as H4. { apply SuccCompat. assumption. }
     apply IsLowerBound; assumption.
   - assert (~ WellOrderable (succ a)) as H2. {
@@ -411,7 +411,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1 H2.
   (* The ordinal is equipotent to its successor, so their cardinals coincide.   *)
-  apply WhenEquiv. apply Equip.Succ; assumption.
+  apply WhenEquip. apply Equip.Succ; assumption.
 Qed.
 
 (* An infinite set has the same cardinal as its successor.                      *)
@@ -424,12 +424,12 @@ Proof.
   assert (card a <> :0:) as H2. {
     apply Empty.HasElem. exists :0:. apply H1. apply Omega.HasZero. }
   (* Thus a is equipotent to its cardinal, and successors preserve equipotence. *)
-  assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
+  assert (a :~: card a) as H3. { apply IsEquipNotZero. assumption. }
   assert (succ a :~: succ (card a)) as H4. {
     apply Equip.SuccCompat. assumption. }
   (* The successor of a has the same cardinal as the successor of card a.       *)
   assert (card (succ a) = card (succ (card a))) as H5. {
-    apply WhenEquiv. assumption. }
+    apply WhenEquip. assumption. }
   (* Since card a is an infinite ordinal, the ordinal case applies.             *)
   assert (card (card a) = card (succ (card a))) as H6. {
     apply SuccOrd. 2: assumption. apply IsOrdinal. }
@@ -449,7 +449,7 @@ Proof.
   - rewrite H2. reflexivity.
   - (* In the successor case, the new set has the cardinal of succ a.           *)
     assert (card (a :\/: :{b}:) = card (succ a)) as H3. {
-      apply WhenEquiv. assumption. }
+      apply WhenEquip. assumption. }
     (* Infinite sets have the same cardinal as their successors.                *)
     assert (card a = card (succ a)) as H4. { apply Succ. assumption. }
     rewrite H3. assumption.
@@ -465,7 +465,7 @@ Proof.
   (* card n is an ordinal equipotent to n, so it equals n.                      *)
   apply EqualOrdNat. 2: assumption.
   - apply IsOrdinal.
-  - apply Equip.Sym, IsEquivOrd, Omega.HasOrdinals. assumption.
+  - apply Equip.Sym, IsEquipOrd, Omega.HasOrdinals. assumption.
 Qed.
 
 (* A set with non-empty cardinal is not empty.                                  *)
@@ -490,7 +490,7 @@ Proof.
       apply Natural.ZeroIsNotOne. assumption. }
     assert (a :~: :1:) as H3. {
       apply Equip.Tran with (card a).
-      + apply IsEquivNotZero. assumption.
+      + apply IsEquipNotZero. assumption.
       + rewrite H1. apply Equip.Refl. }
     destruct H3 as [f H3].
     assert (exists b, b :< a /\ f!b = :0:) as H4. {
@@ -509,7 +509,7 @@ Proof.
   - (* A singleton is equipotent to 1, so the cardinal is 1.                    *)
     destruct H1 as [b H1]. rewrite H1.
     rewrite <- (WhenNat :1:). 2: apply Omega.HasOne.
-    apply WhenEquiv. apply Equip.WhenSingle.
+    apply WhenEquip. apply Equip.WhenSingle.
 Qed.
 
 (* A set has cardinal 2 iff it is a pair of two distinct sets.                  *)
@@ -522,7 +522,7 @@ Proof.
     assert (card a <> :0:) as H2. { rewrite H1. apply Succ.NotZero. }
     assert (a :~: :2:) as H3. {
       apply Equip.Tran with (card a).
-      + apply IsEquivNotZero. assumption.
+      + apply IsEquipNotZero. assumption.
       + rewrite H1. apply Equip.Refl. }
     destruct H3 as [f H3].
     assert (exists b, b :< a /\ f!b = :0:) as H4. {
@@ -569,7 +569,7 @@ Proof.
         assert (succ :{b}: :~: succ :1:) as H8. {
           apply Equip.SuccCompat. apply Equip.WhenSingle. }
         rewrite H7. apply Equip.Tran with (succ :{b}:); assumption. }
-    rewrite H1, H5, <- H4. apply WhenEquiv. assumption.
+    rewrite H1, H5, <- H4. apply WhenEquip. assumption.
 Qed.
 
 (* A left factor of cardinal one does not change the cardinal of a product.     *)
@@ -581,7 +581,7 @@ Proof.
   (* A set of cardinal one is a singleton, so the product is a singleton        *)
   (* product and hence equipotent to the other factor.                          *)
   apply WhenOne in H1. destruct H1 as [c H1]. rewrite H1.
-  apply WhenEquiv. apply Equip.ProdSingleL.
+  apply WhenEquip. apply Equip.ProdSingleL.
 Qed.
 
 (* A right factor of cardinal one does not change the cardinal of a product.    *)
@@ -593,7 +593,7 @@ Proof.
   (* A set of cardinal one is a singleton, so the product is a singleton        *)
   (* product and hence equipotent to the other factor.                          *)
   apply WhenOne in H1. destruct H1 as [c H1]. rewrite H1.
-  apply WhenEquiv. apply Equip.ProdSingleR.
+  apply WhenEquip. apply Equip.ProdSingleR.
 Qed.
 
 (* Every natural number is a cardinal number.                                   *)
@@ -614,7 +614,7 @@ Proof.
     apply SOC.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3].
   - (* If card(N) is a natural number, equipotence forces it to be N itself.    *)
-    assert (:N :~: card :N) as H4. { apply IsEquivOrd. assumption. }
+    assert (:N :~: card :N) as H4. { apply IsEquipOrd. assumption. }
     symmetry. apply EqualOrdNat; assumption.
   - (* Otherwise, the two ordinal inclusions give equality.                     *)
     apply Incl.Double. split. 2: assumption. apply IsIncl. assumption.
@@ -636,7 +636,7 @@ Proof.
   (* Since the cardinal is not zero, a is equipotent to its cardinal.           *)
   assert (card a <> :0:) as H2. {
     intros H2. rewrite H2 in H1. apply Empty.Charac in H1. contradiction. }
-  assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
+  assert (a :~: card a) as H3. { apply IsEquipNotZero. assumption. }
   destruct H3 as [f H3].
   (* Since card(a) is a non-zero ordinal, it contains 0.                        *)
   assert (:0: :< card a) as H4. {
@@ -660,8 +660,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2 H3.
   (* Choose bijections a -> card(a) and card(b) -> b.                           *)
-  assert (a :~: card a) as H4. { apply IsEquiv. assumption. }
-  assert (card b :~: b) as H5. { apply Equip.Sym, IsEquiv. assumption. }
+  assert (a :~: card a) as H4. { apply IsEquip. assumption. }
+  assert (card b :~: b) as H5. { apply Equip.Sym, IsEquip. assumption. }
   destruct H4 as [f H4]. destruct H5 as [g H5].
   (* The first bijection is an injection into card(a).                          *)
   assert (Inj f a (card a)) as H6. { apply Bij.IsInj. assumption. }
@@ -680,8 +680,8 @@ Proof.
   intros a b H1 H2 H3 H4.
   (* Move to cardinals, retract the larger ordinal onto the smaller one, and    *)
   (* then move back to b.                                                       *)
-  assert (a :~: card a) as H5. { apply IsEquiv. assumption. }
-  assert (card b :~: b) as H6. { apply Equip.Sym, IsEquiv. assumption. }
+  assert (a :~: card a) as H5. { apply IsEquip. assumption. }
+  assert (card b :~: b) as H6. { apply Equip.Sym, IsEquip. assumption. }
   destruct H5 as [e H5]. destruct H6 as [h H6].
   assert (Onto e a (card a)) as H7. { apply Bij.IsOnto. assumption. }
   assert (Onto h (card b) b) as H8. { apply Bij.IsOnto. assumption. }
@@ -707,7 +707,7 @@ Proof.
   intros a b f H1 H2.
   (* The domain is equipotent to its image, and that image is contained in b.   *)
   assert (a :~: f:[a]:) as H3. { exists f. apply Bij.FromInj with b. assumption. }
-  assert (card a = card f:[a]:) as H4. { apply WhenEquiv. assumption. }
+  assert (card a = card f:[a]:) as H4. { apply WhenEquip. assumption. }
   rewrite H4. apply InclCompat. 1: assumption.
   rewrite (Inj.ImageOfDomain f a b). 2: assumption. apply H2.
 Qed.
@@ -806,7 +806,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros f a b H1 H2.
   (* Reindex the surjection by a bijection from card(a) onto a.                 *)
-  assert (card a :~: a) as H3. { apply Equip.Sym, IsEquiv. assumption. }
+  assert (card a :~: a) as H3. { apply Equip.Sym, IsEquip. assumption. }
   destruct H3 as [e H3].
   assert (Onto e (card a) a) as H4. { apply Bij.IsOnto. assumption. }
   assert (Onto (f :.: e) (card a) b) as H5. {
@@ -817,7 +817,7 @@ Proof.
   destruct H6 as [d [H6 H7]].
   (* The codomain has the cardinal of a subset of card(a).                      *)
   assert (card b = card d) as H8. {
-    apply WhenEquiv. apply Equip.Sym. exists ((f :.: e) :|: d). assumption. }
+    apply WhenEquip. apply Equip.Sym. exists ((f :.: e) :|: d). assumption. }
   rewrite H8. rewrite <- (Idem a). apply InclCompat. 2: assumption.
   exists (card a). split. 1: apply IsOrdinal. apply Equip.Refl.
 Qed.
@@ -855,7 +855,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a H1 H2.
   (* The set and its image are equipotent, so their cardinals agree.            *)
-  apply WhenEquiv. apply Equip.Sym. apply Equip.ImageInj; assumption.
+  apply WhenEquip. apply Equip.Sym. apply Equip.ImageInj; assumption.
 Qed.
 (* For well-orderable sets, a union is bounded by the disjoint sum.             *)
 Proposition UnionSum : forall (a b:U), WellOrderable a -> WellOrderable b ->
@@ -929,7 +929,7 @@ Proof.
     apply SOC.ElemOrIncl; assumption. }
   destruct H5 as [H5|H5]. 2: assumption.
   exfalso.
-  assert (a :~: card a) as H6. { apply IsEquivOrd. assumption. }
+  assert (a :~: card a) as H6. { apply IsEquipOrd. assumption. }
   assert (a = card a) as H7. { apply Equip.EqualOrdNat; assumption. }
   assert (card a :< a) as H8. { apply H2. assumption. }
   rewrite <- H7 in H8. revert H8. apply Foundation.NoLoop1.
@@ -975,14 +975,14 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d H1 H2 H3 H4 H5 H6.
   (* The two product sets are well-orderable.                                   *)
-  apply EquivCharac.
+  apply EquipCharac.
   - apply WellOrderable.Prod; assumption.
   - apply WellOrderable.Prod; assumption.
   - (* Equal cardinals identify each pair of corresponding factors up to        *)
     (* equipotence, and products preserve equipotence.                          *)
     apply Equip.CompatProd.
-    + apply EquivCharac; assumption.
-    + apply EquivCharac; assumption.
+    + apply EquipCharac; assumption.
+    + apply EquipCharac; assumption.
 Qed.
 
 (* Cardinal equality is compatible with a product on the right.                 *)
@@ -1083,7 +1083,7 @@ Proof.
   assert (n :x: m :~: m :*: n) as H3. {
     exists (Mult2.f m n). apply Mult2.IsBij; assumption. }
   assert (card (n :x: m) = card (m :*: n)) as H4. {
-    apply WhenEquiv. assumption. }
+    apply WhenEquip. assumption. }
   assert (m :*: n :< :N) as H5. { apply Mult.InOmega; assumption. }
   assert (card (m :*: n) :< :N) as H6. { rewrite WhenNat; assumption. }
   rewrite H4. assumption.
@@ -1255,10 +1255,10 @@ Proof.
     assert (:0: :< card a) as H3. { apply H1. apply Omega.HasZero. }
     rewrite H2 in H3. apply Empty.Charac in H3. contradiction. }
   (* The set is equipotent to its non-empty cardinal representative.            *)
-  assert (a :~: card a) as H3. { apply IsEquivNotZero. assumption. }
+  assert (a :~: card a) as H3. { apply IsEquipNotZero. assumption. }
   (* Squaring preserves equipotence, hence preserves cardinality.               *)
   assert (card (a :x: a) = card (card a :x: card a)) as H4. {
-    apply WhenEquiv. apply Equip.CompatProd; assumption. }
+    apply WhenEquip. apply Equip.CompatProd; assumption. }
   (* The representative is an infinite ordinal, so the ordinal square law       *)
   (* applies to it.                                                             *)
   assert (card (card a :x: card a) = card (card a)) as H5. {
@@ -1341,7 +1341,7 @@ Proof.
   assert (card b = :0: \/ card b <> :0:) as [H8|H8]. {
     apply LawExcludedMiddle. }
   - (* If b has cardinal zero and is well-orderable, then b is empty.           *)
-    assert (b :~: card b) as H9. { apply IsEquiv. assumption. }
+    assert (b :~: card b) as H9. { apply IsEquip. assumption. }
     assert (b :~: :0:) as H10. { rewrite <- H8. assumption. }
     assert (b = :0:) as H11. { apply Equip.WhenZero. assumption. }
     assert (card (a :\/: b) = card a) as H12. {

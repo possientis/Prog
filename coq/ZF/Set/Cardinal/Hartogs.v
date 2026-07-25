@@ -99,7 +99,7 @@ Proof.
       apply SOC.ElemOrIncl; assumption. }
     destruct H4 as [H4|H4]. 1: assumption. exfalso.
     assert (card a :~: a) as H5. {
-      apply Equip.Sym, IsEquivNotZero. assumption. }
+      apply Equip.Sym, IsEquipNotZero. assumption. }
     destruct H5 as [f H5].
     assert (Inj f (card a) a) as H6. { apply Bij.IsInj. assumption. }
     assert (Inj (f:|:hartogs a) (hartogs a) a) as H7. {

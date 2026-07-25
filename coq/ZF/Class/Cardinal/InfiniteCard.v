@@ -180,7 +180,7 @@ Proof.
     (* But b is strictly below a = card a, contradicting that a is a cardinal.  *)
     assert (succ b = card (succ b)) as H7. {
       apply Number.WhenCardinal, IsCardinal. assumption. }
-    apply (Number.IsNotEquiv (succ b) b); try assumption.
+    apply (Number.IsNotEquip (succ b) b); try assumption.
     + rewrite <- H7. apply Succ.IsIn.
     + apply Equip.Sym. assumption.
 Qed.
