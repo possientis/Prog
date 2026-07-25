@@ -1,7 +1,7 @@
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.

@@ -1,4 +1,4 @@
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.Map.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
@@ -89,9 +89,9 @@ Proof.
   (* First use the standard currying bijection with the product ordered c x b.  *)
   intros a b c.
   assert (map c (map b a) :~: map (c :x: b) a) as H1. {
-    apply Equiv.Sym. exists (curryMap c b a). apply Curry.IsBijMap. }
+    apply Equip.Sym. exists (curryMap c b a). apply Curry.IsBijMap. }
   (* Then commute the product inside the exponent.                              *)
   assert (map (c :x: b) a :~: map (b :x: c) a) as H2. {
-    apply CompatR. apply Equiv.ProdComm. }
-  apply Equiv.Tran with (map (c :x: b) a); assumption.
+    apply CompatR. apply Equip.ProdComm. }
+  apply Equip.Tran with (map (c :x: b) a); assumption.
 Qed.

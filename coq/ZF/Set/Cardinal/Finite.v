@@ -2,7 +2,7 @@ Require Import ZF.Axiom.Choice.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Core.
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
@@ -20,7 +20,6 @@ Require Import ZF.Set.Union2.
 
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCH := ZF.Set.Cardinal.Choice.
-Module SCE := ZF.Set.Cardinal.Equiv.
 Module SPR := ZF.Set.Prod.
 
 
@@ -34,8 +33,8 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* a is finite so a ~ n for some n in N. Since a ~ b, b ~ a ~ n.              *)
   intros a b H1 [n [H2 H3]]. exists n. split. 1: assumption.
-  apply SCE.Tran with a. 2: assumption.
-  apply SCE.Sym. assumption.
+  apply Equip.Tran with a. 2: assumption.
+  apply Equip.Sym. assumption.
 Qed.
 
 Proposition InclCompat : forall (a b:U),
@@ -51,16 +50,16 @@ Proof.
     destruct H5 as [x [H5 [H6 H7]]]. rewrite <- H7.
     apply Bij.IsInRange with b; assumption. }
   assert (exists m, Ordinal m /\ m :<=: n /\ f:[a]: :~: m) as H8. {
-    apply SCE.OrdinalSubset; assumption. }
+    apply Equip.OrdinalSubset; assumption. }
   destruct H8 as [m [H8 [H9 H10]]].
   assert (m :< :N) as H11. { apply Core.InclElemTran with n; assumption. }
-  assert (a :~: m) as H12. { apply SCE.Tran with f:[a]:; assumption. }
+  assert (a :~: m) as H12. { apply Equip.Tran with f:[a]:; assumption. }
   exists m; split; assumption.
 Qed.
 
 Proposition WhenNat : forall (n:U), n :< :N -> Finite n.
 Proof.
-  intros n H1. exists n. split. 1: assumption. apply SCE.Refl.
+  intros n H1. exists n. split. 1: assumption. apply Equip.Refl.
 Qed.
 
 (* The empty set is finite.                                                     *)
@@ -79,15 +78,15 @@ Proof.
   (* Apply AddElem which gives a :\/: :{b}: = a or a :\/: :{b}: ~ succ a.       *)
   intros a b [n [H1 [f H2]]].
   assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as H3. {
-    apply SCE.AddElem. }
+    apply Equip.AddElem. }
   destruct H3 as [H3|H3].
   - (* b is already in a, so a :\/: :{b}: = a and we are done.                  *)
     rewrite H3. exists n. split. 1: assumption. exists f. assumption.
   - (* b not in a: a :\/: :{b}: ~ succ a, so ~ succ n which is in N.            *)
     exists (succ n). split.
     + apply Omega.HasSucc. assumption.
-    + apply SCE.Tran with (succ a). 1: assumption.
-      apply SCE.SuccCompat. exists f. assumption.
+    + apply Equip.Tran with (succ a). 1: assumption.
+      apply Equip.SuccCompat. exists f. assumption.
 Qed.
 
 (* Removing an element from a finite set leaves a finite set.                   *)
@@ -133,7 +132,7 @@ Proof.
   assert (a :~: card a) as H3. {
     apply SCC.IsEquiv. destruct H1 as [n [H1 H3]].
     exists n. split. 2: assumption. apply Omega.HasOrdinals. assumption. }
-  rewrite H2 in H3. apply SCE.WhenZero. assumption.
+  rewrite H2 in H3. apply Equip.WhenZero. assumption.
 Qed.
 
 (* Adding a new element to a finite set increments its cardinal.                *)
@@ -152,13 +151,14 @@ Proof.
   (* Since b is new, adjoining b gives a set equipotent to succ(a).             *)
   assert (a :\/: :{b}: :~: succ a) as H5. {
     assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as [H5|H5]. {
-      apply SCE.AddElem. } 2: assumption.
+      apply Equip.AddElem. } 2: assumption.
     exfalso. apply H2. rewrite <- H5. apply Union2.Charac.
     right. apply Single.IsIn. }
   (* Transporting the bijection a ~ card(a) through successor gives the size.   *)
-  assert (succ a :~: succ (card a)) as H6. { apply SCE.SuccCompat. assumption. }
+  assert (succ a :~: succ (card a)) as H6. {
+    apply Equip.SuccCompat. assumption. }
   assert (a :\/: :{b}: :~: succ (card a)) as H7. {
-    apply SCE.Tran with (succ a); assumption. }
+    apply Equip.Tran with (succ a); assumption. }
   assert (card (a :\/: :{b}:) = card (succ (card a))) as H8. {
     apply SCC.WhenEquiv. assumption. }
   assert (card a :< :N) as H9. { apply CardIsNat. assumption. }
@@ -207,7 +207,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* {b} x a ~ a, so finiteness transfers from a to {b} x a.                    *)
   intros a b H1. apply EquivCompat with a. 2: assumption.
-  apply SCE.Sym. apply SCE.ProdSingleL.
+  apply Equip.Sym. apply Equip.ProdSingleL.
 Qed.
 
 (* The product of a finite set and a singleton is finite.                       *)
@@ -217,7 +217,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* a x {b} ~ a, so finiteness transfers from a to a x {b}.                    *)
   intros a b H1. apply EquivCompat with a. 2: assumption.
-  apply SCE.Sym. apply SCE.ProdSingleR.
+  apply Equip.Sym. apply Equip.ProdSingleR.
 Qed.
 
 (* The union of two finite sets is finite.                                      *)
@@ -303,7 +303,7 @@ Proof.
   intros a H1. split; intros H2.
   - (* A finite ordinal is equipotent to a natural number, hence equal to it.   *)
     destruct H2 as [n [H2 H3]].
-    assert (a = n) as H4. { apply SCE.EqualOrdNat; assumption. }
+    assert (a = n) as H4. { apply Equip.EqualOrdNat; assumption. }
     rewrite H4. assumption.
   - (* Conversely, every natural number is finite.                              *)
     apply WhenNat. assumption.

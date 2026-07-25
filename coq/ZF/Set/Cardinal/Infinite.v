@@ -9,7 +9,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
 Require Import ZF.Set.Cardinal.Core.
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.Omega.
@@ -20,7 +20,6 @@ Require Import ZF.Set.Union2.
 Module CEM := ZF.Class.Empty.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCH := ZF.Set.Cardinal.Choice.
-Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* A set is infinite if and only if it is not finite.                           *)
@@ -35,7 +34,7 @@ Proof.
   (* Finite a via Finite.EquivCompat, contradicting Infinite a.                 *)
   intros a b H1 H2 H3. apply H2.
   apply Finite.EquivCompat with b. 2: assumption.
-  apply SCE.Sym. assumption.
+  apply Equip.Sym. assumption.
 Qed.
 
 (* An ordinal containing omega is infinite.                                     *)
@@ -110,11 +109,11 @@ Proof.
     assert (WellOrderable a \/ ~ WellOrderable a) as [H4|H4]. {
       apply LawExcludedMiddle. }
     - assert (:N :<=: card a) as H5. { apply CardGen; assumption. }
-      assert (card a :~: succ (card a)) as H6. { apply Equiv.Succ; assumption. }
+      assert (card a :~: succ (card a)) as H6. { apply Equip.Succ; assumption. }
       assert (succ a :~: card a) as H7. {
-        apply SCE.Tran with (succ (card a)).
-        - apply SCE.SuccCompat, SCC.IsEquiv. assumption.
-        - apply SCE.Sym. assumption. }
+        apply Equip.Tran with (succ (card a)).
+        - apply Equip.SuccCompat, SCC.IsEquiv. assumption.
+        - apply Equip.Sym. assumption. }
       apply SCC.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
         intros H5. apply H4. apply WellOrderable.SuccRev. assumption. }
@@ -130,7 +129,7 @@ Proposition AddElem : forall (a b:U), Infinite a ->
 Proof.
   intros a b H1.
   assert (a :\/: :{b}: = a \/ a :\/: :{b}: :~: succ a) as [H2|H2]. {
-    apply SCE.AddElem. }
+    apply Equip.AddElem. }
   - rewrite H2. reflexivity.
   - assert (card (a :\/: :{b}:) = card (succ a)) as H3. {
       apply SCC.WhenEquiv. assumption. }

@@ -53,10 +53,10 @@ Module SOO := ZF.Set.Ordinal.Order.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
-Definition equiv (a b:U) : Prop := exists f, Bij f a b.
+Definition equip (a b:U) : Prop := exists f, Bij f a b.
 
 (* Notation "a :~: b" := (equiv a b)                                            *)
-Global Instance Equiv : Equiv U := { equiv := equiv }.
+Global Instance Equiv : Equiv U := { equiv := equip }.
 
 (* Every set is equipotent to itself.                                           *)
 Proposition Refl : forall (a:U), a :~: a.

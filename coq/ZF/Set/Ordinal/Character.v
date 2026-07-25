@@ -2,7 +2,7 @@ Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Cardinal.Core.
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
@@ -18,7 +18,6 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Specify.
 
 Module SCC := ZF.Set.Cardinal.Core.
-Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* The character of cofinality of the ordinal a.                                *)
@@ -165,7 +164,7 @@ Proof.
     (* even smaller cofinal ordinal, contradicting minimality of charac a.      *)
     assert (b :<=: charac a) as H6. { apply SOC.ElemIsIncl; assumption. }
     assert (exists c, c :<=: b /\ Cofinal (charac a) c) as H7. {
-      apply Cofinal.ExtractEquiv; try assumption. apply SCE.Sym. assumption. }
+      apply Cofinal.ExtractEquiv; try assumption. apply Equip.Sym. assumption. }
     destruct H7 as [c [H7 H8]].
     assert (Ordinal c) as H9. {
       apply Cofinal.IsOrdinal with (charac a). assumption. }

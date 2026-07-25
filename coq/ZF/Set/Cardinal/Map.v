@@ -1,4 +1,4 @@
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
@@ -8,7 +8,6 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Map.
 
-Module SCE := ZF.Set.Cardinal.Equiv.
 
 (* The set of maps is compatible with equipotence of codomains.                 *)
 Proposition CompatR : forall (a b c:U),
@@ -142,7 +141,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d H1 H2.
   (* First change the codomain, then change the domain.                         *)
-  apply SCE.Tran with (map a d).
+  apply Equip.Tran with (map a d).
   - apply CompatR. assumption.
   - apply CompatL. assumption.
 Qed.

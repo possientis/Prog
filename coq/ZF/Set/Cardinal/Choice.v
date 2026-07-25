@@ -130,14 +130,14 @@ Proof.
   intros a c AC H1.
   (* Choose a bijection from card(a) onto a, and take the image of c.           *)
   assert (a :~: card a) as H2. { apply IsEquiv. assumption. }
-  apply Equiv.Sym in H2. destruct H2 as [f H2].
+  apply Equip.Sym in H2. destruct H2 as [f H2].
   exists f:[c]:. split.
   - (* Since c is contained in card(a), its image is contained in a.            *)
     intros y H3. apply (Bij.ImageCharac f (card a) a c) in H3. 2: assumption.
     destruct H3 as [x [H3 [H4 H5]]]. rewrite <- H5.
     apply Bij.IsInRange with (card a); assumption.
   - (* Restricting the bijection to c bijects c onto its image.                 *)
-    apply Equiv.Sym. exists (f:|:c).
+    apply Equip.Sym. exists (f:|:c).
     apply (Bij.Restrict f (card a) a c); assumption.
 Qed.
 
@@ -172,7 +172,7 @@ Proof.
   assert (Ordinal (card :P(b))) as G2. { apply SCC.IsOrdinal. }
   assert (card a = card b) as H3. { apply EquivCharac; assumption. }
   assert (card :P(a) = card :P(b)) as H4. {
-    apply EquivCharac, Equiv.PowerCompat; assumption. }
+    apply EquivCharac, Equip.PowerCompat; assumption. }
   assert (card b :< card :P(b)) as H5. {
     assert (b :<=: :P(b)) as H5. {
       intros c H5.
@@ -185,7 +185,7 @@ Proof.
     apply SOC.EqualOrElem; assumption. }
   destruct H7 as [H7|H7]. 2:assumption. exfalso.
   assert (b :~: :P(b)) as H8. { apply EquivCharac; assumption. }
-  apply Equiv.Cantor with b. assumption. }
+  apply Equip.Cantor with b. assumption. }
   rewrite H3, H4. assumption.
 Qed.
 

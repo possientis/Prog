@@ -20,7 +20,6 @@ Module CCC := ZF.Class.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SOC := ZF.Set.Ordinal.Core.
-Module SCE := ZF.Set.Cardinal.Equiv.
 Module SEM := ZF.Set.Empty.
 Module SOS := ZF.Set.Ordinal.Sup.
 Module SUG := ZF.Set.UnionGenOfClass.
@@ -178,11 +177,11 @@ Proof.
       apply DiffBySet.Charac in H1. destruct H1 as [_ H1]. apply H1.
       apply Omega.HasSucc. assumption. }
     (* So omega is a subset of b, and the Hilbert hotel gives b ~ succ b = a.   *)
-    assert (b :~: succ b) as H6. { apply SCE.Succ; assumption. }
+    assert (b :~: succ b) as H6. { apply Equip.Succ; assumption. }
     (* But b is strictly below a = card a, contradicting that a is a cardinal.  *)
     assert (succ b = card (succ b)) as H7. {
       apply SCC.WhenCardinal, IsCardinal. assumption. }
     apply (SCC.IsNotEquiv (succ b) b); try assumption.
     + rewrite <- H7. apply Succ.IsIn.
-    + apply SCE.Sym. assumption.
+    + apply Equip.Sym. assumption.
 Qed.

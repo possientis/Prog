@@ -3,7 +3,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
-Require Import ZF.Set.Cardinal.Equiv.
+Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Incl.
@@ -40,7 +40,6 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module COF := ZF.Class.Ordinal.FunctionOn.
 Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
-Module SCE := ZF.Set.Cardinal.Equiv.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOA := ZF.Set.Ordinal.Order.
 Module SOE := ZF.Set.Ordinal.Order.E.
@@ -62,7 +61,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a H1.
   (* The ordinal itself is an ordinal representative of its cardinality.        *)
-  exists a. split. 1: assumption. apply SCE.Refl.
+  exists a. split. 1: assumption. apply Equip.Refl.
 Qed.
 
 (* A set is well-orderable iff it admits an explicit well-ordering relation.    *)
@@ -73,7 +72,7 @@ Proof.
   intros a. split; intros H1.
   - destruct H1 as [b [H1 H2]].
     (* Choose a bijection from the ordinal representative onto the set.         *)
-    apply SCE.Sym in H2. destruct H2 as [f H2].
+    apply Equip.Sym in H2. destruct H2 as [f H2].
     (* Transport the ordinal membership well-ordering along that bijection.     *)
     exists (SOT.transport f (SOE.E b) b).
     apply SOW.Transport with f (SOE.E b) b. 1: reflexivity. 1: assumption.
@@ -81,7 +80,7 @@ Proof.
   - destruct H1 as [r H1].
     (* A well-ordered set is isomorphic to an ordinal, hence equipotent to it.  *)
     apply SOA.Exists in H1. destruct H1 as [f [b [H1 H2]]].
-    exists b. split. 1: assumption. apply SCE.Sym. exists f. apply H2.
+    exists b. split. 1: assumption. apply Equip.Sym. exists f. apply H2.
 Qed.
 
 (* Assuming choice, every set is well-orderable.                                *)
@@ -132,7 +131,7 @@ Proof.
   assert (Bij (F:|:b) b a) as H16. {
     split. 2: assumption. split. 2: assumption. split. 2: assumption.
     apply SRR.IsRelation, G1. }
-  exists b. split. 1: assumption. apply SCE.Sym. exists (F:|:b). assumption.
+  exists b. split. 1: assumption. apply Equip.Sym. exists (F:|:b). assumption.
 Qed.
 
 (* Being well-orderable is preserved by inclusion.                              *)
@@ -149,12 +148,12 @@ Proof.
     apply (Bij.RangeCharac f b c). 1: assumption. exists x. split; assumption. }
   (* That image has an ordinal representative inside c.                         *)
   assert (exists d, Ordinal d /\ d :<=: c /\ f:[a]: :~: d) as H5. {
-    apply SCE.OrdinalSubset; assumption. }
+    apply Equip.OrdinalSubset; assumption. }
   destruct H5 as [d [H5 [_ H6]]].
   (* Restricting the bijection to a bijects a with that image.                  *)
   assert (a :~: f:[a]:) as H7. {
     exists (f:|:a). apply (Bij.Restrict f b c); assumption. }
-  exists d. split. 1: assumption. apply SCE.Tran with f:[a]:; assumption.
+  exists d. split. 1: assumption. apply Equip.Tran with f:[a]:; assumption.
 Qed.
 
 (* Being well-orderable is preserved by surjections.                            *)
@@ -164,7 +163,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros f a b H1 [c [H2 H3]].
   (* Reindex the surjection by an ordinal representative of the domain.         *)
-  assert (c :~: a) as H4. { apply SCE.Sym. assumption. }
+  assert (c :~: a) as H4. { apply Equip.Sym. assumption. }
   destruct H4 as [e H4].
   assert (Onto e c a) as H5. { apply Bij.IsOnto. assumption. }
   assert (Onto (f :.: e) c b) as H6. { apply STO.Compose with a; assumption. }
@@ -174,11 +173,11 @@ Proof.
   destruct H7 as [d [H7 H8]].
   (* The restricted domain has an ordinal representative inside the domain.     *)
   assert (exists r, Ordinal r /\ r :<=: c /\ d :~: r) as H9. {
-    apply SCE.OrdinalSubset; assumption. }
+    apply Equip.OrdinalSubset; assumption. }
   destruct H9 as [r [H9 [_ H10]]].
   (* Transport the bijection from the codomain to that ordinal representative.  *)
-  exists r. split. 1: assumption. apply SCE.Tran with d.
-  - apply SCE.Sym. exists ((f :.: e) :|: d). assumption.
+  exists r. split. 1: assumption. apply Equip.Tran with d.
+  - apply Equip.Sym. exists ((f :.: e) :|: d). assumption.
   - assumption.
 Qed.
 
@@ -189,14 +188,14 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b [c [H1 H2]] [d [H3 H4]].
   (* Replace both factors by ordinals, preserving the cartesian product.        *)
-  assert (a :x: b :~: c :x: d) as H5. { apply SCE.CompatProd; assumption. }
+  assert (a :x: b :~: c :x: d) as H5. { apply Equip.CompatProd; assumption. }
   (* The ordinal product orders d x c as the ordinal d*c.                       *)
   assert (c :x: d :~: d :*: c) as H6. {
     exists (Mult2.f d c). apply Mult2.IsBij; assumption. }
   (* Transporting the bijections gives an ordinal representative.               *)
   exists (d :*: c). split.
   - apply Mult.IsOrdinal; assumption.
-  - apply SCE.Tran with (c :x: d); assumption.
+  - apply Equip.Tran with (c :x: d); assumption.
 Qed.
 
 
@@ -207,14 +206,14 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b [c [H1 H2]] [d [H3 H4]].
   (* Replace both summands by ordinals, preserving the disjoint sum.            *)
-  assert (a :++: b :~: c :++: d) as H5. { apply SCE.SumCompat; assumption. }
+  assert (a :++: b :~: c :++: d) as H5. { apply Equip.SumCompat; assumption. }
   (* The ordinal sum orders c ++ d as the ordinal c+d.                          *)
   assert (c :++: d :~: c :+: d) as H6. {
     exists (Plus2.f c d). apply Plus2.IsBij; assumption. }
   (* Transporting the bijections gives an ordinal representative.               *)
   exists (c :+: d). split.
   - apply Plus.IsOrdinal; assumption.
-  - apply SCE.Tran with (c :++: d); assumption.
+  - apply Equip.Tran with (c :++: d); assumption.
 Qed.
 
 (* The union of two well-orderable sets is well-orderable.                      *)
@@ -238,7 +237,7 @@ Proposition Succ : forall (a:U),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a [b [H1 H2]].
-  assert (succ a :~: succ b) as H3. { apply SCE.SuccCompat. assumption. }
+  assert (succ a :~: succ b) as H3. { apply Equip.SuccCompat. assumption. }
   assert (Ordinal (succ b)) as H4. { apply Succ.IsOrdinal. assumption. }
   exists (succ b). split; assumption.
 Qed.
@@ -252,15 +251,15 @@ Proof.
   assert (c = :0: \/ Successor c \/ Limit c) as [H3|[H3|H3]]. {
     apply Limit.ThreeWay. assumption. }
   - exfalso. subst.
-    assert (succ a = :0:) as H4. { apply SCE.WhenZero. assumption. }
+    assert (succ a = :0:) as H4. { apply Equip.WhenZero. assumption. }
     revert H4. apply Succ.NotZero.
   - destruct H3 as [b [H5 H4]]. subst.
-    assert (a :~: b) as H6. { apply SCE.SuccCompatRev. assumption. }
+    assert (a :~: b) as H6. { apply Equip.SuccCompatRev. assumption. }
     exists b. split; assumption.
   - assert (Ordinal c) as H4. { apply H3. }
     assert (:N :<=: c) as H5. { apply Omega.IsInclLimit. assumption. }
-    assert (c :~: succ c) as H6. { apply SCE.Succ; assumption. }
-    assert (succ a :~: succ c) as H7. { apply SCE.Tran with c; assumption. }
-    assert (a :~: c) as H8. { apply SCE.SuccCompatRev. assumption. }
+    assert (c :~: succ c) as H6. { apply Equip.Succ; assumption. }
+    assert (succ a :~: succ c) as H7. { apply Equip.Tran with c; assumption. }
+    assert (a :~: c) as H8. { apply Equip.SuccCompatRev. assumption. }
     exists c. split; assumption.
 Qed.
