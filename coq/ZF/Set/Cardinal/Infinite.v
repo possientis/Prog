@@ -18,7 +18,6 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
-Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCH := ZF.Set.Cardinal.Choice.
 Module SCE := ZF.Set.Cardinal.Equiv.
@@ -98,7 +97,7 @@ Proof.
       assert (card a :< card a) as H4. { apply H2. assumption. }
       revert H4. apply Foundation.NoLoop1.
   - (* An infinite cardinal contains omega, so the set cannot be finite.        *)
-    apply Card. 1: assumption. apply CCI.IsIncl. assumption.
+    apply Card. 1: assumption. apply InfiniteCard.IsIncl. assumption.
 Qed.
 
 (* For an infinite set, the cardinal of the successor is the cardinal.          *)

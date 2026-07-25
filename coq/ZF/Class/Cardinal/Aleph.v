@@ -24,7 +24,6 @@ Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
-Module CCI := ZF.Class.Cardinal.InfiniteCard.
 Module CMI := ZF.Class.Order.Minimal.
 Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
@@ -63,24 +62,24 @@ Proposition IsMinimal : forall (a:U), Ordinal a ->
 Proof.
   intros a H1.
   apply COS.IsMinimal. 3: assumption.
-  - apply CCI.IsProper.
-  - intros b. apply CCI.IsOrdinal.
+  - apply InfiniteCard.IsProper.
+  - intros b. apply InfiniteCard.IsOrdinal.
 Qed.
 
 Proposition IsInf : forall (a:U), Ordinal a ->
   Aleph!a = inf (InfiniteCard :\: Aleph:[a]:).
 Proof.
   intros a H1. apply COS.IsInf. 3: assumption.
-  - apply CCI.IsProper.
-  - intros b. apply CCI.IsOrdinal.
+  - apply InfiniteCard.IsProper.
+  - intros b. apply InfiniteCard.IsOrdinal.
 Qed.
 
 (* Aleph is an isomorphism between the ordinals and infinite cardinals.         *)
 Proposition IsIsom : Isom Aleph E E Ordinal InfiniteCard.
 Proof.
   apply COS.IsIsom.
-  - apply CCI.IsProper.
-  - intros a. apply CCI.IsOrdinal.
+  - apply InfiniteCard.IsProper.
+  - intros a. apply InfiniteCard.IsOrdinal.
 Qed.
 
 (* Aleph is the unique isomorphism ...                                          *)
@@ -88,16 +87,16 @@ Proposition IsUnique : forall (F:Class),
   Isom F E E Ordinal InfiniteCard -> F :~: Aleph.
 Proof.
   intros F. apply COS.IsUnique.
-  - apply CCI.IsProper.
-  - intros a. apply CCI.IsOrdinal.
+  - apply InfiniteCard.IsProper.
+  - intros a. apply InfiniteCard.IsOrdinal.
 Qed.
 
 (* Aleph is strictly monotone.                                                  *)
 Proposition IsMonotone : COM.Monotone Aleph.
 Proof.
   apply COS.IsMonotone.
-  - apply CCI.IsProper.
-  - intros a. apply CCI.IsOrdinal.
+  - apply InfiniteCard.IsProper.
+  - intros a. apply InfiniteCard.IsOrdinal.
 Qed.
 
 (* The domain of Aleph is the class of ordinals.                                *)
@@ -124,7 +123,7 @@ Proposition IsCardinal : forall (a:U), Ordinal a ->
   Cardinal Aleph!a.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros a H1. apply CCI.IsCardinal, IsInfiniteCard. assumption.
+  intros a H1. apply InfiniteCard.IsCardinal, IsInfiniteCard. assumption.
 Qed.
 
 (* The Aleph value at an ordinal is an ordinal.                                 *)
@@ -155,7 +154,7 @@ Proof.
     apply ImageUnderClass.WhenZero. reflexivity. }
   rewrite H1, H2. transitivity (inf InfiniteCard).
   - apply SOI.EquivCompat. apply DiffBySet.IdentityR.
-  - apply CCI.Inf.
+  - apply InfiniteCard.Inf.
 Qed.
 
 (* At a limit ordinal, Aleph is the union of its earlier values.                *)
@@ -169,7 +168,7 @@ Proof.
     assert (Minimal E (InfiniteCard :\: Aleph:[a]:) Aleph!a) as H5. {
       apply IsMinimal. assumption. }
     assert (InfiniteCard (:\/:_{a} Aleph)) as H6. {
-      apply CCI.UnionGen.
+      apply InfiniteCard.UnionGen.
       - intros b H6. apply IsInfiniteCard.
         apply (SOC.IsOrdinal a); assumption.
       - apply SEM.HasElem. exists :0:.
@@ -193,7 +192,7 @@ Proof.
         apply H13. assumption. }
       revert H16. apply Foundation.NoLoop1. }
     apply (COE.WhenMinimal (InfiniteCard :\: Aleph:[a]:)); try assumption.
-    intros x H8. apply CCI.IsOrdinal. apply H8. }
+    intros x H8. apply InfiniteCard.IsOrdinal. apply H8. }
   assert (:\/:_{a} Aleph :<=: Aleph!a) as H21. {
     (* Every earlier Aleph value is bounded by Aleph(a).                        *)
     apply SUG.WhenSetBounded. intros b H5.
