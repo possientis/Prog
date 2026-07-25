@@ -12,6 +12,7 @@ Require Import ZF.Set.Cardinal.Core.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Character.
 Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Core.
 Require Import ZF.Set.Ordinal.InfOfClass.
@@ -128,6 +129,14 @@ Proof.
   intros a H1. apply CCI.IsCardinal, IsInfiniteCard. assumption.
 Qed.
 
+(* The Aleph value at an ordinal is an ordinal.                                 *)
+Proposition IsOrdinal : forall (a:U), Ordinal a ->
+  Ordinal Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1. apply SCC.CardIsOrd, IsCardinal. assumption.
+Qed.
+
 (* Aleph(a) is no less than a.                                                  *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   a :<=: Aleph!a.
@@ -196,7 +205,7 @@ Proof.
     assert (Aleph!b :< Aleph!a) as H9. {
       apply H8; try apply DomainOf; assumption. }
     apply SOC.ElemIsIncl. 2: assumption.
-    apply CCI.IsOrdinal, IsInfiniteCard. assumption. }
+    apply IsOrdinal. assumption. }
   apply Incl.Double. split; assumption.
 Qed.
 
@@ -248,6 +257,19 @@ Proof.
     assert (f!d = Aleph!d) as H10. {
       rewrite Hf. apply RestrictOfClass.Eval. 2: assumption. apply G2. }
     rewrite H10. apply SOC.ElemIsIncl. 2: assumption.
-    apply CCI.IsOrdinal, IsInfiniteCard. assumption.
+    apply IsOrdinal. assumption.
+Qed.
+
+(* A limit index and its aleph value have the same character of cofinality.     *)
+Proposition Character : forall (a:U), Limit a ->
+  charac a = charac (Aleph!a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  assert (Ordinal a) as H2. { apply H1. }
+  assert (Ordinal Aleph!a) as H3. { apply IsOrdinal. assumption. }
+  assert (Cofinal (Aleph!a) a) as H4. { apply IsCofinal. assumption. }
+  (* Cofinal ordinals have the same least cofinal ordinal.                      *)
+  symmetry. apply CofinalCompat; assumption.
 Qed.
 
