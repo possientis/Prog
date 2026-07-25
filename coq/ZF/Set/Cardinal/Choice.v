@@ -35,7 +35,6 @@ Module CRC := ZF.Class.Relation.Choice.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
@@ -51,7 +50,7 @@ Proof.
   apply InfOfClass.IsLargest.
   - intros c H3. apply H3.
   - assert (exists c, Ordinal c /\ a :~: c) as H3. {
-      apply SCW.WithChoice. assumption. }
+      apply WellOrderable.WithChoice. assumption. }
     destruct H3 as [c H3]. apply CEM.HasElem. exists c. assumption.
   - intros c [H3 H4]. apply H2; assumption.
 Qed.
@@ -60,7 +59,7 @@ Qed.
 Proposition IsEquiv : forall (a:U), Choice ->
   a :~: card a.
 Proof.
-  intros a AC. apply SCC.IsEquiv, SCW.WithChoice. assumption.
+  intros a AC. apply SCC.IsEquiv, WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, every set admits an explicit well-ordering relation.        *)
@@ -70,21 +69,23 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC.
   (* Choice makes the set well-orderable, then transport gives the relation.    *)
-  apply SCW.HasWellOrdering. apply SCW.WithChoice. assumption.
+  apply WellOrderable.HasWellOrdering.
+  apply WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, two sets are equipotent iff they have the same cardinal.    *)
 Proposition EquivCharac : forall (a b:U), Choice ->
   a :~: b <-> card a = card b.
 Proof.
-  intros a b AC. apply SCC.EquivCharac; apply SCW.WithChoice; assumption.
+  intros a b AC.
+  apply SCC.EquivCharac; apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, inclusion implies inequality of cardinals.                  *)
 Proposition InclCompat : forall (a b:U), Choice ->
   a :<=: b -> card a :<=: card b.
 Proof.
-  intros a b AC. apply SCC.InclCompat, SCW.WithChoice. assumption.
+  intros a b AC. apply SCC.InclCompat, WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, cardinal equality is compatible with products.              *)
@@ -97,7 +98,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d AC H1 H2.
   (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.EqualCompatProd; try assumption; apply SCW.WithChoice; assumption.
+  apply SCC.EqualCompatProd; try assumption;
+  apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, cardinal equality is compatible with product on the right.  *)
@@ -164,7 +166,7 @@ Proposition Cantor : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply SCW.WithChoice. assumption. }
+    apply WellOrderable.WithChoice. assumption. }
   destruct H1 as [b [H1 H2]].
   assert (Ordinal (card b)) as G1. { apply SCC.IsOrdinal. }
   assert (Ordinal (card :P(b))) as G2. { apply SCC.IsOrdinal. }
@@ -194,7 +196,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
   (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.IsInclProdR; try assumption; apply SCW.WithChoice; assumption.
+  apply SCC.IsInclProdR; try assumption;
+  apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* If a is not empty, then card(b) is bounded by card(a x b).                   *)
@@ -204,7 +207,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
   (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.IsInclProdL; try assumption; apply SCW.WithChoice; assumption.
+  apply SCC.IsInclProdL; try assumption;
+    apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Assuming choice, card(a) <= card(b) gives an injection from a into b.        *)
@@ -214,8 +218,10 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
   (* Choice supplies the well-orderability assumptions needed by SCC.HasInj.    *)
-  assert (WellOrderable a) as H2. { apply SCW.WithChoice. assumption. }
-  assert (WellOrderable b) as H3. { apply SCW.WithChoice. assumption. }
+  assert (WellOrderable a) as H2. {
+    apply WellOrderable.WithChoice. assumption. }
+  assert (WellOrderable b) as H3. {
+    apply WellOrderable.WithChoice. assumption. }
   apply SCC.HasInj; assumption.
 Qed.
 
@@ -226,8 +232,10 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1 H2.
   (* Choice supplies the well-orderability assumptions needed by SCC.HasOnto.   *)
-  assert (WellOrderable a) as H3. { apply SCW.WithChoice. assumption. }
-  assert (WellOrderable b) as H4. { apply SCW.WithChoice. assumption. }
+  assert (WellOrderable a) as H3. {
+    apply WellOrderable.WithChoice. assumption. }
+  assert (WellOrderable b) as H4. {
+    apply WellOrderable.WithChoice. assumption. }
   apply SCC.HasOnto; assumption.
 Qed.
 
@@ -292,7 +300,7 @@ Proof.
   intros a b f AC H1.
   (* Choice makes the codomain well-orderable, so the general form applies.     *)
   apply SCC.WhenInj with f. 2: assumption.
-  apply SCW.WithChoice. assumption.
+  apply WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Assuming choice, a surjection gives an inequality of cardinals.              *)
@@ -303,7 +311,7 @@ Proof.
   intros f a b AC H1.
   (* Choice makes the domain well-orderable, so the general form applies.       *)
   apply SCC.WhenOnto with f. 2: assumption.
-  apply SCW.WithChoice. assumption.
+  apply WellOrderable.WithChoice. assumption.
 Qed.
 
 (* Cardinal product is monotone in its right argument.                          *)
@@ -313,7 +321,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
   (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.InclCompatProdR; try assumption; apply SCW.WithChoice; assumption.
+  apply SCC.InclCompatProdR; try assumption;
+    apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Cardinal product is monotone in its left argument.                           *)
@@ -323,7 +332,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c AC H1.
   (* Choice supplies the well-orderability assumptions needed by SCC.           *)
-  apply SCC.InclCompatProdL; try assumption; apply SCW.WithChoice; assumption.
+  apply SCC.InclCompatProdL; try assumption;
+    apply WellOrderable.WithChoice; assumption.
 Qed.
 
 (* Cardinal product is monotone in both arguments.                              *)
@@ -346,7 +356,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a AC H1.
   (* Choice makes a well-orderable, so the general image bound applies.         *)
-  apply SCC.ImageIncl. 2: assumption. apply SCW.WithChoice. assumption.
+  apply SCC.ImageIncl. 2: assumption.
+  apply WellOrderable.WithChoice. assumption.
 Qed.
 
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)

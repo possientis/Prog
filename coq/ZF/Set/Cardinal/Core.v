@@ -46,7 +46,6 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module SCE := ZF.Set.Cardinal.Equiv.
-Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 Module SOO := ZF.Set.Ordinal.Onto.
 Module SOS := ZF.Set.Ordinal.Sup.
@@ -314,7 +313,7 @@ Proof.
         apply SOS.IsUpperBound. 2: assumption. intros d H7.
         apply CardIsOrd, H1. assumption. }
       assert (WellOrderable (sup a)) as H8. {
-        apply SCW.WhenOrdinal. apply SOS.IsOrdinal. }
+        apply WellOrderable.WhenOrdinal. apply SOS.IsOrdinal. }
       assert (card c :<=: card (sup a)) as H9. {
         apply InclCompat; assumption. }
       assert (c = card c) as H10. { apply WhenCardinal. assumption. }
@@ -339,7 +338,7 @@ Proof.
     assert (Ordinal A!x) as H6. { apply CardIsOrd. assumption. }
     assert (A!x :<=: :\/:_{a} A) as H7. { apply SUG.IsIncl. assumption. }
     assert (WellOrderable (:\/:_{a} A)) as H8. {
-      apply SCW.WhenOrdinal. apply SOU.IsOrdinal.
+      apply WellOrderable.WhenOrdinal. apply SOU.IsOrdinal.
       intros y H8. apply CardIsOrd, H1. assumption. }
     assert (card (A!x) :<=: card (:\/:_{a} A)) as H9. {
       apply InclCompat; assumption. }
@@ -364,7 +363,8 @@ Proof.
   - assert (a :< b \/ b :<=: a) as H5. { apply SOC.ElemOrIncl; assumption. }
     destruct H5 as [H5|H5]. 1: assumption.
     (* If b were included in a, then the cardinal b would be below card(a).     *)
-    assert (WellOrderable a) as H6. { apply SCW.WhenOrdinal. assumption. }
+    assert (WellOrderable a) as H6. {
+      apply WellOrderable.WhenOrdinal. assumption. }
     assert (card b :<=: card a) as H7. { apply InclCompat; assumption. }
     assert (b = card b) as H8. { apply WhenCardinal. assumption. }
     rewrite <- H8 in H7.
@@ -382,7 +382,7 @@ Proof.
   assert (WellOrderable a \/ ~ WellOrderable a) as [H1|H1]. {
     apply LawExcludedMiddle. }
   - assert (WellOrderable (succ a)) as H2. {
-      apply SCW.Succ. assumption. }
+      apply WellOrderable.Succ. assumption. }
     apply InclCompat. 1: assumption. apply Succ.IsIncl.
   - assert (card a = :0:) as H2. { apply WhenNotWellOrderable. assumption. }
     assert (Ordinal (card (succ a))) as H3. { apply IsOrdinal. }
@@ -400,7 +400,7 @@ Proof.
     assert (succ a :~: succ (card a)) as H4. { apply SuccCompat. assumption. }
     apply IsLowerBound; assumption.
   - assert (~ WellOrderable (succ a)) as H2. {
-      intros H2. apply H1. apply SCW.SuccRev. assumption. }
+      intros H2. apply H1. apply WellOrderable.SuccRev. assumption. }
     assert (card (succ a) = :0:) as H3. { apply WhenNotWellOrderable. assumption. }
     rewrite H3. apply Empty.IsIncl.
 Qed.
@@ -718,7 +718,8 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2 H3.
   (* The product is well-orderable, and b supplies a fixed second coordinate.   *)
-  assert (WellOrderable (a :x: b)) as H4. { apply SCW.Prod; assumption. }
+  assert (WellOrderable (a :x: b)) as H4. {
+    apply WellOrderable.Prod; assumption. }
   apply Empty.HasElem in H3. destruct H3 as [y H3].
   remember (From.from a (fun x => :(x,y):)) as f eqn:H5.
   (* Fixing y in b embeds a into the product by sending x to (x,y).             *)
@@ -751,8 +752,10 @@ Proof.
     - apply SOC.Zero.
     - apply Natural.OneIsOrdinal.
     - apply Succ.IsIn. }
-  assert (WellOrderable a) as H4. { apply SCW.WhenOrdinal. assumption. }
-  assert (WellOrderable (a :x: a)) as H5. { apply SCW.Prod; assumption. }
+  assert (WellOrderable a) as H4. {
+    apply WellOrderable.WhenOrdinal. assumption. }
+  assert (WellOrderable (a :x: a)) as H5. {
+    apply WellOrderable.Prod; assumption. }
   remember (SFI.ifThenElse (succ a) (fun x => x :< a)
     (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as f eqn:H6.
   (* Both displayed branch values lie in the square a x a.                      *)
@@ -835,7 +838,7 @@ Proof.
     apply RestrictOfClass.DomainIsIncl. assumption. }
   (* The subdomain is well-orderable, so the surjection gives the bound.        *)
   assert (WellOrderable (SRD.domain (F:|:a))) as H6. {
-    apply SCW.InclCompat with a; assumption. }
+    apply WellOrderable.InclCompat with a; assumption. }
   assert (card (SRR.range (F:|:a)) :<=: card (SRD.domain (F:|:a))) as H7. {
     apply WhenOnto with (F:|:a); assumption. }
   assert (card (SRD.domain (F:|:a)) :<=: card a) as H8. {
@@ -862,7 +865,7 @@ Proof.
   intros a b H1 H2.
   (* The disjoint sum of the two sets is again well-orderable.                  *)
   assert (WellOrderable (a :++: b)) as H3. {
-    apply SCW.Sum; assumption. }
+    apply WellOrderable.Sum; assumption. }
   remember (either a b (id a) (id b)) as f eqn:H4.
   (* The either map from the disjoint sum onto the ordinary union is onto.      *)
   assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply SMS.HasOnto. }
@@ -886,7 +889,7 @@ Proof.
   assert (WellOrderable b) as H6. { apply WellOrderableNotZero. assumption. }
   (* The product is well-orderable, so an injection into it gives a bound.      *)
   assert (WellOrderable (a :x: b)) as H7. {
-    apply SCW.Prod; assumption. }
+    apply WellOrderable.Prod; assumption. }
   assert (exists f, Inj f (a :++: b) (a :x: b)) as H8. {
     apply SMS.HasInj; apply HasTwoElems; assumption. }
   destruct H8 as [f H8].
@@ -973,8 +976,8 @@ Proof.
   intros a b c d H1 H2 H3 H4 H5 H6.
   (* The two product sets are well-orderable.                                   *)
   apply EquivCharac.
-  - apply SCW.Prod; assumption.
-  - apply SCW.Prod; assumption.
+  - apply WellOrderable.Prod; assumption.
+  - apply WellOrderable.Prod; assumption.
   - (* Equal cardinals identify each pair of corresponding factors up to        *)
     (* equipotence, and products preserve equipotence.                          *)
     apply SCE.CompatProd.
@@ -1035,7 +1038,7 @@ Proof.
         apply Inj.EvalInjective with f b c; assumption. }
       subst y'. reflexivity. }
   (* The codomain product is well-orderable, so the injection gives the bound.  *)
-  apply WhenInj with g. 2: assumption. apply SCW.Prod; assumption.
+  apply WhenInj with g. 2: assumption. apply WellOrderable.Prod; assumption.
 Qed.
 
 (* Cardinal product is monotone in its left argument.                           *)
@@ -1093,15 +1096,17 @@ Proof.
   remember (fun a => a :< :N \/ card (a :x: a) = card a) as A eqn:H1.
   assert (forall a, Ordinal a -> A a) as H2. {
     apply Induction.Induction. intros a H2 IH. rewrite H1 in IH.
-    assert (WellOrderable a) as G1. { apply SCW.WhenOrdinal. assumption. }
-    assert (WellOrderable (a :x: a)) as G2. { apply SCW.Prod; assumption. }
+    assert (WellOrderable a) as G1. {
+      apply WellOrderable.WhenOrdinal. assumption. }
+    assert (WellOrderable (a :x: a)) as G2. {
+      apply WellOrderable.Prod; assumption. }
     assert (CRO.OneToOne Pairing) as G3. { apply MaxLex.IsIsom. }
     assert (toClass (a :x: a) :<=: CRD.domain Pairing) as G4. {
       apply MaxLex.IsIncl; assumption. }
     assert (Ordinal :N) as G5. { apply Omega.IsOrdinal. }
     assert (Ordinal (card a)) as G6. { apply IsOrdinal. }
     assert (WellOrderable (card a)) as G7. {
-      apply SCW.WhenOrdinal. assumption. }
+      apply WellOrderable.WhenOrdinal. assumption. }
     assert (card (card a) = card a) as G8. { apply Idem. }
     assert (CRO.OneToOne Pairing) as G10. { apply MaxLex.IsIsom. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
@@ -1114,7 +1119,8 @@ Proof.
     (* exists b, b :< a /\ card b = card a                                      *)
     - destruct H4 as [b [H4 H5]].
       assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
-      assert (WellOrderable b) as K2. { apply SCW.WhenOrdinal. assumption. }
+      assert (WellOrderable b) as K2. {
+        apply WellOrderable.WhenOrdinal. assumption. }
       assert (card (b :x: b) = card (a :x: a)) as K3. {
         apply EqualCompatProd; assumption. }
       specialize (IH b H4). destruct IH as [IH|IH]; rewrite H1.
@@ -1180,7 +1186,8 @@ Proof.
         assert (m :< :N \/ :N :<=: m) as H19. { apply SOC.ElemOrIncl; assumption. }
         assert (Ordinal (succ m)) as H20. { apply Succ.IsOrdinal. assumption. }
         assert (WellOrderable (succ m :x: succ m)) as H21. {
-          apply SCW.Prod; apply SCW.WhenOrdinal; assumption. }
+          apply WellOrderable.Prod;
+          apply WellOrderable.WhenOrdinal; assumption. }
         assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<=:
           card (succ m :x: succ m)) as H22. {
           apply InclCompat; assumption. }
@@ -1285,7 +1292,8 @@ Proof.
     rewrite H3. apply Max.
     - exists a. reflexivity.
     - exists b. reflexivity. }
-  assert (WellOrderable m) as H12. { apply SCW.WhenOrdinal. assumption. }
+  assert (WellOrderable m) as H12. {
+    apply WellOrderable.WhenOrdinal. assumption. }
   assert (card m = m) as H13. { symmetry. apply WhenCardinal. assumption. }
   (* The maximum is infinite because it contains card(a), which contains omega. *)
   assert (:N :<=: m) as H14. {
@@ -1324,7 +1332,8 @@ Proof.
   assert (card a <> :0:) as H3. {
     apply Empty.HasElem. exists :0:. apply H1. apply Omega.HasZero. }
   assert (WellOrderable a) as H4. { apply WellOrderableNotZero. assumption. }
-  assert (WellOrderable (a :\/: b)) as H5. { apply SCW.Union; assumption. }
+  assert (WellOrderable (a :\/: b)) as H5. {
+    apply WellOrderable.Union; assumption. }
   (* The same lower bound also says that card(a) contains one.                  *)
   assert (:1: :< card a) as H6. { apply H1. apply Omega.HasOne. }
   assert (:1: :<=: card a) as H7. {

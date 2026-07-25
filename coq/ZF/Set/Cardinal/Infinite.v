@@ -21,7 +21,6 @@ Module CEM := ZF.Class.Empty.
 Module SCC := ZF.Set.Cardinal.Core.
 Module SCH := ZF.Set.Cardinal.Choice.
 Module SCE := ZF.Set.Cardinal.Equiv.
-Module SCW := ZF.Set.Cardinal.WellOrderable.
 Module SOC := ZF.Set.Ordinal.Core.
 
 (* A set is infinite if and only if it is not finite.                           *)
@@ -72,7 +71,7 @@ Proposition Card : forall (a:U), Choice ->
 Proof.
   intros a AC.
   assert (exists b, Ordinal b /\ a :~: b) as H1. {
-    apply SCW.WithChoice. assumption. }
+    apply WellOrderable.WithChoice. assumption. }
   split; intros H2.
   - apply CardGen; assumption.
   - intros [n [H3 H4]].
@@ -118,7 +117,7 @@ Proof.
         - apply SCE.Sym. assumption. }
       apply SCC.IsLowerBound; assumption.
     - assert (~ WellOrderable (succ a)) as H5. {
-        intros H5. apply H4. apply SCW.SuccRev. assumption. }
+        intros H5. apply H4. apply WellOrderable.SuccRev. assumption. }
       assert (card (succ a) = :0:) as H6. {
         apply SCC.WhenNotWellOrderable. assumption. }
       rewrite H6. apply Empty.IsIncl. }
