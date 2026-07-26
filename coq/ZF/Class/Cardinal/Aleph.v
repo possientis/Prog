@@ -28,10 +28,8 @@ Module CMI := ZF.Class.Order.Minimal.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.
-Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SEM := ZF.Set.Empty.
-Module SOM := ZF.Set.Ordinal.Monotone.
 Module SUG := ZF.Set.UnionGenOfClass.
 
 (* MinFresh picks the E-minimal element of InfiniteCard not already in range.   *)

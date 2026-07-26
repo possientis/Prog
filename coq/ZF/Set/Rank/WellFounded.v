@@ -24,7 +24,6 @@ Require Import ZF.Set.Union.
 Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
-Module CIN := ZF.Class.Incl.
 Module CRF := ZF.Class.Relation.Function.
 Module SOU := ZF.Set.Ordinal.Union.
 Module SRI := ZF.Set.Relation.ImageUnderClass.

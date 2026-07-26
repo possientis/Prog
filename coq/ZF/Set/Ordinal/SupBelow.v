@@ -10,7 +10,6 @@ Require Import ZF.Set.Union.
 
 Export ZF.Notation.SupBelow.
 
-Module CIN := ZF.Class.Incl.
 
 (* The supremum of the set a below b.                                           *)
 Definition supBelow (b a:U) : U := :U( {{ x :< a :/\: b | Ordinal }} ).

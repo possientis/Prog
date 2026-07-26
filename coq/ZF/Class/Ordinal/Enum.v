@@ -49,21 +49,15 @@ Require Import ZF.Set.Relation.OneToOne.
 Require Import ZF.Set.Relation.RestrictOfClass.
 
 Module CMF := ZF.Class.Ordinal.MinFresh.
-Module CIN := ZF.Class.Incl.
 Module COF := ZF.Class.Ordinal.FunctionOn.
 Module CBJ := ZF.Class.Relation.Bij.
-Module CRB := ZF.Class.Relation.Bijection.
 Module CBO := ZF.Class.Relation.BijectionOn.
-Module CRD := ZF.Class.Relation.Domain.
-Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module CRR := ZF.Class.Relation.Range.
 
-Module SIN := ZF.Set.Incl.
 Module SRB := ZF.Set.Relation.Bijection.
 Module SBO := ZF.Set.Relation.BijectionOn.
-Module SRD := ZF.Set.Relation.Domain.
 Module SRF := ZF.Set.Relation.Function.
 Module SRO := ZF.Set.Relation.OneToOne.
 Module SRR := ZF.Set.Relation.Range.

@@ -16,7 +16,6 @@ Require Import ZF.Set.Relation.InvImage.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.Restrict.
 
-Module CRC := ZF.Class.Relation.Converse.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module SRC := ZF.Set.Relation.Converse.

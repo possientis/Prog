@@ -19,7 +19,6 @@ Require Import ZF.Set.Rank.WellFounded.
 Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
-Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Ordinal.Induction.
 Module SUG := ZF.Set.UnionGenOfClass.
 

@@ -24,7 +24,6 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CFL := ZF.Class.Relation.Functional.
 
 Module SRD := ZF.Set.Relation.Domain.
-Module SFL := ZF.Set.Relation.Functional.
 
 Definition Oracle (F:Class) (a:U) : Class := fun x => exists f y, x = :(f,y): /\
   ((f =  :0:                        /\ y = a                     )  \/

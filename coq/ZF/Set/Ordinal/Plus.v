@@ -27,7 +27,6 @@ Require Import ZF.Notation.Plus.
 Export ZF.Notation.Plus.
 
 Module COP := ZF.Class.Ordinal.Plus.
-Module SOO := ZF.Set.Ordinal.UnionOf.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 Module SUG := ZF.Set.UnionGenOfClass.
 
@@ -440,7 +439,7 @@ Proof.
           apply Omega.HasSucc. assumption. }
         destruct H7 as [p [H7 H8]].
         exists p. split. 1: assumption.
-        assert (m :< n :+: p) as X. 2: apply X. (* rewrite failing *)
+        assert (m :< n :+: p) as X. 2: apply X. (* rewrite failing              *)
         rewrite H8. apply Succ.IsIn. }
   apply Induction2.Induction'. 2: assumption.
   - apply Omega.IsOrdinal.
@@ -478,7 +477,7 @@ Proof.
         apply SUG.Charac. exists b. split. 1: assumption.
         assert (Ordinal b) as H9. {
         apply Ordinal.IsOrdinal with a; assumption. }
-        assert (y :< n :+: b) as X. 2: apply X. (* rewrite failing *)
+        assert (y :< n :+: b) as X. 2: apply X. (* rewrite failing              *)
         rewrite H4; try assumption. apply Ordinal.ElemIsIncl. 1: assumption.
         apply Ordinal.InclElemTran with y; assumption.
 Qed.
@@ -520,10 +519,10 @@ Proof.
     apply Empty.HasElem. exists :0:. apply H8. assumption. }
   assert (a :+: b <> succ :U(a :+: b)) as H6. {
     remember (:U(a :+: b)) as d eqn:H6.
-    assert (a :+: b <> succ d) as X. 2: apply X. (* emphasis only *)
+    assert (a :+: b <> succ d) as X. 2: apply X. (* emphasis only               *)
     assert (a :+: b = :\/:_{b} (COP.Plus a)) as H8. {
       apply WhenLimit. assumption. }
-    intros H7. (* assume a + b = d + 1, need a contradiction *)
+    intros H7. (* assume a + b = d + 1, need a contradiction                    *)
     assert (d :< :\/:_{b} (COP.Plus a)) as H9. {
       rewrite <- H8, H7. apply Succ.IsIn. }
     assert (exists c, Ordinal c /\ c :< b /\ d :< a :+: c) as H10. {
@@ -540,9 +539,9 @@ Proof.
     assert (succ c :< b) as H16. { apply Limit.HasSucc; assumption. }
     assert (succ d :< :\/:_{b} (COP.Plus a)) as H17. {
       apply SUG.Charac. exists (succ c). split. 1: assumption.
-      assert (succ d :< a :+: (succ c)) as X. 2: apply X. (* failing rewrite *)
+      assert (succ d :< a :+: (succ c)) as X. 2: apply X. (* failing rewrite    *)
       rewrite WhenSuccR; assumption. }
-    assert (succ d :< succ d) as H18. { (* our contradicton *)
+    assert (succ d :< succ d) as H18. { (* our contradicton                     *)
       rewrite <- H8 in H17. rewrite H7 in H17. assumption. }
     revert H18. apply Foundation.NoLoop1. }
   assert (a :+: b = :0: \/ Successor (a :+: b) \/ Limit (a :+: b)) as H7. {
@@ -594,7 +593,7 @@ Proof.
         rewrite WhenLimit. 2: assumption. apply SUG.Charac.
         destruct H14 as [H14|H14].
         - exists :0:. split. 1: { apply Limit.HasZero. assumption. }
-          assert (x :< (a :+: b) :+: :0:) as X. 2: apply X. (* failing rewrite *)
+          assert (x :< (a :+: b) :+: :0:) as X. 2: apply X. (* failing rewrite  *)
           rewrite WhenZeroR.
           assert (a :+: e :<=: a :+: b) as H15. {
             apply InclCompatR; try assumption.

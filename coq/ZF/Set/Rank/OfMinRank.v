@@ -7,7 +7,6 @@ Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Rank.Core.
 
-Module CEM := ZF.Class.Empty.
 Module CMR := ZF.Class.Rank.OfMinRank.
 
 

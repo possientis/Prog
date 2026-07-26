@@ -25,7 +25,6 @@ Export ZF.Notation.Mult.
 Module COM := ZF.Class.Ordinal.Mult.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 Module SUG := ZF.Set.UnionGenOfClass.
-Module SOU := ZF.Set.Ordinal.UnionOf.
 
 
 (* The product of two ordinals when a is an ordinal.                            *)
@@ -74,7 +73,7 @@ Proof.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     apply Incl.Double. split; intros x H3.
     + apply SUG.Charac in H3. destruct H3 as [y [H3 H4]].
-      assert (x :< :0: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails *)
+      assert (x :< :0: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails    *)
       rewrite H2 in H5; assumption.
     + apply Empty.Charac in H3. contradiction.
 Qed.
@@ -91,7 +90,7 @@ Proof.
     assert (Ordinal a) as G1. { apply H1. }
     apply Incl.Double. split; intros x H3.
     + apply SUG.Charac in H3. destruct H3 as [y [H3 H4]].
-      assert (x :< :1: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails *)
+      assert (x :< :1: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails    *)
       rewrite H2 in H5. 2: assumption.
       assert (Ordinal y) as H6. { apply Ordinal.IsOrdinal with a; assumption. }
       assert (Ordinal x) as H7. { apply Ordinal.IsOrdinal with y; assumption. }
@@ -99,7 +98,7 @@ Proof.
     + apply SUG.Charac. exists (succ x).
       assert (succ x :< a) as G2. { apply Limit.HasSucc; assumption. }
       split. 1: assumption.
-      assert (x :< :1: :*: succ x) as X. 2: apply X. (* rewrite H2 fails *)
+      assert (x :< :1: :*: succ x) as X. 2: apply X. (* rewrite H2 fails        *)
       rewrite H2. 2: assumption. apply Succ.IsIn.
 Qed.
 

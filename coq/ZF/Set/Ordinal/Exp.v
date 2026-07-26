@@ -32,11 +32,7 @@ Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
 Module COE := ZF.Class.Ordinal.Exp.
-Module CRD := ZF.Class.Relation.Domain.
-Module CRL := ZF.Class.Relation.Functional.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
-Module SRD := ZF.Set.Relation.Domain.
-Module SRL := ZF.Set.Relation.Functional.
 Module SUG := ZF.Set.UnionGenOfClass.
 
 (* The exponentiation of two ordinals when a is an ordinal.                     *)

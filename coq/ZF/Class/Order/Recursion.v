@@ -32,7 +32,6 @@ Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
 Module CIN := ZF.Class.Incl.
-Module CRC := ZF.Class.Relation.Converse.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
 Module CRL := ZF.Class.Relation.Functional.

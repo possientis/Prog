@@ -18,7 +18,6 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
-Module CEM := ZF.Class.Empty.
 
 (* A set is infinite if and only if it is not finite.                           *)
 Definition Infinite (a:U) : Prop := ~ Finite a.

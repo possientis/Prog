@@ -33,7 +33,6 @@ Module CEM := ZF.Class.Empty.
 Module CRC := ZF.Class.Relation.Choice.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
-Module CRO := ZF.Class.Relation.OneToOne.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
 

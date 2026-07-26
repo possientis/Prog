@@ -44,7 +44,6 @@ Module CPR := ZF.Class.Prod.
 Module CRB := ZF.Class.Relation.Bij.
 Module SIN := ZF.Set.Incl.
 Module SOI := ZF.Set.Order.InitSegment.
-Module SOS := ZF.Set.Ordinal.Succ.
 Module SPR := ZF.Set.Prod.
 
 (* Max-lexicographic order on On x On.                                          *)

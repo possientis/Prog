@@ -25,7 +25,6 @@ Module COO := ZF.Class.Ordinal.Enum.
 
 Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOI := ZF.Set.Order.Isom.
-Module SOW := ZF.Set.Order.WellOrdering.
 
 (* Every well-ordered set is order-isomorphic to some ordinal.                  *)
 Proposition Exists : forall (r b:U),

@@ -30,7 +30,6 @@ Module CIN := ZF.Class.Incl.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SRF := ZF.Class.Relation.Function.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRO := ZF.Set.Relation.OneToOne.
 
