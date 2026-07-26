@@ -46,10 +46,6 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
-Module SRD := ZF.Set.Relation.Domain.
-Module SRR := ZF.Set.Relation.Range.
-Module SRO := ZF.Set.Relation.Onto.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
@@ -329,10 +325,11 @@ Proof.
     apply SOU.IsOrdinal. intros x H2. apply CardIsOrd, H1. assumption.
   - intros b H2 H3.
     (* It suffices to bound each cardinal value by b.                           *)
-    apply SUG.WhenSetBounded. intros x H4.
+    apply UnionGenOfClass.WhenSetBounded. intros x H4.
     assert (Cardinal A!x) as H5. { apply H1. assumption. }
     assert (Ordinal A!x) as H6. { apply CardIsOrd. assumption. }
-    assert (A!x :<=: :\/:_{a} A) as H7. { apply SUG.IsIncl. assumption. }
+    assert (A!x :<=: :\/:_{a} A) as H7. {
+      apply UnionGenOfClass.IsIncl. assumption. }
     assert (WellOrderable (:\/:_{a} A)) as H8. {
       apply WellOrderable.WhenOrdinal. apply SOU.IsOrdinal.
       intros y H8. apply CardIsOrd, H1. assumption. }
@@ -693,8 +690,8 @@ Proof.
     - assumption. }
   destruct H10 as [r H10].
   assert (Onto (r :.: e) a (card b)) as H11. {
-    apply SRO.Compose with (card a); assumption. }
-  exists (h :.: (r :.: e)). apply SRO.Compose with (card b); assumption.
+    apply Onto.Compose with (card a); assumption. }
+  exists (h :.: (r :.: e)). apply Onto.Compose with (card b); assumption.
 Qed.
 (* An injection into a well-orderable set gives an inequality of cardinals.     *)
 Proposition WhenInj : forall (a b f:U), WellOrderable b ->
@@ -807,7 +804,7 @@ Proof.
   destruct H3 as [e H3].
   assert (Onto e (card a) a) as H4. { apply Bij.IsOnto. assumption. }
   assert (Onto (f :.: e) (card a) b) as H5. {
-    apply SRO.Compose with a; assumption. }
+    apply Onto.Compose with a; assumption. }
   (* The ordinal-domain surjection has a bijective restriction.                 *)
   assert (exists d, d :<=: card a /\ Bij ((f :.: e) :|: d) d b) as H6. {
     apply Onto.HasRestrictBij. 1: apply IsOrdinal. assumption. }
@@ -825,22 +822,22 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a H1 H2.
   (* The restriction of F to a surjects from its domain onto its range.         *)
-  assert (Onto (F:|:a) (SRD.domain (F:|:a)) (SRR.range (F:|:a))) as H3. {
+  assert (Onto (F:|:a) (Domain.domain (F:|:a)) (Range.range (F:|:a))) as H3. {
     split. 2: reflexivity. split. 2: reflexivity.
     apply RestrictOfClass.IsFunction. assumption. }
   (* That range is the image of a, and its domain is contained in a.            *)
-  assert (SRR.range (F:|:a) = F:[a]:) as H4. {
+  assert (Range.range (F:|:a) = F:[a]:) as H4. {
     apply RestrictOfClass.RangeOf. assumption. }
-  assert (SRD.domain (F:|:a) :<=: a) as H5. {
+  assert (Domain.domain (F:|:a) :<=: a) as H5. {
     apply RestrictOfClass.DomainIsIncl. assumption. }
   (* The subdomain is well-orderable, so the surjection gives the bound.        *)
-  assert (WellOrderable (SRD.domain (F:|:a))) as H6. {
+  assert (WellOrderable (Domain.domain (F:|:a))) as H6. {
     apply WellOrderable.InclCompat with a; assumption. }
-  assert (card (SRR.range (F:|:a)) :<=: card (SRD.domain (F:|:a))) as H7. {
+  assert (card (Range.range (F:|:a)) :<=: card (Domain.domain (F:|:a))) as H7. {
     apply WhenOnto with (F:|:a); assumption. }
-  assert (card (SRD.domain (F:|:a)) :<=: card a) as H8. {
+  assert (card (Domain.domain (F:|:a)) :<=: card a) as H8. {
     apply InclCompat; assumption. }
-  rewrite <- H4. apply Incl.Tran with (card (SRD.domain (F:|:a))); assumption.
+  rewrite <- H4. apply Incl.Tran with (card (Domain.domain (F:|:a))); assumption.
 Qed.
 
 (* A one-to-one class preserves the cardinal of a set contained in its domain.  *)
