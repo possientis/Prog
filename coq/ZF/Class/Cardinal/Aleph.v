@@ -29,8 +29,6 @@ Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module SEM := ZF.Set.Empty.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 (* MinFresh picks the E-minimal element of InfiniteCard not already in range.   *)
 Definition MinFresh : Class := COS.MinFresh InfiniteCard.
@@ -166,7 +164,7 @@ Proof.
       apply InfiniteCard.UnionGen.
       - intros b H6. apply IsInfiniteCard.
         apply (Ordinal.IsOrdinal a); assumption.
-      - apply SEM.HasElem. exists :0:.
+      - apply Empty.HasElem. exists :0:.
         apply Limit.HasZero. assumption. }
     assert ((InfiniteCard :\: Aleph:[a]:) (:\/:_{a} Aleph)) as H7. {
       split. 1: assumption.
@@ -177,7 +175,7 @@ Proof.
       assert (succ b :< a) as H10. { apply Limit.HasSucc; assumption. }
       assert (Ordinal (succ b)) as H11. { apply Succ.IsOrdinal. assumption. }
       assert (Aleph!(succ b) :<=: :\/:_{a} Aleph) as H13. {
-        apply SUG.IsIncl. assumption. }
+        apply UnionGenOfClass.IsIncl. assumption. }
       assert (COM.Monotone Aleph) as H14. { apply IsMonotone. }
       destruct H14 as [_ H14].
       assert (Aleph!b :< Aleph!(succ b)) as H15. {
@@ -190,7 +188,7 @@ Proof.
     intros x H8. apply InfiniteCard.IsOrdinal. apply H8. }
   assert (:\/:_{a} Aleph :<=: Aleph!a) as H21. {
     (* Every earlier Aleph value is bounded by Aleph(a).                        *)
-    apply SUG.WhenSetBounded. intros b H5.
+    apply UnionGenOfClass.WhenSetBounded. intros b H5.
     assert (Ordinal b) as H6. { apply (Ordinal.IsOrdinal a); assumption. }
     assert (COM.Monotone Aleph) as H8. { apply IsMonotone. }
     destruct H8 as [_ H8].

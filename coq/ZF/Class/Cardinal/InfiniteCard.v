@@ -17,8 +17,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module CEM := ZF.Class.Empty.
-Module SEM := ZF.Set.Empty.
-Module SUG := ZF.Set.UnionGenOfClass.
+
 
 (* The class of infinite cardinal numbers.                                      *)
 Definition InfiniteCard : Class := Cardinal :\: :N.
@@ -114,7 +113,7 @@ Proof.
     apply Number.Sup. intros b H3. apply IsCardinal, H1. assumption.
   - (* A member of the set contains omega, and is contained in the supremum.    *)
     assert (exists b, b :< a) as H3. {
-      apply SEM.HasElem. assumption. }
+      apply Empty.HasElem. assumption. }
     destruct H3 as [b H3].
     assert (InfiniteCard b) as H4. { apply H1. assumption. }
     assert (:N :<=: b) as H5. { apply IsIncl. assumption. }
@@ -138,11 +137,12 @@ Proof.
   - (* The union is a cardinal because every value is a cardinal.               *)
     apply Number.UnionGen. intros x H3. apply IsCardinal, H1. assumption.
   - (* One value contains omega, and that value is included in the union.       *)
-    assert (exists b, b :< a) as H3. { apply SEM.HasElem. assumption. }
+    assert (exists b, b :< a) as H3. { apply Empty.HasElem. assumption. }
     destruct H3 as [b H3].
     assert (InfiniteCard (A!b)) as H4. { apply H1. assumption. }
     assert (:N :<=: A!b) as H5. { apply IsIncl. assumption. }
-    assert (A!b :<=: :\/:_{a} A) as H6. { apply SUG.IsIncl. assumption. }
+    assert (A!b :<=: :\/:_{a} A) as H6. {
+      apply UnionGenOfClass.IsIncl. assumption. }
     assert (:N :<=: :\/:_{a} A) as H7. {
       apply Incl.Tran with (A!b); assumption. }
     intros H8.

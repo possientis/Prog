@@ -32,10 +32,10 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 
+Module CEM := ZF.Class.Empty.
 Module SOM := ZF.Set.Ordinal.Monotone.
 Module SOO := ZF.Set.Ordinal.Order.
 Module SOE := ZF.Set.Ordinal.Order.E.
-Module CEM := ZF.Class.Empty.
 
 
 (* Predicate expressing the fact that a is cofinal with b.                      *)
@@ -514,7 +514,7 @@ Proof.
     assert (Aleph!a = :\/:_{a} Aleph) as H6. {
       apply Continuous. assumption. }
     rewrite H6 in H5.
-    apply SUG.Charac in H5. destruct H5 as [d [H7 H8]].
+    apply UnionGenOfClass.Charac in H5. destruct H5 as [d [H7 H8]].
     exists d. split. 1: assumption.
     assert (Ordinal d) as H9. { apply (Ordinal.IsOrdinal a); assumption. }
     assert (f!d = Aleph!d) as H10. {

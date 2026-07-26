@@ -18,8 +18,6 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Image.
 
 Module CRR := ZF.Class.Relation.Relation.
-Module SOO := ZF.Set.Ordinal.Order.
-Module SRR := ZF.Set.Relation.Relation.
 
 (* Ordinal isomorphism for each well-ordered pair; the empty set otherwise.     *)
 Definition isom : Class := fun y => exists r x f, y = :(:(r,x):,f):   /\
@@ -72,13 +70,13 @@ Proof.
   - subst. reflexivity.
   - contradiction.
   - contradiction.
-  - assert (SRR.Relation f1) as HRf1. { apply HIsom1. }
-    assert (SRR.Relation f2) as HRf2. { apply HIsom2. }
+  - assert (Relation.Relation f1) as HRf1. { apply HIsom1. }
+    assert (Relation.Relation f2) as HRf2. { apply HIsom2. }
     (* Invert: f1^{-1}: b1 -> x and f2^{-1}: b2 -> x are isomorphisms.          *)
     apply Isom.Converse in HIsom1. apply Isom.Converse in HIsom2.
     (* Ordinal order-type uniqueness gives f1^{-1} = f2^{-1}.                   *)
     assert (b1 = b2 /\ f1^:-1: = f2^:-1:) as [_ Hinv]. {
-      eapply SOO.IsUnique; eassumption. }
+      eapply Order.IsUnique; eassumption. }
     (* Since f1 and f2 are relations, converse injectivity gives f1 = f2.       *)
     apply Converse.Injective; assumption.
 Qed.
@@ -116,7 +114,7 @@ Proof.
       apply LawExcludedMiddle. }
   - (* The ordinal order type of (x, r) exists; its converse is the witness.    *)
     assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
-      apply SOO.Exists. assumption. }
+      apply Order.Exists. assumption. }
     apply Isom.Converse in HIsom.
     exists f^:-1:. eapply Satisfies; eassumption.
   - (* Non-WO: the empty set witnesses membership in isom for (r,x).            *)
@@ -149,7 +147,7 @@ Proof.
   (* image f^{-1}[x] equals a by bijection, which is an ordinal.                *)
   intros r x Hwo.
   assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
-    apply SOO.Exists. assumption. }
+    apply Order.Exists. assumption. }
   apply Isom.Converse in HIsom.
   assert ((isom!:(r,x):) = f^:-1:) as Heq. { eapply Eval; eassumption. }
   assert (f^:-1::[x]: = a) as Himg. { apply Bij.ImageOfDomain. apply HIsom. }
@@ -166,7 +164,7 @@ Proof.
   (* f^{-1}: x -> a is the canonical ordinal isomorphism; isom!(r,x) = f^{-1}.  *)
   intros r x b Hwo Hb.
   assert (exists f a, Ordinal a /\ Isom f (E a) r a x) as [f [a [Ha HIsom]]]. {
-    apply SOO.Exists. assumption. }
+    apply Order.Exists. assumption. }
   apply Isom.Converse in HIsom.
   assert ((isom!:(r,x):) = f^:-1:) as Heq. { eapply Eval; eassumption. }
   (* f^{-1}[x] = a by bijection, so b = isom!(r,x)[x] gives b = a.              *)

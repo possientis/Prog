@@ -29,8 +29,6 @@ Require Import ZF.Set.Specify.
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Image.
 
-Module CCI := ZF.Class.Cardinal.Isom.
-
 
 Definition hartogs (a:U) : Class := fun b =>
   Ordinal b /\ exists f, Inj f b a.
@@ -46,7 +44,7 @@ Proof.
       apply OrdPair.Equal in H2. destruct H2 as [H2 H4]. subst. assumption.
     - rewrite H1. exists r, x. split. 2: assumption. reflexivity. }
   remember (ifThenElse2 :P(a :x: a) :P(a) WO
-      (fun r x => (CCI.isom!:(r,x):) :[x]:) (fun _ _ => :0:)) as f eqn:H3.
+      (fun r x => (Isom.isom!:(r,x):) :[x]:) (fun _ _ => :0:)) as f eqn:H3.
   assert (forall y, y :< range f <-> hartogs a y) as H4. {
     intros y. split; intros H4.
     - apply (FunctionOn.RangeCharac f (:P(a :x: a) :x: :P(a))) in H4.
@@ -54,11 +52,11 @@ Proof.
       destruct H4 as [u [H4 H5]]. apply Prod.Charac in H4.
       destruct H4 as [r [x [H4 [H6 H7]]]]. rewrite H4 in H5. clear H4.
       assert (WO :(r,x): \/ ~ WO :(r,x):) as [H8|H8]. { apply LawExcludedMiddle. }
-      + assert ((f!:(r,x):) = (CCI.isom!:(r,x):) :[x]:) as H9. {
+      + assert ((f!:(r,x):) = (Isom.isom!:(r,x):) :[x]:) as H9. {
           rewrite H3. rewrite IfThenElse2.Eval1 by assumption. reflexivity. }
         assert (Ordinal y) as H10. {
           rewrite <- H5, H9. apply Isom.IsOrdinal, H2. assumption. }
-        remember (CCI.isom!:(r,x):) as g eqn:H11.
+        remember (Isom.isom!:(r,x):) as g eqn:H11.
         assert (Isom g r (E y) x y) as H12. {
           rewrite H11. apply Isom.IsIsom. 1: apply H2; assumption.
           rewrite H5, H11 in H9. assumption. }
@@ -88,8 +86,8 @@ Proof.
         apply WellOrdering.Transport with i (E y) y; assumption. }
       assert (WO :(r,x):) as H13. { apply H2. assumption. }
       assert (Isom i^:-1: r (E y) x y) as H14. { apply Isom.Converse. assumption. }
-      assert ((CCI.isom!:(r,x):) = i^:-1:) as H15. {
-        apply CCI.Eval with y; assumption. }
+      assert ((Isom.isom!:(r,x):) = i^:-1:) as H15. {
+        apply Isom.Eval with y; assumption. }
       assert (i^:-1: :[x]: = y) as H16. { apply Bij.ImageOfDomain, H14. }
       assert (x :< :P(a)) as H17. { apply Power.Charac. assumption. }
       assert (domain i = y) as H18. { apply H8. }
@@ -104,7 +102,7 @@ Proof.
         destruct H21 as [u [v [H21 [H22 H23]]]].
         apply Prod.Charac. exists u, v. split. 1: assumption.
         split; apply H7; assumption. }
-      assert ((f!:(r,x):) = (CCI.isom!:(r,x):) :[x]:) as H22. {
+      assert ((f!:(r,x):) = (Isom.isom!:(r,x):) :[x]:) as H22. {
         rewrite H3. rewrite IfThenElse2.Eval1 by assumption. reflexivity. }
       assert ((f!:(r,x):) = y) as H23. { rewrite H15, H16 in H22. assumption. }
       assert (FunctionOn f (:P(a :x: a) :x: :P(a))) as H24. {
