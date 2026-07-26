@@ -760,12 +760,15 @@ Proof.
         assert (F1 :0: :+: (:sum:_{n} (CRL.shiftL :[F1]:))
           = F2 :0: :+: (:sum:_{k} (CRL.shiftL :[F2]:))) as H18. {
             rewrite H17, SumOfClass.ShiftL, SumOfClass.ShiftL,
-            From.Eval, From.Eval in H15; try assumption.
+            From.Eval, From.Eval in H15.
+            - apply H15.
             - apply From.IsFunctional.
+            - apply H16.
             - intros i H18. apply From.DomainOf.
             - intros i H18. rewrite From.Eval. apply G5.
               rewrite H17. assumption.
             - apply From.IsFunctional.
+            - apply H3.
             - intros i H18. apply From.DomainOf.
             - intros i H18. rewrite From.Eval. apply G6. assumption. }
         clear H15.
@@ -780,8 +783,11 @@ Proof.
           assert (Ordinal i) as G16. {
           apply Ordinal.IsOrdinal with n; assumption. }
           rewrite CRL.Eval, From.Eval, From.Eval, E1, E1', H19, H20,
-            SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
+            SRL.Eval, SRL.Eval.
+          - reflexivity.
+          - apply G7.
           - rewrite G11. apply Succ.ElemCompat; assumption.
+          - apply G8.
           - rewrite G12. apply Succ.ElemCompat; assumption.
           - apply From.IsFunctional.
           - apply From.DomainOf. }
@@ -790,8 +796,11 @@ Proof.
           assert (Ordinal i) as G16. {
           apply Ordinal.IsOrdinal with k; assumption. }
           rewrite CRL.Eval, From.Eval, From.Eval, E2, E2', H21, H22,
-            SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
+            SRL.Eval, SRL.Eval.
+          - reflexivity.
+          - apply G9.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption.
+          - apply G10.
           - rewrite G14, H17. apply Succ.ElemCompat; assumption.
           - apply From.IsFunctional.
           - apply From.DomainOf. }
