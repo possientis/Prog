@@ -5,6 +5,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Cardinal.Finite.
+Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Less.
@@ -18,7 +19,6 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
-Module SCH := ZF.Set.Cardinal.Choice.
 
 (* A set is infinite if and only if it is not finite.                           *)
 Definition Infinite (a:U) : Prop := ~ Finite a.
@@ -152,7 +152,7 @@ Proof.
     + exists x. split. 1: assumption.
       intros H3. apply Diff.Charac in H3. destruct H3 as [_ H3].
       apply H3. apply Single.IsIn.
-  - apply SCH.EquipCharac. 1: assumption.
+  - apply WithChoice.EquipCharac. 1: assumption.
     assert ((a :\: :{x}:) :\/: :{x}: = a) as H3. {
       apply Diff.RemoveAddElem. assumption. }
     (* b is infinite: if finite, a = b u {x} would also be finite.              *)
@@ -172,6 +172,6 @@ Proof.
   intros a AC H1.
   (* The cardinal of an infinite set contains N, so a has a subset of size N.   *)
   assert (:N :<=: card a) as H2. { apply Card; assumption. }
-  apply SCH.HasSubsetOfSize; assumption.
+  apply WithChoice.HasSubsetOfSize; assumption.
 Qed.
 

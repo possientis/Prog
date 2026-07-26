@@ -2,15 +2,13 @@ Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Proper.
-Require Import ZF.Set.Cardinal.Choice.
+Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Union.
-
-Module SCH := ZF.Set.Cardinal.Choice.
 
 (* There is always a cardinal number larger than all cardinals of a given set.  *)
 Proposition LargerCardinal : forall (a:U),
@@ -27,12 +25,13 @@ Proof.
     assert (Ordinal c) as H6. { apply Number.CardIsOrd. assumption. }
     assert (Ordinal (card :U(a))) as H7. { apply Number.IsOrdinal. }
     assert (Ordinal b) as H8. { apply Number.CardIsOrd. assumption. }
-    assert (card :U(a) :< b) as H9. { rewrite H2. apply SCH.Cantor. assumption. }
+    assert (card :U(a) :< b) as H9. {
+      rewrite H2. apply WithChoice.Cantor. assumption. }
     assert (c :<=: card :U(a)) as H10. {
       assert (c :<=: :U(a)) as H10. {
         intros x H10. apply Union.Charac. exists c. split; assumption. }
       assert (c = card c) as H11. { apply WhenCardinal. assumption. }
-      rewrite H11. apply SCH.InclCompat; assumption. }
+      rewrite H11. apply WithChoice.InclCompat; assumption. }
     apply Ordinal.InclElemTran with (card :U(a)); assumption. }
   split; assumption.
 Qed.

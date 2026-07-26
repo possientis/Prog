@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Cardinal.Choice.
+Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.WellOrderable.
@@ -18,7 +18,6 @@ Require Import ZF.Set.Union2.
 
 
 
-Module SCH := ZF.Set.Cardinal.Choice.
 Module SPR := ZF.Set.Prod.
 
 
@@ -117,7 +116,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC H1. exists (card a). split. 1: assumption.
   (* Choice gives a bijection between a and its cardinal.                       *)
-  apply SCH.IsEquip. assumption.
+  apply WithChoice.IsEquip. assumption.
 Qed.
 
 (* A finite set with cardinal zero is empty.                                    *)
