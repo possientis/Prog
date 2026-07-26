@@ -1219,24 +1219,31 @@ Proof.
       assert (c = :0: \/ :0: :< c) as H7. {
       apply Ordinal.ZeroOrElem. assumption. }
       destruct H7 as [H7|H7].
-      + subst. rewrite Exp.WhenOneR, Mult.WhenOneR; try assumption. reflexivity.
+      + subst. rewrite Exp.WhenOneR, Mult.WhenOneR.
+        1: reflexivity. 1: apply H2. apply G4.
       + specialize (IH H7). destruct IH as [[H8 IH]|[H8 IH]].
         * rewrite Exp.WhenSuccR, IH, Mult.Assoc, <- (Mult.Assoc n (a :^: b)), G6,
-          <- Mult.Assoc, <- Exp.DistribL, <- Mult.WhenSuccR; try assumption.
-          reflexivity.
+          <- Mult.Assoc, <- Exp.DistribL, <- Mult.WhenSuccR.
+          1: reflexivity. all: assumption.
         * rewrite Exp.WhenSuccR, IH, <- Mult.Assoc, <- Exp.DistribL,
-          <- Mult.WhenSuccR; try assumption. reflexivity.
+          <- Mult.WhenSuccR. 1: reflexivity. all: assumption.
     - intros c H3 IH _. right. split. 1: assumption.
       assert (Ordinal c) as K1. { apply H3. }
       assert (Ordinal (b :*: c)) as K2. { apply Mult.IsOrdinal; assumption. }
       assert (Ordinal (a :^: (b :*: c))) as K3. { apply Exp.IsOrdinal; assumption. }
       assert (a :^: (b :*: c) :<=: (a :^: b :*: n) :^: c) as H7. {
-        rewrite <- Exp.Assoc; try assumption.
-        apply Exp.InclCompatL; try assumption.
-        apply Mult.IsInclR; assumption. }
+        rewrite <- Exp.Assoc.
+        - apply Exp.InclCompatL.
+          + apply G3.
+          + apply G4.
+          + apply K1.
+          + apply Mult.IsInclR; assumption.
+        - apply G1.
+        - apply H2.
+        - apply K1. }
       assert ((a :^: b :*: n) :^: c :<=: a :^: (b :*: c)) as H8. {
         intros x H8.
-        rewrite Exp.WhenLimit in H8; try assumption.
+        rewrite Exp.WhenLimit in H8. 2: apply H3. 2: apply G9.
         apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
         assert (Ordinal d) as L1. {
         apply Ordinal.IsOrdinal with c; assumption. }
@@ -1256,15 +1263,22 @@ Proof.
             + apply Incl.Refl.
             + apply Mult.IsInclR; assumption. }
         assert (a :^: (b :*: d) :*: n :<=: a :^: (b :*: succ d)) as H12. {
-          rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR, Exp.DistribL;
-          try assumption. apply Mult.InclCompatR; try assumption.
-          apply Ordinal.ElemIsIncl; assumption. }
+          rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR, Exp.DistribL.
+          1: { apply Mult.InclCompatR.
+            - apply G2.
+            - apply G3.
+            - apply Exp.IsOrdinal. apply G1. apply Mult.IsOrdinal.
+              + apply H2.
+              + apply L1.
+            - apply Ordinal.ElemIsIncl; assumption. }
+          all: assumption. }
         apply H11, H12 in H10.
-        rewrite <- Exp.Assoc, Exp.WhenLimit; try assumption.
-        apply SUG.Charac. exists (succ d). split.
-        - apply Limit.HasSucc; assumption.
-        - assert (x :< (a :^: b) :^: (succ d)) as X. 2: apply X. (* rewrite *)
-          rewrite Exp.Assoc; assumption. }
+        rewrite <- Exp.Assoc, Exp.WhenLimit.
+        1: { apply SUG.Charac. exists (succ d). split.
+          - apply Limit.HasSucc; assumption.
+          - assert (x :< (a :^: b) :^: (succ d)) as X. 2: apply X.
+            rewrite Exp.Assoc; assumption. }
+        all: assumption. }
       apply Incl.Double. split; assumption. }
   rewrite E in H7. assumption.
 Qed.
