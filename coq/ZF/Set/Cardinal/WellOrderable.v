@@ -40,14 +40,7 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module COF := ZF.Class.Ordinal.FunctionOn.
 Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
-Module SOA := ZF.Set.Ordinal.Order.
 Module SOE := ZF.Set.Ordinal.Order.E.
-Module SOO := ZF.Set.Ordinal.Onto.
-Module SOT := ZF.Set.Order.Transport.
-Module SOW := ZF.Set.Order.WellOrdering.
-Module SMS := ZF.Set.Relation.Map.Sum.
-Module SRO := ZF.Set.Relation.OneToOne.
-Module STO := ZF.Set.Relation.Onto.
 Module SRR := ZF.Set.Relation.RestrictOfClass.
 
 (* A set is well-orderable iff it is equipotent to some ordinal.                *)
@@ -73,12 +66,12 @@ Proof.
     (* Choose a bijection from the ordinal representative onto the set.         *)
     apply Equip.Sym in H2. destruct H2 as [f H2].
     (* Transport the ordinal membership well-ordering along that bijection.     *)
-    exists (SOT.transport f (SOE.E b) b).
-    apply SOW.Transport with f (SOE.E b) b. 1: reflexivity. 1: assumption.
-    apply SOE.IsWellOrdering. assumption.
+    exists (Transport.transport f (SOE.E b) b).
+    apply WellOrdering.Transport with f (SOE.E b) b. 1: reflexivity.
+    1: assumption. apply SOE.IsWellOrdering. assumption.
   - destruct H1 as [r H1].
     (* A well-ordered set is isomorphic to an ordinal, hence equipotent to it.  *)
-    apply SOA.Exists in H1. destruct H1 as [f [b [H1 H2]]].
+    apply Order.Exists in H1. destruct H1 as [f [b [H1 H2]]].
     exists b. split. 1: assumption. apply Equip.Sym. exists f. apply H2.
 Qed.
 
@@ -118,7 +111,7 @@ Proof.
     Ordinal b                                                     /\
     (forall c, c :< b -> (toClass a :\: F:[c]:) :<>: :0:) /\
     toClass F:[b]: :~: toClass a                                  /\
-    SRO.OneToOne (F:|:b)) as H9. { apply COF.WhenFreshAndSmall; assumption. }
+    OneToOne.OneToOne (F:|:b)) as H9. { apply COF.WhenFreshAndSmall; assumption. }
   destruct H9 as [b [H9 [H10 [H11 H12]]]].
   assert (F:[b]: = a) as H13. { apply CEQ.EqualToClass. assumption. }
   assert (range (F:|:b) = a) as H14. {
@@ -165,10 +158,10 @@ Proof.
   assert (c :~: a) as H4. { apply Equip.Sym. assumption. }
   destruct H4 as [e H4].
   assert (Onto e c a) as H5. { apply Bij.IsOnto. assumption. }
-  assert (Onto (f :.: e) c b) as H6. { apply STO.Compose with a; assumption. }
+  assert (Onto (f :.: e) c b) as H6. { apply Onto.Compose with a; assumption. }
   (* A surjection from an ordinal has a bijective restriction.                  *)
   assert (exists d, d :<=: c /\ Bij ((f :.: e) :|: d) d b) as H7. {
-    apply SOO.HasRestrictBij; assumption. }
+    apply Onto.HasRestrictBij; assumption. }
   destruct H7 as [d [H7 H8]].
   (* The restricted domain has an ordinal representative inside the domain.     *)
   assert (exists r, Ordinal r /\ r :<=: c /\ d :~: r) as H9. {
@@ -225,7 +218,7 @@ Proof.
   assert (WellOrderable (a :++: b)) as H3. { apply Sum; assumption. }
   remember (either a b (id a) (id b)) as f eqn:H4.
   (* The either map from the disjoint sum onto the ordinary union is onto.      *)
-  assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply SMS.HasOnto. }
+  assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply Sum.HasOnto. }
   (* A surjection preserves well-orderability of the codomain.                  *)
   apply OntoCompat with f (a :++: b); assumption.
 Qed.

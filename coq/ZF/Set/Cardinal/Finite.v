@@ -17,10 +17,6 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
 
 
-
-Module SPR := ZF.Set.Prod.
-
-
 (* A set is finite if and only if it is equipotent to a natural number.         *)
 Definition Finite (a:U) : Prop := exists n, n :< :N /\ a :~: n.
 
@@ -269,7 +265,7 @@ Proof.
     - (* If card(a) is zero, then a is empty and so is its product with b.      *)
       intros a b H2 H3 H4.
       assert (a = :0:) as H5. { apply WhenZeroCard; assumption. }
-      rewrite H5, SPR.ZeroL. apply Zero.
+      rewrite H5, Prod.ZeroL. apply Zero.
     - (* Remove one element from a and distribute product over the union.       *)
       intros n H2 IH a b H4 H5 H6.
       assert (card a <> :0:) as H7. { rewrite H4. apply Succ.NotZero. }
@@ -285,7 +281,7 @@ Proof.
         assert (c :\/: :{x}: = a) as H15. {
           rewrite H9. apply Diff.RemoveAddElem. assumption. }
         (* Distributing the product separates the removed slice from the rest.  *)
-        rewrite <- H15. apply SPR.DistribR. }
+        rewrite <- H15. apply Prod.DistribR. }
       rewrite H14. apply Union; assumption. }
   intros a b H3 H4.
   (* Apply the induction statement to card(a), which is natural by finiteness.  *)
