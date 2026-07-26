@@ -129,54 +129,54 @@ Proposition IsSmall : forall (A B:Class),
   B :<: A      ->
   Small B.
 Proof.
-  (* Let A and B be arbitrary classes. *)
+  (* Let A and B be arbitrary classes.                                          *)
   intros A B.
 
-  (* We assume that A is an ordinal class. *)
+  (* We assume that A is an ordinal class.                                      *)
   intros H1. assert (Ordinal A) as X. apply H1. clear X.
 
-  (* We assume that B is a transitive class. *)
+  (* We assume that B is a transitive class.                                    *)
   intros H2. assert (Transitive B) as X. apply H2. clear X.
 
-  (* We assume that B < A. *)
+  (* We assume that B < A.                                                      *)
   intros H3. assert (B :<: A) as X. apply H3. clear X.
 
-  (* We need to show that B is a small class. *)
+  (* We need to show that B is a small class.                                   *)
   assert (Small B) as X. 2: apply X.
 
-  (* In other words, we need to show the existence of a set b ... *)
+  (* In other words, we need to show the existence of a set b ...               *)
   assert (exists b, forall x, x :< b <-> B x) as X. 2: apply X.
 
-  (* We claim that the non-empty class A\B has an :<-minimal element. *)
+  (* We claim that the non-empty class A\B has an :<-minimal element.           *)
   assert (exists b, (A :\: B) b /\ (A :\: B) :/\: toClass b :~: :0:) as H4. {
     apply HasMinimal with A. 1: assumption.
     - apply Class.Inter2.IsInclL.
     - apply Diff.WhenLess. assumption. }
 
-  (* So let b be such a set.  *)
+  (* So let b be such a set.                                                    *)
   destruct H4 as [b [H4 H5]].
 
-  (* Then b lies in the class A\B. *)
+  (* Then b lies in the class A\B.                                              *)
   assert ((A:\:B) b) as X. apply H4. clear X.
 
-  (* and (A\B) /\ b = 0. *)
+  (* and (A\B) /\ b = 0.                                                        *)
   assert ((A:\:B) :/\: toClass b :~: :0:) as X. apply H5. clear X.
 
-  (* We claim the set b has the desired property. *)
+  (* We claim the set b has the desired property.                               *)
   exists b.
 
-  (* So given a set x *)
+  (* So given a set x                                                           *)
   intros x.
 
-  (* We need to show the equivalence x :< b <-> B x. *)
+  (* We need to show the equivalence x :< b <-> B x.                            *)
   assert (x :< b <-> B x) as X. 2: apply X. split; intros H6.
 
-  (* Proof of ->. *)
+  (* Proof of ->.                                                               *)
   - apply DoubleNegation. intros H7. apply Class.Empty.Charac with x, H5.
     split. 2: assumption. split. 2: assumption. destruct H1 as [H1 H8].
     apply (H1 b). 2: assumption. apply H4.
 
-  (* Proof of <-. *)
+  (* Proof of <-.                                                               *)
   - assert (A b) as H7. { apply H4. }
     assert (A x) as H8. { apply H3. assumption. }
     destruct H1 as [H1 H9]. specialize (H9 b x H7 H8).

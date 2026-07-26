@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Oracle.
 Require Import ZF.Class.Ordinal.Recursion.
@@ -16,7 +16,6 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
-Module COC := ZF.Class.Ordinal.Core.
 Module COR := ZF.Class.Ordinal.Recursion.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SFO := ZF.Set.Relation.FunctionOn.
@@ -75,9 +74,9 @@ Qed.
 (* which satisfies the three equations (i), (ii) and (iii).                     *)
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                               ->
-  G!:0: = a                                     ->  (* (i)   *)
-  (forall b, Ordinal b -> G!(succ b) = F!(G!b)) ->  (* (ii)  *)
-  (forall b, Limit b   -> G!b = :\/:_{b} G)     ->  (* (iii) *)
+  G!:0: = a                                     ->  (* (i)                      *)
+  (forall b, Ordinal b -> G!(succ b) = F!(G!b)) ->  (* (ii)                     *)
+  (forall b, Limit b   -> G!b = :\/:_{b} G)     ->  (* (iii)                    *)
   G :~: Recursion F a.
 Proof.
   intros F G a H1 H2 H3 H4.

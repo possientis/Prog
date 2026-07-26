@@ -11,7 +11,7 @@ Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Order.WellOrdering.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Order.Lex.
 Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Prod.
@@ -39,7 +39,6 @@ Require Import ZF.Notation.Image.
 
 Module CIN := ZF.Class.Incl.
 Module CEM := ZF.Class.Empty.
-Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Order.InitSegment.
 Module CPR := ZF.Class.Prod.
 Module CRB := ZF.Class.Relation.Bij.
@@ -277,7 +276,7 @@ Proposition IsIsom : Isom Pairing MaxLex E (On :x: On) On.
 Proof.
   apply Isom.Converse, Enum.IsIsom.
   - apply IsWellFoundedWellOrd.
-  - apply Core.IsProperSquare.
+  - apply OrdClass.IsProperSquare.
 Qed.
 
 (* Pairing maps the MaxLex initial segment of a pair onto its ordinal value.    *)

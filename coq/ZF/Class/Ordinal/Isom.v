@@ -9,7 +9,7 @@ Require Import ZF.Class.Less.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -30,7 +30,6 @@ Require Import ZF.Set.Relation.ImageUnderClass.
 
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 
 
 (* An element a of an ordinal class A is a :<-minimal element of A\a.           *)
@@ -40,11 +39,11 @@ Proposition IsMinimal : forall (A:Class) (a:U),
   Minimal E (A :\: a) a.
 Proof.
   intros A a H1 H2.
-  assert (On a) as H3. { apply COC.WhenElem with A; assumption. }
+  assert (On a) as H3. { apply OrdClass.WhenElem with A; assumption. }
   assert (A :\: a :<>: :0:) as H4. {
     apply Class.Empty.HasElem. exists a. split. 1: assumption. apply Foundation.NoLoop1. }
   apply Inf.IsMinimal. 2: assumption.
-  - intros x [H5 _]. apply COC.WhenElem with A; assumption.
+  - intros x [H5 _]. apply OrdClass.WhenElem with A; assumption.
   - apply Inf.WhenOrdinal; assumption.
 Qed.
 
@@ -96,7 +95,7 @@ Proof.
         apply Minimal.EquivCompatR with F:[A :\: b]:; assumption. }
       clear H11 H12.
       assert (B b) as H14. {
-        apply COC.LessIsElem; try assumption. split.
+        apply OrdClass.LessIsElem; try assumption. split.
         - intros a H14. apply (Bij.ImageOfDomain F A B). 1: apply H3.
           apply (Bij.ImageCharac F A B). 1: apply H3.
           exists a. assert (A a) as H15. {
@@ -107,7 +106,7 @@ Proof.
       assert (Minimal E (B :\: b) b) as H15. {
         apply IsMinimal; assumption. }
       assert (B :\: b :<=: On) as H16. {
-        intros a [H16 _]. apply COC.WhenElem with B; assumption. }
+        intros a [H16 _]. apply OrdClass.WhenElem with B; assumption. }
       assert (B :\: b :<>: :0:) as H17. {
         apply Class.Empty.HasElem. exists b. split. 1: assumption.
         apply Foundation.NoLoop1. }
@@ -117,7 +116,7 @@ Proof.
         apply InfOfClass.IsMinimal; assumption. }
       rewrite <- H18 in H19. assumption. }
   intros a H6.
-  assert (On a) as H7. { apply COC.WhenElem with A; assumption. }
+  assert (On a) as H7. { apply OrdClass.WhenElem with A; assumption. }
   assert (C a) as H8. { apply H5. assumption. }
   rewrite H4 in H8. destruct H8 as [_ H8]. apply H8. assumption.
 Qed.

@@ -25,7 +25,6 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module CMI := ZF.Class.Order.Minimal.
-Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.

@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Relation.Domain.
@@ -28,7 +28,6 @@ Require Import ZF.Set.Union2.
 
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
 Module CFL := ZF.Class.Relation.Functional.
@@ -126,7 +125,7 @@ Qed.
 
 (* The domain of the transfinite recursion class is an Ordinal class.           *)
 Lemma DomainIsOrdinal : forall (F:Class),
-  COC.Ordinal (CRD.domain (Recursion F)).
+  OrdClass.Ordinal (CRD.domain (Recursion F)).
 Proof.
   intros F.
   assert (Transitive (CRD.domain (Recursion F))) as H1. {
@@ -149,7 +148,7 @@ Proof.
       destruct H4 as [_ H4]. rewrite <- H4. apply SRD.Charac.
       exists y. assumption. }
     apply Ordinal.IsOrdinal with a; assumption. }
-  apply COC.WhenTransitive with On; try assumption. apply COC.IsOrdinal.
+  apply OrdClass.WhenTransitive with On; try assumption. apply OrdClass.IsOrdinal.
 Qed.
 
 (* The domain of the transfinite recursion class is the class of ordinals       *)

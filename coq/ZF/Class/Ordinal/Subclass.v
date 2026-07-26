@@ -5,7 +5,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Enum.
 Require Import ZF.Class.Ordinal.MinFresh.
 Require Import ZF.Class.Ordinal.Monotone.
@@ -25,7 +25,6 @@ Require Import ZF.Notation.Image.
 Module CEN := ZF.Class.Ordinal.Enum.
 Module CIN := ZF.Class.Incl.
 Module CMF := ZF.Class.Ordinal.MinFresh.
-Module COC := ZF.Class.Ordinal.Core.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 
@@ -111,7 +110,7 @@ Proof.
   intros A H1 H2.
   apply COM.FromIsom with On A. 3: assumption.
   - apply IsIsom; assumption.
-  - apply COC.IsOrdinal.
+  - apply OrdClass.IsOrdinal.
 Qed.
 
 (* A well ordered small class of ordinals is isomorphic to an ordinal.          *)

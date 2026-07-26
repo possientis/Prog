@@ -7,7 +7,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Order.Total.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellOrdering.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Prod.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -27,7 +27,6 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
 Module CEM := ZF.Class.Empty.
-Module COC := ZF.Class.Ordinal.Core.
 
 (* Lexicographical order on On x On.                                            *)
 Definition Lex : Class := fun x =>
@@ -200,7 +199,7 @@ Proof.
   assert (Small On) as H11. {
     apply Small.EquivCompat with (domain F). 1: assumption.
     apply Function.DomainIsSmall; assumption. }
-  revert H11. apply COC.IsProper.
+  revert H11. apply OrdClass.IsProper.
 Qed.
 
 

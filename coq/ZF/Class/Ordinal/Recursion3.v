@@ -1,6 +1,6 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Oracle2.
 Require Import ZF.Class.Ordinal.Recursion.
@@ -19,7 +19,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module COR := ZF.Class.Ordinal.Recursion.
-Module COC := ZF.Class.Ordinal.Core.
 Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* Transfinite recursion class associated with F and a. In other words, the     *)
@@ -77,9 +76,9 @@ Qed.
 (* which satisfies the three equations (i), (ii) and (iii).                     *)
 Proposition IsUnique : forall (F G:Class) (a:U),
   FunctionOn G On                                   ->
-  G!:0: = a                                         ->  (* (i)   *)
-  (forall b, Ordinal b -> G!(succ b) = F!:(b,G!b):) ->  (* (ii)  *)
-  (forall b, Limit b   -> G!b = :\/:_{b} G)         ->  (* (iii) *)
+  G!:0: = a                                         ->  (* (i)                  *)
+  (forall b, Ordinal b -> G!(succ b) = F!:(b,G!b):) ->  (* (ii)                 *)
+  (forall b, Limit b   -> G!b = :\/:_{b} G)         ->  (* (iii)                *)
   G :~: Recursion F a.
 Proof.
   intros F G a H1 H2 H3 H4.

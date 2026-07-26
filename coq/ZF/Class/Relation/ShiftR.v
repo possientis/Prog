@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Omega.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Relation.Domain.
@@ -25,7 +25,6 @@ Require Import ZF.Set.Union.
 Require Import ZF.Notation.Eval.
 
 Module SOO := ZF.Set.Ordinal.Omega.
-Module COC := ZF.Class.Ordinal.Core.
 
 
 (* Shifting a function class to the right, with additional value at 0.          *)
@@ -234,7 +233,7 @@ Proposition IsOrdFun : forall (F:Class) (a:U),
 Proof.
   intros F a H1 H2 H3.
   assert (On :N) as G1. { apply Omega.IsOrdinal. }
-  assert (COC.Ordinal (domain F)) as H4. { apply H3. }
+  assert (OrdClass.Ordinal (domain F)) as H4. { apply H3. }
   assert (domain F :~: toClass :N \/
     exists n, n :< :N /\ domain F :~: toClass n) as H5. {
       apply Omega.OrdinalSubclass; assumption. }
@@ -242,11 +241,11 @@ Proof.
   - apply IsFunction, H3.
   - split.
     + destruct H5 as [H5|[n [H5 H6]]].
-      * apply COC.EquivCompat with (toClass :N). 2: assumption.
+      * apply OrdClass.EquivCompat with (toClass :N). 2: assumption.
         apply Equiv.Sym, WhenDomainIsN. assumption.
       * assert (On n) as G2. { apply Omega.HasOrdinals. assumption. }
         assert (On (succ n)) as G3. { apply Succ.IsOrdinal. assumption. }
-        apply COC.EquivCompat with (toClass (succ n)). 2: assumption.
+        apply OrdClass.EquivCompat with (toClass (succ n)). 2: assumption.
         apply Equiv.Sym, WhenDomainIsNat; assumption.
     + intros y H6. apply RangeOf in H6. destruct H6 as [H6|H6].
       * subst. assumption.

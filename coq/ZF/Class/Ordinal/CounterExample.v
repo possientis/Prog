@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Recursion2.
@@ -18,7 +18,6 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
-Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 
 (* This module shows that monotonicity is not preserved by ordinal recursion    *)
@@ -62,7 +61,7 @@ Proof.
     + intros x y z H1 H2. apply F0Charac2 in H1. apply F0Charac2 in H2.
       destruct H1 as [H1 H3]. destruct H2 as [H2 H4]. subst. reflexivity.
   - split.
-    + apply Core.EquivCompat with On. 2: apply COC.IsOrdinal.
+    + apply OrdClass.EquivCompat with On. 2: apply OrdClass.IsOrdinal.
       apply Equiv.Sym, F0Domain.
     + intros z H1. destruct H1 as [y H1]. apply F0Charac2 in H1.
       destruct H1 as [H1 H2]. subst. apply Succ.IsOrdinal. assumption.

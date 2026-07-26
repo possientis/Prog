@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -10,7 +10,6 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Union.
 
-Module COC := ZF.Class.Ordinal.Core.
 
 (* Transfinite induction by cases: zero, successor, and limit ordinal cases.    *)
 Proposition Induction : forall (A:Class),

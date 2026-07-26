@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -10,7 +10,6 @@ Require Import ZF.Set.Inter.
 Require Import ZF.Set.Ordinal.Ordinal.
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Ordinal.Inter.
 
 Module SIR := ZF.Set.Inter.
@@ -19,7 +18,7 @@ Module SIR := ZF.Set.Inter.
 Proposition IsOrdinal : forall (a:U),
   toClass a :<=: Ordinal -> Ordinal :I(a).
 Proof.
-  intros a H1. apply COC.EquivCompat with :I(toClass a).
+  intros a H1. apply OrdClass.EquivCompat with :I(toClass a).
   - apply Equiv.Sym, SIR.ToClass.
   - apply COI.IsOrdinal. assumption.
 Qed.

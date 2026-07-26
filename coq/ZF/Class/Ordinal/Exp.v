@@ -1,6 +1,6 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
@@ -21,7 +21,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module COC := ZF.Class.Ordinal.Core.
 Module SUG := ZF.Set.UnionGenOfClass.
 
 (* Not quite the function class (a ^ .) when a is an ordinal: because 0^0 is    *)

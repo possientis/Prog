@@ -2,7 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
@@ -11,7 +11,6 @@ Require Import ZF.Set.Core.
 Require Import ZF.Notation.SupBelow.
 
 
-Module COC := ZF.Class.Ordinal.Core.
 
 
 Export ZF.Notation.SupBelow.
@@ -44,7 +43,7 @@ Proposition IsLess : forall (A:Class) (b:U),
 Proof.
   intros A b.
   assert (sup(:< b) A :~: On \/ sup(:< b) A :<: On) as H1. {
-    apply Core.IsOnOrLess, IsOrdinal. }
+    apply OrdClass.IsOnOrLess, IsOrdinal. }
   destruct H1 as [H1|H1]. 2: assumption. exfalso.
   apply IsProper. apply Small.EquivCompat with (sup(:< b) A).
   1: assumption. apply IsSmall.

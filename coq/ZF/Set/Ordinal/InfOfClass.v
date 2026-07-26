@@ -6,14 +6,13 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Order.E.
 Require Import ZF.Class.Order.Minimal.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 
-Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Ordinal.Inf.
 Module SIC := ZF.Set.InterOfClass.
 Module SOC := ZF.Set.Ordinal.InterOfClass.
@@ -148,7 +147,7 @@ Qed.
 
 (* The infimum of an ordinal class minus a singleton is the removed element.    *)
 Proposition WhenOrdinal : forall (A:Class) (a:U),
-  COC.Ordinal A                 ->
+  OrdClass.Ordinal A                 ->
   Ordinal a                     ->
   A :\: a :<>: :0:      ->
   inf (A :\: a) = a.

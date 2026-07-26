@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.FunctionOn.
@@ -17,7 +17,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module COC := ZF.Class.Ordinal.Core.
 Module SFO := ZF.Set.Relation.FunctionOn.
 
 (* The function class (a + .) when a is an ordinal.                             *)

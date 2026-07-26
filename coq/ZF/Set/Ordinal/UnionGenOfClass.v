@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.UnionGen.
 Require Import ZF.Class.Relation.I.
 Require Import ZF.Set.Core.
@@ -14,14 +14,13 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
-Module COC := ZF.Class.Ordinal.Core.
 Module SUC := ZF.Set.UnionGenOfClass.
 
 (* The union of a class family of ordinals indexed by a is an ordinal.          *)
 Proposition IsOrdinal : forall (A:Class) (a:U),
   (forall x, x :< a -> Ordinal A!x) -> Ordinal :\/:_{a} A.
 Proof.
-  intros A a H1. apply COC.EquivCompat with :\/:_{toClass a} A.
+  intros A a H1. apply OrdClass.EquivCompat with :\/:_{toClass a} A.
   - apply Equiv.Sym, FromClass.ToClass.
   - apply UnionGen.IsOrdinal. assumption.
 Qed.

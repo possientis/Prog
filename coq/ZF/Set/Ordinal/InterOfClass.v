@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Inter.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter.
@@ -11,7 +11,6 @@ Require Import ZF.Set.InterOfClass.
 Require Import ZF.Set.Ordinal.Ordinal.
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Ordinal.Inter.
 
 Module SIN := ZF.Set.Incl.
@@ -24,7 +23,7 @@ Module SIC := ZF.Set.InterOfClass.
 Proposition IsOrdinal : forall (A:Class),
   A :<=: Ordinal -> Ordinal (inter A).
 Proof.
-  intros A H1. apply COC.EquivCompat with :I(A).
+  intros A H1. apply OrdClass.EquivCompat with :I(A).
   - apply Equiv.Sym, SIC.ToClass.
   - apply COI.IsOrdinal. assumption.
 Qed.
@@ -54,7 +53,7 @@ Qed.
 
 (* The intersection of an ordinal class is 0.                                   *)
 Proposition IsZero : forall (A:Class),
-  COC.Ordinal A -> inter A = :0:.
+  OrdClass.Ordinal A -> inter A = :0:.
 Proof.
   intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. { apply LawExcludedMiddle. }
@@ -62,6 +61,6 @@ Proof.
   - rewrite <- SIC.IsZero. apply SIC.EquivCompat. assumption.
   - apply SIN.Double. split; intros x H3.
     + apply SIC.Charac with A. 1: assumption.
-      apply COC.HasZero; assumption.
+      apply OrdClass.HasZero; assumption.
     + apply Empty.Charac in H3. contradiction.
 Qed.

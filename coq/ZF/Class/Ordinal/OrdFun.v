@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Ordinal.Transitive.
@@ -16,7 +16,6 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
 
 
-Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 
 (* An ordinal function is a function with ordinal domain and ordinal values.    *)
@@ -35,8 +34,8 @@ Proof.
   split.
   - apply Recursion2.IsFunctionOn.
   - split.
-    + apply Core.EquivCompat with On. apply Equiv.Sym.
-      1: assumption. apply COC.IsOrdinal.
+    + apply OrdClass.EquivCompat with On. apply Equiv.Sym.
+      1: assumption. apply OrdClass.IsOrdinal.
     + assert (forall x, On x -> On (Recursion F a)!x) as H6. {
         apply Induction2.Induction.
         - rewrite Recursion2.WhenZero. assumption.
@@ -56,7 +55,7 @@ Proposition WhenInDomain : forall (F:Class) (a:U), OrdFun F ->
   domain F a -> On a.
 Proof.
   intros F a [H1 [H2 H3]] H4.
-  apply COC.WhenElem with (domain F); assumption.
+  apply OrdClass.WhenElem with (domain F); assumption.
 Qed.
 
 (* An ordinal function takes ordinal values on its domain.                      *)

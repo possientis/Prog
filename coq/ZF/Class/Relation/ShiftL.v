@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Ordinal.Union.
@@ -22,7 +22,6 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 Module COU := ZF.Class.Ordinal.Union.
 
 (* Shifting a function class to the left.                                       *)
@@ -91,14 +90,14 @@ Proof.
 Qed.
 
 (* When the domain of F is an ordinal, the domain of shiftL F is its union.     *)
-Proposition WhenOrdinalDomain : forall (F:Class), COC.Ordinal (domain F) ->
+Proposition WhenOrdinalDomain : forall (F:Class), OrdClass.Ordinal (domain F) ->
   domain (shiftL F) :~: :U(domain F).
 Proof.
   intros F H1. intros x. split; intros H2.
   - apply DomainOf in H2. exists (succ x). split. 2: assumption.
     apply Succ.IsIn.
   - destruct H2 as [y [H2 H3]]. apply DomainOf.
-    assert (Ordinal y) as H4. { apply COC.WhenElem with (domain F); assumption. }
+    assert (Ordinal y) as H4. { apply OrdClass.WhenElem with (domain F); assumption. }
     assert (Ordinal x) as H5. { apply Ordinal.IsOrdinal with y; assumption. }
     assert (Ordinal (succ x)) as H6. { apply Succ.IsOrdinal. assumption. }
     assert (succ x :<=: y) as H7. { apply Succ.ElemIsIncl; assumption. }
@@ -117,9 +116,9 @@ Proof.
   intros F H1. split.
   - apply IsFunction, H1.
   - split.
-    + apply COC.EquivCompat with :U(domain F).
+    + apply OrdClass.EquivCompat with :U(domain F).
       * apply Equiv.Sym, WhenOrdinalDomain, H1.
-      * apply COU.IsOrdinal, COC.IsIncl, H1.
+      * apply COU.IsOrdinal, OrdClass.IsIncl, H1.
     + apply CIN.Tran with (range F).
       * apply RangeOf.
       * apply H1.

@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Induction2.
 Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Class.Relation.Fun.From.
@@ -18,7 +18,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module COC := ZF.Class.Ordinal.Core.
 
 (* The cumulative hierarchy assigns a rank-initial segment to each ordinal.     *)
 (* (i)   VH(0)      = 0                                                         *)

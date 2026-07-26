@@ -11,7 +11,7 @@ Require Import ZF.Class.Order.Transitive.
 Require Import ZF.Class.Order.WellFounded.
 Require Import ZF.Class.Order.WellFoundedWellOrd.
 Require Import ZF.Class.Order.WellOrdering.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
@@ -19,7 +19,6 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.OrdPair.
 
-Module COC := ZF.Class.Ordinal.Core.
 
 (* The order :< is irreflexive on any class A.                                  *)
 Proposition IsIrreflexive : forall (A:Class),

@@ -2,7 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.Less.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
@@ -10,7 +10,6 @@ Require Import ZF.Set.Core.
 
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 
 
 (* The supremum of the class A.                                                 *)
@@ -50,14 +49,14 @@ Qed.
 Proposition IsOnOrSmall : forall (A:Class),
   sup A :~: On \/ Small (sup A).
 Proof.
-  intros A. apply Core.IsOnOrSmall, IsOrdinal.
+  intros A. apply OrdClass.IsOnOrSmall, IsOrdinal.
 Qed.
 
 (* The supremum is either the class of ordinals or a subclass thereof.          *)
 Proposition IsOnOrLess : forall (A:Class),
   sup A :~: On \/ sup A :<: On.
 Proof.
-  intros A. apply Core.IsOnOrLess, IsOrdinal.
+  intros A. apply OrdClass.IsOnOrLess, IsOrdinal.
 Qed.
 
 (* The supremum of a class of ordinals is an upper-bound of that class.         *)

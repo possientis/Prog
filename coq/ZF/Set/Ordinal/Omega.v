@@ -112,7 +112,7 @@ Qed.
 (* The set N is an ordinal.                                                     *)
 Proposition IsOrdinal : Ordinal :N.
 Proof.
-  apply Core.EquivCompat with :N.
+  apply OrdClass.EquivCompat with :N.
   - apply Equiv.Sym, ToClass.
   - apply COO.IsOrdinal.
 Qed.
@@ -414,7 +414,7 @@ Qed.
 
 (* An ordinal subclass of N is either N itself or a natural number.             *)
 Proposition OrdinalSubclass : forall (A:Class),
-  COC.Ordinal A                                               ->
+  OrdClass.Ordinal A                                               ->
   A :<=: toClass :N                                           ->
   A :~: toClass :N  \/ exists n, n :< :N /\ A :~: toClass n.
 Proof.

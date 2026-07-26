@@ -7,7 +7,7 @@ Require Import ZF.Class.Diff.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
@@ -24,7 +24,6 @@ Export ZF.Notation.N.
 
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 
 
 (* The class natural numbers.                                                   *)
@@ -163,7 +162,7 @@ Proof.
 Qed.
 
 (* N is an ordinal class.                                                       *)
-Proposition IsOrdinal : COC.Ordinal :N.
+Proposition IsOrdinal : OrdClass.Ordinal :N.
 Proof.
   split. 1: apply IsTransitive. intros a b [H1 _] [H2 _].
   apply Ordinal.IsTotal; assumption.
@@ -172,47 +171,47 @@ Qed.
 (* The class N is in fact small, thanks to the axiom of infinity.               *)
 Proposition IsSmall : Small :N.
 Proof.
-  (* We need to show that N is small. *)
+  (* We need to show that N is small.                                           *)
   assert (Small :N) as X. 2: apply X.
 
-  (* There is a set containing 0 and the successor of all its elements. *)
+  (* There is a set containing 0 and the successor of all its elements.         *)
   assert (exists a,
     :0: :< a /\ forall x, x :< a -> succ x :< a) as H1. {apply Infinity. }
 
-  (* So let a be such a set. *)
+  (* So let a be such a set.                                                    *)
   destruct H1 as [a [H1 H2]].
 
-  (* Then 0 :< a. *)
+  (* Then 0 :< a.                                                               *)
   assert (:0: :< a) as X. apply H1. clear X.
 
-  (* And succ x :< a when x :< a. *)
+  (* And succ x :< a when x :< a.                                               *)
   assert (forall x, x :< a -> succ x :< a) as X. apply H2. clear X.
 
-  (* We prove N is small by showing it is bounded. *)
+  (* We prove N is small by showing it is bounded.                              *)
   apply Bounded.IsSmall.
 
-  (* So we need to show the existence of a set a such that N <= a. *)
+  (* So we need to show the existence of a set a such that N <= a.              *)
   assert (exists a, :N :<=: toClass a) as X. 2: apply X.
 
-  (* We claim our set a is such a set. *)
+  (* We claim our set a is such a set.                                          *)
   exists a.
 
-  (* So we need to show that N <= a. *)
+  (* So we need to show that N <= a.                                            *)
   assert (:N :<=: toClass a) as X. 2: apply X.
 
-  (* We proceed by induction. *)
+  (* We proceed by induction.                                                   *)
   apply Induction.
 
-  (* We first need to show that :0: :< a. *)
+  (* We first need to show that :0: :< a.                                       *)
   - assert (:0: :< a) as X. 2: apply X.
 
-  (* Which is true. *)
+  (* Which is true.                                                             *)
     apply H1.
 
-  (* And we need to show that for all i in N, i :< a -> succ i :< a. *)
+  (* And we need to show that for all i in N, i :< a -> succ i :< a.            *)
   - assert (forall i, (:N : Class) i -> i :< a -> succ i :< a) as X. 2: apply X.
 
-  (* Which is also true. *)
+  (* Which is also true.                                                        *)
     intros i _. apply H2.
 Qed.
 

@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Class.Empty.
@@ -13,21 +13,20 @@ Require Import ZF.Set.Ordinal.Transitive.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 
-Module COC := ZF.Class.Ordinal.Core.
 
 (* The class of all ordinals.                                                   *)
 Definition Ordinal : Class := On.
 
 (* If the set is an ordinal, then so is the class.                              *)
 Proposition ToClass : forall (a:U),
-  Ordinal a -> COC.Ordinal (toClass a).
+  Ordinal a -> OrdClass.Ordinal (toClass a).
 Proof.
   intros a H1. assumption.
 Qed.
 
 (* If the class is an ordinal, then so is the set.                              *)
 Proposition FromClass : forall (a:U),
-  COC.Ordinal (toClass a) -> Ordinal a.
+  OrdClass.Ordinal (toClass a) -> Ordinal a.
 Proof.
   intros a H1. assumption.
 Qed.
@@ -53,7 +52,7 @@ Qed.
 Proposition IsOrdinal : forall (a b:U), Ordinal a ->
   b :< a -> Ordinal b.
 Proof.
-  intros a b H1 H2. apply COC.WhenElem with (toClass a);
+  intros a b H1 H2. apply OrdClass.WhenElem with (toClass a);
   assumption.
 Qed.
 
@@ -80,8 +79,8 @@ Qed.
 Proposition IsLess : forall (a:U), Ordinal a ->
   toClass a :<: Ordinal.
 Proof.
-  intros a H1. apply (COC.LessIsElem Ordinal); try assumption.
-  apply COC.IsOrdinal.
+  intros a H1. apply (OrdClass.LessIsElem Ordinal); try assumption.
+  apply OrdClass.IsOrdinal.
 Qed.
 
 (* Ordinals are totally ordered by set membership.                              *)
@@ -92,7 +91,7 @@ Proof.
     toClass a :~: toClass b \/
     toClass a :<: toClass b \/
     toClass b :<: toClass a) as H3. {
-      apply COC.ThreeWay; assumption. }
+      apply OrdClass.ThreeWay; assumption. }
     destruct H3 as [H3|[H3|H3]].
     - left. apply EqualToClass. assumption.
     - right. left. apply LessIsElem; try assumption.
@@ -194,8 +193,8 @@ Qed.
 (* 0 is an ordinal.                                                             *)
 Proposition Zero : Ordinal :0:.
 Proof.
-  apply COC.EquivCompat with :0:.
-  2: apply COC.Zero.
+  apply OrdClass.EquivCompat with :0:.
+  2: apply OrdClass.Zero.
   apply Equiv.Sym, Empty.ToClass.
 Qed.
 
@@ -236,10 +235,10 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists a, A a /\ A :/\: toClass a :~: :0:) as H3. {
-    apply COC.HasMinimal with Ordinal; try assumption. apply COC.IsOrdinal. }
+    apply OrdClass.HasMinimal with Ordinal; try assumption. apply OrdClass.IsOrdinal. }
   destruct H3 as [a [H3 H4]]. exists a. assert (Ordinal a) as H5. {
-    apply COC.WhenElem with Ordinal.
-    apply COC.IsOrdinal. apply H1. assumption. }
+    apply OrdClass.WhenElem with Ordinal.
+    apply OrdClass.IsOrdinal. apply H1. assumption. }
   split. 1: assumption. split. 1: assumption. intros b H6.
   assert (Ordinal b) as H7. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H8. {

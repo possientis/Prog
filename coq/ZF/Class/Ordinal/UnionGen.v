@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.
@@ -9,7 +9,6 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Notation.UnionGen.
 
 
-Module COC := ZF.Class.Ordinal.Core.
 
 
 Export ZF.Notation.UnionGen.

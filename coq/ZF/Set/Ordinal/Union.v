@@ -1,19 +1,18 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Union.
 
-Module COC := ZF.Class.Ordinal.Core.
 Module COU := ZF.Class.Ordinal.Union.
 
 (* The union of a set of ordinals is an ordinal.                                *)
 Proposition IsOrdinal : forall (a:U),
   toClass a :<=: Ordinal -> Ordinal :U(a).
 Proof.
-  intros a H1. apply COC.EquivCompat with :U(toClass a).
+  intros a H1. apply OrdClass.EquivCompat with :U(toClass a).
   - apply Equiv.Sym, Union.ToClass.
   - apply COU.IsOrdinal. assumption.
 Qed.

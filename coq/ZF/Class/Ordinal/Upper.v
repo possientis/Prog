@@ -6,7 +6,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Class.IsSetOf.
 Require Import ZF.Class.Less.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Class.Small.
@@ -16,7 +16,6 @@ Require Import ZF.Set.Incl.
 
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 
 
 (* The class of ordinal upper-bounds of A.                                      *)
@@ -60,10 +59,10 @@ Proof.
   - split. 1: assumption. intros b H3 H4.
     assert (
       sup A :~: toClass a \/ sup A :<: toClass a \/ toClass a :<: sup A) as H5. {
-        apply COC.ThreeWay.
+        apply OrdClass.ThreeWay.
         - apply Sup.IsOrdinal.
-        - apply COC.WhenElem with On.
-          2: assumption. apply COC.IsOrdinal. }
+        - apply OrdClass.WhenElem with On.
+          2: assumption. apply OrdClass.IsOrdinal. }
     destruct H5 as [H5|[H5|H5]].
     + intros x H6. apply H5. apply Sup.InterOn.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
@@ -73,11 +72,11 @@ Proof.
       apply (Sup.IsUpperBound (A :/\: On) b). 3: assumption.
       * apply Class.Inter2.IsInclR.
       * split; assumption.
-    + apply COC.LessIsElem in H5.
+    + apply OrdClass.LessIsElem in H5.
       * contradiction.
       * apply Sup.IsOrdinal.
-      * apply COC.WhenElem with On.
-        2: assumption. apply COC.IsOrdinal.
+      * apply OrdClass.WhenElem with On.
+        2: assumption. apply OrdClass.IsOrdinal.
 Qed.
 
 (* The supremum is a small class iff there is an ordinal upper-bound.           *)
@@ -91,9 +90,9 @@ Proof.
     destruct H3 as [H3 _]. apply NotInSup in H1. 2: assumption.
     apply H1, H2. assumption.
   - assert (sup A :~: On \/ sup A :<: On) as H2. {
-      apply Core.IsOnOrLess, Sup.IsOrdinal. }
+      apply OrdClass.IsOnOrLess, Sup.IsOrdinal. }
     destruct H2 as [H2|H2].
-    + exfalso. apply Core.IsProper, Small.EquivCompat with (sup A); assumption.
+    + exfalso. apply OrdClass.IsProper, Small.EquivCompat with (sup A); assumption.
     + apply Diff.WhenLess in H2. apply Class.Empty.HasElem in H2.
       destruct H2 as [a [H2 H3]]. apply Class.Empty.HasElem. exists a.
       apply NotInSup; assumption.
@@ -105,7 +104,7 @@ Proposition IsIn : forall (A:Class) (a:U),
 Proof.
   intros A a H1.
   assert (On a) as H2. {
-    apply COC.EquivCompat with (sup A).
+    apply OrdClass.EquivCompat with (sup A).
     apply Equiv.Sym. assumption. apply Sup.IsOrdinal. }
   split. 1: assumption. intros b H3 H4. apply Incl.EquivCompatR with (sup A).
   - apply Equiv.Sym. assumption.

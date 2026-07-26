@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
@@ -17,7 +17,6 @@ Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 
-Module COC := ZF.Class.Ordinal.Core.
 Module COO := ZF.Class.Ordinal.OrdFun.
 Module CRD := ZF.Class.Relation.Domain.
 
@@ -34,7 +33,7 @@ Proof.
   intros f [H1 [H2 H3]]. split.
   - apply Function.ToClass. assumption.
   - split.
-    + apply COC.EquivCompat with (toClass (domain f)).
+    + apply OrdClass.EquivCompat with (toClass (domain f)).
       * apply Domain.ToClass.
       * apply Ordinal.ToClass. assumption.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
@@ -48,7 +47,7 @@ Proof.
   - apply Function.FromClass. assumption.
   - split.
     + apply Ordinal.FromClass.
-      apply COC.EquivCompat with (CRD.domain (toClass f)).
+      apply OrdClass.EquivCompat with (CRD.domain (toClass f)).
       2: assumption. apply Equiv.Sym, Domain.ToClass.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
 Qed.

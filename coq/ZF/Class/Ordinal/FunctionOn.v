@@ -5,7 +5,7 @@ Require Import ZF.Class.Empty.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Relation.Converse.
 Require Import ZF.Class.Relation.Domain.
@@ -27,7 +27,6 @@ Require Import ZF.Set.Specify.
 
 
 Module CIN := ZF.Class.Incl.
-Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRO := ZF.Class.Relation.OneToOne.
@@ -66,7 +65,7 @@ Proof.
     assert (Small On) as H7. {
       apply Small.EquivCompat with (domain F). 1: apply H1.
       apply CRF.DomainIsSmall; assumption. }
-    revert H7. apply COC.IsProper. }
+    revert H7. apply OrdClass.IsProper. }
   split. 1: assumption. split; assumption.
 Qed.
 
@@ -95,10 +94,10 @@ Proof.
     contradiction. }
   remember (fun a => On a /\  A :\: F:[a]: :~: :0:) as B eqn:H5.
   assert (B :<>: :0:) as H6. { apply Class.Empty.HasElem. assumption. }
-  assert (COC.Ordinal On) as H7. { apply COC.IsOrdinal. }
+  assert (OrdClass.Ordinal On) as H7. { apply OrdClass.IsOrdinal. }
   assert (B :<=: On) as H8. { intros x H8. rewrite H5 in H8. apply H8. }
   assert (exists a, B a /\ B :/\: toClass a :~: :0:) as H9. {
-    apply COC.HasMinimal with On; assumption. }
+    apply OrdClass.HasMinimal with On; assumption. }
   destruct H9 as [a [H9 H10]].
   assert (On a) as H11. { rewrite H5 in H9. apply H9. }
   assert (A :\: F:[a]: :~: :0:) as H12. { rewrite H5 in H9. apply H9. }

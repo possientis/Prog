@@ -1,5 +1,5 @@
 Require Import ZF.Class.Equiv.
-Require Import ZF.Class.Ordinal.Core.
+Require Import ZF.Class.Ordinal.OrdClass.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
@@ -12,7 +12,6 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 
-Module COC := ZF.Class.Ordinal.Core.
 
 (* The successor of a set a.                                                    *)
 Definition succ (a:U) : U := a :\/: :{a}:.
@@ -61,7 +60,7 @@ Qed.
 Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal (succ a).
 Proof.
-  apply COC.Succ.
+  apply OrdClass.Succ.
 Qed.
 
 (* The successor of an ordinal is a successor ordinal.                          *)

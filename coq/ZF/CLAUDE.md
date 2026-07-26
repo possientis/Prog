@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build
 
 ```bash
-make <target>.vo        # compile a single file (e.g. make Class/Ordinal/Core.vo)
+make <target>.vo        # compile a single file (e.g. make Class/Ordinal/OrdClass.vo)
 make -j$(nproc)         # compile everything in parallel
 ./test.sh               # full build then clean (CI equivalent)
 ./clean.sh              # remove all build artifacts
@@ -14,7 +14,7 @@ make -j$(nproc)         # compile everything in parallel
 Never invoke `coqc` directly — the Makefile passes `-R . ZF` to resolve the load path and manages dependencies via `coqdep`.
 
 All files are compiled under the logical prefix `ZF`, so 
-`Require Import ZF.Class.Ordinal.Core` maps to `Class/Ordinal/Core.v`.
+`Require Import ZF.Class.Ordinal.OrdClass` maps to `Class/Ordinal/OrdClass.v`.
 
 ## Architecture
 
