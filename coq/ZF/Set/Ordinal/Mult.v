@@ -24,7 +24,6 @@ Export ZF.Notation.Mult.
 
 Module COM := ZF.Class.Ordinal.Mult.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 
 (* The product of two ordinals when a is an ordinal.                            *)
@@ -72,7 +71,7 @@ Proof.
     apply Plus.WhenZeroR.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     apply Incl.Double. split; intros x H3.
-    + apply SUG.Charac in H3. destruct H3 as [y [H3 H4]].
+    + apply UnionGenOfClass.Charac in H3. destruct H3 as [y [H3 H4]].
       assert (x :< :0: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails    *)
       rewrite H2 in H5; assumption.
     + apply Empty.Charac in H3. contradiction.
@@ -89,13 +88,13 @@ Proof.
   - intros a H1 H2. rewrite WhenLimit. 2: assumption.
     assert (Ordinal a) as G1. { apply H1. }
     apply Incl.Double. split; intros x H3.
-    + apply SUG.Charac in H3. destruct H3 as [y [H3 H4]].
+    + apply UnionGenOfClass.Charac in H3. destruct H3 as [y [H3 H4]].
       assert (x :< :1: :*: y) as H5. { apply H4. } (* rewrite H2 in H4 fails    *)
       rewrite H2 in H5. 2: assumption.
       assert (Ordinal y) as H6. { apply Ordinal.IsOrdinal with a; assumption. }
       assert (Ordinal x) as H7. { apply Ordinal.IsOrdinal with y; assumption. }
       apply Ordinal.ElemElemTran with y; assumption.
-    + apply SUG.Charac. exists (succ x).
+    + apply UnionGenOfClass.Charac. exists (succ x).
       assert (succ x :< a) as G2. { apply Limit.HasSucc; assumption. }
       split. 1: assumption.
       assert (x :< :1: :*: succ x) as X. 2: apply X. (* rewrite H2 fails        *)
@@ -142,7 +141,7 @@ Proof.
       + apply Plus.IsElemAddR; try assumption.
         apply Empty.HasElem. exists :0:. assumption.
     - rewrite H6. intros b H8 H9 IH c H10 H11.
-      rewrite (WhenLimit c b). 2: assumption. apply SUG.Charac.
+      rewrite (WhenLimit c b). 2: assumption. apply UnionGenOfClass.Charac.
       assert (succ a :< b) as H12. {
         apply Limit.HasSucc. 1: assumption. apply H9, Succ.IsIn. }
       exists (succ a). split. 1: assumption.
@@ -273,8 +272,8 @@ Proof.
     apply Plus.InclCompat; try assumption; apply IsOrdinal; assumption.
   - intros c H3 IH.
     rewrite WhenLimit, WhenLimit; try assumption. intros y H5.
-    apply SUG.Charac in H5. destruct H5 as [x [H5 H6]].
-    apply SUG.Charac. exists x. split. 1: assumption.
+    apply UnionGenOfClass.Charac in H5. destruct H5 as [x [H5 H6]].
+    apply UnionGenOfClass.Charac. exists x. split. 1: assumption.
     apply IH; assumption.
 Qed.
 
@@ -411,7 +410,7 @@ Proof.
   - exfalso. destruct H6 as [c [H6 H7]].
     assert (c :< a :*: b) as H8. { rewrite H7. apply Succ.IsIn. }
     rewrite WhenLimit in H8. 2: assumption.
-    apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
+    apply UnionGenOfClass.Charac in H8. destruct H8 as [d [H8 H9]].
     assert (c :< a :*: d) as H10. { assumption. }
     assert (Ordinal d) as H11. { apply Ordinal.IsOrdinal with b; assumption. }
     assert (Ordinal (a :*: d)) as H12. { apply IsOrdinal; assumption. }
@@ -428,7 +427,7 @@ Proof.
       - rewrite WhenSuccR. 2: assumption. apply Plus.InclCompatR; assumption. }
     assert (succ c :< a :*: b) as H17. {
       rewrite WhenLimit. 2: assumption.
-      apply SUG.Charac. exists (succ d). split. 2: assumption.
+      apply UnionGenOfClass.Charac. exists (succ d). split. 2: assumption.
       apply Limit.HasSucc; assumption. }
     rewrite H7 in H17. revert H17. apply Foundation.NoLoop1.
 Qed.
@@ -463,7 +462,7 @@ Proof.
       rewrite (WhenLimit a (b :+: c)). 2: assumption.
       rewrite (Plus.WhenLimit (a :*: b) (a :*: c)). 2: assumption.
       apply Incl.Double. split; intros y H9;
-      apply SUG.Charac in H9; apply SUG.Charac.
+      apply UnionGenOfClass.Charac in H9; apply UnionGenOfClass.Charac.
       * destruct H9 as [d [H9 H10]].
         assert (Ordinal d) as H11. {
           apply Ordinal.IsOrdinal with (b :+: c); assumption. }
@@ -496,7 +495,7 @@ Proof.
               rewrite <- IH, H14; assumption. }
       * destruct H9 as [e [H9 H10]].
         rewrite WhenLimit in H9. 2: assumption.
-        apply SUG.Charac in H9. destruct H9 as [d [H9 H11]].
+        apply UnionGenOfClass.Charac in H9. destruct H9 as [d [H9 H11]].
         assert (Ordinal d) as H12. {
         apply Ordinal.IsOrdinal with c; assumption. }
         assert (Ordinal (a :*: d)) as G5. { apply IsOrdinal; assumption. }
@@ -542,7 +541,7 @@ Proof.
       rewrite (WhenLimit (a :*: b) c). 2: assumption.
       rewrite (WhenLimit a (b :*: c)). 2: assumption.
       apply Incl.Double. split; intros y H7;
-      apply SUG.Charac in H7; apply SUG.Charac.
+      apply UnionGenOfClass.Charac in H7; apply UnionGenOfClass.Charac.
       * destruct H7 as [d [H7 H8]]. exists (b :*: d).
         assert (Ordinal d) as H9. {
         apply Ordinal.IsOrdinal with c; assumption. }
@@ -552,7 +551,7 @@ Proof.
             rewrite <- IH; assumption. }
       * destruct H7 as [e [H7 H8]].
         rewrite WhenLimit in H7. 2: assumption.
-        apply SUG.Charac in H7. destruct H7 as [d [H7 H9]].
+        apply UnionGenOfClass.Charac in H7. destruct H7 as [d [H7 H9]].
         assert (Ordinal d) as H10. {
         apply Ordinal.IsOrdinal with c; assumption. }
         assert (Ordinal (b :*: d)) as H11. { apply IsOrdinal; assumption. }
@@ -673,7 +672,7 @@ Proof.
         rewrite H19 in H17. rewrite H5 in H17. apply Specify.Charac in H17.
         apply H17.
       - rewrite WhenLimit. 2: assumption. intros y H13.
-        apply SUG.Charac in H13. destruct H13 as [d [H13 H14]].
+        apply UnionGenOfClass.Charac in H13. destruct H13 as [d [H13 H14]].
         assert (Ordinal d) as H16. {
         apply Ordinal.IsOrdinal with c; assumption. }
         apply H11 with d; assumption. }
@@ -838,10 +837,10 @@ Proof.
       destruct H7 as [H7 H8]. subst. clear H6. rewrite WhenZeroR, Plus.WhenZeroR.
       rewrite WhenLimit. 2: assumption. apply Incl.Double.
       split; intros y H6.
-      + apply SUG.Charac in H6. destruct H6 as [x [H6 H9]].
+      + apply UnionGenOfClass.Charac in H6. destruct H6 as [x [H6 H9]].
         apply Omega.IsIn with (m :*: x). 1: assumption.
         apply InOmega; assumption.
-      + apply SUG.Charac.
+      + apply UnionGenOfClass.Charac.
         assert (exists q r,
           q :< :N /\ r :< :N /\ y = m :*: q :+: r /\ r :< m) as H10. {
             apply EuclidN; assumption. }
@@ -884,7 +883,7 @@ Proof.
       rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroR.
       apply Incl.Double. split.
       + rewrite WhenLimit. 2: assumption. intros y H8.
-        apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
+        apply UnionGenOfClass.Charac in H8. destruct H8 as [d [H8 H9]].
         assert (Ordinal d) as H10. {
         apply Ordinal.IsOrdinal with c; assumption. }
         assert (Ordinal (m :*: d)) as G7. { apply IsOrdinal; assumption. }
@@ -973,7 +972,7 @@ Proof.
     apply Incl.Double. split.
     - intros y H6.
       rewrite WhenLimit in H6. 2: assumption.
-      apply SUG.Charac in H6. destruct H6 as [n [H6 H7]].
+      apply UnionGenOfClass.Charac in H6. destruct H6 as [n [H6 H7]].
       assert (Ordinal n) as H8. { apply Omega.HasOrdinals. assumption. }
       assert (n = :0: \/ :0: :< n) as H9. {
       apply Ordinal.ZeroOrElem. assumption. }
