@@ -20,7 +20,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFI := ZF.Class.Relation.Fun.IfThenElse.
-Module SOR := ZF.Set.Relation.RestrictOfClass.
+
 
 (* The function defined on the set a by:                                        *)
 (* f(x) = f1 x if   A x                                                         *)
@@ -45,16 +45,16 @@ Proposition Charac : forall (A:Class) (f1 f2:U -> U) (a x:U),
     x = :(y,f1 y): /\ y :< a /\ A y \/ x = :(y,f2 y): /\ y :< a /\ ~ A y.
 Proof.
   intros A f1 f2 a x. split; intros H1.
-  - apply SOR.Charac in H1. 2: apply CFI.IsFunctional.
+  - apply RestrictOfClass.Charac in H1. 2: apply CFI.IsFunctional.
     destruct H1 as [y [z [H1 [H2 H3]]]].
     apply CFI.Charac2 in H3. destruct H3 as [[H3 H4]|[H3 H4]]; subst; exists y.
     + left.  split. 1: reflexivity. split; assumption.
     + right. split. 1: reflexivity. split; assumption.
   - destruct H1 as [y [[H1 [H2 H3]]|[H1 [H2 H3]]]]; subst.
-    + apply SOR.Charac2Rev. 2: assumption.
+    + apply RestrictOfClass.Charac2Rev. 2: assumption.
       * apply CFI.IsFunctional.
       * apply CFI.Satisfies1. assumption.
-    + apply SOR.Charac2Rev. 2: assumption.
+    + apply RestrictOfClass.Charac2Rev. 2: assumption.
       * apply CFI.IsFunctional.
       * apply CFI.Satisfies2. assumption.
 Qed.

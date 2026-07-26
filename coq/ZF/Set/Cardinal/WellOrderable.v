@@ -14,6 +14,7 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.Plus.
@@ -28,7 +29,6 @@ Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
-Require Import ZF.Set.Ordinal.Onto.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
@@ -40,8 +40,7 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module COF := ZF.Class.Ordinal.FunctionOn.
 Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
-Module SOE := ZF.Set.Ordinal.Order.E.
-Module SRR := ZF.Set.Relation.RestrictOfClass.
+
 
 (* A set is well-orderable iff it is equipotent to some ordinal.                *)
 Definition WellOrderable (a:U) : Prop := exists (b:U), Ordinal b /\ a :~: b.
@@ -66,9 +65,9 @@ Proof.
     (* Choose a bijection from the ordinal representative onto the set.         *)
     apply Equip.Sym in H2. destruct H2 as [f H2].
     (* Transport the ordinal membership well-ordering along that bijection.     *)
-    exists (Transport.transport f (SOE.E b) b).
-    apply WellOrdering.Transport with f (SOE.E b) b. 1: reflexivity.
-    1: assumption. apply SOE.IsWellOrdering. assumption.
+    exists (Transport.transport f (E.E b) b).
+    apply WellOrdering.Transport with f (E.E b) b. 1: reflexivity.
+    1: assumption. apply ZF.Set.Ordinal.Order.E.IsWellOrdering. assumption.
   - destruct H1 as [r H1].
     (* A well-ordered set is isomorphic to an ordinal, hence equipotent to it.  *)
     apply Order.Exists in H1. destruct H1 as [f [b [H1 H2]]].
@@ -122,7 +121,7 @@ Proof.
     - intros c H15. apply G3. apply Ordinal.IsOrdinal with b; assumption. }
   assert (Bij (F:|:b) b a) as H16. {
     split. 2: assumption. split. 2: assumption. split. 2: assumption.
-    apply SRR.IsRelation, G1. }
+    apply Relation.RestrictOfClass.IsRelation, G1. }
   exists b. split. 1: assumption. apply Equip.Sym. exists (F:|:b). assumption.
 Qed.
 

@@ -20,7 +20,7 @@ Require Import ZF.Notation.Eval.
 Export ZF.Notation.Prod.
 
 Module CF2 := ZF.Class.Relation.Fun.From2.
-Module SRF := ZF.Set.Relation.RestrictOfClass.
+
 
 (* We consider the set defined by the product predicate of the sets a and b     *)
 Definition prod (a b:U) : U := fromClass (toClass a :x: toClass b)
@@ -116,13 +116,13 @@ Proposition IsFunL : forall (a b:U), Fun (outL a b) (a :x: b) a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. split.
-  - apply SRF.IsFunctionOn.
+  - apply RestrictOfClass.IsFunctionOn.
     + apply CF2.IsFunctional.
     + intros p H1. apply Charac in H1.
       destruct H1 as [x [y [H1 [H2 H3]]]]. subst p.
       exists x. apply CF2.Satisfies.
   - intros y H1. apply Range.Charac in H1.
-    destruct H1 as [p H1]. apply SRF.Charac2 in H1.
+    destruct H1 as [p H1]. apply RestrictOfClass.Charac2 in H1.
     2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
     apply CF2.Charac2 in H2. destruct H2 as [u' [v' [H2 H5]]]. subst y.
@@ -135,13 +135,13 @@ Proposition IsFunR : forall (a b:U), Fun (outR a b) (a :x: b) b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b. split.
-  - apply SRF.IsFunctionOn.
+  - apply RestrictOfClass.IsFunctionOn.
     + apply CF2.IsFunctional.
     + intros p H1. apply Charac in H1.
       destruct H1 as [x [y [H1 [H2 H3]]]]. subst p.
       exists y. apply CF2.Satisfies.
   - intros y H1. apply Range.Charac in H1.
-    destruct H1 as [p H1]. apply SRF.Charac2 in H1.
+    destruct H1 as [p H1]. apply RestrictOfClass.Charac2 in H1.
     2: apply CF2.IsFunctional. destruct H1 as [H1 H2].
     apply Charac in H1. destruct H1 as [u [v [H1 [H3 H4]]]].
     apply CF2.Charac2 in H2. destruct H2 as [u' [v' [H2 H5]]]. subst y.
@@ -154,7 +154,7 @@ Proposition EvalL : forall (a b x y:U),
   x :< a -> y :< b -> (outL a b)!(:(x,y):) = x.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x y H1 H2. unfold outL. rewrite SRF.Eval.
+  intros a b x y H1 H2. unfold outL. rewrite RestrictOfClass.Eval.
   - apply CF2.Eval.
   - apply CF2.IsFunctional.
   - apply Charac2. split; assumption.
@@ -165,7 +165,7 @@ Proposition EvalR : forall (a b x y:U),
   x :< a -> y :< b -> (outR a b)!(:(x,y):) = y.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x y H1 H2. unfold outR. rewrite SRF.Eval.
+  intros a b x y H1 H2. unfold outR. rewrite RestrictOfClass.Eval.
   - apply CF2.Eval.
   - apply CF2.IsFunctional.
   - apply Charac2. split; assumption.

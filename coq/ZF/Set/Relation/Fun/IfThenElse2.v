@@ -14,7 +14,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFI2 := ZF.Class.Relation.Fun.IfThenElse2.
-Module SOR  := ZF.Set.Relation.RestrictOfClass.
+
 
 (* The function defined on a x b by:                                            *)
 (* f(u,v) = f1 u v if the condition holds at (u,v)                              *)
@@ -31,7 +31,7 @@ Proof.
   (* An element is a pair with first component in the product, and second       *)
   (* component determined by the branch condition on the first component.       *)
   intros A f1 f2 a b x. split; intros H1.
-  - apply SOR.Charac in H1. 2: apply CFI2.IsFunctional.
+  - apply RestrictOfClass.Charac in H1. 2: apply CFI2.IsFunctional.
     destruct H1 as [y [z [H1 [H2 H3]]]].
     apply Prod.Charac in H2. destruct H2 as [u [v [H2 [H4 H5]]]]. subst y.
     apply CFI2.Charac3 in H3.
@@ -39,11 +39,11 @@ Proof.
     + left.  split. 1: assumption. split. 1: assumption. split; assumption.
     + right. split. 1: assumption. split. 1: assumption. split; assumption.
   - destruct H1 as [u [v [[H1 [H2 [H3 H4]]]|[H1 [H2 [H3 H4]]]]]]; subst.
-    + apply SOR.Charac2Rev.
+    + apply RestrictOfClass.Charac2Rev.
       * apply CFI2.IsFunctional.
       * apply Prod.Charac. exists u, v. split. 1: reflexivity. split; assumption.
       * apply CFI2.Satisfies1. assumption.
-    + apply SOR.Charac2Rev.
+    + apply RestrictOfClass.Charac2Rev.
       * apply CFI2.IsFunctional.
       * apply Prod.Charac. exists u, v. split. 1: reflexivity. split; assumption.
       * apply CFI2.Satisfies2. assumption.

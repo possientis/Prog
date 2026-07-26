@@ -22,7 +22,6 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFF := ZF.Class.Relation.Fun.From.
-Module SRR := ZF.Set.Relation.RestrictOfClass.
 
 
 (* Given a set a and Coq expression f representing a function on sets, we aim   *)
@@ -34,12 +33,12 @@ Proposition Charac : forall (f:U -> U) (a x:U),
   x :< from a f <-> exists y, x = :(y,f y): /\ y :< a.
 Proof.
   intros f a x. split; intros H1.
-  - apply SRR.Charac in H1. 2: apply CFF.IsFunctional.
+  - apply RestrictOfClass.Charac in H1. 2: apply CFF.IsFunctional.
     destruct H1 as [y [z [H1 [H2 H3]]]].
     apply CFF.Charac2 in H3. subst. exists y. split. 2: assumption.
     reflexivity.
   - destruct H1 as [y [H1 H2]]. subst.
-    apply SRR.Charac2Rev. 2: assumption.
+    apply RestrictOfClass.Charac2Rev. 2: assumption.
     + apply CFF.IsFunctional.
     + apply CFF.Charac2. reflexivity.
 Qed.
