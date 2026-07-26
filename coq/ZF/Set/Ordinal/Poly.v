@@ -639,32 +639,40 @@ Proof.
     - intros m c d e f H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
       remember (fun i => a :^: d!i :*: c!i) as F1 eqn:E1.
       remember (fun i => a :^: f!i :*: e!i) as F2 eqn:E2.
-      assert (Ordinal m) as G1. { apply Omega.HasOrdinals. assumption. }
+      assert (Ordinal m) as G1. { apply Omega.HasOrdinals. apply H3. }
       rewrite SumOfClass.WhenZero in H14.
       assert (:0: = m) as H15. {
         assert (m = :0: \/ :0: :< m) as H15. {
-          apply Ordinal.ZeroOrElem. assumption. }
-        destruct H15 as [H15|H15]. 1: { symmetry. assumption. } exfalso.
-        apply Omega.HasPred in H15. 2: assumption.
+          apply Ordinal.ZeroOrElem. apply G1. }
+        destruct H15 as [H15|H15]. 1: { symmetry. apply H15. } exfalso.
+        apply Omega.HasPred in H15. 2: apply H3.
         destruct H15 as [k [H15 H16]].
-        assert (Ordinal k) as G2. { apply Omega.HasOrdinals. assumption. }
-        rewrite H16, SumOfClass.WhenSucc, From.Eval in H14. 2: assumption.
+        assert (Ordinal k) as G2. { apply Omega.HasOrdinals. apply H15. }
+        rewrite H16, SumOfClass.WhenSucc, From.Eval in H14. 2: apply G2.
         assert (k :< m) as G3. { rewrite H16. apply Succ.IsIn. }
         assert (Ordinal e!k) as G4. {
-          apply OrdFunOn.IsOrdinal with m; assumption. }
+          apply OrdFunOn.IsOrdinal with m.
+          - apply H6.
+          - apply G3. }
         assert (Ordinal f!k) as G5. {
-          apply OrdFunOn.IsOrdinal with m; assumption. }
+          apply OrdFunOn.IsOrdinal with m.
+          - apply H7.
+          - apply G3. }
         assert (forall i, i :< m -> Ordinal (F2 i)) as G6. {
           intros i G6. rewrite E2. apply Mult.IsOrdinal.
           - apply Exp.IsOrdinal. 1: assumption.
             apply OrdFunOn.IsOrdinal with m; assumption.
           - apply OrdFunOn.IsOrdinal with m; assumption. }
-        assert (Ordinal (F2 k)) as G7. { apply G6. assumption. }
+        assert (Ordinal (F2 k)) as G7. { apply G6. apply G3. }
         assert (Ordinal (:sum:_{k} :[F2]:)) as G8. {
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G8. rewrite From.Eval. apply G6.
-          apply Ordinal.ElemElemTran with k; try assumption.
-            apply Omega.HasOrdinals, Omega.IsIn with k; assumption. }
+          apply Ordinal.ElemElemTran with k.
+          - apply Omega.HasOrdinals, Omega.IsIn with k; assumption.
+          - apply G2.
+          - apply G1.
+          - apply G8.
+          - apply G3. }
         assert (F2 k :<=: (:sum:_{k} :[F2]:) :+: F2 k) as H17. {
           apply Plus.IsInclL; assumption. }
         rewrite <- H14 in H17.
@@ -673,16 +681,18 @@ Proof.
           - apply Exp.IsOrdinal; assumption.
           - apply Exp.HasZero; assumption.
           - apply H12. assumption. }
-        assert (:0: :< :0:) as H19. { apply H17. assumption. }
+        assert (:0: :< :0:) as H19. { apply H17. apply H18. }
         apply Empty.Charac in H19. contradiction. }
         rewrite <- H15 in H6. rewrite <- H15 in H7.
-        assert (c = :0:) as H20. { apply OrdFunOn.WhenZero. assumption. }
-        assert (d = :0:) as H21. { apply OrdFunOn.WhenZero. assumption. }
-        assert (e = :0:) as H22. { apply OrdFunOn.WhenZero. assumption. }
-        assert (f = :0:) as H23. { apply OrdFunOn.WhenZero. assumption. }
+        assert (c = :0:) as H20. { apply OrdFunOn.WhenZero. apply H4. }
+        assert (d = :0:) as H21. { apply OrdFunOn.WhenZero. apply H5. }
+        assert (e = :0:) as H22. { apply OrdFunOn.WhenZero. apply H6. }
+        assert (f = :0:) as H23. { apply OrdFunOn.WhenZero. apply H7. }
         assert (c = e) as H24. { subst. reflexivity. }
         assert (d = f) as H25. { subst. reflexivity. }
-        split. 1: assumption. split; assumption.
+        split. 1: apply H15. split.
+        + apply H24.
+        + apply H25.
     - intros n H3 IH m c d e f H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14 H15.
       remember (fun i => a :^: d!i :*: c!i) as F1 eqn:E1.
       remember (fun i => a :^: f!i :*: e!i) as F2 eqn:E2.
@@ -711,8 +721,12 @@ Proof.
         assert (Ordinal (:sum:_{n} :[F1]:)) as G10. {
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G10. rewrite From.Eval. apply G8.
-          apply Ordinal.ElemElemTran with n; try assumption.
-            apply Omega.HasOrdinals, Omega.IsIn with n; assumption. }
+          apply Ordinal.ElemElemTran with n.
+          - apply Omega.HasOrdinals, Omega.IsIn with n; assumption.
+          - apply G1.
+          - apply G4.
+          - apply G10.
+          - apply G5. }
         assert (F1 n :<=: (:sum:_{n} :[F1]:) :+: F1 n) as H17. {
           apply Plus.IsInclL; assumption. }
         rewrite H15 in H17.
@@ -903,23 +917,50 @@ Proof.
           destruct H29 as [H29|[H29|H29]]. 1: assumption.
           - exfalso.
             assert (s1 :< s2) as H30. {
-            rewrite H27, H28. apply IsElemEuclid; try assumption.
-            + apply H12, Succ.HasZero. assumption.
-            + apply H13. rewrite H17. apply Succ.HasZero. assumption. }
+            rewrite H27, H28. apply IsElemEuclid.
+            + apply H1.
+            + apply G16.
+            + apply G17.
+            + apply G39.
+            + apply G40.
+            + apply G37.
+            + apply G38.
+            + apply H2.
+            + apply H12, Succ.HasZero. apply G1.
+            + apply H23.
+            + apply H13. rewrite H17. apply Succ.HasZero. apply G15.
+            + apply H29. }
             assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
             revert H31. apply Foundation.NoLoop1.
           - exfalso.
             assert (s2 :< s1) as H30. {
-            rewrite H27, H28. apply IsElemEuclid; try assumption.
-            + apply H14. rewrite H17. apply Succ.HasZero. assumption.
-            + apply H11, Succ.HasZero. assumption. }
+            rewrite H27, H28. apply IsElemEuclid.
+            + apply H1.
+            + apply G17.
+            + apply G16.
+            + apply G40.
+            + apply G39.
+            + apply G38.
+            + apply G37.
+            + apply H2.
+            + apply H14. rewrite H17. apply Succ.HasZero. apply G15.
+            + apply H24.
+            + apply H11, Succ.HasZero. apply G1.
+            + apply H29. }
             assert (s2 :< s2) as H31. { rewrite H18 in H30. assumption. }
             revert H31. apply Foundation.NoLoop1. }
         assert (c!:0: = e!:0: /\ r1 = r2) as H30. {
-          apply Mult.EuclidUnique with (a :^: f!:0:); try assumption.
-          - apply Exp.IsOrdinal; assumption.
-          - rewrite <- H29. assumption.
-          - rewrite H27, H28, H29 in H18. assumption. }
+          apply Mult.EuclidUnique with (a :^: f!:0:).
+          - apply Exp.IsOrdinal.
+            + apply H1.
+            + apply G17.
+          - apply G39.
+          - apply G40.
+          - apply G37.
+          - apply G38.
+          - rewrite <- H29. apply H23.
+          - apply H24.
+          - rewrite H27, H28, H29 in H18. apply H18. }
         destruct H30 as [H30 H31].
         assert (forall i, i :< n -> :0: :< c'!i) as G41. {
           rewrite H19. intros i G41.
@@ -936,20 +977,37 @@ Proof.
           - apply H13. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
         assert (n = k /\ c' = e' /\ d' = f') as H32. {
-          apply IH; try assumption.
-          rewrite H25, H26, E1', E2' in H31. assumption. }
+          apply IH.
+          - apply H16.
+          - apply G18.
+          - apply G19.
+          - apply G20.
+          - apply G21.
+          - apply G22.
+          - apply G23.
+          - apply G41.
+          - apply G24.
+          - apply G42.
+          - apply G25.
+          - rewrite H25, H26, E1', E2' in H31. apply H31. }
         destruct H32 as [H32 [H33 H34]].
         assert (succ n = m) as H35. { rewrite H32. symmetry. assumption. }
         assert (c = e) as H36. {
-          apply SRL.IsEqual with n; try assumption.
-          - rewrite <- H35 in H7. assumption.
-          - rewrite H19, H21 in H33. assumption. }
+          apply SRL.IsEqual with n.
+          - apply H3.
+          - apply H5.
+          - rewrite <- H35 in H7. apply H7.
+          - apply H30.
+          - rewrite H19, H21 in H33. apply H33. }
         assert (d = f) as H37. {
-          apply SRL.IsEqual with n; try assumption.
-          - rewrite <- H35 in H8. assumption.
-          - rewrite H20, H22 in H34. assumption. }
-        split. 1: assumption. split; assumption. }
-  rewrite E in H3. assumption.
+          apply SRL.IsEqual with n.
+          - apply H3.
+          - apply H6.
+          - rewrite <- H35 in H8. apply H8.
+          - apply H29.
+          - rewrite H20, H22 in H34. apply H34. }
+        split. 1: apply H35. split. 1: apply H36. apply H37. }
+  rewrite E in H3. apply H3.
 Qed.
 
 Proposition MultReduceNIncl : forall (a b c d n:U),
