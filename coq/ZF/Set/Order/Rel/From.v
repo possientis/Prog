@@ -14,12 +14,14 @@ Definition from (a:U) (r:U -> U -> Prop) : U := CORF.from r :/: a.
 Proposition Charac : forall (r:U -> U -> Prop) (a x:U),
   x :< from a r <-> exists y z, x = :(y,z): /\ y :< a /\ z :< a /\ r y z.
 Proof.
-  (* Proof by Claude + sonnet 4.6                                               *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros r a x. split.
   - intros H.
-    apply RestrictOfClass.Charac in H.
-    destruct H as [y [z [H1 [H2 [H3 H4]]]]].
-    apply CORF.Charac2 in H4.
+    assert (exists y z,
+      x = :(y,z): /\ y :< a /\ z :< a /\ CORF.from r :(y,z):) as H1.
+    { apply RestrictOfClass.Charac. apply H. }
+    destruct H1 as [y [z [H1 [H2 [H3 H4]]]]].
+    assert (r y z) as H5. { apply CORF.Charac2. apply H4. }
     exists y, z. split. 1: assumption. split. 1: assumption. split; assumption.
   - intros [y [z [H1 [H2 [H3 H4]]]]].
     apply RestrictOfClass.Charac.
@@ -31,12 +33,13 @@ Qed.
 Proposition Charac2 : forall (r:U -> U -> Prop) (a x y:U),
   :(x,y): :< from a r <-> x :< a /\ y :< a /\ r x y.
 Proof.
-  (* Proof by Claude + sonnet 4.6                                               *)
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros r a x y. split.
   - intros H.
-    apply RestrictOfClass.Charac2 in H.
-    destruct H as [H1 [H2 H3]].
-    apply CORF.Charac2 in H3.
+    assert (x :< a /\ y :< a /\ CORF.from r :(x,y):) as H1.
+    { apply RestrictOfClass.Charac2. apply H. }
+    destruct H1 as [H1 [H2 H3]].
+    assert (r x y) as H4. { apply CORF.Charac2. apply H3. }
     split. 1: assumption. split; assumption.
   - intros [H1 [H2 H3]].
     apply RestrictOfClass.Charac2.
