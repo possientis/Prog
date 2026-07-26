@@ -45,14 +45,12 @@ Module CEM := ZF.Class.Empty.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SOO := ZF.Set.Ordinal.Onto.
 Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
-Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRR := ZF.Set.Relation.Range.
 Module SRO := ZF.Set.Relation.Onto.
 Module SUG := ZF.Set.UnionGenOfClass.
-Module SMS := ZF.Set.Relation.Map.Sum.
+
 
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
@@ -688,7 +686,7 @@ Proof.
     intros H9. apply H3. apply Equip.WhenZero.
     rewrite <- H9. apply Equip.Sym. exists h. assumption. }
   assert (exists r, Onto r (card a) (card b)) as H10. {
-    apply SOO.WhenIncl.
+    apply Onto.WhenIncl.
     - apply IsOrdinal.
     - apply IsOrdinal.
     - assumption.
@@ -755,10 +753,10 @@ Proof.
     apply WellOrderable.WhenOrdinal. assumption. }
   assert (WellOrderable (a :x: a)) as H5. {
     apply WellOrderable.Prod; assumption. }
-  remember (SFI.ifThenElse (succ a) (fun x => x :< a)
+  remember (IfThenElse.ifThenElse (succ a) (fun x => x :< a)
     (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as f eqn:H6.
   (* Both displayed branch values lie in the square a x a.                      *)
-  assert (SFI.MapsTo (succ a) (a :x: a) (fun x => x :< a)
+  assert (IfThenElse.MapsTo (succ a) (a :x: a) (fun x => x :< a)
     (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as H7. {
     split; intros x H7 H8; apply Prod.Charac2; split; assumption. }
   (* Equal old-branch values have the same second coordinate.                   *)
@@ -786,7 +784,7 @@ Proof.
     apply Succ.Charac in H12. destruct H12 as [H12|H12]. 2: contradiction.
     subst. reflexivity. }
   (* These branch facts show that the piecewise map is injective.               *)
-  assert (SFI.Injective (succ a) (fun x => x :< a)
+  assert (IfThenElse.Injective (succ a) (fun x => x :< a)
     (fun x => :(:0:,x):) (fun _ => :(:1:,:0:):)) as H12. {
     repeat split; intros x y K1 K2 K3 K4 K5.
     - apply H8; assumption.
@@ -794,7 +792,7 @@ Proof.
     - apply H10; assumption.
     - apply H11; assumption. }
   assert (Inj f (succ a) (a :x: a)) as H13. {
-    rewrite H6. apply SFI.IsInj; assumption. }
+    rewrite H6. apply IfThenElse.IsInj; assumption. }
   (* An injection into the well-orderable square gives the cardinal bound.      *)
   apply WhenInj with f; assumption.
 Qed.
@@ -812,7 +810,7 @@ Proof.
     apply SRO.Compose with a; assumption. }
   (* The ordinal-domain surjection has a bijective restriction.                 *)
   assert (exists d, d :<=: card a /\ Bij ((f :.: e) :|: d) d b) as H6. {
-    apply SOO.HasRestrictBij. 1: apply IsOrdinal. assumption. }
+    apply Onto.HasRestrictBij. 1: apply IsOrdinal. assumption. }
   destruct H6 as [d [H6 H7]].
   (* The codomain has the cardinal of a subset of card(a).                      *)
   assert (card b = card d) as H8. {
@@ -867,7 +865,7 @@ Proof.
     apply WellOrderable.Sum; assumption. }
   remember (either a b (id a) (id b)) as f eqn:H4.
   (* The either map from the disjoint sum onto the ordinary union is onto.      *)
-  assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply SMS.HasOnto. }
+  assert (Onto f (a :++: b) (a :\/: b)) as H5. { rewrite H4. apply Sum.HasOnto. }
   (* A surjection from a well-orderable domain bounds its range cardinal.       *)
   apply WhenOnto with f; assumption.
 Qed.
@@ -890,7 +888,7 @@ Proof.
   assert (WellOrderable (a :x: b)) as H7. {
     apply WellOrderable.Prod; assumption. }
   assert (exists f, Inj f (a :++: b) (a :x: b)) as H8. {
-    apply SMS.HasInj; apply HasTwoElems; assumption. }
+    apply Sum.HasInj; apply HasTwoElems; assumption. }
   destruct H8 as [f H8].
   apply WhenInj with f; assumption.
 Qed.

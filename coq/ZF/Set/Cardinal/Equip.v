@@ -49,9 +49,6 @@ Export ZF.Notation.Equiv.
 Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SOO := ZF.Set.Ordinal.Order.
-Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
-Module SMS := ZF.Set.Relation.Map.Sum.
 
 Definition equip (a b:U) : Prop := exists f, Bij f a b.
 
@@ -94,7 +91,7 @@ Proof.
   intros a b H1 H2.
   assert (exists c f,
     Ordinal c /\ c :<=: b /\ Isom f (E c) (E a) c a) as H3. {
-      apply SOO.OrdinalSubset; assumption. }
+      apply Order.OrdinalSubset; assumption. }
   destruct H3 as [c [f [H3 [H4 H5]]]].
   exists c.
   assert (a :~: c) as H6. { apply Sym. exists f. apply H5. }
@@ -116,11 +113,13 @@ Proof.
   assert (domain f = a) as G3. { apply H1. }
   assert (domain g = b) as G4. { apply H2. }
   remember (fun x => (g :.: f) :[x]:) as H eqn:H5.
-  remember (SOR.recursion (CFF.from H) (a :\: d)) as h eqn:H6.
-  assert (FunctionOn h :N) as H7. { rewrite H6. apply SOR.IsFunctionOn. }
-  assert (h!:0: = a :\: d) as H8. { rewrite H6. apply SOR.WhenZero. }
+  remember (RecursionNOfClass.recursion (CFF.from H) (a :\: d)) as h eqn:H6.
+  assert (FunctionOn h :N) as H7. {
+    rewrite H6. apply RecursionNOfClass.IsFunctionOn. }
+  assert (h!:0: = a :\: d) as H8. {
+    rewrite H6. apply RecursionNOfClass.WhenZero. }
   assert (forall n, n :< :N -> h!(succ n) = (g :.: f) :[h!n]:) as H9. {
-    intros n H9. rewrite H6, SOR.WhenSucc, <- H6, CFF.Eval, H5.
+    intros n H9. rewrite H6, RecursionNOfClass.WhenSucc, <- H6, CFF.Eval, H5.
     2: assumption. reflexivity. }
   assert (Inj f a b) as H10. {
     split.
@@ -585,7 +584,7 @@ Proof.
   remember ((inL c d) :.: f) as f' eqn:H3.
   remember ((inR c d) :.: g) as g' eqn:H4.
   (* The induced either map is a bijection between the two disjoint sums.       *)
-  exists (either a b f' g'). apply (SMS.IsBij a b c d f g); assumption.
+  exists (either a b f' g'). apply (Sum.IsBij a b c d f g); assumption.
 Qed.
 
 (* Adding a fixed right summand preserves equipotence.                          *)
