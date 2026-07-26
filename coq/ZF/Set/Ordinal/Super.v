@@ -9,7 +9,6 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module COS := ZF.Class.Ordinal.Super.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 (* Predicate defining a supertransitive set.                                    *)
 Definition Super (a:U) : Prop := Transitive a /\
@@ -61,7 +60,7 @@ Proof.
   intros F a H1. split.
   - apply Transitive.WhenUnion. intros x H2. apply H1. assumption.
   - intros y H2 x H3.
-    apply SUG.Charac in H2. destruct H2 as [b [H2 H4]].
-    apply SUG.Charac. exists b. split. 1: assumption. specialize (H1 b H2).
+    apply UnionGenOfClass.Charac in H2. destruct H2 as [b [H2 H4]].
+    apply UnionGenOfClass.Charac. exists b. split. 1: assumption. specialize (H1 b H2).
     destruct H1 as [H1 H5]. apply (H5 y); assumption.
 Qed.

@@ -8,7 +8,6 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module COT := ZF.Class.Ordinal.Transitive.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 Definition Transitive (a:U) : Prop := forall (x y:U),
   x :< y -> y :< a -> x :< a.
@@ -48,7 +47,7 @@ Proposition WhenUnion : forall (F:Class) (a:U),
   (forall x, x :< a -> Transitive F!x) -> Transitive (:\/:_{a} F).
 Proof.
   intros F a H1 x y H2 H3.
-  apply SUG.Charac in H3. destruct H3 as [b [H3 H4]].
-  apply SUG.Charac. exists b. split. 1: assumption.
+  apply UnionGenOfClass.Charac in H3. destruct H3 as [b [H3 H4]].
+  apply UnionGenOfClass.Charac. exists b. split. 1: assumption.
   apply H1 with y; assumption.
 Qed.

@@ -24,7 +24,6 @@ Require Import ZF.Notation.Sum.
 Export ZF.Notation.Sum.
 
 Module COS := ZF.Class.Ordinal.Sum.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 Definition sum (a:U) (F:Class) : U := (COS.sum F)!a.
 
@@ -50,7 +49,7 @@ Proposition WhenLimit : forall (F:Class) (a:U), Limit a ->
 Proof.
   intros F a H1.
   assert (:\/:_{a} :[fun b => :sum:_{b} F]: = :\/:_{a} (COS.sum F)) as H2. {
-    apply SUG.EtaReduce. }
+    apply UnionGenOfClass.EtaReduce. }
   rewrite H2. apply COS.WhenLimit. assumption.
 Qed.
 

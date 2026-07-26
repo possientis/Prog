@@ -21,7 +21,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 (* Not quite the function class (a ^ .) when a is an ordinal: because 0^0 is    *)
 (* defined as 1, setting a^b = \/_{c :< b} a^c for limit ordinal b implies that *)
@@ -244,6 +243,6 @@ Proof.
   intros a b H1 H2.
   assert (Exp a :~: Exp' a) as H3. { apply WhenNotZeroL. assumption. }
   rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
-  rewrite (SUG.EquivCompat (Exp a) (Exp' a)). 2: assumption.
+  rewrite (UnionGenOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.
   apply Recursion2.WhenLimit. assumption.
 Qed.

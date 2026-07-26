@@ -130,7 +130,7 @@ Proof.
       rewrite H4, H5. reflexivity.
     - intros a H2 IH H3.
       rewrite WhenLimit, WhenLimit; try assumption.
-      apply SUG.Equal. intros x H4.
+      apply UnionGenOfClass.Equal. intros x H4.
       apply IH. 1: assumption. intros y H5. apply H3.
       assert (Ordinal a) as G1. { apply H2. }
       assert (Ordinal x) as G2. { apply Ordinal.IsOrdinal with a; assumption. }

@@ -47,7 +47,6 @@ Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
 
-
 (* The cardinal of a set is the smallest ordinal in bijection with it.          *)
 Definition card (a:U) : U := inf (fun b => Ordinal b /\ a :~: b).
 

@@ -28,7 +28,6 @@ Export ZF.Notation.Plus.
 
 Module COP := ZF.Class.Ordinal.Plus.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 (* The sum of two ordinals when a is an ordinal.                                *)
 Definition plus (a b:U) : U := (COP.Plus a)!b.

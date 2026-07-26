@@ -30,7 +30,6 @@ Require Import ZF.Notation.Eval.
 Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
 Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 Proposition HasMinimal : forall (R A B:Class),
   Founded R A                 ->
@@ -66,7 +65,7 @@ Proof.
       assert (m :< :N) as H19. {
         apply Omega.HasSuccRev. rewrite H18. assumption. }
       rewrite <- H18, H12. 2: assumption.
-      apply SUG.WhenClassBounded.
+      apply UnionGenOfClass.WhenClassBounded.
       intros y _. rewrite H14.
       apply CIN.Tran with (initSegment R B y).
       + apply OfMinRank.IsIncl.
@@ -97,7 +96,7 @@ Proof.
     rewrite H9. apply UnionGen.Charac. exists (succ n). split.
     - apply Omega.HasSucc. assumption.
     - rewrite H12. 2: assumption.
-      apply SUG.Charac. exists a. split. 1: assumption.
+      apply UnionGenOfClass.Charac. exists a. split. 1: assumption.
       rewrite H14. assumption. }
   apply (H20 z); assumption.
 Qed.

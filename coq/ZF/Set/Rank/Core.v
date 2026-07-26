@@ -20,7 +20,6 @@ Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
 Module COI := ZF.Class.Ordinal.Induction.
-Module SUG := ZF.Set.UnionGenOfClass.
 
 (* Given a set a, the class underlying the rank of a.                           *)
 Definition K (a:U) : Class := fun b => Ordinal b /\ a :< VH!(succ b).
@@ -53,7 +52,7 @@ Proof.
     - exfalso. rewrite H8 in H7. rewrite VH.WhenZero in H7.
       apply Empty.Charac in H7. contradiction.
     - exfalso. rewrite VH.WhenLimit in H7. 2: assumption.
-      apply SUG.Charac in H7. destruct H7 as [c [H7 H9]].
+      apply UnionGenOfClass.Charac in H7. destruct H7 as [c [H7 H9]].
       assert (Ordinal c) as H10. { apply Ordinal.IsOrdinal with b; assumption. }
       assert (A c) as H11. { rewrite H1. split; assumption. }
       assert (c :< c) as H12. { apply H6; assumption. }
@@ -106,7 +105,7 @@ Proof.
     - exfalso. rewrite H11 in H10. rewrite VH.WhenZero in H10.
       apply Empty.Charac in H10. contradiction.
     - exfalso. rewrite VH.WhenLimit in H10. 2: assumption.
-      apply SUG.Charac in H10. destruct H10 as [d [H10 H12]].
+      apply UnionGenOfClass.Charac in H10. destruct H10 as [d [H10 H12]].
       assert (Ordinal d) as H13. { apply Ordinal.IsOrdinal with c; assumption. }
       assert (A d) as H14. { rewrite H4. split; assumption. }
       assert (d :< d) as H15. { apply H9; assumption. }

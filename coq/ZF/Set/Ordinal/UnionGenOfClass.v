@@ -14,8 +14,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
-Module SUC := ZF.Set.UnionGenOfClass.
-
 (* The union of a class family of ordinals indexed by a is an ordinal.          *)
 Proposition IsOrdinal : forall (A:Class) (a:U),
   (forall x, x :< a -> Ordinal A!x) -> Ordinal :\/:_{a} A.
@@ -29,12 +27,12 @@ Qed.
 Proposition WhenLimit : forall (a:U), Limit a -> :\/:_{a} I = a.
 Proof.
   intros a H1. apply Incl.Double. split; intros b H2.
-  - apply SUC.Charac in H2. destruct H2 as [c [H2 H3]].
+  - apply UnionGenOfClass.Charac in H2. destruct H2 as [c [H2 H3]].
     rewrite I.Eval in H3.
     assert (Ordinal a) as G1. { apply H1. }
     assert (Transitive a) as G2. { apply Ordinal.Charac in G1. apply G1. }
     apply G2 with c; assumption.
-  - apply SUC.Charac.
+  - apply UnionGenOfClass.Charac.
     assert (exists c, b :< c /\ c :< a) as H3. {
       apply Limit.InBetween; assumption. }
     destruct H3 as [c [H3 H4]]. exists c. split. 1: assumption.

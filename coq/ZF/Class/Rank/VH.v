@@ -113,7 +113,7 @@ Proof.
     - apply ElemSucc. assumption.
     - intros b H2 H3 IH. apply InclSucc; assumption.
     - intros b H2 H3 IH. rewrite (WhenLimit b). 2: assumption.
-      apply SUG.Charac. exists (succ a).
+      apply UnionGenOfClass.Charac. exists (succ a).
       assert (succ a :< b) as H4. {
         apply Limit.HasSucc. 1: assumption. apply H3, Succ.IsIn. }
       split. 1: assumption. apply ElemSucc. assumption. }

@@ -34,7 +34,6 @@ Module CEM := ZF.Class.Empty.
 Module COE := ZF.Class.Ordinal.Exp.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 
-
 (* The exponentiation of two ordinals when a is an ordinal.                     *)
 Definition exp (a b:U) : U := (COE.Exp a)!b.
 

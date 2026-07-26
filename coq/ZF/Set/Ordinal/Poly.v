@@ -26,6 +26,7 @@ Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.ShiftL.
 Require Import ZF.Set.Relation.ShiftR.
 Require Import ZF.Set.Single.
+Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 
@@ -1242,7 +1243,7 @@ Proof.
       assert ((a :^: b :*: n) :^: c :<=: a :^: (b :*: c)) as H8. {
         intros x H8.
         rewrite Exp.WhenLimit in H8. 2: apply H3. 2: apply G9.
-        apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
+        apply UnionGenOfClass.Charac in H8. destruct H8 as [d [H8 H9]].
         assert (Ordinal d) as L1. {
         apply Ordinal.IsOrdinal with c; assumption. }
         assert (Ordinal (b :*: d)) as L2. { apply Mult.IsOrdinal; assumption. }
@@ -1272,7 +1273,7 @@ Proof.
           all: assumption. }
         apply H11, H12 in H10.
         rewrite <- Exp.Assoc, Exp.WhenLimit.
-        1: { apply SUG.Charac. exists (succ d). split.
+        1: { apply UnionGenOfClass.Charac. exists (succ d). split.
           - apply Limit.HasSucc; assumption.
           - assert (x :< (a :^: b) :^: (succ d)) as X. 2: apply X.
             rewrite Exp.Assoc; assumption. }

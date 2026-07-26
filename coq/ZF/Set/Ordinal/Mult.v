@@ -25,7 +25,6 @@ Export ZF.Notation.Mult.
 Module COM := ZF.Class.Ordinal.Mult.
 Module SOG := ZF.Set.Ordinal.UnionGenOfClass.
 
-
 (* The product of two ordinals when a is an ordinal.                            *)
 Definition mult (a b:U) : U := (COM.Mult a)!b.
 
@@ -930,7 +929,6 @@ Proof.
     apply LimitWithNat; try assumption. apply Omega.HasZero. }
   rewrite Plus.WhenZeroR, WhenZeroR, Plus.WhenZeroR in H4. assumption.
 Qed.
-
 
 Proposition SuccNSquared :
   (:N :+: :1: ) :*: (:N :+: :1:) = :N :*: :N :+: :N :+: :1:.
