@@ -5,7 +5,7 @@ Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Union.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
@@ -108,7 +108,7 @@ Proof.
   assert (forall x, x :< a -> x :<=: b) as H5. {
     intros c H5.
     assert (Ordinal c) as H6. { apply H1. assumption. }
-    assert (b :< c \/ c :<=: b) as H7. { apply Core.ElemOrIncl; assumption. }
+    assert (b :< c \/ c :<=: b) as H7. { apply Ordinal.ElemOrIncl; assumption. }
     destruct H7 as [H7|H7]. 2: assumption. exfalso.
     apply H4 with c. split. 1: assumption. split; assumption. }
   assert (sup a :<=: b) as H6. { apply IsSmallest; assumption. }

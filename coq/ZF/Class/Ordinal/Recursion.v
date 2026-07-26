@@ -13,7 +13,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Eval.
@@ -35,7 +35,6 @@ Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Relation.
 
-Module SOC := ZF.Set.Ordinal.Core.
 Module SRD := ZF.Set.Relation.Domain.
 Module SRF := ZF.Set.Relation.Function.
 Module SFL := ZF.Set.Relation.Functional.
@@ -82,7 +81,7 @@ Proof.
     - intros c H9 H10. rewrite H8. split. 1: assumption. intros H11.
       assert (f:|:c = g:|:c) as H12. {
         assert (c :<=: a) as H12. {
-          apply SOC.LessIsElem; assumption. }
+          apply Ordinal.LessIsElem; assumption. }
         apply SFO.RestrictEqual with a b; try assumption.
         + apply Incl.Tran with a; assumption.
         + intros x H13.
@@ -92,7 +91,7 @@ Proof.
           rewrite H6, H7, H12. 1: reflexivity. 2: assumption.
           apply H3. assumption. }
   intros x H10.
-  assert (On x) as H11. { apply SOC.IsOrdinal with a; assumption. }
+  assert (On x) as H11. { apply Ordinal.IsOrdinal with a; assumption. }
   assert (A x) as H12. { apply H9. assumption. }
   rewrite H8 in H12. destruct H12 as [_ H12]. apply H12. assumption.
 Qed.
@@ -111,7 +110,7 @@ Proof.
   destruct H1 as [f [a [H1 [H3 [H4 H5]]]]].
   destruct H2 as [g [b [H2 [H6 [H7 H8]]]]].
   assert (a :<=: b \/ b :<=: a) as H9. {
-    apply SOC.InclOrIncl; assumption. }
+    apply Ordinal.InclOrIncl; assumption. }
   assert (x :< a) as H10. {
     destruct H4 as [_ H4]. rewrite <- H4.
     apply SRD.Charac. exists y. assumption. }
@@ -141,15 +140,15 @@ Proof.
       - split. 1: assumption. split; assumption. }
     apply H7.
     assert (On x) as H8. {
-      apply SOC.IsOrdinal with a; assumption. }
-    apply SOC.ElemIsIncl in H6; try assumption.
+      apply Ordinal.IsOrdinal with a; assumption. }
+    apply Ordinal.ElemIsIncl in H6; try assumption.
     apply H6. assumption. }
   assert (CRD.domain (Recursion F) :<=: On) as H2. {
     intros x [y [f [a [H2 [H3 [H4 H5]]]]]].
     assert (x :< a) as H6. {
       destruct H4 as [_ H4]. rewrite <- H4. apply SRD.Charac.
       exists y. assumption. }
-    apply SOC.IsOrdinal with a; assumption. }
+    apply Ordinal.IsOrdinal with a; assumption. }
   apply COC.WhenTransitive with On; try assumption. apply COC.IsOrdinal.
 Qed.
 
@@ -225,7 +224,7 @@ Proof.
     assert (g = f:|:a) as H22. { apply H13. assumption. }
     assert (g:|:b = f:|:b) as H23. {
       rewrite H22. apply Restrict.TowerProperty.
-      apply SOC.ElemIsIncl; assumption. }
+      apply Ordinal.ElemIsIncl; assumption. }
     rewrite H21, <- H23. apply H19. assumption. }
   remember (f :\/: :{ :(c,F!f): }:) as g eqn:H15.
   assert (SRR.Relation g) as H16. {
@@ -283,7 +282,7 @@ Proof.
         destruct H18 as [[_ H18] _]. assumption. }
       assert (g:|:b = f:|:b) as H22. {
         rewrite <- H19. symmetry. apply Restrict.TowerProperty.
-        apply SOC.ElemIsIncl; assumption. }
+        apply Ordinal.ElemIsIncl; assumption. }
       rewrite H21, H22. apply H14. assumption.
     - apply Single.Charac in H20.
       assert (g!b = F!f) as H21. {
@@ -321,7 +320,7 @@ Proof.
     + apply IsFunction.
     + apply CIN.EquivCompatR with On.
       * apply Equiv.Sym, DomainIsOn.
-      * intros x H2. apply SOC.IsOrdinal with a; assumption.
+      * intros x H2. apply Ordinal.IsOrdinal with a; assumption.
 Qed.
 
 Lemma K_Restrict : forall (F:Class) (f a:U),
@@ -358,7 +357,7 @@ Proof.
   assert (f:|:b = (Recursion F) :|: b) as H10. {
     rewrite H9. apply RestrictOfClass.TowerProperty.
     - apply IsFunction.
-    - apply SOC.ElemIsIncl; assumption. }
+    - apply Ordinal.ElemIsIncl; assumption. }
   rewrite H8, <- H10. apply H6. assumption.
 Qed.
 
@@ -375,10 +374,11 @@ Proof.
     intros a H3 H4.
     assert (SRD.domain (G:|:a) = a) as H6. {
       apply RestrictOfClass.DomainWhenIncl. 1: apply H1. destruct H1 as [_ H1].
-      intros x H6. apply H1. apply SOC.IsOrdinal with a; assumption. }
+      intros x H6. apply H1. apply Ordinal.IsOrdinal with a; assumption. }
     assert (SRD.domain ((Recursion F) :|: a) = a) as H7. {
       apply RestrictOfClass.DomainWhenIncl. 1: apply IsFunction.
-      intros x H7. apply DomainIsOn. apply SOC.IsOrdinal with a; assumption. }
+      intros x H7. apply DomainIsOn.
+      apply Ordinal.IsOrdinal with a; assumption. }
     assert (G:|:a = (Recursion F) :|: a) as H5. {
       apply SRF.Equal.
       - apply RestrictOfClass.IsFunction, H1.

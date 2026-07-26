@@ -11,7 +11,7 @@ Require Import ZF.Set.Less.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.WellOrderable.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Single.
@@ -19,7 +19,6 @@ Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
 Module SCH := ZF.Set.Cardinal.Choice.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* A set is infinite if and only if it is not finite.                           *)
 Definition Infinite (a:U) : Prop := ~ Finite a.
@@ -57,7 +56,7 @@ Proof.
   assert (Ordinal (card a)) as G1. { apply Number.IsOrdinal. }
   assert (Ordinal :N) as G2. { apply Omega.IsOrdinal. }
   assert (card a :< :N \/ :N :<=: card a) as H3. {
-    apply SOC.ElemOrIncl; assumption. }
+    apply Ordinal.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   apply H1. exists (card a). split. 1: assumption.
   apply Number.IsEquip. assumption.

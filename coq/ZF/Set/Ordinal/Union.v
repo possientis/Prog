@@ -3,7 +3,7 @@ Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Union.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Union.
 
 Module COC := ZF.Class.Ordinal.Core.

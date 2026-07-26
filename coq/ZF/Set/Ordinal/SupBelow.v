@@ -3,7 +3,7 @@ Require Import ZF.Class.Ordinal.SupBelow.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
@@ -53,7 +53,7 @@ Proof.
   unfold Notation.SupBelow.supBelow, SetSupBelow, supBelow.
   assert ({{ x :< a :/\: b | Ordinal }} = a :/\: b) as H3. {
     apply Specify.IsA. intros x H3. apply Inter2.Charac in H3.
-    destruct H3 as [H3 _]. apply Core.IsOrdinal with a; assumption. }
+    destruct H3 as [H3 _]. apply Ordinal.IsOrdinal with a; assumption. }
   rewrite H3. reflexivity.
 Qed.
 

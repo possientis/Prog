@@ -8,7 +8,7 @@ Require Import ZF.Class.Relation.ShiftR.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
@@ -89,7 +89,7 @@ Proposition ShiftL : forall (F:Class) (n:U),
   :sum:_{succ n} F = F!:0: :+: :sum:_{n} (shiftL F).
 Proof.
   intros F n H1. revert n.
-  assert (Ordinal :0:) as G1. { apply Core.Zero. }
+  assert (Ordinal :0:) as G1. { apply Ordinal.Zero. }
   remember (fun n =>
     (forall i, i :< succ n -> domain F i)  ->
     (forall i, i :< succ n -> Ordinal F!i) ->
@@ -107,14 +107,15 @@ Proof.
         * apply H5. apply Succ.HasZero; assumption.
         * apply IsOrdinal. 1: assumption.
           intros i H6.
-          assert (Ordinal i) as G4. { apply SOC.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G4. {
+            apply Ordinal.IsOrdinal with n; assumption. }
           assert (Ordinal (succ i)) as G5. { apply Succ.IsOrdinal. assumption. }
           rewrite ShiftL.Eval. 2: assumption.
          { apply H5, Succ.ElemCompat; try assumption.
-            apply SOC.ElemElemTran with n; try assumption.
+            apply Ordinal.ElemElemTran with n; try assumption.
             apply Succ.IsIn. }
          { apply H4, Succ.ElemCompat; try assumption.
-            apply SOC.ElemElemTran with n; try assumption.
+            apply Ordinal.ElemElemTran with n; try assumption.
             apply Succ.IsIn. }
         * apply H5, Succ.IsIn.
       + apply H4, Succ.IsIn.
@@ -133,7 +134,7 @@ Proposition ShiftR : forall (F:Class) (a n:U),
   :sum:_{succ n} (shiftR a F) = a :+: :sum:_{n} F.
 Proof.
   intros F a n H1 H2. revert n.
-  assert (Ordinal :0:) as G1. { apply Core.Zero. }
+  assert (Ordinal :0:) as G1. { apply Ordinal.Zero. }
   remember (fun n =>
     (forall i, i :< n -> domain F i)                ->
     (forall i, i :< n -> Ordinal F!i)               ->

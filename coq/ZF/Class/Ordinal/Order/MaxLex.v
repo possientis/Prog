@@ -24,7 +24,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Max.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
@@ -44,7 +44,6 @@ Module COI := ZF.Class.Order.InitSegment.
 Module CPR := ZF.Class.Prod.
 Module CRB := ZF.Class.Relation.Bij.
 Module SIN := ZF.Set.Incl.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SOI := ZF.Set.Order.InitSegment.
 Module SOS := ZF.Set.Ordinal.Succ.
 Module SPR := ZF.Set.Prod.
@@ -113,7 +112,7 @@ Proof.
     destruct H5 as [a [b [H5 _]]]. subst. apply CEM.HasElem.
     exists (a :\/: b). exists a. exists b. split. 2: assumption. reflexivity. }
   assert (exists c, On c /\ B c /\ forall x, B x -> c :<=: x) as H6. {
-    apply SOC.HasMinimal; assumption. }
+    apply Ordinal.HasMinimal; assumption. }
   destruct H6 as [c [H6 [H7 H8]]].
   remember (fun x =>
     exists a b, x = :(a,b): /\ c = a :\/: b /\ A :(a,b): ) as C eqn:H9.
@@ -143,7 +142,7 @@ Proof.
     apply H8 in H24.
     assert (On c) as H25. { rewrite H16. apply Max.IsOrdinal; assumption. }
     assert (On d) as H26. { rewrite H23. apply Max.IsOrdinal; assumption. }
-    apply SOC.EqualOrElem in H24; try assumption.
+    apply Ordinal.EqualOrElem in H24; try assumption.
     destruct H24 as [H24|H24].
     - rewrite H20 in H19. apply Charac4 in H19. destruct H19 as [H19|H19].
       + apply Foundation.NoLoop1 with c. rewrite <- H24 in H23. rewrite <- H23 in H19.
@@ -154,7 +153,8 @@ Proof.
         * rewrite <- H20. assumption.
     - rewrite H20 in H19. apply Charac4 in H19. destruct H19 as [H19|H19].
       + rewrite <- H23 in H19. rewrite <- H16 in H19.
-        apply Foundation.NoLoop1 with c. apply SOC.ElemIsIncl in H19; try assumption.
+        apply Foundation.NoLoop1 with c.
+        apply Ordinal.ElemIsIncl in H19; try assumption.
         apply H19. assumption.
       + destruct H19 as [H19 _].
         rewrite <- H23 in H19. rewrite <- H16 in H19. rewrite H19 in H24.
@@ -182,7 +182,7 @@ Proof.
   assert (
     a :\/: b  = c :\/: d  \/
     a :\/: b :< c :\/: d  \/
-    c :\/: d :< a :\/: b) as H9. { apply SOC.IsTotal; assumption. }
+    c :\/: d :< a :\/: b) as H9. { apply Ordinal.IsTotal; assumption. }
   destruct H9 as [H9|[H9|H9]].
   - assert (
     :(a,b): = :(c,d):       \/
@@ -224,14 +224,14 @@ Proof.
   apply Charac4 in H8. apply SPR.Charac2.
   assert (y :\/: z :<=: a :\/: b) as H9. {
     destruct H8 as [H8|[H8 _]].
-    - apply SOC.ElemIsIncl; assumption.
+    - apply Ordinal.ElemIsIncl; assumption.
     - rewrite H8. apply SIN.Refl. }
   (* Hence each coordinate is below the successor of that maximum.              *)
   assert (y :<=: a :\/: b) as H10. {
     apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclL. }
   assert (z :<=: a :\/: b) as H11. {
     apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
-  split; apply SOC.InclElemTran with (a :\/: b); try assumption;
+  split; apply Ordinal.InclElemTran with (a :\/: b); try assumption;
   apply Succ.IsIn.
 Qed.
 
@@ -299,7 +299,7 @@ Proof.
     - apply IsIsom. }
   rewrite H3, SOI.EA.
   apply Specify.IsA. intros c H4.
-  apply SOC.IsOrdinal with Pairing!:(a,b):; assumption.
+  apply Ordinal.IsOrdinal with Pairing!:(a,b):; assumption.
 Qed.
 
 (* The product of two ordinals is a subset of the domain of Pairing.            *)
@@ -312,8 +312,8 @@ Proof.
   apply CRB.Satisfies with (On :x: On) On.
   - apply IsIsom.
   - apply CPR.Charac2.
-    assert (On x) as H6. { apply SOC.IsOrdinal with a; assumption. }
-    assert (On y) as H7. { apply SOC.IsOrdinal with b; assumption. }
+    assert (On x) as H6. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (On y) as H7. { apply Ordinal.IsOrdinal with b; assumption. }
     split; assumption.
 Qed.
 

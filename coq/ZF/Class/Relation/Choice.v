@@ -12,7 +12,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Minimal.
 Require Import ZF.Set.Order.Total.
 Require Import ZF.Set.Order.WellOrdering.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionGen.
 Require Import ZF.Set.OrdPair.

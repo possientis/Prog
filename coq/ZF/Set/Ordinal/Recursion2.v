@@ -1,7 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Recursion2OfClass.
 Require Import ZF.Set.Ordinal.Succ.

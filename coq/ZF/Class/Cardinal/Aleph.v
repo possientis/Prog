@@ -12,7 +12,7 @@ Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
@@ -32,7 +32,6 @@ Module COS := ZF.Class.Ordinal.Subclass.
 Module CFL := ZF.Class.Relation.Functional.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module SEM := ZF.Set.Empty.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SOM := ZF.Set.Ordinal.Monotone.
 Module SUG := ZF.Set.UnionGenOfClass.
 
@@ -148,7 +147,7 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   (* Aleph(0) is the infimum of the infinite cardinals not already attained.    *)
   assert (Aleph!:0: = inf (InfiniteCard :\: Aleph:[:0:]:)) as H1. {
-    apply IsInf. apply SOC.Zero. }
+    apply IsInf. apply Ordinal.Zero. }
   assert (Aleph:[:0:]: = :0:) as H2. {
     apply ImageUnderClass.WhenZero. reflexivity. }
   rewrite H1, H2. transitivity (inf InfiniteCard).
@@ -169,7 +168,7 @@ Proof.
     assert (InfiniteCard (:\/:_{a} Aleph)) as H6. {
       apply InfiniteCard.UnionGen.
       - intros b H6. apply IsInfiniteCard.
-        apply (SOC.IsOrdinal a); assumption.
+        apply (Ordinal.IsOrdinal a); assumption.
       - apply SEM.HasElem. exists :0:.
         apply Limit.HasZero. assumption. }
     assert ((InfiniteCard :\: Aleph:[a]:) (:\/:_{a} Aleph)) as H7. {
@@ -195,12 +194,12 @@ Proof.
   assert (:\/:_{a} Aleph :<=: Aleph!a) as H21. {
     (* Every earlier Aleph value is bounded by Aleph(a).                        *)
     apply SUG.WhenSetBounded. intros b H5.
-    assert (Ordinal b) as H6. { apply (SOC.IsOrdinal a); assumption. }
+    assert (Ordinal b) as H6. { apply (Ordinal.IsOrdinal a); assumption. }
     assert (COM.Monotone Aleph) as H8. { apply IsMonotone. }
     destruct H8 as [_ H8].
     assert (Aleph!b :< Aleph!a) as H9. {
       apply H8; try apply DomainOf; assumption. }
-    apply SOC.ElemIsIncl. 2: assumption.
+    apply Ordinal.ElemIsIncl. 2: assumption.
     apply IsOrdinal. assumption. }
   apply Incl.Double. split; assumption.
 Qed.

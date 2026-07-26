@@ -6,7 +6,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Decreasing.
 Require Import ZF.Set.Ordinal.Exp.
 Require Import ZF.Set.Ordinal.Limit.
@@ -48,10 +48,10 @@ Proposition IsElem : forall (a b c d n:U),
 Proof.
   intros a b c d n H1 H2 H3 H4 H5 H6 H7.
   revert n H3 b c d H2 H4 H5 H6.
-  assert (Ordinal :0:) as G1. { apply Core.Zero. }
+  assert (Ordinal :0:) as G1. { apply Ordinal.Zero. }
   assert (Ordinal :1:) as G2. { apply Natural.OneIsOrdinal. }
   assert (:0: :< a) as G3. {
-    apply Core.ElemElemTran with :1:; try assumption.
+    apply Ordinal.ElemElemTran with :1:; try assumption.
     apply Succ.IsIn. }
   remember (fun n =>
     forall b c d: U,
@@ -100,13 +100,15 @@ Proof.
         apply Succ.HasZero. assumption. }
       assert (forall i, i :< n -> c'!i :< a) as H22. {
         intros i H22.
-        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+        assert (Ordinal i) as G9. {
+        apply Ordinal.IsOrdinal with n; assumption. }
         rewrite H17, SRL.Eval. 2: assumption.
         - apply H10, Succ.ElemCompat; assumption.
         - rewrite G8. apply Succ.ElemCompat; assumption. }
       assert (forall i, i :< n -> b'!i :< b!:0:) as H23. {
         intros i H23.
-        assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+        assert (Ordinal i) as G9. {
+        apply Ordinal.IsOrdinal with n; assumption. }
         rewrite H16, SRL.Eval. 2: assumption.
         - apply H6.
           + rewrite G7. apply Succ.HasZero. assumption.
@@ -117,7 +119,7 @@ Proof.
       assert (:sum:_{n} (CRL.shiftL :[F]:) = :sum:_{n} :[G]:) as H24. {
         apply SumOfClass.Equal. 1: assumption.
         intros i H24.
-       assert (Ordinal i) as G9. { apply Core.IsOrdinal with n; assumption. }
+       assert (Ordinal i) as G9. { apply Ordinal.IsOrdinal with n; assumption. }
         rewrite
           CRL.Eval, From.Eval, From.Eval, E, E', H16, H17, SRL.Eval, SRL.Eval;
         try assumption. 1: reflexivity.
@@ -133,10 +135,10 @@ Proof.
         rewrite E. apply Mult.IsOrdinal. 1: assumption.
         apply H14, Succ.HasZero. assumption. }
       assert (forall i, i :< n -> Ordinal b'!i) as G12. {
-        intros i G12. apply Core.IsOrdinal with b!:0:. 1: assumption.
+        intros i G12. apply Ordinal.IsOrdinal with b!:0:. 1: assumption.
         apply H23. assumption. }
       assert (forall i, i :< n -> Ordinal c'!i) as G13. {
-        intros i G13. apply Core.IsOrdinal with a. 1: assumption.
+        intros i G13. apply Ordinal.IsOrdinal with a. 1: assumption.
         apply H22. assumption. }
       assert (forall i, i :< n -> Ordinal (a :^: b'!i)) as G14. {
         intros i G14. apply Exp.IsOrdinal. 1: assumption.
@@ -152,7 +154,7 @@ Proof.
         apply Plus.IsOrdinal; assumption. }
       assert (Ordinal (F :0: :+: a :^: b!:0:)) as G18. {
         apply Plus.IsOrdinal; assumption. }
-      apply Core.ElemInclTran with (F :0: :+: a :^: b!:0:); try assumption.
+      apply Ordinal.ElemInclTran with (F :0: :+: a :^: b!:0:); try assumption.
       + apply Plus.ElemCompatR; assumption.
       + rewrite E.
         assert (
@@ -226,7 +228,7 @@ Proof.
   assert (:1: :< a) as G19. { apply Limit.HasOne. assumption. }
   assert (forall i, i :< n -> m'!i :< a) as G20. {
     intros i G20.
-    assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
+    assert (Ordinal i) as K1. { apply Ordinal.IsOrdinal with n; assumption. }
     apply Omega.IsInclLimit. 1: assumption.
     rewrite H13, SRL.Eval.
     - apply H7. apply Succ.ElemCompat; assumption.
@@ -234,7 +236,7 @@ Proof.
     - rewrite G8. apply Succ.ElemCompat; assumption. }
   assert (forall i, i :< n -> b'!i :< b!:0:) as G21. {
     intros i G21.
-    assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
+    assert (Ordinal i) as K1. { apply Ordinal.IsOrdinal with n; assumption. }
     rewrite H12, SRL.Eval.
     - apply H5.
       + rewrite G7. apply Succ.HasZero. assumption.
@@ -268,7 +270,7 @@ Proof.
   assert (s' = :sum:_{n} (CRL.shiftL :[F]:)) as H17. {
     rewrite H15. apply SumOfClass.Equal. 1: assumption.
     intros i H17.
-    assert (Ordinal i) as K1. { apply Core.IsOrdinal with n; assumption. }
+    assert (Ordinal i) as K1. { apply Ordinal.IsOrdinal with n; assumption. }
     rewrite From.Eval, CRL.Eval, From.Eval,
     H14, H10, H12, H13, SRL.Eval, SRL.Eval. 1: reflexivity.
     - apply H4.
@@ -316,7 +318,7 @@ Proof.
         apply Exp.InBetween; assumption. }
       destruct H5 as [e [H5 [H6 H7]]].
     assert (Ordinal (a :^: e)) as G1. { apply Exp.IsOrdinal; assumption. }
-    assert (Ordinal :0:) as G2. { apply Core.Zero. }
+    assert (Ordinal :0:) as G2. { apply Ordinal.Zero. }
     assert (Ordinal :1:) as G3. { apply Natural.OneIsOrdinal. }
     assert (:0: :< a) as G4. {
       apply ElemElemTran with :1:; try assumption.
@@ -332,13 +334,15 @@ Proof.
     assert (Ordinal (a :^: e :*: q)) as G5. {
       apply Mult.IsOrdinal; assumption. }
     assert (:0: :< q) as H12. {
-      assert (q = :0: \/ :0: :< q) as H12. { apply Core.ZeroOrElem. assumption. }
+      assert (q = :0: \/ :0: :< q) as H12. {
+      apply Ordinal.ZeroOrElem. assumption. }
       destruct H12 as [H12|H12]. 2: assumption. subst. exfalso.
       rewrite Mult.WhenZeroR, Plus.WhenZeroL in H6. 2: assumption.
       assert (r :< r) as H13. { apply H6. assumption. }
       revert H13. apply Foundation.NoLoop1. }
     assert (q :< a) as H13. {
-      assert (q :< a \/ a :<=: q) as H13. { apply Core.ElemOrIncl; assumption. }
+      assert (q :< a \/ a :<=: q) as H13. {
+      apply Ordinal.ElemOrIncl; assumption. }
       destruct H13 as [H13|H13]. 1: assumption. exfalso.
       assert (a :^: succ e :<=: b) as H14. {
         rewrite Exp.WhenSuccR, H10. 2: assumption.
@@ -347,10 +351,11 @@ Proof.
       - apply Plus.IsInclR; assumption. }
       assert (b :< b) as H15. { apply H14. assumption. }
       revert H15. apply Foundation.NoLoop1. }
-    assert (r = :0: \/ :0: :< r) as H14. { apply Core.ZeroOrElem. assumption. }
+    assert (r = :0: \/ :0: :< r) as H14. {
+    apply Ordinal.ZeroOrElem. assumption. }
     assert (:1: :< :N) as G6. { apply Omega.HasOne. }
     assert (:1: = succ :0:) as G7. { reflexivity. }
-    assert (Ordinal :0:) as G8. { apply Core.Zero. }
+    assert (Ordinal :0:) as G8. { apply Ordinal.Zero. }
     destruct H14 as [H14|H14].
     - remember :{ :(:0:,q): }: as c eqn:H15.
       remember :{ :(:0:,e): }: as d eqn:H16.
@@ -406,7 +411,7 @@ Proof.
           apply OrdFunOn.IsOrdinal with n; assumption. }
         assert (Ordinal (a :^: d!i)) as G11. { apply Exp.IsOrdinal; assumption. }
         apply Exp.ElemCompatRevR with a; try assumption.
-        apply Core.InclElemTran with r; try assumption.
+        apply Ordinal.InclElemTran with r; try assumption.
         apply Incl.Tran with (a :^: d!i :*: c!i).
         - apply Mult.IsInclR. 1: assumption.
           + apply OrdFunOn.IsOrdinal with n; assumption.
@@ -431,9 +436,9 @@ Proof.
       assert (Functional d) as G15. { apply H20. }
       assert (Ordinal :N) as G16. { apply Omega.IsOrdinal. }
       assert (domain c :<=: :N) as G17. {
-        rewrite G12. apply Core.ElemIsIncl; assumption. }
+        rewrite G12. apply Ordinal.ElemIsIncl; assumption. }
       assert (domain d :<=: :N) as G18. {
-        rewrite G13. apply Core.ElemIsIncl; assumption. }
+        rewrite G13. apply Ordinal.ElemIsIncl; assumption. }
       assert (Ordinal (succ n)) as G19. {
         apply Omega.HasOrdinals. assumption. }
       assert (Decreasing d') as H30. {
@@ -445,7 +450,7 @@ Proof.
           apply Omega.IsIn with (succ n); assumption. }
         assert (Ordinal i) as G21. { apply Omega.HasOrdinals. assumption. }
         assert (i = :0: \/ :0: :< i) as H32. {
-          apply Core.ZeroOrElem. assumption. }
+          apply Ordinal.ZeroOrElem. assumption. }
         destruct H32 as [H32|H32].
         - rewrite H26, H32, SRR.EvalZero; assumption.
         - apply Omega.HasPred in H32. 2: assumption.
@@ -463,7 +468,7 @@ Proof.
           apply Omega.IsIn with (succ n); assumption. }
         assert (Ordinal i) as G21. { apply Omega.HasOrdinals. assumption. }
         assert (i = :0: \/ :0: :< i) as H33. {
-          apply Core.ZeroOrElem. assumption. }
+          apply Ordinal.ZeroOrElem. assumption. }
         destruct H33 as [H33|H33].
         - rewrite H26, H33, SRR.EvalZero; assumption.
         - apply Omega.HasPred in H33. 2: assumption.
@@ -487,7 +492,7 @@ Proof.
           apply Omega.IsIn with (succ n); assumption. }
         assert (Ordinal i) as G21. { apply Omega.HasOrdinals. assumption. }
         assert (i = :0: \/ :0: :< i) as H37. {
-          apply Core.ZeroOrElem. assumption. }
+          apply Ordinal.ZeroOrElem. assumption. }
         destruct H37 as [H37|H37].
         - rewrite H37, SRR.EvalZero, SRR.EvalZero, CRR.EvalZero; try assumption.
           1: reflexivity. apply From.IsFunctional.
@@ -517,7 +522,7 @@ Proof.
       assert (b = :sum:_{succ n} (CRR.shiftR (a :^: e :*: q) :[F]:)) as X. 2: apply X.
       rewrite H37, H10, H24. reflexivity. }
   intros b H2.
-  assert (b = :0: \/ :0: :< b) as H5. { apply Core.ZeroOrElem. assumption. }
+  assert (b = :0: \/ :0: :< b) as H5. { apply Ordinal.ZeroOrElem. assumption. }
   destruct H5 as [H5|H5].
   - exists :0:, :0:, :0:.
     assert (:0: :< :N) as H6. { apply Omega.HasZero. }
@@ -551,7 +556,8 @@ Proof.
   intros a b c q1 q2 r1 r2 H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12.
   assert (Ordinal (succ b)) as G1. { apply Succ.IsOrdinal. assumption. }
   assert (:0: :< a) as G2. {
-    apply Natural.HasZero. 1: assumption. apply Core.ElemIsIncl; assumption. }
+    apply Natural.HasZero. 1: assumption.
+    apply Ordinal.ElemIsIncl; assumption. }
   assert (Ordinal (a :^: c)) as G3. { apply Exp.IsOrdinal; assumption. }
   assert (Ordinal (a :^: c :*: q2)) as G4. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :^: b)) as G5. { apply Exp.IsOrdinal; assumption. }
@@ -582,9 +588,9 @@ Proof.
     rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR; assumption. }
   assert (a :^: b :*: q1 :+: r1 :< a :^: (succ b)) as H18. {
     rewrite <- Plus.WhenOneR, Exp.DistribL, Exp.WhenOneR; try assumption.
-    apply Core.ElemInclTran with (a :^: b :*: (succ q1)); try assumption.
+    apply Ordinal.ElemInclTran with (a :^: b :*: (succ q1)); try assumption.
     apply Mult.InclCompatR; assumption. }
-  apply Core.ElemInclTran with (a :^: (succ b)); assumption.
+  apply Ordinal.ElemInclTran with (a :^: (succ b)); assumption.
 Qed.
 
 Proposition IsUnique : forall (a n m c d e f:U),
@@ -607,10 +613,11 @@ Proposition IsUnique : forall (a n m c d e f:U),
   n = m /\ c = e /\ d = f.
 Proof.
   intros a n m c d e f H1 H2 H3. revert n H3 m c d e f.
-  assert (Ordinal :0:) as K1. { apply Core.Zero. }
+  assert (Ordinal :0:) as K1. { apply Ordinal.Zero. }
   assert (Ordinal :1:) as K2. { apply Natural.OneIsOrdinal. }
   assert (:0: :< a) as K3. {
-    apply Natural.HasZero. 1: assumption. apply Core.ElemIsIncl; assumption. }
+    apply Natural.HasZero. 1: assumption.
+    apply Ordinal.ElemIsIncl; assumption. }
   remember (fun n =>
     forall m c d e f : U,
     m :< :N                                                             ->
@@ -636,7 +643,7 @@ Proof.
       rewrite SumOfClass.WhenZero in H14.
       assert (:0: = m) as H15. {
         assert (m = :0: \/ :0: :< m) as H15. {
-          apply Core.ZeroOrElem. assumption. }
+          apply Ordinal.ZeroOrElem. assumption. }
         destruct H15 as [H15|H15]. 1: { symmetry. assumption. } exfalso.
         apply Omega.HasPred in H15. 2: assumption.
         destruct H15 as [k [H15 H16]].
@@ -656,7 +663,7 @@ Proof.
         assert (Ordinal (:sum:_{k} :[F2]:)) as G8. {
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G8. rewrite From.Eval. apply G6.
-          apply Core.ElemElemTran with k; try assumption.
+          apply Ordinal.ElemElemTran with k; try assumption.
             apply Omega.HasOrdinals, Omega.IsIn with k; assumption. }
         assert (F2 k :<=: (:sum:_{k} :[F2]:) :+: F2 k) as H17. {
           apply Plus.IsInclL; assumption. }
@@ -684,7 +691,8 @@ Proof.
       assert (succ n :< :N) as G3. { apply Omega.HasSucc. assumption. }
       assert (Ordinal (succ n)) as G4. {
         apply Omega.HasOrdinals. assumption. }
-      assert (m =:0: \/ :0: :< m) as H16. { apply Core.ZeroOrElem. assumption. }
+      assert (m =:0: \/ :0: :< m) as H16. {
+      apply Ordinal.ZeroOrElem. assumption. }
       destruct H16 as [H16|H16].
       + exfalso.
         rewrite H16, SumOfClass.WhenZero, SumOfClass.WhenSucc, From.Eval in H15.
@@ -703,7 +711,7 @@ Proof.
         assert (Ordinal (:sum:_{n} :[F1]:)) as G10. {
           apply SumOfClass.IsOrdinal. 1: assumption.
           intros i G10. rewrite From.Eval. apply G8.
-          apply Core.ElemElemTran with n; try assumption.
+          apply Ordinal.ElemElemTran with n; try assumption.
             apply Omega.HasOrdinals, Omega.IsIn with n; assumption. }
         assert (F1 n :<=: (:sum:_{n} :[F1]:) :+: F1 n) as H17. {
           apply Plus.IsInclL; assumption. }
@@ -755,7 +763,8 @@ Proof.
         remember (fun i => a :^: f'!i :*: e'!i) as F2' eqn:E2'.
         assert (:sum:_{n} (CRL.shiftL :[F1]:) = :sum:_{n} :[F1']:) as H23. {
           apply SumOfClass.Equal. 1: assumption. intros i H23.
-          assert (Ordinal i) as G16. { apply Core.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G16. {
+          apply Ordinal.IsOrdinal with n; assumption. }
           rewrite CRL.Eval, From.Eval, From.Eval, E1, E1', H19, H20,
             SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
           - rewrite G11. apply Succ.ElemCompat; assumption.
@@ -764,7 +773,8 @@ Proof.
           - apply From.DomainOf. }
         assert (:sum:_{k} (CRL.shiftL :[F2]:) = :sum:_{k} :[F2']:) as H24. {
           apply SumOfClass.Equal. 1: assumption. intros i H24.
-          assert (Ordinal i) as G16. { apply Core.IsOrdinal with k; assumption. }
+          assert (Ordinal i) as G16. {
+          apply Ordinal.IsOrdinal with k; assumption. }
           rewrite CRL.Eval, From.Eval, From.Eval, E2, E2', H21, H22,
             SRL.Eval, SRL.Eval; try assumption. 1: reflexivity.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption.
@@ -792,19 +802,22 @@ Proof.
           rewrite H22. apply SRL.IsDecreasing. 2: assumption. apply H8. }
         assert (forall i, i :< n -> c'!i :< a) as G24. {
           rewrite H19. intros i G24.
-          assert (Ordinal i) as G25. { apply Core.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G25. {
+          apply Ordinal.IsOrdinal with n; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply H12. apply Succ.ElemCompat; assumption.
           - rewrite G11. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> e'!i :< a) as G25. {
           rewrite H21. intros i G25.
-          assert (Ordinal i) as G26. { apply Core.IsOrdinal with k; assumption. }
+          assert (Ordinal i) as G26. {
+          apply Ordinal.IsOrdinal with k; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply H14. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< n -> d'!i :< d!:0:) as G26. {
           rewrite H20. intros i G26.
-          assert (Ordinal i) as G27. { apply Core.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G27. {
+          apply Ordinal.IsOrdinal with n; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply H9.
             + rewrite G12. apply Succ.HasZero. assumption.
@@ -813,7 +826,8 @@ Proof.
           - rewrite G12. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> f'!i :< f!:0:) as G27. {
           rewrite H22. intros i G27.
-          assert (Ordinal i) as G28. { apply Core.IsOrdinal with k; assumption. }
+          assert (Ordinal i) as G28. {
+          apply Ordinal.IsOrdinal with k; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply H10.
             + rewrite G14, H17. apply Succ.HasZero. assumption.
@@ -834,25 +848,29 @@ Proof.
           intros i G32. apply OrdFunOn.IsOrdinal with m; assumption. }
         assert (forall i, i :< n -> Ordinal c'!i) as G33. {
           rewrite H19. intros i G33.
-          assert (Ordinal i) as G34. { apply Core.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G34. {
+          apply Ordinal.IsOrdinal with n; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply G29. apply Succ.ElemCompat; assumption.
           - rewrite G11. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< n -> Ordinal d'!i) as G34. {
           rewrite H20. intros i G34.
-          assert (Ordinal i) as G35. { apply Core.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G35. {
+          apply Ordinal.IsOrdinal with n; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply G31. apply Succ.ElemCompat; assumption.
           - rewrite G12. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> Ordinal e'!i) as G35. {
           rewrite H21. intros i G35.
-          assert (Ordinal i) as G36. { apply Core.IsOrdinal with k; assumption. }
+          assert (Ordinal i) as G36. {
+          apply Ordinal.IsOrdinal with k; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply G30. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> Ordinal f'!i) as G36. {
           rewrite H22. intros i G36.
-          assert (Ordinal i) as G37. { apply Core.IsOrdinal with k; assumption. }
+          assert (Ordinal i) as G37. {
+          apply Ordinal.IsOrdinal with k; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply G32. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G14, H17. apply Succ.ElemCompat; assumption. }
@@ -881,7 +899,7 @@ Proof.
         remember (a :^: f!:0: :*: e!:0: :+: r2) as s2 eqn:H28.
         assert (d!:0: = f!:0:) as H29. {
           assert (d!:0: = f!:0: \/ d!:0: :< f!:0: \/ f!:0: :< d!:0:) as H29. {
-            apply Core.IsTotal; assumption. }
+            apply Ordinal.IsTotal; assumption. }
           destruct H29 as [H29|[H29|H29]]. 1: assumption.
           - exfalso.
             assert (s1 :< s2) as H30. {
@@ -905,13 +923,15 @@ Proof.
         destruct H30 as [H30 H31].
         assert (forall i, i :< n -> :0: :< c'!i) as G41. {
           rewrite H19. intros i G41.
-          assert (Ordinal i) as G42. { apply Core.IsOrdinal with n; assumption. }
+          assert (Ordinal i) as G42. {
+          apply Ordinal.IsOrdinal with n; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply H11. apply Succ.ElemCompat; assumption.
           - rewrite G11. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> :0: :< e'!i) as G42. {
           rewrite H21. intros i G42.
-          assert (Ordinal i) as G43. { apply Core.IsOrdinal with k; assumption. }
+          assert (Ordinal i) as G43. {
+          apply Ordinal.IsOrdinal with k; assumption. }
           rewrite SRL.Eval. 2: assumption.
           - apply H13. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
@@ -1001,7 +1021,8 @@ Proof.
     rewrite Exp.DistribL; try assumption.
     apply Mult.InclCompatL; try assumption.
     - apply Exp.IsOrdinal; assumption.
-    - apply Core.ElemIsIncl. 2: assumption. apply Exp.IsOrdinal; assumption. }
+    - apply Ordinal.ElemIsIncl. 2: assumption.
+      apply Exp.IsOrdinal; assumption. }
   assert (s :*: a :^: d :<=: a :^: (b!:0: :+: d)) as H16. {
     rewrite <- Plus.WhenOneR, Plus.Assoc, (Plus.WhenNatL :1: d) in H15;
     assumption. }
@@ -1079,7 +1100,7 @@ Proof.
   assert (s :*: a :^: d :<=: a :^: b!:0: :*: succ m!:0: :*: a :^: d) as H25. {
     apply Mult.InclCompatL; try assumption.
     - apply Mult.IsOrdinal. 1: assumption. apply Succ.IsOrdinal. assumption.
-    - apply Core.ElemIsIncl. 2: assumption.
+    - apply Ordinal.ElemIsIncl. 2: assumption.
       apply Mult.IsOrdinal. 1: assumption. apply Succ.IsOrdinal. assumption. }
   assert (s :*: a :^: d :<=: a :^: b!:0: :*: a :^: d) as H26. {
     rewrite Mult.Assoc, (Mult.LimitWithNatSimple (succ m!:0:)) in H25;
@@ -1115,7 +1136,7 @@ Proof.
   assert (:0: :< a) as G7. { apply Limit.HasZero. assumption. }
   assert (:0: :< a :^: b) as G8. { apply Exp.HasZero; assumption. }
   assert (:0: :< a :^: b :*: n) as G9. { apply Mult.HasZero; assumption. }
-  assert (Ordinal :0:) as G10. { apply Core.Zero. }
+  assert (Ordinal :0:) as G10. { apply Ordinal.Zero. }
   assert (n :< a :^: b) as G11. { apply Omega.IsInclLimit; assumption. }
   assert (Ordinal :1:) as G12. { apply Natural.OneIsOrdinal. }
   remember (fun c => :0: :< c ->
@@ -1128,7 +1149,8 @@ Proof.
       assert (Ordinal (b :*: c)) as K1. { apply Mult.IsOrdinal; assumption. }
       assert (Ordinal (a :^: (b :*: c))) as K2. {
         apply Exp.IsOrdinal; assumption. }
-      assert (c = :0: \/ :0: :< c) as H7. { apply Core.ZeroOrElem. assumption. }
+      assert (c = :0: \/ :0: :< c) as H7. {
+      apply Ordinal.ZeroOrElem. assumption. }
       destruct H7 as [H7|H7].
       + subst. rewrite Exp.WhenOneR, Mult.WhenOneR; try assumption. reflexivity.
       + specialize (IH H7). destruct IH as [[H8 IH]|[H8 IH]].
@@ -1149,7 +1171,8 @@ Proof.
         intros x H8.
         rewrite Exp.WhenLimit in H8; try assumption.
         apply SUG.Charac in H8. destruct H8 as [d [H8 H9]].
-        assert (Ordinal d) as L1. { apply Core.IsOrdinal with c; assumption. }
+        assert (Ordinal d) as L1. {
+        apply Ordinal.IsOrdinal with c; assumption. }
         assert (Ordinal (b :*: d)) as L2. { apply Mult.IsOrdinal; assumption. }
         assert (Ordinal (a :^: (b :*: d))) as L3. {
           apply Exp.IsOrdinal; assumption. }
@@ -1157,7 +1180,7 @@ Proof.
         assert (x :< (a :^: b :*: n) :^: d) as H10. { assumption. } clear H9.
         assert ((a :^: b :*: n) :^: d :<=: (a :^: (b :*: d) :*: n)) as H11. {
           assert (d = :0: \/ :0: :< d) as H11. {
-            apply Core.ZeroOrElem. assumption. }
+            apply Ordinal.ZeroOrElem. assumption. }
           destruct H11 as [H11|H11].
           - subst. rewrite Exp.WhenZeroR, Mult.WhenZeroR, Exp.WhenZeroR,
             Mult.WhenOneL. 2: assumption. apply Succ.ElemIsIncl; assumption.
@@ -1168,7 +1191,7 @@ Proof.
         assert (a :^: (b :*: d) :*: n :<=: a :^: (b :*: succ d)) as H12. {
           rewrite <- Plus.WhenOneR, Mult.DistribL, Mult.WhenOneR, Exp.DistribL;
           try assumption. apply Mult.InclCompatR; try assumption.
-          apply Core.ElemIsIncl; assumption. }
+          apply Ordinal.ElemIsIncl; assumption. }
         apply H11, H12 in H10.
         rewrite <- Exp.Assoc, Exp.WhenLimit; try assumption.
         apply SUG.Charac. exists (succ d). split.
@@ -1231,11 +1254,11 @@ Proposition LimitWithNatIncl : forall (a b c n:U),
 Proof.
   intros a b c n H1 H2 H3 H4 H5 H6.
   assert (Ordinal n) as G1. { apply Omega.HasOrdinals. assumption. }
-  assert (Ordinal :0:) as G2. { apply Core.Zero. }
+  assert (Ordinal :0:) as G2. { apply Ordinal.Zero. }
   assert (Ordinal a) as G3. { apply H1. }
   assert (Ordinal (b :*: c)) as G4. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :^: (b :*: c))) as G5. { apply Exp.IsOrdinal; assumption. }
-  assert (c = :0: \/ :0: :< c) as H7. { apply Core.ZeroOrElem. assumption. }
+  assert (c = :0: \/ :0: :< c) as H7. { apply Ordinal.ZeroOrElem. assumption. }
   destruct H7 as [H7|H7].
   - subst.
     rewrite Exp.WhenZeroR, Mult.WhenZeroR, Exp.WhenZeroR, Mult.WhenOneL.
@@ -1286,7 +1309,7 @@ Proof.
     apply Omega.HasSucc, H8, Succ.HasZero. assumption. }
 
   assert (s :<=: a :^: b!:0: :*: succ m!:0:) as H10. {
-    apply Core.ElemIsIncl. 1: assumption.
+    apply Ordinal.ElemIsIncl. 1: assumption.
     rewrite H9. apply IsElemNat; assumption. }
   assert (s :^: d :<=: (a :^: b!:0: :*: succ m!:0:) :^: d) as H11. {
     apply Exp.InclCompatL; assumption. }
@@ -1337,7 +1360,7 @@ Proof.
     apply Omega.HasSucc, H9, Succ.HasZero. assumption. }
   assert (Ordinal d) as G14. { apply H2. }
   assert (s :<=: a :^: b!:0: :*: succ m!:0:) as H11. {
-    apply Core.ElemIsIncl. 1: assumption.
+    apply Ordinal.ElemIsIncl. 1: assumption.
     rewrite H10. apply IsElemNat; assumption. }
   assert (a :^: b!:0: :<=: a :^: b!:0: :*: m!:0:) as H12. {
     apply Mult.IsInclR; assumption. }

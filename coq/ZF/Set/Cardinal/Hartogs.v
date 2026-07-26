@@ -6,7 +6,7 @@ Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Transitive.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Inj.
@@ -14,7 +14,6 @@ Require Import ZF.Set.Relation.Restrict.
 
 
 Module CCH := ZF.Class.Cardinal.Hartogs.
-Module SOC := ZF.Set.Ordinal.Core.
 
 Definition hartogs (a:U) : U := fromClass (CCH.hartogs a) (CCH.IsSmall a).
 
@@ -44,17 +43,17 @@ Proposition IsTransitive : forall (a:U),
   Transitive (hartogs a).
 Proof.
   intros a c b H1 H2. apply Charac in H2. destruct H2 as [H2 [f H3]].
-  assert (Ordinal c) as H4. { apply SOC.IsOrdinal with b; assumption. }
+  assert (Ordinal c) as H4. { apply Ordinal.IsOrdinal with b; assumption. }
   assert (Inj (f:|:c) c a) as H5. {
     apply Inj.Restrict with b. 1: assumption.
-    apply SOC.ElemIsIncl; assumption. }
+    apply Ordinal.ElemIsIncl; assumption. }
   apply Charac. split. 1: assumption. exists (f:|:c). assumption.
 Qed.
 
 (* hartogs(a) is an ordinal.                                                    *)
 Proposition IsOrdinal : forall (a:U), Ordinal (hartogs a).
 Proof.
-  intro a. apply SOC.WhenTransitive.
+  intro a. apply Ordinal.WhenTransitive.
   - apply IsTransitive.
   - apply IsIncl.
 Qed.
@@ -67,7 +66,7 @@ Proof.
   assert (Ordinal (hartogs a)) as G1. { apply IsOrdinal. }
   destruct H2 as [f H2].
   assert (b :< hartogs a \/ hartogs a :<=: b) as H3. {
-    apply SOC.ElemOrIncl; assumption. }
+    apply Ordinal.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3]. 2: assumption. exfalso.
   apply Charac in H3. destruct H3 as [_ [g H3]].
   assert (Inj f (hartogs a) b) as H4. { apply Bij.IsInj. assumption. }
@@ -82,7 +81,7 @@ Qed.
 Proposition HasZero : forall (a:U), :0: :< hartogs a.
 Proof.
   intros a. apply Charac. split.
-  - apply SOC.Zero.
+  - apply Ordinal.Zero.
   - exists :0:. apply Inj.WhenZero. reflexivity.
 Qed.
 
@@ -96,7 +95,7 @@ Proof.
   destruct H3 as [H3|H3].
   - rewrite H3. apply HasZero.
   - assert (card a :< hartogs a \/ hartogs a :<=: card a) as H4. {
-      apply SOC.ElemOrIncl; assumption. }
+      apply Ordinal.ElemOrIncl; assumption. }
     destruct H4 as [H4|H4]. 1: assumption. exfalso.
     assert (card a :~: a) as H5. {
       apply Equip.Sym, IsEquipNotZero. assumption. }

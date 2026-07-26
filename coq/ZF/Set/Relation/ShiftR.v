@@ -5,7 +5,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Decreasing.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.OrdFun.
@@ -223,7 +223,8 @@ Proof.
     assert (succ n :< :N) as G5. { apply Omega.HasSucc. assumption. }
     assert (x :< :N) as G6. { apply Omega.IsIn with (succ n); assumption. }
     assert (Ordinal x) as G7. { apply Omega.HasOrdinals. assumption. }
-    assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
+    assert (x = :0: \/ :0: :< x) as H4. {
+      apply Ordinal.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4]. 1: { left. assumption. } right.
     split. 1: assumption. split. 1: assumption. rewrite H2.
     assert (Ordinal :U(x)) as G8. { apply UnionOf.IsOrdinal. assumption. }
@@ -242,7 +243,8 @@ Proof.
     destruct H3 as [H3|[H3 [H4 H5]]]. 2: assumption. subst. apply Omega.HasZero.
   - apply DomainOf. 1: assumption.
     assert (Ordinal x) as G1. { apply Omega.HasOrdinals. assumption. }
-    assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
+    assert (x = :0: \/ :0: :< x) as H4. {
+      apply Ordinal.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4].
     + left. assumption.
     + right. split. 1: assumption. split. 1: assumption. rewrite H1.
@@ -277,7 +279,7 @@ Proof.
   assert (Ordinal (succ (domain f))) as G3. {
     apply Succ.IsOrdinal. assumption. }
   assert (domain f = :N \/ domain f :< :N) as H5. {
-    apply Core.EqualOrElem; assumption. }
+    apply Ordinal.EqualOrElem; assumption. }
   split.
   - apply IsFunction. 1: assumption. apply H3.
   - split.
@@ -301,7 +303,7 @@ Proof.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   split.
   - apply IsOrdFun; try assumption. rewrite H4.
-    apply Core.ElemIsIncl; assumption.
+    apply Ordinal.ElemIsIncl; assumption.
   - rewrite WhenDomainIsNat; rewrite H4. 2: assumption. reflexivity.
 Qed.
 
@@ -328,7 +330,7 @@ Proposition IsDecreasing : forall (f a:U),
 Proof.
   intros f a [H1 [H2 H3]] H4 H5 H6 H7 x y H8 H9 H10.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
-  assert (domain f :<=: :N) as G2. { apply Core.ElemIsIncl; assumption. }
+  assert (domain f :<=: :N) as G2. { apply Ordinal.ElemIsIncl; assumption. }
   rewrite WhenDomainIsNat in H8. 2: assumption.
   rewrite WhenDomainIsNat in H9. 2: assumption.
   remember (domain f) as n eqn:H11. symmetry in H11.
@@ -341,8 +343,8 @@ Proof.
   assert (Ordinal y) as G9. { apply Omega.HasOrdinals. assumption. }
   assert (Functional f) as G10. { apply H1. }
   assert (domain f :<=: :N) as G11. { rewrite H11. assumption. }
-  assert (x = :0: \/ :0: :< x) as H12. { apply Core.ZeroOrElem. assumption. }
-  assert (y = :0: \/ :0: :< y) as H13. { apply Core.ZeroOrElem. assumption. }
+  assert (x = :0: \/ :0: :< x) as H12. { apply Ordinal.ZeroOrElem. assumption. }
+  assert (y = :0: \/ :0: :< y) as H13. { apply Ordinal.ZeroOrElem. assumption. }
   assert (forall i, i :< succ n -> :0: :< i -> :U(i) :< domain f) as H14. {
     intros i H14 H15. rewrite H11.
     assert (i :< :N) as G12. { apply Omega.IsIn with (succ n); assumption. }
@@ -355,7 +357,7 @@ Proof.
   - assert (:U(y) :< domain f) as H15. { apply H14; assumption. }
     rewrite H12, EvalZero, Eval; try assumption.
     assert (Ordinal :U(y)) as G15. {
-      apply Core.IsOrdinal with (domain f). 2: assumption.
+      apply Ordinal.IsOrdinal with (domain f). 2: assumption.
       rewrite H11. assumption. }
     apply H6. rewrite <- H11. assumption.
   - exfalso. rewrite H13 in H10. apply Empty.Charac in H10. contradiction.
@@ -363,10 +365,10 @@ Proof.
     assert (:U(y) :< domain f) as H16. { apply H14; assumption. }
     rewrite Eval, Eval; try assumption.
     assert (Ordinal :U(x)) as G15. {
-      apply Core.IsOrdinal with (domain f). 2: assumption.
+      apply Ordinal.IsOrdinal with (domain f). 2: assumption.
       rewrite H11. assumption. }
     assert (Ordinal :U(y)) as G16. {
-      apply Core.IsOrdinal with (domain f). 2: assumption.
+      apply Ordinal.IsOrdinal with (domain f). 2: assumption.
       rewrite H11. assumption. }
     apply H7; try assumption.
     apply Succ.ElemCompatRev; try assumption.

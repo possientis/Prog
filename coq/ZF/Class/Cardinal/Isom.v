@@ -8,7 +8,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.WellOrdering.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.OrdPair.

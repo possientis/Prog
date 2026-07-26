@@ -9,7 +9,7 @@ Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Inf.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 

@@ -5,7 +5,7 @@ Require Import ZF.Class.Relation.I.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Transitive.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -33,7 +33,7 @@ Proof.
   - apply SUC.Charac in H2. destruct H2 as [c [H2 H3]].
     rewrite I.Eval in H3.
     assert (Ordinal a) as G1. { apply H1. }
-    assert (Transitive a) as G2. { apply Core.Charac in G1. apply G1. }
+    assert (Transitive a) as G2. { apply Ordinal.Charac in G1. apply G1. }
     apply G2 with c; assumption.
   - apply SUC.Charac.
     assert (exists c, b :< c /\ c :< a) as H3. {

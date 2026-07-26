@@ -16,11 +16,10 @@ Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.OrdPair.
 
 Module COC := ZF.Class.Ordinal.Core.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* The order :< is irreflexive on any class A.                                  *)
 Proposition IsIrreflexive : forall (A:Class),
@@ -35,7 +34,7 @@ Proposition IsTransitive : forall (A:Class),
 Proof.
   intros A H1 x y z H2 H3 H4 H5 H6.
   apply E.Charac2 in H5. apply E.Charac2 in H6. apply E.Charac2.
-  apply SOC.ElemElemTran with y; try assumption; apply H1; assumption.
+  apply Ordinal.ElemElemTran with y; try assumption; apply H1; assumption.
 Qed.
 
 (* The order :< is total on any class of ordinals.                              *)
@@ -44,7 +43,7 @@ Proposition IsTotal : forall (A:Class),
 Proof.
   intros A H1 x y H2 H3.
   assert (x = y \/ x :< y \/ y :< x) as H4. {
-    apply SOC.IsTotal; apply H1; assumption. }
+    apply Ordinal.IsTotal; apply H1; assumption. }
   destruct H4 as [H4|[H4|H4]].
   - left. assumption.
   - right. left. apply E.Charac2. assumption.
@@ -60,10 +59,10 @@ Proof.
   assert (Ordinal a) as H5. { apply H1. assumption. }
   assert (Ordinal b) as H6. { apply H1. assumption. }
   assert (a = b \/ a :< b \/ b :< a) as H7. {
-    apply SOC.IsTotal; assumption. }
+    apply Ordinal.IsTotal; assumption. }
   destruct H7 as [H7|[H7|H7]].
   - subst. apply ZF.Set.Incl.Refl.
-  - apply SOC.ElemIsIncl; assumption.
+  - apply Ordinal.ElemIsIncl; assumption.
   - exfalso. apply H3 with b. 1: assumption. apply E.Charac2. assumption.
 Qed.
 

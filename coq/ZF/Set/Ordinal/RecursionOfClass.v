@@ -3,7 +3,7 @@ Require Import ZF.Class.Ordinal.Induction.
 Require Import ZF.Class.Ordinal.Recursion.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
@@ -71,20 +71,20 @@ Proposition IsRecursive : forall (F:Class) (a:U), Ordinal a ->
   forall b, b :< a -> (recursion F a)!b = F!((recursion F a) :|: b).
 Proof.
   intros F a H1 b H2.
-  assert (b :<=: a) as H3. { apply Core.ElemIsIncl; assumption. }
+  assert (b :<=: a) as H3. { apply Ordinal.ElemIsIncl; assumption. }
   assert ((recursion F a)!b = (Recursion F)!b) as H4. {
     apply RestrictOfClass.Eval. 2: assumption. apply Recursion.IsFunctionOn. }
   assert ((recursion F a) :|: b = (Recursion F) :|: b) as H5. {
     apply FunctionOn.Equal with b b. 3: reflexivity.
     - apply FunctionOn.Restrict with a. 2: assumption.
       apply IsFunctionOn. assumption.
-    - apply Recursion.Restrict. apply Core.IsOrdinal with a; assumption.
+    - apply Recursion.Restrict. apply Ordinal.IsOrdinal with a; assumption.
     - intros x H5. unfold recursion. rewrite RestrictOfClass.TowerProperty.
       + reflexivity.
       + apply Recursion.IsFunctionOn.
       + assumption. }
   rewrite H4, H5. apply Recursion.IsRecursive.
-  apply Core.IsOrdinal with a; assumption.
+  apply Ordinal.IsOrdinal with a; assumption.
 Qed.
 
 (* The recursion set is the unique F-recursive function defined on a.           *)
@@ -101,12 +101,12 @@ Proof.
     assert (forall x, Ordinal x -> A x) as H5. {
       apply Induction.Induction. intros b H5 H6. rewrite H4 in H6. rewrite H4.
       intros H7. rewrite H3. 2: assumption. rewrite IsRecursive; try assumption.
-    assert (b :<=: a) as H8. { apply Core.ElemIsIncl; assumption. }
+    assert (b :<=: a) as H8. { apply Ordinal.ElemIsIncl; assumption. }
     assert (f:|:b = (recursion F a) :|: b) as H9. {
       apply FunctionOn.RestrictEqual with a a; try assumption.
       - apply IsFunctionOn. assumption.
       - intros x H9. apply H6. 1: assumption. apply H8. assumption. }
       rewrite H9. reflexivity. }
     intros x H6. rewrite H4 in H5. apply H5. 2: assumption.
-    apply Core.IsOrdinal with a; assumption.
+    apply Ordinal.IsOrdinal with a; assumption.
 Qed.

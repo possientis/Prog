@@ -5,7 +5,7 @@ Require Import ZF.Class.Rank.VH.
 Require Import ZF.Class.Proper.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Rank.Core.
@@ -38,7 +38,8 @@ Proof.
   apply H1, IsSmall. exists a. split. 1: assumption.
   intros x H4. specialize (H3 x).
   assert (Ordinal (rank x)) as G1. { apply SRC.IsOrdinal. }
-  assert (a :< rank x \/ rank x :<=: a) as H5. { apply Core.ElemOrIncl; assumption. }
+  assert (a :< rank x \/ rank x :<=: a) as H5. {
+  apply Ordinal.ElemOrIncl; assumption. }
   destruct H5 as [H5|H5]. 2: assumption. exfalso.
   apply H3. split; assumption.
 Qed.

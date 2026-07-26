@@ -3,14 +3,14 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Union.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Union.
 
 (* The union of an ordinal is an ordinal.                                       *)
 Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal :U(a).
 Proof.
-  intros a H1. apply Union.IsOrdinal, Core.IsLess. assumption.
+  intros a H1. apply Union.IsOrdinal, Ordinal.IsLess. assumption.
 Qed.
 
 (* The union of an ordinal is an upper-bound of its elements.                   *)
@@ -18,7 +18,7 @@ Proposition IsUpperBound : forall (a b:U), Ordinal a ->
   b :< a -> b :<=: :U(a).
 Proof.
   intros a b H1 H2. apply Union.IsUpperBound. 2: assumption.
-  apply Core.IsLess. assumption.
+  apply Ordinal.IsLess. assumption.
 Qed.
 
 (* The union of an ordinal is the smallest upper-bound.                         *)
@@ -28,7 +28,7 @@ Proposition IsSmallest : forall (a b:U),
   :U(a) :<=: b.
 Proof.
   intros a b H1 H2. apply Union.IsSmallest; try assumption.
-  apply Core.IsLess. assumption.
+  apply Ordinal.IsLess. assumption.
 Qed.
 
 (* The union of an ordinal is not an element of it iff it is equal to it.       *)

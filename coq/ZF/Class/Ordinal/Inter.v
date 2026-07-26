@@ -6,7 +6,7 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Class.Ordinal.Core.
 Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 
 
 Module COC := ZF.Class.Ordinal.Core.
@@ -17,7 +17,7 @@ Proposition IsIncl' : forall (A:Class),
   A :<=: On -> A :<>: :0: -> inter' A :<=: On.
 Proof.
   intros A H1 H2. apply Class.Empty.HasElem in H2. destruct H2 as [a H2].
-  intros x H3. apply Core.IsOrdinal with a.
+  intros x H3. apply Ordinal.IsOrdinal with a.
   - apply H1. assumption.
   - apply H3. assumption.
 Qed.
@@ -44,8 +44,8 @@ Proof.
   intros A H1 y H2 x H3 z H4.
   assert (y :< z) as H5. { apply H2. assumption. }
   assert (Ordinal z) as H6. { apply H1. assumption. }
-  assert (Ordinal y) as H7. { apply Core.IsOrdinal with z; assumption. }
-  assert (Ordinal x) as H8. { apply Core.IsOrdinal with y; assumption. }
+  assert (Ordinal y) as H7. { apply Ordinal.IsOrdinal with z; assumption. }
+  assert (Ordinal x) as H8. { apply Ordinal.IsOrdinal with y; assumption. }
   apply ElemElemTran with y; assumption.
 Qed.
 

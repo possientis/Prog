@@ -5,7 +5,7 @@ Require Import ZF.Set.Diff.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Order.Isom.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Mult2.
 Require Import ZF.Set.Ordinal.Natural.
@@ -1071,7 +1071,8 @@ Proof.
   (* n is an ordinal since every element of N is an ordinal.                    *)
   assert (Ordinal n) as H4. { apply Omega.HasOrdinals. assumption. }
   (* Ordinal trichotomy: a = n, a :< n, or n :< a.                              *)
-  assert (a = n \/ a :< n \/ n :< a) as H5. { apply Core.IsTotal; assumption. }
+  assert (a = n \/ a :< n \/ n :< a) as H5. {
+  apply Ordinal.IsTotal; assumption. }
   destruct H5 as [H5|[H5|H5]]. 1: assumption.
   - (* a :< n implies a :< N, and two equipotent natural numbers are equal.     *)
     assert (a :< :N) as H6. { apply Omega.IsIn with n; assumption. }

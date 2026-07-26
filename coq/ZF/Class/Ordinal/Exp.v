@@ -9,7 +9,7 @@ Require Import ZF.Class.Relation.Relation.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
@@ -22,7 +22,6 @@ Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module COC := ZF.Class.Ordinal.Core.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SUG := ZF.Set.UnionGenOfClass.
 
 (* Not quite the function class (a ^ .) when a is an ordinal: because 0^0 is    *)
@@ -152,7 +151,8 @@ Proof.
     + destruct H2 as [y H2].
       apply WhenZeroCharac2 in H2. 2: reflexivity.
       apply OnZeroCharac2 in H2. apply H2.
-    + assert (x = :0: \/ :0: :< x) as H3. { apply Core.ZeroOrElem. assumption. }
+    + assert (x = :0: \/ :0: :< x) as H3. {
+      apply Ordinal.ZeroOrElem. assumption. }
       destruct H3 as [H3|H3].
       * subst. exists :1:. apply WhenZeroCharac2. 1: reflexivity.
         apply OnZeroCharac2. split. 1: assumption. left. split; reflexivity.
@@ -186,10 +186,10 @@ Proof.
     apply EvalOfClass.Charac.
     + apply OnZeroIsFunctional.
     + exists :1:. apply OnZeroCharac2. split.
-      * apply SOC.Zero.
+      * apply Ordinal.Zero.
       * left. split; reflexivity.
     + apply OnZeroCharac2. split.
-      * apply SOC.Zero.
+      * apply Ordinal.Zero.
       * left. split; reflexivity.
   - assert (Exp a :~: Exp' a) as H2. { apply WhenNotZeroL. assumption. }
     rewrite (EvalOfClass.EquivCompat (Exp a) (Exp' a)). 2: assumption.

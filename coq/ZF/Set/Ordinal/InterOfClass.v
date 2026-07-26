@@ -8,7 +8,7 @@ Require Import ZF.Class.Inter.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.InterOfClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 
 Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.

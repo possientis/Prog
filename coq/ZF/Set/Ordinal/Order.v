@@ -10,7 +10,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.WellOrdering.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Relation.Domain.
@@ -75,7 +75,7 @@ Proof.
   intros a b H1 H2.
   assert (Small (toClass a)) as G1. { apply Small.SetIsSmall. }
   assert (toClass a :<=: Ordinal) as G2. {
-    intros c G2. apply Core.IsOrdinal with b. 1: assumption.
+    intros c G2. apply Ordinal.IsOrdinal with b. 1: assumption.
     apply H2. assumption. }
   assert (exists c, Ordinal c /\
     forall (f:U),
@@ -97,8 +97,8 @@ Proof.
   assert (domain f = c) as G3. { apply H7. }
   assert (range f = a) as G4. { apply H7. }
   assert (c :<=: b) as H9. {
-    intros d H9. apply Core.InclElemTran with f!d; try assumption.
-    - apply Core.IsOrdinal with c; assumption.
+    intros d H9. apply Ordinal.InclElemTran with f!d; try assumption.
+    - apply Ordinal.IsOrdinal with c; assumption.
     - apply H8. rewrite G4. apply Bij.IsInRange with c. 2: assumption. apply H7.
     - apply Monotone.IsIncl. 1: assumption. rewrite G3. assumption.
     - apply H2. apply Bij.IsInRange with c. 2: assumption. apply H7. }

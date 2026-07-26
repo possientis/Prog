@@ -6,7 +6,7 @@ Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Super.
@@ -127,7 +127,7 @@ Proposition InclCompat : forall (a b:U), On a -> On b ->
   a :<=: b -> VH!a :<=: VH!b.
 Proof.
   intros a b H1 H2 H3.
-  apply Core.EqualOrElem in H3; try assumption.
+  apply Ordinal.EqualOrElem in H3; try assumption.
   destruct H3 as [H3|H3].
   - subst. apply Incl.Refl.
   - intros x H4.

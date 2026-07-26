@@ -6,7 +6,7 @@ Require Import ZF.Class.Relation.Fun.From2.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
@@ -22,7 +22,6 @@ Module COC := ZF.Class.Ordinal.Core.
 Module COR := ZF.Class.Ordinal.Recursion3.
 Module FR2 := ZF.Class.Relation.Fun.From2.
 Module SFO := ZF.Set.Relation.FunctionOn.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SUG := ZF.Set.Ordinal.UnionGenOfClass.
 
 Definition Oracle (F:Class) : Class := FR2.from2 (fun x y => y :+: F!x).
@@ -95,7 +94,7 @@ Proof.
     On (sum F)!a) as A eqn:H2.
   assert (forall a, On a -> A a) as H3. {
     apply Induction2.Induction; rewrite H2.
-    - intros _. rewrite WhenZero. apply SOC.Zero.
+    - intros _. rewrite WhenZero. apply Ordinal.Zero.
     - intros a H3 IH H4. rewrite WhenSucc. 2: assumption.
       apply Plus.IsOrdinal.
       + apply IH. intros x H5. apply H4. apply Succ.IsIncl. assumption.
@@ -104,11 +103,11 @@ Proof.
       assert (On a) as H5. { apply H3. }
       rewrite WhenLimit. 2: assumption. apply SUG.IsOrdinal.
       intros x H6.
-      assert (On x) as H7. { apply SOC.IsOrdinal with a; assumption. }
+      assert (On x) as H7. { apply Ordinal.IsOrdinal with a; assumption. }
       apply IH. 1: assumption.
       intros y H9. apply H4.
-      assert (On y) as H10. { apply SOC.IsOrdinal with x; assumption. }
-      apply SOC.ElemElemTran with x; assumption. }
+      assert (On y) as H10. { apply Ordinal.IsOrdinal with x; assumption. }
+      apply Ordinal.ElemElemTran with x; assumption. }
   rewrite H2 in H3. assumption.
 Qed.
 
@@ -135,9 +134,9 @@ Proof.
       apply SUG.Equal. intros x H4.
       apply IH. 1: assumption. intros y H5. apply H3.
       assert (Ordinal a) as G1. { apply H2. }
-      assert (Ordinal x) as G2. { apply SOC.IsOrdinal with a; assumption. }
-      assert (Ordinal y) as G3. { apply SOC.IsOrdinal with x; assumption. }
-      apply SOC.ElemElemTran with x; assumption. }
+      assert (Ordinal x) as G2. { apply Ordinal.IsOrdinal with a; assumption. }
+      assert (Ordinal y) as G3. { apply Ordinal.IsOrdinal with x; assumption. }
+      apply Ordinal.ElemElemTran with x; assumption. }
   rewrite H1 in H2. assumption.
 Qed.
 

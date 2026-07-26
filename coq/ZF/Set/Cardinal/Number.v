@@ -10,7 +10,7 @@ Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Mult2.
@@ -45,7 +45,6 @@ Module CEM := ZF.Class.Empty.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SOO := ZF.Set.Ordinal.Onto.
 Module SOS := ZF.Set.Ordinal.Sup.
 Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
@@ -194,7 +193,8 @@ Proof.
     assert (Ordinal a) as G1. { rewrite H1. apply IsOrdinal. }
     assert (Ordinal (card a)) as G2. { apply IsOrdinal. }
     apply Incl.Double. split.
-    + assert (a = :0: \/ :0: :< a) as H2. { apply SOC.ZeroOrElem. assumption. }
+    + assert (a = :0: \/ :0: :< a) as H2. {
+        apply Ordinal.ZeroOrElem. assumption. }
       destruct H2 as [H2|H2].
       * rewrite H2. apply Empty.IsIncl.
       * remember (card a) as c eqn:H3. rewrite H1, H3.
@@ -359,7 +359,7 @@ Proof.
   (* A cardinal is an ordinal, so a and b are comparable by membership.         *)
   assert (Ordinal b) as H3. { apply CardIsOrd. assumption. }
   split; intros H4.
-  - assert (a :< b \/ b :<=: a) as H5. { apply SOC.ElemOrIncl; assumption. }
+  - assert (a :< b \/ b :<=: a) as H5. { apply Ordinal.ElemOrIncl; assumption. }
     destruct H5 as [H5|H5]. 1: assumption.
     (* If b were included in a, then the cardinal b would be below card(a).     *)
     assert (WellOrderable a) as H6. {
@@ -370,7 +370,7 @@ Proof.
     assert (card a :< card a) as H9. { apply H7. assumption. }
     exfalso. revert H9. apply Foundation.NoLoop1.
   - (* Since card(a) is included in a, membership of a in b carries card(a).    *)
-    apply SOC.InclElemTran with a; try assumption.
+    apply Ordinal.InclElemTran with a; try assumption.
     + apply IsOrdinal.
     + apply IsIncl. assumption.
 Qed.
@@ -611,7 +611,7 @@ Proof.
   assert (Ordinal (card :N)) as H2. { apply IsOrdinal. }
   (* By ordinal trichotomy, card(N) is either below N or contains N.            *)
   assert (card :N :< :N \/ :N :<=: card :N) as H3. {
-    apply SOC.ElemOrIncl; assumption. }
+    apply Ordinal.ElemOrIncl; assumption. }
   destruct H3 as [H3|H3].
   - (* If card(N) is a natural number, equipotence forces it to be N itself.    *)
     assert (:N :~: card :N) as H4. { apply IsEquipOrd. assumption. }
@@ -640,7 +640,7 @@ Proof.
   destruct H3 as [f H3].
   (* Since card(a) is a non-zero ordinal, it contains 0.                        *)
   assert (:0: :< card a) as H4. {
-    apply SOC.HasZero. 1: apply IsOrdinal. assumption. }
+    apply Ordinal.HasZero. 1: apply IsOrdinal. assumption. }
   assert (:1: :< card a) as H5. { assumption. }
   (* Take their inverse images under the bijection a -> card(a).                *)
   assert (exists x, x :< a /\ f!x = :0:) as H6. {
@@ -748,8 +748,8 @@ Proof.
   intros a H1 H2.
   (* Both zero and one lie in a, and the square is well-orderable.              *)
   assert (:0: :< a) as H3. {
-    apply SOC.ElemElemTran with :1:; try assumption.
-    - apply SOC.Zero.
+    apply Ordinal.ElemElemTran with :1:; try assumption.
+    - apply Ordinal.Zero.
     - apply Natural.OneIsOrdinal.
     - apply Succ.IsIn. }
   assert (WellOrderable a) as H4. {
@@ -926,7 +926,7 @@ Proof.
   assert (Ordinal (card a)) as H3. { apply IsOrdinal. }
   assert (Ordinal :N) as H4. { apply Omega.IsOrdinal. }
   assert (card a :< :N \/ :N :<=: card a) as H5. {
-    apply SOC.ElemOrIncl; assumption. }
+    apply Ordinal.ElemOrIncl; assumption. }
   destruct H5 as [H5|H5]. 2: assumption.
   exfalso.
   assert (a :~: card a) as H6. { apply IsEquipOrd. assumption. }
@@ -941,7 +941,8 @@ Proof.
   intros a H1.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   split; intros H2.
-  - assert (a :< :N \/ :N :<=: a) as H3. { apply SOC.ElemOrIncl; assumption. }
+  - assert (a :< :N \/ :N :<=: a) as H3. {
+      apply Ordinal.ElemOrIncl; assumption. }
     destruct H3 as [H3|H3]. 1: assumption.
     apply CardOrdinal in H3. 2: assumption. exfalso.
     assert (card a :< card a) as H4. { apply H3. assumption. } revert H4.
@@ -1111,14 +1112,14 @@ Proof.
     assert (CRO.OneToOne Pairing) as G10. { apply MaxLex.IsIsom. }
     assert (forall b, b :< a -> card b :<=: card a) as H3. {
       intros b H3.
-      assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
-      apply InclCompat. 1: assumption. apply SOC.ElemIsIncl; assumption. }
+      assert (Ordinal b) as K1. { apply Ordinal.IsOrdinal with a; assumption. }
+      apply InclCompat. 1: assumption. apply Ordinal.ElemIsIncl; assumption. }
     assert ((exists b, b :< a /\ card b = card a) \/
           ~(exists b, b :< a /\ card b = card a)) as [H4|H4]. {
       apply LawExcludedMiddle. }
     (* exists b, b :< a /\ card b = card a                                      *)
     - destruct H4 as [b [H4 H5]].
-      assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+      assert (Ordinal b) as K1. { apply Ordinal.IsOrdinal with a; assumption. }
       assert (WellOrderable b) as K2. {
         apply WellOrderable.WhenOrdinal. assumption. }
       assert (card (b :x: b) = card (a :x: a)) as K3. {
@@ -1130,17 +1131,19 @@ Proof.
     (* ~ exists b, b :< a /\ card b = card a                                    *)
     - assert (forall b, b :< a -> card b :< card a) as H5. {
         intros b H5.
-        assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+        assert (Ordinal b) as K1. {
+          apply Ordinal.IsOrdinal with a; assumption. }
         assert (Ordinal (card a)) as K2. { apply IsOrdinal. }
         assert (Ordinal (card b)) as K3. { apply IsOrdinal. }
         assert (card b = card a \/ card b :< card a) as K4. {
-          apply SOC.EqualOrElem; try assumption. apply H3. assumption. }
+          apply Ordinal.EqualOrElem; try assumption. apply H3. assumption. }
         destruct K4 as [K4|K4]. 2: assumption. exfalso. apply H4.
         exists b. split; assumption. }
       assert (forall b, b :< a -> :N :<=: b ->
         card (succ b :x: succ b) = card (succ b)) as H6. {
         intros b H6 H7.
-        assert (Ordinal b) as K1. { apply SOC.IsOrdinal with a; assumption. }
+        assert (Ordinal b) as K1. {
+          apply Ordinal.IsOrdinal with a; assumption. }
         assert (Ordinal (succ b)) as K2. { apply Succ.IsOrdinal. assumption. }
         assert (Cardinal (card a)) as K3. { exists a. reflexivity. }
         assert (card b = card (succ b)) as K4. { apply SuccOrd; assumption. }
@@ -1148,14 +1151,15 @@ Proof.
         assert (succ b :< card a) as H8. {
           apply CardLess; try assumption. rewrite <- K4. apply H5. assumption. }
         assert (succ b :< a) as H9. {
-          apply SOC.ElemInclTran with (card a); try assumption.
+          apply Ordinal.ElemInclTran with (card a); try assumption.
           apply IsIncl. assumption. }
         specialize (IH (succ b) H9).
         destruct IH as [IH|IH]. 2: assumption. exfalso.
         assert (succ b :< b) as H10. { apply H7. assumption. }
         assert (succ b :< succ b) as H11. { apply Succ.IsIncl. assumption. }
         revert H11. apply Foundation.NoLoop1. }
-      assert (a :< :N \/ :N :<=: a) as G9. { apply SOC.ElemOrIncl; assumption. }
+      assert (a :< :N \/ :N :<=: a) as G9. {
+        apply Ordinal.ElemOrIncl; assumption. }
       destruct G9 as [G9|G9]. 1: { rewrite H1. left. assumption. }
       (* case :N :<=: a                                                         *)
       assert (Pairing:[a :x: a]: :<=: card a) as H7. {
@@ -1183,7 +1187,8 @@ Proof.
           rewrite H15. apply Max.IsOrdinal; assumption. }
         assert (m :< a) as H18. {
           rewrite H15. apply Max.ElemCompat; assumption. }
-        assert (m :< :N \/ :N :<=: m) as H19. { apply SOC.ElemOrIncl; assumption. }
+        assert (m :< :N \/ :N :<=: m) as H19. {
+          apply Ordinal.ElemOrIncl; assumption. }
         assert (Ordinal (succ m)) as H20. { apply Succ.IsOrdinal. assumption. }
         assert (WellOrderable (succ m :x: succ m)) as H21. {
           apply WellOrderable.Prod;
@@ -1199,11 +1204,11 @@ Proof.
             apply ProdNat; assumption. }
           assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<
             :N) as H28. {
-            apply SOC.InclElemTran with (card (succ m :x: succ m));
+            apply Ordinal.InclElemTran with (card (succ m :x: succ m));
             try assumption; apply IsOrdinal. }
           assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<
             card a) as H29. {
-            apply SOC.ElemInclTran with :N; try assumption.
+            apply Ordinal.ElemInclTran with :N; try assumption.
             + apply IsOrdinal.
             + apply CardOrdinal; assumption. }
           apply CardLess. 1: assumption.
@@ -1220,7 +1225,7 @@ Proof.
             rewrite H23, H24. assumption. }
           assert (card (initSegment MaxLex (Ordinal :x: Ordinal) :(b,c):) :<
             card a) as H27. {
-            apply SOC.InclElemTran with (card (succ m :x: succ m));
+            apply Ordinal.InclElemTran with (card (succ m :x: succ m));
             try assumption; apply IsOrdinal. }
           apply CardLess. 1: assumption.
           + exists a. reflexivity.
@@ -1232,7 +1237,7 @@ Proof.
       assert (card (a :x: a) :<=: card a) as H10. {
         rewrite <- H8. assumption. }
       rewrite H1. assert (a :< :N \/ :N :<=: a) as H11. {
-        apply SOC.ElemOrIncl; assumption. }
+        apply Ordinal.ElemOrIncl; assumption. }
       destruct H11 as [H11|H11]. 1: { left. assumption. } right.
       assert (card a :<=: card (a :x: a)) as H12. {
         apply SquareHigher; assumption. }
@@ -1337,7 +1342,7 @@ Proof.
   (* The same lower bound also says that card(a) contains one.                  *)
   assert (:1: :< card a) as H6. { apply H1. apply Omega.HasOne. }
   assert (:1: :<=: card a) as H7. {
-    apply SOC.ElemIsIncl. 2: assumption. apply IsOrdinal. }
+    apply Ordinal.ElemIsIncl. 2: assumption. apply IsOrdinal. }
   assert (card b = :0: \/ card b <> :0:) as [H8|H8]. {
     apply LawExcludedMiddle. }
   - (* If b has cardinal zero and is well-orderable, then b is empty.           *)
@@ -1351,7 +1356,7 @@ Proof.
     rewrite H12, H13. reflexivity.
   - (* Otherwise card(b) is positive, so it is either one or contains one.      *)
     assert (:0: :< card b) as H9. {
-      apply SOC.HasZero. 2: assumption. apply IsOrdinal. }
+      apply Ordinal.HasZero. 2: assumption. apply IsOrdinal. }
     assert (card b = :1: \/ :1: :< card b) as [H10|H10]. {
       apply Natural.OneOrElem. 2: assumption. apply IsOrdinal. }
     + (* If b is singleton-sized, adjoining it to a does not change card(a).    *)

@@ -9,7 +9,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Order.Minimal.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inter.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.OrdPair.
@@ -131,7 +131,7 @@ Proof.
     Ordinal b                   /\
     b :< a                      /\
     forall c , c :< a -> b :<=: c) as H3. {
-      apply Core.HasMinimal. 1: assumption.
+      apply Ordinal.HasMinimal. 1: assumption.
       apply Empty.NotEmptyToClass. assumption. }
   destruct H3 as [b [H3 [H4 H5]]].
   assert (Minimal (E a) a b) as H6. {
@@ -173,7 +173,7 @@ Proof.
   assert (forall x, x :< a -> b :<=: x) as H6. {
     intros c H6.
     assert (Ordinal c) as H7. { apply H1. assumption. }
-    assert (c :< b \/ b :<=: c) as H8. { apply Core.ElemOrIncl; assumption. }
+    assert (c :< b \/ b :<=: c) as H8. { apply Ordinal.ElemOrIncl; assumption. }
     destruct H8 as [H8|H8]. 2: assumption. exfalso.
     apply H5 with c. split. 1: assumption. split; assumption. }
   assert (b :<=: inf a) as H7. { apply IsLargest; assumption. }

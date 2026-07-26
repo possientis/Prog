@@ -6,7 +6,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Inter2.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Specify.
@@ -88,7 +88,7 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   intros a H1 x y H2 H3.
   assert (x = y \/ x :< y \/ y :< x) as H4. {
-    apply ZF.Set.Ordinal.Core.IsTotal.
+    apply ZF.Set.Ordinal.Ordinal.IsTotal.
     - apply IsOrdinal with a; assumption.
     - apply IsOrdinal with a; assumption. }
   destruct H4 as [H4|[H4|H4]].

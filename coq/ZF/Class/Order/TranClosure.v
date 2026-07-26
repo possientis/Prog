@@ -16,7 +16,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
@@ -246,7 +246,7 @@ Proof.
               - rewrite G8. assumption. }
             rewrite H39, H39.
             + apply H33. assumption.
-            + apply Core.ElemElemTran with m; try assumption.
+            + apply Ordinal.ElemElemTran with m; try assumption.
               apply Succ.IsIn.
             + apply Succ.ElemCompat; assumption. }
         split. 1: assumption. split. 1: assumption. split. 1: assumption.

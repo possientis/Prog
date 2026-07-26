@@ -2,7 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.SuccOf.
@@ -18,7 +18,7 @@ Definition NonLimit : Class := fun a =>
 Proposition HasOrdinals : NonLimit :<=: Ordinal.
 Proof.
   intros a [H1|H1].
-  - subst. apply Core.Zero.
+  - subst. apply Ordinal.Zero.
   - destruct H1 as [b [H1 H2]]. subst. apply Succ.IsOrdinal. assumption.
 Qed.
 

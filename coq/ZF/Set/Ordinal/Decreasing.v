@@ -2,7 +2,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
@@ -37,15 +37,15 @@ Proposition Relax : forall (f x y:U),
 Proof.
   intros f x y H1 H2 H3 H4 H5. assert (H6 := H1). destruct H6 as [H6 [H7 H8]].
   assert (Ordinal x) as G1. {
-    apply Core.IsOrdinal with (domain f); assumption. }
+    apply Ordinal.IsOrdinal with (domain f); assumption. }
   assert (Ordinal y) as G2. {
-    apply Core.IsOrdinal with (domain f); assumption. }
+    apply Ordinal.IsOrdinal with (domain f); assumption. }
   assert (Ordinal f!x) as G3. { apply OrdFun.IsOrdinal; assumption. }
   assert (Ordinal f!y) as G4. { apply OrdFun.IsOrdinal; assumption. }
-  assert (x = y \/ x :< y) as H9. { apply Core.EqualOrElem; assumption.  }
+  assert (x = y \/ x :< y) as H9. { apply Ordinal.EqualOrElem; assumption.  }
   destruct H9 as [H9|H9].
   - subst. apply Incl.Refl.
-  - apply Core.ElemIsIncl. 1: assumption. apply H2; assumption.
+  - apply Ordinal.ElemIsIncl. 1: assumption. apply H2; assumption.
 Qed.
 
 (* The empty function is decreasing.                                            *)

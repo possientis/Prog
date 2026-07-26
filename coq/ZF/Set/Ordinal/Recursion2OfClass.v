@@ -4,7 +4,7 @@ Require Import ZF.Class.Ordinal.Recursion2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Eval.
@@ -38,7 +38,7 @@ Proof.
   intros F a b H1 H2. unfold recursion. rewrite RestrictOfClass.Eval.
   - apply Recursion2.WhenZero.
   - apply Recursion2.IsFunctionOn.
-  - apply Core.HasZero; assumption.
+  - apply Ordinal.HasZero; assumption.
 Qed.
 
 (* The recursion set satisfies the equation f(succ c) = F(f(c)).                *)
@@ -49,9 +49,9 @@ Proposition WhenSucc : forall (F:Class) (a b c:U),
 Proof.
   intros F a b c H1 H2. unfold recursion.
   assert (c :< b) as H3. {
-    apply Core.ElemIsIncl in H2. 2: assumption. apply H2, Succ.IsIn. }
+    apply Ordinal.ElemIsIncl in H2. 2: assumption. apply H2, Succ.IsIn. }
   assert (Ordinal c) as H4. {
-    apply  Core.IsOrdinal with b; assumption. }
+    apply  Ordinal.IsOrdinal with b; assumption. }
   rewrite RestrictOfClass.Eval, RestrictOfClass.Eval; try assumption.
   - apply Recursion2.WhenSucc. assumption.
   - apply Recursion2.IsFunctionOn.
@@ -70,7 +70,7 @@ Proof.
   assert (:\/:_{c} (recursion F a b) = :\/:_{c} (Recursion F a)) as H4. {
     apply UnionGenOfClass.Equal. intros x H4. apply RestrictOfClass.Eval.
     - apply Recursion2.IsFunctionOn.
-    - apply Core.ElemIsIncl in H3. 2: assumption. apply H3. assumption. }
+    - apply Ordinal.ElemIsIncl in H3. 2: assumption. apply H3. assumption. }
   rewrite H4. unfold recursion. rewrite RestrictOfClass.Eval. 3: assumption.
   - apply Recursion2.WhenLimit. assumption.
   - apply Recursion2.IsFunctionOn.
@@ -91,7 +91,7 @@ Proof.
   - apply IsFunctionOn. assumption.
   - reflexivity.
   - intros c H6.
-    assert (Ordinal c) as H7. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal c) as H7. { apply Ordinal.IsOrdinal with b; assumption. }
     revert c H7 H6.
     remember (fun c => c :< b -> f!c = (recursion F a b)!c) as A eqn:H6.
     assert (forall c, Ordinal c -> A c) as H7. {
@@ -100,11 +100,11 @@ Proof.
         apply Empty.HasElem. exists :0:. assumption.
       - rewrite H6. intros c H7 H8 H9. rewrite H4; try assumption. rewrite H8.
         + symmetry. apply WhenSucc; assumption.
-        + apply Core.ElemIsIncl in H9. 2: assumption. apply H9, Succ.IsIn.
+        + apply Ordinal.ElemIsIncl in H9. 2: assumption. apply H9, Succ.IsIn.
       - rewrite H6. intros c H7 H8 H9. rewrite H5; try assumption. symmetry.
         assert (:\/:_{c} f = :\/:_{c} (recursion F a b)) as H10. {
           apply UnionGen.Equal. intros x H11. apply H8. 1: assumption.
-          apply Core.ElemIsIncl in H9. 2: assumption. apply H9. assumption. }
+          apply Ordinal.ElemIsIncl in H9. 2: assumption. apply H9. assumption. }
         rewrite H10. apply WhenLimit; assumption. }
     rewrite H6 in H7. assumption.
 Qed.

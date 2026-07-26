@@ -2,7 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Recursion2OfClass.
@@ -54,7 +54,8 @@ Proposition IsUnique : forall (F:Class) (a f:U),
 Proof.
   intros F a f H1 H2 H3. apply (SOR2.IsUnique F a :N); try assumption.
   - apply Omega.IsOrdinal.
-  - intros n H4 H5. apply H3. apply Core.ElemIsIncl in H5. 2: apply Omega.IsOrdinal.
+  - intros n H4 H5. apply H3.
+    apply Ordinal.ElemIsIncl in H5. 2: apply Omega.IsOrdinal.
     apply H5, Succ.IsIn.
   - intros n H4 H5. destruct H4 as [H4 H6]. exfalso. apply H6.
     apply Omega.HasNonLimits. assumption.

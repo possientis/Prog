@@ -1,6 +1,6 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.UnionGen.

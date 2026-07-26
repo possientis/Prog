@@ -14,7 +14,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Union.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -24,7 +24,6 @@ Require Import ZF.Notation.Eval.
 Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module COU := ZF.Class.Ordinal.Union.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* Shifting a function class to the left.                                       *)
 Definition shiftL (F:Class) : Class := fun x => exists y z,
@@ -100,11 +99,11 @@ Proof.
     apply Succ.IsIn.
   - destruct H2 as [y [H2 H3]]. apply DomainOf.
     assert (Ordinal y) as H4. { apply COC.WhenElem with (domain F); assumption. }
-    assert (Ordinal x) as H5. { apply SOC.IsOrdinal with y; assumption. }
+    assert (Ordinal x) as H5. { apply Ordinal.IsOrdinal with y; assumption. }
     assert (Ordinal (succ x)) as H6. { apply Succ.IsOrdinal. assumption. }
     assert (succ x :<=: y) as H7. { apply Succ.ElemIsIncl; assumption. }
     assert (succ x = y \/ succ x :< y) as H8. {
-      apply SOC.EqualOrElem; assumption. }
+      apply Ordinal.EqualOrElem; assumption. }
     destruct H8 as [H8|H8].
     + subst. assumption.
     + assert (Transitive (domain F)) as H9. { apply H1. }

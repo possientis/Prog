@@ -8,7 +8,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Cofinal.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
@@ -17,7 +17,6 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Specify.
 
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* The character of cofinality of the ordinal a.                                *)
 Definition charac (a:U) : U := inf {{ x :< succ a | Cofinal a }}.
@@ -42,12 +41,12 @@ Proof.
   remember {{ x :< succ a | Cofinal a }} as r eqn:Hr.
   assert (toClass r :<=: Ordinal) as H4. {
     intros x H4. rewrite Hr in H4. apply Specify.Charac in H4.
-    destruct H4 as [H4 _]. apply SOC.IsOrdinal with (succ a). 2: assumption.
+    destruct H4 as [H4 _]. apply Ordinal.IsOrdinal with (succ a). 2: assumption.
     apply Succ.IsOrdinal. assumption. }
   assert (b :< r) as H5. {
     assert (b :<=: a) as H5. { apply H3. }
     assert (b :< succ a) as H6. {
-      apply SOC.InclElemTran with a; try assumption.
+      apply Ordinal.InclElemTran with a; try assumption.
       - apply Succ.IsOrdinal. assumption.
       - apply Succ.IsIn. }
     rewrite Hr. apply Specify.Charac. split; assumption. }
@@ -68,7 +67,7 @@ Proof.
   remember {{ x :< succ a | Cofinal a }} as r eqn:Hr.
   assert (toClass r :<=: Ordinal) as H4. {
     intros x H4. rewrite Hr in H4. apply Specify.Charac in H4.
-    destruct H4 as [H4 _]. apply SOC.IsOrdinal with (succ a). 2: assumption.
+    destruct H4 as [H4 _]. apply Ordinal.IsOrdinal with (succ a). 2: assumption.
     apply Succ.IsOrdinal. assumption. }
   assert (a :< r) as H5. {
     rewrite Hr. apply Specify.Charac. split.
@@ -105,7 +104,7 @@ Proof.
   remember {{ x :< succ a | Cofinal a }} as r eqn:Hr.
   assert (toClass r :<=: Ordinal) as H2. {
     intros x H2. rewrite Hr in H2. apply Specify.Charac in H2.
-    destruct H2 as [H2 _]. apply SOC.IsOrdinal with (succ a). 2: assumption.
+    destruct H2 as [H2 _]. apply Ordinal.IsOrdinal with (succ a). 2: assumption.
     apply Succ.IsOrdinal. assumption. }
   assert (a :< r) as H3. {
     rewrite Hr. apply Specify.Charac. split.
@@ -157,11 +156,11 @@ Proof.
   assert (forall b, Ordinal b -> charac a :~: b -> charac a :<=: b) as H3. {
     intros b H3 H4.
     assert (b :< charac a \/ charac a :<=: b) as H5. {
-      apply SOC.ElemOrIncl; assumption. }
+      apply Ordinal.ElemOrIncl; assumption. }
     destruct H5 as [H5|H5]. 2: assumption. exfalso.
     (* If a smaller ordinal were equipotent to charac a, it would contain an    *)
     (* even smaller cofinal ordinal, contradicting minimality of charac a.      *)
-    assert (b :<=: charac a) as H6. { apply SOC.ElemIsIncl; assumption. }
+    assert (b :<=: charac a) as H6. { apply Ordinal.ElemIsIncl; assumption. }
     assert (exists c, c :<=: b /\ Cofinal (charac a) c) as H7. {
       apply Cofinal.ExtractEquiv; try assumption. apply Equip.Sym. assumption. }
     destruct H7 as [c [H7 H8]].
@@ -172,9 +171,9 @@ Proof.
       assumption. }
     assert (charac a :<=: c) as H11. { apply IsLowerBound; assumption. }
     assert (c :< charac a) as H12. {
-      apply SOC.InclElemTran with b; assumption. }
+      apply Ordinal.InclElemTran with b; assumption. }
     assert (charac a :< charac a) as H13. {
-      apply SOC.InclElemTran with c; assumption. }
+      apply Ordinal.InclElemTran with c; assumption. }
     apply Foundation.NoLoop1 with (charac a). assumption. }
   apply Number.Charac. split; assumption.
 Qed.
@@ -201,7 +200,7 @@ Qed.
 Proposition WhenZero : charac :0: = :0:.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  apply Empty.WhenIncl. apply IsIncl. apply SOC.Zero.
+  apply Empty.WhenIncl. apply IsIncl. apply Ordinal.Zero.
 Qed.
 
 (* The character of cofinality of a successor ordinal is one.                   *)
@@ -223,7 +222,7 @@ Proof.
     assert (b <> :0:) as H7. {
       intros H7. subst. apply Cofinal.WhenZero in H6.
       apply Succ.NotZero with a. assumption. }
-    assert (:0: :< b) as H8. { apply SOC.HasZero; assumption. }
+    assert (:0: :< b) as H8. { apply Ordinal.HasZero; assumption. }
     apply Natural.HasZeroRev; assumption. }
   apply Incl.Double. split; assumption.
 Qed.

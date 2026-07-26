@@ -6,7 +6,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Specify.
 
@@ -58,7 +58,7 @@ Proof.
   intros a b H1 H2. unfold Notation.InfAbove.infAbove, infAbove, SetInfAbove.
   unfold infAbove, inf.
   assert ({{ x :< a :\: b | Ordinal }} = a :\: b) as H3. {
-    apply Specify.IsA. intros x H3. apply Core.IsOrdinal with a.
+    apply Specify.IsA. intros x H3. apply Ordinal.IsOrdinal with a.
     1: assumption. apply Diff.Charac in H3. apply H3. }
   rewrite H3. reflexivity.
 Qed.
@@ -81,15 +81,16 @@ Proof.
   apply Incl.Double. split.
   - apply SOI.IsLowerBound.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
-      apply Core.IsOrdinal with a; assumption.
+      apply Ordinal.IsOrdinal with a; assumption.
     + apply Diff.Charac. split. 1: assumption. apply Foundation.NoLoop1.
   - apply SOI.IsLargest.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
-      apply Core.IsOrdinal with a; assumption.
+      apply Ordinal.IsOrdinal with a; assumption.
     + intros H4. apply Diff.WhenZero in H4. apply Foundation.NoLoop1 with b.
       apply H4. assumption.
     + intros c H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
-      assert (Ordinal c) as H6. { apply Core.IsOrdinal with a; assumption. }
-      assert (c :< b \/ b :<=: c) as H7. { apply Core.ElemOrIncl; assumption. }
+      assert (Ordinal c) as H6. { apply Ordinal.IsOrdinal with a; assumption. }
+      assert (c :< b \/ b :<=: c) as H7. {
+      apply Ordinal.ElemOrIncl; assumption. }
       destruct H7 as [H7|H7]. 1: contradiction. assumption.
 Qed.

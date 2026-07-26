@@ -8,7 +8,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Order.WellOrdering.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
@@ -71,7 +71,7 @@ Proof.
       + assert ((f!:(r,x):) = :0:) as H9. {
           rewrite H3. rewrite IfThenElse2.Eval2 by assumption. reflexivity. }
         assert (y = :0:) as H10. { rewrite <- H5, H9. reflexivity. }
-        rewrite H10. split. 1: apply Core.Zero.
+        rewrite H10. split. 1: apply Ordinal.Zero.
         exists :0:. apply Inj.WhenZero. reflexivity.
     - destruct H4 as [H4 [i H5]].
       remember (range i) as x eqn:H6.

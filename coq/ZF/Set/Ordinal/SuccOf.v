@@ -2,7 +2,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.Union.
@@ -35,7 +35,7 @@ Proposition IsStrictUpperBound2 : forall (a b:U),
   b :< succ :U(a).
 Proof.
   intros a b H1. apply IsStrictUpperBound.
-  apply Core.IsLess. assumption.
+  apply Ordinal.IsLess. assumption.
 Qed.
 
 (* An ordinal is a subset of the successor of its union.                        *)

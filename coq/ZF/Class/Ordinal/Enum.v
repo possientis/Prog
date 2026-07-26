@@ -37,7 +37,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
@@ -62,7 +62,6 @@ Module CRO := ZF.Class.Relation.OneToOne.
 Module CRR := ZF.Class.Relation.Range.
 
 Module SIN := ZF.Set.Incl.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SRB := ZF.Set.Relation.Bijection.
 Module SBO := ZF.Set.Relation.BijectionOn.
 Module SRD := ZF.Set.Relation.Domain.
@@ -156,7 +155,7 @@ Proof.
     assert (A G!b) as G3. { apply G1. assumption. }
     assert (G:[a]: :<=: G:[b]:) as H18. {
       apply ImageUnderClass.InclCompatR. 1: apply H3.
-      apply SOC.ElemIsIncl; assumption. }
+      apply Ordinal.ElemIsIncl; assumption. }
     assert (A :\: G:[b]: :<=: A :\: G:[a]:) as H19. {
       apply DiffBySet.InclCompatR. assumption. }
     assert ((A :\: G:[a]:) G!b) as H20. {
@@ -178,7 +177,7 @@ Proof.
     assert (A G!a) as G2. { apply G1. assumption. }
     assert (A G!b) as G3. { apply G1. assumption. }
     assert (a = b \/ a :< b \/ b :< a) as H21. {
-      apply SOC.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H21 as [H21|[H21|H21]]. 2: assumption.
     - exfalso. subst. revert H20. apply H16. apply G1. assumption.
     - exfalso.
@@ -289,7 +288,7 @@ Proof.
   exists a. split. 1: assumption. intros g H14.
   assert (domain g = a) as H15. {
     rewrite H14. apply RestrictOfClass.DomainWhenIncl. 1: apply H5.
-    intros b H15. apply H5. apply SOC.IsOrdinal with a; assumption. }
+    intros b H15. apply H5. apply Ordinal.IsOrdinal with a; assumption. }
   assert (SRF.Function g) as H16. {
     rewrite H14. apply RestrictOfClass.IsFunction. apply H5. }
   assert (SRB.Bijection g) as H17. {
@@ -306,15 +305,15 @@ Proof.
   assert (CBJ.Bij (toClass g) (toClass a) A) as H22. { split; assumption. }
   assert (forall b c, b :< a -> c :< a -> b :< c -> R :(g!b,g!c):) as H23. {
     intros b c H23 H24 H25.
-    assert (On b) as H26. { apply SOC.IsOrdinal with a; assumption. }
-    assert (On c) as H27. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On b) as H26. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (On c) as H27. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (g!b = G!b) as H28. {
       rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
     assert (g!c = G!c) as H29. {
       rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
-    assert (b :<=: c) as H30. { apply SOC.ElemIsIncl; assumption. }
-    assert (b :<=: a) as H31. { apply SOC.ElemIsIncl; assumption. }
-    assert (c :<=: a) as H32. { apply SOC.ElemIsIncl; assumption. }
+    assert (b :<=: c) as H30. { apply Ordinal.ElemIsIncl; assumption. }
+    assert (b :<=: a) as H31. { apply Ordinal.ElemIsIncl; assumption. }
+    assert (c :<=: a) as H32. { apply Ordinal.ElemIsIncl; assumption. }
     assert (G:[b]: :<=: G:[c]:) as H33. {
       apply ImageUnderClass.InclCompatR. 2: assumption. apply H5. }
     assert ((A :\: G:[c]:) :<=: (A :\: G:[b]:)) as H34. {
@@ -340,8 +339,8 @@ Proof.
     intros b G3. apply (CBJ.IsInRange (toClass g) (toClass a) A); assumption. }
   assert (forall b c, b :< a -> c :< a -> R :(g!b,g!c): -> b :< c) as H26. {
     intros b c H26 H27 H28.
-    assert (On b) as H29. { apply SOC.IsOrdinal with a; assumption. }
-    assert (On c) as H30. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On b) as H29. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (On c) as H30. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (g!b = G!b) as H31. {
       rewrite H14. apply RestrictOfClass.Eval. 2: assumption. apply H5. }
     assert (g!c = G!c) as H32. {
@@ -349,7 +348,7 @@ Proof.
     assert (A g!b) as H33. { apply G3. assumption. }
     assert (A g!c) as H34. { apply G3. assumption. }
     assert (b = c \/ b :< c \/ c :< b) as H35. {
-      apply SOC.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H35 as [H35|[H35|H35]]. 2: assumption.
     - exfalso. rewrite H35 in H28. revert H28. apply H24. assumption.
     - assert (R :(g!c,g!b):) as H36. { apply H23; assumption. }

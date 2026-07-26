@@ -1,7 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Pair.
 Require Import ZF.Set.Single.
@@ -88,7 +88,7 @@ Global Instance SetNine : Nine U := { nine := nine }.
 (* Zero is an ordinal.                                                          *)
 Proposition Zero : Ordinal :0:.
 Proof.
-  apply Core.Zero.
+  apply Ordinal.Zero.
 Qed.
 
 (* One is an ordinal.                                                           *)
@@ -190,7 +190,7 @@ Proposition OneOrElem : forall (a:U), Ordinal a ->
 Proof.
   intros a H1 H2.
   assert (:1: :< a \/ a :<=: :1:) as H3. {
-    apply Core.ElemOrIncl. 2: assumption. apply OneIsOrdinal. }
+    apply Ordinal.ElemOrIncl. 2: assumption. apply OneIsOrdinal. }
   destruct H3 as [H3|H3].
   - right. assumption.
   - left. apply Incl.Double. split. 1: assumption.
@@ -214,6 +214,6 @@ Proof.
   intros a H1 H2.
   apply OneOrElem in H2. 2: assumption. destruct H2 as [H2|H2].
   - subst. apply Incl.Refl.
-  - apply Core.ElemIsIncl; assumption.
+  - apply Ordinal.ElemIsIncl; assumption.
 Qed.
 

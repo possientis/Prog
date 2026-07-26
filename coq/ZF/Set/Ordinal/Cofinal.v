@@ -8,7 +8,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Order.Isom.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
@@ -32,7 +32,6 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 
-Module SOC := ZF.Set.Ordinal.Core.
 Module SOM := ZF.Set.Ordinal.Monotone.
 Module SOO := ZF.Set.Ordinal.Order.
 Module SOE := ZF.Set.Ordinal.Order.E.
@@ -104,7 +103,7 @@ Proof.
   exists b'. split. 1: apply Succ.IsIn. rewrite H9.
   apply Succ.Charac in H10. destruct H10 as [H10|H10].
   - subst. apply Incl.Refl.
-  - apply SOC.ElemIsIncl; assumption.
+  - apply Ordinal.ElemIsIncl; assumption.
 Qed.
 
 (* A successor ordinal containing one is cofinal with one.                      *)
@@ -145,7 +144,7 @@ Proof.
       assert (d :<=: b') as H15. {
         apply Succ.Charac in H12. destruct H12 as [H12|H12].
         - subst. apply Incl.Refl.
-        - apply SOC.ElemIsIncl; assumption. }
+        - apply Ordinal.ElemIsIncl; assumption. }
       assert (domain f = succ b') as H16. { apply H8. }
       assert (f!d :<=: f!b') as H17. {
         apply SOM.Relax; try assumption.
@@ -178,17 +177,17 @@ Proof.
         - apply Succ.IsIn. }
       assert (f!(succ d) :< a) as H16. {
         apply Fun.IsInRange with b; assumption. }
-      assert (Ordinal c) as H17. { apply SOC.IsOrdinal with a; assumption. }
+      assert (Ordinal c) as H17. { apply Ordinal.IsOrdinal with a; assumption. }
       assert (Ordinal f!d) as H18. {
         assert (f!d :< a) as G2. { apply Fun.IsInRange with b; assumption. }
-        apply SOC.IsOrdinal with a; assumption. }
+        apply Ordinal.IsOrdinal with a; assumption. }
       assert (Ordinal f!(succ d)) as H19. {
-        apply SOC.IsOrdinal with a; assumption. }
+        apply Ordinal.IsOrdinal with a; assumption. }
       assert (c :< f!(succ d)) as H20. {
-        apply SOC.InclElemTran with (f!d); assumption. }
+        apply Ordinal.InclElemTran with (f!d); assumption. }
       assert (succ c :<=: f!(succ d)) as H21. {
         apply Succ.ElemIsIncl; assumption. }
-      apply SOC.InclElemTran with (f!(succ d)); try assumption.
+      apply Ordinal.InclElemTran with (f!(succ d)); try assumption.
       apply Succ.IsOrdinal. assumption. }
     apply Limit.WhenHasSucc; assumption.
 Qed.
@@ -220,7 +219,7 @@ Proof.
       apply (Fun.ImageIncl f b a b); try assumption. apply Incl.Refl. }
     assert (d :< a) as H8. { apply H7. assumption. }
     assert (Ordinal a) as H9. { apply H1. }
-    apply SOC.Charac in H9. destruct H9 as [H9 _].
+    apply Ordinal.Charac in H9. destruct H9 as [H9 _].
     apply H9 with d; assumption. }
   apply Incl.Double. split; assumption.
 Qed.
@@ -314,40 +313,42 @@ Proof.
     destruct H18 as [_ H18]. rewrite HA in H18. apply H18. assumption. }
   assert (forall c, c :< a -> exists d, d :< e /\ c :<=: (f :.: h)!d) as H15. {
     intros c H15.
-    assert (Ordinal c) as H16. { apply SOC.IsOrdinal with a; assumption. }
+    assert (Ordinal c) as H16. { apply Ordinal.IsOrdinal with a; assumption. }
     (* First choose the least index whose f-value bounds c.                     *)
     remember (fun d => d :< b /\ c :<=: f!d) as B eqn:HB.
     assert (B :<=: Ordinal) as H17. {
       intros d H17. rewrite HB in H17. destruct H17 as [H17 _].
-      apply SOC.IsOrdinal with b; assumption. }
+      apply Ordinal.IsOrdinal with b; assumption. }
     assert (exists d, Ordinal d /\ B d /\ forall x, B x -> d :<=: x) as H18. {
-      apply SOC.HasMinimal. 1: assumption. apply CEM.HasElem.
+      apply Ordinal.HasMinimal. 1: assumption. apply CEM.HasElem.
       assert (exists d, d :< b /\ c :<=: f!d) as G1. { apply H5. assumption. }
       destruct G1 as [d G1]. exists d. rewrite HB. assumption. }
     destruct H18 as [d [H18 [H19 H20]]]. rewrite HB in H19.
     destruct H19 as [H19 H21].
     assert (f!d :< a) as G1. { apply Fun.IsInRange with b; assumption. }
-    assert (Ordinal (f!d)) as G2. { apply SOC.IsOrdinal with a; assumption. }
+    assert (Ordinal (f!d)) as G2. {
+      apply Ordinal.IsOrdinal with a; assumption. }
     assert (d :< r) as H22. {
       rewrite Hr. apply Specify.Charac. split. 1: assumption. rewrite HA.
       intros x H22.
-      assert (Ordinal x) as G3. { apply SOC.IsOrdinal with d; assumption. }
-      assert (x :< b) as G4. { apply SOC.ElemElemTran with d; assumption. }
+      assert (Ordinal x) as G3. { apply Ordinal.IsOrdinal with d; assumption. }
+      assert (x :< b) as G4. { apply Ordinal.ElemElemTran with d; assumption. }
       assert (f!x :< a) as G5. { apply Fun.IsInRange with b; assumption. }
-      assert (Ordinal (f!x)) as G6. { apply SOC.IsOrdinal with a; assumption. }
+      assert (Ordinal (f!x)) as G6. {
+        apply Ordinal.IsOrdinal with a; assumption. }
       (* Minimality says no earlier index already bounds c.                     *)
       assert (~ c :<=: f!x) as H23. {
         intros H23.
         assert (B x) as H24. { rewrite HB. split; assumption. }
         assert (d :<=: x) as H25. { apply H20. assumption. }
         assert (d :< d) as H26. {
-          apply SOC.InclElemTran with x; assumption. }
+          apply Ordinal.InclElemTran with x; assumption. }
         apply Foundation.NoLoop1 with d. assumption. }
       assert (f!x :< c) as H24. {
         assert (f!x :< c \/ c :<=: f!x) as H25. {
-          apply SOC.ElemOrIncl; assumption. }
+          apply Ordinal.ElemOrIncl; assumption. }
         destruct H25 as [H25|H25]. 1: assumption. contradiction. }
-      apply SOC.ElemInclTran with c; assumption. }
+      apply Ordinal.ElemInclTran with c; assumption. }
     assert (exists v, v :< e /\ h!v = d) as H23. {
       apply (Bij.RangeCharac h e r d). 1: assumption. assumption. }
     destruct H23 as [v [H23 H24]]. exists v. split. 1: assumption.
@@ -411,7 +412,7 @@ Proof.
     split. 1: assumption. rewrite HA. assumption. }
   assert (forall d, d :< c -> toClass (F d) :<=: Ordinal) as H14. {
       intros d H14 x H15. rewrite HF in H15. apply Specify.Charac in H15.
-      destruct H15 as [H15 _]. apply SOC.IsOrdinal with b; assumption. }
+      destruct H15 as [H15 _]. apply Ordinal.IsOrdinal with b; assumption. }
   assert (forall d, d :< c -> h!d :< b) as H15. {
     intros d H15.
     assert (h!d = G d) as H16. { rewrite Hh. apply From.Eval. assumption. }
@@ -440,11 +441,12 @@ Proof.
     assert (f!v :< a) as H19. { apply Fun.IsInRange with b; assumption. }
     assert (exists d, d :< c /\ f!v :<=: g!d) as H20. { apply H12. assumption. }
     destruct H20 as [d [H20 H21]]. exists d. split. 1: assumption.
-    assert (Ordinal v) as H22. { apply SOC.IsOrdinal with b; assumption. }
-    assert (Ordinal h!d) as H23. { apply SOC.IsOrdinal with b. 1: assumption.
+    assert (Ordinal v) as H22. { apply Ordinal.IsOrdinal with b; assumption. }
+    assert (Ordinal h!d) as H23. {
+      apply Ordinal.IsOrdinal with b. 1: assumption.
       apply H15. assumption. }
     assert (h!d :< v \/ v :<=: h!d) as H24. {
-      apply SOC.ElemOrIncl; assumption. }
+      apply Ordinal.ElemOrIncl; assumption. }
     destruct H24 as [H24|H24]. 2: assumption. exfalso.
     assert (f!(h!d) :< f!v) as H25. {
       apply H7.
@@ -454,14 +456,16 @@ Proof.
       - assumption. }
     assert (f!(h!d) :< a) as H26. { apply Fun.IsInRange with b. 1: assumption.
       apply H15. assumption. }
-    assert (Ordinal f!(h!d)) as H27. { apply SOC.IsOrdinal with a; assumption. }
-    assert (Ordinal f!v) as H28. { apply SOC.IsOrdinal with a; assumption. }
+    assert (Ordinal f!(h!d)) as H27. {
+      apply Ordinal.IsOrdinal with a; assumption. }
+    assert (Ordinal f!v) as H28. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (g!d :< a) as H29. { apply Fun.IsInRange with c; assumption. }
-    assert (Ordinal g!d) as H30. { apply SOC.IsOrdinal with a; assumption. }
+    assert (Ordinal g!d) as H30. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (f!(h!d) :< g!d) as H31. {
-      apply SOC.ElemInclTran with (f!v); assumption. }
+      apply Ordinal.ElemInclTran with (f!v); assumption. }
     assert (f!(h!d) :< f!(h!d)) as H32. {
-      apply SOC.ElemInclTran with (g!d); try assumption. apply H16. assumption. }
+      apply Ordinal.ElemInclTran with (g!d); try assumption.
+      apply H16. assumption. }
     apply Foundation.NoLoop1 with (f!(h!d)). assumption. }
   (* The weakly cofinal map h now feeds the existing extraction theorem.        *)
   apply Extract; try assumption. exists h. split; assumption.
@@ -483,19 +487,20 @@ Proof.
       apply SOM.ClassRestrict. 1: assumption.
       - apply IsMonotone.
       - intros x H3. apply Aleph.DomainOf.
-        apply (SOC.IsOrdinal a); assumption. }
+        apply (Ordinal.IsOrdinal a); assumption. }
     split. 1: assumption.
     assert (CFO.FunctionOn Aleph Ordinal) as G2. { apply Aleph.IsFunctionOn. }
     assert (Fun f a (Aleph!a)) as H4. {
       split.
       - rewrite Hf. apply RestrictOfClass.IsFunctionOn. 1: apply G2.
-        intros x H4. apply Aleph.DomainOf. apply (SOC.IsOrdinal a); assumption.
+        intros x H4. apply Aleph.DomainOf.
+        apply (Ordinal.IsOrdinal a); assumption.
       - intros y H4.
         assert (CFL.Functional Aleph) as G1. { apply G2. }
         rewrite Hf in H4. rewrite RestrictOfClass.RangeOf in H4. 2: assumption.
         apply ImageUnderClass.Charac in H4. 2: assumption.
         destruct H4 as [x [H4 H5]].
-        assert (Ordinal x) as H6. { apply (SOC.IsOrdinal a); assumption. }
+        assert (Ordinal x) as H6. { apply (Ordinal.IsOrdinal a); assumption. }
         assert (Aleph!x = y) as H7. {
           apply (CFO.Eval Aleph Ordinal); try apply IsFunctionOn; assumption. }
         rewrite <- H7.
@@ -511,10 +516,10 @@ Proof.
     rewrite H6 in H5.
     apply SUG.Charac in H5. destruct H5 as [d [H7 H8]].
     exists d. split. 1: assumption.
-    assert (Ordinal d) as H9. { apply (SOC.IsOrdinal a); assumption. }
+    assert (Ordinal d) as H9. { apply (Ordinal.IsOrdinal a); assumption. }
     assert (f!d = Aleph!d) as H10. {
       rewrite Hf. apply RestrictOfClass.Eval. 2: assumption. apply G2. }
-    rewrite H10. apply SOC.ElemIsIncl. 2: assumption.
+    rewrite H10. apply Ordinal.ElemIsIncl. 2: assumption.
     apply Aleph.IsOrdinal. assumption.
 Qed.
 

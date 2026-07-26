@@ -12,7 +12,7 @@ Require Import ZF.Class.Ordinal.Transitive.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
@@ -83,7 +83,7 @@ Proof.
     + apply Succ.IsOrdinal. assumption.
     + apply Succ.IsIn.
   - split. 1: assumption. intros b H3. assert (Ordinal b) as H4. {
-      apply Core.IsOrdinal with (succ a). 2: assumption.
+      apply Ordinal.IsOrdinal with (succ a). 2: assumption.
       apply Succ.IsOrdinal. assumption. }
     apply H2. 1: assumption.
     assert (a :< b \/ b :<=: a) as H5. { apply ElemOrIncl; assumption. }
@@ -96,11 +96,11 @@ Proposition IsIncl : forall (a:U), Ordinal a ->
   toClass a :<=: NonLimit -> toClass a :<=: :N.
 Proof.
   intros a H1 H2 b H3. split.
-  - apply Core.IsOrdinal with a; assumption.
+  - apply Ordinal.IsOrdinal with a; assumption.
   - intros c H4. assert (Ordinal b) as H5. {
-      apply Core.IsOrdinal with a; assumption. }
+      apply Ordinal.IsOrdinal with a; assumption. }
     assert (Ordinal c) as H6. {
-      apply Core.IsOrdinal with (succ b). 2: assumption.
+      apply Ordinal.IsOrdinal with (succ b). 2: assumption.
       apply Succ.IsOrdinal. assumption. }
     apply H2. apply InclElemTran with b; try assumption.
     apply InclCompatRev; try assumption.
@@ -154,10 +154,10 @@ Qed.
 Proposition IsTransitive : Transitive :N.
 Proof.
   intros b H1 a H2. assert (H3 := H1). destruct H3 as [H3 H4].
-  assert (Ordinal a) as H5. { apply Core.IsOrdinal with b; assumption. }
+  assert (Ordinal a) as H5. { apply Ordinal.IsOrdinal with b; assumption. }
   assert (toClass (succ a) :<=: NonLimit) as H6. {
     intros x H7. apply Union2.Charac in H7. destruct H7 as [H7|H7].
-    - apply H4, Succ.IsIncl. apply (Core.ElemIsIncl a b); assumption.
+    - apply H4, Succ.IsIncl. apply (Ordinal.ElemIsIncl a b); assumption.
     - apply Single.Charac in H7. subst. apply H4, Succ.IsIncl. assumption. }
   split; assumption.
 Qed.
@@ -166,7 +166,7 @@ Qed.
 Proposition IsOrdinal : COC.Ordinal :N.
 Proof.
   split. 1: apply IsTransitive. intros a b [H1 _] [H2 _].
-  apply Core.IsTotal; assumption.
+  apply Ordinal.IsTotal; assumption.
 Qed.
 
 (* The class N is in fact small, thanks to the axiom of infinity.               *)

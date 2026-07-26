@@ -8,7 +8,7 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
@@ -21,7 +21,6 @@ Require Import ZF.Notation.Eval.
 Module COR := ZF.Class.Ordinal.Recursion.
 Module COC := ZF.Class.Ordinal.Core.
 Module SFO := ZF.Set.Relation.FunctionOn.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* Transfinite recursion class associated with F and a. In other words, the     *)
 (* unique function class G defined on On by the equations:                      *)
@@ -44,7 +43,7 @@ Proposition WhenZero : forall (F:Class) (a:U),
 Proof.
   intros F a. unfold Recursion. rewrite COR.IsRecursive.
   - apply Oracle2.WhenZero.
-  - apply SOC.Zero.
+  - apply Ordinal.Zero.
 Qed.
 
 (* The transfinite recursion class satisfies the equation G(succ b) = F(b,G(b)) *)
@@ -58,7 +57,7 @@ Proof.
   - apply COR.IsFunction.
   - apply Incl.EquivCompatR with On.
     + apply Equiv.Sym, COR.DomainIsOn.
-    + intros x H3. apply Core.IsOrdinal with (succ b); assumption.
+    + intros x H3. apply Ordinal.IsOrdinal with (succ b); assumption.
 Qed.
 
 (* The transfinite recursion class satisfies the equation:                      *)
@@ -71,7 +70,7 @@ Proof.
   - apply COR.IsFunction.
   - apply Incl.EquivCompatR with On.
     + apply Equiv.Sym, COR.DomainIsOn.
-    + intros x H2. apply Core.IsOrdinal with b. 2: assumption. apply H1.
+    + intros x H2. apply Ordinal.IsOrdinal with b. 2: assumption. apply H1.
 Qed.
 
 (* The transfinite recursion class is the unique function class defined on On   *)

@@ -3,7 +3,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Functional.
@@ -18,7 +18,6 @@ Require Import ZF.Set.Specify.
 Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SRB := ZF.Set.Relation.Bij.
 Module SRF := ZF.Set.Relation.Fun.
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
@@ -40,7 +39,7 @@ Proof.
   - intros y H6. apply SRR.Charac in H6. destruct H6 as [x H6].
     apply SFI.Charac2 in H6. destruct H6 as [[H6 [_ H7]]|[H6 [_ _]]].
     + rewrite H6. assumption.
-    + rewrite H6. apply SOC.HasZero; assumption.
+    + rewrite H6. apply Ordinal.HasZero; assumption.
   - intros y H6. apply SRR.Charac. exists y.
     apply (SFI.Satisfies1 (fun x => x :< b) (fun x => x) (fun _ => :0:) a y).
     + apply H4. assumption.
@@ -68,10 +67,10 @@ Proof.
     rewrite (SRS.Eval f c y) in H9; try assumption.
     assert (x :< a) as H10. { apply H4. assumption. }
     assert (y :< a) as H11. { apply H4. assumption. }
-    assert (Ordinal x) as H12. { apply SOC.IsOrdinal with a; assumption. }
-    assert (Ordinal y) as H13. { apply SOC.IsOrdinal with a; assumption. }
+    assert (Ordinal x) as H12. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (Ordinal y) as H13. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (x = y \/ x :< y \/ y :< x) as H14. {
-      apply SOC.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H14 as [H14|[H14|H14]]. 1: assumption.
     - exfalso. rewrite H3 in H8. apply Specify.Charac in H8.
       destruct H8 as [_ H8]. apply H8 with x; assumption.
@@ -86,9 +85,9 @@ Proof.
     destruct H9 as [x [H9 H10]].
     remember (fun y => y :< a /\ f!y = z) as A eqn:H11.
     assert (exists n, Ordinal n /\ A n /\ forall y, A y -> n :<=: y) as H12. {
-      apply SOC.HasMinimal.
+      apply Ordinal.HasMinimal.
       - rewrite H11. intros y H12. destruct H12 as [H12 _].
-        apply SOC.IsOrdinal with a; assumption.
+        apply Ordinal.IsOrdinal with a; assumption.
       - apply CEM.HasElem. exists x. rewrite H11. split; assumption. }
     destruct H12 as [n [H12 [H13 H14]]]. rewrite H11 in H13.
     destruct H13 as [H13 H15].
@@ -96,7 +95,7 @@ Proof.
       rewrite H3. apply Specify.Charac. split. 1: assumption.
       intros y H16 H17.
       assert (y :< a) as H18. {
-        assert (n :<=: a) as H18. { apply SOC.ElemIsIncl; assumption. }
+        assert (n :<=: a) as H18. { apply Ordinal.ElemIsIncl; assumption. }
         apply H18. assumption. }
       assert (A y) as H19. { rewrite H11. split. 1: assumption.
         rewrite H17. assumption. }

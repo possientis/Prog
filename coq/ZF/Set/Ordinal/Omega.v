@@ -11,7 +11,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Max.
 Require Import ZF.Set.Ordinal.Natural.
@@ -146,12 +146,13 @@ Proposition HasSuccRev : forall (n:U), succ n :< :N -> n :< :N.
 Proof.
   intros n H1.
   assert (Ordinal (succ n)) as H2. {
-    apply Core.IsOrdinal with :N. 2: assumption. apply IsOrdinal. }
+    apply Ordinal.IsOrdinal with :N. 2: assumption. apply IsOrdinal. }
   assert (Ordinal n) as H3. { apply Succ.IsOrdinalRev. assumption. }
   apply Charac. split. 1: assumption.
   intros m H4.
-  assert (Ordinal m) as H5. { apply Core.IsOrdinal with (succ n); assumption. }
-  apply HasNonLimits, Core.ElemElemTran with (succ n); try assumption.
+  assert (Ordinal m) as H5. {
+  apply Ordinal.IsOrdinal with (succ n); assumption. }
+  apply HasNonLimits, Ordinal.ElemElemTran with (succ n); try assumption.
   apply IsOrdinal.
 Qed.
 
@@ -159,7 +160,7 @@ Qed.
 Proposition WhenNotZero : forall (n:U), n :< :N ->
   n <> :0: -> :0: :< n.
 Proof.
-  intros n H1. apply Core.HasZero. apply HasOrdinals. assumption.
+  intros n H1. apply Ordinal.HasZero. apply HasOrdinals. assumption.
 Qed.
 
 (* A natural number is positive iff it is a successor ordinal.                  *)
@@ -210,7 +211,7 @@ Proposition ZeroOrElem : forall (n:U), n :< :N ->
 Proof.
   intros n H1.
   assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
-  apply Core.ZeroOrElem. assumption.
+  apply Ordinal.ZeroOrElem. assumption.
 Qed.
 
 (* The successor of any natural number contains 0.                              *)
@@ -275,7 +276,7 @@ Proof.
   assert (Ordinal n) as G1. { apply HasOrdinals. assumption. }
   assert (Ordinal :N) as G2. { apply IsOrdinal. }
   assert (Ordinal :U(n)) as G3. { apply UnionOf.IsOrdinal. assumption. }
-  assert (n = :0: \/ :0: :< n) as H2. { apply Core.ZeroOrElem. assumption. }
+  assert (n = :0: \/ :0: :< n) as H2. { apply Ordinal.ZeroOrElem. assumption. }
   destruct H2 as [H2|H2].
   - subst. rewrite Union.WhenZero. assumption.
   - apply HasSuccRev. rewrite SuccOfUnion; assumption.
@@ -366,7 +367,7 @@ Proposition Induction' : forall (A:Class) (m:U),
 Proof.
   intros A m H1 H2 H3.
   assert (Ordinal m) as G1. { apply HasOrdinals. assumption. }
-  assert (m = :0: \/ :0: :< m) as G2. { apply Core.ZeroOrElem. assumption. }
+  assert (m = :0: \/ :0: :< m) as G2. { apply Ordinal.ZeroOrElem. assumption. }
   remember (fun n => m :<=: n -> A n) as B eqn:H4.
   assert (forall n, n :< :N -> B n) as H5. {
     apply Induction; rewrite H4.
@@ -377,7 +378,7 @@ Proof.
       assert (Ordinal n) as G3. { apply HasOrdinals. assumption. }
       assert (Ordinal (succ n)) as G4. { apply Succ.IsOrdinal. assumption. }
       assert (m = succ n \/ m :< succ n) as H7. {
-        apply Core.EqualOrElem; assumption. }
+        apply Ordinal.EqualOrElem; assumption. }
       destruct H7 as [H7|H7].
       + rewrite <- H7. assumption.
       + apply Succ.ElemIsIncl in H7; try assumption.
@@ -395,7 +396,7 @@ Proposition HasMinimal : forall (A:Class),
 Proof.
   intros A H1 H2.
   assert (exists m, Ordinal m /\ A m /\forall n, A n -> m :<=: n) as H3. {
-    apply Core.HasMinimal. 2: assumption.
+    apply Ordinal.HasMinimal. 2: assumption.
     intros x H3. apply HasOrdinals, H1. assumption. }
   destruct H3 as [m [H3 [H4 H5]]]. exists m. split; assumption.
 Qed.
@@ -439,7 +440,7 @@ Proof.
   - assert (m :< :N) as G2. { apply H2. assumption. }
     assert (Ordinal m) as G3. { apply HasOrdinals. assumption. }
     assert (n = m \/ n :< m \/ m :< n) as H14. {
-      apply Core.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H14 as [H14|[H14|H14]]. 3: assumption.
     + subst. contradiction.
     + exfalso. apply H12.

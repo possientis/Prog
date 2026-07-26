@@ -13,7 +13,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Class.Union2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionOf.
@@ -24,7 +24,6 @@ Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
 
-Module SOC := ZF.Set.Ordinal.Core.
 Module SOO := ZF.Set.Ordinal.Omega.
 Module COC := ZF.Class.Ordinal.Core.
 
@@ -197,7 +196,8 @@ Proof.
     assert (succ n :< :N) as G5. { apply Omega.HasSucc. assumption. }
     assert (x :< :N) as G6. { apply Omega.IsIn with (succ n); assumption. }
     assert (On x) as G7. { apply SOO.HasOrdinals. assumption. }
-    assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
+    assert (x = :0: \/ :0: :< x) as H4. {
+      apply Ordinal.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4]. 1: { left. assumption. } right.
     split. 1: assumption. split. 1: assumption. apply H2.
     assert (On :U(x)) as G8. { apply UnionOf.IsOrdinal. assumption. }
@@ -217,7 +217,8 @@ Proof.
     subst. apply Omega.HasZero.
   - apply DomainOf. 1: assumption.
     assert (On x) as G1. { apply Omega.HasOrdinals. assumption. }
-    assert (x = :0: \/ :0: :< x) as H4. { apply SOC.ZeroOrElem. assumption. }
+    assert (x = :0: \/ :0: :< x) as H4. {
+      apply Ordinal.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4].
     + left. assumption.
     + right. split. 1: assumption. split. 1: assumption. apply H1.

@@ -5,7 +5,7 @@ Require Import ZF.Class.Ordinal.OrdFun.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Domain.
@@ -36,7 +36,7 @@ Proof.
   - split.
     + apply COC.EquivCompat with (toClass (domain f)).
       * apply Domain.ToClass.
-      * apply Core.ToClass. assumption.
+      * apply Ordinal.ToClass. assumption.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
 Qed.
 
@@ -47,7 +47,8 @@ Proof.
   intros f [H1 [H2 H3]]. split.
   - apply Function.FromClass. assumption.
   - split.
-    + apply Core.FromClass. apply COC.EquivCompat with (CRD.domain (toClass f)).
+    + apply Ordinal.FromClass.
+      apply COC.EquivCompat with (CRD.domain (toClass f)).
       2: assumption. apply Equiv.Sym, Domain.ToClass.
     + intros y H4. apply H3. apply Range.ToClass. assumption.
 Qed.
@@ -99,7 +100,7 @@ Proof.
   - apply Function.WhenZero. assumption.
   - split.
     + assert (domain f = :0:) as H2. { apply Domain.WhenZero. assumption. }
-      rewrite H2. apply Core.Zero.
+      rewrite H2. apply Ordinal.Zero.
     + intros y H2.
       assert (range f = :0:) as H3. { apply Range.WhenZero. assumption. }
       rewrite H3 in H2. apply Empty.Charac in H2. contradiction.

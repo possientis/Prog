@@ -7,7 +7,7 @@ Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
@@ -18,7 +18,6 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Module CCC := ZF.Class.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SEM := ZF.Set.Empty.
 Module SOS := ZF.Set.Ordinal.Sup.
 Module SUG := ZF.Set.UnionGenOfClass.
@@ -64,7 +63,7 @@ Proof.
   (* in a. The first is ruled out, so omega is a subset of a.                   *)
   intros a H1.
   assert (a :< :N \/ :N :<=: a) as H2. {
-    apply SOC.ElemOrIncl.
+    apply Ordinal.ElemOrIncl.
     - apply IsOrdinal. assumption.
     - apply Omega.IsOrdinal. }
   destruct H2 as [H2|H2]. 2: assumption. exfalso.
@@ -171,7 +170,7 @@ Proof.
     (* Since succ b is infinite, b is not in omega (else succ b would be).      *)
     assert (:N :<=: b) as H5. {
       assert (b :< :N \/ :N :<=: b) as H5. {
-        apply SOC.ElemOrIncl; try assumption. apply Omega.IsOrdinal. }
+        apply Ordinal.ElemOrIncl; try assumption. apply Omega.IsOrdinal. }
       destruct H5 as [H5|H5]. 2: assumption. exfalso.
       apply DiffBySet.Charac in H1. destruct H1 as [_ H1]. apply H1.
       apply Omega.HasSucc. assumption. }

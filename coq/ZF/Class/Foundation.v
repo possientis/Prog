@@ -5,7 +5,7 @@ Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Rank.Core.
 
 Module CEM := ZF.Class.Empty.
@@ -25,7 +25,7 @@ Proof.
     intros b H4. rewrite H2 in H4. destruct H4 as [a [H4 H5]].
     subst. apply SRC.IsOrdinal. }
   assert (exists b, Ordinal b /\ B b /\ forall c, B c -> b :<=: c) as H6. {
-    apply Core.HasMinimal; assumption. }
+    apply Ordinal.HasMinimal; assumption. }
   destruct H6 as [b [H6 [H7 H8]]]. rewrite H2 in H7. destruct H7 as [a [H7 H9]].
   exists a. split. 1: assumption.
   assert (toClass a :/\: A :~: :0:) as H10. {

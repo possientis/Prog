@@ -6,7 +6,7 @@ Require Import ZF.Class.Rank.Core.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Rank.Core.
 
 Module CEM := ZF.Class.Empty.
@@ -38,7 +38,7 @@ Proof.
     apply CEM.HasElem. exists (rank a). rewrite H2. exists a.
     split. 1: assumption. reflexivity. }
   assert (exists b, Ordinal b /\ B b /\ forall c, B c -> b :<=: c) as H5. {
-    apply Core.HasMinimal; assumption. }
+    apply Ordinal.HasMinimal; assumption. }
   destruct H5 as [b [H5 [H6 H7]]]. rewrite H2 in H6. destruct H6 as [x [H6 H8]].
   apply CEM.HasElem. exists x. split. 1: assumption.
   intros y H9. rewrite H8 in H7. apply H7. rewrite H2. exists y.

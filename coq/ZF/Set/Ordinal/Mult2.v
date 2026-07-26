@@ -6,7 +6,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.Plus.
@@ -87,14 +87,14 @@ Lemma Inequality : forall (a b c d:U),
   a :*: c :+: d :< a :*: b.
 Proof.
   intros a b c d H1 H2 H3 H4.
-  assert (Ordinal c) as G1. { apply Core.IsOrdinal with b; assumption. }
-  assert (Ordinal d) as G2. { apply Core.IsOrdinal with a; assumption. }
+  assert (Ordinal c) as G1. { apply Ordinal.IsOrdinal with b; assumption. }
+  assert (Ordinal d) as G2. { apply Ordinal.IsOrdinal with a; assumption. }
   assert (Ordinal (a :*: b)) as G3. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :*: c)) as G4. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :*: c :+: a)) as G5. { apply Plus.IsOrdinal; assumption. }
   assert (Ordinal (a :*: c :+: d)) as G6. { apply Plus.IsOrdinal; assumption. }
   assert (Ordinal (succ c)) as G7. { apply Succ.IsOrdinal. assumption. }
-  apply Core.ElemInclTran with (a :*: c :+: a); try assumption.
+  apply Ordinal.ElemInclTran with (a :*: c :+: a); try assumption.
   - apply Plus.ElemCompatR; assumption.
   - rewrite <- Mult.WhenSuccR. 2: assumption.
     apply Mult.InclCompatR; try assumption.
@@ -147,10 +147,10 @@ Proof.
   apply Converse.Charac2, Charac2 in H4; try assumption.
   destruct H3 as [c [d [H3 [H5 [H6 H7]]]]].
   destruct H4 as [c' [d' [H4 [H8 [H9 H10]]]]].
-  assert (Ordinal c)  as G1. { apply Core.IsOrdinal with b; assumption. }
-  assert (Ordinal c') as G2. { apply Core.IsOrdinal with b; assumption. }
-  assert (Ordinal d)  as G3. { apply Core.IsOrdinal with a; assumption. }
-  assert (Ordinal d') as G4. { apply Core.IsOrdinal with a; assumption. }
+  assert (Ordinal c)  as G1. { apply Ordinal.IsOrdinal with b; assumption. }
+  assert (Ordinal c') as G2. { apply Ordinal.IsOrdinal with b; assumption. }
+  assert (Ordinal d)  as G3. { apply Ordinal.IsOrdinal with a; assumption. }
+  assert (Ordinal d') as G4. { apply Ordinal.IsOrdinal with a; assumption. }
   subst.
   assert (c = c' /\ d = d') as [H11 H12]. {
     apply Mult.EuclidUnique with a; assumption. }
@@ -202,7 +202,7 @@ Proof.
     destruct H3 as [c [d [H3 [H4 [H5 H6]]]]]. subst.
     apply Inequality; assumption.
   - assert (Ordinal y) as G2. {
-      apply Core.IsOrdinal with (a :*: b); assumption. }
+      apply Ordinal.IsOrdinal with (a :*: b); assumption. }
     assert (a = :0: \/ :0: :< a) as H4. { apply ZeroOrElem. assumption. }
     destruct H4 as [H4|H4].
     + subst. rewrite Mult.WhenZeroL in H3. 2: assumption.
@@ -212,7 +212,8 @@ Proof.
           apply Mult.Euclid; assumption. }
       destruct H5 as [c [d [H5 [H6 [H7 H8]]]]].
       assert (Ordinal (a :*: c)) as G3. { apply Mult.IsOrdinal; assumption. }
-      assert (c :< b \/ b :<=: c) as H9. { apply Core.ElemOrIncl; assumption. }
+      assert (c :< b \/ b :<=: c) as H9. {
+      apply Ordinal.ElemOrIncl; assumption. }
       destruct H9 as [H9|H9].
       * apply Range.Charac. exists :(c,d):. apply Charac2; try assumption.
         exists c. exists d. split. 1: assumption. split. 1: assumption.
@@ -256,10 +257,10 @@ Proof.
   intros x y H3 H4.
   apply SPR.Charac in H3. apply SPR.Charac in H4.
   destruct H3 as [c [d [H3 [H5 H6]]]]. destruct H4 as [c' [d' [H4 [H7 H8]]]].
-  assert (Ordinal c)  as G1. { apply Core.IsOrdinal with b; assumption. }
-  assert (Ordinal d)  as G2. { apply Core.IsOrdinal with a; assumption. }
-  assert (Ordinal c') as G3. { apply Core.IsOrdinal with b; assumption. }
-  assert (Ordinal d') as G4. { apply Core.IsOrdinal with a; assumption. }
+  assert (Ordinal c)  as G1. { apply Ordinal.IsOrdinal with b; assumption. }
+  assert (Ordinal d)  as G2. { apply Ordinal.IsOrdinal with a; assumption. }
+  assert (Ordinal c') as G3. { apply Ordinal.IsOrdinal with b; assumption. }
+  assert (Ordinal d') as G4. { apply Ordinal.IsOrdinal with a; assumption. }
   assert (Ordinal (a :*: c))  as G5. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :*: c')) as G6. { apply Mult.IsOrdinal; assumption. }
   assert (Ordinal (a :*: c :+: d))   as G7. { apply Plus.IsOrdinal; assumption. }
@@ -273,7 +274,7 @@ Proof.
     + apply Inequality; assumption.
     + split . 1: { apply Inequality; assumption. }
       destruct H13 as [H13|[H13 H14]].
-      * apply Core.ElemInclTran with (a :*: succ c); try assumption.
+      * apply Ordinal.ElemInclTran with (a :*: succ c); try assumption.
         { rewrite Mult.WhenSuccR. 2: assumption.
           apply Plus.ElemCompatR; assumption. }
         { apply Incl.Tran with (a :*: c').
@@ -286,7 +287,7 @@ Proof.
     apply leCharac2. split. 1: assumption. split. 1: assumption.
     split. 1: assumption. split. 1: assumption.
     assert (c = c' \/ c :< c' \/ c' :< c) as H12. {
-      apply Core.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H12 as [H12|[H12|H12]].
     + right. split. 1: assumption. subst.
       apply Plus.ElemCompatRevR with (a :*: c'); assumption.
@@ -296,7 +297,7 @@ Proof.
         apply Incl.Tran with (a :*: succ c').
         - rewrite Mult.WhenSuccR. 2: assumption.
           apply Plus.InclCompatR; try assumption.
-          apply Core.ElemIsIncl; assumption.
+          apply Ordinal.ElemIsIncl; assumption.
         - apply Incl.Tran with (a :*: c).
           + apply Mult.InclCompatR; try assumption.
             apply Succ.ElemIsIncl; assumption.

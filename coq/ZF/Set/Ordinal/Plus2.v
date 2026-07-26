@@ -5,7 +5,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
 Require Import ZF.Set.Order.RestrictOfClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.Plus.
@@ -163,8 +163,8 @@ Proof.
       destruct H1 as [H1 [H2 H3]]. apply Prod.Charac2. split.
       * apply Union2.Charac. left. subst. apply Prod.Charac2.
         split. 2: assumption. apply Single.Charac. reflexivity.
-      * subst. apply Core.ElemInclTran with a; try assumption.
-        { apply Core.IsOrdinal with a; assumption. }
+      * subst. apply Ordinal.ElemInclTran with a; try assumption.
+        { apply Ordinal.IsOrdinal with a; assumption. }
         { apply Plus.IsOrdinal; assumption. }
         { apply Plus.IsInclR; assumption. }
     + split. 2: { apply FCharac2. exists c. right. assumption. }
@@ -172,7 +172,7 @@ Proof.
       * apply Union2.Charac. right. subst. apply Prod.Charac2.
         split. 2: assumption. apply Single.Charac. reflexivity.
       * subst. apply Plus.ElemCompatR; try assumption.
-        apply Core.IsOrdinal with b; assumption.
+        apply Ordinal.IsOrdinal with b; assumption.
 Qed.
 
 (* The set f a b is a relation.                                                 *)
@@ -214,20 +214,20 @@ Proof.
   - reflexivity.
   - exfalso.
     assert (a :< a) as H9. {
-      assert (Ordinal d) as H9. { apply Core.IsOrdinal with b; assumption. }
-      apply Core.InclElemTran with (a :+: d); try assumption.
+      assert (Ordinal d) as H9. { apply Ordinal.IsOrdinal with b; assumption. }
+      apply Ordinal.InclElemTran with (a :+: d); try assumption.
       - apply Plus.IsOrdinal; assumption.
       - apply Plus.IsInclR; assumption. }
     revert H9. apply Foundation.NoLoop1.
   - exfalso.
     assert (a :< a) as H9. {
-      assert (Ordinal c) as H9. { apply Core.IsOrdinal with b; assumption. }
-      apply Core.InclElemTran with (a :+: c); try assumption.
+      assert (Ordinal c) as H9. { apply Ordinal.IsOrdinal with b; assumption. }
+      apply Ordinal.InclElemTran with (a :+: c); try assumption.
       - apply Plus.IsOrdinal; assumption.
       - apply Plus.IsInclR; assumption. }
     revert H9. apply Foundation.NoLoop1.
-  - assert (Ordinal c) as H9.  { apply Core.IsOrdinal with b; assumption. }
-    assert (Ordinal d) as H10. { apply Core.IsOrdinal with b; assumption. }
+  - assert (Ordinal c) as H9.  { apply Ordinal.IsOrdinal with b; assumption. }
+    assert (Ordinal d) as H10. { apply Ordinal.IsOrdinal with b; assumption. }
     apply Plus.CancelL in H8; try assumption. subst. reflexivity.
 Qed.
 
@@ -278,16 +278,17 @@ Proof.
   - apply Range.Charac in H3. destruct H3 as [x H3].
     apply Charac2 in H3; try assumption.
     destruct H3 as [c [[H3 [H4 H5]]|[H3 [H4 H5]]]]; subst.
-    + apply Core.ElemInclTran with a; try assumption.
-      * apply Core.IsOrdinal with a; assumption.
+    + apply Ordinal.ElemInclTran with a; try assumption.
+      * apply Ordinal.IsOrdinal with a; assumption.
       * apply Plus.IsOrdinal; assumption.
       * apply Plus.IsInclR; assumption.
     + apply Plus.ElemCompatR; try assumption.
-      apply Core.IsOrdinal with b; assumption.
+      apply Ordinal.IsOrdinal with b; assumption.
   - assert (Ordinal (a :+: b)) as H6. { apply Plus.IsOrdinal; assumption. }
     assert (Ordinal y) as H7. {
-      apply Core.IsOrdinal with (a :+: b); assumption. }
-    assert (y :< a \/ a :<=: y ) as H8. { apply Core.ElemOrIncl; assumption. }
+      apply Ordinal.IsOrdinal with (a :+: b); assumption. }
+    assert (y :< a \/ a :<=: y ) as H8. {
+    apply Ordinal.ElemOrIncl; assumption. }
     destruct H8 as [H8|H8]; apply Range.Charac.
     + exists :(:0:,y):. apply Charac2; try assumption. exists y. left.
       split. 1: assumption. split; reflexivity.
@@ -354,7 +355,7 @@ Proof.
   - apply lex01Charac2 in H9. destruct H9 as [H9 H10].
     rewrite Eval0, Eval1; try assumption. apply E.Charac2. split.
     + apply Plus.IsInclR; assumption.
-    + assert (Ordinal d) as H11. { apply Core.IsOrdinal with b; assumption. }
+    + assert (Ordinal d) as H11. { apply Ordinal.IsOrdinal with b; assumption. }
       split.
       * apply Plus.ElemCompatR; assumption.
       * apply Plus.IsInclR; assumption.
@@ -362,24 +363,24 @@ Proof.
   - apply lex10Charac2 in H9. contradiction.
   - exfalso. rewrite Eval0, Eval1 in H9; try assumption. apply E.Charac2 in H9.
     destruct H9 as [H9 [H10 H11]].
-    assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }
-    assert (Ordinal d) as H13. { apply Core.IsOrdinal with a; assumption. }
+    assert (Ordinal c) as H12. { apply Ordinal.IsOrdinal with b; assumption. }
+    assert (Ordinal d) as H13. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (Ordinal (a :+: c)) as H14. { apply Plus.IsOrdinal; assumption. }
     assert (a :+: c :< a :+: c) as H15. {
       apply Plus.IsInclR; try assumption.
-      apply Core.ElemElemTran with d; assumption. }
+      apply Ordinal.ElemElemTran with d; assumption. }
     revert H15. apply Foundation.NoLoop1.
   - apply lex11Charac2 in H9. destruct H9 as [H9 [H10 H11]].
     rewrite Eval1, Eval1; try assumption. apply E.Charac2.
-    assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }
-    assert (Ordinal d) as H13. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal c) as H12. { apply Ordinal.IsOrdinal with b; assumption. }
+    assert (Ordinal d) as H13. { apply Ordinal.IsOrdinal with b; assumption. }
     split.
     + apply Plus.ElemCompatR; assumption.
     + split; apply Plus.ElemCompatR; assumption.
   - rewrite Eval1, Eval1 in H9; try assumption. apply E.Charac2 in H9.
     destruct H9 as [H9 [H10 H11]]. apply lex11Charac2.
-    assert (Ordinal c) as H12. { apply Core.IsOrdinal with b; assumption. }
-    assert (Ordinal d) as H13. { apply Core.IsOrdinal with b; assumption. }
+    assert (Ordinal c) as H12. { apply Ordinal.IsOrdinal with b; assumption. }
+    assert (Ordinal d) as H13. { apply Ordinal.IsOrdinal with b; assumption. }
     split. 1: assumption. split. 1: assumption.
     apply Plus.ElemCompatRevR with a; assumption.
 Qed.

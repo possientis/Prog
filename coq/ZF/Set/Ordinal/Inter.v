@@ -7,14 +7,13 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 
 Module CIN := ZF.Class.Incl.
 Module COC := ZF.Class.Ordinal.Core.
 Module COI := ZF.Class.Ordinal.Inter.
 
 Module SIR := ZF.Set.Inter.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* The intersection of a set of ordinals is an ordinal.                         *)
 Proposition IsOrdinal : forall (a:U),
@@ -58,6 +57,6 @@ Proof.
   - subst. apply Inter.WhenZero.
   - apply Incl.Double. split; intros x H3.
     + apply Inter.Charac with a. 1: assumption.
-      apply SOC.HasZero; assumption.
+      apply Ordinal.HasZero; assumption.
     + apply Empty.Charac in H3. contradiction.
 Qed.

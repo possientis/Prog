@@ -147,17 +147,17 @@ Proof.
   - apply UnionGenOfClass.Charac in H1. destruct H1 as [n [H1 H2]].
     assert (On (succ n)) as H3. {
       apply Omega.HasOrdinals. apply Omega.HasSucc. assumption. }
-    rewrite Fn in H2. 2: assumption. apply SOC.ElemElemTran with (succ n);
+    rewrite Fn in H2. 2: assumption. apply Ordinal.ElemElemTran with (succ n);
     try assumption.
-    + apply SOC.IsOrdinal with (succ n); assumption.
+    + apply Ordinal.IsOrdinal with (succ n); assumption.
     + apply Omega.IsOrdinal.
     + apply Omega.HasSucc. assumption.
   - apply Limit.InBetween in H1. 2: apply Omega.IsLimit.
     destruct H1 as [n [H1 H2]]. apply UnionGenOfClass.Charac.
     exists n. split. 1: assumption. rewrite Fn. 2: assumption.
     assert (On n) as H3. { apply Omega.HasOrdinals. assumption. }
-    apply SOC.ElemInclTran with n; try assumption.
-    + apply SOC.IsOrdinal with n; assumption.
+    apply Ordinal.ElemInclTran with n; try assumption.
+    + apply Ordinal.IsOrdinal with n; assumption.
     + apply Succ.IsOrdinal. assumption.
     + apply Succ.IsIncl.
 Qed.
@@ -232,9 +232,9 @@ Proof.
   fold G. apply Incl.Double. split; intros y H1.
   - apply UnionGenOfClass.Charac in H1. destruct H1 as [n [H1 H2]].
     assert (On n) as H3. { apply Omega.HasOrdinals. assumption. }
-    rewrite Gn in H2. 2: assumption. apply SOC.ElemElemTran with n;
+    rewrite Gn in H2. 2: assumption. apply Ordinal.ElemElemTran with n;
     try assumption.
-    + apply SOC.IsOrdinal with n; assumption.
+    + apply Ordinal.IsOrdinal with n; assumption.
     + apply Omega.IsOrdinal.
   - apply Limit.InBetween in H1. 2: apply Omega.IsLimit.
     destruct H1 as [n [H1 H2]]. apply UnionGenOfClass.Charac.

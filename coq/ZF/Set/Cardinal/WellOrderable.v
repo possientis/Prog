@@ -9,7 +9,7 @@ Require Import ZF.Set.Diff.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Transport.
 Require Import ZF.Set.Order.WellOrdering.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
@@ -40,7 +40,6 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module COF := ZF.Class.Ordinal.FunctionOn.
 Module CFF := ZF.Class.Relation.Fun.From.
 Module CRD := ZF.Class.Relation.Domain.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SOA := ZF.Set.Ordinal.Order.
 Module SOE := ZF.Set.Ordinal.Order.E.
 Module SOO := ZF.Set.Ordinal.Onto.
@@ -127,7 +126,7 @@ Proof.
   assert (domain (F:|:b) = b) as H15. {
     apply RestrictOfClass.DomainWhenIncl.
     - apply G1.
-    - intros c H15. apply G3. apply SOC.IsOrdinal with b; assumption. }
+    - intros c H15. apply G3. apply Ordinal.IsOrdinal with b; assumption. }
   assert (Bij (F:|:b) b a) as H16. {
     split. 2: assumption. split. 2: assumption. split. 2: assumption.
     apply SRR.IsRelation, G1. }

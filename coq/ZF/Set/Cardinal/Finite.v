@@ -7,7 +7,7 @@ Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Prod.
@@ -51,7 +51,7 @@ Proof.
   assert (exists m, Ordinal m /\ m :<=: n /\ f:[a]: :~: m) as H8. {
     apply Equip.OrdinalSubset; assumption. }
   destruct H8 as [m [H8 [H9 H10]]].
-  assert (m :< :N) as H11. { apply Core.InclElemTran with n; assumption. }
+  assert (m :< :N) as H11. { apply Ordinal.InclElemTran with n; assumption. }
   assert (a :~: m) as H12. { apply Equip.Tran with f:[a]:; assumption. }
   exists m; split; assumption.
 Qed.

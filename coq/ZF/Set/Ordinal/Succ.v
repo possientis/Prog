@@ -6,7 +6,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.UnionOf.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union.
@@ -74,7 +74,7 @@ Qed.
 (* The successor of any ordinal contains 0.                                     *)
 Proposition HasZero : forall (a:U), Ordinal a -> :0: :< succ a.
 Proof.
-  intros a H1. apply Core.HasZero.
+  intros a H1. apply Ordinal.HasZero.
   - apply IsOrdinal. assumption.
   - apply NotZero.
 Qed.
@@ -110,16 +110,16 @@ Proof.
   apply Incl.Double. split. 1: assumption.
   intros x H4. apply Charac in H4. destruct H4 as [H4|H4].
   - subst. assumption.
-  - assert (Ordinal a) as H5. { apply Core.IsOrdinal with b; assumption. }
-    assert (Ordinal x) as H6. { apply Core.IsOrdinal with a; assumption. }
-    apply Core.ElemElemTran with a; assumption.
+  - assert (Ordinal a) as H5. { apply Ordinal.IsOrdinal with b; assumption. }
+    assert (Ordinal x) as H6. { apply Ordinal.IsOrdinal with a; assumption. }
+    apply Ordinal.ElemElemTran with a; assumption.
 Qed.
 
 (* If the successor of a is an ordinal then a is an ordinal.                    *)
 Proposition IsOrdinalRev : forall (a:U),
   Ordinal (succ a) -> Ordinal a.
 Proof.
-  intros a H1. apply Core.IsOrdinal with (succ a). 1: assumption. apply IsIn.
+  intros a H1. apply Ordinal.IsOrdinal with (succ a). 1: assumption. apply IsIn.
 Qed.
 
 (* Every successor ordinal contains 0.                                          *)
@@ -147,7 +147,7 @@ Proposition InclCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
   succ a :<=: succ b -> a :<=: b.
 Proof.
   intros a b H1 H2 H3 c H4. assert (Ordinal c) as H5. {
-    apply Core.IsOrdinal with a; assumption. }
+    apply Ordinal.IsOrdinal with a; assumption. }
   assert (c :< b \/ b :<=: c) as H6. { apply ElemOrIncl; assumption. }
   destruct H6 as [H6|H6]. 1: assumption.
   exfalso. apply NoInBetween with b a. split.
@@ -190,7 +190,7 @@ Proof.
   intros a b H1 H2. split.
   - intros H3 c H4. apply Union2.Charac in H4. destruct H4 as [H4|H4].
     + apply ElemInclTran with a; try assumption.
-      * apply Core.IsOrdinal with a; assumption.
+      * apply Ordinal.IsOrdinal with a; assumption.
       * apply LessIsElem in H3; try assumption. apply H3.
     + apply Single.Charac in H4. subst. assumption.
   - intros H3. assert (a :< b \/ b :<=: a) as H4. {
@@ -205,12 +205,12 @@ Proposition InclIsElem : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b <-> a :< succ b.
 Proof.
   intros a b H1 H2. split; intros H3.
-  - apply Core.InclElemTran with b; try assumption.
+  - apply Ordinal.InclElemTran with b; try assumption.
     + apply IsOrdinal. assumption.
     + apply IsIn.
   - apply Charac in H3. destruct H3 as [H3|H3].
     + subst. apply Incl.Refl.
-    + apply Core.ElemIsIncl; assumption.
+    + apply Ordinal.ElemIsIncl; assumption.
 Qed.
 
 (* The successor of a set is not equal to the set in question.                  *)

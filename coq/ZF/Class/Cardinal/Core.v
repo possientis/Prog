@@ -4,7 +4,7 @@ Require Import ZF.Class.Proper.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.Hartogs.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Union.

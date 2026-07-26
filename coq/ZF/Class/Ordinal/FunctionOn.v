@@ -15,7 +15,7 @@ Require Import ZF.Class.Relation.OneToOne.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.FunctionOn.
@@ -31,7 +31,6 @@ Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SRF := ZF.Class.Relation.Function.
 Module SFO := ZF.Set.Relation.FunctionOn.
 Module SRO := ZF.Set.Relation.OneToOne.
@@ -52,7 +51,7 @@ Proof.
     apply CFO.IsOneToOne with On. 1: assumption.
     intros a b H4 H5 H6.
     assert (a = b \/ a :< b \/ b :< a) as H7. {
-      apply SOC.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H7 as [H7|[H7|H7]]. 1: assumption.
     - exfalso. specialize (H2 b H5). rewrite <- H6 in H2.
       destruct H2 as [_ H2]. apply H2.
@@ -105,13 +104,13 @@ Proof.
   assert (A :\: F:[a]: :~: :0:) as H12. { rewrite H5 in H9. apply H9. }
   assert (forall b, b :< a -> (A :\: F:[b]:) :<>: :0:) as H13. {
     intros b H13 H14.
-    assert (On b) as H15. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On b) as H15. { apply Ordinal.IsOrdinal with a; assumption. }
     apply Class.Empty.Charac with b. apply H10. split. 2: assumption.
     rewrite H5. split; assumption. }
   assert (toClass F:[a]: :<=: A) as H14. {
     intros y H14. apply ImageUnderClass.Charac in H14. 2: apply H1.
     destruct H14 as [b [H14 H15]].
-    assert (On b) as H16. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On b) as H16. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (F!b = y) as H17. { apply (CFO.Eval F On); assumption. }
     assert ((A :\: F:[b]:) :<>: :0:) as H18. { apply H13. assumption. }
     assert ((A :\: F:[b]:) F!b) as H19. { apply H3; assumption. }
@@ -124,19 +123,19 @@ Proof.
     - apply RestrictOfClass.IsFunction, H1.
     - rewrite RestrictOfClass.DomainOf. 2: apply H1.
       apply Specify.IsA. intros b H17. apply H1.
-      apply SOC.IsOrdinal with a; assumption. }
+      apply Ordinal.IsOrdinal with a; assumption. }
   assert (SRO.OneToOne (F:|:a)) as H18. {
     apply SFO.IsOneToOne with a. 1: assumption.
     intros b c H18 H19 H20.
-    assert (On b) as H21. { apply SOC.IsOrdinal with a; assumption. }
-    assert (On c) as H22. { apply SOC.IsOrdinal with a; assumption. }
+    assert (On b) as H21. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (On c) as H22. { apply Ordinal.IsOrdinal with a; assumption. }
     assert ((F:|:a)!b = F!b) as H23. {
       apply RestrictOfClass.Eval. 1: apply H1. assumption. }
     assert ((F:|:a)!c = F!c) as H24. {
       apply RestrictOfClass.Eval. 1: apply H1. assumption. }
     rewrite H23 in H20. rewrite H24 in H20.
     assert (b = c \/ b :< c \/ c :< b) as H25. {
-      apply SOC.IsTotal; assumption. }
+      apply Ordinal.IsTotal; assumption. }
     destruct H25 as [H25|[H25|H25]]. 1: assumption.
     - exfalso. specialize (H13 c H19). specialize (H3 c H22 H13).
       rewrite <- H20 in H3. destruct H3 as [_ H3]. apply H3.

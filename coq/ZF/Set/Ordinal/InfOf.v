@@ -1,7 +1,7 @@
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Inter.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Specify.
 
@@ -11,7 +11,8 @@ Proposition IsInter : forall (a:U), Ordinal a ->
 Proof.
   intros a H1. unfold inf.
   assert ({{ x:< a | Ordinal }} = a) as H2. {
-    apply Specify.IsA. intros x H2. apply Core.IsOrdinal with a; assumption. }
+    apply Specify.IsA. intros x H2.
+    apply Ordinal.IsOrdinal with a; assumption. }
   rewrite H2. reflexivity.
 Qed.
 

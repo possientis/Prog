@@ -8,7 +8,7 @@ Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -55,7 +55,7 @@ Proof.
   - apply COR.IsFunction.
   - apply Incl.EquivCompatR with On.
     + apply Equiv.Sym, COR.DomainIsOn.
-    + intros x H3. apply Core.IsOrdinal with (succ b); assumption.
+    + intros x H3. apply Ordinal.IsOrdinal with (succ b); assumption.
 Qed.
 
 (* The transfinite recursion class satisfies the equation:                      *)
@@ -68,7 +68,7 @@ Proof.
   - apply COR.IsFunction.
   - apply Incl.EquivCompatR with On.
     + apply Equiv.Sym, COR.DomainIsOn.
-    + intros x H2. apply Core.IsOrdinal with b. 2: assumption. apply H1.
+    + intros x H2. apply Ordinal.IsOrdinal with b. 2: assumption. apply H1.
 Qed.
 
 (* The transfinite recursion class is the unique function class defined on On   *)

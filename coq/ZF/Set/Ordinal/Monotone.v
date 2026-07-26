@@ -5,7 +5,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.Isom.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Order.E.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.Ordinal.Succ.
@@ -111,15 +111,17 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros f x y H1 H2 H3 H4.
   assert (Ordinal (domain f)) as H5. { apply OrdFun.DomainOf. apply H1. }
-  assert (Ordinal x) as H6. { apply Core.IsOrdinal with (domain f); assumption. }
-  assert (Ordinal y) as H7. { apply Core.IsOrdinal with (domain f); assumption. }
+  assert (Ordinal x) as H6. {
+  apply Ordinal.IsOrdinal with (domain f); assumption. }
+  assert (Ordinal y) as H7. {
+  apply Ordinal.IsOrdinal with (domain f); assumption. }
   assert (Ordinal f!y) as H8. { apply OrdFun.IsOrdinal. 1: apply H1. assumption. }
-  assert (x = y \/ x :< y) as H9. { apply Core.EqualOrElem; assumption. }
+  assert (x = y \/ x :< y) as H9. { apply Ordinal.EqualOrElem; assumption. }
   destruct H9 as [H9|H9].
   - (* Equal arguments have equal values.                                       *)
     subst. apply Incl.Refl.
   - (* A strictly larger argument gives a strictly larger value.                *)
-    apply Core.ElemIsIncl. 1: assumption. apply H1; assumption.
+    apply Ordinal.ElemIsIncl. 1: assumption. apply H1; assumption.
 Qed.
 
 (* A function between ordinals is monotone when it preserves membership.        *)
@@ -136,7 +138,7 @@ Proof.
     split. 1: apply H3. split.
     + assert (domain f = a) as H6. { apply H3. }
       rewrite H6. assumption.
-    + intros y H6. apply Core.IsOrdinal with b. 1: assumption. apply H5.
+    + intros y H6. apply Ordinal.IsOrdinal with b. 1: assumption. apply H5.
       assumption.
   - (* Order preservation over the domain is the displayed hypothesis.          *)
     intros x y H6 H7 H8.
@@ -218,9 +220,9 @@ Proof.
       rewrite H12, H13.
       apply H3. assumption.
     - (* If y is below a, then x is also below a and both values are unchanged. *)
-      assert (Ordinal y) as H11. { apply Core.IsOrdinal with a; assumption. }
-      assert (Ordinal x) as H12. { apply Core.IsOrdinal with y; assumption. }
-      assert (x :< a) as H13. { apply Core.ElemElemTran with y; assumption. }
+      assert (Ordinal y) as H11. { apply Ordinal.IsOrdinal with a; assumption. }
+      assert (Ordinal x) as H12. { apply Ordinal.IsOrdinal with y; assumption. }
+      assert (x :< a) as H13. { apply Ordinal.ElemElemTran with y; assumption. }
       assert (f!x = x) as H14. { rewrite H4. apply SFI.Eval1; assumption. }
       assert (f!y = y) as H15. {
         rewrite H4. apply SFI.Eval1. 2: assumption.
@@ -248,5 +250,5 @@ Proof.
     + apply COI.EquivCompat3 with (toClass (E b)).
       * apply SOE.ToClass.
       * apply Isom.ToClass. assumption.
-  - apply Core.ToClass. assumption.
+  - apply Ordinal.ToClass. assumption.
 Qed.

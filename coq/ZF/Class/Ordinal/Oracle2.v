@@ -3,7 +3,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.

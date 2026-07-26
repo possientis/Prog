@@ -20,7 +20,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
@@ -28,7 +28,6 @@ Require Import ZF.Set.Single.
 
 Module CEM := ZF.Class.Empty.
 Module COC := ZF.Class.Ordinal.Core.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* Lexicographical order on On x On.                                            *)
 Definition Lex : Class := fun x =>
@@ -80,7 +79,7 @@ Proof.
     intros x [y H4]. apply H1 in H4. apply Prod.Charac2 in H4. apply H4. }
   assert (exists a,
     On a /\ domain A a /\ forall y, domain A y -> a :<=: y) as H5. {
-    apply SOC.HasMinimal; assumption. }
+    apply Ordinal.HasMinimal; assumption. }
   destruct H5 as [a [H5 [H6 H7]]].
   remember (fun b => A :(a,b):) as B eqn:H8.
   assert (B :<=: On) as H9. {
@@ -89,7 +88,7 @@ Proof.
   assert (B :<>: :0:) as H10. {
     destruct H6 as [b H6]. apply CEM.HasElem. exists b. rewrite H8. assumption. }
   assert (exists b, On b /\ B b /\ forall z, B z -> b :<=: z) as H11. {
-    apply SOC.HasMinimal; assumption. }
+    apply Ordinal.HasMinimal; assumption. }
   destruct H11 as [b [H11 [H12 H13]]].
   assert (Minimal Lex A :(a,b):) as H14. {
     split.
@@ -117,8 +116,10 @@ Proposition IsTotal : Total Lex (On :x: On).
 Proof.
   intros x y H1 H2.
   destruct H1 as [a [b [H1 [H3 H4]]]]. destruct H2 as [c [d [H2 [H5 H6]]]]. subst.
-  assert (a = c \/ a :< c \/ c :< a) as H7. { apply SOC.IsTotal; assumption. }
-  assert (b = d \/ b :< d \/ d :< b) as H8. { apply SOC.IsTotal; assumption. }
+  assert (a = c \/ a :< c \/ c :< a) as H7. {
+    apply Ordinal.IsTotal; assumption. }
+  assert (b = d \/ b :< d \/ d :< b) as H8. {
+    apply Ordinal.IsTotal; assumption. }
   destruct H7 as [H7|[H7|H7]].
   - destruct H8 as [H8|[H8|H8]].
     + subst. left. reflexivity.

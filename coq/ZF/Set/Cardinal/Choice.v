@@ -9,7 +9,7 @@ Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.WellOrdering.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Power.
@@ -34,7 +34,6 @@ Module CRC := ZF.Class.Relation.Choice.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SOC := ZF.Set.Ordinal.Core.
 Module SMS := ZF.Set.Relation.Map.Sum.
 
 
@@ -175,13 +174,13 @@ Proof.
   assert (card b :< card :P(b)) as H5. {
     assert (b :<=: :P(b)) as H5. {
       intros c H5.
-      assert (Ordinal c) as K1. { apply SOC.IsOrdinal with b; assumption. }
+      assert (Ordinal c) as K1. { apply Ordinal.IsOrdinal with b; assumption. }
       apply Power.Charac. intros d H6.
-      assert (Ordinal d) as K2. { apply SOC.IsOrdinal with c; assumption. }
-      apply SOC.ElemElemTran with c; assumption. }
+      assert (Ordinal d) as K2. { apply Ordinal.IsOrdinal with c; assumption. }
+      apply Ordinal.ElemElemTran with c; assumption. }
   assert (card b :<=: card :P(b)) as H6. { apply InclCompat; assumption. }
   assert (card b = card :P(b) \/ card b :< card :P(b)) as H7. {
-    apply SOC.EqualOrElem; assumption. }
+    apply Ordinal.EqualOrElem; assumption. }
   destruct H7 as [H7|H7]. 2:assumption. exfalso.
   assert (b :~: :P(b)) as H8. { apply EquipCharac; assumption. }
   apply Equip.Cantor with b. assumption. }

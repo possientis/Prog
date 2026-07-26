@@ -4,7 +4,7 @@ Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Decreasing.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.OrdFun.
@@ -120,15 +120,16 @@ Proof.
   - apply DomainOf in H2. apply Union.Charac. exists (succ x).
     split. 2: assumption. apply Succ.IsIn.
   - apply Union.Charac in H2. destruct H2 as [y [H2 H3]]. apply DomainOf.
-    assert (Ordinal y) as H4. { apply Core.IsOrdinal with (domain f); assumption. }
-    assert (Ordinal x) as H5. { apply Core.IsOrdinal with y; assumption. }
+    assert (Ordinal y) as H4. {
+    apply Ordinal.IsOrdinal with (domain f); assumption. }
+    assert (Ordinal x) as H5. { apply Ordinal.IsOrdinal with y; assumption. }
     assert (Ordinal (succ x)) as H6. { apply Succ.IsOrdinal. assumption. }
     assert (succ x :<=: y) as H7. { apply Succ.ElemIsIncl; assumption. }
     assert (succ x = y \/ succ x :< y) as H8. {
-      apply Core.EqualOrElem; assumption. }
+      apply Ordinal.EqualOrElem; assumption. }
     destruct H8 as [H8|H8].
     + subst. assumption.
-    + apply Core.ElemElemTran with y; assumption.
+    + apply Ordinal.ElemElemTran with y; assumption.
 Qed.
 
 (* The left shift of an ordinal function is an ordinal function.                *)
@@ -176,9 +177,9 @@ Proof.
   assert (Ordinal (domain f)) as G2. { apply OrdFun.DomainOf. assumption. }
   apply DomainOf in H3. apply DomainOf in H4.
   assert (Ordinal (succ x)) as G3. {
-    apply Core.IsOrdinal with (domain f); assumption. }
+    apply Ordinal.IsOrdinal with (domain f); assumption. }
   assert (Ordinal (succ y)) as G4. {
-    apply Core.IsOrdinal with (domain f); assumption. }
+    apply Ordinal.IsOrdinal with (domain f); assumption. }
   assert (Ordinal x) as G5. { apply Succ.IsOrdinalRev. assumption. }
   assert (Ordinal y) as G6. { apply Succ.IsOrdinalRev. assumption. }
   rewrite Eval, Eval; try assumption. apply H2; try assumption.

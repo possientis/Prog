@@ -5,13 +5,12 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Union.
 
 Module COC := ZF.Class.Ordinal.Core.
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* Transfinite induction by cases: zero, successor, and limit ordinal cases.    *)
 Proposition Induction : forall (A:Class),
@@ -47,20 +46,20 @@ Proof.
   assert (forall a, On a -> B a) as H7. {
     apply Induction.
     - rewrite H6. assert (:0: :<=: b) as H7. { apply Empty.IsIncl. }
-      apply SOC.EqualOrElem in H7. 3: assumption.
+      apply Ordinal.EqualOrElem in H7. 3: assumption.
       + destruct H7 as [H7|H7]. 2: { left. assumption. }
         right. subst. assumption.
-      + apply SOC.Zero.
+      + apply Ordinal.Zero.
     - rewrite H6. intros a H7 H8.
       assert (On (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
       destruct H8 as [H8|H8].
       + apply Succ.ElemIsIncl in H8; try assumption.
-        apply Core.EqualOrElem in H8; try assumption.
+        apply Ordinal.EqualOrElem in H8; try assumption.
         destruct H8 as [H8|H8].
         * right. rewrite H8. assumption.
         * left. assumption.
       + assert (succ a = b \/ succ a :< b \/ b :< succ a) as H9. {
-          apply Core.IsTotal; assumption. }
+          apply Ordinal.IsTotal; assumption. }
         destruct H9 as [H9|[H9|H9]].
         * right. rewrite H9. assumption.
         * left. assumption.
@@ -69,7 +68,8 @@ Proof.
           right. apply H4; assumption.
     - rewrite H6. intros a H7 H8.
       assert (On a) as G1. { apply H7. }
-      assert (a :< b \/ b :<=: a) as H9. { apply Core.ElemOrIncl; assumption. }
+      assert (a :< b \/ b :<=: a) as H9. {
+      apply Ordinal.ElemOrIncl; assumption. }
       destruct H9 as [H9|H9]. 1: { left. assumption. }
       right. apply H5; try assumption. intros x H10 H11.
       assert (x :< b \/ A x) as H12. { apply H8. assumption. }

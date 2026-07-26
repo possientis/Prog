@@ -15,7 +15,7 @@ Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.Function.
 Require Import ZF.Class.Relation.Range.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
@@ -28,7 +28,6 @@ Require Import ZF.Set.Union2.
 Module COC := ZF.Class.Ordinal.Core.
 Module CRF := ZF.Class.Relation.Function.
 
-Module SOC := ZF.Set.Ordinal.Core.
 
 (* A strictly monotone ordinal function.                                        *)
 Definition Monotone (F:Class) : Prop := OrdFun F /\ forall (a b:U),
@@ -45,7 +44,8 @@ Proof.
   remember (fun b => domain F b /\ F!b :< b) as A eqn:H8.
   assert (A :~: :0: \/ A :<>: :0:) as H9. { apply LawExcludedMiddle. }
   destruct H9 as [H9|H9].
-  - assert (F!a :< a \/ a :<=: F!a) as H10. { apply SOC.ElemOrIncl; assumption. }
+  - assert (F!a :< a \/ a :<=: F!a) as H10. {
+      apply Ordinal.ElemOrIncl; assumption. }
     destruct H10 as [H10|H10]. 2: assumption. exfalso.
     assert (A a) as H11. { rewrite H8. split; assumption. }
     apply H9 in H11. contradiction.
@@ -90,7 +90,7 @@ Proof.
       assert (Ordinal (Recursion F a)!c) as H16. {
         apply H6, CRF.IsInRange. 1: apply H6. apply H7. assumption. }
       apply Union2.Charac in H14. destruct H14 as [H14|H14].
-      + apply SOC.ElemInclTran with (Recursion F a)!c; try assumption.
+      + apply Ordinal.ElemInclTran with (Recursion F a)!c; try assumption.
         * apply H3, CRF.IsInRange. 1: apply H3. apply H5. assumption.
         * apply H12; assumption.
         * apply IsIncl. { split; assumption. } { apply H5. assumption. }
@@ -100,13 +100,13 @@ Proof.
       assert (exists d, b :< d /\ d :< c) as H15. {
         apply Limit.InBetween; assumption. }
       destruct H15 as [d [H15 H16]].
-      apply SOC.ElemInclTran with (Recursion F a)!d.
+      apply Ordinal.ElemInclTran with (Recursion F a)!d.
       + apply H6, CRF.IsInRange. 1: apply H6. apply H7. assumption.
       + apply H6, CRF.IsInRange. 1: apply H6. apply H7.
-        apply SOC.IsOrdinal with c. 2: assumption. apply H11.
+        apply Ordinal.IsOrdinal with c. 2: assumption. apply H11.
       + apply UnionGenOfClass.IsOrdinal. intros x H17.
         apply H6, CRF.IsInRange. 1: apply H6. apply H7.
-        apply SOC.IsOrdinal with c. 2: assumption. apply H11.
+        apply Ordinal.IsOrdinal with c. 2: assumption. apply H11.
       + apply H12; assumption.
       + apply UnionGenOfClass.IsIncl. assumption. }
   rewrite H10 in H11. assumption.

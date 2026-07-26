@@ -4,7 +4,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Plus.
@@ -41,11 +41,11 @@ Proof.
     assert (toClass G :<=: Ordinal) as H8. {
       intros d H8. rewrite H6 in H8. apply Specify.Charac in H8.
       destruct H8 as [H8 H9].
-      apply Core.IsOrdinal with (succ b); assumption. }
+      apply Ordinal.IsOrdinal with (succ b); assumption. }
     assert (G <> :0:) as H9. {
       apply Empty.HasElem. exists c. rewrite H6.
       apply Specify.Charac. split.
-      - apply Core.InclElemTran with b; try assumption. 2: apply Succ.IsIn.
+      - apply Ordinal.InclElemTran with b; try assumption. 2: apply Succ.IsIn.
         rewrite <- H5. apply Plus.IsInclL; assumption.
       - rewrite H5. apply Incl.Refl. }
     assert (b :-: a :< G) as H10. {
@@ -58,7 +58,7 @@ Proof.
     apply Plus.InclCompatR; try assumption.
     apply Inf.IsLowerBound.
     - intros d H9. apply Specify.Charac in H9. destruct H9 as [H9 H10].
-      apply Core.IsOrdinal with (succ b). 2: assumption.
+      apply Ordinal.IsOrdinal with (succ b). 2: assumption.
       apply Succ.IsOrdinal. assumption.
     - apply Specify.Charac. split.
       + apply InclElemTran with b; try assumption.
@@ -74,7 +74,7 @@ Proposition IsZero : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2 H3.
   assert (Ordinal (b :-: a)) as H4. { apply IsOrdinal; assumption. }
-  assert (Ordinal :0:) as H5. { apply Core.Zero. }
+  assert (Ordinal :0:) as H5. { apply Ordinal.Zero. }
   assert (Ordinal (succ b)) as H6. { apply Succ.IsOrdinal. assumption. }
   remember ({{ x :< succ b | fun c => b :<=: a :+: c}}) as G eqn:H7.
   assert (b :-: a = inf G) as H8. { rewrite H7. reflexivity. }
@@ -86,7 +86,7 @@ Proof.
     rewrite H8. apply Inf.IsLowerBound. 2: assumption.
     intros c H10. rewrite H7 in H10.
     apply Specify.Charac in H10. destruct H10 as [H10 _].
-    apply Core.IsOrdinal with (succ b); assumption. }
+    apply Ordinal.IsOrdinal with (succ b); assumption. }
   assert (:0: :<=: b :-: a) as H11. { apply Empty.IsIncl. }
   apply Incl.Double. split; assumption.
 Qed.
@@ -97,7 +97,7 @@ Proposition IsIncl : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2. apply Inf.IsLowerBound.
   - intros c H3. apply Specify.Charac in H3. destruct H3 as [H3 _].
-    apply Core.IsOrdinal with (succ b). 2: assumption.
+    apply Ordinal.IsOrdinal with (succ b). 2: assumption.
     apply Succ.IsOrdinal. assumption.
   - apply Specify.Charac. split.
     + apply Succ.IsIn.
@@ -117,7 +117,7 @@ Proof.
     apply Inf.IsLargest.
     - intros c H3.
       apply Specify.Charac in H3. destruct H3 as [H3 _].
-      apply Core.IsOrdinal with (succ :N). 2: assumption.
+      apply Ordinal.IsOrdinal with (succ :N). 2: assumption.
       apply Succ.IsOrdinal, Omega.IsOrdinal.
     - apply Empty.HasElem. exists :N.
       apply Specify.Charac. split.

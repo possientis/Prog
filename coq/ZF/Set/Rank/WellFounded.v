@@ -11,7 +11,7 @@ Require Import ZF.Class.V.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Order.InitSegment.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Union.
@@ -60,7 +60,7 @@ Proof.
   assert (forall x, x :< a -> VH!(F!x) :<=: VH!b) as H11. {
     intros x H11. apply VH.InclCompat. 2: assumption.
     - apply H9. assumption.
-    - apply Core.ElemIsIncl. 1: assumption. apply H10. assumption. }
+    - apply Ordinal.ElemIsIncl. 1: assumption. apply H10. assumption. }
   assert (forall x, x :< a -> A x (inf (A x))) as H12. {
     intros x H12. apply InfOfClass.IsIn.
     - rewrite H2. intros u [H13 H14]. assumption.

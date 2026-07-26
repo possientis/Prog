@@ -2,7 +2,7 @@ Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.OrdFun.
 Require Import ZF.Set.OrdPair.

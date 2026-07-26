@@ -7,7 +7,7 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Rank.OfMinRank.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Rank.Core.
 
 
@@ -62,7 +62,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros A.
   assert (A :~: :0: \/ A :<>: :0:) as [H1|H1]. { apply LawExcludedMiddle. }
-  - rewrite WhenZero. 2: assumption. apply Core.Zero.
+  - rewrite WhenZero. 2: assumption. apply Ordinal.Zero.
   - assert (ofMinRank A <> :0:) as H2. {
       apply OfMinRank.IsNotEmpty. assumption. }
     apply Empty.HasElem in H2. destruct H2 as [y H2].
@@ -133,6 +133,6 @@ Proof.
   (* The minimal rank is below rank zero, and rank zero is zero.                *)
   intros A H1.
   assert ((minRank A) :<=: rank :0:) as H2. { apply IsLowerBound. assumption. }
-  rewrite SRC.WhenOrdinal in H2. 2: apply Core.Zero.
+  rewrite SRC.WhenOrdinal in H2. 2: apply Ordinal.Zero.
   apply Empty.WhenIncl. assumption.
 Qed.

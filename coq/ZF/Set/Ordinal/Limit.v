@@ -6,7 +6,7 @@ Require Import ZF.Class.Incl.
 Require Import ZF.Class.Inter2.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Succ.
@@ -70,7 +70,7 @@ Proof.
   intros a H1.
   assert (Ordinal a) as H2. { apply H1. }
   apply Charac in H1. 2: assumption.
-  apply Core.HasZero. 1: assumption. apply H1.
+  apply Ordinal.HasZero. 1: assumption. apply H1.
 Qed.
 
 (* 0 is not a limit ordinal.                                                    *)
@@ -96,8 +96,8 @@ Proof.
   apply Charac in H1; try assumption.
   destruct H1 as [_ H1]. assert (H4 := H2). rewrite H1 in H4.
   apply Union.Charac in H4. destruct H4 as [c [H4 H5]].
-  assert (Ordinal b) as H6. { apply Core.IsOrdinal with a; assumption. }
-  assert (Ordinal c) as H7. { apply Core.IsOrdinal with a; assumption. }
+  assert (Ordinal b) as H6. { apply Ordinal.IsOrdinal with a; assumption. }
+  assert (Ordinal c) as H7. { apply Ordinal.IsOrdinal with a; assumption. }
   apply InclElemTran with c; try assumption.
   - apply Succ.IsOrdinal. assumption.
   - apply Succ.ElemIsIncl; assumption.
@@ -127,7 +127,7 @@ Proof.
   assert (Ordinal a) as H4. { apply H1. }
   assert (Ordinal (succ b)) as H5. { apply Succ.IsOrdinal. assumption. }
   assert (succ b = a \/ succ b :< a \/ a :< succ b) as H6. {
-    apply Core.IsTotal; assumption. }
+    apply Ordinal.IsTotal; assumption. }
   destruct H6 as [H6|[H6|H6]]. 2: assumption.
   - exfalso. apply NotBoth with a. 1: assumption. right.
     exists b. split. 1: assumption. symmetry. assumption.

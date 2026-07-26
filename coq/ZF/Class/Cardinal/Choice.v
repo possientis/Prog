@@ -6,7 +6,7 @@ Require Import ZF.Set.Cardinal.Choice.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Union.
 
@@ -33,7 +33,7 @@ Proof.
         intros x H10. apply Union.Charac. exists c. split; assumption. }
       assert (c = card c) as H11. { apply WhenCardinal. assumption. }
       rewrite H11. apply SCH.InclCompat; assumption. }
-    apply SOC.InclElemTran with (card :U(a)); assumption. }
+    apply Ordinal.InclElemTran with (card :U(a)); assumption. }
   split; assumption.
 Qed.
 

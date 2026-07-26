@@ -4,7 +4,7 @@ Require Import ZF.Class.Ordinal.Sup.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
-Require Import ZF.Set.Ordinal.Core.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.NonLimit.
 Require Import ZF.Set.Ordinal.Omega.
@@ -19,7 +19,7 @@ Proposition WhenOrdinal : forall (a:U),
   Ordinal a -> sup a = :U(a).
 Proof.
   intros a H1. apply Sup.WhenOrdinals. intros x H2.
-  apply Core.IsOrdinal with a; assumption.
+  apply Ordinal.IsOrdinal with a; assumption.
 Qed.
 
 (* The supremum of an ordinal is an ordinal.                                    *)
