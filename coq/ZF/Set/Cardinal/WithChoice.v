@@ -30,10 +30,8 @@ Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 
 Module CEM := ZF.Class.Empty.
-Module CRC := ZF.Class.Relation.Choice.
 Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
-Module SMS := ZF.Set.Relation.Map.Sum.
 
 
 (* The cardinal of a set is the largest such lower bound.                       *)
@@ -256,7 +254,7 @@ Proof.
     split. 2: assumption. reflexivity. }
   (* Class choice assembles the injections into one indexing function.          *)
   assert (exists f, FunctionOn f a /\ forall x, x :< a -> A :(x,f!x):) as H4. {
-    apply CRC.FunctionOn; assumption. }
+    apply Choice.FunctionOn; assumption. }
   destruct H4 as [f [H4 H5]]. exists f. split. 1: assumption.
   intros x H6.
   assert (A :(x,f!x):) as H7. { apply H5. assumption. }
@@ -282,7 +280,7 @@ Proof.
   assert (exists f,
     FunctionOn f :U(a)  /\
     forall x, x :< :U(a) -> A :(x,f!x):) as H3. {
-      apply CRC.FunctionOn; assumption. }
+      apply Choice.FunctionOn; assumption. }
   destruct H3 as [f [H3 H4]]. exists f. split. 1: assumption.
   intros x H5. assert (A :(x,f!x):) as H6. { apply H4. assumption. }
   rewrite H1 in H6. destruct H6 as [u [v [H6 [H7 H8]]]].
@@ -365,7 +363,7 @@ Proof.
   intros a b AC.
   remember (either a b (id a) (id b)) as f eqn:H1.
   (* The either map from the disjoint sum onto the ordinary union is onto.      *)
-  assert (Onto f (a :++: b) (a :\/: b)) as H2. { rewrite H1. apply SMS.HasOnto. }
+  assert (Onto f (a :++: b) (a :\/: b)) as H2. { rewrite H1. apply Sum.HasOnto. }
   (* A surjection bounds the cardinal of its codomain by that of its domain.    *)
   apply WhenOnto with f; assumption.
 Qed.
