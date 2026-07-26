@@ -31,8 +31,6 @@ Require Import ZF.Notation.Eval.
 
 Module CRL := ZF.Class.Relation.ShiftL.
 Module CRR := ZF.Class.Relation.ShiftR.
-Module SRL := ZF.Set.Relation.ShiftL.
-Module SRR := ZF.Set.Relation.ShiftR.
 
 Proposition IsElem : forall (a b c d n:U),
   Ordinal a                                             ->
@@ -90,11 +88,11 @@ Proof.
       remember (shiftL b) as b' eqn:H16.
       remember (shiftL c) as c' eqn:H17.
       assert (OrdFunOn b' n) as H18. {
-        rewrite H16. apply SRL.OnSucc. assumption. }
+        rewrite H16. apply ShiftL.OnSucc. assumption. }
       assert (OrdFunOn c' n) as H19. {
-        rewrite H17. apply SRL.OnSucc. assumption. }
+        rewrite H17. apply ShiftL.OnSucc. assumption. }
       assert (Decreasing b') as H20. {
-        rewrite H16. apply SRL.IsDecreasing. 2: assumption. apply H4. }
+        rewrite H16. apply ShiftL.IsDecreasing. 2: assumption. apply H4. }
       assert (Ordinal b!:0:) as H21. {
         apply OrdFunOn.IsOrdinal with (succ n). 1: assumption.
         apply Succ.HasZero. assumption. }
@@ -102,14 +100,14 @@ Proof.
         intros i H22.
         assert (Ordinal i) as G9. {
         apply Ordinal.IsOrdinal with n; assumption. }
-        rewrite H17, SRL.Eval. 2: assumption.
+        rewrite H17, ShiftL.Eval. 2: assumption.
         - apply H10, Succ.ElemCompat; assumption.
         - rewrite G8. apply Succ.ElemCompat; assumption. }
       assert (forall i, i :< n -> b'!i :< b!:0:) as H23. {
         intros i H23.
         assert (Ordinal i) as G9. {
         apply Ordinal.IsOrdinal with n; assumption. }
-        rewrite H16, SRL.Eval. 2: assumption.
+        rewrite H16, ShiftL.Eval. 2: assumption.
         - apply H6.
           + rewrite G7. apply Succ.HasZero. assumption.
           + rewrite G7. apply Succ.ElemCompat; assumption.
@@ -121,7 +119,7 @@ Proof.
         intros i H24.
        assert (Ordinal i) as G9. { apply Ordinal.IsOrdinal with n; assumption. }
         rewrite
-          CRL.Eval, From.Eval, From.Eval, E, E', H16, H17, SRL.Eval, SRL.Eval;
+          CRL.Eval, From.Eval, From.Eval, E, E', H16, H17, ShiftL.Eval, ShiftL.Eval;
         try assumption. 1: reflexivity.
         - rewrite G8. apply Succ.ElemCompat; assumption.
         - rewrite G7. apply Succ.ElemCompat; assumption.
@@ -221,23 +219,23 @@ Proof.
   remember (shiftL b) as b' eqn:H12.
   remember (shiftL m) as m' eqn:H13.
   remember (fun i => a :^: b'!i :*: m'!i) as F' eqn:H14.
-  assert (OrdFunOn b' n) as G16. { rewrite H12. apply SRL.OnSucc. assumption. }
-  assert (OrdFunOn m' n) as G17. { rewrite H13. apply SRL.OnSucc. assumption. }
+  assert (OrdFunOn b' n) as G16. { rewrite H12. apply ShiftL.OnSucc. assumption. }
+  assert (OrdFunOn m' n) as G17. { rewrite H13. apply ShiftL.OnSucc. assumption. }
   assert (Decreasing b') as G18. {
-    rewrite H12. apply SRL.IsDecreasing. 2: assumption. apply H3. }
+    rewrite H12. apply ShiftL.IsDecreasing. 2: assumption. apply H3. }
   assert (:1: :< a) as G19. { apply Limit.HasOne. assumption. }
   assert (forall i, i :< n -> m'!i :< a) as G20. {
     intros i G20.
     assert (Ordinal i) as K1. { apply Ordinal.IsOrdinal with n; assumption. }
     apply Omega.IsInclLimit. 1: assumption.
-    rewrite H13, SRL.Eval.
+    rewrite H13, ShiftL.Eval.
     - apply H7. apply Succ.ElemCompat; assumption.
     - apply H4.
     - rewrite G8. apply Succ.ElemCompat; assumption. }
   assert (forall i, i :< n -> b'!i :< b!:0:) as G21. {
     intros i G21.
     assert (Ordinal i) as K1. { apply Ordinal.IsOrdinal with n; assumption. }
-    rewrite H12, SRL.Eval.
+    rewrite H12, ShiftL.Eval.
     - apply H5.
       + rewrite G7. apply Succ.HasZero. assumption.
       + rewrite G7. apply Succ.ElemCompat; assumption.
@@ -272,7 +270,7 @@ Proof.
     intros i H17.
     assert (Ordinal i) as K1. { apply Ordinal.IsOrdinal with n; assumption. }
     rewrite From.Eval, CRL.Eval, From.Eval,
-    H14, H10, H12, H13, SRL.Eval, SRL.Eval. 1: reflexivity.
+    H14, H10, H12, H13, ShiftL.Eval, ShiftL.Eval. 1: reflexivity.
     - apply H4.
     - rewrite G8. apply Succ.ElemCompat; assumption.
     - apply H3.
@@ -402,9 +400,9 @@ Proof.
       exists (succ n), c', d'.
       assert (succ n :< :N) as G9. { apply Omega.HasSucc. assumption. }
       assert (OrdFunOn c' (succ n)) as H27. {
-        rewrite H26. apply SRR.IsOrdFunOnNat; assumption. }
+        rewrite H26. apply ShiftR.IsOrdFunOnNat; assumption. }
       assert (OrdFunOn d' (succ n)) as H28. {
-        rewrite H25. apply SRR.IsOrdFunOnNat; assumption. }
+        rewrite H25. apply ShiftR.IsOrdFunOnNat; assumption. }
       assert (forall i, i :< n -> d!i :< e) as H29. {
         intros i H29.
         assert (Ordinal d!i) as G10. {
@@ -442,7 +440,7 @@ Proof.
       assert (Ordinal (succ n)) as G19. {
         apply Omega.HasOrdinals. assumption. }
       assert (Decreasing d') as H30. {
-        rewrite H25. apply SRR.IsDecreasing; try assumption;
+        rewrite H25. apply ShiftR.IsDecreasing; try assumption;
         rewrite G13;assumption. }
       assert (forall i, i :< succ n -> :0: :< c'!i) as H31. {
         intros i H31.
@@ -452,14 +450,14 @@ Proof.
         assert (i = :0: \/ :0: :< i) as H32. {
           apply Ordinal.ZeroOrElem. assumption. }
         destruct H32 as [H32|H32].
-        - rewrite H26, H32, SRR.EvalZero; assumption.
+        - rewrite H26, H32, ShiftR.EvalZero; assumption.
         - apply Omega.HasPred in H32. 2: assumption.
           destruct H32 as [j [H32 H33]].
           assert (Ordinal j) as G22. { apply Omega.HasOrdinals. assumption. }
           assert (j :< n) as G24. {
             apply Succ.ElemCompatRev; try assumption.
             rewrite <- H33. assumption. }
-          rewrite H26, H33, SRR.EvalSucc; try assumption.
+          rewrite H26, H33, ShiftR.EvalSucc; try assumption.
           + apply H22. assumption.
           + rewrite G12. assumption. }
       assert (forall i, i :< succ n -> c'!i :< a) as H32. {
@@ -470,14 +468,14 @@ Proof.
         assert (i = :0: \/ :0: :< i) as H33. {
           apply Ordinal.ZeroOrElem. assumption. }
         destruct H33 as [H33|H33].
-        - rewrite H26, H33, SRR.EvalZero; assumption.
+        - rewrite H26, H33, ShiftR.EvalZero; assumption.
         - apply Omega.HasPred in H33. 2: assumption.
           destruct H33 as [j [H33 H34]].
           assert (Ordinal j) as G22. { apply Omega.HasOrdinals. assumption. }
           assert (j :< n) as G24. {
             apply Succ.ElemCompatRev; try assumption.
             rewrite <- H34. assumption. }
-          rewrite H26, H34, SRR.EvalSucc; try assumption.
+          rewrite H26, H34, ShiftR.EvalSucc; try assumption.
           + apply H23. assumption.
           + rewrite G12. assumption. }
       split. 1: assumption. split. 1: assumption. split. 1: assumption.
@@ -494,7 +492,7 @@ Proof.
         assert (i = :0: \/ :0: :< i) as H37. {
           apply Ordinal.ZeroOrElem. assumption. }
         destruct H37 as [H37|H37].
-        - rewrite H37, SRR.EvalZero, SRR.EvalZero, CRR.EvalZero; try assumption.
+        - rewrite H37, ShiftR.EvalZero, ShiftR.EvalZero, CRR.EvalZero; try assumption.
           1: reflexivity. apply From.IsFunctional.
         - apply Omega.HasPred in H37. 2: assumption.
           destruct H37 as [j [H37 H38]].
@@ -504,7 +502,7 @@ Proof.
             rewrite <- H38. assumption. }
           assert (j :< domain c) as G25. { rewrite G12. assumption. }
           assert (j :< domain d) as G26. { rewrite G13. assumption. }
-          rewrite H38, SRR.EvalSucc, SRR.EvalSucc, CRR.EvalSucc, H33, From.Eval;
+          rewrite H38, ShiftR.EvalSucc, ShiftR.EvalSucc, CRR.EvalSucc, H33, From.Eval;
           try assumption. 1: reflexivity.
           + apply From.IsFunctional.
           + apply From.DomainOf. }
@@ -772,10 +770,10 @@ Proof.
             - intros i H18. apply From.DomainOf.
             - intros i H18. rewrite From.Eval. apply G6. assumption. }
         clear H15.
-        remember (SRL.shiftL c) as c' eqn:H19.
-        remember (SRL.shiftL d) as d' eqn:H20.
-        remember (SRL.shiftL e) as e' eqn:H21.
-        remember (SRL.shiftL f) as f' eqn:H22.
+        remember (ShiftL.shiftL c) as c' eqn:H19.
+        remember (ShiftL.shiftL d) as d' eqn:H20.
+        remember (ShiftL.shiftL e) as e' eqn:H21.
+        remember (ShiftL.shiftL f) as f' eqn:H22.
         remember (fun i => a :^: d'!i :*: c'!i) as F1' eqn:E1'.
         remember (fun i => a :^: f'!i :*: e'!i) as F2' eqn:E2'.
         assert (:sum:_{n} (CRL.shiftL :[F1]:) = :sum:_{n} :[F1']:) as H23. {
@@ -783,7 +781,7 @@ Proof.
           assert (Ordinal i) as G16. {
           apply Ordinal.IsOrdinal with n; assumption. }
           rewrite CRL.Eval, From.Eval, From.Eval, E1, E1', H19, H20,
-            SRL.Eval, SRL.Eval.
+            ShiftL.Eval, ShiftL.Eval.
           - reflexivity.
           - apply G7.
           - rewrite G11. apply Succ.ElemCompat; assumption.
@@ -796,7 +794,7 @@ Proof.
           assert (Ordinal i) as G16. {
           apply Ordinal.IsOrdinal with k; assumption. }
           rewrite CRL.Eval, From.Eval, From.Eval, E2, E2', H21, H22,
-            SRL.Eval, SRL.Eval.
+            ShiftL.Eval, ShiftL.Eval.
           - reflexivity.
           - apply G9.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption.
@@ -812,36 +810,36 @@ Proof.
           apply OrdFunOn.IsOrdinal with m. 1: assumption.
           rewrite H17. apply Succ.HasZero. assumption. }
         assert (OrdFunOn c' n) as G18. {
-          rewrite H19. apply SRL.OnSucc. assumption. }
+          rewrite H19. apply ShiftL.OnSucc. assumption. }
         assert (OrdFunOn d' n) as G19. {
-          rewrite H20. apply SRL.OnSucc. assumption. }
+          rewrite H20. apply ShiftL.OnSucc. assumption. }
         assert (OrdFunOn e' k) as G20. {
-          rewrite H21. apply SRL.OnSucc. rewrite <- H17. assumption. }
+          rewrite H21. apply ShiftL.OnSucc. rewrite <- H17. assumption. }
         assert (OrdFunOn f' k) as G21. {
-          rewrite H22. apply SRL.OnSucc. rewrite <- H17. assumption. }
+          rewrite H22. apply ShiftL.OnSucc. rewrite <- H17. assumption. }
         assert (Decreasing d') as G22. {
-          rewrite H20. apply SRL.IsDecreasing. 2: assumption. apply H6. }
+          rewrite H20. apply ShiftL.IsDecreasing. 2: assumption. apply H6. }
         assert (Decreasing f') as G23. {
-          rewrite H22. apply SRL.IsDecreasing. 2: assumption. apply H8. }
+          rewrite H22. apply ShiftL.IsDecreasing. 2: assumption. apply H8. }
         assert (forall i, i :< n -> c'!i :< a) as G24. {
           rewrite H19. intros i G24.
           assert (Ordinal i) as G25. {
           apply Ordinal.IsOrdinal with n; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply H12. apply Succ.ElemCompat; assumption.
           - rewrite G11. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> e'!i :< a) as G25. {
           rewrite H21. intros i G25.
           assert (Ordinal i) as G26. {
           apply Ordinal.IsOrdinal with k; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply H14. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< n -> d'!i :< d!:0:) as G26. {
           rewrite H20. intros i G26.
           assert (Ordinal i) as G27. {
           apply Ordinal.IsOrdinal with n; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply H9.
             + rewrite G12. apply Succ.HasZero. assumption.
             + rewrite G12. apply Succ.ElemCompat; assumption.
@@ -851,7 +849,7 @@ Proof.
           rewrite H22. intros i G27.
           assert (Ordinal i) as G28. {
           apply Ordinal.IsOrdinal with k; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply H10.
             + rewrite G14, H17. apply Succ.HasZero. assumption.
             + rewrite G14, H17. apply Succ.ElemCompat; assumption.
@@ -873,28 +871,28 @@ Proof.
           rewrite H19. intros i G33.
           assert (Ordinal i) as G34. {
           apply Ordinal.IsOrdinal with n; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply G29. apply Succ.ElemCompat; assumption.
           - rewrite G11. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< n -> Ordinal d'!i) as G34. {
           rewrite H20. intros i G34.
           assert (Ordinal i) as G35. {
           apply Ordinal.IsOrdinal with n; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply G31. apply Succ.ElemCompat; assumption.
           - rewrite G12. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> Ordinal e'!i) as G35. {
           rewrite H21. intros i G35.
           assert (Ordinal i) as G36. {
           apply Ordinal.IsOrdinal with k; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply G30. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> Ordinal f'!i) as G36. {
           rewrite H22. intros i G36.
           assert (Ordinal i) as G37. {
           apply Ordinal.IsOrdinal with k; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply G32. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G14, H17. apply Succ.ElemCompat; assumption. }
         assert (Ordinal (:sum:_{n} :[F1']:)) as G37. {
@@ -975,14 +973,14 @@ Proof.
           rewrite H19. intros i G41.
           assert (Ordinal i) as G42. {
           apply Ordinal.IsOrdinal with n; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply H11. apply Succ.ElemCompat; assumption.
           - rewrite G11. apply Succ.ElemCompat; assumption. }
         assert (forall i, i :< k -> :0: :< e'!i) as G42. {
           rewrite H21. intros i G42.
           assert (Ordinal i) as G43. {
           apply Ordinal.IsOrdinal with k; assumption. }
-          rewrite SRL.Eval. 2: assumption.
+          rewrite ShiftL.Eval. 2: assumption.
           - apply H13. rewrite H17. apply Succ.ElemCompat; assumption.
           - rewrite G13, H17. apply Succ.ElemCompat; assumption. }
         assert (n = k /\ c' = e' /\ d' = f') as H32. {
@@ -1002,14 +1000,14 @@ Proof.
         destruct H32 as [H32 [H33 H34]].
         assert (succ n = m) as H35. { rewrite H32. symmetry. assumption. }
         assert (c = e) as H36. {
-          apply SRL.IsEqual with n.
+          apply ShiftL.IsEqual with n.
           - apply H3.
           - apply H5.
           - rewrite <- H35 in H7. apply H7.
           - apply H30.
           - rewrite H19, H21 in H33. apply H33. }
         assert (d = f) as H37. {
-          apply SRL.IsEqual with n.
+          apply ShiftL.IsEqual with n.
           - apply H3.
           - apply H6.
           - rewrite <- H35 in H8. apply H8.
