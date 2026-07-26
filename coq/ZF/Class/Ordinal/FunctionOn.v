@@ -30,8 +30,7 @@ Module CIN := ZF.Class.Incl.
 Module CRF := ZF.Class.Relation.Function.
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRO := ZF.Class.Relation.OneToOne.
-Module SFO := ZF.Set.Relation.FunctionOn.
-Module SRO := ZF.Set.Relation.OneToOne.
+
 
 (* An ordinal function choosing fresh values from A implies A is a proper class.*)
 Proposition WhenFreshValue : forall (F A:Class),
@@ -81,7 +80,7 @@ Proposition WhenFreshAndSmall : forall (F A:Class),
     On a                                                                  /\
     (forall b, b :< a -> (A :\: F:[b]:) :<>: :0:)                 /\
     toClass F:[a]: :~: A                                                  /\
-    SRO.OneToOne (F :|: a).
+    OneToOne (F :|: a).
 Proof.
   intros F A H1 H2 H3.
   assert (exists a, On a /\ A :\: F:[a]: :~: :0:) as H4. {
@@ -116,14 +115,14 @@ Proof.
   assert (A :<=: toClass F:[a]:) as H15. { apply DiffBySet.WhenZero. assumption. }
   assert (toClass F:[a]: :~: A) as H16. {
     apply CIN.Double. split; assumption. }
-  assert (SFO.FunctionOn (F:|:a) a) as H17. {
+  assert (FunctionOn (F:|:a) a) as H17. {
     split.
     - apply RestrictOfClass.IsFunction, H1.
     - rewrite RestrictOfClass.DomainOf. 2: apply H1.
       apply Specify.IsA. intros b H17. apply H1.
       apply Ordinal.IsOrdinal with a; assumption. }
-  assert (SRO.OneToOne (F:|:a)) as H18. {
-    apply SFO.IsOneToOne with a. 1: assumption.
+  assert (OneToOne (F:|:a)) as H18. {
+    apply FunctionOn.IsOneToOne with a. 1: assumption.
     intros b c H18 H19 H20.
     assert (On b) as H21. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (On c) as H22. { apply Ordinal.IsOrdinal with a; assumption. }

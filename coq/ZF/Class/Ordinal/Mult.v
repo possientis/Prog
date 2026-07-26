@@ -16,7 +16,7 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module SFO := ZF.Set.Relation.FunctionOn.
+
 
 (* The function class (a * .) when a is an ordinal.                             *)
 Definition Mult (a:U) : Class := Recursion :[fun b => b :+: a]: :0:.
@@ -66,7 +66,7 @@ Qed.
 
 (* The restriction of Mult a to b is a function on b for every ordinal b.       *)
 Proposition Restrict : forall (a b:U), On b ->
-  SFO.FunctionOn ((Mult a) :|: b) b.
+  FunctionOn ((Mult a) :|: b) b.
 Proof.
   intros a b. apply Recursion2.Restrict.
 Qed.

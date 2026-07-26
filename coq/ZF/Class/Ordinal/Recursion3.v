@@ -13,13 +13,14 @@ Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 
 Module COR := ZF.Class.Ordinal.Recursion.
-Module SFO := ZF.Set.Relation.FunctionOn.
+Module CFO := ZF.Class.Relation.FunctionOn.
 
 (* Transfinite recursion class associated with F and a. In other words, the     *)
 (* unique function class G defined on On by the equations:                      *)
@@ -31,7 +32,7 @@ Definition Recursion (F:Class) (a:U) : Class := COR.Recursion (Oracle F a).
 
 (* The transfinite recursion class is a function class defined on the ordinals. *)
 Proposition IsFunctionOn : forall (F:Class) (a:U),
-  FunctionOn (Recursion F a) On.
+  CFO.FunctionOn (Recursion F a) On.
 Proof.
   intros F a. apply COR.IsFunctionOn.
 Qed.
@@ -75,7 +76,7 @@ Qed.
 (* The transfinite recursion class is the unique function class defined on On   *)
 (* which satisfies the three equations (i), (ii) and (iii).                     *)
 Proposition IsUnique : forall (F G:Class) (a:U),
-  FunctionOn G On                                   ->
+  CFO.FunctionOn G On                                   ->
   G!:0: = a                                         ->  (* (i)                  *)
   (forall b, Ordinal b -> G!(succ b) = F!:(b,G!b):) ->  (* (ii)                 *)
   (forall b, Limit b   -> G!b = :\/:_{b} G)         ->  (* (iii)                *)
@@ -104,7 +105,7 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (F:Class) (a b:U), On b ->
-  SFO.FunctionOn (Recursion F a :|: b) b.
+  FunctionOn (Recursion F a :|: b) b.
 Proof.
   intros F a b. apply COR.Restrict.
 Qed.

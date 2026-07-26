@@ -17,7 +17,7 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
-Module SFO := ZF.Set.Relation.FunctionOn.
+
 
 (* The function class (a + .) when a is an ordinal.                             *)
 Definition Plus (a:U) : Class := Recursion :[fun b => succ b]: a.
@@ -64,7 +64,7 @@ Proof.
 Qed.
 
 Proposition Restrict : forall (a b:U), On b ->
-  SFO.FunctionOn ((Plus a) :|: b) b.
+  FunctionOn ((Plus a) :|: b) b.
 Proof.
   intros a b. apply Recursion2.Restrict.
 Qed.

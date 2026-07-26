@@ -13,17 +13,18 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.UnionGenOfClass.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 
 Module COR := ZF.Class.Ordinal.Recursion3.
-Module FR2 := ZF.Class.Relation.Fun.From2.
-Module SFO := ZF.Set.Relation.FunctionOn.
+Module CFO := ZF.Class.Relation.FunctionOn.
+Module CRF := ZF.Class.Relation.Fun.From2.
 Module SUG := ZF.Set.Ordinal.UnionGenOfClass.
 
-Definition Oracle (F:Class) : Class := FR2.from2 (fun x y => y :+: F!x).
+Definition Oracle (F:Class) : Class := CRF.from2 (fun x y => y :+: F!x).
 
 (* The unique function class G defined on On by the equations:                  *)
 (* (i)    G(0)      = 0                                                         *)
@@ -33,7 +34,7 @@ Definition sum (F:Class) : Class := COR.Recursion (Oracle F) :0:.
 
 (* sum F is a function class defined on the class of ordinals.                  *)
 Proposition IsFunctionOn : forall (F:Class),
-  FunctionOn (sum F) On.
+  CFO.FunctionOn (sum F) On.
 Proof.
   intros F. apply COR.IsFunctionOn.
 Qed.
@@ -52,7 +53,7 @@ Proof.
   intros F b H1.
   assert ((sum F)!(succ b) = (Oracle F)!:(b,(sum F)!b):) as H2. {
     apply COR.WhenSucc. assumption. }
-  unfold Oracle in H2. rewrite FR2.Eval in H2. assumption.
+  unfold Oracle in H2. rewrite CRF.Eval in H2. assumption.
 Qed.
 
 (* sum F at a limit ordinal b is the union of sum F restricted to b.            *)
@@ -64,19 +65,19 @@ Qed.
 
 (* sum F is the unique function satisfying the three recursion equations.       *)
 Proposition IsUnique : forall (F G:Class) (a:U),
-  FunctionOn G On                                   ->
+  CFO.FunctionOn G On                                   ->
   G!:0: = :0:                                       ->  (* (i)                  *)
   (forall b, Ordinal b -> G!(succ b) = G!b :+: F!b) ->  (* (ii)                 *)
   (forall b, Limit b   -> G!b = :\/:_{b} G)         ->  (* (iii)                *)
   G :~: sum F.
 Proof.
   intros F G a H1 H2 H3. apply COR.IsUnique; try assumption.
-  intros b H4. unfold Oracle. rewrite FR2.Eval. apply H3. assumption.
+  intros b H4. unfold Oracle. rewrite CRF.Eval. apply H3. assumption.
 Qed.
 
 (* The restriction of sum F to b is a function on b for every ordinal b.        *)
 Proposition Restrict : forall (F:Class) (b:U), On b ->
-  SFO.FunctionOn (sum F :|: b) b.
+  FunctionOn (sum F :|: b) b.
 Proof.
   intros F. apply COR.Restrict.
 Qed.
