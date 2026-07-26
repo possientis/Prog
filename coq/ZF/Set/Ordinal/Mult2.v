@@ -65,11 +65,15 @@ Proposition leCharac2 : forall (a b c d c' d':U),
     d' :< a                           /\
     (c :< c' \/ (c = c' /\ d :< d')).
 Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d c' d'. split; intros H1.
-  - apply SOR.Charac2 in H1. destruct H1 as [H1 [H2 H3]].
-    apply SPR.Charac2 in H1. destruct H1 as [H1 H4].
+  - assert (:(c,d): :< b :x: a /\ :(c',d'): :< b :x: a /\
+      Lex :(:(c,d):, :(c',d'):):) as H2.
+    { apply SOR.Charac2. apply H1. }
+    destruct H2 as [H2 [H3 H4]].
     apply SPR.Charac2 in H2. destruct H2 as [H2 H5].
-    apply Lex.Charac4 in H3. split. 1: assumption. split. 1: assumption.
+    apply SPR.Charac2 in H3. destruct H3 as [H3 H6].
+    apply Lex.Charac4 in H4. split. 1: assumption. split. 1: assumption.
     split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 [H3 [H4 H5]]]].
     apply SOR.Charac2. split.
@@ -253,6 +257,7 @@ Qed.
 Proposition IsIsom : forall (a b:U), Ordinal a -> Ordinal b ->
   Isom (f a b) (le a b) (r a b) (b :x: a) (a :*: b).
 Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2. split. 1: { apply IsBij; assumption. }
   intros x y H3 H4.
   apply SPR.Charac in H3. apply SPR.Charac in H4.
@@ -282,8 +287,11 @@ Proof.
             apply Succ.ElemIsIncl; assumption.
           - apply Plus.IsInclR; assumption. }
       * subst. apply Plus.ElemCompatR; assumption.
-  - rewrite Eval, Eval in H9; try assumption. apply E.Charac2 in H9.
-    destruct H9 as [H9 [H10 H11]].
+  - rewrite Eval, Eval in H9; try assumption.
+    assert (a :*: c :+: d :< a :*: b /\
+      a :*: c' :+: d' :< a :*: b /\ a :*: c :+: d :< a :*: c' :+: d') as H10.
+    { apply E.Charac2. apply H9. }
+    destruct H10 as [H10 [H11 H15]].
     apply leCharac2. split. 1: assumption. split. 1: assumption.
     split. 1: assumption. split. 1: assumption.
     assert (c = c' \/ c :< c' \/ c' :< c) as H12. {
