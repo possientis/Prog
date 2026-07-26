@@ -29,9 +29,7 @@ Require Import ZF.Set.UnionGen.
 Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
-Module SRC := ZF.Set.Rank.Core.
 Module SOG := ZF.Set.Ordinal.UnionGen.
-Module SUG := ZF.Set.UnionGen.
 
 
 Proposition HasBound : forall (A:Class) (a:U),
@@ -56,11 +54,11 @@ Proof.
     rewrite H4, From.Eval, H3, H2. 2: assumption.
     apply MinRank.IsAttained, CEM.HasElem. assumption. }
   destruct H11 as [y [H11 H12]]. exists y. split. 1: assumption.
-  rewrite H9. apply SRC.IsIn. 1: assumption. rewrite <- H12, H7.
+  rewrite H9. apply Core.IsIn. 1: assumption. rewrite <- H12, H7.
   apply Succ.InclIsElem.
   - apply H6. assumption.
   - rewrite <- H7. assumption.
-  - apply SUG.IsIncl. assumption.
+  - apply UnionGen.IsIncl. assumption.
 Qed.
 
 Proposition FunctionOn : forall (A:Class) (a:U), Choice ->

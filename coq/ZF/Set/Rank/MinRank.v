@@ -12,7 +12,7 @@ Require Import ZF.Set.Rank.Core.
 
 
 Module CMR := ZF.Class.Rank.MinRank.
-Module SRC := ZF.Set.Rank.Core.
+
 
 (* The minimal rank of the elements of A.                                       *)
 Definition minRank (A:Class) : U := fromClass (CMR.minRank A) (CMR.IsSmall A).
@@ -66,7 +66,7 @@ Proof.
   - assert (ofMinRank A <> :0:) as H2. {
       apply OfMinRank.IsNotEmpty. assumption. }
     apply Empty.HasElem in H2. destruct H2 as [y H2].
-    rewrite (Equal A y). 2: assumption. apply SRC.IsOrdinal.
+    rewrite (Equal A y). 2: assumption. apply Core.IsOrdinal.
 Qed.
 
 (* A non-empty class has an element whose rank is the minimal rank.             *)
@@ -133,6 +133,6 @@ Proof.
   (* The minimal rank is below rank zero, and rank zero is zero.                *)
   intros A H1.
   assert ((minRank A) :<=: rank :0:) as H2. { apply IsLowerBound. assumption. }
-  rewrite SRC.WhenOrdinal in H2. 2: apply Ordinal.Zero.
+  rewrite Core.WhenOrdinal in H2. 2: apply Ordinal.Zero.
   apply Empty.WhenIncl. assumption.
 Qed.

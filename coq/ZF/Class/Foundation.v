@@ -9,7 +9,7 @@ Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Rank.Core.
 
 Module CEM := ZF.Class.Empty.
-Module SRC := ZF.Set.Rank.Core.
+
 
 (* Every non-empty class has an element disjoint from the class itself.         *)
 Proposition Foundation : forall (A:Class),
@@ -23,7 +23,7 @@ Proof.
     split. 1: assumption. reflexivity. }
   assert (B :<=: Ordinal) as H4. {
     intros b H4. rewrite H2 in H4. destruct H4 as [a [H4 H5]].
-    subst. apply SRC.IsOrdinal. }
+    subst. apply Core.IsOrdinal. }
   assert (exists b, Ordinal b /\ B b /\ forall c, B c -> b :<=: c) as H6. {
     apply Ordinal.HasMinimal; assumption. }
   destruct H6 as [b [H6 [H7 H8]]]. rewrite H2 in H7. destruct H7 as [a [H7 H9]].
@@ -34,7 +34,7 @@ Proof.
       assert (rank a :<=: rank c) as H12. {
         rewrite <- H9. apply H8. rewrite H2. exists c. split. 1: assumption.
         reflexivity. }
-      assert (rank c :< rank a) as H13. { apply SRC.ElemCompat. assumption. }
+      assert (rank c :< rank a) as H13. { apply Core.ElemCompat. assumption. }
       assert (rank c :< rank c) as H14. { apply H12. assumption. }
       revert H14. apply Foundation.NoLoop1.
     - contradiction. }
