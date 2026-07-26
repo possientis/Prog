@@ -18,7 +18,6 @@ Require Import ZF.Set.UnionGenOfClass.
 
 Module CEM := ZF.Class.Empty.
 Module SEM := ZF.Set.Empty.
-Module SOS := ZF.Set.Ordinal.Sup.
 Module SUG := ZF.Set.UnionGenOfClass.
 
 (* The class of infinite cardinal numbers.                                      *)
@@ -121,7 +120,7 @@ Proof.
     assert (:N :<=: b) as H5. { apply IsIncl. assumption. }
     assert (toClass a :<=: Ordinal) as H6. {
       intros c H6. apply IsOrdinal, H1. assumption. }
-    assert (b :<=: sup a) as H7. { apply SOS.IsUpperBound; assumption. }
+    assert (b :<=: sup a) as H7. { apply Sup.IsUpperBound; assumption. }
     assert (:N :<=: sup a) as H8. { apply Incl.Tran with b; assumption. }
     intros H9.
     assert (sup a :< sup a) as H10. { apply H8. assumption. }

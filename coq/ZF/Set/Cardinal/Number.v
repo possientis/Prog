@@ -46,7 +46,6 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module SOO := ZF.Set.Ordinal.Onto.
-Module SOS := ZF.Set.Ordinal.Sup.
 Module SOU := ZF.Set.Ordinal.UnionGenOfClass.
 Module SFI := ZF.Set.Relation.Fun.IfThenElse.
 Module SRD := ZF.Set.Relation.Domain.
@@ -300,19 +299,19 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a H1. apply Charac. split.
   - (* A supremum of ordinals is an ordinal.                                    *)
-    apply SOS.IsOrdinal.
+    apply Sup.IsOrdinal.
   - intros b H2 H3.
     (* It suffices to show that every cardinal in a is bounded by b.            *)
-    apply SOS.IsSmallest.
+    apply Sup.IsSmallest.
     + intros c H4. apply CardIsOrd, H1. assumption.
     + intros c H4.
       assert (Cardinal c) as H5. { apply H1. assumption. }
       assert (Ordinal c) as H6. { apply CardIsOrd. assumption. }
       assert (c :<=: sup a) as H7. {
-        apply SOS.IsUpperBound. 2: assumption. intros d H7.
+        apply Sup.IsUpperBound. 2: assumption. intros d H7.
         apply CardIsOrd, H1. assumption. }
       assert (WellOrderable (sup a)) as H8. {
-        apply WellOrderable.WhenOrdinal. apply SOS.IsOrdinal. }
+        apply WellOrderable.WhenOrdinal. apply Sup.IsOrdinal. }
       assert (card c :<=: card (sup a)) as H9. {
         apply InclCompat; assumption. }
       assert (c = card c) as H10. { apply WhenCardinal. assumption. }
