@@ -16,7 +16,6 @@ Require Import ZF.Set.Ordinal.Sup.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
-Module CCC := ZF.Class.Cardinal.Core.
 Module CEM := ZF.Class.Empty.
 Module SEM := ZF.Set.Empty.
 Module SOS := ZF.Set.Ordinal.Sup.
@@ -28,7 +27,7 @@ Definition InfiniteCard : Class := Cardinal :\: :N.
 (* The class of infinite cardinal numbers is a proper class.                    *)
 Proposition IsProper : Proper InfiniteCard.
 Proof.
-  apply DiffBySet.IsProper, CCC.IsProper.
+  apply DiffBySet.IsProper, Core.IsProper.
 Qed.
 
 Proposition IsCardinal : forall (a:U), InfiniteCard a ->
