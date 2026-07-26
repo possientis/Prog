@@ -33,9 +33,6 @@ Require Import ZF.Set.UnionGenOfClass.
 Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
-Module SOM := ZF.Set.Ordinal.Monotone.
-Module SOO := ZF.Set.Ordinal.Order.
-Module SOE := ZF.Set.Ordinal.Order.E.
 
 
 (* Predicate expressing the fact that a is cofinal with b.                      *)
@@ -74,7 +71,7 @@ Proof.
     subst. split.
     + apply Empty.IsIncl.
     + exists :0:.
-      assert (Monotone :0:) as H1. { apply SOM.WhenZero. reflexivity. }
+      assert (Monotone :0:) as H1. { apply Monotone.WhenZero. reflexivity. }
       assert (Fun :0: :0: :0:) as H2. { apply Fun.WhenZero. reflexivity. }
       split. 1: assumption. split. 1: assumption.
       intros c H3. exfalso. apply Empty.Charac in H3. contradiction.
@@ -95,7 +92,7 @@ Proof.
     Monotone f                /\
     Fun f (succ b') (succ a') /\
     f!b' = a') as H7. {
-      apply SOM.HasSuccFun; assumption. }
+      apply Monotone.HasSuccFun; assumption. }
   destruct H7 as [f [H7 [H8 H9]]]. split. 1: assumption.
   exists f. split. 1: assumption. split. 1: assumption.
   intros c H10.
@@ -147,7 +144,7 @@ Proof.
         - apply Ordinal.ElemIsIncl; assumption. }
       assert (domain f = succ b') as H16. { apply H8. }
       assert (f!d :<=: f!b') as H17. {
-        apply SOM.Relax; try assumption.
+        apply Monotone.Relax; try assumption.
         - rewrite H16. assumption.
         - rewrite H16. apply Succ.IsIn.
       }
@@ -232,7 +229,7 @@ Proof.
   intros a H1.
   (* The identity on a is the cofinal map from a into itself.                   *)
   split. 1: apply Incl.Refl.
-  exists (id a). split. 1: apply SOM.WhenId; assumption.
+  exists (id a). split. 1: apply Monotone.WhenId; assumption.
   split. 1: apply Id.IsFun.
   (* Each element of a is bounded by its own identity value.                    *)
   intros c H2. exists c. split. 1: assumption.
@@ -257,7 +254,7 @@ Proof.
   split. 1: assumption.
   assert (Fun (f :.: g) c a) as H13. { apply Fun.Compose with b; assumption. }
   exists (f :.: g). split.
-  - apply SOM.Compose with c b a; assumption.
+  - apply Monotone.Compose with c b a; assumption.
   - split. 1: assumption.
     intros x H14.
     (* First bound x by a value of f, then bound that index by a value of g.    *)
@@ -266,7 +263,7 @@ Proof.
     assert (exists z, z :< c /\ y :<=: g!z) as H17. { apply H11. assumption. }
     destruct H17 as [z [H17 H18]]. exists z. split. 1: assumption.
     assert (f!y :<=: f!(g!z)) as H19. {
-      apply SOM.Relax; try assumption.
+      apply Monotone.Relax; try assumption.
       - assert (domain f = b) as H19. { apply H7. } rewrite H19. assumption.
       - assert (domain f = b) as H19. { apply H7. } rewrite H19.
         apply Fun.IsInRange with c; assumption. }
@@ -292,23 +289,23 @@ Proof.
   remember {{ d :< b | A }} as r eqn:Hr.
   assert (r :<=: b) as H6. { rewrite Hr. apply Specify.IsInclL. }
   assert (exists e h, Ordinal e /\ e :<=: b /\ Isom h (E e) (E r) e r) as H7. {
-    apply SOO.OrdinalSubset; assumption. }
+    apply Order.OrdinalSubset; assumption. }
   destruct H7 as [e [h [H7 [H8 H9]]]].
   assert (Bij h e r) as H10. { apply H9. }
   assert (Fun h e r) as H11. { apply Bij.IsFun. assumption. }
   assert (Fun h e b) as H12. { apply Fun.InclCompatR with r; assumption. }
   assert (Fun (f :.: h) e a) as H13. { apply Fun.Compose with b; assumption. }
   assert (Monotone (f :.: h)) as H14. {
-    apply SOM.FromFun with e a; try assumption.
+    apply Monotone.FromFun with e a; try assumption.
     intros x y H14 H15 H16.
     (* The isomorphism lists record indices in increasing order.                *)
     rewrite Fun.ComposeEval with h f e b a x; try assumption.
     rewrite Fun.ComposeEval with h f e b a y; try assumption.
     destruct H9 as [_ H9].
     assert (:( h!x , h!y ): :< E r) as H17. {
-      apply H9; try assumption. apply SOE.Charac2. split. 1: assumption.
+      apply H9; try assumption. apply E.Charac2. split. 1: assumption.
       split; assumption. }
-    apply SOE.Charac2 in H17. destruct H17 as [H17 [H18 H19]].
+    apply E.Charac2 in H17. destruct H17 as [H17 [H18 H19]].
     rewrite Hr in H18. apply Specify.Charac in H18.
     destruct H18 as [_ H18]. rewrite HA in H18. apply H18. assumption. }
   assert (forall c, c :< a -> exists d, d :< e /\ c :<=: (f :.: h)!d) as H15. {
@@ -482,9 +479,9 @@ Proof.
   - (* Every index lies below its aleph value.                                  *)
     apply Aleph.IsIncl. assumption.
   - exists f.
-    assert (SOM.Monotone f) as H3. {
+    assert (Monotone.Monotone f) as H3. {
       rewrite Hf.
-      apply SOM.ClassRestrict. 1: assumption.
+      apply Monotone.ClassRestrict. 1: assumption.
       - apply IsMonotone.
       - intros x H3. apply Aleph.DomainOf.
         apply (Ordinal.IsOrdinal a); assumption. }
