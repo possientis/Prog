@@ -350,7 +350,10 @@ Proof.
     + apply Plus.IsInclR; assumption.
     + split. 2: assumption. apply Plus.IsInclR; assumption.
   - rewrite Eval0, Eval0 in H9; try assumption.
-    apply E.Charac2 in H9. destruct H9 as [H9 [H10 H11]].
+    assert (c :< a :+: b /\ d :< a :+: b /\ c :< d) as H12. {
+      apply E.Charac2. apply H9. }
+    clear H9.
+    destruct H12 as [H9 [H10 H11]].
     apply lex00Charac2. split. 1: assumption. split; assumption.
   - apply lex01Charac2 in H9. destruct H9 as [H9 H10].
     rewrite Eval0, Eval1; try assumption. apply E.Charac2. split.
@@ -361,8 +364,11 @@ Proof.
       * apply Plus.IsInclR; assumption.
   - apply lex01Charac2. split; assumption.
   - apply lex10Charac2 in H9. contradiction.
-  - exfalso. rewrite Eval0, Eval1 in H9; try assumption. apply E.Charac2 in H9.
-    destruct H9 as [H9 [H10 H11]].
+  - exfalso. rewrite Eval0, Eval1 in H9; try assumption.
+    assert (a :+: c :< a :+: b /\ d :< a :+: b /\ a :+: c :< d) as H12. {
+      apply E.Charac2. apply H9. }
+    clear H9.
+    destruct H12 as [H9 [H10 H11]].
     assert (Ordinal c) as H12. { apply Ordinal.IsOrdinal with b; assumption. }
     assert (Ordinal d) as H13. { apply Ordinal.IsOrdinal with a; assumption. }
     assert (Ordinal (a :+: c)) as H14. { apply Plus.IsOrdinal; assumption. }
@@ -377,8 +383,11 @@ Proof.
     split.
     + apply Plus.ElemCompatR; assumption.
     + split; apply Plus.ElemCompatR; assumption.
-  - rewrite Eval1, Eval1 in H9; try assumption. apply E.Charac2 in H9.
-    destruct H9 as [H9 [H10 H11]]. apply lex11Charac2.
+  - rewrite Eval1, Eval1 in H9; try assumption.
+    assert (a :+: c :< a :+: b /\ a :+: d :< a :+: b /\
+      a :+: c :< a :+: d) as H12. { apply E.Charac2. apply H9. }
+    clear H9.
+    destruct H12 as [H9 [H10 H11]]. apply lex11Charac2.
     assert (Ordinal c) as H12. { apply Ordinal.IsOrdinal with b; assumption. }
     assert (Ordinal d) as H13. { apply Ordinal.IsOrdinal with b; assumption. }
     split. 1: assumption. split. 1: assumption.
