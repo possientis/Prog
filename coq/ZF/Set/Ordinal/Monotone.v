@@ -21,8 +21,6 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Module COI := ZF.Class.Order.Isom.
 Module CRD := ZF.Class.Relation.Domain.
 Module COM := ZF.Class.Ordinal.Monotone.
-Module SFI := ZF.Set.Relation.Fun.IfThenElse.
-Module SOE := ZF.Set.Ordinal.Order.E.
 
 
 (* A strictly monotone ordinal function.                                        *)
@@ -194,13 +192,13 @@ Proposition HasSuccFun : forall (a b:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b H1 H2 H3.
-  remember (SFI.ifThenElse (succ a) (fun x => x :< a)
+  remember (ifThenElse (succ a) (fun x => x :< a)
     (fun x => x) (fun _ => b)) as f eqn:H4.
   exists f.
   assert (Ordinal (succ a)) as H5. { apply Succ.IsOrdinal. assumption. }
   assert (Ordinal (succ b)) as H6. { apply Succ.IsOrdinal. assumption. }
   assert (Fun f (succ a) (succ b)) as H7. {
-    rewrite H4. apply SFI.IsFun. split.
+    rewrite H4. apply IfThenElse.IsFun. split.
     - (* Points below a remain below succ b.                                    *)
       intros x H7 H8. apply Succ.Charac. right. apply H3. assumption.
     - (* The remaining point is sent to the top of succ b.                      *)
@@ -214,23 +212,23 @@ Proof.
       subst y.
       assert (x :< a) as H9. { assumption. }
       assert (~ a :< a) as H11. { apply Foundation.NoLoop1. }
-      assert (f!x = x) as H12. { rewrite H4. apply SFI.Eval1; assumption. }
+      assert (f!x = x) as H12. { rewrite H4. apply IfThenElse.Eval1; assumption. }
       assert (f!a = b) as H13. {
-        rewrite H4. apply SFI.Eval2. 1: apply Succ.IsIn. assumption. }
+        rewrite H4. apply IfThenElse.Eval2. 1: apply Succ.IsIn. assumption. }
       rewrite H12, H13.
       apply H3. assumption.
     - (* If y is below a, then x is also below a and both values are unchanged. *)
       assert (Ordinal y) as H11. { apply Ordinal.IsOrdinal with a; assumption. }
       assert (Ordinal x) as H12. { apply Ordinal.IsOrdinal with y; assumption. }
       assert (x :< a) as H13. { apply Ordinal.ElemElemTran with y; assumption. }
-      assert (f!x = x) as H14. { rewrite H4. apply SFI.Eval1; assumption. }
+      assert (f!x = x) as H14. { rewrite H4. apply IfThenElse.Eval1; assumption. }
       assert (f!y = y) as H15. {
-        rewrite H4. apply SFI.Eval1. 2: assumption.
+        rewrite H4. apply IfThenElse.Eval1. 2: assumption.
         apply Succ.Charac. right. assumption. }
       rewrite H14, H15.
       assumption. }
   split. 1: assumption. split. 1: assumption.
-  rewrite H4. apply SFI.Eval2. 1: apply Succ.IsIn.
+  rewrite H4. apply IfThenElse.Eval2. 1: apply Succ.IsIn.
   apply Foundation.NoLoop1.
 Qed.
 
@@ -246,9 +244,9 @@ Proof.
   - apply (COI.RestrictL _ _ _ (toClass a)).
     apply (COI.RestrictR _ _ _ _ (toClass b)).
     apply COI.EquivCompat2 with (toClass (E a)).
-    + apply SOE.ToClass.
+    + apply E.ToClass.
     + apply COI.EquivCompat3 with (toClass (E b)).
-      * apply SOE.ToClass.
+      * apply E.ToClass.
       * apply Isom.ToClass. assumption.
   - apply Ordinal.ToClass. assumption.
 Qed.

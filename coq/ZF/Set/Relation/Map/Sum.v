@@ -22,8 +22,6 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
-Module SFI := ZF.Set.Relation.Fun.IfThenElse.
-Module SSU := ZF.Set.Sum.
 
 (* The either map applies f on the left summand and g on the right.             *)
 Definition either (a b f g:U) : U :=
@@ -41,9 +39,9 @@ Proposition IsFun : forall (a b c f g:U),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c f g H1 H2. split.
-  - apply SFI.IsFunctionOn.
+  - apply IfThenElse.IsFunctionOn.
   - intros y H3. apply Range.Charac in H3. destruct H3 as [z H3].
-    apply SFI.Charac2 in H3.
+    apply IfThenElse.Charac2 in H3.
     destruct H3 as [[H3 [H4 H5]]|[H3 [H4 H5]]].
     + rewrite H3. apply Fun.IsInRange with a. 1: assumption.
       apply Fun.IsInRange with (:{ :0: }: :x: a). 2: assumption.
@@ -62,7 +60,7 @@ Proposition EvalL : forall (a b c f g x:U),
   (either a b f g)!(:(:0:,x):) = f!x.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c f g x H1 H2 H3. unfold either. rewrite SFI.Eval1.
+  intros a b c f g x H1 H2 H3. unfold either. rewrite IfThenElse.Eval1.
   - rewrite Prod.EvalR. 1: reflexivity. 2: assumption.
     apply Single.IsIn.
   - apply Union2.Charac. left.
@@ -80,7 +78,7 @@ Proposition EvalR : forall (a b c f g y:U),
   (either a b f g)!(:(:1:,y):) = g!y.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b c f g y H1 H2 H3. unfold either. rewrite SFI.Eval2.
+  intros a b c f g y H1 H2 H3. unfold either. rewrite IfThenElse.Eval2.
   - rewrite Prod.EvalR. 1: reflexivity. 2: assumption.
     apply Single.IsIn.
   - apply Union2.Charac. right.
@@ -106,7 +104,7 @@ Proof.
   - intros x H3.
     rewrite (Fun.ComposeEval (inL a b) (either a b f g) a (a :++: b) c x).
     4: assumption.
-    + rewrite SSU.EvalL, (EvalL a b c); try assumption. reflexivity.
+    + rewrite ZF.Set.Sum.EvalL, (EvalL a b c); try assumption. reflexivity.
     + apply Sum.IsFunL.
     + apply IsFun; assumption.
 Qed.
@@ -126,7 +124,7 @@ Proof.
   - intros y H3.
     rewrite (Fun.ComposeEval (inR a b) (either a b f g) b (a :++: b) c y).
     4: assumption.
-    + rewrite SSU.EvalR, (EvalR a b c); try assumption. reflexivity.
+    + rewrite ZF.Set.Sum.EvalR, (EvalR a b c); try assumption. reflexivity.
     + apply Sum.IsFunR.
     + apply IsFun; assumption.
 Qed.
@@ -207,23 +205,23 @@ Proof.
   assert (Inj f' a (c :++: d)) as H6. {
     rewrite H3. apply Inj.Compose with c.
     - apply Bij.IsInj. assumption.
-    - apply SSU.IsInjL. }
+    - apply Sum.IsInjL. }
   assert (Inj g' b (c :++: d)) as H7. {
     rewrite H4. apply Inj.Compose with d.
     - apply Bij.IsInj. assumption.
-    - apply SSU.IsInjR. }
+    - apply Sum.IsInjR. }
   (* Distinct target tags make the two branch ranges disjoint.                  *)
   assert (forall x y, x :< a -> y :< b -> f'!x <> g'!y) as H8. {
     intros x y H8 H9 H10.
     rewrite H3 in H10. rewrite H4 in H10.
     rewrite (Inj.ComposeEval f (inL c d) a c (c :++: d) x) in H10.
-    2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjL. 2: assumption.
+    2: apply Bij.IsInj; assumption. 2: apply Sum.IsInjL. 2: assumption.
     rewrite (Inj.ComposeEval g (inR c d) b d (c :++: d) y) in H10.
-    2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjR. 2: assumption.
+    2: apply Bij.IsInj; assumption. 2: apply Sum.IsInjR. 2: assumption.
     assert (f!x :< c) as H11. { apply Bij.IsInRange with a; assumption. }
     assert (g!y :< d) as H12. { apply Bij.IsInRange with b; assumption. }
-    rewrite SSU.EvalL in H10. 2: assumption.
-    rewrite SSU.EvalR in H10. 2: assumption.
+    rewrite ZF.Set.Sum.EvalL in H10. 2: assumption.
+    rewrite ZF.Set.Sum.EvalR in H10. 2: assumption.
     apply OrdPair.Equal in H10. destruct H10 as [H10 _].
     apply ZeroIsNotOne. assumption. }
   (* Hence the either map is injective on the disjoint sum.                     *)
@@ -246,8 +244,8 @@ Proof.
       + rewrite H5, (EvalL a b (c :++: d) f' g' x);
         try apply Inj.IsFun; try assumption.
         rewrite H3. rewrite (Inj.ComposeEval f (inL c d) a c (c :++: d) x).
-        2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjL. 2: assumption.
-        rewrite SSU.EvalL. 2: apply Bij.IsInRange with a; assumption.
+        2: apply Bij.IsInj; assumption. 2: apply Sum.IsInjL. 2: assumption.
+        rewrite ZF.Set.Sum.EvalL. 2: apply Bij.IsInRange with a; assumption.
         rewrite H14. symmetry. apply H11.
     - apply Prod.Charac in H11. destruct H11 as [u [v [H11 [H12 H13]]]].
       apply Single.Charac in H12. subst u.
@@ -260,8 +258,8 @@ Proof.
       + rewrite H5, (EvalR a b (c :++: d) f' g' y);
         try apply Inj.IsFun; try assumption.
         rewrite H4. rewrite (Inj.ComposeEval g (inR c d) b d (c :++: d) y).
-        2: apply Bij.IsInj; assumption. 2: apply SSU.IsInjR. 2: assumption.
-        rewrite SSU.EvalR. 2: apply Bij.IsInRange with b; assumption.
+        2: apply Bij.IsInj; assumption. 2: apply Sum.IsInjR. 2: assumption.
+        rewrite ZF.Set.Sum.EvalR. 2: apply Bij.IsInRange with b; assumption.
         rewrite H14. symmetry. apply H11. }
   apply Bij.FromFun. 1: assumption. 2: assumption.
   apply H9.
@@ -325,14 +323,14 @@ Proof.
   remember (fun y => :(x1,y):) as g1 eqn:H9.
   remember (fun y:U => :(x2,y2):) as g2 eqn:H10.
   remember (From.from a (fun x => :(x,y1):)) as f eqn:H11.
-  remember (SFI.ifThenElse b A g1 g2) as g eqn:H12.
+  remember (ifThenElse b A g1 g2) as g eqn:H12.
   (* The left branch is the horizontal line at y1.                              *)
   assert (Inj f a (a :x: b)) as H13. {
     rewrite H11. apply From.IsInj.
     - intros x H13. apply Prod.Charac2. split; assumption.
     - intros x y H13 H14 H15. apply OrdPair.Equal in H15. apply H15. }
   (* The right branch is a vertical line, except that y1 is moved aside.        *)
-  assert (SFI.Injective b A g1 g2) as H14. {
+  assert (IfThenElse.Injective b A g1 g2) as H14. {
     rewrite H8. rewrite H9. rewrite H10. split.
     - intros y z H14 H15 H16 H17 H18. apply OrdPair.Equal in H18. apply H18.
     - split.
@@ -353,7 +351,7 @@ Proof.
             apply DoubleNegation. intro H20. contradiction. }
           subst. reflexivity. }
   assert (Inj g b (a :x: b)) as H15. {
-    rewrite H12. apply SFI.IsInj.
+    rewrite H12. apply IfThenElse.IsInj.
     - rewrite H8. rewrite H9. rewrite H10. split.
       + intros y H15 H16. apply Prod.Charac2. split; assumption.
       + intros y H15 H16. apply Prod.Charac2. split; assumption.
@@ -364,10 +362,10 @@ Proof.
     rewrite From.Eval in H18. 2: assumption.
     assert (A y \/ ~ A y) as H19. { apply LawExcludedMiddle. }
     destruct H19 as [H19|H19].
-    - rewrite SFI.Eval1 in H18; try assumption.
+    - rewrite IfThenElse.Eval1 in H18; try assumption.
       rewrite H9 in H18. apply OrdPair.Equal in H18. destruct H18 as [H18 H20].
       rewrite H8 in H19. symmetry in H20. contradiction.
-    - rewrite SFI.Eval2 in H18; try assumption.
+    - rewrite IfThenElse.Eval2 in H18; try assumption.
       rewrite H10 in H18. apply OrdPair.Equal in H18. destruct H18 as [H18 H20].
       contradiction. }
   exists (either a b f g). apply IsInj; assumption.
