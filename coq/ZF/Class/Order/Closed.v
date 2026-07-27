@@ -27,7 +27,7 @@ Require Import ZF.Notation.Image.
 Module CIN := ZF.Class.Incl.
 Module CPR := ZF.Class.Prod.
 Module CRI := ZF.Class.Relation.Image.
-Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
+
 
 (* R is closed on A.                                                            *)
 Definition Closed (R A:Class) : Prop := R:[A]: :<=: A.
@@ -55,19 +55,19 @@ Proof.
   remember (fun x => :\/:_{p} (From.from (fun i => R_ i x))) as R' eqn:H10.
   remember (fun x => :\/:_{q} (From.from (fun i => S_ i x))) as S' eqn:H11.
   remember (fun x => x :\/: R' x :\/: S' x) as G eqn:H12.
-  remember (SOR.recursion (From.from G) a) as f eqn:H13.
+  remember (recursion (From.from G) a) as f eqn:H13.
   remember (:\/:_{:N} f) as b eqn:H14.
   exists b.
   assert (:0: :< :N) as G0. { apply Omega.HasZero. }
-  assert (domain f = :N) as G1. { rewrite H13. apply SOR.IsFunctionOn. }
-  assert (Functional f) as G2. { rewrite H13. apply SOR.IsFunctionOn. }
+  assert (domain f = :N) as G1. { rewrite H13. apply RecursionNOfClass.IsFunctionOn. }
+  assert (Functional f) as G2. { rewrite H13. apply RecursionNOfClass.IsFunctionOn. }
   assert (forall x, x :< b <-> exists n, n :< :N /\ x :< f!n) as G3. {
     rewrite H14. apply UnionGen.Charac. }
   assert (forall n, n :< :N -> f!n :<=: b) as G4. {
     intros n G4 x G5. apply G3. exists n. split; assumption. }
-  assert (a = f!:0:) as G5. { rewrite H13, SOR.WhenZero. reflexivity. }
+  assert (a = f!:0:) as G5. { rewrite H13, RecursionNOfClass.WhenZero. reflexivity. }
   assert (forall n, n :< :N -> f!(succ n) = f!n :\/: R' f!n :\/: S' f!n) as G6. {
-    intros n G6. rewrite H13, SOR.WhenSucc, <- H13, From.Eval, H12.
+    intros n G6. rewrite H13, RecursionNOfClass.WhenSucc, <- H13, From.Eval, H12.
     2: assumption. reflexivity. }
   assert (forall x, toClass x :<=: A -> toClass (R' x) :<=: A) as G7. {
     intros c G7. rewrite H10. apply UnionGenOfClass.WhenClassBounded.

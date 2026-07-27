@@ -45,7 +45,7 @@ Module CRD := ZF.Class.Relation.Domain.
 Module CRF := ZF.Class.Relation.Function.
 Module CRL := ZF.Class.Relation.Functional.
 Module CRR := ZF.Class.Relation.Relation.
-Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
+
 
 (* An R-transitive set a in class A,                                            *)
 Definition Transitive (R A:Class) (a:U) : Prop :=
@@ -124,11 +124,11 @@ Proof.
       destruct H12 as [H12 H16]. split. 1: assumption.
       exists u. split. 1: assumption. apply CRC.Charac2Rev. assumption. }
   remember (fun x => x :\/: :U(B:[x]:)) as G eqn:H12.
-  remember (SOR.recursion (From.from G) a) as f eqn:H13.
+  remember (recursion (From.from G) a) as f eqn:H13.
   remember (:U(f:[:N]:)) as b eqn:H14.
   exists b.
-  assert (domain f = :N) as G2. { rewrite H13. apply SOR.IsFunctionOn. }
-  assert (Functional f) as G3. { rewrite H13. apply SOR.IsFunctionOn. }
+  assert (domain f = :N) as G2. { rewrite H13. apply RecursionNOfClass.IsFunctionOn. }
+  assert (Functional f) as G3. { rewrite H13. apply RecursionNOfClass.IsFunctionOn. }
   assert (forall x, x :< b <-> exists n, n :< :N /\ x :< f!n) as G4. {
     intros x. split; intros G4.
     - rewrite H14 in G4. apply Union.Charac in G4.
@@ -143,9 +143,9 @@ Proof.
       rewrite G2. assumption. }
   assert (forall n, n :< :N -> f!n :<=: b) as G5. {
     intros n G5 x G6. apply G4. exists n. split; assumption. }
-  assert (a = f!:0:) as H15. { rewrite H13, SOR.WhenZero. reflexivity. }
+  assert (a = f!:0:) as H15. { rewrite H13, RecursionNOfClass.WhenZero. reflexivity. }
   assert (forall n, n :< :N -> f!(succ n) = f!n :\/: :U(B:[f!n]:)) as H16. {
-    intros n H16. rewrite H13, SOR.WhenSucc, <- H13, From.Eval, H12.
+    intros n H16. rewrite H13, RecursionNOfClass.WhenSucc, <- H13, From.Eval, H12.
     2: assumption. reflexivity. }
   assert (forall n, n :< :N -> f!n :<=: f!(succ n)) as H17. {
     intros n H17. rewrite H16. 2: assumption. apply Union2.IsInclL. }

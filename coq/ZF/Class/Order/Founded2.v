@@ -29,7 +29,7 @@ Require Import ZF.Notation.Eval.
 
 Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
-Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
+
 
 Proposition HasMinimal : forall (R A B:Class),
   Founded R A                 ->
@@ -42,13 +42,13 @@ Proof.
     intros x H5. apply Minimal.NotMinimal. 1: assumption. apply H4. }
   remember (fun y => ofMinRank (initSegment R B y)) as G eqn:H6.
   remember (fun a => :\/:_{a} :[G]:) as F eqn:H7.
-  remember (SOR.recursion :[F]: (ofMinRank B)) as f eqn:H8.
+  remember (recursion :[F]: (ofMinRank B)) as f eqn:H8.
   remember (:\/:_{:N} f) as b eqn:H9.
-  assert (FunctionOn f :N) as H10. { rewrite H8. apply SOR.IsFunctionOn. }
+  assert (FunctionOn f :N) as H10. { rewrite H8. apply RecursionNOfClass.IsFunctionOn. }
   assert (f!:0: = ofMinRank B) as H11. {
-    rewrite H8. apply SOR.WhenZero. }
+    rewrite H8. apply RecursionNOfClass.WhenZero. }
   assert (forall n, n :< :N -> f!(succ n) = :\/:_{f!n} :[G]:) as H12. {
-    intros n H12. rewrite H8, SOR.WhenSucc, <- H8, From.Eval, H7.
+    intros n H12. rewrite H8, RecursionNOfClass.WhenSucc, <- H8, From.Eval, H7.
     2: assumption. reflexivity. }
   assert (forall y, initSegment R B y :<=: B) as H13. {
     intros y. apply COI.IsIncl. }

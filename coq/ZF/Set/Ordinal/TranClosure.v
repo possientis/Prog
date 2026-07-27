@@ -17,7 +17,7 @@ Require Import ZF.Set.UnionGen.
 Require Import ZF.Notation.Eval.
 
 Module CEM := ZF.Class.Empty.
-Module SOR := ZF.Set.Ordinal.RecursionNOfClass.
+
 
 (* Every set has a smallest transitive superset.                                *)
 Proposition Exists : forall a, exists b,
@@ -27,15 +27,15 @@ Proposition Exists : forall a, exists b,
 Proof.
   intros a.
   remember (fun x => x :\/: :U(x)) as F eqn:H1.
-  remember (SOR.recursion :[F]: a) as f eqn:H2.
+  remember (recursion :[F]: a) as f eqn:H2.
   remember (:\/:_{:N} f) as b eqn:H3.
   exists b.
-  assert (a = f!:0:) as H4. { rewrite H2, SOR.WhenZero. reflexivity. }
+  assert (a = f!:0:) as H4. { rewrite H2, RecursionNOfClass.WhenZero. reflexivity. }
   assert (f!:0: :<=: b) as H5. {
     rewrite H3. apply UnionGen.IsIncl, Omega.HasZero. }
   assert (a :<=: b) as H6. { rewrite H4. assumption. }
   assert (forall n, n :< :N -> f!(succ n) = f!n :\/: :U(f!n)) as H7. {
-    intros n H7. rewrite H2, SOR.WhenSucc, <- H2, From.Eval, H1.
+    intros n H7. rewrite H2, RecursionNOfClass.WhenSucc, <- H2, From.Eval, H1.
     2: assumption. reflexivity. }
   assert (forall n, n :< :N -> f!n :<=: f!(succ n)) as H8. {
     intros n H8. rewrite H7. 2: assumption. apply Union2.IsInclL. }
