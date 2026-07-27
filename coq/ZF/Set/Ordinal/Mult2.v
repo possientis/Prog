@@ -28,8 +28,7 @@ Require Import ZF.Set.Specify.
 
 Require Import ZF.Notation.Eval.
 
-Module SOR := ZF.Set.Order.RestrictOfClass.
-Module SPR := ZF.Set.Prod.
+
 
 (* Lexicographic order on b x a.                                                *)
 Definition le (a b:U) : U := Lex :/: (b :x: a).
@@ -69,17 +68,17 @@ Proof.
   intros a b c d c' d'. split; intros H1.
   - assert (:(c,d): :< b :x: a /\ :(c',d'): :< b :x: a /\
       Lex :(:(c,d):, :(c',d'):):) as H2.
-    { apply SOR.Charac2. apply H1. }
+    { apply RestrictOfClass.Charac2. apply H1. }
     destruct H2 as [H2 [H3 H4]].
-    apply SPR.Charac2 in H2. destruct H2 as [H2 H5].
-    apply SPR.Charac2 in H3. destruct H3 as [H3 H6].
+    apply Prod.Charac2 in H2. destruct H2 as [H2 H5].
+    apply Prod.Charac2 in H3. destruct H3 as [H3 H6].
     apply Lex.Charac4 in H4. split. 1: assumption. split. 1: assumption.
     split. 1: assumption. split; assumption.
   - destruct H1 as [H1 [H2 [H3 [H4 H5]]]].
-    apply SOR.Charac2. split.
-    + apply SPR.Charac2. split; assumption.
+    apply RestrictOfClass.Charac2. split.
+    + apply Prod.Charac2. split; assumption.
     + split.
-      * apply SPR.Charac2. split; assumption.
+      * apply Prod.Charac2. split; assumption.
       * apply Lex.Charac4. assumption.
 Qed.
 
@@ -114,8 +113,8 @@ Proof.
     apply FCharac2 in H4. assumption.
   - destruct H3 as [c [d [H3 [H4 [H5 H6]]]]].
     apply Specify.Charac. split.
-    + apply SPR.Charac2. subst. split.
-      * apply SPR.Charac2. split; assumption.
+    + apply Prod.Charac2. subst. split.
+      * apply Prod.Charac2. split; assumption.
       * apply Inequality; assumption.
     + apply FCharac2. exists c. exists d.
       split. 1: assumption. split. 1: assumption. split; assumption.
@@ -126,7 +125,7 @@ Proposition IsRelation : forall (a b:U), Relation (f a b).
 Proof.
   intros a b x H1.
   apply Specify.Charac in H1. destruct H1 as [H1 _].
-  apply SPR.Charac in H1. destruct H1 as [y [z [H1 _]]].
+  apply Prod.Charac in H1. destruct H1 as [y [z [H1 _]]].
   exists y. exists z. assumption.
 Qed.
 
@@ -178,8 +177,8 @@ Proof.
   - apply Domain.Charac in H3. destruct H3 as [y H3].
     apply Charac2 in H3; try assumption.
     destruct H3 as [c [d [H3 [H4 [H5 _]]]]]. subst.
-    apply SPR.Charac2. split; assumption.
-  - apply SPR.Charac in H3. destruct H3 as [c [d [H3 [H4 H5]]]]. subst.
+    apply Prod.Charac2. split; assumption.
+  - apply Prod.Charac in H3. destruct H3 as [c [d [H3 [H4 H5]]]]. subst.
     apply Domain.Charac. exists (a :*: c :+: d).
     apply Charac2; try assumption. exists c. exists d.
     split. 1: assumption. split. 1: assumption. split; reflexivity.
@@ -248,7 +247,7 @@ Proof.
   intros a b c d H1 H2 H3 H4.
   apply Eval.Charac.
   - apply IsFunctional; assumption.
-  - rewrite DomainOf; try assumption. apply SPR.Charac2. split; assumption.
+  - rewrite DomainOf; try assumption. apply Prod.Charac2. split; assumption.
   - apply Charac2; try assumption. exists c. exists d.
     split. 1: assumption. split. 1: assumption. split; reflexivity.
 Qed.
@@ -260,7 +259,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2. split. 1: { apply IsBij; assumption. }
   intros x y H3 H4.
-  apply SPR.Charac in H3. apply SPR.Charac in H4.
+  apply Prod.Charac in H3. apply Prod.Charac in H4.
   destruct H3 as [c [d [H3 [H5 H6]]]]. destruct H4 as [c' [d' [H4 [H7 H8]]]].
   assert (Ordinal c)  as G1. { apply Ordinal.IsOrdinal with b; assumption. }
   assert (Ordinal d)  as G2. { apply Ordinal.IsOrdinal with a; assumption. }

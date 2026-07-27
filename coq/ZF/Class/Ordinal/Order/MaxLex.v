@@ -42,9 +42,7 @@ Module CEM := ZF.Class.Empty.
 Module COI := ZF.Class.Order.InitSegment.
 Module CPR := ZF.Class.Prod.
 Module CRB := ZF.Class.Relation.Bij.
-Module SIN := ZF.Set.Incl.
-Module SOI := ZF.Set.Order.InitSegment.
-Module SPR := ZF.Set.Prod.
+
 
 (* Max-lexicographic order on On x On.                                          *)
 Definition MaxLex : Class := fun x =>
@@ -219,16 +217,16 @@ Proof.
   intros x H5. apply COI.Charac in H5.
   destruct H5 as [[y [z [H5 [H6 H7]]]] H8]. subst.
   (* A predecessor in MaxLex has maximum at most that of the target pair.       *)
-  apply Charac4 in H8. apply SPR.Charac2.
+  apply Charac4 in H8. apply Prod.Charac2.
   assert (y :\/: z :<=: a :\/: b) as H9. {
     destruct H8 as [H8|[H8 _]].
     - apply Ordinal.ElemIsIncl; assumption.
-    - rewrite H8. apply SIN.Refl. }
+    - rewrite H8. apply Incl.Refl. }
   (* Hence each coordinate is below the successor of that maximum.              *)
   assert (y :<=: a :\/: b) as H10. {
-    apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclL. }
+    apply Incl.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclL. }
   assert (z :<=: a :\/: b) as H11. {
-    apply SIN.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
+    apply Incl.Tran with (y :\/: z). 2: assumption. apply Union2.IsInclR. }
   split; apply Ordinal.InclElemTran with (a :\/: b); try assumption;
   apply Succ.IsIn.
 Qed.
@@ -256,7 +254,7 @@ Proposition IsInclInit : forall (a b c:U),
 Proof.
   intros a b c H1 H2 H3 d H4.
   apply (IsInclInit' a b c); try assumption.
-  apply (SOI.ToClass MaxLex (On :x: On)). 4: assumption.
+  apply (InitSegment.ToClass MaxLex (On :x: On)). 4: assumption.
   - apply IsWellFounded.
   - apply CPR.Charac2. split; assumption.
   - apply CIN.Refl.
@@ -292,10 +290,10 @@ Proof.
     Pairing:[initSegment MaxLex (On :x: On) :(a,b):]:
     =
     initSegment E On Pairing!:(a,b):) as H3. {
-    apply SOI.IsomFullImage. 2: assumption.
+    apply InitSegment.IsomFullImage. 2: assumption.
     - apply IsWellFounded.
     - apply IsIsom. }
-  rewrite H3, SOI.EA.
+  rewrite H3, InitSegment.EA.
   apply Specify.IsA. intros c H4.
   apply Ordinal.IsOrdinal with Pairing!:(a,b):; assumption.
 Qed.
@@ -322,8 +320,8 @@ Proof.
   assert (WellFounded MaxLex (On :x: On)) as G1. { apply IsWellFounded. }
   assert ((On :x: On) :(a,b):) as G2. { apply CPR.Charac2. split; assumption. }
   assert (On :x: On :<=: On :x: On) as G3. { apply CIN.Refl. }
-  apply (SOI.Charac _ (On :x: On)) in H3; try assumption. destruct H3 as [H3 H4].
-  destruct H3 as [u [v [H3 [H5 H6]]]]. subst x.
+  apply (InitSegment.Charac _ (On :x: On)) in H3; try assumption.
+  destruct H3 as [H3 H4]. destruct H3 as [u [v [H3 [H5 H6]]]]. subst x.
   exists Pairing!:(u,v):. apply (CRB.Satisfies _ (On :x: On) On).
   - apply IsIsom.
   - apply CPR.Charac2. split; assumption.
