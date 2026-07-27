@@ -23,7 +23,6 @@ Require Import ZF.Set.UnionGen.
 Module CRD := ZF.Class.Relation.Domain.
 Module CFL := ZF.Class.Relation.Functional.
 
-Module SRD := ZF.Set.Relation.Domain.
 
 Definition Oracle (F:Class) (a:U) : Class := fun x => exists f y, x = :(f,y): /\
   ((f =  :0:                        /\ y = a                     )  \/
@@ -85,7 +84,7 @@ Proof.
   assert (succ b <> :0:) as H7. { apply Succ.NotZero. }
   assert (sup (succ b) = b) as H8. { apply SupOf.WhenSucc. assumption. }
   assert (g <> :0:) as H9. {
-    intros H9. apply H7. rewrite <- H5. apply SRD.WhenZero. assumption. }
+    intros H9. apply H7. rewrite <- H5. apply Domain.WhenZero. assumption. }
   assert (g!b = G!b) as H10. {
     rewrite H4. apply RestrictOfClass.Eval. 1: assumption. apply Succ.IsIn. }
   assert (Oracle F a :(g,F!(G!b)):) as H11. {
@@ -109,7 +108,7 @@ Proof.
     rewrite H4. apply RestrictOfClass.DomainWhenIncl; assumption. }
   assert (b <> :0:) as H7. { apply Limit.Charac. 2: assumption. apply H1. }
   assert (g <> :0:) as H8. {
-    intros H8. apply H7. rewrite <- H5. apply SRD.WhenZero. assumption. }
+    intros H8. apply H7. rewrite <- H5. apply Domain.WhenZero. assumption. }
   assert (:\/:_{b} g = :\/:_{b} G)as H9. {
     apply UnionGenOfClass.Equal. intros x H9.
     rewrite H4. apply RestrictOfClass.Eval; assumption. }

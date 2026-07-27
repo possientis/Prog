@@ -42,6 +42,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Bijection.
 Require Import ZF.Set.Relation.BijectionOn.
 Require Import ZF.Set.Relation.Domain.
+Require Import ZF.Set.Relation.Function.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.ImageUnderClass.
@@ -56,11 +57,6 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRO := ZF.Class.Relation.OneToOne.
 Module CRR := ZF.Class.Relation.Range.
 
-Module SRB := ZF.Set.Relation.Bijection.
-Module SBO := ZF.Set.Relation.BijectionOn.
-Module SRF := ZF.Set.Relation.Function.
-Module SRO := ZF.Set.Relation.OneToOne.
-Module SRR := ZF.Set.Relation.Range.
 
 (* The canonical isomorphism from On onto A, from recursion over MinFresh.      *)
 Definition Enum (R A:Class) : Class := Recursion (CMF.MinFresh R A).
@@ -83,7 +79,7 @@ Proposition IsMinimal : forall (R A G:Class) (a:U),
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   intros R A G a H1 H2 H3 H4 H5.
-  assert (SRR.range (G:|:a) = G:[a]:) as H6. {
+  assert (range (G:|:a) = G:[a]:) as H6. {
     apply RestrictOfClass.RangeOf, H2. }
   rewrite (H3 a H4).
   rewrite <- H6.
@@ -276,24 +272,24 @@ Proof.
     On a                                                                  /\
     (forall b, b :< a -> (A :\: G:[b]:) :<>: :0:)                 /\
     toClass G:[a]: :~: A                                                  /\
-    SRO.OneToOne (G :|: a)) as H10. { apply COF.WhenFreshAndSmall; assumption. }
+    OneToOne (G :|: a)) as H10. { apply COF.WhenFreshAndSmall; assumption. }
   destruct H10 as [a [H10 [H11 [H12 H13]]]].
   exists a. split. 1: assumption. intros g H14.
   assert (domain g = a) as H15. {
     rewrite H14. apply RestrictOfClass.DomainWhenIncl. 1: apply H5.
     intros b H15. apply H5. apply Ordinal.IsOrdinal with a; assumption. }
-  assert (SRF.Function g) as H16. {
+  assert (Function g) as H16. {
     rewrite H14. apply RestrictOfClass.IsFunction. apply H5. }
-  assert (SRB.Bijection g) as H17. {
+  assert (Bijection g) as H17. {
     split. 1: apply H16. rewrite H14. assumption. }
-  assert (SBO.BijectionOn g a) as H18. { split; assumption. }
+  assert (BijectionOn g a) as H18. { split; assumption. }
   assert (CBO.BijectionOn (toClass g) (toClass a)) as H19. {
-    apply SBO.ToClass. assumption. }
+    apply BijectionOn.ToClass. assumption. }
   assert (range g = G:[a]:) as H20. {
     rewrite H14. apply RestrictOfClass.RangeOf. apply H5. }
   assert (CRR.range (toClass g) :~: A) as H21. {
-    apply Equiv.Tran with (toClass (SRR.range g)).
-    - apply Equiv.Sym, SRR.ToClass.
+    apply Equiv.Tran with (toClass (range g)).
+    - apply Equiv.Sym, Range.ToClass.
     - rewrite H20. assumption. }
   assert (CBJ.Bij (toClass g) (toClass a) A) as H22. { split; assumption. }
   assert (forall b c, b :< a -> c :< a -> b :< c -> R :(g!b,g!c):) as H23. {
@@ -321,7 +317,7 @@ Proof.
       - apply H8. 1: assumption. apply H11. assumption. }
     destruct H37 as [H37|H37]. 2: { rewrite H28, H29. assumption. } exfalso.
     assert (b = c) as H38. {
-      apply SBO.EvalInjective with g a; try assumption.
+      apply BijectionOn.EvalInjective with g a; try assumption.
       rewrite H28, H29. assumption. }
     revert H25. rewrite H38. apply Foundation.NoLoop1. }
   assert (Irreflexive R A) as H24. {

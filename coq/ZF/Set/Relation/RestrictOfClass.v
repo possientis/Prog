@@ -38,10 +38,6 @@ Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRR := ZF.Class.Relation.Range.
 Module CRO := ZF.Class.Relation.OneToOne.
 
-Module SRD := ZF.Set.Relation.Domain.
-Module SFL := ZF.Set.Relation.Functional.
-Module SRR := ZF.Set.Relation.Range.
-Module SRO := ZF.Set.Relation.OneToOne.
 
 Definition restrict (F:Class) (a:U) : U := truncate (F:|:toClass a).
 
@@ -112,7 +108,7 @@ Qed.
 
 (* The restriction of a functional class is a functional set.                   *)
 Proposition IsFunctional : forall (F:Class) (a:U),
-  CFL.Functional F -> SFL.Functional (F:|:a).
+  CFL.Functional F -> Functional (F:|:a).
 Proof.
   intros F a H1 x y z H2 H3.
   apply Charac2 in H2. 2: assumption. destruct H2 as [_ H2].
@@ -131,19 +127,19 @@ Qed.
 
 (* The domain of the restriction F|a is the intersection of a and domain F.     *)
 Proposition DomainOf : forall (F:Class) (a:U), CFL.Functional F ->
-  SRD.domain (F:|:a) = {{ x :< a | CRD.domain F }}.
+  domain (F:|:a) = {{ x :< a | CRD.domain F }}.
 Proof.
   intros F a H1. apply Incl.Double. split; intros x H2.
-  - apply SRD.Charac in H2. destruct H2 as [y H2]. apply Charac2 in H2.
+  - apply Domain.Charac in H2. destruct H2 as [y H2]. apply Charac2 in H2.
     2: assumption. destruct H2 as [H2 H3]. apply Specify.Charac.
     split. 1: assumption. exists y. assumption.
   - apply Specify.Charac in H2. destruct H2 as [H2 [y H3]].
-    apply SRD.Charac. exists y. apply Charac2Rev; assumption.
+    apply Domain.Charac. exists y. apply Charac2Rev; assumption.
 Qed.
 
 (* The domain of the restriction F|a is contained in a.                         *)
 Proposition DomainIsIncl : forall (F:Class) (a:U), CFL.Functional F ->
-  SRD.domain (F:|:a) :<=: a.
+  domain (F:|:a) :<=: a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a H1 x H2.
@@ -155,7 +151,7 @@ Qed.
 
 (* When a is contained in the domain of F, the domain of F restricted to a is a *)
 Proposition DomainWhenIncl : forall (F:Class) (a:U), CFL.Functional F ->
-  toClass a :<=: CRD.domain F -> SRD.domain (F:|:a) = a.
+  toClass a :<=: CRD.domain F -> domain (F:|:a) = a.
 Proof.
   intros F a H1 H2. rewrite DomainOf. 2: assumption.
   apply Incl.Double. split; intros x H3.
@@ -177,11 +173,11 @@ Proposition RangeOf : forall (F:Class) (a:U), CFL.Functional F ->
   range (F:|:a) = F:[a]:.
 Proof.
   intros F a H1. apply Incl.Double. split; intros y H2.
-  - apply SRR.Charac in H2. destruct H2 as [x H2].
+  - apply Range.Charac in H2. destruct H2 as [x H2].
     apply Charac2 in H2. 2: assumption. destruct H2 as [H2 H3].
     apply ImageUnderClass.CharacRev with x; assumption.
   - apply ImageUnderClass.Charac in H2. 2: assumption. destruct H2 as [x [H2 H3]].
-    apply SRR.Charac. exists x. apply Charac2Rev; assumption.
+    apply Range.Charac. exists x. apply Charac2Rev; assumption.
 Qed.
 (* The restriction of a one-to-one class by a set is one-to-one.                *)
 Proposition IsOneToOne : forall (F:Class) (a:U),
@@ -190,7 +186,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros F a H1.
   (* The set restriction represents the class restriction of F to a.            *)
-  apply SRO.FromClass. apply CRO.EquivCompat with (F:|:toClass a).
+  apply OneToOne.FromClass. apply CRO.EquivCompat with (F:|:toClass a).
   - apply Equiv.Sym, ToClass. apply H1.
   - (* A class restriction of a one-to-one class is one-to-one.                 *)
     apply CRO.Restrict. assumption.
@@ -237,7 +233,7 @@ Qed.
 Proposition RangeIsIncl : forall (F:Class) (a y:U), CFL.Functional F ->
   y :< range (F:|:a) -> CRR.range F y.
 Proof.
-  intros F a y H1 H2. apply SRR.Charac in H2. destruct H2 as [x H2].
+  intros F a y H1 H2. apply Range.Charac in H2. destruct H2 as [x H2].
   apply Charac2 in H2. 2: assumption. destruct H2 as [H2 H3].
   exists x. assumption.
 Qed.
@@ -269,15 +265,15 @@ Proposition Eval : forall (F:Class) (a x:U), CFL.Functional F ->
   x :< a -> (F:|:a)!x = F!x.
 Proof.
   intros F a x H1 H2.
-  assert (SFL.Functional (F:|:a)) as H3. { apply IsFunctional. assumption. }
+  assert (Functional (F:|:a)) as H3. { apply IsFunctional. assumption. }
   assert (CRD.domain F x \/ ~ CRD.domain F x) as H4. { apply LawExcludedMiddle. }
   remember F!x as y eqn:E. destruct H4 as [H4|H4].
-  - assert (x :< SRD.domain (F:|:a)) as H5. {
+  - assert (x :< domain (F:|:a)) as H5. {
       rewrite DomainOf. 2: assumption. apply Specify.Charac. split; assumption. }
     apply Eval.Charac; try assumption. apply Charac2Rev; try assumption.
     rewrite E. apply EvalOfClass.Satisfies; assumption.
-  - assert (~ x :< SRD.domain (F:|:a)) as H5. {
-      intros H5. apply SRD.Charac in H5. destruct H5 as [z H5].
+  - assert (~ x :< domain (F:|:a)) as H5. {
+      intros H5. apply Domain.Charac in H5. destruct H5 as [z H5].
       apply Charac2 in H5. 2: assumption. destruct H5 as [H5 H6]. apply H4.
       exists z. assumption. }
     assert (y = :0:) as H6. {
