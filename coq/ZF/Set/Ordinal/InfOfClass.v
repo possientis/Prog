@@ -14,7 +14,6 @@ Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 
 Module COI := ZF.Class.Ordinal.Inf.
-Module SIC := ZF.Set.InterOfClass.
 Module SOC := ZF.Set.Ordinal.InterOfClass.
 
 (* The infimum of the class A.                                                  *)
@@ -27,7 +26,7 @@ Proposition Charac : forall (A:Class) (x y:U),
   On y        ->
   x :< y.
 Proof.
-  intros A x y H1 H2 H3. apply SIC.Charac with (A :/\: On).
+  intros A x y H1 H2 H3. apply InterOfClass.Charac with (A :/\: On).
   1: assumption. split; assumption.
 Qed.
 
@@ -37,7 +36,7 @@ Proposition CharacRev : forall (A:Class) (x:U),
   (forall y, A y -> On y -> x :< y) ->
   x :< inf A.
 Proof.
-  intros A x H1 H2. apply SIC.CharacRev. 1: assumption.
+  intros A x H1 H2. apply InterOfClass.CharacRev. 1: assumption.
   intros y [H3 H4]. apply H2; assumption.
 Qed.
 
@@ -45,21 +44,21 @@ Qed.
 Proposition EquivCompat : forall (A B:Class),
   A :~: B -> inf A = inf B.
 Proof.
-  intros A B H1. apply SIC.EquivCompat, Inter2.EquivCompatL. assumption.
+  intros A B H1. apply InterOfClass.EquivCompat, Inter2.EquivCompatL. assumption.
 Qed.
 
 (* The class of the infimum (as a set) is the infimum (as a class).             *)
 Proposition ToClass : forall (A:Class),
   toClass (inf A) :~: COI.inf A.
 Proof.
-  intros A. apply SIC.ToClass.
+  intros A. apply InterOfClass.ToClass.
 Qed.
 
 (* The infimum of a class of ordinals coincide with its intersection.           *)
 Proposition WhenOrdinalElem : forall (A:Class),
   A :<=: On -> inf A = inter A.
 Proof.
-  intros A H1. apply SIC.EquivCompat.
+  intros A H1. apply InterOfClass.EquivCompat.
   apply Class.Inter2.WhenInclL. assumption.
 Qed.
 
@@ -175,7 +174,7 @@ Proposition IsZero : forall (A:Class),
   A :/\: On :~: :0: -> inf A = :0:.
 Proof.
   intros A H1. unfold inf.
-  rewrite (SIC.EquivCompat (A :/\: On) :0:). 2: assumption.
-  apply SIC.IsZero.
+  rewrite (InterOfClass.EquivCompat (A :/\: On) :0:). 2: assumption.
+  apply ZF.Set.InterOfClass.IsZero.
 Qed.
 

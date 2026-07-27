@@ -10,26 +10,25 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 
-Module SOR2 := ZF.Set.Ordinal.Recursion2OfClass.
 
 (* The recursion set associated with the class F and set a.                     *)
 (* In other words, the unique function f defined on N by the equations:         *)
 (* (i)    f(0)      = a                                                         *)
 (* (ii)   f(n+1) = F(f(n))                                                      *)
-Definition recursion (F:Class) (a:U) : U := SOR2.recursion F a :N.
+Definition recursion (F:Class) (a:U) : U := Recursion2OfClass.recursion F a :N.
 
 (* The recursion set of F and a is a function defined on N.                     *)
 Proposition IsFunctionOn : forall (F:Class) (a:U),
   FunctionOn (recursion F a) :N.
 Proof.
-  intros F a. apply (SOR2.IsFunctionOn F a :N), Omega.IsOrdinal.
+  intros F a. apply (Recursion2OfClass.IsFunctionOn F a :N), Omega.IsOrdinal.
 Qed.
 
 (* The recursion set of F and a has initial value a.                            *)
 Proposition WhenZero : forall (F:Class) (a:U),
   (recursion F a)!:0: = a.
 Proof.
-  intros F a. apply (SOR2.WhenZero F a :N).
+  intros F a. apply (Recursion2OfClass.WhenZero F a :N).
   - apply Omega.IsOrdinal.
   - apply Omega.IsNotEmpty.
 Qed.
@@ -39,7 +38,7 @@ Proposition WhenSucc : forall (F:Class) (a n:U),
   n :< :N                                            ->
   (recursion F a)!(succ n)  = F!((recursion F a)!n).
 Proof.
-  intros F a n H1. apply (SOR2.WhenSucc F a :N).
+  intros F a n H1. apply (Recursion2OfClass.WhenSucc F a :N).
   - apply Omega.IsOrdinal.
   - apply Omega.HasSucc. assumption.
 Qed.
@@ -52,7 +51,7 @@ Proposition IsUnique : forall (F:Class) (a f:U),
   (forall n, n :< :N -> f!(succ n) = F!(f!n))   ->
   f = recursion F a.
 Proof.
-  intros F a f H1 H2 H3. apply (SOR2.IsUnique F a :N); try assumption.
+  intros F a f H1 H2 H3. apply (Recursion2OfClass.IsUnique F a :N); try assumption.
   - apply Omega.IsOrdinal.
   - intros n H4 H5. apply H3.
     apply Ordinal.ElemIsIncl in H5. 2: apply Omega.IsOrdinal.

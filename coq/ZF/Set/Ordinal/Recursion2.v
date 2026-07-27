@@ -9,7 +9,6 @@ Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.UnionGen.
 
-Module SOR2 := ZF.Set.Ordinal.Recursion2OfClass.
 
 (* The recursion set associated with the sets f a b.                            *)
 (* In other words, when b is an ordinal, the unique function g                  *)
@@ -17,13 +16,14 @@ Module SOR2 := ZF.Set.Ordinal.Recursion2OfClass.
 (* (i)    g(0)      = a                                                         *)
 (* (ii)   g(succ c) = f(g(c))                                                   *)
 (* (iii)  g(c)      = \/_{x :< c} g(x) , if c is a limit ordinal                *)
-Definition recursion (f a b:U) : U := (SOR2.recursion (toClass f) a b).
+Definition recursion (f a b:U) : U
+  := (Recursion2OfClass.recursion (toClass f) a b).
 
 (* The recursion set of f a b is a function defined on b, when b is an ordinal. *)
 Proposition IsFunctionOn : forall (f a b:U), Ordinal b ->
   FunctionOn (recursion f a b) b.
 Proof.
-  intros f. apply SOR2.IsFunctionOn.
+  intros f. apply Recursion2OfClass.IsFunctionOn.
 Qed.
 
 (* The recursion set of f a b has initial value a.                              *)
@@ -32,7 +32,7 @@ Proposition WhenZero : forall (f a b:U),
   b <> :0:                    ->
   (recursion f a b)!:0: = a.
 Proof.
-  intros f. apply SOR2.WhenZero.
+  intros f. apply Recursion2OfClass.WhenZero.
 Qed.
 
 (* The recursion set satisfies the equation g(succ c) = f(g(c)).                *)
@@ -41,7 +41,7 @@ Proposition WhenSucc : forall (f a b c:U),
   succ c :< b                                             ->
   (recursion f a b)!(succ c)  = f!((recursion f a b)!c).
 Proof.
-  intros f. apply SOR2.WhenSucc.
+  intros f. apply Recursion2OfClass.WhenSucc.
 Qed.
 
 (* The recursion set satisfies the equation:                                    *)
@@ -52,7 +52,7 @@ Proposition WhenLimit : forall (f a b c:U),
   c :< b    ->
   (recursion f a b)!c = :\/:_{c} (recursion f a b).
 Proof.
-  intros f. apply SOR2.WhenLimit.
+  intros f. apply Recursion2OfClass.WhenLimit.
 Qed.
 
 (* The recursion set of f a b is the unique function defined on b which         *)
@@ -65,7 +65,7 @@ Proposition IsUnique : forall (f g a b:U),
   (forall c, Limit c -> c :< b -> g!c = :\/:_{c} g)               ->    (* (iii)*)
   g = recursion f a b.
 Proof.
-  intros f g a b. apply SOR2.IsUnique.
+  intros f g a b. apply Recursion2OfClass.IsUnique.
 Qed.
 
 

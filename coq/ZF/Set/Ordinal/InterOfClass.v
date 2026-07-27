@@ -13,8 +13,6 @@ Require Import ZF.Set.Ordinal.Ordinal.
 Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Ordinal.Inter.
 
-Module SIN := ZF.Set.Incl.
-Module SIC := ZF.Set.InterOfClass.
 
 (* This is a more general treatment of ZF.Set.Ordinal.Inter where we use inter  *)
 (* as defined in ZF.Set.InterOfClass which allows for class argument.           *)
@@ -24,7 +22,7 @@ Proposition IsOrdinal : forall (A:Class),
   A :<=: Ordinal -> Ordinal (inter A).
 Proof.
   intros A H1. apply OrdClass.EquivCompat with :I(A).
-  - apply Equiv.Sym, SIC.ToClass.
+  - apply Equiv.Sym, InterOfClass.ToClass.
   - apply COI.IsOrdinal. assumption.
 Qed.
 
@@ -35,7 +33,7 @@ Proposition IsLowerBound : forall (A:Class) (a:U),
   inter A :<=: a.
 Proof.
   intros A a H1 H2. apply CIN.EquivCompatL with :I(A).
-  - apply Equiv.Sym, SIC.ToClass.
+  - apply Equiv.Sym, InterOfClass.ToClass.
   - apply COI.IsLowerBound; assumption.
 Qed.
 
@@ -47,7 +45,7 @@ Proposition IsLargest : forall (A:Class) (a:U),
   a :<=: inter A.
 Proof.
   intros A a H1 H2 H3. apply CIN.EquivCompatR with :I(A).
-  - apply Equiv.Sym, SIC.ToClass.
+  - apply Equiv.Sym, InterOfClass.ToClass.
   - apply COI.IsLargest; assumption.
 Qed.
 
@@ -58,9 +56,9 @@ Proof.
   intros A H1.
   assert (A :~: :0: \/ A :<>: :0:) as H2. { apply LawExcludedMiddle. }
   destruct H2 as [H2|H2].
-  - rewrite <- SIC.IsZero. apply SIC.EquivCompat. assumption.
-  - apply SIN.Double. split; intros x H3.
-    + apply SIC.Charac with A. 1: assumption.
+  - rewrite <- InterOfClass.IsZero. apply InterOfClass.EquivCompat. assumption.
+  - apply Incl.Double. split; intros x H3.
+    + apply InterOfClass.Charac with A. 1: assumption.
       apply OrdClass.HasZero; assumption.
     + apply Empty.Charac in H3. contradiction.
 Qed.
