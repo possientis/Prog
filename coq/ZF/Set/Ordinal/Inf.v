@@ -18,8 +18,7 @@ Require Import ZF.Set.Specify.
 Module CIN := ZF.Class.Inter.
 Module COI := ZF.Class.Ordinal.Inf.
 Module SIN := ZF.Set.Inter.
-Module SOE := ZF.Set.Ordinal.Order.E.
-Module SOI := ZF.Set.Ordinal.Inter.
+
 
 (* The infimum of the set a.                                                    *)
 Definition inf (a:U) : U := :I( {{ x :< a | Ordinal }} ).
@@ -81,7 +80,7 @@ Qed.
 (* The infimum of any set is an ordinal.                                        *)
 Proposition IsOrdinal : forall (a:U), Ordinal (inf a).
 Proof.
-  intros a. apply SOI.IsOrdinal. intros x H1.
+  intros a. apply Inter.IsOrdinal. intros x H1.
   apply Specify.IsInclR in H1. assumption.
 Qed.
 
@@ -92,7 +91,7 @@ Proposition IsLowerBound : forall (a b:U),
   inf a :<=: b.
 Proof.
   intros a b H1 H2. rewrite WhenOrdinals. 2: assumption.
-  apply SOI.IsLowerBound; assumption.
+  apply Inter.IsLowerBound; assumption.
 Qed.
 
 (* The infimum of a non-empty set of ordinals is the greatest lower bound.      *)
@@ -103,7 +102,7 @@ Proposition IsLargest : forall (a b:U),
   b :<=: inf a.
 Proof.
   intros a b H1 H2 H3. rewrite WhenOrdinals. 2: assumption.
-  apply SOI.IsLargest; assumption.
+  apply Inter.IsLargest; assumption.
 Qed.
 
 (* No element of a set of ordinals can be less than the infimum.                *)
@@ -138,7 +137,7 @@ Proof.
     split. 1: assumption.
     intros c H6 H7.
     assert (Ordinal c) as H8. { apply H1. assumption. }
-    apply SOE.Charac2 in H7. destruct H7 as [H7 [H9 H10]].
+    apply E.Charac2 in H7. destruct H7 as [H7 [H9 H10]].
     assert (c :< c) as H11. { apply H5; assumption. }
     revert H11. apply Foundation.NoLoop1. }
   assert (Ordinal (inf a)) as H7. { apply IsOrdinal. }

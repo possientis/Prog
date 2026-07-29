@@ -14,7 +14,7 @@ Export ZF.Notation.InfAbove.
 
 Module COI := ZF.Class.Ordinal.Inf.
 Module SIN := ZF.Set.Inter.
-Module SOI := ZF.Set.Ordinal.Inter.
+
 
 (* The infimum of the set a above b.                                            *)
 Definition infAbove (b a:U) : U := inf (a :\: b).
@@ -79,11 +79,11 @@ Proposition IsEqual : forall (a b:U), Ordinal a -> Ordinal b ->
 Proof.
   intros a b H1 H2 H3. rewrite WhenOrdinal; try assumption.
   apply Incl.Double. split.
-  - apply SOI.IsLowerBound.
+  - apply Inter.IsLowerBound.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Ordinal.IsOrdinal with a; assumption.
     + apply Diff.Charac. split. 1: assumption. apply Foundation.NoLoop1.
-  - apply SOI.IsLargest.
+  - apply Inter.IsLargest.
     + intros x H4. apply Diff.Charac in H4. destruct H4 as [H4 H5].
       apply Ordinal.IsOrdinal with a; assumption.
     + intros H4. apply Diff.WhenZero in H4. apply Foundation.NoLoop1 with b.
