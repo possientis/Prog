@@ -8,6 +8,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Inter.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
+Require Import ZF.Set.Ordinal.Inter.
 Require Import ZF.Set.Specify.
 
 Export ZF.Notation.InfAbove.

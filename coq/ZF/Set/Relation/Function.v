@@ -19,7 +19,7 @@ Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Single.
 
 Module CRF := ZF.Class.Relation.Function.
-Module SRI := ZF.Set.Relation.InvImage.
+
 
 (* A set is a function iff it is a relation and it is functional.               *)
 Definition Function (f:U) : Prop := Relation f /\ Functional f.
@@ -82,7 +82,7 @@ Qed.
 Proposition InvImageOfRange : forall (f:U),
   f^:-1::[range f]: = domain f.
 Proof.
-  apply SRI.OfRange.
+  apply InvImage.OfRange.
 Qed.
 
 (* The composition of two functional sets is a function.                        *)

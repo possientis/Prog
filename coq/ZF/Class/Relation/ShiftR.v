@@ -24,8 +24,6 @@ Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.Eval.
 
-Module SOO := ZF.Set.Ordinal.Omega.
-
 
 (* Shifting a function class to the right, with additional value at 0.          *)
 Definition shiftR (a:U) (F:Class) := fun x => x = :(:0:,a): \/ exists y z,
@@ -50,7 +48,7 @@ Proof.
     assert (On x) as G5. { apply Omega.HasOrdinals. assumption. }
     assert (succ :U(x) = x) as H5. {
       apply Succ.OfUnion. 1: assumption.
-      apply SOO.IsSuccessor; assumption. }
+      apply Omega.IsSuccessor; assumption. }
     rewrite H5. split. 2: assumption. reflexivity.
 Qed.
 
@@ -189,12 +187,12 @@ Proof.
     + assert (succ :U(x) = x) as H6. { apply Omega.SuccOfUnion; assumption. }
       assert (:U(x) :< n) as H7. { apply H2. assumption. }
       assert (:U(x) :< :N) as G3. { apply Omega.IsIn with n; assumption. }
-      assert (On :U(x)) as G4. { apply SOO.HasOrdinals. assumption. }
+      assert (On :U(x)) as G4. { apply Omega.HasOrdinals. assumption. }
       rewrite <- H6. apply Succ.ElemCompat; assumption.
   - apply DomainOf. 1: assumption.
     assert (succ n :< :N) as G5. { apply Omega.HasSucc. assumption. }
     assert (x :< :N) as G6. { apply Omega.IsIn with (succ n); assumption. }
-    assert (On x) as G7. { apply SOO.HasOrdinals. assumption. }
+    assert (On x) as G7. { apply Omega.HasOrdinals. assumption. }
     assert (x = :0: \/ :0: :< x) as H4. {
       apply Ordinal.ZeroOrElem. assumption. }
     destruct H4 as [H4|H4]. 1: { left. assumption. } right.

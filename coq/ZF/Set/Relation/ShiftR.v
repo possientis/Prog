@@ -74,7 +74,7 @@ Proof.
       assert (Ordinal x) as G5. { apply Omega.HasOrdinals. assumption. }
       assert (succ :U(x) = x) as H5. {
         apply Succ.OfUnion. 1: assumption.
-        apply SOO.IsSuccessor; assumption. }
+        apply Omega.IsSuccessor; assumption. }
       rewrite H5. split. 2: assumption. reflexivity.
 Qed.
 

@@ -17,7 +17,7 @@ Require Import ZF.Set.Truncate.
 
 Module COS := ZF.Class.Order.Succ.
 Module CIN := ZF.Class.Incl.
-Module SIN := ZF.Set.Incl.
+
 
 (* The successor in the ordered class (A,R) of a set a.                         *)
 Definition succ (R A:Class) (a:U) : U := truncate (COS.succ R A a).
@@ -180,7 +180,7 @@ Proposition InitRefl : forall (R A:Class) (a:U),
   ~ Maximal R A a                                       ->
   initSegment R A (succ R A a) = initSegment R^:=: A a.
 Proof.
-  intros R A a H1 H2 H3. apply SIN.Double.
+  intros R A a H1 H2 H3. apply Incl.Double.
   assert (WellFounded R A) as H4. { apply H1. }
   assert (Total R A) as H5. { apply H1. }
   assert (A :<=: A) as H6. { apply CIN.Refl. }

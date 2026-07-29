@@ -26,7 +26,7 @@ Require Import ZF.Notation.Eval.
 Module CEM := ZF.Class.Empty.
 Module CRF := ZF.Class.Relation.Function.
 Module SOU := ZF.Set.Ordinal.Union.
-Module SRI := ZF.Set.Relation.ImageUnderClass.
+
 
 (* Precicate defining a well founded set.                                       *)
 Definition WellFounded (a:U) : Prop := exists b, Ordinal b /\ a :< VH!b.
@@ -41,7 +41,7 @@ Proof.
   assert (Functional F) as G1. { rewrite H3. apply From.IsFunctional. }
   assert (Function F) as G2. { rewrite H3. apply From.IsFunction. }
   assert (toClass F:[a]: :<=: Ordinal) as H4. {
-    intros b H4. apply SRI.ToClass in H4. 2: assumption.
+    intros b H4. apply ImageUnderClass.ToClass in H4. 2: assumption.
     destruct H4 as [x [H4 H5]]. rewrite H3 in H5.
     apply From.Charac2 in H5. rewrite H5. apply InfOfClass.IsOrdinal. }
   assert (Ordinal :U(F:[a]:)) as H6. { apply SOU.IsOrdinal. assumption. }
@@ -54,7 +54,7 @@ Proof.
     intros x H10. rewrite H7. apply Succ.InclIsElem. 2: assumption.
     - apply H9. assumption.
     - apply SOU.IsUpperBound. 1: assumption.
-      apply SRI.CharacRev with x; try assumption.
+      apply ImageUnderClass.CharacRev with x; try assumption.
       apply CRF.Satisfies. 1: assumption. rewrite H3. apply From.DomainOf. }
   assert (forall x, x :< a -> VH!(F!x) :<=: VH!b) as H11. {
     intros x H11. apply VH.InclCompat. 2: assumption.

@@ -20,7 +20,7 @@ Require Import ZF.Set.Single.
 
 Module CFO := ZF.Class.Relation.FunctionOn.
 Module CRD := ZF.Class.Relation.Domain.
-Module SRI := ZF.Set.Relation.InvImage.
+
 
 (* f is a function defined on a.                                                *)
 Definition FunctionOn (f a:U) : Prop := Function f /\ domain f = a.
@@ -79,7 +79,7 @@ Qed.
 Proposition InvImageOfRange : forall (f a:U),
   FunctionOn f a -> f^:-1::[range f]: = a.
 Proof.
-  intros f a [H1 H2]. rewrite <- H2. apply SRI.OfRange.
+  intros f a [H1 H2]. rewrite <- H2. apply InvImage.OfRange.
 Qed.
 
 (* If f defined on a, g defined on b and range f <= b, then g.f defined on a.   *)

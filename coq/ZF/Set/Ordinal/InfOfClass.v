@@ -14,7 +14,7 @@ Require Import ZF.Set.Ordinal.InterOfClass.
 Require Import ZF.Set.InterOfClass.
 
 Module COI := ZF.Class.Ordinal.Inf.
-Module SOC := ZF.Set.Ordinal.InterOfClass.
+
 
 (* The infimum of the class A.                                                  *)
 Definition inf (A:Class) : U := inter (A :/\: On).
@@ -72,7 +72,7 @@ Qed.
 (* The infimum of a class is an ordinal.                                        *)
 Proposition IsOrdinal : forall (A:Class), Ordinal (inf A).
 Proof.
-  intros A. apply SOC.IsOrdinal, Class.Inter2.IsInclR.
+  intros A. apply InterOfClass.IsOrdinal, Class.Inter2.IsInclR.
 Qed.
 
 (* The infimum of a class of ordinals is a lower-bound of the class.            *)

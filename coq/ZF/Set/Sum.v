@@ -13,8 +13,6 @@ Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Append.
 Export ZF.Notation.Append.
 
-Module SRF := ZF.Set.Relation.Fun.From.
-Module SRI := ZF.Set.Relation.Inj.
 
 (* The sum of two sets, formed by tagging the left and right components.        *)
 Definition sum (a b:U) : U := :{ :0: }: :x: a :\/: :{ :1: }: :x: b.
@@ -23,16 +21,16 @@ Definition sum (a b:U) : U := :{ :0: }: :x: a :\/: :{ :1: }: :x: b.
 Global Instance SetAppend : Append U := { append := sum }.
 
 (* The left injection from a to the disjoint sum of a and b.                    *)
-Definition inL (a b:U) : U := SRF.from a (fun x => :(:0:,x):).
+Definition inL (a b:U) : U := from a (fun x => :(:0:,x):).
 
 (* The right injection from b to the disjoint sum of a and b.                   *)
-Definition inR (a b:U) : U := SRF.from b (fun y => :(:1:,y):).
+Definition inR (a b:U) : U := from b (fun y => :(:1:,y):).
 
 (* The left injection is an injection from a to a ++ b.                         *)
 Proposition IsInjL : forall (a b:U), Inj (inL a b) a (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b. apply SRF.IsInj.
+  intros a b. apply From.IsInj.
   - intros x H1. apply Union2.Charac. left.
     apply Prod.Charac2. split.
     + apply Single.IsIn.
@@ -44,7 +42,7 @@ Qed.
 Proposition IsInjR : forall (a b:U), Inj (inR a b) b (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b. apply SRF.IsInj.
+  intros a b. apply From.IsInj.
   - intros y H1. apply Union2.Charac. right.
     apply Prod.Charac2. split.
     + apply Single.IsIn.
@@ -56,14 +54,14 @@ Qed.
 Proposition IsFunL : forall (a b:U), Fun (inL a b) a (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b. apply SRI.IsFun, IsInjL.
+  intros a b. apply Inj.IsFun, IsInjL.
 Qed.
 
 (* The right injection is a function from b to a ++ b.                          *)
 Proposition IsFunR : forall (a b:U), Fun (inR a b) b (a :++: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b. apply SRI.IsFun, IsInjR.
+  intros a b. apply Inj.IsFun, IsInjR.
 Qed.
 
 (* The left injection sends x to the left-tagged pair (0,x).                    *)
@@ -71,7 +69,7 @@ Proposition EvalL : forall (a b x:U),
   x :< a -> (inL a b)!x = :(:0:,x):.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b x H1. apply SRF.Eval. assumption.
+  intros a b x H1. apply From.Eval. assumption.
 Qed.
 
 (* The right injection sends y to the right-tagged pair (1,y).                  *)
@@ -79,5 +77,5 @@ Proposition EvalR : forall (a b y:U),
   y :< b -> (inR a b)!y = :(:1:,y):.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b y H1. apply SRF.Eval. assumption.
+  intros a b y H1. apply From.Eval. assumption.
 Qed.

@@ -24,7 +24,6 @@ Require Import ZF.Set.Union.
 Require Import ZF.Notation.Eval.
 
 Module CRS := ZF.Class.Relation.ShiftL.
-Module SOU := ZF.Set.Ordinal.UnionOf.
 
 
 (* Shifting a function to the left. shiftL f = { (x,y) | (succ x, y) :< f }     *)
@@ -140,7 +139,7 @@ Proof.
   - apply IsFunction. apply H1.
   - split.
     + rewrite WhenOrdinalDomain.
-      * apply SOU.IsOrdinal, OrdFun.DomainOf. assumption.
+      * apply UnionOf.IsOrdinal, OrdFun.DomainOf. assumption.
       * apply OrdFun.DomainOf. assumption.
     + intros y H2. apply RangeOf in H2. revert H2. apply H1.
 Qed.
