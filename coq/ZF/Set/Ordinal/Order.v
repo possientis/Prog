@@ -23,8 +23,6 @@ Module COW := ZF.Class.Order.WellOrdering.
 Module COS := ZF.Class.Ordinal.Subclass.
 Module COO := ZF.Class.Ordinal.Enum.
 
-Module SOE := ZF.Set.Ordinal.Order.E.
-Module SOI := ZF.Set.Order.Isom.
 
 (* Every well-ordered set is order-isomorphic to some ordinal.                  *)
 Proposition Exists : forall (r b:U),
@@ -43,9 +41,9 @@ Proof.
       apply COO.WhenSmall; assumption. }
   destruct H4 as [a [H4 H5]].
   remember (COO.Enum (toClass r) (toClass b) :|: a) as f eqn:H6.
-  exists f. exists a. split. 1: assumption. apply SOI.FromClass.
+  exists f. exists a. split. 1: assumption. apply Isom.FromClass.
   apply COI.EquivCompat2 with (COE.E:/:toClass a).
-  - apply Equiv.Sym, SOE.ToClass.
+  - apply Equiv.Sym, E.ToClass.
   - apply (proj1 (COI.RestrictL (toClass f) _ _ _ _)), H5. reflexivity.
 Qed.
 
@@ -62,9 +60,9 @@ Proof.
   apply COO.WhenSmallUnique with (toClass r) (toClass c); try assumption.
   - apply SetIsSmall.
   - apply COI.RestrictL, COI.EquivCompat2 with (toClass (E a)).
-    1: apply SOE.ToClass. apply SOI.ToClass. assumption.
+    1: apply E.ToClass. apply Isom.ToClass. assumption.
   - apply COI.RestrictL, COI.EquivCompat2 with (toClass (E b)).
-    1: apply SOE.ToClass. apply SOI.ToClass. assumption.
+    1: apply E.ToClass. apply Isom.ToClass. assumption.
 Qed.
 
 (* Every ordinal subset of an ordinal is order-isomorphic to some sub-ordinal.  *)
@@ -86,11 +84,11 @@ Proof.
   assert (f = f) as H6. { reflexivity. }
   specialize (H4 f H6). exists c, f.
   assert (Isom f (E c) (E a) c a) as H7. {
-    apply SOI.FromClass.
+    apply Isom.FromClass.
     apply COI.EquivCompat2 with (COE.E :/: (toClass c)).
-    + apply Equiv.Sym, SOE.ToClass.
+    + apply Equiv.Sym, E.ToClass.
     + apply COI.EquivCompat3 with (COE.E :/: (toClass a)).
-      * apply Equiv.Sym, SOE.ToClass.
+      * apply Equiv.Sym, E.ToClass.
       * apply (COI.RestrictL _ COE.E), (COI.RestrictR _ _ COE.E). assumption. }
   assert(Monotone f) as H8. { apply (Monotone.FromIsom f c a); assumption. }
   assert (domain f = c) as G3. { apply H7. }
