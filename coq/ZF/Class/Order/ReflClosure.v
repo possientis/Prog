@@ -29,6 +29,7 @@ Proof.
   intros R x H1. right. assumption.
 Qed.
 
+(* The reflexive closure holds at (y,z) iff y = z or R holds at (y,z).          *)
 Proposition Charac2 : forall (R:Class) (y z:U),
   R^:=: :(y,z): <-> y = z \/ R :(y,z):.
 Proof.
@@ -95,6 +96,7 @@ Proof.
   exfalso. apply H1 with x. 1: assumption. apply H2 with y; assumption.
 Qed.
 
+(* For any two elements of a total order, each is below or equal to the other.  *)
 Proposition LeqOrLeq : forall (R A:Class) (x y:U),
   Total R A ->
   A x       ->
@@ -108,6 +110,7 @@ Proof.
   - right. apply Charac2. right. assumption.
 Qed.
 
+(* In a total order, x < y or y <= x holds for any two elements x and y.        *)
 Proposition LessOrLeq : forall (R A:Class) (x y:U),
   Total R A ->
   A x       ->
@@ -121,6 +124,7 @@ Proof.
   - right. apply Charac2. right. assumption.
 Qed.
 
+(* If x is at most y and y is strictly below z, then x is strictly below z.     *)
 Proposition LeqLessTran : forall (R A:Class) (x y z:U),
   Transitive R A  ->
   A x             ->
@@ -136,6 +140,7 @@ Proof.
   - apply H1 with y; assumption.
 Qed.
 
+(* If x is strictly below y and y is at most z, then x is strictly below z.     *)
 Proposition LessLeqTran : forall (R A:Class) (x y z:U),
   Transitive R A  ->
   A x             ->

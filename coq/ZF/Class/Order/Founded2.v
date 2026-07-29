@@ -31,6 +31,7 @@ Module CIN := ZF.Class.Incl.
 Module COI := ZF.Class.Order.InitSegment.
 
 
+(* If R is founded on A, every non-empty subclass of A has an R-minimal element.*)
 Proposition HasMinimal : forall (R A B:Class),
   Founded R A                 ->
   B :<=: A                    ->

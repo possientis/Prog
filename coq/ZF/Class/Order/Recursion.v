@@ -118,6 +118,7 @@ Proof.
   - apply IsFunctional. assumption.
 Qed.
 
+(* The domain of the recursion class associated with R A F is a subclass of A.  *)
 Lemma IsIncl1 : forall (R A F:Class),
   CRD.domain (Recursion R A F) :<=: A.
 Proof.
@@ -128,6 +129,7 @@ Proof.
   apply H2. assumption.
 Qed.
 
+(* The recursion class evaluates consistently with any local recursive function.*)
 Lemma Eval : forall (R A F:Class) (f a x:U),
   WellFounded R A                             ->
   toClass a :<=: CRD.domain (Recursion R A F) ->
@@ -142,6 +144,7 @@ Proof.
     apply FunctionOn.Satisfies with a. 2: assumption. apply H3.
 Qed.
 
+(* Any local recursive function on a witnesses inclusion of a in the domain.    *)
 Lemma IsIncl2 : forall (R A F:Class) (f a:U),
   K R A F f a -> toClass a :<=: CRD.domain (Recursion R A F).
 Proof.
@@ -149,6 +152,7 @@ Proof.
   apply FunctionOn.Satisfies with a. 2: assumption. apply H1.
 Qed.
 
+(* The recursion class satisfies the recursive formula at each domain element.  *)
 Lemma Recurse : forall (R A F:Class) (b:U),
   WellFounded R A                                                   ->
   CRD.domain (Recursion R A F) b                                    ->
@@ -187,6 +191,7 @@ Proof.
   rewrite H4, H10. apply H3. assumption.
 Qed.
 
+(* The recursion class restricted to a transitive set a is a local recursion.   *)
 Lemma Restrict : forall (R A F:Class) (a f:U),
   WellFounded R A                               ->
   toClass a :<=: CRD.domain (Recursion R A F)   ->
@@ -216,6 +221,7 @@ Proof.
   split. 1: assumption. split. 1: assumption. split; assumption.
 Qed.
 
+(* The recursion class restricted to the closure of an initial segment is local.*)
 Lemma OnClosure : forall (R A F:Class) (a b f:U),
   WellFounded R A                                                         ->
   A a                                                                     ->
@@ -261,6 +267,7 @@ Proof.
   apply Restrict; assumption.
 Qed.
 
+(* Extending a local recursion by one element gives a larger local recursion.   *)
 Lemma Extend : forall (R A F:Class) (a b c f g:U),
   WellFounded R A                                   ->
   A a                                               ->

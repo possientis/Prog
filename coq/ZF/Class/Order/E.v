@@ -18,6 +18,7 @@ Require Import ZF.Set.Single.
 (* The class satisfied by all ordered pairs (x,y) with x :< y.                  *)
 Definition E : Class := fun x => exists y z, x = :(y,z): /\ y :< z.
 
+(* E holds for the ordered pair (y,z) if and only if y is a member of z.        *)
 Proposition Charac2 : forall (y z:U), E :(y,z): <-> y :< z.
 Proof.
   intros y z. split; intros H1.
@@ -26,7 +27,8 @@ Proof.
   - exists y. exists z. split. 1: reflexivity. assumption.
 Qed.
 
-Proposition InitSegmentEA : forall (A:Class) (a:U),
+(* The initial segment of E in A at a equals the intersection of A and a.       *)
+Lemma InitSegmentEA : forall (A:Class) (a:U),
   initSegment E A a :~: A :/\: toClass a.
 Proof.
   intros A a x. split; intros [H1 H2].
@@ -38,8 +40,8 @@ Proof.
     + apply Charac2. assumption.
 Qed.
 
-
-Proposition InitSegmentEV : forall (a:U),
+(* The initial segment of E in V at a equals the class corresponding to a.      *)
+Lemma InitSegmentEV : forall (a:U),
   initSegment E V a :~: toClass a.
 Proof.
   intros a. apply Equiv.Tran with (V :/\: toClass a).
@@ -47,6 +49,7 @@ Proof.
   - apply Inter2VL.
 Qed.
 
+(* a is an E-minimal element of A iff A(a) holds and no member of a lies in A.  *)
 Proposition MinimalEA : forall (A:Class) (a:U),
   Minimal E A a <-> A a /\ A :/\: toClass a :~: :0:.
 Proof.
@@ -115,6 +118,7 @@ Proof.
     apply Inter2.Charac. split. 2: assumption. apply Charac2. assumption.
 Qed.
 
+(* The membership relation E is well-founded on the class V of all sets.        *)
 Proposition IsWellFounded : WellFounded E V.
 Proof.
   split. 1: apply IsFounded. intros a _.

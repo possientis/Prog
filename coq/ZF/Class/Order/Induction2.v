@@ -16,6 +16,7 @@ Module CIN := ZF.Class.Incl.
 Module CIT := ZF.Class.Inter2.
 Module COI := ZF.Class.Order.InitSegment.
 
+(* If B is a subclass of A satisfying the inductive property for R, then A = B. *)
 Proposition Induction1 : forall (R A B:Class),
   Founded R A                                             ->
   B :<=: A                                                ->
@@ -73,6 +74,7 @@ Proof.
   apply Minimal.IsIn in H6. destruct H6 as [_ H6]. contradiction.
 Qed.
 
+(* Principle of transfinite induction for a founded relation on A.              *)
 Proposition Induction : forall (R A B:Class),
   Founded R A                                                          ->
   (forall a, A a -> (forall x, COI.initSegment R A a x -> B x) -> B a)  ->

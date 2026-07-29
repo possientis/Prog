@@ -12,6 +12,7 @@ Require Import ZF.Set.OrdPair.
 (* Predicate expressing the fact that R is a strict total order class on A.     *)
 Definition StrictTotalOrd (R A:Class) : Prop := StrictOrd R A /\ Total R A.
 
+(* A strict total order is a strict order.                                      *)
 Proposition IsStrictOrd : forall (R A:Class),
   StrictTotalOrd R A -> StrictOrd R A.
 Proof.
@@ -19,6 +20,7 @@ Proof.
 Qed.
 
 
+(* In a strict total order, x < y iff neither x = y nor y < x holds.            *)
 Proposition WhenLess : forall (R A:Class) (x y:U),
   A x                ->
   A y                ->
@@ -35,6 +37,7 @@ Proof.
     + apply H5. right. assumption.
 Qed.
 
+(* Sufficient conditions for a class to be a strict total order on A.           *)
 Proposition Suffice : forall (R A:Class),
   Transitive R A ->
   (forall x y, A x -> A y -> R :(x,y): <-> ~ (x = y \/ R :(y,x):)) ->

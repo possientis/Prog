@@ -15,6 +15,7 @@ Require Import ZF.Set.Relation.EvalOfClass.
 Definition Minimal (R A:Class) (a:U) : Prop
   := A a /\ (forall x, A x -> ~ R :(x,a):).
 
+(* If a is in A but not minimal, there exists an element of A strictly below a. *)
 Proposition NotMinimal : forall (R A:Class) (a:U),
   A a -> ~ Minimal R A a -> exists x, A x /\ R :(x,a):.
 Proof.
@@ -27,6 +28,7 @@ Definition HasMinimal R A : Prop := exists a, Minimal R A a.
 
 Definition HasNoMinimal R A : Prop := ~ HasMinimal R A.
 
+(* Minimality is preserved when R and A are replaced by equivalent classes.     *)
 Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> Minimal R A a -> Minimal S B a.
 Proof.
@@ -37,6 +39,7 @@ Proof.
     + apply H1. assumption.
 Qed.
 
+(* Minimality is preserved when R is replaced by an equivalent class.           *)
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> Minimal R A a -> Minimal S A a.
 Proof.
@@ -44,6 +47,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* Minimality is preserved when A is replaced by an equivalent class.           *)
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Minimal R A a -> Minimal R B a.
 Proof.
@@ -51,12 +55,14 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* An R-minimal element of A belongs to A.                                      *)
 Proposition IsIn : forall (R A:Class) (a:U),
   Minimal R A a -> A a.
 Proof.
   intros R A a H1. apply H1.
 Qed.
 
+(* If a is minimal in B under a total order, every element of B is at least a.  *)
 Proposition WhenIn : forall (R A B:Class) (a b:U),
   Total R A             ->
   B :<=: A              ->
@@ -73,6 +79,7 @@ Proof.
   - exfalso. revert H5. apply H3. assumption.
 Qed.
 
+(* If A has no minimal element, every element of A has a strictly smaller one.  *)
 Proposition WhenHasNone : forall (R A:Class) (a:U),
   A a                           ->
   HasNoMinimal R A              ->
@@ -83,6 +90,7 @@ Proof.
   intros b H4 H5. apply H3. exists b. split; assumption.
 Qed.
 
+(* An isomorphism maps an R-minimal element to an S-minimal element.            *)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B          ->
   C :<=: A                ->
@@ -98,6 +106,7 @@ Proof.
     apply H1 in H7; try assumption. specialize (H5 x H6). contradiction.
 Qed.
 
+(* a is R-minimal in A iff a is in A and the initial segment at a is empty.     *)
 Proposition EmptySegment : forall (R A:Class) (a:U),
   Minimal R A a <-> A a /\ initSegment R A a :~: :0:.
 Proof.

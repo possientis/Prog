@@ -9,18 +9,21 @@ Require Import ZF.Set.OrdPair.
 (* Predicate expressing the fact that R is a strict order class on A.           *)
 Definition StrictOrd (R A:Class) : Prop := Irreflexive R A /\ Transitive R A.
 
+(* A strict order on A is irreflexive on A.                                     *)
 Proposition IsIrreflexive : forall (R A:Class),
   StrictOrd R A -> Irreflexive R A.
 Proof.
   intros R A H1. apply H1.
 Qed.
 
+(* A strict order on A is transitive on A.                                      *)
 Proposition IsTransitive : forall (R A:Class),
   StrictOrd R A -> Transitive R A.
 Proof.
   intros R A H1. apply H1.
 Qed.
 
+(* In a strict order, x < y implies it is not the case that x = y or y < x.     *)
 Proposition WhenLess : forall (R A:Class) (x y:U),
   A x           ->
   A y           ->

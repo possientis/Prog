@@ -57,6 +57,7 @@ Proof.
   apply CIN.Tran with A; assumption.
 Qed.
 
+(* Foundedness is preserved and reflected by order isomorphisms.                *)
 Proposition IsomCompat : forall (F R S A B:Class),
   Isom F R S A B -> Founded R A <-> Founded S B.
 Proof.
@@ -103,6 +104,7 @@ Proof.
   - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
+(* A founded relation has no element related to itself.                         *)
 Proposition NoLoop1 : forall (R A:Class), Founded R A ->
   forall a, A a -> ~ R :(a,a):.
 Proof.
@@ -116,6 +118,7 @@ Proof.
   specialize (H5 a (Single.IsIn a)). contradiction.
 Qed.
 
+(* A founded relation has no pair of elements related to each other.            *)
 Proposition NoLoop2 : forall (R A:Class), Founded R A ->
   forall a b, A a -> A b -> ~ (R :(a,b): /\ R :(b,a):).
 Proof.
@@ -130,6 +133,7 @@ Proof.
   - specialize (H7 a (Pair.IsInL a b)). contradiction.
 Qed.
 
+(* A founded relation has no 3-cycle among elements of A.                       *)
 Proposition NoLoop3 : forall (R A:Class), Founded R A -> forall a1 a2 a3,
   A a1 ->
   A a2 ->
@@ -148,6 +152,7 @@ Proof.
   - specialize (H9 a2 (Tuple3In2 a1 a2 a3)). contradiction.
 Qed.
 
+(* A founded relation has no 4-cycle among elements of A.                       *)
 Proposition NoLoop4 : forall (R A:Class), Founded R A -> forall a1 a2 a3 a4,
   A a1 ->
   A a2 ->

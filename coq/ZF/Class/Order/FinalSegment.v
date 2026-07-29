@@ -30,6 +30,7 @@ Proof.
   - split. 1: assumption. exists a. split. 2: assumption. apply Single.IsIn.
 Qed.
 
+(* x is in the final segment iff it is in the initial segment of the converse.  *)
 Proposition InInit : forall (R A:Class) (a x:U),
   finalSegment R A a x <-> initSegment R^:-1: A a x.
 Proof.
@@ -88,6 +89,7 @@ Proof.
   apply CIN.Refl.
 Qed.
 
+(* Every element of the final segment of R on A at a belongs to A.              *)
 Proposition WhenIn : forall (R A:Class) (a x:U),
   finalSegment R A a x -> A x.
 Proof.
@@ -95,6 +97,7 @@ Proof.
 Qed.
 
 
+(* If x is in the final segment of R on A at a, then R holds at (a,x).          *)
 Proposition IsMore : forall (R A:Class) (a x:U),
   finalSegment R A a x -> R :(a,x):.
 Proof.
@@ -109,6 +112,7 @@ Proof.
   apply Charac. split; assumption.
 Qed.
 
+(* The final segment is empty if no element of A is strictly above a.           *)
 Proposition WhenZeroRev : forall (R A:Class) (a:U),
   (forall x, A x -> ~ R :(a,x):) -> finalSegment R A a :~: :0:.
 Proof.
@@ -125,6 +129,7 @@ Proof.
   intros R A a. apply Class.Inter2.IsInclL.
 Qed.
 
+(* If b is below a in A, then the final segment at a is included in that at b.  *)
 Proposition WhenMore : forall (R A:Class) (a b:U),
   Transitive R A                            ->
   A a                                       ->
@@ -160,6 +165,7 @@ Proof.
     + rewrite H8. assumption.
 Qed.
 
+(* An isomorphism maps the final segment at a to the final segment at its image.*)
 Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
   Isom F R S A B    ->
   A a               ->
@@ -171,6 +177,7 @@ Proof.
   - apply EquivCompatR, Bij.ImageOfDomain, H1.
 Qed.
 
+(* An isomorphism preserves the emptiness of a final segment.                   *)
 Proposition IsomWhenZero : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                      ->
   C :<=: A                            ->

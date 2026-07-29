@@ -32,6 +32,7 @@ Proof.
     apply Single.IsIn.
 Qed.
 
+(* x belongs to the reflexive initial segment at a iff x = a or x is below a.   *)
 Proposition CharacRefl : forall (R A:Class) (a x:U),
   initSegment R^:=: A a x <-> (A a /\ x = a) \/ initSegment R A a x.
 Proof.
@@ -94,18 +95,21 @@ Proof.
   apply CIN.Refl.
 Qed.
 
+(* Every element of the initial segment of R in A at a belongs to A.            *)
 Proposition IsIn : forall (R A:Class) (a x:U),
   initSegment R A a x -> A x.
 Proof.
   intros R A a x H1. apply Charac in H1. apply H1.
 Qed.
 
+(* If x is in the initial segment of R in A at a, then R holds at (x,a).        *)
 Proposition IsLess : forall (R A:Class) (a x:U),
   initSegment R A a x -> R :(x,a):.
 Proof.
   intros R A a x H1. apply Charac in H1. apply H1.
 Qed.
 
+(* Any element of the reflexive initial segment at a is below or equal to a.    *)
 Proposition IsLeq : forall (R A:Class) (a x:U),
   initSegment R^:=: A a x -> R^:=: :(x,a):.
 Proof.
@@ -120,6 +124,7 @@ Proof.
   apply Charac. split; assumption.
 Qed.
 
+(* The initial segment is empty if no element of A is strictly below a.         *)
 Proposition WhenZeroRev : forall (R A:Class) (a:U),
   (forall x, A x -> ~ R :(x,a):) -> initSegment R A a :~: :0:.
 Proof.
@@ -136,6 +141,7 @@ Proof.
   intros R A a. apply Class.Inter2.IsInclL.
 Qed.
 
+(* If a is below b in A, then the initial segment at a is included in that at b.*)
 Proposition WhenLess : forall (R A:Class) (a b:U),
   Transitive R A                            ->
   A a                                       ->
@@ -171,6 +177,7 @@ Proof.
     + rewrite H8. assumption.
 Qed.
 
+(* An isomorphism maps the initial segment at a onto the initial segment at F!a.*)
 Proposition IsomFullImage : forall (F R S A B:Class) (a:U),
   Isom F R S A B    ->
   A a               ->
@@ -182,6 +189,7 @@ Proof.
   - apply EquivCompatR, Bij.ImageOfDomain, H1.
 Qed.
 
+(* An isomorphism preserves the emptiness of an initial segment.                *)
 Proposition IsomWhenZero : forall (F R S A B C:Class) (a:U),
   Isom F R S A B                    ->
   C :<=: A                          ->
@@ -195,12 +203,14 @@ Proof.
   - apply Empty.ImageOf. assumption.
 Qed.
 
+(* a is an element of its own reflexive initial segment when a lies in A.       *)
 Proposition IsInRefl : forall (R A:Class) (a:U),
   A a -> initSegment R^:=: A a a.
 Proof.
   intros R A a H1. apply CharacRefl. left. split. 1: assumption. reflexivity.
 Qed.
 
+(* If R^= holds at (a,b), the initial segment at a is included in that at b.    *)
 Proposition WhenLeq : forall (R A:Class) (a b:U),
   Transitive R A                              ->
   A a                                         ->

@@ -26,6 +26,7 @@ Definition HasMaximal R A : Prop := exists a, Maximal R A a.
 
 Definition HasNoMaximal R A : Prop := ~ HasMaximal R A.
 
+(* Maximality is preserved when R and A are replaced by equivalent classes.     *)
 Proposition EquivCompat : forall (R S A B:Class) (a:U),
   R :~: S -> A :~: B -> Maximal R A a -> Maximal S B a.
 Proof.
@@ -36,6 +37,7 @@ Proof.
     + apply H1. assumption.
 Qed.
 
+(* Maximality is preserved when R is replaced by an equivalent class.           *)
 Proposition EquivCompatL : forall (R S A:Class) (a:U),
   R :~: S -> Maximal R A a -> Maximal S A a.
 Proof.
@@ -43,6 +45,7 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* Maximality is preserved when A is replaced by an equivalent class.           *)
 Proposition EquivCompatR : forall (R A B:Class) (a:U),
   A :~: B -> Maximal R A a -> Maximal R B a.
 Proof.
@@ -50,12 +53,14 @@ Proof.
   apply Equiv.Refl.
 Qed.
 
+(* An R-maximal element of A belongs to A.                                      *)
 Proposition IsIn : forall (R A:Class) (a:U),
   Maximal R A a -> A a.
 Proof.
   intros R A a H1. apply H1.
 Qed.
 
+(* If b is maximal in B under a total order, every element of B is at most b.   *)
 Proposition WhenIn : forall (R A B:Class) (a b:U),
   Total R A             ->
   B :<=: A              ->
@@ -72,6 +77,7 @@ Proof.
   - exfalso. revert H5. apply H3. assumption.
 Qed.
 
+(* If A has no maximal element, every element of A has a strictly larger one.   *)
 Proposition WhenHasNone : forall (R A:Class) (a:U),
   A a                           ->
   HasNoMaximal R A              ->
@@ -82,6 +88,7 @@ Proof.
   intros b H4 H5. apply H3. exists b. split; assumption.
 Qed.
 
+(* An isomorphism maps an R-maximal element to an S-maximal element.            *)
 Proposition IsomImage : forall (F R S A B C:Class) (a:U),
   Isom F R S A B          ->
   C :<=: A                ->
@@ -97,6 +104,7 @@ Proof.
     apply H1 in H7; try assumption. specialize (H5 x H6). contradiction.
 Qed.
 
+(* a is R-maximal in A if and only if a is R^-1-minimal in A.                   *)
 Proposition IsMinimal : forall (R A:Class) (a:U),
   Maximal R A a <-> Minimal R^:-1: A a.
 Proof.
@@ -107,6 +115,7 @@ Proof.
     destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
 Qed.
 
+(* a is R-minimal in A if and only if a is R^-1-maximal in A.                   *)
 Proposition IsMaximal : forall (R A:Class) (a:U),
   Minimal R A a <-> Maximal R^:-1: A a.
 Proof.
@@ -117,6 +126,7 @@ Proof.
     destruct H1 as [H1 H4]. specialize (H4 x H2). contradiction.
 Qed.
 
+(* a is R-maximal in A iff a is in A and the final segment at a is empty.       *)
 Proposition EmptySegment : forall (R A:Class) (a:U),
   Maximal R A a <-> A a /\ finalSegment R A a :~: :0:.
 Proof.
@@ -125,6 +135,7 @@ Proof.
   - split. 1: assumption. intros x. apply FinalSegment.WhenZero. assumption.
 Qed.
 
+(* In a total order, the reflexive initial segment at the maximum of A equals A.*)
 Proposition InitRefl : forall (R A:Class) (a:U),
   Total R A                     ->
   Maximal R A a                 ->

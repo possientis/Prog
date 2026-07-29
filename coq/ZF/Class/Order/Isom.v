@@ -16,6 +16,7 @@ Require Import ZF.Set.OrdPair.
 Definition Isom (F R S A B:Class) : Prop := Bij F A B /\ forall x y, A x -> A y ->
   R :(x,y): <-> S :(F!x,F!y):.
 
+(* Isomorphism is compatible with class equivalence in all five arguments.      *)
 Proposition EquivCompat : forall (F R S A B F' R' S' A' B':Class),
   F :~: F'              ->
   R :~: R'              ->
@@ -41,6 +42,7 @@ Proof.
       * rewrite H10, H11. apply H3. assumption.
 Qed.
 
+(* Replacing F by an equivalent class preserves isomorphism.                    *)
 Proposition EquivCompat1 : forall (F G R S A B:Class),
   F :~: G -> Isom F R S A B -> Isom G R S A B.
 Proof.
@@ -51,6 +53,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Replacing R by an equivalent class preserves isomorphism.                    *)
 Proposition EquivCompat2 : forall (F R R' S A B:Class),
   R :~: R' -> Isom F R S A B -> Isom F R' S A B.
 Proof.
@@ -61,6 +64,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Replacing S by an equivalent class preserves isomorphism.                    *)
 Proposition EquivCompat3 : forall (F R S S' A B:Class),
   S :~: S' -> Isom F R S A B -> Isom F R S' A B.
 Proof.
@@ -71,6 +75,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Replacing A by an equivalent class preserves isomorphism.                    *)
 Proposition EquivCompat4 : forall (F R S A A' B:Class),
   A :~: A' -> Isom F R S A B -> Isom F R S A' B.
 Proof.
@@ -81,6 +86,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* Replacing B by an equivalent class preserves isomorphism.                    *)
 Proposition EquivCompat5 : forall (F R S A B B':Class),
   B :~: B' -> Isom F R S A B -> Isom F R S A B'.
 Proof.
@@ -91,6 +97,7 @@ Proof.
   - apply Equiv.Refl.
 Qed.
 
+(* F is an (R,S)-isomorphism from A to B iff it is an (R|A,S)-isomorphism.      *)
 Proposition RestrictL : forall (F R S A B:Class),
   Isom F R S A B <-> Isom F (R:/:A) S A B.
 Proof.
@@ -107,6 +114,7 @@ Proof.
     + apply H2 in H5; try assumption. destruct H5 as [H5 _]. assumption.
 Qed.
 
+(* F is an (R,S)-isomorphism from A to B iff it is an (R,S|B)-isomorphism.      *)
 Proposition RestrictR : forall (F R S A B:Class),
   Isom F R S A B <-> Isom F R (S:/:B) A B.
 Proof.
@@ -164,6 +172,7 @@ Proof.
         rewrite (Bij.ComposeEval F G A B C y) in H7; try assumption.
 Qed.
 
+(* Transporting R by a bijection F from A to B yields an (R,S)-isomorphism.     *)
 Proposition Transport : forall (F R S A B:Class),
   (S = transport F R A) -> Bij F A B -> Isom F R S A B.
 Proof.

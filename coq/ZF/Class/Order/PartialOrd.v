@@ -9,18 +9,21 @@ Require Import ZF.Class.Relation.Bij.
 Definition PartialOrd (R A:Class) : Prop
   := Reflexive R A /\ AntiSymmetric R A /\ Transitive R A.
 
+(* A partial order on A is reflexive on A.                                      *)
 Proposition IsReflexive : forall (R A:Class),
   PartialOrd R A -> Reflexive R A.
 Proof.
   intros R A H1. apply H1.
 Qed.
 
+(* A partial order on A is antisymmetric on A.                                  *)
 Proposition IsAntiSymmetric : forall (R A:Class),
   PartialOrd R A -> AntiSymmetric R A.
 Proof.
   intros R A H1. apply H1.
 Qed.
 
+(* A partial order on A is transitive on A.                                     *)
 Proposition IsTransitive : forall (R A:Class),
   PartialOrd R A -> Transitive R A.
 Proof.

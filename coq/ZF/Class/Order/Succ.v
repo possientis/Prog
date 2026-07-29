@@ -15,6 +15,7 @@ Require Import ZF.Set.OrdPair.
 Definition succ (R A:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ Minimal R (finalSegment R A a) y.
 
+(* x is in the successor of a iff x lies below the minimal element above a.     *)
 Proposition Charac : forall (R A:Class) (a x:U), succ R A a x <-> exists y,
   x :< y                                    /\
   A y                                       /\
@@ -38,6 +39,7 @@ Proof.
       * apply FinalSegment.IsMore with A. assumption.
 Qed.
 
+(* The successor class of a maximal element is the empty class.                 *)
 Proposition WhenMaximal : forall (R A:Class) (a:U),
   Maximal R A a -> succ R A a :~: :0:.
 Proof.
@@ -49,6 +51,7 @@ Proof.
   - contradiction.
 Qed.
 
+(* If a is not maximal, the successor of a is a nonempty set-sized class.       *)
 Proposition WhenNotMaximal : forall (R A:Class) (a:U),
   WellFoundedWellOrd R A                        ->
   A a                                           ->
@@ -83,6 +86,7 @@ Proof.
     rewrite H4. apply FinalSegment.Charac. split; assumption.
 Qed.
 
+(* The successor class of any element of A is a small class.                    *)
 Proposition IsSmall : forall (R A:Class) (a:U),
   WellFoundedWellOrd R A  ->
   A a                     ->
