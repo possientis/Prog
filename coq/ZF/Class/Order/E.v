@@ -65,56 +65,56 @@ Qed.
 (* The class E is founded on V, i.e. every subset of V has an E-minimal element.*)
 Proposition IsFounded : Founded E V.
 Proof.
-  (* Let a be an arbitrary set. *)
+  (* Let a be an arbitrary set.                                                 *)
   intros a.
 
-  (* We assume that a is non-empty. *)
+  (* We assume that a is non-empty.                                             *)
   intros _ H1. assert (a <> :0:) as A. apply H1. clear A.
 
-  (* We need to show that a has an E-minimal element. *)
+  (* We need to show that a has an E-minimal element.                           *)
   assert (exists x, Minimal E (toClass a) x) as A. 2: apply A.
 
-  (* Applying the foundation axiom... *)
+  (* Applying the foundation axiom...                                           *)
   apply Foundation in H1.
 
-  (* We see that a has an element x such that x /\ a = 0. *)
+  (* We see that a has an element x such that x /\ a = 0.                       *)
   assert (exists x, x :< a /\ x :/\: a = :0:) as A. apply H1. clear A.
 
-  (* So let x be such an element. *)
+  (* So let x be such an element.                                               *)
   destruct H1 as [x [H1 H2]].
 
-  (* Then we have x :< a. *)
+  (* Then we have x :< a.                                                       *)
   assert (x :< a) as A. apply H1. clear A.
 
-  (* And we have x /\ a = 0. *)
+  (* And we have x /\ a = 0.                                                    *)
   assert (x :/\: a = :0:) as A. apply H2. clear A.
 
-  (* We claim that such an x is our desired e-minimal element. *)
+  (* We claim that such an x is our desired E-minimal element.                  *)
   exists x.
 
-  (* So we need to show that x is E-minimal in a *)
+  (* So we need to show that x is E-minimal in a                                *)
   assert (Minimal E (toClass a) x) as A. 2: apply A.
 
-  (* In other words... *)
+  (* In other words...                                                          *)
   split.
 
-  (* We need to show that x :< a, which is true by assumption. *)
+  (* We need to show that x :< a, which is true by assumption.                  *)
   - assert (x :< a) as A. 2: apply A. assumption.
 
-  (* And given y in a *)
+  (* And given y in a                                                           *)
   - intros y H3. assert (y :< a) as A. apply H3. clear A.
 
-  (* We need to show that E (y,x) does not hold. *)
+  (* We need to show that E (y,x) does not hold.                                *)
     assert (~ E :(y,x):) as A. 2: apply A.
 
-  (* So we assume to the contrary that E (y,x) is true. *)
+  (* So we assume to the contrary that E (y,x) is true.                         *)
     intros H4. assert (E :(y,x):) as A. apply H4. clear A.
 
-  (* and we obtain a contradiction buy showing that y lies in x /\ a. *)
+  (* We get a contradiction by showing that y lies in x /\ a.                   *)
     apply Empty.Charac with y. rewrite <- H2.
     assert (y :< x :/\: a) as A. 2: apply A.
 
-  (* Which follows easily. *)
+  (* Which follows easily.                                                      *)
     apply Inter2.Charac. split. 2: assumption. apply Charac2. assumption.
 Qed.
 

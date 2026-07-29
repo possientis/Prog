@@ -10,7 +10,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Notation.Slash.
 Export ZF.Notation.Slash.
 
-(* The restriction of a class (viewed as relation) to another relation.         *)
+(* The restriction of a relation class R to A.                                  *)
 Definition restrict (R A:Class) : Class := R :/\: (A :x: A).
 
 

@@ -124,55 +124,55 @@ Proposition IsUnique : forall (R A B:Class) (x y:U),
   x = y.
 Proof.
 
-  (* Let R A B be arbitrary classes and x y arbitrary sets. *)
+  (* Let R A B be arbitrary classes and x y arbitrary sets.                     *)
   intros R A B x y.
 
-  (* We assume that R is a total on A. *)
+  (* We assume that R is a total on A.                                          *)
   intros H1. assert (Total R A) as X. apply H1. clear X.
 
-  (* We assume that B is a subclass of A. *)
+  (* We assume that B is a subclass of A.                                       *)
   intros H2. assert (B :<=: A) as X. apply H2. clear X.
 
-  (* We assume that x is R-minimal in B. *)
+  (* We assume that x is R-minimal in B.                                        *)
   intros H3. assert (Minimal R B x) as X. apply H3. clear X.
 
-  (* And we assume that y is R-minimal in B. *)
+  (* And we assume that y is R-minimal in B.                                    *)
   intros H4. assert (Minimal R B y) as X. apply H4. clear X.
 
-  (* We need to show that x = y. *)
+  (* We need to show that x = y.                                                *)
   assert (x = y) as X. 2: apply X.
 
-  (* x is also an element of A. *)
+  (* x is also an element of A.                                                 *)
   assert (A x) as H5. { apply H2. apply IsIn with R. assumption. }
 
-  (* And y is an element of A. *)
+  (* And y is an element of A.                                                  *)
   assert (A y) as H6. { apply H2. apply IsIn with R. assumption. }
 
-  (* From the totality of R on A we see that x = y \/  x R y \/ y R x. *)
+  (* From the totality of R on A we see that x = y \/  x R y \/ y R x.          *)
   specialize (H1 x y H5 H6).
   assert (x = y \/ R :(x,y): \/ R :(y,x):) as X. apply H1. clear X.
 
-  (* We consider these three cases separately. *)
+  (* We consider these three cases separately.                                  *)
   destruct H1 as [H1|[H1|H1]].
 
-  (* We first consider the case when x = y. *)
+  (* We first consider the case when x = y.                                     *)
   - assert (x = y) as X. { apply H1. } clear X.
 
-    (* Then we are done. *)
+    (* Then we are done.                                                        *)
     assumption.
 
-  (* We then consider the case x R y. *)
+  (* We then consider the case x R y.                                           *)
   - assert (R :(x,y):) as X. { apply H1. } clear X.
 
- (* This contradicts the minimality of y. *)
+ (* This contradicts the minimality of y.                                       *)
     assert (~R :(x,y):) as H7. { apply H4. apply IsIn with R. assumption. }
 
     contradiction.
 
-  (* We finally consider the case y R x. *)
+  (* We finally consider the case y R x.                                        *)
   - assert (R :(y,x):) as X. { apply H1. } clear X.
 
- (* This contradicts the minimality of x. *)
+ (* This contradicts the minimality of x.                                       *)
     assert (~R :(y,x):) as H7. { apply H3. apply IsIn with R. assumption. }
 
     contradiction.

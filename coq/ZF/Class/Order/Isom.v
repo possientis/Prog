@@ -133,7 +133,7 @@ Proof.
       apply Prod.Charac2. split; apply Bij.IsInRange with A; assumption.
 Qed.
 
-(* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorpshism. *)
+(* If F:A -> B is an (R,S)-isomorphism, F^-1 : B -> A is an (S,R)-isomorphism.  *)
 Proposition Converse : forall (F R S A B:Class),
   Isom F R S A B -> Isom F^:-1: S R B A.
 Proof.
@@ -151,7 +151,7 @@ Proof.
       * apply Bij.ConverseEvalIsInDomain with B; assumption.
 Qed.
 
-(* The composition of two isomorpshims is an isomorphism.                       *)
+(* The composition of two isomorphisms is an isomorphism.                       *)
 Proposition Compose : forall (F G R S T A B C:Class),
   Isom F R S A B ->
   Isom G S T B C ->

@@ -16,7 +16,7 @@ Require Import ZF.Set.Single.
 
 Module CIN := ZF.Class.Incl.
 
-(* Inital segment of R on A at a.                                               *)
+(* Final segment of R on A at a.                                                *)
 Definition finalSegment (R A:Class) (a:U) : Class
   := A :/\: R :[ toClass :{a}: ]:.
 
@@ -104,7 +104,7 @@ Proof.
   intros R A a x H1. apply Charac in H1. apply H1.
 Qed.
 
-(* The final segment is empty iff there is no x in A which is more than a.      *)
+(* If the final segment is empty, no element of A is more than a.               *)
 Proposition WhenZero : forall (R A:Class) (a x:U),
   finalSegment R A a :~: :0: -> A x -> ~ R :(a,x):.
 Proof.

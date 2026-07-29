@@ -144,7 +144,7 @@ Proof.
     apply FunctionOn.Satisfies with a. 2: assumption. apply H3.
 Qed.
 
-(* Any local recursive function on a witnesses inclusion of a in the domain.    *)
+(* Any local recursive function with domain a places a inside the domain.       *)
 Lemma IsIncl2 : forall (R A F:Class) (f a:U),
   K R A F f a -> toClass a :<=: CRD.domain (Recursion R A F).
 Proof.
@@ -191,7 +191,7 @@ Proof.
   rewrite H4, H10. apply H3. assumption.
 Qed.
 
-(* The recursion class restricted to a transitive set a is a local recursion.   *)
+(* The recursion class restricted to an R-transitive set a is local.            *)
 Lemma Restrict : forall (R A F:Class) (a f:U),
   WellFounded R A                               ->
   toClass a :<=: CRD.domain (Recursion R A F)   ->

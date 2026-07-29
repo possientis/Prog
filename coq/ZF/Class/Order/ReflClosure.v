@@ -23,7 +23,7 @@ Definition reflClosure (R:Class) : Class := fun x =>
 Global Instance ClassReflClosure : ReflClosure Class
   := { reflClosure := reflClosure }.
 
-(* The class is a subclass of its reflexive closure,                            *)
+(* The relation R is a subclass of its reflexive closure.                       *)
 Proposition IsIncl : forall (R:Class), R :<=: R^:=:.
 Proof.
   intros R x H1. right. assumption.
@@ -86,7 +86,7 @@ Proof.
   - right. apply H1 with y; assumption.
 Qed.
 
-(* The closure is antisymmetric when the class is irreflexive and transitive.   *)
+(* The reflexive closure is antisymmetric when R is irreflexive and transitive. *)
 Proposition IsAntiSymmetric : forall (R A:Class),
   Irreflexive R A -> Transitive R A  -> AntiSymmetric R^:=: A.
 Proof.

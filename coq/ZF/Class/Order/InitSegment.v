@@ -17,7 +17,7 @@ Require Import ZF.Set.Single.
 
 Module CIN := ZF.Class.Incl.
 
-(* Inital segment of R on A at a.                                               *)
+(* Initial segment of R on A at a.                                              *)
 Definition initSegment (R A:Class) (a:U) : Class
   := A :/\: R^:-1: :[ toClass :{a}: ]:.
 
@@ -116,7 +116,7 @@ Proof.
   intros R. apply IsLess.
 Qed.
 
-(* The initial segment is empty iff there is no x in A which is less than a.    *)
+(* If the initial segment is empty, no element of A is less than a.             *)
 Proposition WhenZero : forall (R A:Class) (a x:U),
   initSegment R A a :~: :0: -> A x -> ~ R :(x,a):.
 Proof.

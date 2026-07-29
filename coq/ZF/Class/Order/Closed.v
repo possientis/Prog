@@ -35,7 +35,7 @@ Definition Closed (R A:Class) : Prop := R:[A]: :<=: A.
 (* R is closed on A^2.                                                          *)
 Definition Closed2 (R A:Class) : Prop := R:[A:x:A]: :<=: A.
 
-(* A set in A has a superset in A that is closed under finitely many operations.*)
+(* A subset of A has a superset in A closed under finitely many operations.     *)
 Proposition Exists : forall (R S A:Class) (p q a:U),
   p :< :N                                                                   ->
   q :< :N                                                                   ->

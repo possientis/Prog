@@ -15,7 +15,7 @@ Require Import ZF.Set.OrdPair.
 Definition succ (R A:Class) (a:U) : Class := fun x =>
   exists y, x :< y /\ Minimal R (finalSegment R A a) y.
 
-(* x is in the successor of a iff x lies below the minimal element above a.     *)
+(* x is in the successor of a iff x belongs to the least element above a.       *)
 Proposition Charac : forall (R A:Class) (a x:U), succ R A a x <-> exists y,
   x :< y                                    /\
   A y                                       /\
