@@ -167,6 +167,20 @@ Proof.
   intros a H1. apply Number.CardIsOrd, IsCardinal. assumption.
 Qed.
 
+(* Aleph preserves inclusion between ordinal indices.                           *)
+Proposition InclCompat : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b -> Aleph!a :<=: Aleph!b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  apply Ordinal.EqualOrElem in H3; try assumption.
+  destruct H3 as [H3|H3].
+  - subst. apply Incl.Refl.
+  - apply Ordinal.ElemIsIncl.
+    + apply IsOrdinal. assumption.
+    + apply ElemCompat; assumption.
+Qed.
+
 (* Aleph(a) is no less than a.                                                  *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   a :<=: Aleph!a.
@@ -238,3 +252,4 @@ Proof.
     apply IsOrdinal. assumption. }
   apply Incl.Double. split; assumption.
 Qed.
+
