@@ -6,6 +6,7 @@ Require Import ZF.Class.Order.Isom.
 Require Import ZF.Class.Order.Minimal.
 Require Import ZF.Class.Ordinal.Monotone.
 Require Import ZF.Class.Ordinal.Order.E.
+Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.FunctionOn.
 Require Import ZF.Set.Cardinal.Number.
@@ -28,6 +29,7 @@ Module CMI := ZF.Class.Order.Minimal.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.
+Module CBJ := ZF.Class.Relation.Bij.
 Module CFO := ZF.Class.Relation.FunctionOn.
 
 (* MinFresh picks the E-minimal element of InfiniteCard not already in range.   *)
@@ -73,6 +75,18 @@ Proof.
   apply COS.IsIsom.
   - apply InfiniteCard.IsProper.
   - intros a. apply InfiniteCard.IsOrdinal.
+Qed.
+
+(* Every infinite cardinal appears as an Aleph value.                           *)
+Proposition HasIndex : forall (a:U),
+  InfiniteCard a -> exists b, Ordinal b /\ Aleph!b = a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  assert (Bij Aleph Ordinal InfiniteCard) as H2. { apply IsIsom. }
+  assert (InfiniteCard a <-> exists b, Ordinal b /\ Aleph!b = a) as H3. {
+    apply CBJ.RangeCharac. assumption. }
+  apply H3. assumption.
 Qed.
 
 (* Aleph is the unique isomorphism ...                                          *)
