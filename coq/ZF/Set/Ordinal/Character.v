@@ -17,6 +17,8 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Specify.
 
+Require Import ZF.Notation.Eval.
+
 
 (* The character of cofinality of the ordinal a.                                *)
 Definition charac (a:U) : U := inf {{ x :< succ a | Cofinal a }}.
@@ -256,3 +258,9 @@ Proof.
   apply CofinalCompat; assumption.
 Qed.
 
+Proposition WhenAlephN : charac (Aleph!:N) = :N.
+Proof.
+  assert (charac (Aleph!:N) = charac :N) as H1. {
+    apply WhenAleph, Omega.IsLimit. }
+  rewrite H1. apply WhenOmega.
+Qed.
