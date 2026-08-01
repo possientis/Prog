@@ -11,6 +11,7 @@ Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
@@ -263,4 +264,28 @@ Proof.
   assert (charac (Aleph!:N) = charac :N) as H1. {
     apply WhenAleph, Omega.IsLimit. }
   rewrite H1. apply WhenOmega.
+Qed.
+
+(* The aleph at any positive finite omega multiple has character omega.         *)
+Proposition WhenAlephNMultNat : forall (n:U),
+  n :< :N                           ->
+  :0: :< n                          ->
+  charac (Aleph! (:N :*: n)) = :N.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros n H1 H2.
+  assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
+  assert (Ordinal n) as G2. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal (:N :*: n)) as G3. { apply Mult.IsOrdinal; assumption. }
+  assert (Limit (:N :*: n)) as H3. {
+    apply Mult.LimitCharac; try assumption. split.
+    - apply Omega.HasZero.
+    - split. 1: assumption. left. apply Omega.IsLimit. }
+  assert (charac (Aleph! (:N :*: n)) = charac (:N :*: n)) as H4. {
+    apply WhenAleph. assumption. }
+  assert (Cofinal (:N :*: n) :N) as H5. {
+    apply Cofinal.WhenOmegaMultNat; assumption. }
+  assert (charac (:N :*: n) = charac :N) as H6. {
+    apply CofinalCompat; assumption. }
+  rewrite H4, H6. apply WhenOmega.
 Qed.
