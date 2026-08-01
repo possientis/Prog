@@ -12,6 +12,7 @@ Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Order.
@@ -152,6 +153,24 @@ Proof.
     apply Ordinal.ElemIsIncl. 2: assumption.
     assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
     apply Plus.IsOrdinal; assumption.
+Qed.
+
+(* A positive finite omega multiple is cofinal with omega.                      *)
+Proposition WhenOmegaMultNat : forall (n:U),
+  n :< :N                 ->
+  :0: :< n                ->
+  Cofinal (:N :*: n) :N.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros n H1 H2.
+  assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
+  assert (exists m, m :< :N /\ n = succ m) as H3. {
+    apply Omega.HasPred; assumption. }
+  destruct H3 as [m [H3 H4]]. subst.
+  assert (Ordinal m) as G2. { apply Omega.HasOrdinals. assumption. }
+  assert (Ordinal (:N :*: m)) as G3. { apply Mult.IsOrdinal; assumption. }
+  rewrite Mult.WhenSuccR. 2: assumption.
+  apply WhenPlusOmega. assumption.
 Qed.
 
 (* Cofinal ordinals are limit ordinals together.                                *)
