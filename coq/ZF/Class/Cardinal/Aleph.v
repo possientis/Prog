@@ -204,6 +204,47 @@ Proof.
   - apply InfiniteCard.Inf.
 Qed.
 
+(* Sets below a successor Aleph have cardinal at most the previous Aleph.       *)
+Proposition CardBelowSucc : forall (a x:U), Ordinal a ->
+  x :< Aleph! (succ a) -> card x :<=: Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a x H1 H2.
+  assert (Ordinal :N) as G0. { apply Omega.IsOrdinal. }
+  assert (Ordinal (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal Aleph! (succ a)) as G2. { apply IsOrdinal. assumption. }
+  assert (Ordinal x) as G3. {
+    apply Ordinal.IsOrdinal with Aleph!(succ a); assumption. }
+  assert (Cardinal Aleph!a) as G4. { apply IsCardinal. assumption. }
+  assert (Cardinal Aleph!(succ a)) as G5. { apply IsCardinal. assumption. }
+  assert (Ordinal (card x)) as G6. { apply Number.IsOrdinal. }
+  assert (card x :< Aleph!(succ a)) as H3. { apply Number.CardLess; assumption. }
+  assert (card x :< :N \/ :N :<=: card x) as H4. {
+    apply Ordinal.ElemOrIncl; assumption. }
+  destruct H4 as [H4|H4].
+  - (* Finite cardinals are bounded by Aleph(0), hence by Aleph(a).             *)
+    assert (card x :<=: :N) as H5. { apply Ordinal.ElemIsIncl; assumption. }
+    assert (:N :<=: Aleph!a) as H6. {
+      rewrite <- WhenZero. apply InclCompat; try assumption.
+      - apply Ordinal.Zero.
+      - apply Empty.IsIncl. }
+    apply Incl.Tran with :N; assumption.
+  - (* An infinite cardinal below Aleph(a+1) is an earlier Aleph value.         *)
+    assert (Cardinal (card x)) as H5. { exists x. reflexivity. }
+    assert (InfiniteCard (card x)) as H6. {
+      apply InfiniteCard.WhenIncl; assumption. }
+    assert (exists b, Ordinal b /\ Aleph!b = card x) as H7. {
+      apply HasIndex. assumption. }
+    destruct H7 as [b [H7 H8]].
+    assert (Aleph!b :< Aleph!(succ a)) as H9. { rewrite H8. assumption. }
+    assert (b :< succ a) as H10. { apply ElemCompatRev; try assumption. }
+    apply Succ.Charac in H10. destruct H10 as [H10|H10].
+    + subst. rewrite <- H8. apply Incl.Refl.
+    + assert (b :<=: a) as H11. { apply Ordinal.ElemIsIncl; assumption. }
+      assert (Aleph!b :<=: Aleph!a) as H12. { apply InclCompat; assumption. }
+      rewrite <- H8. assumption.
+Qed.
+
 (* At a limit ordinal, Aleph is the union of its earlier values.                *)
 Proposition Continuous : forall (a:U), Limit a -> Aleph!a = :\/:_{a} Aleph.
 Proof.
