@@ -26,6 +26,7 @@ Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module CMI := ZF.Class.Order.Minimal.
+Module CEE := ZF.Class.Order.E.
 Module COE := ZF.Class.Ordinal.Order.E.
 Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.
@@ -123,6 +124,18 @@ Proof.
   assert (domain Aleph a) as H5. { apply DomainOf. assumption. }
   assert (domain Aleph b) as H6. { apply DomainOf. assumption. }
   apply H4; assumption.
+Qed.
+
+(* Aleph reflects strict comparison between ordinal indices.                    *)
+Proposition ElemCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
+  Aleph!a :< Aleph!b -> a :< b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  assert (Isom Aleph E E Ordinal InfiniteCard) as H4. { apply IsIsom. }
+  destruct H4 as [_ H4].
+  apply CEE.Charac2.
+  apply H4; try assumption. apply CEE.Charac2. assumption.
 Qed.
 
 (* The Aleph value at an ordinal is an infinite cardinal.                       *)
