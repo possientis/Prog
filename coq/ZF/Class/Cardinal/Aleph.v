@@ -98,6 +98,19 @@ Proof.
   apply IsIsom.
 Qed.
 
+(* Aleph preserves strict comparison between ordinal indices.                   *)
+Proposition ElemCompat : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :< b -> Aleph!a :< Aleph!b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  assert (COM.Monotone Aleph) as H4. { apply IsMonotone. }
+  destruct H4 as [_ H4].
+  assert (domain Aleph a) as H5. { apply DomainOf. assumption. }
+  assert (domain Aleph b) as H6. { apply DomainOf. assumption. }
+  apply H4; assumption.
+Qed.
+
 (* The Aleph value at an ordinal is an infinite cardinal.                       *)
 Proposition IsInfiniteCard : forall (a:U), Ordinal a ->
   InfiniteCard Aleph!a.
