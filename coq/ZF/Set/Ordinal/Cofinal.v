@@ -13,8 +13,10 @@ Require Import ZF.Set.Ordinal.Inf.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Order.
 Require Import ZF.Set.Ordinal.Order.E.
+Require Import ZF.Set.Ordinal.Plus.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Domain.
@@ -114,6 +116,42 @@ Proof.
   (* Since one is the successor of zero, the successor case applies directly.   *)
   apply WhenSuccessor; try assumption.
   apply Succ.IsSuccessor. apply Natural.Zero.
+Qed.
+
+(* An ordinal followed by an omega tail is cofinal with omega.                  *)
+Proposition WhenPlusOmega : forall (a:U), Ordinal a ->
+  Cofinal (a :+: :N) :N.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
+  assert (Limit :N) as G2. { apply Omega.IsLimit. }
+  assert (Ordinal (a :+: :N)) as G3. { apply Plus.IsOrdinal; assumption. }
+  remember (From.from :N (fun n => a :+: n)) as f eqn:Hf.
+  split.
+  - (* The omega tail is contained in the ordinal obtained by appending it.     *)
+    apply Plus.IsInclL; assumption.
+  - exists f.
+    assert (Fun f :N (a :+: :N)) as H2. {
+      rewrite Hf. apply From.IsFun. intros n H2.
+      assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
+      apply Plus.ElemCompatR; assumption. }
+    assert (Monotone f) as H3. {
+      apply Monotone.FromFun with :N (a :+: :N); try assumption.
+      intros n m H3 H4 H5. rewrite Hf, From.Eval, From.Eval; try assumption.
+      assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
+      assert (Ordinal m) as G5. { apply Omega.HasOrdinals. assumption. }
+      apply Plus.ElemCompatR; assumption. }
+    split. 1: assumption. split. 1: assumption.
+    intros c H4.
+    (* Every point below the omega tail lies below one of its finite stages.    *)
+    rewrite Plus.WhenLimit in H4. 2: assumption.
+    apply UnionGenOfClass.Charac in H4. destruct H4 as [n [H4 H5]].
+    exists n. split. 1: assumption.
+    rewrite Hf, From.Eval. 2: assumption.
+    apply Ordinal.ElemIsIncl. 2: assumption.
+    assert (Ordinal n) as G4. { apply Omega.HasOrdinals. assumption. }
+    apply Plus.IsOrdinal; assumption.
 Qed.
 
 (* Cofinal ordinals are limit ordinals together.                                *)
