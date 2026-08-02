@@ -3,6 +3,8 @@ Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Mult.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Omega.
@@ -14,6 +16,28 @@ Require Import ZF.Notation.Eval.
 
 (* The set a is a singular cardinal.                                            *)
 Definition Singular (a:U) : Prop := InfiniteCard a /\ charac a :< a.
+
+(* A limit-indexed Aleph above its index is singular.                           *)
+Proposition WhenLimit : forall (a:U), Limit a ->
+  a :< (Aleph!a) -> Singular (Aleph!a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1 H2.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (Ordinal (charac a)) as G2. { apply Character.IsOrdinal. }
+  assert (Ordinal (Aleph!a)) as G3. { apply Aleph.IsOrdinal. assumption. }
+  assert (InfiniteCard (Aleph!a)) as H3. {
+    apply Aleph.IsInfiniteCard. assumption. }
+  (* The limit-indexed Aleph has the same character as its index.               *)
+  assert (charac (Aleph!a) = charac a) as H4. {
+    apply Character.WhenAleph. assumption. }
+  assert (charac a :<=: a) as H5. { apply Character.IsIncl. assumption. }
+  (* Since the index is below its Aleph value, so is its character.             *)
+  assert (charac a :< (Aleph!a)) as H6. {
+    apply Ordinal.InclElemTran with a; assumption. }
+  assert (charac (Aleph!a) :< (Aleph!a)) as H7. { rewrite H4. assumption. }
+  split; assumption.
+Qed.
 
 (* Aleph omega is a singular cardinal.                                          *)
 Proposition WhenOmega : Singular (Aleph!:N).
