@@ -126,20 +126,18 @@ Proof.
     revert H10. apply Foundation.NoLoop1.
 Qed.
 
-(* A non-empty union of set-indexed infinite cardinals is infinite.             *)
+(* A cardinal-valued union with an infinite value is infinite.                  *)
 Proposition UnionGen : forall (A:Class) (a:U),
-  (forall x, x :< a -> InfiniteCard (A!x))  ->
-  a <> :0:                                  ->
+  (forall x, x :< a -> Cardinal (A!x))             ->
+  (exists x, x :< a /\ InfiniteCard (A!x))         ->
   InfiniteCard (:\/:_{a} A).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A a H1 H2. split.
   - (* The union is a cardinal because every value is a cardinal.               *)
-    apply Number.UnionGen. intros x H3. apply IsCardinal, H1. assumption.
+    apply Number.UnionGen. intros x H3. apply H1. assumption.
   - (* One value contains omega, and that value is included in the union.       *)
-    assert (exists b, b :< a) as H3. { apply Empty.HasElem. assumption. }
-    destruct H3 as [b H3].
-    assert (InfiniteCard (A!b)) as H4. { apply H1. assumption. }
+    destruct H2 as [b [H3 H4]].
     assert (:N :<=: A!b) as H5. { apply IsIncl. assumption. }
     assert (A!b :<=: :\/:_{a} A) as H6. {
       apply UnionGenOfClass.IsIncl. assumption. }

@@ -257,10 +257,11 @@ Proof.
       apply IsMinimal. assumption. }
     assert (InfiniteCard (:\/:_{a} Aleph)) as H6. {
       apply InfiniteCard.UnionGen.
-      - intros b H6. apply IsInfiniteCard.
+      - intros b H6. apply InfiniteCard.IsCardinal. apply IsInfiniteCard.
         apply (Ordinal.IsOrdinal a); assumption.
-      - apply Empty.HasElem. exists :0:.
-        apply Limit.HasZero. assumption. }
+      - exists :0:. split.
+        + apply Limit.HasZero. assumption.
+        + apply IsInfiniteCard. apply Ordinal.Zero. }
     assert ((InfiniteCard :\: Aleph:[a]:) (:\/:_{a} Aleph)) as H7. {
       split. 1: assumption.
       intros H7.
