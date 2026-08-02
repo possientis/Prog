@@ -1,8 +1,29 @@
+Require Import ZF.Axiom.Choice.
+Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Cardinal.InfiniteCard.
+Require Import ZF.Set.Cardinal.Number.
+Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Foundation.
+Require Import ZF.Set.Incl.
+Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Character.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Ordinal.
+Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Functional.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Union.
+
+Require Import ZF.Notation.Eval.
+
+
+Module CRL := ZF.Class.Relation.Functional.
 
 (* The set a is a regular cardinal.                                             *)
 Definition Regular (a:U) : Prop := InfiniteCard a /\ charac a = a.
@@ -15,3 +36,82 @@ Proof.
   - apply InfiniteCard.HasOmega.
   - apply Character.WhenOmega.
 Qed.
+
+(* The Aleph value at a successor ordinal is a regular cardinal.                *)
+Proposition WhenAlephSucc : forall (a:U), Choice ->
+  Ordinal a -> Regular (Aleph! (succ a)).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a AC H1.
+  assert (Ordinal (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
+  assert (InfiniteCard Aleph!(succ a)) as H2. {
+    apply Aleph.IsInfiniteCard. assumption. }
+  split. 1: assumption.
+  assert (Ordinal Aleph!(succ a)) as G2. { apply Aleph.IsOrdinal. assumption. }
+  assert (Cardinal Aleph!(succ a)) as G3. { apply Aleph.IsCardinal. assumption. }
+  assert (Aleph!a :< Aleph!(succ a)) as G4. {
+    apply Aleph.ElemCompat; try assumption. apply Succ.IsIn. }
+  assert (charac Aleph!(succ a) :<=: Aleph!(succ a)) as H3. {
+    apply Character.IsIncl. assumption. }
+  assert (Aleph!(succ a) :<=: charac Aleph!(succ a)) as H4. {
+    apply Ordinal.EqualOrElem in H3. 3: assumption. 2: apply Character.IsOrdinal.
+    destruct H3 as [H3|H3].
+    - rewrite H3. apply Incl.Refl.
+    - exfalso.
+      (* If the character were smaller, it is an earlier Aleph value.           *)
+      assert (InfiniteCard (charac Aleph!(succ a))) as K1. {
+        apply Character.IsInfiniteCard. assumption. }
+      assert (exists b, Ordinal b /\ Aleph!b = charac Aleph!(succ a)) as K2. {
+        apply Aleph.HasIndex. assumption. }
+      destruct K2 as [b [K2 K3]].
+      assert (Aleph!b :< Aleph!(succ a)) as K4. { rewrite K3. assumption. }
+      assert (b :< succ a) as K5. { apply Aleph.ElemCompatRev; assumption. }
+      assert (b :<=: a) as K6. { apply Succ.InclIsElem; assumption. }
+      assert (Aleph!b :<=: Aleph!a) as K7. {
+        apply Aleph.InclCompat; assumption. }
+      assert (Limit Aleph!(succ a)) as K8. {
+        apply InfiniteCard.IsLimit. assumption. }
+      assert (Cofinal Aleph!(succ a) (Aleph!b)) as K9. {
+        rewrite K3. apply Character.IsCofinal. assumption. }
+      assert (exists f, Fun f (Aleph!b) (Aleph!(succ a)) /\
+        Aleph!(succ a) = :U(f:[Aleph!b]:)) as K10. {
+        apply Cofinal.UnionImage; assumption. }
+      destruct K10 as [f [K10 K11]].
+      assert (Functional f) as K12. { apply K10. }
+      assert (CRL.Functional (toClass f)) as K13. {
+        apply Functional.ToClass. assumption. }
+      (* Proposition 10.48 bounds the union by the product of index and bound.  *)
+      assert (card :U((toClass f):[Aleph!b]:) :<=:
+        card (Aleph!b :x: Aleph!a)) as K14. {
+        apply WithChoice.UnionProdImage; try assumption.
+        intros x K14.
+        assert ((toClass f)!x :< Aleph!(succ a)) as K15. {
+          apply Fun.IsInRange with (Aleph!b); assumption. }
+        assert (card ((toClass f)!x) :<=: Aleph!a) as K16. {
+          apply Aleph.CardBelowSucc; assumption. }
+        assert (Aleph!a = card Aleph!a) as K17. {
+          apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
+        rewrite <- K17. assumption. }
+      assert (f:[Aleph!b]: = (toClass f):[Aleph!b]:) as K15. {
+        apply Image.ByClass. }
+      rewrite <- K15 in K14. rewrite <- K11 in K14.
+      assert (Aleph!(succ a) = card Aleph!(succ a)) as K16. {
+        apply Number.WhenCardinal. assumption. }
+      rewrite <- K16 in K14.
+      assert (card (Aleph!b :x: Aleph!a) :<=:
+        card (Aleph!a :x: Aleph!a)) as K17. {
+        apply WithChoice.InclCompatProdL. 1: assumption.
+        apply WithChoice.InclCompat; assumption. }
+      assert (card (Aleph!a :x: Aleph!a) = Aleph!a) as K18. {
+        rewrite Number.SquareOrd.
+        + symmetry. apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption.
+        + apply Aleph.IsOrdinal. assumption.
+        + apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
+      assert (Aleph!(succ a) :<=: Aleph!a) as K19. {
+        apply Incl.Tran with (card (Aleph!b :x: Aleph!a)). 1: assumption.
+        rewrite K18 in K17. assumption. }
+      assert (Aleph!a :< Aleph!a) as K20. { apply K19. assumption. }
+      apply Foundation.NoLoop1 with Aleph!a. assumption. }
+  apply Incl.Double. split; assumption.
+Qed.
+
