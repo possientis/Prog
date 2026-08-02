@@ -5,6 +5,7 @@ Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Cofinal.
@@ -28,17 +29,17 @@ Module CRL := ZF.Class.Relation.Functional.
 (* The set a is a regular cardinal.                                             *)
 Definition Regular (a:U) : Prop := InfiniteCard a /\ charac a = a.
 
-(* Omega is a regular cardinal.                                                 *)
-Proposition WhenOmega : Regular :N.
+(* The zeroth Aleph cardinal is regular.                                        *)
+Proposition WhenZero : Regular (Aleph!:0:).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   split.
-  - apply InfiniteCard.HasOmega.
-  - apply Character.WhenOmega.
+  - apply Aleph.IsInfiniteCard. apply Ordinal.Zero.
+  - rewrite Aleph.WhenZero. apply Character.WhenOmega.
 Qed.
 
 (* The Aleph value at a successor ordinal is a regular cardinal.                *)
-Proposition WhenAlephSucc : forall (a:U), Choice ->
+Proposition WhenSucc : forall (a:U), Choice ->
   Ordinal a -> Regular (Aleph! (succ a)).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)

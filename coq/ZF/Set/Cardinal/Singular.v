@@ -16,7 +16,7 @@ Require Import ZF.Notation.Eval.
 Definition Singular (a:U) : Prop := InfiniteCard a /\ charac a :< a.
 
 (* Aleph omega is a singular cardinal.                                          *)
-Proposition WhenAlephN : Singular (Aleph!:N).
+Proposition WhenOmega : Singular (Aleph!:N).
 Proof.
   assert (Ordinal :N) as G1. { apply Omega.IsOrdinal. }
   assert (Ordinal :0:) as G2. { apply Ordinal.Zero. }
@@ -32,7 +32,7 @@ Proof.
 Qed.
 
 (* Every positive finite omega multiple indexes a singular aleph.               *)
-Proposition WhenAlephNMultNat : forall (n:U),
+Proposition WhenOmegaMultNat : forall (n:U),
   n :< :N                         ->
   :0: :< n                        ->
   Singular (Aleph! (:N :*: n)).
