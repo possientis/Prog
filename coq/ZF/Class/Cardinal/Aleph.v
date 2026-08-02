@@ -141,6 +141,16 @@ Proof.
   apply H4; try assumption. apply CEE.Charac2. assumption.
 Qed.
 
+(* Aleph takes equal values only at equal ordinal indices.                      *)
+Proposition Injective : forall (a b:U), Ordinal a -> Ordinal b ->
+  Aleph!a = Aleph!b -> a = b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  assert (Bij Aleph Ordinal InfiniteCard) as H4. { apply IsIsom. }
+  apply (CBJ.EvalInjective Aleph Ordinal InfiniteCard); assumption.
+Qed.
+
 (* The Aleph value at an ordinal is an infinite cardinal.                       *)
 Proposition IsInfiniteCard : forall (a:U), Ordinal a ->
   InfiniteCard Aleph!a.
