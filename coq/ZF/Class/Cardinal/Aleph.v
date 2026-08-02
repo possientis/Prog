@@ -18,11 +18,13 @@ Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module CMI := ZF.Class.Order.Minimal.
@@ -32,6 +34,7 @@ Module COM := ZF.Class.Ordinal.Monotone.
 Module COS := ZF.Class.Ordinal.Subclass.
 Module CBJ := ZF.Class.Relation.Bij.
 Module CFO := ZF.Class.Relation.FunctionOn.
+
 
 (* MinFresh picks the E-minimal element of InfiniteCard not already in range.   *)
 Definition MinFresh : Class := COS.MinFresh InfiniteCard.
@@ -293,5 +296,57 @@ Proof.
     apply Ordinal.ElemIsIncl. 2: assumption.
     apply IsOrdinal. assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* Aleph has an ordinal fixed point.                                            *)
+Proposition HasFixedPoint :
+  exists a, Ordinal a /\ a = Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  (* Iterate Aleph along omega, starting at Aleph(0).                           *)
+  remember (RecursionNOfClass.recursion Aleph Aleph!:0:) as h eqn:H1.
+  assert (FunctionOn.FunctionOn h :N) as H2. {
+    rewrite H1. apply RecursionNOfClass.IsFunctionOn. }
+  assert (forall n, n :< :N -> InfiniteCard (h!n)) as H3. {
+    apply Omega.Induction.
+    - rewrite H1, RecursionNOfClass.WhenZero.
+      apply IsInfiniteCard. apply Ordinal.Zero.
+    - intros n H3 H4. rewrite H1, RecursionNOfClass.WhenSucc, <- H1.
+      2: assumption.
+      apply IsInfiniteCard. apply InfiniteCard.IsOrdinal. assumption. }
+  assert (InfiniteCard (:U(h:[:N]:))) as H4. {
+    (* The image-union is infinite because all iterates are cardinals and the   *)
+    (* initial iterate is an infinite cardinal.                                 *)
+    apply InfiniteCard.UnionImage. 1: assumption.
+    - intros n H4. apply InfiniteCard.IsCardinal, H3. assumption.
+    - exists :0:. split. 1: apply Omega.HasZero. apply H3, Omega.HasZero. }
+  assert (exists a, Ordinal a /\ Aleph!a = :U(h:[:N]:)) as H5. {
+    apply HasIndex. assumption. }
+  destruct H5 as [a [H5 H6]]. exists a. split. 1: assumption.
+  assert (Ordinal Aleph!a) as H7. { apply IsOrdinal. assumption. }
+  assert (a :<=: Aleph!a) as H8. { apply IsIncl. assumption. }
+  apply Ordinal.EqualOrElem in H8; try assumption.
+  destruct H8 as [H8|H8]. 1: assumption.
+  exfalso.
+  (* If the index is strictly below the union, it is below some iterate.        *)
+  assert (:\/:_{:N} (toClass h) = :U(h:[:N]:)) as H9. {
+    apply UnionGenOfClass.WhenImage. assumption. }
+  assert (a :< :\/:_{:N} (toClass h)) as H10. {
+    rewrite H9. rewrite <- H6. assumption. }
+  apply UnionGenOfClass.Charac in H10.
+  destruct H10 as [n [H10 H11]].
+  assert (InfiniteCard (h!n)) as H12. { apply H3. assumption. }
+  assert (Ordinal (h!n)) as H13. { apply InfiniteCard.IsOrdinal. assumption. }
+  assert (Aleph!a :< Aleph!(h!n)) as H14. {
+    apply ElemCompat; assumption. }
+  assert (succ n :< :N) as H15. { apply Omega.HasSucc. assumption. }
+  assert (h!(succ n) = Aleph!(h!n)) as H16. {
+    rewrite H1. rewrite RecursionNOfClass.WhenSucc. 2: assumption.
+    rewrite <- H1. reflexivity. }
+  assert (h!(succ n) :<=: :U(h:[:N]:)) as H17. {
+    rewrite <- H9. apply UnionGenOfClass.IsIncl. assumption. }
+  assert (Aleph!a :< :U(h:[:N]:)) as H18. {
+    apply H17. rewrite H16. assumption. }
+  rewrite <- H6 in H18. revert H18. apply Foundation.NoLoop1.
 Qed.
 
