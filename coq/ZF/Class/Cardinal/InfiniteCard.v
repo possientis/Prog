@@ -14,6 +14,9 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Ordinal.Sup.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Module CEM := ZF.Class.Empty.
@@ -146,6 +149,21 @@ Proof.
     intros H8.
     assert (:\/:_{a} A :< :\/:_{a} A) as H9. { apply H7. assumption. }
     revert H9. apply Foundation.NoLoop1.
+Qed.
+
+(* An image union with cardinal values and an infinite value is infinite.       *)
+Proposition UnionImage : forall (f a:U),
+  FunctionOn f a                              ->
+  (forall x, x :< a -> Cardinal (f!x))        ->
+  (exists x, x :< a /\ InfiniteCard (f!x))    ->
+  InfiniteCard :U(f:[a]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f a H1 H2 H3.
+  (* The image union is the generalized union of the same function values.      *)
+  rewrite <- UnionGenOfClass.WhenImage. 2: assumption.
+  (* The generalized theorem applies to the same cardinal values and witness.   *)
+  apply UnionGen; assumption.
 Qed.
 
 (* Every infinite cardinal is a limit ordinal.                                  *)
