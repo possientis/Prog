@@ -27,6 +27,7 @@ Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Single.
 
 Module CEM := ZF.Class.Empty.
+Module CRC := ZF.Class.Relation.Converse.
 
 (* Lexicographical order on On x On.                                            *)
 Definition Lex : Class := fun x =>
@@ -179,7 +180,7 @@ Proof.
     - intros x y z H7 H8. apply H6 in H7. apply H6 in H8.
       destruct H7 as [H7 H9]. destruct H8 as [H8 H10]. subst. reflexivity.
     - intros x y z H7 H8.
-      apply Converse.Charac2 in H7. apply Converse.Charac2 in H8.
+      apply CRC.Charac2 in H7. apply CRC.Charac2 in H8.
       apply H6 in H7. apply H6 in H8.
       destruct H7 as [H7 H9]. destruct H8 as [H8 H10]. rewrite H9 in H10.
       apply OrdPair.Equal in H10. apply H10. }

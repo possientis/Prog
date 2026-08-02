@@ -7,6 +7,9 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
@@ -100,6 +103,25 @@ Proposition WhenClassBounded : forall (A B:Class) (a:U),
 Proof.
   intros A B a H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
   apply (H1 x); assumption.
+Qed.
+
+(* The generalized union over a function equals the union of its image.         *)
+Proposition WhenImage : forall (f a:U),
+  FunctionOn f a -> :\/:_{a} (toClass f) = :U(f:[a]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f a H1. apply Incl.Double. split; intros y H3.
+  - (* Every member of a value over a lies in the image union.                  *)
+    apply Charac in H3. destruct H3 as [x [H3 H4]].
+    apply Union.Charac. exists f!x. split. 1: assumption.
+    apply Image.Charac. exists x. split. 1: assumption.
+    apply FunctionOn.Satisfies with a; assumption.
+  - (* Conversely, each member of the image union comes from a value.           *)
+    apply Union.Charac in H3. destruct H3 as [z [H3 H4]].
+    apply (FunctionOn.ImageCharac f a a) in H4. 2: assumption.
+    destruct H4 as [x [H4 [_ H5]]]. apply Charac. exists x. split.
+    + assumption.
+    + rewrite <- H5 in H3. assumption.
 Qed.
 
 (* The generalized union is unchanged by eta-reducing the family.               *)
