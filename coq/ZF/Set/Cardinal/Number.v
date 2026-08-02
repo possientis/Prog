@@ -28,6 +28,7 @@ Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
@@ -35,6 +36,7 @@ Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
 Require Import ZF.Set.UnionGenOfClass.
 
@@ -339,6 +341,20 @@ Proof.
     assert (card b :<=: b) as H12. { apply IsIncl. assumption. }
     rewrite <- H10, H11 in H9.
     apply Incl.Tran with (card b); assumption.
+Qed.
+
+(* The union of the image of a cardinal-valued function is a cardinal.          *)
+Proposition UnionImage : forall (f a:U),
+  FunctionOn f a                          ->
+  (forall x, x :< a -> Cardinal (f!x))    ->
+  Cardinal :U(f:[a]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros f a H1 H2.
+  (* The image union is the generalized union of the same function values.      *)
+  rewrite <- UnionGenOfClass.WhenImage. 2: assumption.
+  (* The generalized union theorem applies because every value is a cardinal.   *)
+  apply UnionGen. intros x H3. apply H2. assumption.
 Qed.
 
 (* An ordinal is below a cardinal iff its cardinal is below that cardinal.      *)
