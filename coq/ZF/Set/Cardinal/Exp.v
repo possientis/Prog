@@ -102,6 +102,26 @@ Proof.
   apply Equip.Tran with (map (c :x: b) a); assumption.
 Qed.
 
+(* Exponentiation is left-monotone in cardinal under choice.                    *)
+Proposition InclCompatL : forall (a b c:U),
+  Choice                                ->
+  card a :<=: card b                    ->
+  card (a :^^: c) :<=: card (b :^^: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* The cardinal inequality gives an injection from a into b.                  *)
+  assert (exists f, Inj f a b) as H2. {
+    apply WithChoice.HasInj; assumption. }
+  destruct H2 as [f H2].
+  (* Postcomposition with that injection embeds maps c -> a into maps c -> b.   *)
+  assert (exists h, Inj h (map c a) (map c b)) as H3. {
+    apply (Relation.Map.HasInjR a b c f). assumption. }
+  destruct H3 as [h H3].
+  (* An injection of the function spaces gives the cardinal inequality.         *)
+  apply WithChoice.WhenInj with h; assumption.
+Qed.
+
 (* Exponentiation is right-monotone in cardinal under choice.                   *)
 Proposition InclCompatR : forall (a b c:U),
   Choice                                ->
