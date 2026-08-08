@@ -25,10 +25,13 @@ Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Id.
+Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Range.
 Require Import ZF.Set.Relation.RestrictOfClass.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union2.
 
@@ -145,6 +148,32 @@ Proof.
   assert (a :~: f:[a]:) as H7. {
     exists (f:|:a). apply (Bij.Restrict f b c); assumption. }
   exists d. split. 1: assumption. apply Equip.Tran with f:[a]:; assumption.
+Qed.
+
+(* If the power set of a is well-orderable, then a is well-orderable.           *)
+Proposition PowerRev : forall (a:U),
+  WellOrderable :P(a) -> WellOrderable a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* Send each element to its singleton, which is a subset of a.                *)
+  remember (from a (fun x => :{x}:)) as f eqn:H2.
+  assert (Inj f a :P(a)) as H3. {
+    rewrite H2. apply From.IsInj.
+    - intros x H3. apply Power.Charac. intros y H4.
+      apply Single.Charac in H4. subst. assumption.
+    - intros x y H3 H4 H5. apply Single.WhenEqual. assumption. }
+  (* The image of this injection is a well-orderable subset of the power set.   *)
+  assert (WellOrderable f:[a]:) as H4. {
+    apply InclCompat with :P(a). 2: assumption.
+    assert (f:[a]: = range f) as H4. {
+      apply (Inj.ImageOfDomain f a :P(a)). assumption. }
+    rewrite H4.
+    apply H3. }
+  destruct H4 as [b [H4 H5]]. exists b. split. 1: assumption.
+  (* The singleton map bijects a with its image.                                *)
+  apply Equip.Tran with f:[a]:. 2: assumption.
+  exists f. apply Bij.FromInj with :P(a). assumption.
 Qed.
 
 (* Being well-orderable is preserved by surjections.                            *)
