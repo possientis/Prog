@@ -93,3 +93,20 @@ Proof.
     rewrite H16. apply Aleph.ElemCompat; assumption.
 Qed.
 
+(* Under GCH, weak inaccessibility and inaccessibility coincide.                *)
+Proposition WhenGCH : forall (a:U),
+  GCH -> (WeaklyInaccessible a <-> Inaccessible a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a GCH. split; intros H1.
+  - (* A weakly inaccessible cardinal is closed under powers by the limit case. *)
+    assert (forall x, card x :< a -> card :P(x) :< a) as H2. {
+      intros x H2.
+      destruct H1 as [H3 [b [H4 H5]]].
+      rewrite H5 in H2. rewrite H5.
+      apply PowerBelowLimit; assumption. }
+    split; assumption.
+  - (* Inaccessibility already contains weak inaccessibility.                   *)
+    apply H1.
+Qed.
+
