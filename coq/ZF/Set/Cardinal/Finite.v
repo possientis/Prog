@@ -30,7 +30,7 @@ Require Import ZF.Set.Union2.
 Definition Finite (a:U) : Prop := exists n, n :< :N /\ a :~: n.
 
 (* Finiteness is preserved under equipotence.                                   *)
-Proposition EquivCompat : forall (a b:U),
+Proposition EquipCompat : forall (a b:U),
   a :~: b -> Finite a -> Finite b.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
@@ -218,7 +218,7 @@ Proposition ProdSingleL : forall (a b:U),
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* {b} x a ~ a, so finiteness transfers from a to {b} x a.                    *)
-  intros a b H1. apply EquivCompat with a. 2: assumption.
+  intros a b H1. apply EquipCompat with a. 2: assumption.
   apply Equip.Sym. apply Equip.ProdSingleL.
 Qed.
 
@@ -228,7 +228,7 @@ Proposition ProdSingleR : forall (a b:U),
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* a x {b} ~ a, so finiteness transfers from a to a x {b}.                    *)
-  intros a b H1. apply EquivCompat with a. 2: assumption.
+  intros a b H1. apply EquipCompat with a. 2: assumption.
   apply Equip.Sym. apply Equip.ProdSingleR.
 Qed.
 

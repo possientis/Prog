@@ -23,14 +23,14 @@ Require Import ZF.Set.Union2.
 Definition Infinite (a:U) : Prop := ~ Finite a.
 
 (* Being infinite is preserved under equipotence.                               *)
-Proposition EquivCompat : forall (a b:U),
+Proposition EquipCompat : forall (a b:U),
   a :~: b -> Infinite a -> Infinite b.
 Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* Infinite a means not Finite a. If b were finite, a ~ b would give          *)
-  (* Finite a via Finite.EquivCompat, contradicting Infinite a.                 *)
+  (* Finite a via Finite.EquipCompat, contradicting Infinite a.                 *)
   intros a b H1 H2 H3. apply H2.
-  apply Finite.EquivCompat with b. 2: assumption.
+  apply Finite.EquipCompat with b. 2: assumption.
   apply Equip.Sym. assumption.
 Qed.
 
