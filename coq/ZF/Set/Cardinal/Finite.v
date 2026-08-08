@@ -403,6 +403,26 @@ Proof.
   rewrite H1 in H4. apply H4; try assumption. reflexivity.
 Qed.
 
+(* The cardinal of the power set of a finite-cardinal set is finite.            *)
+Proposition CardPower : forall (a:U),
+  card a :< :N -> card :P(a) :< :N.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  assert (WellOrderable a \/ ~ WellOrderable a) as [H2|H2]. {
+    apply LawExcludedMiddle. }
+  - (* If a is well-orderable, then a is actually finite.                       *)
+    assert (Finite a) as H3. {
+      exists (card a). split. 1: assumption. apply Number.IsEquip. assumption. }
+    apply CardIsNat. apply Power. assumption.
+  - (* Otherwise the power set cannot be well-orderable either.                 *)
+    assert (~ WellOrderable :P(a)) as H3. {
+      intros H3. apply H2. apply WellOrderable.PowerRev. assumption. }
+    assert (card :P(a) = :0:) as H4. {
+      apply Number.WhenNotWellOrderable. assumption. }
+    rewrite H4. apply Omega.HasZero.
+Qed.
+
 (* An ordinal is finite if and only if it is a natural number.                  *)
 Proposition WhenOrdinal : forall (a:U), Ordinal a ->
   Finite a <-> a :< :N.
