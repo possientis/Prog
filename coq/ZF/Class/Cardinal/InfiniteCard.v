@@ -71,6 +71,17 @@ Proof.
   apply H3. assumption.
 Qed.
 
+(* An infinite cardinal is not zero.                                            *)
+Proposition IsNotZero : forall (a:U), InfiniteCard a -> a <> :0:.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1 H2.
+  assert (:N :<=: a) as H3. { apply IsIncl. assumption. }
+  assert (:0: :< :N) as H4. { apply Omega.HasZero. }
+  assert (:0: :< a) as H5. { apply H3. assumption. }
+  rewrite H2 in H5. apply Empty.Charac in H5. contradiction.
+Qed.
+
 (* A cardinal containing omega is an infinite cardinal.                         *)
 Proposition WhenIncl : forall (a:U),
   Cardinal a -> :N :<=: a -> InfiniteCard a.
