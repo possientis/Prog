@@ -1,11 +1,13 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Set.Cardinal.Equip.
+Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Map.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
+Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Charac.
@@ -157,4 +159,36 @@ Proof.
   apply Incl.Tran with (card (b :^^: c)).
   - apply InclCompatL; assumption.
   - apply InclCompatR; assumption.
+Qed.
+
+(* The power set to an infinite exponent has the power-set cardinal.            *)
+Proposition PowerBase : forall (a:U),
+  Choice                            ->
+  Infinite a                        ->
+  card (:P(a) :^^: a) = card :P(a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC H1.
+  (* An infinite set has cardinal at least omega under choice.                  *)
+  assert (:N :<=: card a) as H2. { apply Infinite.Card; assumption. }
+  (* Hence its square has the same cardinal.                                    *)
+  assert (card (a :x: a) = card a) as H3. { apply Number.Square. assumption. }
+  (* Under choice this cardinal equality gives an equipotence of exponents.     *)
+  assert (a :x: a :~: a) as H4. {
+    apply WithChoice.EquipCharac; assumption. }
+  (* Replace P(a) by 2^a as the base.                                           *)
+  assert (:P(a) :^^: a :~: (:2: :^^: a) :^^: a) as H5. {
+    apply CompatL. apply Equip.Sym. apply OfTwo. }
+  (* Associate the two exponentiations into one exponent over a x a.            *)
+  assert ((:2: :^^: a) :^^: a :~: :2: :^^: (a :x: a)) as H6. {
+    apply Assoc. }
+  (* The square exponent has the same size as the original exponent.            *)
+  assert (:2: :^^: (a :x: a) :~: :2: :^^: a) as H7. {
+    apply CompatR. assumption. }
+  (* Finally translate 2^a back to the power set of a.                          *)
+  assert (:2: :^^: a :~: :P(a)) as H8. { apply OfTwo. }
+  apply Number.WhenEquip.
+  apply Equip.Tran with ((:2: :^^: a) :^^: a). 1: assumption.
+  apply Equip.Tran with (:2: :^^: (a :x: a)). 1: assumption.
+  apply Equip.Tran with (:2: :^^: a); assumption.
 Qed.
