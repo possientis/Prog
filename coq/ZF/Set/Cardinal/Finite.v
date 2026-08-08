@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Choice.
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Cardinal.Number.
@@ -9,9 +10,17 @@ Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.OrdPair.
+Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.Restrict.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Union2.
@@ -62,6 +71,15 @@ Proof.
   (* Proof by Claude + sonnet 4.6                                               *)
   (* The empty set is equipotent to 0, which is a natural number.               *)
   apply WhenNat. apply Omega.HasZero.
+Qed.
+
+(* Every singleton is finite.                                                   *)
+Proposition Single : forall (a:U), Finite :{a}:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a. exists :1:. split.
+  - apply Omega.HasOne.
+  - apply Equip.WhenSingle.
 Qed.
 
 (* A finite set remains finite after adjoining a single element.                *)
@@ -289,6 +307,103 @@ Proof.
   rewrite H1 in H5. apply H5; try assumption. reflexivity.
 Qed.
 
+(* A surjective image of a finite set is finite.                                *)
+Proposition OntoCompat : forall (f a b:U),
+  Onto f a b -> Finite a -> Finite b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 H2.
+  assert (WellOrderable a) as H3. {
+    destruct H2 as [n [H2 H3]]. exists n. split. 2: assumption.
+    apply Omega.HasOrdinals. assumption. }
+  (* A surjection from a well-orderable set makes the codomain well-orderable.  *)
+  assert (WellOrderable b) as H4. {
+    apply WellOrderable.OntoCompat with f a; assumption. }
+  assert (card b :<=: card a) as H5. { apply Number.WhenOnto with f; assumption. }
+  assert (card a :< :N) as H6. { apply CardIsNat. assumption. }
+  (* The cardinal of b is bounded by a natural cardinal, hence is natural.      *)
+  assert (card b :< :N) as H7. {
+    apply Ordinal.InclElemTran with (card a); try assumption.
+    - apply Number.IsOrdinal.
+    - apply Number.IsOrdinal.
+    - apply Omega.IsOrdinal. }
+  exists (card b). split. 1: assumption. apply Number.IsEquip. assumption.
+Qed.
+
+(* The image of a finite set under a function is finite.                        *)
+Proposition Image : forall (f a:U),
+  FunctionOn f a -> Finite a -> Finite f:[a]:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a H1 H2. apply OntoCompat with f a. 2: assumption.
+  split. 1: assumption. symmetry. apply FunctionOn.ImageOfDomain. assumption.
+Qed.
+
+(* The power set of a finite set is finite.                                     *)
+Proposition Power : forall (a:U),
+  Finite a -> Finite :P(a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  remember (fun n => forall a, card a = n -> Finite a -> Finite :P(a))
+    as A eqn:H1.
+  assert (forall n, n :< :N -> A n) as H2. {
+    apply Omega.Induction; rewrite H1.
+    - (* The only subset of the empty set is the empty set itself.              *)
+      intros a H2 H3.
+      assert (a = :0:) as H4. { apply WhenZeroCard; assumption. }
+      rewrite H4.
+      assert (:P(:0:) = :{:0:}:) as H5. {
+        apply Incl.Double. split; intros x H5.
+        + apply Single.Charac. apply Empty.WhenIncl. apply Power.Charac. assumption.
+        + apply Single.Charac in H5. subst. apply Power.IsIn. }
+      rewrite H5. apply Single.
+    - (* A subset of a with one chosen element either omits it or contains it.  *)
+      intros n H2 IH a H4 H5.
+      assert (card a <> :0:) as H6. { rewrite H4. apply Succ.NotZero. }
+      assert (a <> :0:) as H7. { apply Number.NotZero. assumption. }
+      apply Empty.HasElem in H7. destruct H7 as [x H7].
+      remember (a :\: :{x}:) as c eqn:H8.
+      assert (card c = n) as H9. { rewrite H8. apply RemoveElemCard; assumption. }
+      assert (Finite c) as H10. { rewrite H8. apply RemoveElem. assumption. }
+      assert (Finite :P(c)) as H11. { apply IH; assumption. }
+      remember (from :P(c) (fun y => y :\/: :{x}:)) as f eqn:H12.
+      assert (FunctionOn f :P(c)) as H13. { rewrite H12. apply From.IsFunctionOn. }
+      assert (Finite f:[:P(c)]:) as H14. { apply Image; assumption. }
+      assert (Finite (:P(c) :\/: f:[:P(c)]:)) as H15. { apply Union; assumption. }
+      apply InclCompat with (:P(c) :\/: f:[:P(c)]:). 2: assumption.
+      intros y H16. apply Power.Charac in H16.
+      assert (x :< y \/ ~ x :< y) as [H17|H17]. { apply LawExcludedMiddle. }
+      + apply Union2.Charac. right. apply Image.Charac.
+        exists (y :\: :{x}:). split.
+        * apply Power.Charac. intros z H18. rewrite H8. apply Diff.Charac.
+          apply Diff.Charac in H18. destruct H18 as [H18 H19].
+          split. 1: apply H16. assumption.
+          intros H20. apply H19. apply Single.Charac in H20.
+          apply Single.Charac. assumption.
+        * rewrite H12. assert (y :\: :{x}: :< :P(c)) as H18. {
+            apply Power.Charac. intros z H18. rewrite H8. apply Diff.Charac.
+            apply Diff.Charac in H18. destruct H18 as [H18 H19].
+            split. 1: apply H16. assumption.
+            intros H20. apply H19. apply Single.Charac in H20.
+            apply Single.Charac. assumption. }
+          remember (y :\: :{x}:) as d eqn:H19.
+          remember (d :\/: :{x}:) as e eqn:H20.
+          assert (e = y) as H21. {
+            rewrite H20, H19. apply Diff.RemoveAddElem. assumption. }
+          assert (:(d,e): :< from :P(c) (fun y => y :\/: :{x}:)) as H22. {
+            rewrite H20. apply (From.Satisfies (fun y => y :\/: :{x}:)
+              :P(c) d). assumption. }
+          rewrite H21 in H22.
+          change (:(d,y): :< from :P(c) (fun y => y :\/: :{x}:)).
+          assumption.
+      + apply Union2.Charac. left. apply Power.Charac. intros z H18.
+        rewrite H8. apply Diff.Charac. split. 1: apply H16. assumption.
+        intros H19. apply Single.Charac in H19. subst. contradiction. }
+  intros a H3.
+  assert (A (card a)) as H4. { apply H2. apply CardIsNat. assumption. }
+  rewrite H1 in H4. apply H4; try assumption. reflexivity.
+Qed.
+
 (* An ordinal is finite if and only if it is a natural number.                  *)
 Proposition WhenOrdinal : forall (a:U), Ordinal a ->
   Finite a <-> a :< :N.
@@ -302,4 +417,3 @@ Proof.
   - (* Conversely, every natural number is finite.                              *)
     apply WhenNat. assumption.
 Qed.
-
