@@ -344,19 +344,14 @@ Proposition Power : forall (a:U),
   Finite a -> Finite :P(a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  remember (fun n => forall a, card a = n -> Finite a -> Finite :P(a))
-    as A eqn:H1.
+  remember (fun n =>
+    forall a, card a = n -> Finite a -> Finite :P(a)) as A eqn:H1.
   assert (forall n, n :< :N -> A n) as H2. {
     apply Omega.Induction; rewrite H1.
     - (* The only subset of the empty set is the empty set itself.              *)
       intros a H2 H3.
       assert (a = :0:) as H4. { apply WhenZeroCard; assumption. }
-      rewrite H4.
-      assert (:P(:0:) = :{:0:}:) as H5. {
-        apply Incl.Double. split; intros x H5.
-        + apply Single.Charac. apply Empty.WhenIncl. apply Power.Charac. assumption.
-        + apply Single.Charac in H5. subst. apply Power.IsIn. }
-      rewrite H5. apply Single.
+      rewrite H4, Power.WhenZero. apply Single.
     - (* A subset of a with one chosen element either omits it or contains it.  *)
       intros n H2 IH a H4 H5.
       assert (card a <> :0:) as H6. { rewrite H4. apply Succ.NotZero. }
