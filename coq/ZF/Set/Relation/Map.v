@@ -3,10 +3,14 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Bij.
+Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.
+Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Specify.
+
+Require Import ZF.Notation.Eval.
 
 (* The set of all maps from a to b.                                             *)
 Definition map (a b:U) : U := {{ f :< :P(a :x: b) | fun f => Fun f a b }}.
@@ -86,6 +90,41 @@ Proposition IsInclInj : forall (a b:U),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b f H1. apply Specify.Charac in H1. apply H1.
+Qed.
+
+(* An injection of codomains induces an injection of map sets.                  *)
+Proposition HasInjR : forall (a b c f:U),
+  Inj f a b -> exists h, Inj h (map c a) (map c b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f H1.
+  (* Post-compose every map c -> a with the fixed injection a -> b.             *)
+  remember (From.from (map c a) (fun g => f :.: g)) as h eqn:H2.
+  assert (Inj h (map c a) (map c b)) as H3. {
+    rewrite H2. apply From.IsInj.
+    - (* The post-composite is a map from c into b.                             *)
+      intros g H3. apply CharacMap.
+      assert (Fun g c a) as H4. { apply CharacMap. assumption. }
+      apply Fun.Compose with a. 1: assumption. apply Inj.IsFun. assumption.
+    - (* Equal composites have equal original values by injectivity.            *)
+      intros g k H3 H4 H5.
+      assert (Fun g c a) as H6. { apply CharacMap. assumption. }
+      assert (Fun k c a) as H7. { apply CharacMap. assumption. }
+      apply Fun.Equal with c a c a; try assumption; try reflexivity.
+      intros x H8.
+      assert ((f :.: g)!x = (f :.: k)!x) as H9. {
+        rewrite H5. reflexivity. }
+      assert ((f :.: g)!x = (f!(g!x))) as H10. {
+        apply (Fun.ComposeEval g f c a b x); try assumption.
+        apply Inj.IsFun. assumption. }
+      assert ((f :.: k)!x = f!(k!x)) as H11. {
+        apply (Fun.ComposeEval k f c a b x); try assumption.
+        apply Inj.IsFun. assumption. }
+      rewrite H10, H11 in H9.
+      assert (g!x :< a) as H12. { apply Fun.IsInRange with c; assumption. }
+      assert (k!x :< a) as H13. { apply Fun.IsInRange with c; assumption. }
+      apply (Inj.EvalInjective f a b); assumption. }
+  exists h. assumption.
 Qed.
 
 (* The set of bijections from a to b is included in the set of maps.            *)
