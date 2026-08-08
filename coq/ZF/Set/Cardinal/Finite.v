@@ -361,39 +361,43 @@ Proof.
       assert (card c = n) as H9. { rewrite H8. apply RemoveElemCard; assumption. }
       assert (Finite c) as H10. { rewrite H8. apply RemoveElem. assumption. }
       assert (Finite :P(c)) as H11. { apply IH; assumption. }
+      (* Add the removed point to each subset of c.                             *)
       remember (from :P(c) (fun y => y :\/: :{x}:)) as f eqn:H12.
       assert (FunctionOn f :P(c)) as H13. { rewrite H12. apply From.IsFunctionOn. }
+      (* The subsets of c that contain x form a finite image of P(c).           *)
       assert (Finite f:[:P(c)]:) as H14. { apply Image; assumption. }
       assert (Finite (:P(c) :\/: f:[:P(c)]:)) as H15. { apply Union; assumption. }
-      apply InclCompat with (:P(c) :\/: f:[:P(c)]:). 2: assumption.
-      intros y H16. apply Power.Charac in H16.
-      assert (x :< y \/ ~ x :< y) as [H17|H17]. { apply LawExcludedMiddle. }
-      + apply Union2.Charac. right. apply Image.Charac.
-        exists (y :\: :{x}:). split.
-        * apply Power.Charac. intros z H18. rewrite H8. apply Diff.Charac.
-          apply Diff.Charac in H18. destruct H18 as [H18 H19].
-          split. 1: apply H16. assumption.
-          intros H20. apply H19. apply Single.Charac in H20.
-          apply Single.Charac. assumption.
-        * rewrite H12. assert (y :\: :{x}: :< :P(c)) as H18. {
-            apply Power.Charac. intros z H18. rewrite H8. apply Diff.Charac.
+      assert (:P(a) :<=: :P(c) :\/: f:[:P(c)]:) as H16. {
+        intros y H16. apply Power.Charac in H16.
+        assert (x :< y \/ ~ x :< y) as [H17|H17]. { apply LawExcludedMiddle. }
+        - apply Union2.Charac. right. apply Image.Charac.
+          exists (y :\: :{x}:). split.
+          + apply Power.Charac. intros z H18. rewrite H8. apply Diff.Charac.
             apply Diff.Charac in H18. destruct H18 as [H18 H19].
             split. 1: apply H16. assumption.
             intros H20. apply H19. apply Single.Charac in H20.
-            apply Single.Charac. assumption. }
-          remember (y :\: :{x}:) as d eqn:H19.
-          remember (d :\/: :{x}:) as e eqn:H20.
-          assert (e = y) as H21. {
-            rewrite H20, H19. apply Diff.RemoveAddElem. assumption. }
-          assert (:(d,e): :< from :P(c) (fun y => y :\/: :{x}:)) as H22. {
-            rewrite H20. apply (From.Satisfies (fun y => y :\/: :{x}:)
-              :P(c) d). assumption. }
-          rewrite H21 in H22.
-          change (:(d,y): :< from :P(c) (fun y => y :\/: :{x}:)).
-          assumption.
-      + apply Union2.Charac. left. apply Power.Charac. intros z H18.
-        rewrite H8. apply Diff.Charac. split. 1: apply H16. assumption.
-        intros H19. apply Single.Charac in H19. subst. contradiction. }
+            apply Single.Charac. assumption.
+          + rewrite H12. assert (y :\: :{x}: :< :P(c)) as H18. {
+              apply Power.Charac. intros z H18. rewrite H8. apply Diff.Charac.
+              apply Diff.Charac in H18. destruct H18 as [H18 H19].
+              split. 1: apply H16. assumption.
+              intros H20. apply H19. apply Single.Charac in H20.
+              apply Single.Charac. assumption. }
+            remember (y :\: :{x}:) as d eqn:H19.
+            remember (d :\/: :{x}:) as e eqn:H20.
+            assert (e = y) as H21. {
+              rewrite H20, H19. apply Diff.RemoveAddElem. assumption. }
+            assert (:(d,e): :< from :P(c) (fun y => y :\/: :{x}:)) as H22. {
+              rewrite H20. apply (From.Satisfies (fun y => y :\/: :{x}:)
+                :P(c) d). assumption. }
+            rewrite H21 in H22.
+            change (:(d,y): :< from :P(c) (fun y => y :\/: :{x}:)).
+            assumption.
+        - apply Union2.Charac. left. apply Power.Charac. intros z H18.
+          rewrite H8. apply Diff.Charac. split. 1: apply H16. assumption.
+          intros H19. apply Single.Charac in H19. subst. contradiction. }
+      apply InclCompat with (:P(c) :\/: f:[:P(c)]:). 1: assumption.
+      assumption. }
   intros a H3.
   assert (A (card a)) as H4. { apply H2. apply CardIsNat. assumption. }
   rewrite H1 in H4. apply H4; try assumption. reflexivity.
