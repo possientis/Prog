@@ -127,6 +127,43 @@ Proof.
   exists h. assumption.
 Qed.
 
+(* A surjection of domains induces an injection of map sets.                    *)
+Proposition HasInjL : forall (a b c f:U),
+  Onto f a b -> exists h, Inj h (map b c) (map a c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c f H1.
+  (* Pre-compose every map b -> c with the fixed surjection a -> b.             *)
+  remember (From.from (map b c) (fun g => g :.: f)) as h eqn:H2.
+  assert (Inj h (map b c) (map a c)) as H3. {
+    rewrite H2. apply From.IsInj.
+    - (* The pre-composite is a map from a into c.                              *)
+      intros g H3. apply CharacMap.
+      assert (Fun g b c) as H4. { apply CharacMap. assumption. }
+      apply Fun.Compose with b. 2: assumption. apply Onto.IsFun. assumption.
+    - (* Equal pre-composites agree on every value hit by the surjection.       *)
+      intros g k H3 H4 H5.
+      assert (Fun g b c) as H6. { apply CharacMap. assumption. }
+      assert (Fun k b c) as H7. { apply CharacMap. assumption. }
+      apply Fun.Equal with b c b c; try assumption; try reflexivity.
+      intros y H8.
+      assert (exists x, x :< a /\ f!x = y) as H9. {
+        assert (y :< b <-> exists x, x :< a /\ f!x = y) as G1. {
+          apply Onto.RangeCharac. assumption. }
+        apply G1. assumption. }
+      destruct H9 as [x [H9 H10]].
+      assert ((g :.: f)!x = (k :.: f)!x) as H11. {
+        rewrite H5. reflexivity. }
+      assert ((g :.: f)!x = g!(f!x)) as H12. {
+        apply (Fun.ComposeEval f g a b c x); try assumption.
+        apply Onto.IsFun. assumption. }
+      assert ((k :.: f)!x = k!(f!x)) as H13. {
+        apply (Fun.ComposeEval f k a b c x); try assumption.
+        apply Onto.IsFun. assumption. }
+      rewrite H12, H13 in H11. rewrite H10 in H11. assumption. }
+  exists h. assumption.
+Qed.
+
 (* The set of bijections from a to b is included in the set of maps.            *)
 Proposition IsInclBij : forall (a b:U),
   bij a b :<=: map a b.
