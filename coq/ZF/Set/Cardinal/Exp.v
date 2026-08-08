@@ -142,3 +142,19 @@ Proof.
   (* An injection of the function spaces gives the cardinal inequality.         *)
   apply WithChoice.WhenInj with h; assumption.
 Qed.
+
+(* Exponentiation is monotone in both cardinal arguments under choice.          *)
+Proposition InclCompat : forall (a b c d:U),
+  Choice                                ->
+  c <> :0:                              ->
+  card a :<=: card b                    ->
+  card c :<=: card d                    ->
+  card (a :^^: c) :<=: card (b :^^: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d AC H1 H2 H3.
+  (* First enlarge the base, then enlarge the exponent.                         *)
+  apply Incl.Tran with (card (b :^^: c)).
+  - apply InclCompatL; assumption.
+  - apply InclCompatR; assumption.
+Qed.
