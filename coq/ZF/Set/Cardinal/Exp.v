@@ -192,3 +192,34 @@ Proof.
   apply Equip.Tran with (:2: :^^: (a :x: a)). 1: assumption.
   apply Equip.Tran with (:2: :^^: a); assumption.
 Qed.
+
+(* A bounded nontrivial base has the power-set cardinal.                        *)
+Proposition WhenBounded : forall (a b:U),
+  Choice                                ->
+  Infinite b                            ->
+  :2: :<=: card a                       ->
+  card a :<=: card :P(b)                ->
+  card (a :^^: b) = card :P(b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2 H3.
+  (* The lower bound compares 2^b with a^b, then identifies 2^b with P(b).      *)
+  assert (card :P(b) :<=: card (a :^^: b)) as H4. {
+    assert (card :2: :<=: card a) as G1. {
+      rewrite Number.WhenNat. 2: { apply Omega.HasSucc, Omega.HasOne. }
+      assumption. }
+    assert (card (:2: :^^: b) :<=: card (a :^^: b)) as H4. {
+      apply (InclCompatL :2: a b); assumption. }
+    assert (card (:2: :^^: b) = card :P(b)) as H5. {
+      apply Number.WhenEquip. apply OfTwo. }
+    rewrite <- H5. assumption. }
+  (* The upper bound compares a^b with P(b)^b, then evaluates P(b)^b.           *)
+  assert (card (a :^^: b) :<=: card :P(b)) as H5. {
+    assert (card (a :^^: b) :<=: card (:P(b) :^^: b)) as H5. {
+      apply (InclCompatL a :P(b) b); assumption. }
+    assert (card (:P(b) :^^: b) = card :P(b)) as H6. {
+      apply PowerBase; assumption. }
+    rewrite <- H6. assumption. }
+  (* The two cardinal bounds identify the cardinals.                            *)
+  apply Incl.Double. split; assumption.
+Qed.
