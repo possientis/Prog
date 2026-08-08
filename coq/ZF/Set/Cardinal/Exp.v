@@ -1,5 +1,8 @@
+Require Import ZF.Axiom.Choice.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.Map.
+Require Import ZF.Set.Cardinal.Number.
+Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
@@ -11,11 +14,14 @@ Require Import ZF.Set.Relation.Fiber.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.
 Require Import ZF.Set.Relation.Map.Curry.
+Require Import ZF.Set.Relation.Onto.
 
 Require Import ZF.Notation.Exp2.
 Export ZF.Notation.Exp2.
+
 
 (* The exponentiation of two sets.                                              *)
 Definition exp (a b:U) : U := map b a.
@@ -31,7 +37,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c d H1 H2.
   (* This is exactly compatibility of the corresponding set of maps.            *)
-  apply Map.Compat; assumption.
+  apply Cardinal.Map.Compat; assumption.
 Qed.
 
 (* Exponentiation is left-compatible with equipotence.                          *)
@@ -41,7 +47,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c H1.
   (* Changing the base changes the codomain of the map set.                     *)
-  apply Map.CompatR. assumption.
+  apply Cardinal.Map.CompatR. assumption.
 Qed.
 
 (* Exponentiation is right-compatible with equipotence.                         *)
@@ -51,7 +57,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b c H1.
   (* Changing the exponent changes the domain of the map set.                   *)
-  apply Map.CompatL. assumption.
+  apply Cardinal.Map.CompatL. assumption.
 Qed.
 
 (* The set of maps from a into two is equipotent to the power set of a.         *)
@@ -94,4 +100,25 @@ Proof.
   assert (map (c :x: b) a :~: map (b :x: c) a) as H2. {
     apply CompatR. apply Equip.ProdComm. }
   apply Equip.Tran with (map (c :x: b) a); assumption.
+Qed.
+
+(* Exponentiation is right-monotone in cardinal under choice.                   *)
+Proposition InclCompatR : forall (a b c:U),
+  Choice                                ->
+  b <> :0:                              ->
+  card b :<=: card c                    ->
+  card (a :^^: b) :<=: card (a :^^: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1 H2.
+  (* The cardinal inequality gives a surjection from c onto b.                  *)
+  assert (exists f, Onto f c b) as H3. {
+    apply WithChoice.HasOnto; assumption. }
+  destruct H3 as [f H3].
+  (* Precomposition with that surjection embeds maps b -> a into maps c -> a.   *)
+  assert (exists h, Inj h (map b a) (map c a)) as H4. {
+    apply (Relation.Map.HasInjL c b a f). assumption. }
+  destruct H4 as [h H4].
+  (* An injection of the function spaces gives the cardinal inequality.         *)
+  apply WithChoice.WhenInj with h; assumption.
 Qed.
