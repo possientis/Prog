@@ -1,4 +1,6 @@
 Require Import ZF.Axiom.Choice.
+Require Import ZF.Class.Cardinal.Aleph.
+Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Map.
@@ -8,6 +10,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
+Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.Charac.
@@ -20,7 +23,9 @@ Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.
 Require Import ZF.Set.Relation.Map.Curry.
 Require Import ZF.Set.Relation.Onto.
+Require Import ZF.Set.Relation.EvalOfClass.
 
+Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Exp2.
 Export ZF.Notation.Exp2.
 
@@ -222,4 +227,48 @@ Proof.
     rewrite <- H6. assumption. }
   (* The two cardinal bounds identify the cardinals.                            *)
   apply Incl.Double. split; assumption.
+Qed.
+
+(* Aleph bases below an Aleph exponent have the same power as two.              *)
+Proposition WhenAlephInclL : forall (a b:U),
+  Choice                                                  ->
+  Ordinal a                                               ->
+  Ordinal b                                               ->
+  Aleph!a :<=: Aleph!b                                    ->
+  card (Aleph!a :^^: Aleph!b) = card (:2: :^^: Aleph!b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2 H3.
+  assert (InfiniteCard Aleph!a) as G1. { apply Aleph.IsInfiniteCard. assumption. }
+  assert (Cardinal Aleph!a) as G2. { apply Aleph.IsCardinal. assumption. }
+  assert (Ordinal Aleph!a) as G3. { apply Aleph.IsOrdinal. assumption. }
+  assert (Cardinal Aleph!b) as G4. { apply Aleph.IsCardinal. assumption. }
+  (* The smaller Aleph is at least two, because every Aleph contains N.         *)
+  assert (:2: :<=: card Aleph!a) as H4. {
+    assert (Aleph!a = card Aleph!a) as K1. {
+      apply Number.WhenCardinal. assumption. }
+    rewrite <- K1.
+    assert (:N :<=: Aleph!a) as K2. { apply InfiniteCard.IsIncl. assumption. }
+    assert (:2: :< Aleph!a) as K3. { apply K2. apply Omega.HasTwo. }
+    apply Ordinal.ElemIsIncl; assumption. }
+  (* The upper bound follows from Aleph inclusion and Cantor's theorem.         *)
+  assert (card Aleph!a :<=: card :P(Aleph!b)) as H5. {
+    assert (Aleph!a = card Aleph!a) as K1. {
+      apply Number.WhenCardinal. assumption. }
+    assert (Aleph!b = card Aleph!b) as K2. {
+      apply Number.WhenCardinal. assumption. }
+    assert (card Aleph!b :< card :P(Aleph!b)) as K3. {
+      apply WithChoice.Cantor. assumption. }
+    assert (Ordinal (card :P(Aleph!b))) as K4. { apply Number.IsOrdinal. }
+    assert (card Aleph!b :<=: card :P(Aleph!b)) as K5. {
+      apply Ordinal.ElemIsIncl; assumption. }
+    rewrite <- K1. apply Incl.Tran with Aleph!b. 1: assumption.
+    rewrite <- K2 in K5. assumption. }
+  (* The bounded theorem identifies the left side with P(Aleph b).              *)
+  assert (card (Aleph!a :^^: Aleph!b) = card :P(Aleph!b)) as H6. {
+    apply WhenBounded; try assumption. apply Aleph.IsInfinite. assumption. }
+  (* Finally replace the power set by the two-valued function set.              *)
+  assert (card (:2: :^^: Aleph!b) = card :P(Aleph!b)) as H7. {
+    apply Number.WhenEquip. apply OfTwo. }
+  rewrite H7. assumption.
 Qed.
