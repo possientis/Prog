@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Equiv.
@@ -16,6 +17,7 @@ Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Specify.
 
 Require Import ZF.Notation.Eval.
@@ -147,6 +149,45 @@ Proof.
     assert (charac b :<=: c) as H11. { apply IsLowerBound; assumption. }
     apply Incl.Tran with c; assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* Functions with domain below the character of cofinality have bounded range.  *)
+Proposition WhenLess : forall (a b f:U),
+  Ordinal a                                           ->
+  Ordinal b                                           ->
+  b :< charac a                                       ->
+  Fun f b a                                           ->
+  exists c, c :< a /\ forall x, x :< b -> f!x :< c.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b f H1 H2 H3 H4.
+  assert (Ordinal (charac a)) as H5. { apply IsOrdinal. }
+  assert (charac a :<=: a) as H6. { apply IsIncl. assumption. }
+  assert (b :<=: charac a) as H7. { apply Ordinal.ElemIsIncl; assumption. }
+  assert (b :<=: a) as H8. { apply Incl.Tran with (charac a); assumption. }
+  (* If no bound existed, the map would be weakly cofinal in a.                 *)
+  apply DoubleNegation. intros H9.
+  assert (forall c, c :< a -> exists d, d :< b /\ c :<=: f!d) as H10. {
+    intros c H10. apply DoubleNegation. intros H11.
+    apply H9. exists c. split. 1: assumption.
+    intros d H12.
+    assert (f!d :< a) as H13. { apply Fun.IsInRange with b; assumption. }
+    assert (Ordinal c) as H14. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (Ordinal (f!d)) as H15. { apply Ordinal.IsOrdinal with a; assumption. }
+    assert (f!d :< c \/ c :<=: f!d) as H16. {
+      apply Ordinal.ElemOrIncl; assumption. }
+    destruct H16 as [H16|H16]. 1: assumption.
+    exfalso. apply H11. exists d. split; assumption. }
+  (* Extraction gives a cofinal subordinal of b, contradicting minimality.      *)
+  assert (exists c, c :<=: b /\ Cofinal a c) as H11. {
+    apply Cofinal.Extract; try assumption. exists f. split; assumption. }
+  destruct H11 as [c [H11 H12]].
+  assert (Ordinal c) as H13. { apply Cofinal.IsOrdinal with a. assumption. }
+  assert (charac a :<=: c) as H14. { apply IsLowerBound; assumption. }
+  assert (charac a :<=: b) as H15. { apply Incl.Tran with c; assumption. }
+  assert (charac a :< charac a) as H16. {
+    apply Ordinal.InclElemTran with b; assumption. }
+  apply Foundation.NoLoop1 with (charac a). assumption.
 Qed.
 
 (* The character of cofinality of an ordinal is a cardinal.                     *)
