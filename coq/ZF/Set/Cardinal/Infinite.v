@@ -47,6 +47,18 @@ Proof.
   revert H5. apply Foundation.NoLoop1.
 Qed.
 
+(* Every infinite cardinal is an infinite set.                                  *)
+Proposition WhenInfiniteCard : forall (a:U),
+  InfiniteCard a -> Infinite a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* An infinite cardinal is an ordinal and contains omega.                     *)
+  apply WhenOrdinal.
+  - apply InfiniteCard.IsOrdinal. assumption.
+  - apply InfiniteCard.IsIncl. assumption.
+Qed.
+
 (* The cardinal of an infinite set is not finite.                               *)
 Proposition CardGen : forall (a:U), Infinite a ->
   WellOrderable a -> :N :<=: card a.
