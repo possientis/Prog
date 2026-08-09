@@ -79,6 +79,13 @@ Proof.
   apply HasSucc, HasZero.
 Qed.
 
+(* 2 is a natural number.                                                       *)
+Proposition HasTwo : :2: :< :N.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasSucc, HasOne.
+Qed.
+
 (* The set N is not empty.                                                      *)
 Proposition IsNotEmpty : :N <> :0:.
 Proof.
