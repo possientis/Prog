@@ -272,3 +272,15 @@ Proof.
     apply Number.WhenEquip. apply OfTwo. }
   rewrite H7. assumption.
 Qed.
+
+(* An Aleph to its own power has the same power as two to that Aleph.           *)
+Proposition AlephSame : forall (a:U),
+  Choice                                                  ->
+  Ordinal a                                               ->
+  card (Aleph!a :^^: Aleph!a) = card (:2: :^^: Aleph!a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC H1.
+  (* This is the equal-index case of the previous Aleph comparison theorem.     *)
+  apply WhenAlephInclL; try assumption. apply Incl.Refl.
+Qed.
