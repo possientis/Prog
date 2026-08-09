@@ -9,6 +9,7 @@ Require Import ZF.Class.Ordinal.Order.E.
 Require Import ZF.Class.Relation.Bij.
 Require Import ZF.Class.Relation.Domain.
 Require Import ZF.Class.Relation.FunctionOn.
+Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -26,6 +27,8 @@ Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
+
+Require Import ZF.Notation.Eval.
 
 Module CMI := ZF.Class.Order.Minimal.
 Module CEE := ZF.Class.Order.E.
@@ -164,6 +167,15 @@ Proof.
   apply H3.
 Qed.
 
+(* The Aleph value at an ordinal is an infinite set.                            *)
+Proposition IsInfinite : forall (a:U), Ordinal a ->
+  Infinite Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  apply Infinite.WhenInfiniteCard. apply IsInfiniteCard. assumption.
+Qed.
+
 (* The Aleph value at an ordinal is a cardinal.                                 *)
 Proposition IsCardinal : forall (a:U), Ordinal a ->
   Cardinal Aleph!a.
@@ -208,7 +220,7 @@ Proposition WhenZero : Aleph!:0: = :N.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   (* Aleph(0) is the infimum of the infinite cardinals not already attained.    *)
-  assert (Aleph!:0: = inf (InfiniteCard :\: Aleph:[:0:]:)) as H1. {
+  assert (Aleph!:0: = inf (InfiniteCard :\: Aleph:[:0: : U]:)) as H1. {
     apply IsInf. apply Ordinal.Zero. }
   assert (Aleph:[:0:]: = :0:) as H2. {
     apply ImageUnderClass.WhenZero. reflexivity. }
@@ -259,7 +271,8 @@ Proof.
 Qed.
 
 (* At a limit ordinal, Aleph is the union of its earlier values.                *)
-Proposition Continuous : forall (a:U), Limit a -> Aleph!a = :\/:_{a} Aleph.
+Proposition Continuous : forall (a:U), Limit a ->
+  Aleph!a = :\/:_{a} Aleph.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a H1.
@@ -359,4 +372,3 @@ Proof.
     apply H17. rewrite H16. assumption. }
   rewrite <- H6 in H18. revert H18. apply Foundation.NoLoop1.
 Qed.
-
