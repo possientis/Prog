@@ -283,8 +283,8 @@ Proof.
   - apply InclCompatCardR; assumption.
 Qed.
 
-(* The power set to an infinite exponent has the power-set cardinal.            *)
-Proposition PowerBase : forall (a:U),
+(* A power-set base raised to an infinite exponent has its own cardinal.        *)
+Proposition WhenPowerSetCardL : forall (a:U),
   Choice                            ->
   Infinite a                        ->
   card (:P(a) :^^: a) = card :P(a).
@@ -339,7 +339,7 @@ Proof.
     assert (card (a :^^: b) :<=: card (:P(b) :^^: b)) as H5. {
       apply (InclCompatCardL a :P(b) b); assumption. }
     assert (card (:P(b) :^^: b) = card :P(b)) as H6. {
-      apply PowerBase; assumption. }
+      apply WhenPowerSetCardL; assumption. }
     rewrite <- H6. assumption. }
   (* The two cardinal bounds identify the cardinals.                            *)
   apply Incl.Double. split; assumption.
