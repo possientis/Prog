@@ -67,8 +67,8 @@ Proof.
   apply Cardinal.Map.CompatL. assumption.
 Qed.
 
-(* The set of maps from a into two is equipotent to the power set of a.         *)
-Proposition OfTwo : forall (a:U),
+(* The set of two-valued maps on a is equipotent to the power set of a.         *)
+Proposition WhenTwoL : forall (a:U),
   :2: :^^: a :~: :P(a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -183,7 +183,7 @@ Proof.
     apply WithChoice.EquipCharac; assumption. }
   (* Replace P(a) by 2^a as the base.                                           *)
   assert (:P(a) :^^: a :~: (:2: :^^: a) :^^: a) as H5. {
-    apply CompatL. apply Equip.Sym. apply OfTwo. }
+    apply CompatL. apply Equip.Sym. apply WhenTwoL. }
   (* Associate the two exponentiations into one exponent over a x a.            *)
   assert ((:2: :^^: a) :^^: a :~: :2: :^^: (a :x: a)) as H6. {
     apply Assoc. }
@@ -191,7 +191,7 @@ Proof.
   assert (:2: :^^: (a :x: a) :~: :2: :^^: a) as H7. {
     apply CompatR. assumption. }
   (* Finally translate 2^a back to the power set of a.                          *)
-  assert (:2: :^^: a :~: :P(a)) as H8. { apply OfTwo. }
+  assert (:2: :^^: a :~: :P(a)) as H8. { apply WhenTwoL. }
   apply Number.WhenEquip.
   apply Equip.Tran with ((:2: :^^: a) :^^: a). 1: assumption.
   apply Equip.Tran with (:2: :^^: (a :x: a)). 1: assumption.
@@ -216,7 +216,7 @@ Proof.
     assert (card (:2: :^^: b) :<=: card (a :^^: b)) as H4. {
       apply (InclCompatL :2: a b); assumption. }
     assert (card (:2: :^^: b) = card :P(b)) as H5. {
-      apply Number.WhenEquip. apply OfTwo. }
+      apply Number.WhenEquip. apply WhenTwoL. }
     rewrite <- H5. assumption. }
   (* The upper bound compares a^b with P(b)^b, then evaluates P(b)^b.           *)
   assert (card (a :^^: b) :<=: card :P(b)) as H5. {
@@ -269,7 +269,7 @@ Proof.
     apply WhenBounded; try assumption. apply Aleph.IsInfinite. assumption. }
   (* Finally replace the power set by the two-valued function set.              *)
   assert (card (:2: :^^: Aleph!b) = card :P(Aleph!b)) as H7. {
-    apply Number.WhenEquip. apply OfTwo. }
+    apply Number.WhenEquip. apply WhenTwoL. }
   rewrite H7. assumption.
 Qed.
 
