@@ -216,6 +216,16 @@ Proof.
   apply Equip.Tran with (map (c :x: b) a); assumption.
 Qed.
 
+(* Currying identifies the cardinals of the associated function sets.           *)
+Proposition AssocCard : forall (a b c:U),
+  card ((a :^^: b) :^^: c) = card (a :^^: (b :x: c)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c.
+  (* Equipotent function sets have the same cardinal.                           *)
+  apply Number.WhenEquip. apply Assoc.
+Qed.
+
 (* Exponentiation is left-monotone in cardinal under choice.                    *)
 Proposition InclCompatL : forall (a b c:U),
   Choice                                ->
