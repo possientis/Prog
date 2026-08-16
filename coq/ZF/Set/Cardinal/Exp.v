@@ -94,6 +94,16 @@ Proof.
   exists h. assumption.
 Qed.
 
+(* The two-valued maps on a have the power-set cardinal.                        *)
+Proposition WhenTwoCardL : forall (a:U),
+  card (:2: :^^: a) = card :P(a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a.
+  (* Equal sets of size are represented by the same cardinal.                   *)
+  apply Number.WhenEquip. apply WhenTwoL.
+Qed.
+
 (* Currying identifies maps into a function set with maps on a product.         *)
 Proposition Assoc : forall (a b c:U),
   (a :^^: b) :^^: c :~: a :^^: (b :x: c).
@@ -215,8 +225,7 @@ Proof.
       assumption. }
     assert (card (:2: :^^: b) :<=: card (a :^^: b)) as H4. {
       apply (InclCompatL :2: a b); assumption. }
-    assert (card (:2: :^^: b) = card :P(b)) as H5. {
-      apply Number.WhenEquip. apply WhenTwoL. }
+    assert (card (:2: :^^: b) = card :P(b)) as H5. { apply WhenTwoCardL. }
     rewrite <- H5. assumption. }
   (* The upper bound compares a^b with P(b)^b, then evaluates P(b)^b.           *)
   assert (card (a :^^: b) :<=: card :P(b)) as H5. {
@@ -269,7 +278,7 @@ Proof.
     apply WhenBounded; try assumption. apply Aleph.IsInfinite. assumption. }
   (* Finally replace the power set by the two-valued function set.              *)
   assert (card (:2: :^^: Aleph!b) = card :P(Aleph!b)) as H7. {
-    apply Number.WhenEquip. apply WhenTwoL. }
+    apply WhenTwoCardL. }
   rewrite H7. assumption.
 Qed.
 
