@@ -417,28 +417,28 @@ Proposition WhenAlephInclR : forall (a b:U),
   Choice                                                  ->
   Ordinal a                                               ->
   Ordinal b                                               ->
-  Aleph!a :<=: Aleph!b                                    ->
-  card (Aleph!b :^^: Aleph!a) :<=: card (:2: :^^: Aleph!b).
+  Aleph!b :<=: Aleph!a                                    ->
+  card (Aleph!a :^^: Aleph!b) :<=: card (:2: :^^: Aleph!a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1 H2 H3.
-  assert (InfiniteCard Aleph!a) as G1. { apply Aleph.IsInfiniteCard. assumption. }
+  assert (InfiniteCard Aleph!b) as G1. { apply Aleph.IsInfiniteCard. assumption. }
   assert (Cardinal Aleph!a) as G2. { apply Aleph.IsCardinal. assumption. }
   assert (Cardinal Aleph!b) as G3. { apply Aleph.IsCardinal. assumption. }
   (* The smaller Aleph is non-empty, because every Aleph is infinite.           *)
-  assert (Aleph!a <> :0:) as H4. { apply InfiniteCard.IsNotZero. assumption. }
+  assert (Aleph!b <> :0:) as H4. { apply InfiniteCard.IsNotZero. assumption. }
   (* The inclusion of Alephs is the same as the corresponding cardinal bound.   *)
-  assert (card Aleph!a :<=: card Aleph!b) as H5. {
+  assert (card Aleph!b :<=: card Aleph!a) as H5. {
     assert (Aleph!a = card Aleph!a) as K1. {
       apply Number.WhenCardinal. assumption. }
     assert (Aleph!b = card Aleph!b) as K2. {
       apply Number.WhenCardinal. assumption. }
     rewrite <- K1, <- K2. assumption. }
   (* Monotonicity in the exponent bounds the reversed Aleph power.              *)
-  assert (card (Aleph!b :^^: Aleph!a) :<=: card (Aleph!b :^^: Aleph!b)) as H6. {
+  assert (card (Aleph!a :^^: Aleph!b) :<=: card (Aleph!a :^^: Aleph!a)) as H6. {
     apply InclCompatCardR; assumption. }
   (* The diagonal Aleph power is the same size as the two-valued power.         *)
-  assert (card (Aleph!b :^^: Aleph!b) = card (:2: :^^: Aleph!b)) as H7. {
+  assert (card (Aleph!a :^^: Aleph!a) = card (:2: :^^: Aleph!a)) as H7. {
     apply AlephSame; assumption. }
   rewrite <- H7. assumption.
 Qed.
