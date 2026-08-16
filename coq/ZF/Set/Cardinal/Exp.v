@@ -13,6 +13,7 @@ Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
+Require Import ZF.Set.Single.
 Require Import ZF.Set.Relation.Charac.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Fiber.
@@ -109,6 +110,58 @@ Proof.
   assert (b :~: c) as H2. { apply WithChoice.EquipCharac; assumption. }
   (* The structural right compatibility then identifies the function sets.      *)
   apply Number.WhenEquip. apply CompatR. assumption.
+Qed.
+
+(* Exponentiation by one is equipotent to the base.                             *)
+Proposition WhenOneR : forall (a:U),
+  a :^^: :1: :~: a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a.
+  (* Send an element of a to the constant map on the singleton.                 *)
+  remember (fun y => from :1: (fun _ => y)) as F eqn:H1.
+  remember (from a F) as h eqn:H2.
+  assert (:0: :< :1:) as H3. {
+    rewrite Natural.OneExtension. apply Single.IsIn. }
+  (* Each displayed constant map is a map from one into a.                      *)
+  assert (forall y, y :< a -> F y :< map :1: a) as H4. {
+    intros y H4. rewrite H1. apply CharacMap. apply From.IsFun.
+    intros x H5. assumption. }
+  (* Equal constant maps have equal values at the unique element of one.        *)
+  assert (forall x y,
+    x :< a -> y :< a -> F x = F y -> x = y) as H5. {
+    intros x y H5 H6 H7. rewrite H1 in H7.
+    assert ((from :1: (fun _ => x))!:0: = (from :1: (fun _ => y))!:0:) as H8. {
+      rewrite H7. reflexivity. }
+    rewrite From.Eval in H8. 2: assumption.
+    rewrite From.Eval in H8. 2: assumption. assumption. }
+  (* Any map from one into a is the constant map at its value on zero.          *)
+  assert (forall f,
+    f :< map :1: a -> exists y, y :< a /\ F y = f) as H6. {
+    intros f H6.
+    assert (Fun f :1: a) as H7. { apply CharacMap. assumption. }
+    exists (f!:0:). split.
+    - apply Fun.IsInRange with :1:; assumption.
+    - rewrite H1.
+      apply Fun.Equal with :1: a :1: a; try reflexivity; try assumption.
+      + apply From.IsFun. intros x H8. apply Fun.IsInRange with :1:; assumption.
+      + intros x H8. rewrite From.Eval. 2: assumption.
+        assert (x = :0:) as H9. {
+          rewrite Natural.OneExtension in H8. apply Single.Charac. assumption. }
+        rewrite H9. reflexivity. }
+  assert (Bij h a (map :1: a)) as H7. {
+    rewrite H2. apply From.IsBij; assumption. }
+  apply Equip.Sym. exists h. assumption.
+Qed.
+
+(* Exponentiation by one has the cardinal of the base.                          *)
+Proposition WhenOneCardR : forall (a:U),
+  card (a :^^: :1:) = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a.
+  (* Equal sets of size are represented by the same cardinal.                   *)
+  apply Number.WhenEquip. apply WhenOneR.
 Qed.
 
 (* The set of two-valued maps on a is equipotent to the power set of a.         *)
