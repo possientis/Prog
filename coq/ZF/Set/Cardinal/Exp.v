@@ -227,7 +227,7 @@ Proof.
 Qed.
 
 (* Exponentiation is left-monotone in cardinal under choice.                    *)
-Proposition InclCompatL : forall (a b c:U),
+Proposition InclCompatCardL : forall (a b c:U),
   Choice                                ->
   card a :<=: card b                    ->
   card (a :^^: c) :<=: card (b :^^: c).
@@ -247,7 +247,7 @@ Proof.
 Qed.
 
 (* Exponentiation is right-monotone in cardinal under choice.                   *)
-Proposition InclCompatR : forall (a b c:U),
+Proposition InclCompatCardR : forall (a b c:U),
   Choice                                ->
   b <> :0:                              ->
   card b :<=: card c                    ->
@@ -268,7 +268,7 @@ Proof.
 Qed.
 
 (* Exponentiation is monotone in both cardinal arguments under choice.          *)
-Proposition InclCompat : forall (a b c d:U),
+Proposition InclCompatCard : forall (a b c d:U),
   Choice                                ->
   c <> :0:                              ->
   card a :<=: card b                    ->
@@ -279,8 +279,8 @@ Proof.
   intros a b c d AC H1 H2 H3.
   (* First enlarge the base, then enlarge the exponent.                         *)
   apply Incl.Tran with (card (b :^^: c)).
-  - apply InclCompatL; assumption.
-  - apply InclCompatR; assumption.
+  - apply InclCompatCardL; assumption.
+  - apply InclCompatCardR; assumption.
 Qed.
 
 (* The power set to an infinite exponent has the power-set cardinal.            *)
@@ -331,13 +331,13 @@ Proof.
       rewrite Number.WhenNat. 2: { apply Omega.HasSucc, Omega.HasOne. }
       assumption. }
     assert (card (:2: :^^: b) :<=: card (a :^^: b)) as H4. {
-      apply (InclCompatL :2: a b); assumption. }
+      apply (InclCompatCardL :2: a b); assumption. }
     assert (card (:2: :^^: b) = card :P(b)) as H5. { apply WhenTwoCardL. }
     rewrite <- H5. assumption. }
   (* The upper bound compares a^b with P(b)^b, then evaluates P(b)^b.           *)
   assert (card (a :^^: b) :<=: card :P(b)) as H5. {
     assert (card (a :^^: b) :<=: card (:P(b) :^^: b)) as H5. {
-      apply (InclCompatL a :P(b) b); assumption. }
+      apply (InclCompatCardL a :P(b) b); assumption. }
     assert (card (:P(b) :^^: b) = card :P(b)) as H6. {
       apply PowerBase; assumption. }
     rewrite <- H6. assumption. }
@@ -425,7 +425,7 @@ Proof.
     rewrite <- K1, <- K2. assumption. }
   (* Monotonicity in the exponent bounds the reversed Aleph power.              *)
   assert (card (Aleph!b :^^: Aleph!a) :<=: card (Aleph!b :^^: Aleph!b)) as H6. {
-    apply InclCompatR; assumption. }
+    apply InclCompatCardR; assumption. }
   (* The diagonal Aleph power is the same size as the two-valued power.         *)
   assert (card (Aleph!b :^^: Aleph!b) = card (:2: :^^: Aleph!b)) as H7. {
     apply AlephSame; assumption. }
