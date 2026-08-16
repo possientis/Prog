@@ -327,7 +327,7 @@ Proof.
 Qed.
 
 (* A bounded nontrivial base has the power-set cardinal.                        *)
-Proposition WhenBounded : forall (a b:U),
+Proposition WhenBoundedCardL : forall (a b:U),
   Choice                                ->
   Infinite b                            ->
   :2: :<=: card a                       ->
@@ -393,7 +393,7 @@ Proof.
     rewrite <- K2 in K5. assumption. }
   (* The bounded theorem identifies the left side with P(Aleph b).              *)
   assert (card (Aleph!a :^^: Aleph!b) = card :P(Aleph!b)) as H6. {
-    apply WhenBounded; try assumption. apply Aleph.IsInfinite. assumption. }
+    apply WhenBoundedCardL; try assumption. apply Aleph.IsInfinite. assumption. }
   (* Finally replace the power set by the two-valued function set.              *)
   assert (card (:2: :^^: Aleph!b) = card :P(Aleph!b)) as H7. {
     apply WhenTwoCardL. }
