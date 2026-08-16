@@ -67,6 +67,50 @@ Proof.
   apply Cardinal.Map.CompatL. assumption.
 Qed.
 
+(* Exponentiation is cardinal-compatible in both arguments under choice.        *)
+Proposition CompatCard : forall (a b c d:U),
+  Choice                                ->
+  card a = card c                       ->
+  card b = card d                       ->
+  card (a :^^: b) = card (c :^^: d).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d AC H1 H2.
+  (* Choice turns the cardinal equalities into equipotences.                    *)
+  assert (a :~: c) as H3. { apply WithChoice.EquipCharac; assumption. }
+  assert (b :~: d) as H4. { apply WithChoice.EquipCharac; assumption. }
+  (* The structural compatibility then identifies the function sets.            *)
+  apply Number.WhenEquip. apply Compat; assumption.
+Qed.
+
+(* Exponentiation is left cardinal-compatible under choice.                     *)
+Proposition CompatCardL : forall (a b c:U),
+  Choice                                ->
+  card a = card b                       ->
+  card (a :^^: c) = card (b :^^: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* Choice turns the base cardinal equality into an equipotence.               *)
+  assert (a :~: b) as H2. { apply WithChoice.EquipCharac; assumption. }
+  (* The structural left compatibility then identifies the function sets.       *)
+  apply Number.WhenEquip. apply CompatL. assumption.
+Qed.
+
+(* Exponentiation is right cardinal-compatible under choice.                    *)
+Proposition CompatCardR : forall (a b c:U),
+  Choice                                ->
+  card b = card c                       ->
+  card (a :^^: b) = card (a :^^: c).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c AC H1.
+  (* Choice turns the exponent cardinal equality into an equipotence.           *)
+  assert (b :~: c) as H2. { apply WithChoice.EquipCharac; assumption. }
+  (* The structural right compatibility then identifies the function sets.      *)
+  apply Number.WhenEquip. apply CompatR. assumption.
+Qed.
+
 (* The set of two-valued maps on a is equipotent to the power set of a.         *)
 Proposition WhenTwoL : forall (a:U),
   :2: :^^: a :~: :P(a).
