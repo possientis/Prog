@@ -283,11 +283,11 @@ Proof.
   - apply InclCompatCardR; assumption.
 Qed.
 
-(* A power-set base raised to an infinite exponent has its own cardinal.        *)
-Proposition WhenPowerSetCardL : forall (a:U),
+(* A power-set base raised to an infinite exponent has its own size.            *)
+Proposition WhenPowerSetL : forall (a:U),
   Choice                            ->
   Infinite a                        ->
-  card (:P(a) :^^: a) = card :P(a).
+  :P(a) :^^: a :~: :P(a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a AC H1.
@@ -309,10 +309,21 @@ Proof.
     apply CompatR. assumption. }
   (* Finally translate 2^a back to the power set of a.                          *)
   assert (:2: :^^: a :~: :P(a)) as H8. { apply WhenTwoL. }
-  apply Number.WhenEquip.
   apply Equip.Tran with ((:2: :^^: a) :^^: a). 1: assumption.
   apply Equip.Tran with (:2: :^^: (a :x: a)). 1: assumption.
   apply Equip.Tran with (:2: :^^: a); assumption.
+Qed.
+
+(* A power-set base raised to an infinite exponent has its own cardinal.        *)
+Proposition WhenPowerSetCardL : forall (a:U),
+  Choice                            ->
+  Infinite a                        ->
+  card (:P(a) :^^: a) = card :P(a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC H1.
+  (* Equipotent sets have the same cardinal.                                    *)
+  apply Number.WhenEquip. apply WhenPowerSetL; assumption.
 Qed.
 
 (* A bounded nontrivial base has the power-set cardinal.                        *)
