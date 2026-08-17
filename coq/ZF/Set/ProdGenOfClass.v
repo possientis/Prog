@@ -22,11 +22,11 @@ Export ZF.Notation.ProdGen.
 
 
 (* The generalized product prd_{x :< a} A(x).                                   *)
-Definition prodGen (a:U) (A:Class) : U := fromClass (:prd:_{a} A)
+Definition prodGen (a:U) (A:Class) : U := fromClass (Class.ProdGen.prodGen a A)
   (ProdGen.IsSmall A a).
 
 (* Notation ":prd:_{ a } A" := (prodGen a A)                                    *)
-Global Instance ProdGenOfClass : ProdGen U Class U := { prodGen := prodGen }.
+Global Instance ProdGenOfClass : ProdGen U Class := { prodGen := prodGen }.
 
 (* A set belongs to the product iff it is a function choosing from each fibre.  *)
 Proposition Charac : forall (A:Class) (a f:U),
@@ -69,17 +69,20 @@ Proposition Equal : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x = B!x) -> :prd:_{a} A = :prd:_{a} B.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros A B a H1. apply Incl.Double. split; intros f H2.
-  - (* A choice from A is a choice from B because the fibres agree.             *)
-    apply Charac in H2. destruct H2 as [H2 H3]. apply Charac. split.
-    + assumption.
-    + intros x H4. assert (A!x = B!x) as H5. { apply H1. assumption. }
-      rewrite <- H5. apply H3. assumption.
-  - (* The same argument with the equality reversed gives the converse.         *)
-    apply Charac in H2. destruct H2 as [H2 H3]. apply Charac. split.
-    + assumption.
-    + intros x H4. assert (A!x = B!x) as H5. { apply H1. assumption. }
-      rewrite H5. apply H3. assumption.
+  intros A B a H1.
+  (* A choice from A is a choice from B because the fibres agree.               *)
+  assert (:prd:_{a} A :<=: :prd:_{a} B) as H2. {
+    intros f H2. apply Charac in H2. destruct H2 as [H2 H3].
+    apply Charac. split. 1: assumption.
+    intros x H4. assert (A!x = B!x) as H5. { apply H1. assumption. }
+    rewrite <- H5. apply H3. assumption. }
+  (* The same argument with the equality reversed gives the converse.           *)
+  assert (:prd:_{a} B :<=: :prd:_{a} A) as H3. {
+    intros f H3. apply Charac in H3. destruct H3 as [H3 H4].
+    apply Charac. split. 1: assumption.
+    intros x H5. assert (A!x = B!x) as H6. { apply H1. assumption. }
+    rewrite H6. apply H4. assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* The product is invariant under class equivalence of the family.              *)
@@ -93,9 +96,9 @@ Qed.
 
 (* Shrinking indices and enlarging fibres preserves product membership.         *)
 Proposition InclCompat : forall (A B:Class) (a b f:U),
-  a :<=: b                           ->
-  (forall x, x :< a -> A!x :<=: B!x) ->
-  f :< :prd:_{b} A                   ->
+  a :<=: b                              ->
+  (forall x, x :< a -> A!x :<=: B!x)    ->
+  f     :< :prd:_{b} A                  ->
   f:|:a :< :prd:_{a} B.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
@@ -110,7 +113,7 @@ Proof.
     intros x H5.
     assert (FunctionOn f b) as H6. { apply IsFunctionOn with A. assumption. }
     assert (Functional f) as H7. { destruct H6 as [[_ H6] _]. assumption. }
-    rewrite Restrict.Eval. 2: assumption. 2: assumption.
+    rewrite Restrict.Eval; try assumption.
     assert (f!x :< A!x) as H8. {
       apply (EvalIsIn A b f x). 1: assumption. apply H1. assumption. }
     apply H2; assumption. }
@@ -129,18 +132,17 @@ Qed.
 (* Enlarging each fibre enlarges the product over the same index set.           *)
 Proposition InclCompatR : forall (A B:Class) (a:U),
   (forall x, x :< a -> A!x :<=: B!x) ->
-  (:prd:_{a} A : U) :<=: (:prd:_{a} B : U).
+  :prd:_{a} A :<=: :prd:_{a} B.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A B a H1 f H2. apply (Charac A a f) in H2.
   destruct H2 as [H2 H3]. apply (Charac B a f). split. 1: assumption.
-  intros x H4. apply H1.
-  1: assumption. apply H3. assumption.
+  intros x H4. apply H1. 1: assumption. apply H3. assumption.
 Qed.
 
 (* If all fibres are contained in b, then the product lies in map(a,b).         *)
 Proposition WhenBounded : forall (A:Class) (a b:U),
-  (forall x, x :< a -> A!x :<=: b) -> (:prd:_{a} A : U) :<=: map a b.
+  (forall x, x :< a -> A!x :<=: b) -> :prd:_{a} A :<=: map a b.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A a b H1 f H2. apply Map.CharacMap.
@@ -212,3 +214,4 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A a. apply Equal. intros x H1. apply ZF.Class.Relation.Fun.From.Eval.
 Qed.
+
