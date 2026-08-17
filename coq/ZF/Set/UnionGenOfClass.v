@@ -1,5 +1,7 @@
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Domain.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.UnionGen.
@@ -9,6 +11,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Union.
 
 Require Import ZF.Notation.UnionGen.
@@ -16,6 +19,7 @@ Export ZF.Notation.UnionGen.
 
 
 Module CIN := ZF.Class.Incl.
+Module CRD := ZF.Class.Relation.Domain.
 
 (* The generalized union \/_{x :< a} A(x)                                       *)
 Definition unionGen (a:U) (A:Class) : U := fromClass (:\/:_{toClass a} A)
@@ -122,6 +126,30 @@ Proof.
     destruct H4 as [x [H4 [_ H5]]]. apply Charac. exists x. split.
     + assumption.
     + rewrite <- H5 in H3. assumption.
+Qed.
+
+(* A generalized union over a functional class equals the union of its image.   *)
+Proposition WhenClassImage : forall (F:Class) (a:U),
+  Functional F                            ->
+  (forall x, x :< a -> CRD.domain F x)    ->
+  :\/:_{a} F = :U(F:[a]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros F a H1 H2.
+  (* First show that every member of a displayed value lies in the image union. *)
+  assert (:\/:_{a} F :<=: :U(F:[a]:)) as H3. {
+    intros y H3. apply Charac in H3. destruct H3 as [x [H3 H4]].
+    apply Union.Charac. exists (F!x). split. 1: assumption.
+    apply ImageUnderClass.IsIn; try assumption. apply H2. assumption. }
+  (* Conversely, every image-union member comes from one of those values.       *)
+  assert (:U(F:[a]:) :<=: :\/:_{a} F) as H4. {
+    intros y H4. apply Union.Charac in H4. destruct H4 as [z [H4 H5]].
+    apply ImageUnderClass.Charac in H5. 2: assumption.
+    destruct H5 as [x [H5 H6]].
+    assert (CRD.domain F x) as H7. { exists z. assumption. }
+    assert (F!x = z) as H8. { apply EvalOfClass.Charac; assumption. }
+    apply Charac. exists x. split. 1: assumption. rewrite H8. assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* The generalized union is unchanged by eta-reducing the family.               *)
