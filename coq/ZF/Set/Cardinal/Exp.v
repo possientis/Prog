@@ -328,10 +328,10 @@ Qed.
 
 (* A bounded nontrivial base has the power-set cardinal.                        *)
 Proposition WhenBoundedCardL : forall (a b:U),
-  Choice                                ->
-  Infinite b                            ->
-  :2: :<=: card a                       ->
-  card a :<=: card :P(b)                ->
+  Choice                           ->
+  Infinite b                       ->
+  :2: :<=: card a                  ->
+  card a :<=: card :P(b)           ->
   card (a :^^: b) = card :P(b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -361,7 +361,7 @@ Proposition WhenAlephInclL : forall (a b:U),
   Choice                                                  ->
   Ordinal a                                               ->
   Ordinal b                                               ->
-  Aleph!a :<=: Aleph!b                                    ->
+  a :<=: b                                                ->
   card (Aleph!a :^^: Aleph!b) = card (:2: :^^: Aleph!b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -378,8 +378,9 @@ Proof.
     assert (:N :<=: Aleph!a) as K2. { apply InfiniteCard.IsIncl. assumption. }
     assert (:2: :< Aleph!a) as K3. { apply K2. apply Omega.HasTwo. }
     apply Ordinal.ElemIsIncl; assumption. }
-  (* The upper bound follows from Aleph inclusion and Cantor's theorem.         *)
+  (* The upper bound follows from index inclusion and Cantor's theorem.         *)
   assert (card Aleph!a :<=: card :P(Aleph!b)) as H5. {
+    assert (Aleph!a :<=: Aleph!b) as K0. { apply Aleph.InclCompat; assumption. }
     assert (Aleph!a = card Aleph!a) as K1. {
       apply Number.WhenCardinal. assumption. }
     assert (Aleph!b = card Aleph!b) as K2. {
@@ -389,7 +390,7 @@ Proof.
     assert (Ordinal (card :P(Aleph!b))) as K4. { apply Number.IsOrdinal. }
     assert (card Aleph!b :<=: card :P(Aleph!b)) as K5. {
       apply Ordinal.ElemIsIncl; assumption. }
-    rewrite <- K1. apply Incl.Tran with Aleph!b. 1: assumption.
+    rewrite <- K1. apply Incl.Tran with Aleph!b. 1: apply K0.
     rewrite <- K2 in K5. assumption. }
   (* The bounded theorem identifies the left side with P(Aleph b).              *)
   assert (card (Aleph!a :^^: Aleph!b) = card :P(Aleph!b)) as H6. {
@@ -417,7 +418,7 @@ Proposition WhenAlephInclR : forall (a b:U),
   Choice                                                  ->
   Ordinal a                                               ->
   Ordinal b                                               ->
-  Aleph!b :<=: Aleph!a                                    ->
+  b :<=: a                                                ->
   card (Aleph!a :^^: Aleph!b) :<=: card (:2: :^^: Aleph!a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -427,8 +428,9 @@ Proof.
   assert (Cardinal Aleph!b) as G3. { apply Aleph.IsCardinal. assumption. }
   (* The smaller Aleph is non-empty, because every Aleph is infinite.           *)
   assert (Aleph!b <> :0:) as H4. { apply InfiniteCard.IsNotZero. assumption. }
-  (* The inclusion of Alephs is the same as the corresponding cardinal bound.   *)
+  (* The index inclusion gives the corresponding Aleph cardinal bound.          *)
   assert (card Aleph!b :<=: card Aleph!a) as H5. {
+    assert (Aleph!b :<=: Aleph!a) as K0. { apply Aleph.InclCompat; assumption. }
     assert (Aleph!a = card Aleph!a) as K1. {
       apply Number.WhenCardinal. assumption. }
     assert (Aleph!b = card Aleph!b) as K2. {
