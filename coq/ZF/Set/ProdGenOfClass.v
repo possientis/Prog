@@ -169,17 +169,18 @@ Proposition WhenConstant : forall (A:Class) (a b:U),
   (forall x, x :< a -> A!x = b) -> :prd:_{a} A = map a b.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros A a b H1. apply Incl.Double. split; intros f H2.
-  - (* Every product member maps into the displayed constant fibre.             *)
-    assert ((:prd:_{a} A : U) :<=: map a b) as H3. {
-      apply WhenBounded. intros x H3.
-      assert (A!x = b) as H4. { apply H1. assumption. }
-      rewrite H4. apply Incl.Refl. }
-    apply H3. assumption.
-  - (* Conversely, any map into b chooses from the equal fibre at every index.  *)
-    apply Map.CharacMap in H2. apply Charac. split. 1: apply H2.
-    intros x H3. assert (A!x = b) as H4. { apply H1. assumption. }
-    rewrite H4. apply Fun.IsInRange with a; assumption.
+  intros A a b H1.
+  (* Every product member maps into the displayed constant fibre.               *)
+  assert (:prd:_{a} A :<=: map a b) as H2. {
+    apply WhenBounded. intros x H2.
+    assert (A!x = b) as H3. { apply H1. assumption. }
+    rewrite H3. apply Incl.Refl. }
+  (* Conversely, any map into b chooses from the equal fibre at every index.    *)
+  assert (map a b :<=: :prd:_{a} A) as H3. {
+    intros f H3. apply Map.CharacMap in H3. apply Charac. split. 1: apply H3.
+    intros x H4. assert (A!x = b) as H5. { apply H1. assumption. }
+    rewrite H5. apply Fun.IsInRange with a; assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* The product over the empty index set is the singleton empty function.        *)
