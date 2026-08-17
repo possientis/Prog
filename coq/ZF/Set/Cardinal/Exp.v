@@ -7,6 +7,7 @@ Require Import ZF.Set.Cardinal.Map.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
@@ -125,7 +126,7 @@ Proof.
     rewrite Natural.OneExtension. apply Single.IsIn. }
   (* Each displayed constant map is a map from one into a.                      *)
   assert (forall y, y :< a -> F y :< map :1: a) as H4. {
-    intros y H4. rewrite H1. apply CharacMap. apply From.IsFun.
+    intros y H4. rewrite H1. apply Map.CharacMap. apply From.IsFun.
     intros x H5. assumption. }
   (* Equal constant maps have equal values at the unique element of one.        *)
   assert (forall x y,
@@ -139,7 +140,7 @@ Proof.
   assert (forall f,
     f :< map :1: a -> exists y, y :< a /\ F y = f) as H6. {
     intros f H6.
-    assert (Fun f :1: a) as H7. { apply CharacMap. assumption. }
+    assert (Fun f :1: a) as H7. { apply Map.CharacMap. assumption. }
     exists (f!:0:). split.
     - apply Fun.IsInRange with :1:; assumption.
     - rewrite H1.
@@ -164,6 +165,34 @@ Proof.
   apply Number.WhenEquip. apply WhenOneR.
 Qed.
 
+(* A non-empty exponent contains a copy of the base cardinal.                   *)
+Proposition IsInclCardR : forall (a b:U),
+  Choice                            ->
+  b <> :0:                          ->
+  card a :<=: card (a :^^: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1.
+  (* Choose one point of the exponent and send each base element to a constant. *)
+  assert (exists x, x :< b) as H2. { apply Empty.HasElem. assumption. }
+  destruct H2 as [x H2].
+  remember (fun y => from b (fun _ => y)) as F eqn:H3.
+  remember (from a F) as h eqn:H4.
+  assert (Inj h a (map b a)) as H5. {
+    (* Each displayed constant is a function from b into a.                     *)
+    assert (forall y, y :< a -> F y :< map b a) as H5. {
+      intros y H5. rewrite H3. apply Map.CharacMap. apply From.IsFun.
+      intros z H6. assumption. }
+    (* Equal constant functions have equal values at the chosen point.          *)
+    assert (forall y z,
+      y :< a -> z :< a -> F y = F z -> y = z) as H6. {
+      intros y z H6 H7 H8.
+      assert ((F y)!x = (F z)!x) as H9. { rewrite H8. reflexivity. }
+      rewrite H3, From.Eval, From.Eval in H9; assumption. }
+    rewrite H4. apply From.IsInj; assumption. }
+  apply WithChoice.WhenInj with h; assumption.
+Qed.
+
 (* The set of two-valued maps on a is equipotent to the power set of a.         *)
 Proposition WhenTwoL : forall (a:U),
   :2: :^^: a :~: :P(a).
@@ -176,17 +205,17 @@ Proof.
     rewrite H1. apply From.IsBij.
     - (* The fiber over one is a subset of the domain, hence a subset of a.     *)
       intros f H2. apply Power.Charac.
-      assert (Fun f a :2:) as H3. { apply CharacMap. assumption. }
+      assert (Fun f a :2:) as H3. { apply Map.CharacMap. assumption. }
       assert (domain f = a) as H4. { apply H3. }
       rewrite <- H4. apply Fiber.IsIncl.
     - (* Binary-valued functions are determined by their fibers over one.       *)
       intros f g H2 H3 H4. apply Fiber.EqualOfOne with a; try assumption;
-        apply CharacMap; assumption.
+        apply Map.CharacMap; assumption.
     - (* Every subset of a is the fiber over one of its characteristic function.*)
       intros b H2.
       assert (b :<=: a) as H3. { apply Power.Charac. assumption. }
       exists (charac a b). split.
-      + apply CharacMap. apply Charac.IsFun.
+      + apply Map.CharacMap. apply Charac.IsFun.
       + apply Fiber.OfCharac. assumption. }
   exists h. assumption.
 Qed.
@@ -444,3 +473,4 @@ Proof.
     apply AlephSame; assumption. }
   rewrite <- H7. assumption.
 Qed.
+
