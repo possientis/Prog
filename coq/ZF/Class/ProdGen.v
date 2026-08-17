@@ -13,5 +13,5 @@ Definition prodGen (a:U) (A:Class) : Class := fun f =>
   FunctionOn f a /\ forall x, x :< a -> f!x :< A!x.
 
 (* Notation ":prd:_{ a } A" := (prodGen a A)                                    *)
-Global Instance ProdGenClass : ProdGen U Class Class := {prodGen := prodGen }.
+Global Instance ProdGenClass : ProdGen U Class Class := { prodGen := prodGen }.
 

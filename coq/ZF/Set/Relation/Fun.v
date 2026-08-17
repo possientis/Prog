@@ -51,6 +51,23 @@ Proof.
   apply Incl.Tran with b; assumption.
 Qed.
 
+(* A function on a whose values lie in b is a function from a to b.             *)
+Proposition FromFunctionOn : forall (f a b:U),
+  FunctionOn f a ->
+  (forall x, x :< a -> f!x :< b) ->
+  Fun f a b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b H1 H2.
+  (* It remains to show that the range of f is included in b.                   *)
+  assert (range f :<=: b) as H3. {
+    (* Every range element is the value at some point of the domain.            *)
+    intros y H3. apply (FunctionOn.RangeCharac f a y) in H3. 2: assumption.
+    destruct H3 as [x [H3 H4]]. rewrite <- H4. apply H2. assumption.
+  }
+  split; assumption.
+Qed.
+
 (* A function f:a -> b that is injective on a is one-to-one.                    *)
 Proposition IsOneToOne : forall (f a b:U),
   Fun f a b                                             ->
