@@ -187,16 +187,20 @@ Qed.
 Proposition WhenZeroL : forall (A:Class), :prd:_{:0:} A = :{:0:}:.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros A. apply Incl.Double. split; intros f H1.
-  - (* Every function on the empty index set is the empty function.             *)
-    apply Single.Charac. apply FunctionOn.Equal with :0: :0:; try reflexivity.
-    + apply IsFunctionOn with A. assumption.
-    + apply FunctionOn.WhenZero. reflexivity.
-    + intros x H2. apply Empty.Charac in H2. contradiction.
-  - (* The empty function chooses from every empty list of fibres.              *)
-    apply Single.Charac in H1. apply Charac. split.
-    + apply FunctionOn.WhenZero. assumption.
-    + intros x H2. apply Empty.Charac in H2. contradiction.
+  intros A.
+  (* Every function on the empty index set is the empty function.               *)
+  assert (:prd:_{:0:} A :<=: :{:0:}:) as H1. {
+    intros f H1. apply Single.Charac.
+    apply FunctionOn.Equal with :0: :0:; try reflexivity.
+    - apply IsFunctionOn with A. assumption.
+    - apply FunctionOn.WhenZero. reflexivity.
+    - intros x H2. apply Empty.Charac in H2. contradiction. }
+  (* The empty function chooses from every empty list of fibres.                *)
+  assert (:{ :0: }: :<=: :prd:_{:0:} A) as H2. {
+    intros f H2. apply Single.Charac in H2. apply Charac. split.
+    - apply FunctionOn.WhenZero. assumption.
+    - intros x H3. apply Empty.Charac in H3. contradiction. }
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* A product is empty when one of its fibres over the index set is empty.       *)
@@ -216,6 +220,6 @@ Proposition EtaReduce : forall (A:Class) (a:U),
   :prd:_{a} :[fun x => A!x]: = :prd:_{a} A.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros A a. apply Equal. intros x H1. apply ZF.Class.Relation.Fun.From.Eval.
+  intros A a. apply Equal. intros x H1. apply Class.Relation.Fun.From.Eval.
 Qed.
 
