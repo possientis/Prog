@@ -206,6 +206,26 @@ Proof.
     + apply ElemCompat; assumption.
 Qed.
 
+(* Aleph reflects inclusion between ordinal indices.                            *)
+Proposition InclCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
+  Aleph!a :<=: Aleph!b -> a :<=: b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  (* Either a is already below b, or b is included in a.                        *)
+  assert (a :< b \/ b :<=: a) as H4. {
+    apply Ordinal.ElemOrIncl; assumption. }
+  destruct H4 as [H4|H4].
+  - (* In the strict case, inclusion follows from ordinal transitivity.         *)
+    apply Ordinal.ElemIsIncl; assumption.
+  - (* Otherwise Aleph(b) is also included in Aleph(a), so the two Aleph values *)
+    (* coincide; injectivity then identifies the original indices.              *)
+    assert (Aleph!b :<=: Aleph!a) as H5. { apply InclCompat; assumption. }
+    assert (Aleph!a = Aleph!b) as H6. { apply Incl.Double. split; assumption. }
+    assert (a = b) as H7. { apply Injective; assumption. }
+    subst. apply Incl.Refl.
+Qed.
+
 (* Aleph(a) is no less than a.                                                  *)
 Proposition IsIncl : forall (a:U), Ordinal a ->
   a :<=: Aleph!a.
