@@ -145,16 +145,19 @@ Proposition WhenBounded : forall (A:Class) (a b:U),
   (forall x, x :< a -> A!x :<=: b) -> :prd:_{a} A :<=: map a b.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros A a b H1 f H2. apply Map.CharacMap.
-  apply Fun.FromFunctionOn.
-  - apply IsFunctionOn with A. assumption.
-  - intros x H3. assert (A!x :<=: b) as H4. { apply H1. assumption. }
-    apply H4. apply (EvalIsIn A a f x); assumption.
+  intros A a b H1 f H2.
+  (* The product member is already a function on the index set.                 *)
+  assert (FunctionOn f a) as H3. { apply IsFunctionOn with A. assumption. }
+  (* Every displayed value lies in the common bound b.                          *)
+  assert (forall x, x :< a -> f!x :< b) as H4. {
+    intros x H4. assert (A!x :<=: b) as H5. { apply H1. assumption. }
+    apply H5. apply (EvalIsIn A a f x); assumption. }
+  apply Map.CharacMap, Fun.FromFunctionOn; assumption.
 Qed.
 
 (* The product lies in the map set into the generalized union of its fibres.    *)
 Proposition IsIncl : forall (A:Class) (a:U),
-  (:prd:_{a} A : U) :<=: map a (:\/:_{a} A).
+  :prd:_{a} A :<=: map a (:\/:_{a} A).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A a. apply WhenBounded. intros x H1.
