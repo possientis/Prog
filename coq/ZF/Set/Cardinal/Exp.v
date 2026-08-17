@@ -1,6 +1,7 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Map.
@@ -12,10 +13,12 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Ordinal.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Single.
 Require Import ZF.Set.Relation.Charac.
+Require Import ZF.Set.Ordinal.Character.
 Require Import ZF.Set.Relation.Domain.
 Require Import ZF.Set.Relation.Fiber.
 Require Import ZF.Set.Relation.Bij.
@@ -26,10 +29,14 @@ Require Import ZF.Set.Relation.Map.
 Require Import ZF.Set.Relation.Map.Curry.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Exp2.
 Export ZF.Notation.Exp2.
+
+
+Module CFF := ZF.Class.Relation.Fun.From.
 
 
 (* The exponentiation of two sets.                                              *)
@@ -193,6 +200,51 @@ Proof.
   apply WithChoice.WhenInj with h; assumption.
 Qed.
 
+(* At a limit Aleph base, exponentiation is the union of earlier powers.        *)
+Proposition WhenLimitAlephL : forall (a b:U),
+  Limit a                                                   ->
+  Ordinal b                                                 ->
+  b :< charac (Aleph!a)                                     ->
+  Aleph!a :^^: b = :\/:_{a} :[fun c => Aleph!c :^^: b]:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (Ordinal Aleph!a) as G2. { apply Aleph.IsOrdinal. assumption. }
+  assert (Aleph!a = :\/:_{a} Aleph) as H4. { apply Aleph.Continuous. assumption. }
+  (* Every map into Aleph(a) is already bounded by some earlier Aleph value.    *)
+  assert (Aleph!a :^^: b :<=: :\/:_{a} :[fun c => Aleph!c :^^: b]:) as H5. {
+    intros f H5.
+    assert (Fun f b Aleph!a) as H6. { apply Map.CharacMap. assumption. }
+    assert (exists d, d :< Aleph!a /\ forall x, x :< b -> f!x :< d) as H7. {
+      apply Character.WhenLess; assumption. }
+    destruct H7 as [d [H7 H8]]. rewrite H4 in H7.
+    apply UnionGenOfClass.Charac in H7. destruct H7 as [c [H7 H9]].
+    assert (Ordinal c) as H10. { apply (Ordinal.IsOrdinal a); assumption. }
+    assert (Ordinal Aleph!c) as H11. { apply Aleph.IsOrdinal. assumption. }
+    assert (Ordinal d) as H12. { apply Ordinal.IsOrdinal with Aleph!c; assumption. }
+    assert (d :<=: Aleph!c) as H13. { apply Ordinal.ElemIsIncl; assumption. }
+    assert (Fun f b d) as H14. {
+      split. 1: apply H6. intros y H14.
+      apply (Fun.RangeCharac f b Aleph!a) in H14. 2: assumption.
+      destruct H14 as [x [H14 H15]]. rewrite <- H15. apply H8. assumption. }
+    assert (Fun f b Aleph!c) as H15. { apply Fun.InclCompatR with d; assumption. }
+    apply UnionGenOfClass.Charac. exists c. split. 1: assumption.
+    rewrite CFF.Eval. apply Map.CharacMap. assumption. }
+  (* Conversely, a map into an earlier Aleph value is a map into Aleph(a).      *)
+  assert (:\/:_{a} :[fun c => Aleph!c :^^: b]: :<=: Aleph!a :^^: b) as H6. {
+    intros f H6. apply UnionGenOfClass.Charac in H6.
+    destruct H6 as [c [H6 H7]]. rewrite CFF.Eval in H7.
+    assert (Ordinal c) as H8. { apply (Ordinal.IsOrdinal a); assumption. }
+    assert (c :<=: a) as H9. { apply Ordinal.ElemIsIncl; assumption. }
+    assert (Aleph!c :<=: Aleph!a) as H10. { apply Aleph.InclCompat; assumption. }
+    assert (Fun f b Aleph!c) as H11. { apply Map.CharacMap. assumption. }
+    assert (Fun f b Aleph!a) as H12. {
+      apply Fun.InclCompatR with Aleph!c; assumption. }
+    apply Map.CharacMap. assumption. }
+  apply Incl.Double. split; assumption.
+Qed.
+
 (* The set of two-valued maps on a is equipotent to the power set of a.         *)
 Proposition WhenTwoL : forall (a:U),
   :2: :^^: a :~: :P(a).
@@ -214,7 +266,7 @@ Proof.
     - (* Every subset of a is the fiber over one of its characteristic function.*)
       intros b H2.
       assert (b :<=: a) as H3. { apply Power.Charac. assumption. }
-      exists (charac a b). split.
+      exists (Charac.charac a b). split.
       + apply Map.CharacMap. apply Charac.IsFun.
       + apply Fiber.OfCharac. assumption. }
   exists h. assumption.
