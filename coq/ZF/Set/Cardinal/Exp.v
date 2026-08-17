@@ -24,11 +24,13 @@ Require Import ZF.Set.Relation.Fiber.
 Require Import ZF.Set.Relation.Bij.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Fun.From.
+Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.
 Require Import ZF.Set.Relation.Map.Curry.
 Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.EvalOfClass.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -524,5 +526,96 @@ Proof.
   assert (card (Aleph!a :^^: Aleph!a) = card (:2: :^^: Aleph!a)) as H7. {
     apply AlephSame; assumption. }
   rewrite <- H7. assumption.
+Qed.
+
+(* A small Aleph exponent of a limit Aleph base has the base cardinal.          *)
+Proposition IsAlephBase : forall (a b:U),
+  Choice                                                      ->
+  Limit a                                                     ->
+  Ordinal b                                                   ->
+  (forall c, c :< a -> card (:2: :^^: Aleph!c) :< Aleph!a)    ->
+  Aleph!b :< charac (Aleph!a)                                 ->
+  card (Aleph!a :^^: Aleph!b) = Aleph!a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2 H3 H4.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (Ordinal Aleph!a) as G2. { apply Aleph.IsOrdinal. assumption. }
+  assert (Ordinal Aleph!b) as G3. { apply Aleph.IsOrdinal. assumption. }
+  assert (Cardinal Aleph!a) as G4. { apply Aleph.IsCardinal. assumption. }
+  assert (InfiniteCard Aleph!b) as G5. { apply Aleph.IsInfiniteCard. assumption. }
+  remember :[fun c => Aleph!c :^^: Aleph!b]: as F eqn:HF.
+  (* The exponent index is below a, because it is below the character.          *)
+  assert (b :< a) as H5. {
+    assert (Ordinal (charac (Aleph!a))) as K1. { apply Character.IsOrdinal. }
+    assert (charac (Aleph!a) :<=: Aleph!a) as K2. {
+      apply Character.IsIncl. assumption. }
+    assert (Aleph!b :< Aleph!a) as K3. {
+      apply Ordinal.ElemInclTran with (charac (Aleph!a)); assumption. }
+    apply Aleph.ElemCompatRev; assumption. }
+  (* Every member of the indexed family has cardinal below Aleph(a).            *)
+  assert (forall c, c :< a -> card (F!c) :<=: card Aleph!a) as H6. {
+    intros c H6. rewrite HF, CFF.Eval.
+    assert (Ordinal c) as K1. { apply (Ordinal.IsOrdinal a); assumption. }
+    assert (Ordinal (card (:2: :^^: Aleph!c))) as K2. { apply Number.IsOrdinal. }
+    assert (card (:2: :^^: Aleph!c) :<=: Aleph!a) as K3. {
+      apply Ordinal.ElemIsIncl; try assumption. apply H3. assumption. }
+    assert (c :< b \/ b :<=: c) as K4. { apply Ordinal.ElemOrIncl; assumption. }
+    destruct K4 as [K4|K4].
+    - assert (c :<=: b) as K5. { apply Ordinal.ElemIsIncl; assumption. }
+      assert (card (Aleph!c :^^: Aleph!b) = card (:2: :^^: Aleph!b)) as K6. {
+        apply WhenAlephInclL; assumption. }
+      assert (card (:2: :^^: Aleph!b) :<=: Aleph!a) as K7. {
+        apply Ordinal.ElemIsIncl; try assumption. apply H3. assumption. }
+      assert (Aleph!a = card Aleph!a) as K8. {
+        apply Number.WhenCardinal. assumption. }
+      rewrite K6. rewrite <- K8. assumption.
+    - assert (card (Aleph!c :^^: Aleph!b) :<=: card (:2: :^^: Aleph!c)) as K5. {
+        apply WhenAlephInclR; assumption. }
+      assert (card (Aleph!c :^^: Aleph!b) :<=: Aleph!a) as K6. {
+        apply Incl.Tran with (card (:2: :^^: Aleph!c)); assumption. }
+      assert (Aleph!a = card Aleph!a) as K7. {
+        apply Number.WhenCardinal. assumption. }
+      rewrite <- K7. assumption. }
+  (* The union-product estimate bounds the upper side by Aleph(a).              *)
+  assert (card (Aleph!a :^^: Aleph!b) :<=: Aleph!a) as H7. {
+    assert (Aleph!a :^^: Aleph!b = :\/:_{a} F) as K1. {
+      rewrite HF. apply WhenLimitAlephL; assumption. }
+    rewrite K1.
+    assert (:\/:_{a} F = :U(F:[a]:)) as K2. {
+      apply UnionGenOfClass.WhenClassImage.
+      - rewrite HF. apply CFF.IsFunctional.
+      - intros c K2. rewrite HF. apply CFF.DomainOf. }
+    rewrite K2.
+    assert (card :U(F:[a]:) :<=: card (a :x: Aleph!a)) as K3. {
+      apply WithChoice.UnionProdImage; try assumption.
+      rewrite HF. apply CFF.IsFunctional. }
+    assert (card a :<=: card Aleph!a) as K4. {
+      apply WithChoice.InclCompat. 1: assumption. apply Aleph.IsIncl. assumption. }
+    assert (card (a :x: Aleph!a) :<=: card (Aleph!a :x: Aleph!a)) as K5. {
+      apply WithChoice.InclCompatProdL; assumption. }
+    assert (:N :<=: card Aleph!a) as K6. {
+      assert (Aleph!a = card Aleph!a) as L1. {
+        apply Number.WhenCardinal. assumption. }
+      rewrite <- L1.
+      apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
+    assert (card (Aleph!a :x: Aleph!a) = card Aleph!a) as K7. {
+      apply Number.Square. assumption. }
+    assert (card (a :x: Aleph!a) :<=: card Aleph!a) as K8. {
+      rewrite <- K7. assumption. }
+    assert (card :U(F:[a]:) :<=: card Aleph!a) as K9. {
+      apply Incl.Tran with (card (a :x: Aleph!a)); assumption. }
+    assert (Aleph!a = card Aleph!a) as K10. {
+      apply Number.WhenCardinal. assumption. }
+    rewrite K10. assumption. }
+  (* Constant functions give the opposite bound.                                *)
+  assert (Aleph!a :<=: card (Aleph!a :^^: Aleph!b)) as H8. {
+    assert (Aleph!b <> :0:) as K1. { apply InfiniteCard.IsNotZero. assumption. }
+    assert (card Aleph!a :<=: card (Aleph!a :^^: Aleph!b)) as K2. {
+      apply IsInclCardR; assumption. }
+    assert (Aleph!a = card Aleph!a) as K3. {
+      apply Number.WhenCardinal. assumption. }
+    rewrite <- K3 in K2. assumption. }
+  apply Incl.Double. split; assumption.
 Qed.
 
