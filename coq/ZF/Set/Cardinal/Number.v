@@ -28,8 +28,10 @@ Require Import ZF.Set.Relation.Compose.
 Require Import ZF.Set.Relation.Fun.IfThenElse.
 Require Import ZF.Set.Relation.Fun.From.
 Require Import ZF.Set.Relation.Fun.From2.
+Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Id.
+Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.Inj.
 Require Import ZF.Set.Relation.Map.Sum.
 Require Import ZF.Set.Relation.Onto.
@@ -853,6 +855,15 @@ Proof.
   assert (card (Domain.domain (F:|:a)) :<=: card a) as H8. {
     apply InclCompat; assumption. }
   rewrite <- H4. apply Incl.Tran with (card (Domain.domain (F:|:a))); assumption.
+Qed.
+
+(* The cardinal of an image of a well-orderable set under a function is bounded.*)
+Proposition ImageInclSet : forall (f a:U), WellOrderable a ->
+  FunctionOn f a -> card f:[a]: :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a H1 H2. rewrite Image.ByClass. apply ImageIncl. 1: assumption.
+  apply Functional.ToClass. apply H2.
 Qed.
 
 (* A one-to-one class preserves the cardinal of a set contained in its domain.  *)

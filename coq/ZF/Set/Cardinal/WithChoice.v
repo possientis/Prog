@@ -368,8 +368,8 @@ Proposition ImageInclSet : forall (f a:U), Choice ->
   FunctionOn f a -> card f:[a]: :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros f a AC H1. rewrite Image.ByClass. apply ImageIncl. 1: assumption.
-  apply Functional.ToClass. apply H1.
+  intros f a AC H1. apply Number.ImageInclSet. 2: assumption.
+  apply WellOrderable.WithChoice. assumption.
 Qed.
 
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
