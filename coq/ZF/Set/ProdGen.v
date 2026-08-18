@@ -1,6 +1,8 @@
 Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.Eval.
@@ -99,6 +101,14 @@ Proposition InclCompatR : forall (a b c:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b c. apply ProdGenOfClass.InclCompatR.
+Qed.
+
+(* A product of fibrewise differences is contained in the original product.     *)
+Proposition WhenDiff : forall (a b c:U),
+  :prd:_{a} (:[fun x => b!x :\: c!x]:) :<=: :prd:_{a} b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c. apply ProdGenOfClass.WhenDiff.
 Qed.
 
 (* If all fibres are contained in c, then the product lies in map(a,c).         *)

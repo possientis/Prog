@@ -5,6 +5,7 @@ Require Import ZF.Class.Relation.Choice.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
@@ -168,6 +169,15 @@ Proof.
   intros A B a H1 f H2. apply (Charac A a f) in H2.
   destruct H2 as [H2 H3]. apply (Charac B a f). split. 1: assumption.
   intros x H4. apply H1. 1: assumption. apply H3. assumption.
+Qed.
+
+(* A product of fibrewise differences is contained in the original product.     *)
+Proposition WhenDiff : forall (A B:Class) (a:U),
+  :prd:_{a} (:[fun x => A!x :\: B!x]:) :<=: :prd:_{a} A.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros A B a. apply InclCompatR. intros x H1.
+  rewrite Class.Relation.Fun.From.Eval. apply Diff.IsIncl.
 Qed.
 
 (* If all fibres are contained in b, then the product lies in map(a,b).         *)

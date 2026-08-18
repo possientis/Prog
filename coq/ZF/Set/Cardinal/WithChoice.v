@@ -535,13 +535,7 @@ Proof.
     intros x H13. rewrite CFF.Eval. apply H12. assumption. }
   destruct H13 as [e H13].
   assert (e :< :prd:_{a} c) as H14. {
-    apply ProdGen.IsIn.
-    - apply ProdGenOfClass.IsFunctionOn with (:[fun x => c!x :\: d!x]:).
-      assumption.
-    - intros x H15.
-      assert (e!x :< (:[fun x => c!x :\: d!x]:)!x) as H16. {
-        apply ProdGenOfClass.EvalIsIn with a; assumption. }
-      rewrite CFF.Eval in H16. apply Diff.IsIncl in H16. assumption. }
+    apply ProdGen.WhenDiff with d. assumption. }
   (* Surjectivity puts the diagonal member somewhere in the alleged list.       *)
   assert (exists z, z :< :\/:_{a} b /\ f!z = e) as H15. {
     assert (e :< :prd:_{a} c <->
