@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
@@ -52,6 +53,16 @@ Proposition IsIn : forall (a b f:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b. apply ProdGenOfClass.IsIn.
+Qed.
+
+(* Choice gives a member of a product of non-empty fibres.                      *)
+Proposition HasElem : forall (a b:U),
+  Choice                              ->
+  (forall x, x :< a -> b!x <> :0:)    ->
+  exists f, f :< :prd:_{a} b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b. apply ProdGenOfClass.HasElem.
 Qed.
 
 (* The product is the same when the functions b and c agree on a.               *)
