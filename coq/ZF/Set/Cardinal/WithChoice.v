@@ -91,6 +91,22 @@ Proof.
   intros a b AC. apply Number.InclCompat, WellOrderable.WithChoice. assumption.
 Qed.
 
+(* A set strictly larger in cardinality has an element outside the smaller set. *)
+Proposition WhenLessDiff : forall (a b:U), Choice ->
+  card a :< card b -> b :\: a <> :0:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2. apply Diff.WhenZero in H2.
+  (* If the difference were empty, b would be contained in a.                   *)
+  assert (card b :<=: card a) as H3. { apply InclCompat; assumption. }
+  (* This would put card(a) inside itself, which is impossible.                 *)
+  assert (Ordinal (card a)) as H4. { apply Number.IsOrdinal. }
+  assert (Ordinal (card b)) as H5. { apply Number.IsOrdinal. }
+  assert (card a :< card a) as H6. {
+    apply Ordinal.ElemInclTran with (card b); assumption. }
+  revert H6. apply Foundation.NoLoop1.
+Qed.
+
 (* Assuming choice, cardinal equality is compatible with products.              *)
 Proposition EqualCompatProd : forall (a b c d:U),
   Choice                              ->
@@ -512,11 +528,7 @@ Proof.
       1-3: apply Number.IsOrdinal.
       - apply H11. assumption.
       - apply H1. assumption. }
-    intros H14. apply Diff.WhenZero in H14.
-    assert (d!x = c!x) as H15. {
-      apply Incl.Double. split. 1: apply H10. assumption. assumption. }
-    assert (card (d!x) = card (c!x)) as H16. { rewrite H15. reflexivity. }
-    rewrite H16 in H13. revert H13. apply Foundation.NoLoop1. }
+    apply WhenLessDiff; assumption. }
   (* Choice selects a diagonal member outside every used-coordinate set.        *)
   assert (exists e, e :< :prd:_{a} (:[fun x => c!x :\: d!x]:)) as H13. {
     apply ProdGenOfClass.HasElem. 1: assumption.
