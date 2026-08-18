@@ -538,18 +538,15 @@ Proof.
     apply ProdGen.WhenDiff with d. assumption. }
   (* Surjectivity puts the diagonal member somewhere in the alleged list.       *)
   assert (exists z, z :< :\/:_{a} b /\ f!z = e) as H15. {
-    assert (e :< :prd:_{a} c <->
-      exists z, z :< :\/:_{a} b /\ f!z = e) as H16. {
-      apply Onto.RangeCharac. assumption. }
-    apply H16. assumption. }
+    apply (Onto.RangeCharac f (:\/:_{a} b) (:prd:_{a} c)); assumption. }
   destruct H15 as [z [H15 H16]]. apply UnionGen.Charac in H15.
   destruct H15 as [x [H15 H17]].
   (* At that fibre, the diagonal value is both used and deliberately unused.    *)
   assert (e!x :< d!x) as H18. {
     assert (F x z :< d!x) as H19. {
-      rewrite (H8 x). 2: assumption. rewrite H6. apply Image.Charac. exists z.
+      rewrite H8, H6. 2: assumption. apply Image.Charac. exists z.
       split. 1: assumption. rewrite HH. apply From.Satisfies. assumption. }
-    rewrite HF in H19. rewrite H16 in H19. assumption. }
+    rewrite HF, H16 in H19. assumption. }
   assert (e!x :< (:[fun x => c!x :\: d!x]:)!x) as H19. {
     apply ProdGenOfClass.EvalIsIn with a; assumption. }
   rewrite CFF.Eval in H19. apply Diff.Charac in H19.
