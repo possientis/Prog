@@ -5,6 +5,7 @@ Require Import ZF.Set.Core.
 Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Map.
@@ -109,6 +110,14 @@ Proposition WhenDiff : forall (a b c:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b c. apply ProdGenOfClass.WhenDiff.
+Qed.
+
+(* A product of fibrewise intersections is the intersection of the products.    *)
+Proposition WhenInter : forall (a b c:U),
+  :prd:_{a} (:[fun x => b!x :/\: c!x]:) = :prd:_{a} b :/\: :prd:_{a} c.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c. apply ProdGenOfClass.WhenInter.
 Qed.
 
 (* If all fibres are contained in c, then the product lies in map(a,c).         *)

@@ -9,6 +9,7 @@ Require Import ZF.Set.Diff.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.Inter2.
 Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -178,6 +179,36 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A B a. apply InclCompatR. intros x H1.
   rewrite Class.Relation.Fun.From.Eval. apply Diff.IsIncl.
+Qed.
+
+(* A product of fibrewise intersections is the intersection of the products.    *)
+Proposition WhenInter : forall (A B:Class) (a:U),
+  :prd:_{a} (:[fun x => A!x :/\: B!x]:) = :prd:_{a} A :/\: :prd:_{a} B.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros A B a. apply Incl.Double. split; intros f H1.
+  - assert (f :< :prd:_{a} A) as H2. {
+      apply Charac in H1. destruct H1 as [H1 H2]. apply Charac. split.
+      1: assumption. intros x H3.
+      assert (f!x :< (:[fun x => A!x :/\: B!x]:)!x) as H4. {
+        apply H2. assumption. }
+      rewrite Class.Relation.Fun.From.Eval in H4.
+      apply Inter2.Charac in H4. apply H4. }
+    assert (f :< :prd:_{a} B) as H3. {
+      apply Charac in H1. destruct H1 as [H1 H3]. apply Charac. split.
+      1: assumption. intros x H4.
+      assert (f!x :< (:[fun x => A!x :/\: B!x]:)!x) as H5. {
+        apply H3. assumption. }
+      rewrite Class.Relation.Fun.From.Eval in H5.
+      apply Inter2.Charac in H5. apply H5. }
+    apply Inter2.Charac. split; assumption.
+  - apply Inter2.Charac in H1. destruct H1 as [H1 H2].
+    apply Charac in H1. apply Charac in H2. destruct H1 as [H1 H3].
+    destruct H2 as [_ H2]. apply Charac. split. 1: assumption.
+    intros x H4. rewrite Class.Relation.Fun.From.Eval.
+    assert (f!x :< A!x) as H5. { apply H3. assumption. }
+    assert (f!x :< B!x) as H6. { apply H2. assumption. }
+    apply Inter2.Charac. split; assumption.
 Qed.
 
 (* If all fibres are contained in b, then the product lies in map(a,b).         *)
