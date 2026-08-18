@@ -2,6 +2,9 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.FunctionOn.
+Require Import ZF.Set.Relation.Image.
+Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.UnionGen.
@@ -70,5 +73,13 @@ Proposition WhenBounded : forall (a b c:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b c. apply UnionGenOfClass.WhenSetBounded.
+Qed.
+
+(* The generalized union over a function equals the union of its image.         *)
+Proposition WhenImage : forall (a b:U),
+  FunctionOn b a -> :\/:_{a} b = :U(b:[a]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b. apply UnionGenOfClass.WhenImage.
 Qed.
 
