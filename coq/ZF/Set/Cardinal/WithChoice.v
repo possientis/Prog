@@ -363,6 +363,15 @@ Proof.
   apply WellOrderable.WithChoice. assumption.
 Qed.
 
+(* The cardinal of the image of a set under a function is bounded.              *)
+Proposition ImageInclSet : forall (f a:U), Choice ->
+  FunctionOn f a -> card f:[a]: :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a AC H1. rewrite Image.ByClass. apply ImageIncl. 1: assumption.
+  apply Functional.ToClass. apply H1.
+Qed.
+
 (* The cardinal of a union is bounded by the cardinal of the disjoint sum.      *)
 Proposition UnionSum : forall (a b:U), Choice ->
   card (a :\/: b) :<=: card (a :++: b).
@@ -456,11 +465,8 @@ Proof.
   intros a b c AC H1.
   (* Every c-fibre is non-empty, because a smaller cardinal lies below it.      *)
   assert (forall x, x :< a -> c!x <> :0:) as H2. {
-    intros x H2 H3.
-    assert (card (b!x) :< card (c!x)) as H4. { apply H1. assumption. }
-    assert (card (c!x) = :0:) as H5. {
-      rewrite H3. apply Number.WhenNat. apply Omega.HasZero. }
-    rewrite H5 in H4. apply Empty.Charac in H4. contradiction. }
+    intros x H2. apply Number.NotZero. apply Empty.HasElem.
+    exists (card (b!x)). apply H1. assumption. }
   (* Hence the product has at least one member.                                 *)
   assert (:prd:_{a} c <> :0:) as H3. {
     apply Empty.HasElem. apply ProdGen.HasElem; assumption. }
@@ -472,76 +478,75 @@ Proof.
   assert (exists f, Onto f (:\/:_{a} b) (:prd:_{a} c)) as H5. {
     apply HasOnto; assumption. }
   destruct H5 as [f H5].
-  remember (fun x z => (f!z)!x) as D eqn:HD.
-  remember (fun x => (From.from (b!x) (D x)) :[ b!x ]:) as d eqn:H6.
+  remember (fun x z => (f!z)!x) as F eqn:HF.
+  remember (fun x => From.from (b!x) (F x)) as H eqn:HH.
+  remember (fun x => (H x) :[b!x]:) as D eqn:H6.
+  remember (From.from a D) as d eqn:Hd.
+  assert (FunctionOn d a) as H7. { rewrite Hd. apply From.IsFunctionOn. }
+  assert (forall x, x :< a -> d!x = D x) as H8. {
+    intros x H8. rewrite Hd. apply From.Eval. assumption. }
+  assert (forall x, x :< a -> FunctionOn (H x) (b!x)) as H9. {
+    intros x H9. rewrite HH. apply From.IsFunctionOn. }
   (* The used x-coordinates form a subset of the x-th c-fibre.                  *)
-  assert (forall x, x :< a -> d x :<=: c!x) as H7. {
-    intros x H7 y H8.
-    remember (From.from (b!x) (D x)) as h eqn:H9.
-    assert (FunctionOn h (b!x)) as H10. { rewrite H9. apply From.IsFunctionOn. }
-    rewrite H6 in H8. rewrite <- H9 in H8.
-    apply (FunctionOn.ImageCharac h (b!x) (b!x)) in H8. 2: assumption.
-    destruct H8 as [z [H8 [_ H11]]]. rewrite H9 in H11.
-    rewrite From.Eval in H11. 2: assumption. rewrite HD in H11.
-    rewrite <- H11.
-    assert (z :< :\/:_{a} b) as H12. {
+  assert (forall x, x :< a -> d!x :<=: c!x) as H10. {
+    intros x H10 y H11.
+    rewrite (H8 x) in H11. 2: assumption. rewrite H6 in H11.
+    apply (FunctionOn.ImageCharac (H x) (b!x) (b!x)) in H11.
+    2: apply H9; assumption.
+    destruct H11 as [z [H11 [_ H12]]]. rewrite HH in H12.
+    rewrite From.Eval in H12. 2: assumption. rewrite HF in H12. rewrite <- H12.
+    assert (z :< :\/:_{a} b) as H13. {
       apply UnionGen.Charac. exists x. split; assumption. }
-    assert (f!z :< :prd:_{a} c) as H13. {
+    assert (f!z :< :prd:_{a} c) as H14. {
       apply Onto.IsInRange with (:\/:_{a} b); assumption. }
     apply ProdGen.EvalIsIn with a; assumption. }
   (* Each used-coordinate set is no larger than the corresponding b-fibre.      *)
-  assert (forall x, x :< a -> card (d x) :<=: card (b!x)) as H8. {
-    intros x H8.
-    remember (From.from (b!x) (D x)) as h eqn:H9.
-    assert (FunctionOn h (b!x)) as H10. { rewrite H9. apply From.IsFunctionOn. }
-    assert (Onto h (b!x) (d x)) as H11. {
-      split. 1: assumption. rewrite H6. rewrite <- H9.
-      symmetry. apply FunctionOn.ImageOfDomain. assumption. }
-    apply WhenOnto with h; assumption. }
+  assert (forall x, x :< a -> card (d!x) :<=: card (b!x)) as H11. {
+    intros x H12. rewrite H8, H6. 2: assumption.
+    apply ImageInclSet. 1: assumption. apply H9. assumption. }
   (* Therefore each complement c(x) \ d(x) is non-empty.                        *)
-  assert (forall x, x :< a -> c!x :\: d x <> :0:) as H9. {
-    intros x H9.
-    assert (card (d x) :< card (c!x)) as H10. {
+  assert (forall x, x :< a -> c!x :\: d!x <> :0:) as H12. {
+    intros x H12.
+    assert (card (d!x) :< card (c!x)) as H13. {
       apply Ordinal.InclElemTran with (card (b!x)).
       1-3: apply Number.IsOrdinal.
-      - apply H8. assumption.
+      - apply H11. assumption.
       - apply H1. assumption. }
-    intros H11. apply Diff.WhenZero in H11.
-    assert (d x = c!x) as H12. {
-      apply Incl.Double. split. 1: apply H7. assumption. assumption. }
-    assert (card (d x) = card (c!x)) as H13. { rewrite H12. reflexivity. }
-    rewrite H13 in H10. revert H10. apply Foundation.NoLoop1. }
+    intros H14. apply Diff.WhenZero in H14.
+    assert (d!x = c!x) as H15. {
+      apply Incl.Double. split. 1: apply H10. assumption. assumption. }
+    assert (card (d!x) = card (c!x)) as H16. { rewrite H15. reflexivity. }
+    rewrite H16 in H13. revert H13. apply Foundation.NoLoop1. }
   (* Choice selects a diagonal member outside every used-coordinate set.        *)
-  assert (exists e, e :< :prd:_{a} (:[fun x => c!x :\: d x]:)) as H10. {
+  assert (exists e, e :< :prd:_{a} (:[fun x => c!x :\: d!x]:)) as H13. {
     apply ProdGenOfClass.HasElem. 1: assumption.
-    intros x H10. rewrite CFF.Eval. apply H9. assumption. }
-  destruct H10 as [e H10].
-  assert (e :< :prd:_{a} c) as H11. {
+    intros x H13. rewrite CFF.Eval. apply H12. assumption. }
+  destruct H13 as [e H13].
+  assert (e :< :prd:_{a} c) as H14. {
     apply ProdGen.IsIn.
-    - apply ProdGenOfClass.IsFunctionOn with (:[fun x => c!x :\: d x]:).
+    - apply ProdGenOfClass.IsFunctionOn with (:[fun x => c!x :\: d!x]:).
       assumption.
-    - intros x H11.
-      assert (e!x :< (:[fun x => c!x :\: d x]:)!x) as H12. {
+    - intros x H15.
+      assert (e!x :< (:[fun x => c!x :\: d!x]:)!x) as H16. {
         apply ProdGenOfClass.EvalIsIn with a; assumption. }
-      rewrite CFF.Eval in H12. apply Diff.IsIncl in H12. assumption. }
+      rewrite CFF.Eval in H16. apply Diff.IsIncl in H16. assumption. }
   (* Surjectivity puts the diagonal member somewhere in the alleged list.       *)
-  assert (exists z, z :< :\/:_{a} b /\ f!z = e) as H12. {
+  assert (exists z, z :< :\/:_{a} b /\ f!z = e) as H15. {
     assert (e :< :prd:_{a} c <->
-      exists z, z :< :\/:_{a} b /\ f!z = e) as H12. {
+      exists z, z :< :\/:_{a} b /\ f!z = e) as H16. {
       apply Onto.RangeCharac. assumption. }
-    apply H12. assumption. }
-  destruct H12 as [z [H12 H13]]. apply UnionGen.Charac in H12.
-  destruct H12 as [x [H12 H14]].
+    apply H16. assumption. }
+  destruct H15 as [z [H15 H16]]. apply UnionGen.Charac in H15.
+  destruct H15 as [x [H15 H17]].
   (* At that fibre, the diagonal value is both used and deliberately unused.    *)
-  assert (e!x :< d x) as H15. {
-    remember (From.from (b!x) (D x)) as h eqn:H15.
-    assert (D x z :< d x) as H16. {
-      rewrite H6. rewrite <- H15. apply Image.Charac. exists z.
-      split. 1: assumption. rewrite H15. apply From.Satisfies. assumption. }
-    rewrite HD in H16. rewrite H13 in H16. assumption. }
-  assert (e!x :< (:[fun x => c!x :\: d x]:)!x) as H16. {
+  assert (e!x :< d!x) as H18. {
+    assert (F x z :< d!x) as H19. {
+      rewrite (H8 x). 2: assumption. rewrite H6. apply Image.Charac. exists z.
+      split. 1: assumption. rewrite HH. apply From.Satisfies. assumption. }
+    rewrite HF in H19. rewrite H16 in H19. assumption. }
+  assert (e!x :< (:[fun x => c!x :\: d!x]:)!x) as H19. {
     apply ProdGenOfClass.EvalIsIn with a; assumption. }
-  rewrite CFF.Eval in H16. apply Diff.Charac in H16.
-  destruct H16 as [_ H16]. contradiction.
+  rewrite CFF.Eval in H19. apply Diff.Charac in H19.
+  destruct H19 as [_ H19]. contradiction.
 Qed.
 
