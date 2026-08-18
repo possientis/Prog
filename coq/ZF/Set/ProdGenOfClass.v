@@ -1,11 +1,14 @@
+Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.ProdGen.
+Require Import ZF.Class.Relation.Choice.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.OrdPair.
 Require Import ZF.Set.Relation.Eval.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.
@@ -62,6 +65,33 @@ Proposition IsIn : forall (A:Class) (a f:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros A a f H1 H2. apply Charac. split; assumption.
+Qed.
+
+(* Choice gives a member of a product of non-empty fibres.                      *)
+Proposition HasElem : forall (A:Class) (a:U),
+  Choice                              ->
+  (forall x, x :< a -> A!x <> :0:)    ->
+  exists f, f :< :prd:_{a} A.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros A a AC H1.
+  remember (fun z => exists x y,
+    z = :(x,y): /\ x :< a /\ y :< A!x) as B eqn:H2.
+  (* Each fibre has a point, so it satisfies the choice relation.               *)
+  assert (forall x, x :< a -> exists y, B :(x,y):) as H3. {
+    intros x H3. assert (A!x <> :0:) as H4. { apply H1. assumption. }
+    apply Empty.HasElem in H4. destruct H4 as [y H4]. exists y.
+    rewrite H2. exists x, y. split. 2: split; assumption. reflexivity. }
+  (* Choice assembles those points into one function on the index set.          *)
+  assert (exists f, FunctionOn f a /\ forall x, x :< a -> B :(x,f!x):) as H4. {
+    apply Choice.FunctionOn; assumption. }
+  destruct H4 as [f [H4 H5]]. exists f.
+  (* The chosen value at each index lies in the corresponding fibre.            *)
+  assert (forall x, x :< a -> f!x :< A!x) as H6. {
+    intros x H6. assert (B :(x,f!x):) as H7. { apply H5. assumption. }
+    rewrite H2 in H7. destruct H7 as [u [v [H7 [H8 H9]]]].
+    apply OrdPair.Equal in H7. destruct H7 as [H7 H10]. subst. assumption. }
+  apply IsIn; assumption.
 Qed.
 
 (* The product is the same when the two families agree on the index set.        *)
