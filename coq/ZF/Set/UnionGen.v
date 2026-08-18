@@ -8,8 +8,6 @@ Require Import ZF.Notation.UnionGen.
 Export ZF.Notation.UnionGen.
 
 
-Module CIN := ZF.Class.Incl.
-
 (* The generalized union \/_{x :< a} b(x)                                       *)
 Definition unionGen (a b:U) : U := :\/:_{a} (toClass b).
 
@@ -20,6 +18,7 @@ Global Instance SetUnionGen : UnionGen U U := { unionGen := unionGen }.
 Proposition Charac : forall (a b y:U),
   y :< :\/:_{a} b <-> exists x, x :< a /\ y :< b!x.
 Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
   intros a b. apply UnionGenOfClass.Charac.
 Qed.
 
@@ -27,17 +26,15 @@ Qed.
 Proposition Equal : forall (a b c:U),
   (forall x, x :< a -> b!x = c!x) -> :\/:_{a} b = :\/:_{a} c.
 Proof.
-  intros a b c H1. apply Incl.Double. split; intros y H2;
-  apply Charac in H2; destruct H2 as [x [H2 H3]]; apply Charac;
-  exists x; split; try assumption.
-  - rewrite <- H1; assumption.
-  - rewrite H1; assumption.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c. apply UnionGenOfClass.Equal.
 Qed.
 
 (* If x is in a, then b(x) is included in the generalized union over a.         *)
 Proposition IsIncl : forall (a b x:U),
   x :< a -> b!x :<=: :\/:_{a} b.
 Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
   intros a b. apply UnionGenOfClass.IsIncl.
 Qed.
 
@@ -47,34 +44,31 @@ Proposition InclCompat : forall (a b c d:U),
   (forall x, x :< a -> b!x :<=: d!x)  ->
   :\/:_{a} b  :<=: :\/:_{c} d.
 Proof.
-  intros a b c d H1 H2 y H3.
-  apply Charac in H3. destruct H3 as [x [H3 H4]].
-  apply Charac. exists x. split.
-  - apply H1. assumption.
-  - apply H2; assumption.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c d. apply UnionGenOfClass.InclCompat.
 Qed.
 
 (* The generalized union is monotone in the left index set.                     *)
 Proposition InclCompatL : forall (a b c:U),
   a :<=: c -> :\/:_{a} b :<=: :\/:_{c} b.
 Proof.
-  intros a b c H1. apply InclCompat. 1: assumption.
-  intros x _. apply Incl.Refl.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c. apply UnionGenOfClass.InclCompatL.
 Qed.
 
 (* The generalized union is monotone in the right family.                       *)
 Proposition InclCompatR : forall (a b c:U),
   (forall x, x :< a -> b!x :<=: c!x)  -> :\/:_{a} b :<=: :\/:_{a} c.
 Proof.
-  intros a b c H1. apply InclCompat. 2: assumption.
-  apply CIN.Refl.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c. apply UnionGenOfClass.InclCompatR.
 Qed.
 
 (* If each b(x) is a subset of c for x in a, the generalized union is too.      *)
 Proposition WhenBounded : forall (a b c:U),
   (forall x, x :< a -> b!x :<=: c) -> :\/:_{a} b :<=: c.
 Proof.
-  intros a b c H1 y H2. apply Charac in H2. destruct H2 as [x [H2 H3]].
-  apply (H1 x); assumption.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b c. apply UnionGenOfClass.WhenSetBounded.
 Qed.
 
