@@ -38,6 +38,15 @@ Proof.
   - rewrite Aleph.WhenZero. apply Character.WhenOmega.
 Qed.
 
+(* The character of the zeroth Aleph is the zeroth Aleph.                       *)
+Proposition WhenZeroCharac : charac Aleph!:0: = Aleph!:0:.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  (* Regularity of the zeroth Aleph includes precisely this character equality. *)
+  assert (Regular (Aleph!:0:)) as H1. { apply WhenZero. }
+  apply H1.
+Qed.
+
 (* The Aleph value at a successor ordinal is a regular cardinal.                *)
 Proposition WhenSucc : forall (a:U), Choice ->
   Ordinal a -> Regular (Aleph! (succ a)).
@@ -114,5 +123,16 @@ Proof.
       assert (Aleph!a :< Aleph!a) as K20. { apply K19. assumption. }
       apply Foundation.NoLoop1 with Aleph!a. assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* The character of a successor-indexed Aleph is that Aleph.                    *)
+Proposition WhenSuccCharac : forall (a:U), Choice ->
+  Ordinal a -> charac Aleph!(succ a) = Aleph!(succ a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a AC H1.
+  (* Regularity of the successor Aleph includes the character equality.         *)
+  assert (Regular (Aleph!(succ a))) as H2. { apply WhenSucc; assumption. }
+  apply H2.
 Qed.
 
