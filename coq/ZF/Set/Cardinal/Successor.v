@@ -53,19 +53,23 @@ Proof.
 Qed.
 
 (* The successor cardinal is below every ordinal with larger cardinal.          *)
-Proposition IsLowerBound : forall (a b:U), Above a b -> a^:+: :<=: b.
+Proposition IsLowerBound : forall (a b:U),
+  Ordinal b         ->
+  card a :< card b  ->
+  a^:+: :<=: b.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros a b H1.
+  intros a b H1 H2.
   (* This is the lower-bound property of the defining infimum.                  *)
   apply (InfOfClass.IsLowerBound (Above a)).
   - apply IsIncl.
-  - assumption.
+  - split; assumption.
 Qed.
 
 (* Every common lower bound is below the successor cardinal.                    *)
 Proposition IsLargest : forall (a b:U),
-  (forall c, Above a c -> b :<=: c) -> b :<=: a^:+:.
+  (forall c, Ordinal c -> card a :< card c -> b :<=: c) ->
+  b :<=: a^:+:.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1.
@@ -73,7 +77,7 @@ Proof.
   apply (InfOfClass.IsLargest (Above a)).
   - apply IsIncl.
   - apply HasElem.
-  - assumption.
+  - intros c H2. destruct H2 as [H2 H3]. apply H1; assumption.
 Qed.
 
 (* The successor cardinal belongs to the class of ordinals with larger card.    *)
@@ -99,10 +103,8 @@ Proof.
     intros b H3 H4.
     (* Any equipotent ordinal has the same cardinal, hence also lies above a.   *)
     assert (card a^:+: = card b) as H5. { apply Number.WhenEquip. assumption. }
-    assert (Above a b) as H6. {
-      split. 1: assumption. rewrite <- H5. assumption. }
     (* The defining infimum is below every ordinal in the defining class.       *)
-    apply IsLowerBound. assumption. }
+    apply IsLowerBound. 1: assumption. rewrite <- H5. assumption. }
   apply Number.Charac. split; assumption.
 Qed.
 
@@ -137,9 +139,8 @@ Proof.
   assert (card a :< card b \/ card b :<=: card a) as H4. {
     apply Ordinal.ElemOrIncl; apply Number.IsOrdinal. }
   destruct H4 as [H4|H4]. 2: assumption. exfalso.
-  assert (Above a b) as H5. { split; assumption. }
   (* But then the successor would be below b, contradicting b < successor.      *)
-  assert (a^:+: :<=: b) as H6. { apply IsLowerBound. assumption. }
+  assert (a^:+: :<=: b) as H6. { apply IsLowerBound; assumption. }
   assert (b :< b) as H7. { apply H6. assumption. }
   revert H7. apply Foundation.NoLoop1.
 Qed.
