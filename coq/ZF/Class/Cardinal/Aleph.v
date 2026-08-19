@@ -192,6 +192,14 @@ Proof.
   intros a H1. apply Number.CardIsOrd, IsCardinal. assumption.
 Qed.
 
+(* The Aleph value at an ordinal is a limit ordinal.                            *)
+Proposition IsLimit : forall (a:U), Ordinal a ->
+  Limit Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1. apply InfiniteCard.IsLimit, IsInfiniteCard. assumption.
+Qed.
+
 (* Aleph preserves inclusion between ordinal indices.                           *)
 Proposition InclCompat : forall (a b:U), Ordinal a -> Ordinal b ->
   a :<=: b -> Aleph!a :<=: Aleph!b.

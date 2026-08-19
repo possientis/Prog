@@ -82,7 +82,7 @@ Proof.
       assert (Aleph!b :<=: Aleph!a) as K7. {
         apply Aleph.InclCompat; assumption. }
       assert (Limit Aleph!(succ a)) as K8. {
-        apply InfiniteCard.IsLimit. assumption. }
+        apply Aleph.IsLimit, Succ.IsOrdinal. assumption. }
       assert (Cofinal Aleph!(succ a) (Aleph!b)) as K9. {
         rewrite K3. apply Character.IsCofinal. assumption. }
       assert (exists f, Monotone f /\ Fun f (Aleph!b) (Aleph!(succ a)) /\
