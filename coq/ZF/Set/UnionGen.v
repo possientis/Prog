@@ -2,6 +2,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.Eval.
+Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Relation.FunctionOn.
 Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Union.
@@ -76,10 +77,12 @@ Proof.
 Qed.
 
 (* The generalized union over a function equals the union of its image.         *)
-Proposition WhenImage : forall (a b:U),
-  FunctionOn b a -> :\/:_{a} b = :U(b:[a]:).
+Proposition WhenImage : forall (a f:U),
+  FunctionOn f a -> :\/:_{a} f = :U(f:[a]:).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros a b. apply UnionGenOfClass.WhenImage.
+  intros a f H1. transitivity (:U((toClass f):[a]:)).
+  - apply UnionGenOfClass.WhenClassImage. apply Functional.ToClass. apply H1.
+  - rewrite <- Image.ByClass. reflexivity.
 Qed.
 

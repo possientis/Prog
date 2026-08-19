@@ -453,7 +453,7 @@ Proof.
   intros F a b AC H1 H2.
   (* The generalized union is the same as the union of the class image.         *)
   assert (:\/:_{a} F = :U(F:[a]:)) as H3. {
-    apply UnionGenOfClass.WhenFunctionalImage. assumption. }
+    apply UnionGenOfClass.WhenClassImage. assumption. }
   rewrite H3.
   (* Every member of the image has cardinal bounded by b.                       *)
   assert (forall y, y :< F:[a]: -> card y :<=: card b) as H4. {

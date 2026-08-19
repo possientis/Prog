@@ -26,6 +26,7 @@ Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Union.
+Require Import ZF.Set.UnionGen.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -380,11 +381,11 @@ Proof.
   destruct H8 as [H8|H8]. 1: assumption.
   exfalso.
   (* If the index is strictly below the union, it is below some iterate.        *)
-  assert (:\/:_{:N} (toClass h) = :U(h:[:N]:)) as H9. {
-    apply UnionGenOfClass.WhenImage. assumption. }
-  assert (a :< :\/:_{:N} (toClass h)) as H10. {
+  assert (:\/:_{:N} h = :U(h:[:N]:)) as H9. {
+    apply UnionGen.WhenImage. assumption. }
+  assert (a :< :\/:_{:N} h) as H10. {
     rewrite H9. rewrite <- H6. assumption. }
-  apply UnionGenOfClass.Charac in H10.
+  apply UnionGen.Charac in H10.
   destruct H10 as [n [H10 H11]].
   assert (InfiniteCard (h!n)) as H12. { apply H3. assumption. }
   assert (Ordinal (h!n)) as H13. { apply InfiniteCard.IsOrdinal. assumption. }
@@ -395,7 +396,7 @@ Proof.
     rewrite H1. rewrite RecursionNOfClass.WhenSucc. 2: assumption.
     rewrite <- H1. reflexivity. }
   assert (h!(succ n) :<=: :U(h:[:N]:)) as H17. {
-    rewrite <- H9. apply UnionGenOfClass.IsIncl. assumption. }
+    rewrite <- H9. apply UnionGen.IsIncl. assumption. }
   assert (Aleph!a :< :U(h:[:N]:)) as H18. {
     apply H17. rewrite H16. assumption. }
   rewrite <- H6 in H18. revert H18. apply Foundation.NoLoop1.

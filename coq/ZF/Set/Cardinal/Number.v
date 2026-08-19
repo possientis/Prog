@@ -40,6 +40,7 @@ Require Import ZF.Set.Single.
 Require Import ZF.Set.Sum.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.Union2.
+Require Import ZF.Set.UnionGen.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -354,7 +355,7 @@ Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros f a H1 H2.
   (* The image union is the generalized union of the same function values.      *)
-  rewrite <- UnionGenOfClass.WhenImage. 2: assumption.
+  rewrite <- UnionGen.WhenImage. 2: assumption.
   (* The generalized union theorem applies because every value is a cardinal.   *)
   apply UnionGen. intros x H3. apply H2. assumption.
 Qed.
