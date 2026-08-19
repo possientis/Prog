@@ -66,6 +66,21 @@ Proof.
   - split; assumption.
 Qed.
 
+(* The successor cardinal is below every larger cardinal.                       *)
+Proposition IsLowerBoundCard : forall (a b:U),
+  Ordinal a -> Cardinal b -> a :< b -> a^:+: :<=: b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3.
+  (* For an ordinal below a cardinal, cardinal comparison is equivalent.        *)
+  assert (card a :< b) as H4. {
+    apply Number.CardLess; assumption. }
+  (* Since b is a cardinal, the general lower-bound theorem applies.            *)
+  assert (b = card b) as H5. { apply Number.WhenCardinal. assumption. }
+  rewrite H5 in H4. apply IsLowerBound. 2: assumption.
+  apply Number.CardIsOrd. assumption.
+Qed.
+
 (* Every common lower bound is below the successor cardinal.                    *)
 Proposition IsLargest : forall (a b:U),
   (forall c, Ordinal c -> card a :< card c -> b :<=: c) ->
