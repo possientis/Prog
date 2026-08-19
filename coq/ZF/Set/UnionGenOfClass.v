@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Domain.
@@ -6,6 +7,7 @@ Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Small.
 Require Import ZF.Class.UnionGen.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.Empty.
 Require Import ZF.Set.FromClass.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Relation.EvalOfClass.
@@ -150,6 +152,30 @@ Proof.
     assert (F!x = z) as H8. { apply EvalOfClass.Charac; assumption. }
     apply Charac. exists x. split. 1: assumption. rewrite H8. assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* A generalized union over a functional class equals the union of its image.   *)
+Proposition WhenFunctionalImage : forall (F:Class) (a:U),
+  Functional F -> :\/:_{a} F = :U(F:[a]:).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros F a H1. apply Incl.Double. split; intros y H2.
+  - (* Every member of a displayed value comes from the class image.            *)
+    apply Charac in H2. destruct H2 as [x [H2 H3]].
+    assert (CRD.domain F x \/ ~ CRD.domain F x) as H4. {
+      apply LawExcludedMiddle. }
+    destruct H4 as [H4|H4].
+    + apply Union.Charac. exists (F!x). split. 1: assumption.
+      apply ImageUnderClass.IsIn; assumption.
+    + rewrite EvalOfClass.WhenNotInDomain in H3. 2: assumption.
+      apply Empty.Charac in H3. contradiction.
+  - (* Conversely, an image-union member comes from the corresponding value.    *)
+    apply Union.Charac in H2. destruct H2 as [z [H2 H3]].
+    apply ImageUnderClass.Charac in H3. 2: assumption.
+    destruct H3 as [x [H3 H4]].
+    assert (CRD.domain F x) as H5. { exists z. assumption. }
+    assert (F!x = z) as H6. { apply EvalOfClass.Charac; assumption. }
+    apply Charac. exists x. split. 1: assumption. rewrite H6. assumption.
 Qed.
 
 (* The generalized union is unchanged by eta-reducing the family.               *)

@@ -607,13 +607,8 @@ Proof.
     assert (Aleph!a :^^: Aleph!b = :\/:_{a} F) as K1. {
       rewrite HF. apply WhenLimitAlephL; assumption. }
     rewrite K1.
-    assert (:\/:_{a} F = :U(F:[a]:)) as K2. {
-      apply UnionGenOfClass.WhenClassImage.
-      - rewrite HF. apply CFF.IsFunctional.
-      - intros c K2. rewrite HF. apply CFF.DomainOf. }
-    rewrite K2.
-    assert (card :U(F:[a]:) :<=: card (a :x: Aleph!a)) as K3. {
-      apply WithChoice.UnionProdImage; try assumption.
+    assert (card (:\/:_{a} F) :<=: card (a :x: Aleph!a)) as K3. {
+      apply WithChoice.UnionGenProd; try assumption.
       rewrite HF. apply CFF.IsFunctional. }
     assert (card a :<=: card Aleph!a) as K4. {
       apply WithChoice.InclCompat. 1: assumption. apply Aleph.IsIncl. assumption. }
@@ -628,7 +623,7 @@ Proof.
       apply Number.Square. assumption. }
     assert (card (a :x: Aleph!a) :<=: card Aleph!a) as K8. {
       rewrite <- K7. assumption. }
-    assert (card :U(F:[a]:) :<=: card Aleph!a) as K9. {
+    assert (card (:\/:_{a} F) :<=: card Aleph!a) as K9. {
       apply Incl.Tran with (card (a :x: Aleph!a)); assumption. }
     assert (Aleph!a = card Aleph!a) as K10. {
       apply Number.WhenCardinal. assumption. }

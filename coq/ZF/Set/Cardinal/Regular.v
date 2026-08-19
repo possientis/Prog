@@ -19,7 +19,6 @@ Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.Functional.
-Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGen.
 
@@ -93,9 +92,8 @@ Proof.
       assert (CRL.Functional (toClass f)) as K13. {
         apply Functional.ToClass. assumption. }
       (* Proposition 10.48 bounds the union by the product of index and bound.  *)
-      assert (card :U((toClass f):[Aleph!b]:) :<=:
-        card (Aleph!b :x: Aleph!a)) as K14. {
-        apply WithChoice.UnionProdImage; try assumption.
+      assert (card (:\/:_{Aleph!b} f) :<=: card (Aleph!b :x: Aleph!a)) as K14. {
+        apply WithChoice.UnionGenProd; try assumption.
         intros x K14.
         assert ((toClass f)!x :< Aleph!(succ a)) as K15. {
           apply Fun.IsInRange with (Aleph!b); assumption. }
@@ -104,27 +102,23 @@ Proof.
         assert (Aleph!a = card Aleph!a) as K17. {
           apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
         rewrite <- K17. assumption. }
-      assert (f:[Aleph!b]: = (toClass f):[Aleph!b]:) as K15. {
-        apply Image.ByClass. }
-      assert (:\/:_{Aleph!b} f = :U(f:[Aleph!b]:)) as K16. {
-        apply ZF.Set.UnionGen.WhenImage. apply K10. }
-      rewrite <- K15 in K14. rewrite <- K16 in K14. rewrite <- K11 in K14.
-      assert (Aleph!(succ a) = card Aleph!(succ a)) as K17. {
+      rewrite <- K11 in K14.
+      assert (Aleph!(succ a) = card Aleph!(succ a)) as K18. {
         apply Number.WhenCardinal. assumption. }
-      rewrite <- K17 in K14.
+      rewrite <- K18 in K14.
       assert (card (Aleph!b :x: Aleph!a) :<=:
-        card (Aleph!a :x: Aleph!a)) as K18. {
+        card (Aleph!a :x: Aleph!a)) as K19. {
         apply WithChoice.InclCompatProdL. 1: assumption.
         apply WithChoice.InclCompat; assumption. }
-      assert (card (Aleph!a :x: Aleph!a) = Aleph!a) as K19. {
+      assert (card (Aleph!a :x: Aleph!a) = Aleph!a) as K20. {
         rewrite Number.SquareOrd.
         + symmetry. apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption.
         + apply Aleph.IsOrdinal. assumption.
         + apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
-      assert (Aleph!(succ a) :<=: Aleph!a) as K20. {
+      assert (Aleph!(succ a) :<=: Aleph!a) as K21. {
         apply Incl.Tran with (card (Aleph!b :x: Aleph!a)). 1: assumption.
-        rewrite K19 in K18. assumption. }
-      assert (Aleph!a :< Aleph!a) as K21. { apply K20. assumption. }
+        rewrite K20 in K19. assumption. }
+      assert (Aleph!a :< Aleph!a) as K22. { apply K21. assumption. }
       apply Foundation.NoLoop1 with Aleph!a. assumption. }
   apply Incl.Double. split; assumption.
 Qed.
