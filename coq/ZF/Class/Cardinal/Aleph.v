@@ -366,13 +366,13 @@ Proof.
     - intros n H3 H4. rewrite H1, RecursionNOfClass.WhenSucc, <- H1.
       2: assumption.
       apply IsInfiniteCard. apply InfiniteCard.IsOrdinal. assumption. }
-  assert (InfiniteCard (:U(h:[:N]:))) as H4. {
-    (* The image-union is infinite because all iterates are cardinals and the   *)
-    (* initial iterate is an infinite cardinal.                                 *)
-    apply InfiniteCard.UnionImage. 1: assumption.
+  assert (InfiniteCard (:\/:_{:N} h)) as H4. {
+    (* The generalized union is infinite because all iterates are cardinals and *)
+    (* the initial iterate is an infinite cardinal.                             *)
+    apply InfiniteCard.UnionGenSet.
     - intros n H4. apply InfiniteCard.IsCardinal, H3. assumption.
     - exists :0:. split. 1: apply Omega.HasZero. apply H3, Omega.HasZero. }
-  assert (exists a, Ordinal a /\ Aleph!a = :U(h:[:N]:)) as H5. {
+  assert (exists a, Ordinal a /\ Aleph!a = :\/:_{:N} h) as H5. {
     apply HasIndex. assumption. }
   destruct H5 as [a [H5 H6]]. exists a. split. 1: assumption.
   assert (Ordinal Aleph!a) as H7. { apply IsOrdinal. assumption. }
@@ -381,10 +381,8 @@ Proof.
   destruct H8 as [H8|H8]. 1: assumption.
   exfalso.
   (* If the index is strictly below the union, it is below some iterate.        *)
-  assert (:\/:_{:N} h = :U(h:[:N]:)) as H9. {
-    apply UnionGen.WhenImage. assumption. }
   assert (a :< :\/:_{:N} h) as H10. {
-    rewrite H9. rewrite <- H6. assumption. }
+    rewrite <- H6. assumption. }
   apply UnionGen.Charac in H10.
   destruct H10 as [n [H10 H11]].
   assert (InfiniteCard (h!n)) as H12. { apply H3. assumption. }
@@ -395,9 +393,9 @@ Proof.
   assert (h!(succ n) = Aleph!(h!n)) as H16. {
     rewrite H1. rewrite RecursionNOfClass.WhenSucc. 2: assumption.
     rewrite <- H1. reflexivity. }
-  assert (h!(succ n) :<=: :U(h:[:N]:)) as H17. {
-    rewrite <- H9. apply UnionGen.IsIncl. assumption. }
-  assert (Aleph!a :< :U(h:[:N]:)) as H18. {
+  assert (h!(succ n) :<=: :\/:_{:N} h) as H17. {
+    apply UnionGen.IsIncl. assumption. }
+  assert (Aleph!a :< :\/:_{:N} h) as H18. {
     apply H17. rewrite H16. assumption. }
   rewrite <- H6 in H18. revert H18. apply Foundation.NoLoop1.
 Qed.
