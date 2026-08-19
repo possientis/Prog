@@ -6,14 +6,20 @@ Require Import ZF.Set.Cardinal.Equip.
 Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Map.
 Require Import ZF.Set.Cardinal.Number.
+Require Import ZF.Set.Cardinal.Regular.
+Require Import ZF.Set.Cardinal.Successor.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
 Require Import ZF.Set.Incl.
+Require Import ZF.Set.ProdGen.
 Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Ordinal.
+Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Power.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Single.
@@ -636,5 +642,81 @@ Proof.
       apply Number.WhenCardinal. assumption. }
     rewrite <- K3 in K2. assumption. }
   apply Incl.Double. split; assumption.
+Qed.
+
+(* Every Aleph is below its power by its cofinality character.                  *)
+Proposition IsLessCharacL : forall (a:U), Choice -> Ordinal a ->
+  Aleph!a :< card (Aleph!a :^^: charac (Aleph!a)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC H1.
+  assert (a = :0: \/ Successor a \/ Limit a) as H2. {
+    apply Limit.ThreeWay. assumption. }
+  destruct H2 as [H2|[H2|H2]].
+  - subst.
+    (* The zeroth Aleph is regular, so its character is itself.                 *)
+    rewrite Regular.WhenZeroCharac.
+    (* Cantor gives the strict lower bound by the two-valued power.             *)
+    assert (Aleph!:0: :< card (:2: :^^: Aleph!:0:)) as H3. {
+      apply CantorAlephCard; assumption. }
+    (* The diagonal Aleph power has that same cardinal.                         *)
+    assert (card (Aleph!:0: :^^: Aleph!:0:) = card (:2: :^^: Aleph!:0:)) as H4. {
+      apply AlephSame; assumption. }
+    rewrite H4. assumption.
+  - destruct H2 as [b [H2 H3]]. subst.
+    assert (Ordinal (succ b)) as G1. { apply Succ.IsOrdinal. assumption. }
+    (* A successor-indexed Aleph is regular, so its character is itself.        *)
+    rewrite Regular.WhenSuccCharac; try assumption.
+    (* Cantor gives the strict lower bound by the two-valued power.             *)
+    assert (Aleph!(succ b) :< card (:2: :^^: Aleph!(succ b))) as H3. {
+      apply CantorAlephCard; assumption. }
+    (* The diagonal Aleph power has that same cardinal.                         *)
+    assert (card (Aleph!(succ b) :^^: Aleph!(succ b)) =
+      card (:2: :^^: Aleph!(succ b))) as H4. { apply AlephSame; assumption. }
+    rewrite H4. assumption.
+  - remember (charac (Aleph!a)) as b eqn:Hb.
+    assert (Ordinal Aleph!a) as G1. { apply Aleph.IsOrdinal. assumption. }
+    assert (Limit Aleph!a) as G2. { apply Aleph.IsLimit. assumption. }
+    assert (Cofinal Aleph!a b) as H3. {
+      rewrite Hb. apply Character.IsCofinal. assumption. }
+    (* The character supplies a cofinal generalized-union representation.       *)
+    assert (exists f, Monotone f /\ Fun f b Aleph!a /\ Aleph!a = :\/:_{b} f)
+      as H4. { apply Cofinal.UnionGen; assumption. }
+    destruct H4 as [f [H4 [H5 H6]]].
+    remember (From.from b (fun x => (f!x)^:+:)) as c eqn:Hc.
+    (* Each chosen successor-cardinal fibre is larger than the corresponding    *)
+    (* cofinal value.                                                           *)
+    assert (forall x, x :< b -> card (f!x) :< card (c!x)) as H7. {
+      intros x H7. rewrite Hc, From.Eval. 2: assumption.
+      apply Successor.IsMoreCard. }
+    (* Zermelo's theorem gives the strict lower bound by the product.           *)
+    assert (card (:\/:_{b} f) :< card (:prd:_{b} c)) as H8. {
+      apply WithChoice.Zermelo; assumption. }
+    assert (Aleph!a :< card (:prd:_{b} c)) as H9. {
+      assert (Aleph!a = card (:\/:_{b} f)) as K1. {
+        rewrite <- H6. apply Number.WhenCardinal, Aleph.IsCardinal. assumption. }
+      rewrite <- K1 in H8. assumption. }
+    (* The union of the successor-cardinal fibres is still below Aleph(a).      *)
+    assert (:\/:_{b} c :<=: Aleph!a) as H10. {
+      intros y H10. apply UnionGen.Charac in H10. destruct H10 as [x [H10 H11]].
+      rewrite Hc, From.Eval in H11. 2: assumption.
+      assert (f!x :< Aleph!a) as K1. { apply Fun.IsInRange with b; assumption. }
+      assert ((f!x)^:+: :< Aleph!a) as K2. {
+        apply Successor.IsLessAleph; assumption. }
+      assert (Ordinal Aleph!a) as K3. { apply Aleph.IsOrdinal. assumption. }
+      apply Ordinal.Charac in K3. destruct K3 as [K3 _].
+      apply K3 with ((f!x)^:+:); assumption. }
+    (* Product members are maps into the generalized union of the fibres.       *)
+    assert (card (:prd:_{b} c) :<=: card ((:\/:_{b} c) :^^: b)) as H11. {
+      apply WithChoice.InclCompat. 1: assumption. apply ProdGen.IsIncl. }
+    assert (card (:\/:_{b} c) :<=: card Aleph!a) as H12. {
+      apply WithChoice.InclCompat; assumption. }
+    assert (card ((:\/:_{b} c) :^^: b) :<=: card (Aleph!a :^^: b)) as H13. {
+        apply InclCompatCardL; assumption. }
+    assert (Aleph!a :< card ((:\/:_{b} c) :^^: b)) as H14. {
+      apply Ordinal.ElemInclTran with (card (:prd:_{b} c));
+      try assumption; apply Number.IsOrdinal. }
+    apply Ordinal.ElemInclTran with (card ((:\/:_{b} c) :^^: b));
+    try assumption; apply Number.IsOrdinal.
 Qed.
 
