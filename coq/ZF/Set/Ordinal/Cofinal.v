@@ -31,6 +31,7 @@ Require Import ZF.Set.Relation.Image.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Specify.
 Require Import ZF.Set.Union.
+Require Import ZF.Set.UnionGen.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -246,36 +247,33 @@ Proof.
     apply Limit.WhenHasSucc; assumption.
 Qed.
 
-(* A limit ordinal cofinal with b is a union of a monotone function image.      *)
-Proposition UnionImage : forall (a b:U),
+(* A limit ordinal cofinal with b is a monotone generalized union over b.       *)
+Proposition UnionGen : forall (a b:U),
   Limit a   ->
   Cofinal a b ->
-  exists f, Monotone f /\ Fun f b a /\ a = :U(f:[b]:).
+  exists f, Monotone f /\ Fun f b a /\ a = :\/:_{b} f.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b H1 H2.
   (* Use the function that already witnesses the cofinality of a by b.          *)
   destruct H2 as [_ [f [H2 [H3 H4]]]]. exists f. split. 1: assumption.
   split. 1: assumption.
-  assert (a :<=: :U(f:[b]:)) as H5. {
-    (* Each element of a belongs to a value of the cofinal image.               *)
-    intros c H5. apply Union.Charac.
+  assert (a :<=: :\/:_{b} f) as H5. {
+    (* Each element of a belongs to a sufficiently large cofinal value.         *)
+    intros c H5. apply ZF.Set.UnionGen.Charac.
     assert (succ c :< a) as H6. { apply Limit.HasSucc; assumption. }
     assert (exists d, d :< b /\ succ c :<=: f!d) as H7. {
       apply H4. assumption. }
-    destruct H7 as [d [H7 H8]]. exists f!d. split.
-    - apply H8. apply Succ.IsIn.
-    - apply Image.Charac. exists d. split. 1: assumption.
-      apply Fun.Satisfies with b a; assumption. }
-  assert (:U(f:[b]:) :<=: a) as H6. {
-    (* Conversely, every value in the image already lies below a.               *)
-    intros c H6. apply Union.Charac in H6. destruct H6 as [d [H6 H7]].
-    assert (f:[b]: :<=: a) as H8. {
-      apply (Fun.ImageIncl f b a b); try assumption. apply Incl.Refl. }
-    assert (d :< a) as H9. { apply H8. assumption. }
-    assert (Ordinal a) as H10. { apply H1. }
-    apply Ordinal.Charac in H10. destruct H10 as [H10 _].
-    apply H10 with d; assumption. }
+    destruct H7 as [d [H7 H8]]. exists d. split. 1: assumption.
+    apply H8. apply Succ.IsIn. }
+  assert (:\/:_{b} f :<=: a) as H6. {
+    (* Conversely, every cofinal value already lies below a.                    *)
+    intros c H6. apply ZF.Set.UnionGen.Charac in H6.
+    destruct H6 as [d [H6 H7]].
+    assert (f!d :< a) as H8. { apply Fun.IsInRange with b; assumption. }
+    assert (Ordinal a) as H9. { apply H1. }
+    apply Ordinal.Charac in H9. destruct H9 as [H9 _].
+    apply H9 with f!d; assumption. }
   apply Incl.Double. split; assumption.
 Qed.
 
