@@ -246,35 +246,36 @@ Proof.
     apply Limit.WhenHasSucc; assumption.
 Qed.
 
-(* A limit ordinal cofinal with b is the union of a function image of b.        *)
+(* A limit ordinal cofinal with b is a union of a monotone function image.      *)
 Proposition UnionImage : forall (a b:U),
   Limit a   ->
   Cofinal a b ->
-  exists f, Fun f b a /\ a = :U(f:[b]:).
+  exists f, Monotone f /\ Fun f b a /\ a = :U(f:[b]:).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b H1 H2.
   (* Use the function that already witnesses the cofinality of a by b.          *)
-  destruct H2 as [_ [f [_ [H2 H3]]]]. exists f. split. 1: assumption.
-  assert (a :<=: :U(f:[b]:)) as H4. {
+  destruct H2 as [_ [f [H2 [H3 H4]]]]. exists f. split. 1: assumption.
+  split. 1: assumption.
+  assert (a :<=: :U(f:[b]:)) as H5. {
     (* Each element of a belongs to a value of the cofinal image.               *)
-    intros c H4. apply Union.Charac.
-    assert (succ c :< a) as H5. { apply Limit.HasSucc; assumption. }
-    assert (exists d, d :< b /\ succ c :<=: f!d) as H6. {
-      apply H3. assumption. }
-    destruct H6 as [d [H6 H7]]. exists f!d. split.
-    - apply H7. apply Succ.IsIn.
+    intros c H5. apply Union.Charac.
+    assert (succ c :< a) as H6. { apply Limit.HasSucc; assumption. }
+    assert (exists d, d :< b /\ succ c :<=: f!d) as H7. {
+      apply H4. assumption. }
+    destruct H7 as [d [H7 H8]]. exists f!d. split.
+    - apply H8. apply Succ.IsIn.
     - apply Image.Charac. exists d. split. 1: assumption.
       apply Fun.Satisfies with b a; assumption. }
-  assert (:U(f:[b]:) :<=: a) as H5. {
+  assert (:U(f:[b]:) :<=: a) as H6. {
     (* Conversely, every value in the image already lies below a.               *)
-    intros c H5. apply Union.Charac in H5. destruct H5 as [d [H5 H6]].
-    assert (f:[b]: :<=: a) as H7. {
+    intros c H6. apply Union.Charac in H6. destruct H6 as [d [H6 H7]].
+    assert (f:[b]: :<=: a) as H8. {
       apply (Fun.ImageIncl f b a b); try assumption. apply Incl.Refl. }
-    assert (d :< a) as H8. { apply H7. assumption. }
-    assert (Ordinal a) as H9. { apply H1. }
-    apply Ordinal.Charac in H9. destruct H9 as [H9 _].
-    apply H9 with d; assumption. }
+    assert (d :< a) as H9. { apply H8. assumption. }
+    assert (Ordinal a) as H10. { apply H1. }
+    apply Ordinal.Charac in H10. destruct H10 as [H10 _].
+    apply H10 with d; assumption. }
   apply Incl.Double. split; assumption.
 Qed.
 

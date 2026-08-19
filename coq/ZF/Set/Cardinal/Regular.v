@@ -11,6 +11,7 @@ Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Cofinal.
 Require Import ZF.Set.Ordinal.Character.
 Require Import ZF.Set.Ordinal.Limit.
+Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.Succ.
@@ -83,10 +84,10 @@ Proof.
         apply InfiniteCard.IsLimit. assumption. }
       assert (Cofinal Aleph!(succ a) (Aleph!b)) as K9. {
         rewrite K3. apply Character.IsCofinal. assumption. }
-      assert (exists f, Fun f (Aleph!b) (Aleph!(succ a)) /\
+      assert (exists f, Monotone f /\ Fun f (Aleph!b) (Aleph!(succ a)) /\
         Aleph!(succ a) = :U(f:[Aleph!b]:)) as K10. {
         apply Cofinal.UnionImage; assumption. }
-      destruct K10 as [f [K10 K11]].
+      destruct K10 as [f [_ [K10 K11]]].
       assert (Functional f) as K12. { apply K10. }
       assert (CRL.Functional (toClass f)) as K13. {
         apply Functional.ToClass. assumption. }
