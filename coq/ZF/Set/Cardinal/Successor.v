@@ -4,6 +4,7 @@ Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Cardinal.Hartogs.
 Require Import ZF.Set.Cardinal.Number.
+Require Import ZF.Set.Cardinal.WellOrderable.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.InfOfClass.
@@ -165,6 +166,24 @@ Proof.
   assert (a^:+: = card a^:+:) as H1. {
     apply Number.WhenCardinal. apply IsCardinal. }
   rewrite H1. apply IsMoreCard.
+Qed.
+
+(* The successor-cardinal operation is monotone on ordinals.                    *)
+Proposition InclCompat : forall (a b:U),
+  Ordinal a -> Ordinal b -> a :<=: b -> a^:+: :<=: b^:+:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2 H3.
+  (* Inclusion between ordinals gives inclusion between their cardinals.        *)
+  assert (WellOrderable b) as H4. { apply WellOrderable.WhenOrdinal. assumption. }
+  assert (card a :<=: card b) as H5. { apply Number.InclCompat; assumption. }
+  (* The cardinal of a is therefore below the successor cardinal of b.          *)
+  assert (card b :< card b^:+:) as H6. { apply IsMoreCard. }
+  assert (card a :< card b^:+:) as H7. {
+    apply Ordinal.InclElemTran with (card b); try assumption;
+    apply Number.IsOrdinal. }
+  (* The defining lower-bound property gives the desired monotonicity.          *)
+  apply IsLowerBound. 2: assumption. apply IsOrdinal.
 Qed.
 
 (* Every ordinal below the successor has cardinality at most the original.      *)
