@@ -445,35 +445,34 @@ Qed.
 (* The cardinal of a generalized union is bounded by a product.                 *)
 Proposition UnionGenProd : forall (F:Class) (a b:U),
   Choice                                          ->
-  Functional F                                    ->
   (forall x, x :< a -> card (F!x) :<=: card b)    ->
   card (:\/:_{a} F) :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros F a b AC H1 H2.
-  (* The generalized union is the same as the union of the class image.         *)
-  assert (:\/:_{a} F = :U(F:[a]:)) as H3. {
-    apply UnionGenOfClass.WhenImage. assumption. }
+  intros F a b AC H1.
+  remember (:[fun x => F!x]:) as A eqn:H2.
+  (* Replace the class family by the functional class of its displayed values.  *)
+  assert (:\/:_{a} F = :\/:_{a} A) as H3. {
+    rewrite H2. symmetry. apply UnionGenOfClass.EtaReduce. }
   rewrite H3.
-  (* Every member of the image has cardinal bounded by b.                       *)
-  assert (forall y, y :< F:[a]: -> card y :<=: card b) as H4. {
-    intros y H4.
-    (* Such a member is a value F!x for some x in a.                            *)
-    assert (exists x, x :< a /\ F :(x,y):) as H5. {
-      apply ImageUnderClass.Charac; assumption. }
-    destruct H5 as [x [H5 H6]].
-    assert (CRD.domain F x) as H7. { exists y. assumption. }
-    assert (F!x = y) as H8. {
-      apply EvalOfClass.Charac; assumption. }
-    rewrite <- H8. apply H2. assumption. }
-  (* First bound the union of the image by its own index product.               *)
-  assert (card :U(F:[a]:) :<=: card (F:[a]: :x: b)) as H5. {
-    apply UnionProd; assumption. }
-  (* The image index set has cardinal at most the original index set.           *)
-  assert (card F:[a]: :<=: card a) as H6. { apply ImageIncl; assumption. }
-  assert (card (F:[a]: :x: b) :<=: card (a :x: b)) as H7. {
-    apply InclCompatProdL; assumption. }
-  apply Incl.Tran with (card (F:[a]: :x: b)); assumption.
+  assert (Functional A) as H4. { rewrite H2. apply CFF.IsFunctional. }
+  (* The image-union proof applies to that functional displayed-value class.    *)
+  assert (card (:\/:_{a} A) :<=: card (a :x: b)) as H5. {
+    rewrite UnionGenOfClass.WhenImage. 2: assumption.
+    assert (forall y, y :< A:[a]: -> card y :<=: card b) as H5. {
+      intros y H5.
+      assert (exists x, x :< a /\ A :(x,y):) as H6. {
+        apply ImageUnderClass.Charac; assumption. }
+      destruct H6 as [x [H6 H7]]. rewrite H2 in H7. apply CFF.Charac2 in H7.
+      rewrite H7. apply H1. assumption. }
+    assert (card :U(A:[a]:) :<=: card (A:[a]: :x: b)) as H6. {
+      apply UnionProd; assumption. }
+    assert (card A:[a]: :<=: card a) as H7. {
+      apply ImageIncl; assumption. }
+    assert (card (A:[a]: :x: b) :<=: card (a :x: b)) as H8. {
+      apply InclCompatProdL; assumption. }
+    apply Incl.Tran with (card (A:[a]: :x: b)); assumption. }
+  assumption.
 Qed.
 
 (* The cardinal of a set-indexed generalized union is bounded by a product.     *)
@@ -489,7 +488,7 @@ Proof.
     symmetry. apply UnionGenOfClass.EtaReduce. }
   rewrite H2.
   (* The class-family theorem applies to that displayed value class.            *)
-  apply UnionGenProd. 1: assumption. 1: apply CFF.IsFunctional.
+  apply UnionGenProd. 1: assumption.
   intros x H3. rewrite CFF.Eval. apply H1. assumption.
 Qed.
 

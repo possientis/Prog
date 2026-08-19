@@ -608,8 +608,7 @@ Proof.
       rewrite HF. apply WhenLimitAlephL; assumption. }
     rewrite K1.
     assert (card (:\/:_{a} F) :<=: card (a :x: Aleph!a)) as K3. {
-      apply WithChoice.UnionGenProd; try assumption.
-      rewrite HF. apply CFF.IsFunctional. }
+      apply WithChoice.UnionGenProd; assumption. }
     assert (card a :<=: card Aleph!a) as K4. {
       apply WithChoice.InclCompat. 1: assumption. apply Aleph.IsIncl. assumption. }
     assert (card (a :x: Aleph!a) :<=: card (Aleph!a :x: Aleph!a)) as K5. {

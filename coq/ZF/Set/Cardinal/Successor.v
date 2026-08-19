@@ -170,8 +170,8 @@ Proof.
 Qed.
 
 (* The successor-cardinal operation is monotone on ordinals.                    *)
-Proposition InclCompat : forall (a b:U),
-  Ordinal a -> Ordinal b -> a :<=: b -> a^:+: :<=: b^:+:.
+Proposition InclCompat : forall (a b:U), Ordinal a -> Ordinal b ->
+  a :<=: b -> a^:+: :<=: b^:+:.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b H1 H2 H3.
@@ -188,8 +188,8 @@ Proof.
 Qed.
 
 (* Under choice, the successor-cardinal operation is monotone on sets.          *)
-Proposition InclCompatChoice : forall (a b:U),
-  Choice -> a :<=: b -> a^:+: :<=: b^:+:.
+Proposition InclCompatChoice : forall (a b:U), Choice ->
+  a :<=: b -> a^:+: :<=: b^:+:.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a b AC H1.
