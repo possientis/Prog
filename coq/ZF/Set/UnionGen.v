@@ -82,7 +82,7 @@ Proposition WhenImage : forall (a f:U),
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a f H1. transitivity (:U((toClass f):[a]:)).
-  - apply UnionGenOfClass.WhenClassImage. apply Functional.ToClass. apply H1.
+  - apply UnionGenOfClass.WhenImage. apply Functional.ToClass. apply H1.
   - rewrite <- Image.ByClass. reflexivity.
 Qed.
 

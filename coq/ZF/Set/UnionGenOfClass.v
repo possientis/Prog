@@ -110,7 +110,7 @@ Proof.
 Qed.
 
 (* A generalized union over a functional class equals the union of its image.   *)
-Proposition WhenClassImage : forall (F:Class) (a:U),
+Proposition WhenImage : forall (F:Class) (a:U),
   Functional F -> :\/:_{a} F = :U(F:[a]:).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
