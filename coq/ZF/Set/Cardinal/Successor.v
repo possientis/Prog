@@ -1,3 +1,4 @@
+Require Import ZF.Axiom.Choice.
 Require Import ZF.Class.Empty.
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Equiv.
@@ -180,6 +181,24 @@ Proof.
   (* The cardinal of a is therefore below the successor cardinal of b.          *)
   assert (card b :< card b^:+:) as H6. { apply IsMoreCard. }
   assert (card a :< card b^:+:) as H7. {
+    apply Ordinal.InclElemTran with (card b); try assumption;
+    apply Number.IsOrdinal. }
+  (* The defining lower-bound property gives the desired monotonicity.          *)
+  apply IsLowerBound. 2: assumption. apply IsOrdinal.
+Qed.
+
+(* Under choice, the successor-cardinal operation is monotone on sets.          *)
+Proposition InclCompatChoice : forall (a b:U),
+  Choice -> a :<=: b -> a^:+: :<=: b^:+:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1.
+  (* Choice makes b well-orderable, so inclusion gives cardinal inclusion.      *)
+  assert (WellOrderable b) as H2. { apply WellOrderable.WithChoice. assumption. }
+  assert (card a :<=: card b) as H3. { apply Number.InclCompat; assumption. }
+  (* The cardinal of a is therefore below the successor cardinal of b.          *)
+  assert (card b :< card b^:+:) as H4. { apply IsMoreCard. }
+  assert (card a :< card b^:+:) as H5. {
     apply Ordinal.InclElemTran with (card b); try assumption;
     apply Number.IsOrdinal. }
   (* The defining lower-bound property gives the desired monotonicity.          *)
