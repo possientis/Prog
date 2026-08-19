@@ -1,4 +1,5 @@
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Set.Cardinal.Hartogs.
@@ -6,8 +7,11 @@ Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.InfOfClass.
+Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Ordinal.
+Require Import ZF.Set.UnionGenOfClass.
 
+Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Successor.
 Export ZF.Notation.Successor.
 
@@ -79,6 +83,28 @@ Proof.
   assert (b = card b) as H5. { apply Number.WhenCardinal. assumption. }
   rewrite H5 in H4. apply IsLowerBound. 2: assumption.
   apply Number.CardIsOrd. assumption.
+Qed.
+
+(* Below a limit-indexed Aleph, successor cardinals remain below that Aleph.    *)
+Proposition IsLessAleph : forall (a b:U),
+  Limit a -> b :< Aleph!a -> b^:+: :< Aleph!a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b H1 H2.
+  assert (Ordinal a) as G1. { apply H1. }
+  assert (Ordinal Aleph!a) as G2. { apply Aleph.IsOrdinal. assumption. }
+  (* Continuity places b below some earlier Aleph value.                        *)
+  assert (Aleph!a = :\/:_{a} Aleph) as H3. { apply Aleph.Continuous. assumption. }
+  rewrite H3 in H2. apply UnionGenOfClass.Charac in H2.
+  destruct H2 as [c [H2 H4]].
+  assert (Ordinal c) as G3. { apply Ordinal.IsOrdinal with a; assumption. }
+  assert (Ordinal Aleph!c) as G4. { apply Aleph.IsOrdinal. assumption. }
+  assert (Cardinal Aleph!c) as G5. { apply Aleph.IsCardinal. assumption. }
+  assert (Ordinal b) as G6. { apply Ordinal.IsOrdinal with Aleph!c; assumption. }
+  (* The new lower-bound form catches the successor cardinal below Aleph(c).    *)
+  assert (b^:+: :<=: Aleph!c) as H5. { apply IsLowerBoundCard; assumption. }
+  assert (Aleph!c :< Aleph!a) as H6. { apply Aleph.ElemCompat; assumption. }
+  apply Ordinal.InclElemTran with Aleph!c; try assumption. apply IsOrdinal.
 Qed.
 
 (* Every common lower bound is below the successor cardinal.                    *)
