@@ -346,18 +346,14 @@ Proof.
     apply Incl.Tran with (card b); assumption.
 Qed.
 
-(* The union of the image of a cardinal-valued function is a cardinal.          *)
-Proposition UnionImage : forall (f a:U),
-  FunctionOn f a                          ->
-  (forall x, x :< a -> Cardinal (f!x))    ->
-  Cardinal :U(f:[a]:).
+(* The generalized union of a cardinal-valued set family is a cardinal.         *)
+Proposition UnionGenSet : forall (f a:U),
+  (forall x, x :< a -> Cardinal (f!x)) -> Cardinal (:\/:_{a} f).
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
-  intros f a H1 H2.
-  (* The image union is the generalized union of the same function values.      *)
-  rewrite <- UnionGen.WhenImage. 2: assumption.
-  (* The generalized union theorem applies because every value is a cardinal.   *)
-  apply UnionGen. intros x H3. apply H2. assumption.
+  intros f a H1.
+  (* This is the class-family theorem applied to the set family.                *)
+  apply UnionGen. intros x H2. apply H1. assumption.
 Qed.
 
 (* An ordinal is below a cardinal iff its cardinal is below that cardinal.      *)
