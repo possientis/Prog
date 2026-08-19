@@ -284,6 +284,31 @@ Proof.
   apply Number.WhenEquip. apply WhenTwoL.
 Qed.
 
+(* Cantor's theorem bounds a set by its two-valued function set.                *)
+Proposition CantorCard : forall (a:U), Choice ->
+  card a :< card (:2: :^^: a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC.
+  (* The two-valued function set has the same cardinal as the power set.        *)
+  rewrite WhenTwoCardL. apply WithChoice.Cantor. assumption.
+Qed.
+
+(* Cantor's theorem bounds an Aleph by its two-valued function set.             *)
+Proposition CantorAlephCard : forall (a:U), Choice ->
+  Ordinal a -> Aleph!a :< card (:2: :^^: Aleph!a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC H1.
+  (* First apply Cantor's theorem to the underlying Aleph set.                  *)
+  assert (card Aleph!a :< card (:2: :^^: Aleph!a)) as H2. {
+    apply CantorCard. assumption. }
+  (* An Aleph is already its own cardinal, so this is the desired bound.        *)
+  assert (Aleph!a = card Aleph!a) as H3. {
+    apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
+  rewrite <- H3 in H2. assumption.
+Qed.
+
 (* Currying identifies maps into a function set with maps on a product.         *)
 Proposition Assoc : forall (a b c:U),
   (a :^^: b) :^^: c :~: a :^^: (b :x: c).
