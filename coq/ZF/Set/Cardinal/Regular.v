@@ -18,14 +18,10 @@ Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.
-Require Import ZF.Set.Relation.Functional.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGen.
 
 Require Import ZF.Notation.Eval.
-
-
-Module CRL := ZF.Class.Relation.Functional.
 
 (* The set a is a regular cardinal.                                             *)
 Definition Regular (a:U) : Prop := InfiniteCard a /\ charac a = a.
@@ -88,16 +84,13 @@ Proof.
         Aleph!(succ a) = :\/:_{Aleph!b} f) as K10. {
         apply Cofinal.UnionGen; assumption. }
       destruct K10 as [f [_ [K10 K11]]].
-      assert (Functional f) as K12. { apply K10. }
-      assert (CRL.Functional (toClass f)) as K13. {
-        apply Functional.ToClass. assumption. }
       (* Proposition 10.48 bounds the union by the product of index and bound.  *)
       assert (card (:\/:_{Aleph!b} f) :<=: card (Aleph!b :x: Aleph!a)) as K14. {
-        apply WithChoice.UnionGenProd; try assumption.
+        apply WithChoice.UnionGenProdSet; try assumption.
         intros x K14.
-        assert ((toClass f)!x :< Aleph!(succ a)) as K15. {
+        assert (f!x :< Aleph!(succ a)) as K15. {
           apply Fun.IsInRange with (Aleph!b); assumption. }
-        assert (card ((toClass f)!x) :<=: Aleph!a) as K16. {
+        assert (card (f!x) :<=: Aleph!a) as K16. {
           apply Aleph.CardBelowSucc; assumption. }
         assert (Aleph!a = card Aleph!a) as K17. {
           apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }

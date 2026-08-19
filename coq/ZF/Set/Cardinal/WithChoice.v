@@ -476,6 +476,23 @@ Proof.
   apply Incl.Tran with (card (F:[a]: :x: b)); assumption.
 Qed.
 
+(* The cardinal of a set-indexed generalized union is bounded by a product.     *)
+Proposition UnionGenProdSet : forall (f a b:U),
+  Choice                                          ->
+  (forall x, x :< a -> card (f!x) :<=: card b)    ->
+  card (:\/:_{a} f) :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b AC H1.
+  (* Replace the set family by the functional class of its displayed values.    *)
+  assert (:\/:_{a} f = :\/:_{a} :[fun x => f!x]:) as H2. {
+    symmetry. apply UnionGenOfClass.EtaReduce. }
+  rewrite H2.
+  (* The class-family theorem applies to that displayed value class.            *)
+  apply UnionGenProd. 1: assumption. 1: apply CFF.IsFunctional.
+  intros x H3. rewrite CFF.Eval. apply H1. assumption.
+Qed.
+
 (* Zermelo's theorem bounds a generalized union by a product.                   *)
 Proposition Zermelo : forall (a b c:U),
   Choice                                            ->
