@@ -1,4 +1,5 @@
 Require Import ZF.Axiom.Choice.
+Require Import ZF.Axiom.Continuum.
 Require Import ZF.Class.Cardinal.Aleph.
 Require Import ZF.Class.Cardinal.InfiniteCard.
 Require Import ZF.Class.Relation.Fun.From.
@@ -39,6 +40,7 @@ Require Import ZF.Set.Relation.Onto.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Union.
 Require Import ZF.Set.UnionGenOfClass.
+Require Import ZF.Set.Union2.
 
 Require Import ZF.Notation.Eval.
 Require Import ZF.Notation.Exp2.
@@ -797,5 +799,83 @@ Proof.
   assert (Aleph!a :< charac (card (Aleph!:0: :^^: Aleph!a))) as H3. {
     apply IsLessCharacR; try assumption. apply Ordinal.Zero. }
   rewrite Aleph.WhenZero, H2 in H3. assumption.
+Qed.
+
+(* Under GCH, a small Aleph exponent of an Aleph base has the base cardinal.    *)
+Proposition WhenGCHL : forall (a b:U),
+  Choice                                                      ->
+  GCH                                                         ->
+  Ordinal a                                                   ->
+  Ordinal b                                                   ->
+  Aleph!b :< charac (Aleph!a)                                 ->
+  card (Aleph!a :^^: Aleph!b) = Aleph!a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC GCH H1 H2 H3.
+  assert (a = :0: \/ Successor a \/ Limit a) as H4. {
+    apply Limit.ThreeWay. assumption. }
+  destruct H4 as [H4|[H4|H4]].
+  - subst.
+    (* The zeroth Aleph is regular, so its character is itself.                 *)
+    rewrite Regular.WhenZeroCharac in H3.
+    (* But every Aleph is at least the zeroth one.                              *)
+    assert (Aleph!:0: :<=: Aleph!b) as H4. {
+      apply Aleph.InclCompat; try assumption. apply Empty.IsIncl. }
+    assert (Aleph!b :< Aleph!b) as H5. { apply H4. assumption. }
+    exfalso. revert H5. apply Foundation.NoLoop1.
+  - destruct H4 as [c [H4 H5]]. subst.
+    assert (Ordinal (succ c)) as G1. { apply Succ.IsOrdinal. assumption. }
+    assert (Ordinal Aleph!c) as G2. { apply Aleph.IsOrdinal. assumption. }
+    assert (Ordinal Aleph!b) as G3. { apply Aleph.IsOrdinal. assumption. }
+    (* A successor-indexed Aleph is regular, so the exponent index is earlier.  *)
+    assert (b :<=: c) as H6. {
+      rewrite Regular.WhenSuccCharac in H3; try assumption.
+      assert (b :< succ c) as K1. { apply Aleph.ElemCompatRev; assumption. }
+      apply Succ.InclIsElem; assumption. }
+    (* GCH identifies the next Aleph with the two-valued power below it.        *)
+    assert (card (:2: :^^: Aleph!c) = Aleph!(succ c)) as H5. {
+      assert (card :P(Aleph!c) = Aleph!(succ c)) as K1. { apply GCH. assumption. }
+      rewrite <- K1. apply WhenTwoCardL. }
+    (* The comparable product of the two Alephs has the larger cardinal.        *)
+    assert (card (Aleph!c :x: Aleph!b) = Aleph!c) as H7. {
+      assert (:N :<=: card Aleph!c) as K1. {
+        rewrite Aleph.Card. 2: assumption.
+        apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
+      assert (:0: :< card Aleph!b) as K2. {
+        rewrite Aleph.Card. 2: assumption.
+        assert (:N :<=: Aleph!b) as L1. {
+          apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
+        apply L1. apply Omega.HasZero. }
+      assert (card (Aleph!c :x: Aleph!b) = card Aleph!c :\/: card Aleph!b) as K3. {
+        apply Number.ProdMax; assumption. }
+      assert (Aleph!b :<=: Aleph!c) as K4. { apply Aleph.InclCompat; assumption. }
+      assert (Aleph!c = Aleph!c :\/: Aleph!b) as K5. {
+        apply Union2.WhenEqualL. assumption. }
+      rewrite K3, Aleph.Card, Aleph.Card; try assumption. symmetry. assumption. }
+    (* Currying transports the calculation back to the original power.          *)
+    assert (card (Aleph!(succ c) :^^: Aleph!b) =
+      card ((:2: :^^: Aleph!c) :^^: Aleph!b)) as H8. {
+        apply CompatCardL; try assumption. rewrite Aleph.Card; try assumption.
+        symmetry. assumption. }
+    assert (card ((:2: :^^: Aleph!c) :^^: Aleph!b) =
+      card (:2: :^^: (Aleph!c :x: Aleph!b))) as H9. { apply AssocCard. }
+    assert (card (:2: :^^: (Aleph!c :x: Aleph!b)) =
+      card (:2: :^^: Aleph!c)) as H10. {
+        apply CompatCardR. 1: assumption. rewrite Aleph.Card; assumption. }
+    rewrite H8, H9, H10, H5. reflexivity.
+  - (* At a limit index, GCH supplies the bound needed by IsAlephBase.          *)
+    assert (card (Aleph!a :^^: Aleph!b) = Aleph!a) as H5. {
+      assert (forall c, c :< a -> card (:2: :^^: Aleph!c) :< Aleph!a) as K1. {
+        intros c K1.
+        assert (Ordinal c) as K2. { apply (Ordinal.IsOrdinal a); assumption. }
+        assert (Ordinal (succ c)) as K3. { apply Succ.IsOrdinal. assumption. }
+        assert (succ c :< a) as K4. { apply Limit.HasSucc; assumption. }
+        assert (card (:2: :^^: Aleph!c) = Aleph!(succ c)) as K5. {
+          assert (card :P(Aleph!c) = Aleph!(succ c)) as L1. {
+            apply GCH. assumption. }
+          rewrite <- L1. apply WhenTwoCardL. }
+        rewrite K5. apply Aleph.ElemCompat; assumption. }
+      apply IsAlephBase; assumption. }
+    assumption.
 Qed.
 
