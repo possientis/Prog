@@ -168,6 +168,14 @@ Proof.
   apply H3.
 Qed.
 
+(* The Aleph value at an ordinal is not zero.                                   *)
+Proposition IsNotZero : forall (a:U), Ordinal a -> Aleph!a <> :0:.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  apply InfiniteCard.IsNotZero, IsInfiniteCard. assumption.
+Qed.
+
 (* The Aleph value at an ordinal is an infinite set.                            *)
 Proposition IsInfinite : forall (a:U), Ordinal a ->
   Infinite Aleph!a.
