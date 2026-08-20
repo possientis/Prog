@@ -879,3 +879,54 @@ Proof.
     assumption.
 Qed.
 
+(* Under GCH, a middle Aleph exponent of an Aleph base has next cardinal.       *)
+Proposition WhenGCHM : forall (a b:U),
+  Choice                                                      ->
+  GCH                                                         ->
+  Ordinal a                                                   ->
+  Ordinal b                                                   ->
+  charac (Aleph!a) :<=: Aleph!b                               ->
+  Aleph!b :<=: Aleph!a                                        ->
+  card (Aleph!a :^^: Aleph!b) = Aleph!(succ a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC GCH H1 H2 H3 H4.
+  assert (Ordinal Aleph!a) as G1. { apply Aleph.IsOrdinal. assumption. }
+  assert (Ordinal Aleph!b) as G2. { apply Aleph.IsOrdinal. assumption. }
+  assert (Ordinal (charac (Aleph!a))) as G3. { apply Character.IsOrdinal. }
+  assert (Cardinal (card (Aleph!a :^^: Aleph!b))) as G4. {
+    exists (Aleph!a :^^: Aleph!b). reflexivity. }
+  (* The character power is already above the base Aleph.                       *)
+  assert (Aleph!a :< card (Aleph!a :^^: charac (Aleph!a))) as H5. {
+    apply IsLessCharacL; assumption. }
+  (* Monotonicity in the exponent carries that lower bound to the given power.  *)
+  assert (card (Aleph!a :^^: charac (Aleph!a)) :<=:
+    card (Aleph!a :^^: Aleph!b)) as H6. {
+      assert (InfiniteCard (charac (Aleph!a))) as K1. {
+        apply Character.IsInfiniteCard. apply Aleph.IsInfiniteCard. assumption. }
+      assert (charac (Aleph!a) <> :0:) as K2. {
+        apply InfiniteCard.IsNotZero. assumption. }
+      assert (card (charac (Aleph!a)) :<=: card Aleph!b) as K3. {
+        rewrite Character.Card, Aleph.Card; assumption. }
+      apply InclCompatCardR; assumption. }
+  (* Therefore the successor cardinal of the base Aleph is below the power.     *)
+  assert (Aleph!(succ a) :<=: card (Aleph!a :^^: Aleph!b)) as H7. {
+    assert (Aleph!a :< card (Aleph!a :^^: Aleph!b)) as K1. {
+      apply Ordinal.ElemInclTran with (card (Aleph!a :^^: charac (Aleph!a)));
+      try assumption; apply Number.IsOrdinal. }
+    assert ((Aleph!a)^:+: :<=: card (Aleph!a :^^: Aleph!b)) as K2. {
+      apply Successor.IsLowerBoundCard; assumption. }
+    rewrite Successor.WhenAleph in K2; assumption. }
+  (* The exponent index bound reduces the power to the two-valued diagonal.     *)
+  assert (card (Aleph!a :^^: Aleph!b) :<=: Aleph!(succ a)) as H8. {
+    assert (b :<=: a) as K1. { apply Aleph.InclCompatRev; assumption. }
+    assert (card (Aleph!a :^^: Aleph!b) :<=: card (:2: :^^: Aleph!a)) as K2. {
+      apply WhenAlephInclR; assumption. }
+    assert (card (:2: :^^: Aleph!a) = card :P(Aleph!a)) as K3. {
+      apply WhenTwoCardL. }
+    assert (card :P(Aleph!a) = Aleph!(succ a)) as K4. { apply GCH. assumption. }
+    rewrite K3, K4 in K2. assumption. }
+  (* The two inclusions identify the middle-case cardinal exactly.              *)
+  apply Incl.Double. split; assumption.
+Qed.
+
