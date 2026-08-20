@@ -810,3 +810,20 @@ Proof.
   revert H13. apply Foundation.NoLoop1.
 Qed.
 
+(* Every Aleph is below the character of its two-valued power.                  *)
+Proposition Konig : forall (a:U), Choice -> Ordinal a ->
+  Aleph!a :< charac (card (:2: :^^: Aleph!a)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a AC H1.
+  assert (card (:N :^^: Aleph!a) = card (:2: :^^: Aleph!a)) as H2. {
+    assert (card (Aleph!:0: :^^: Aleph!a) = card (:2: :^^: Aleph!a)) as K1. {
+      apply WhenAlephInclL; try assumption.
+        - apply Ordinal.Zero.
+        - apply Empty.IsIncl. }
+    rewrite Aleph.WhenZero in K1. assumption. }
+  assert (Aleph!a :< charac (card (Aleph!:0: :^^: Aleph!a))) as H3. {
+    apply IsLessCharacR; try assumption. apply Ordinal.Zero. }
+  rewrite Aleph.WhenZero, H2 in H3. assumption.
+Qed.
+
