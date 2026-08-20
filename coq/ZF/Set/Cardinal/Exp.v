@@ -843,9 +843,9 @@ Proof.
         apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
       assert (:0: :< card Aleph!b) as K2. {
         rewrite Aleph.Card. 2: assumption.
-        assert (:N :<=: Aleph!b) as L1. {
-          apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
-        apply L1. apply Omega.HasZero. }
+        apply Ordinal.HasZero.
+        - apply Aleph.IsOrdinal; assumption.
+        - apply Aleph.IsNotZero. assumption. }
       assert (card (Aleph!c :x: Aleph!b) = card Aleph!c :\/: card Aleph!b) as K3. {
         apply Number.ProdMax; assumption. }
       assert (Aleph!b :<=: Aleph!c) as K4. { apply Aleph.InclCompat; assumption. }
