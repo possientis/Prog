@@ -11,6 +11,7 @@ Require Import ZF.Set.Cardinal.Successor.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.ProdGen.
 Require Import ZF.Set.Ordinal.Natural.
@@ -738,5 +739,74 @@ Proof.
       try assumption; apply Number.IsOrdinal. }
     apply Ordinal.ElemInclTran with (card ((:\/:_{b} c) :^^: b));
     try assumption; apply Number.IsOrdinal.
+Qed.
+
+(* Every Aleph exponent is below the character of the resulting cardinal.       *)
+Proposition IsLessCharacR : forall (a b:U), Choice -> Ordinal a -> Ordinal b ->
+  Aleph!b :< charac (card (Aleph!a :^^: Aleph!b)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2.
+  remember (card (Aleph!a :^^: Aleph!b)) as c eqn:Hc.
+  assert (InfiniteCard c) as H3. {
+    rewrite Hc. apply IsInfiniteCard; try assumption.
+    - assert (Aleph!a = card Aleph!a) as K1. {
+        apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
+      rewrite <- K1. apply Aleph.IsInfiniteCard. assumption.
+    - apply Aleph.IsNotZero. assumption. }
+  assert (Ordinal c) as G1. { apply InfiniteCard.IsOrdinal. assumption. }
+  assert (Ordinal (charac c)) as G2. { apply Character.IsOrdinal. }
+  assert (Ordinal Aleph!b) as G3. { apply Aleph.IsOrdinal. assumption. }
+  assert (Aleph!b :< charac c \/ charac c :<=: Aleph!b) as H4. {
+    apply Ordinal.ElemOrIncl; assumption. }
+  destruct H4 as [H4|H4]. 1: assumption. exfalso.
+  assert (InfiniteCard (charac c)) as H5. {
+    apply Character.IsInfiniteCard. assumption. }
+  assert (charac c <> :0:) as H6. { apply InfiniteCard.IsNotZero. assumption. }
+  assert (exists d, Ordinal d /\ Aleph!d = c) as H7. {
+    apply Aleph.HasIndex. assumption. }
+  destruct H7 as [d [H7 H8]].
+  (* The previous theorem applies after writing c as an Aleph value.            *)
+  assert (c :< card (c :^^: charac c)) as H9. {
+    assert (Aleph!d :< card (Aleph!d :^^: charac (Aleph!d))) as K1. {
+      apply IsLessCharacL; assumption. }
+    rewrite H8 in K1. assumption. }
+  (* The contradictory assumption bounds the character by the exponent Aleph.   *)
+  assert (card (c :^^: charac c) :<=: card (c :^^: Aleph!b)) as H10. {
+    assert (card (charac c) :<=: card Aleph!b) as K1. {
+      assert (charac c = card (charac c)) as L1. {
+        apply Number.WhenCardinal. apply Character.IsCardinal. assumption. }
+      assert (Aleph!b = card Aleph!b) as L2. {
+        apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
+      rewrite <- L1, <- L2. assumption. }
+    apply InclCompatCardR; assumption. }
+  (* Currying and the infinite square law collapse this upper bound to c.       *)
+  assert (card (c :^^: Aleph!b) = c) as H11. {
+    assert (card c = card (Aleph!a :^^: Aleph!b)) as K1. {
+      assert (c = card c) as L1. {
+        apply Number.WhenCardinal. apply InfiniteCard.IsCardinal. assumption. }
+      rewrite <- L1. assumption. }
+    assert (card (c :^^: Aleph!b) =
+      card ((Aleph!a :^^: Aleph!b) :^^: Aleph!b)) as K2. {
+        apply CompatCardL; assumption. }
+    assert (card ((Aleph!a :^^: Aleph!b) :^^: Aleph!b) =
+      card (Aleph!a :^^: (Aleph!b :x: Aleph!b))) as K3. { apply AssocCard. }
+    assert (card (Aleph!a :^^: (Aleph!b :x: Aleph!b)) =
+      card (Aleph!a :^^: Aleph!b)) as K4. {
+        apply CompatCardR. 1: assumption.
+        apply Number.SquareOrd.
+        - apply Aleph.IsOrdinal. assumption.
+        - assert (InfiniteCard Aleph!b) as L1. {
+            apply Aleph.IsInfiniteCard. assumption. }
+          apply InfiniteCard.IsIncl. assumption. }
+    rewrite K2, K3, K4. symmetry. assumption. }
+  assert (card (c :^^: charac c) :<=: c) as H12. {
+    assert (card (c :^^: Aleph!b) :<=: c) as K1. {
+      rewrite H11. apply Incl.Refl. }
+    apply Incl.Tran with (card (c :^^: Aleph!b)); assumption. }
+  assert (c :< c) as H13. {
+    apply Ordinal.ElemInclTran with (card (c :^^: charac c));
+    try assumption; apply Number.IsOrdinal. }
+  revert H13. apply Foundation.NoLoop1.
 Qed.
 
