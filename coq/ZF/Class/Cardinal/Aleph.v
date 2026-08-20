@@ -193,6 +193,16 @@ Proof.
   intros a H1. apply InfiniteCard.IsCardinal, IsInfiniteCard. assumption.
 Qed.
 
+(* The cardinal of an Aleph value is that Aleph value.                          *)
+Proposition Card : forall (a:U), Ordinal a ->
+  card Aleph!a = Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* Since an Aleph value is a cardinal, taking its cardinal changes nothing.   *)
+  symmetry. apply Number.WhenCardinal. apply IsCardinal. assumption.
+Qed.
+
 (* The Aleph value at an ordinal is an ordinal.                                 *)
 Proposition IsOrdinal : forall (a:U), Ordinal a ->
   Ordinal Aleph!a.

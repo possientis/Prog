@@ -35,6 +35,16 @@ Proof.
   apply DiffBySet.IsInclL.
 Qed.
 
+(* The cardinal of an infinite cardinal is that infinite cardinal.              *)
+Proposition Card : forall (a:U), InfiniteCard a -> card a = a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  (* Since an infinite cardinal is a cardinal, taking its cardinal changes      *)
+  (* nothing.                                                                   *)
+  symmetry. apply Number.WhenCardinal. apply IsCardinal. assumption.
+Qed.
+
 Proposition IsOrdinal : forall (a:U), InfiniteCard a ->
   Ordinal a.
 Proof.
@@ -197,9 +207,8 @@ Proof.
     (* So omega is a subset of b, and the Hilbert hotel gives b ~ succ b = a.   *)
     assert (b :~: succ b) as H6. { apply Equip.Succ; assumption. }
     (* But b is strictly below a = card a, contradicting that a is a cardinal.  *)
-    assert (succ b = card (succ b)) as H7. {
-      apply Number.WhenCardinal, IsCardinal. assumption. }
+    assert (card (succ b) = succ b) as H7. { apply Card. assumption. }
     apply (Number.IsNotEquip (succ b) b); try assumption.
-    + rewrite <- H7. apply Succ.IsIn.
+    + rewrite H7. apply Succ.IsIn.
     + apply Equip.Sym. assumption.
 Qed.

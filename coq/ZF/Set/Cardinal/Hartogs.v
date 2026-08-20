@@ -77,6 +77,15 @@ Proof.
   revert H6. apply Foundation.NoLoop1.
 Qed.
 
+(* The cardinal of a Hartogs number is that Hartogs number.                     *)
+Proposition Card : forall (a:U), card (hartogs a) = hartogs a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a.
+  (* Since a Hartogs number is a cardinal, taking its cardinal changes nothing. *)
+  symmetry. apply Number.WhenCardinal. apply IsCardinal.
+Qed.
+
 (* The empty set is an element of hartogs(a).                                   *)
 Proposition HasZero : forall (a:U), :0: :< hartogs a.
 Proof.

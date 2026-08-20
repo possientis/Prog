@@ -222,6 +222,16 @@ Proof.
   apply Number.Charac. split; assumption.
 Qed.
 
+(* The cardinal of a character is that character.                               *)
+Proposition Card : forall (a:U), Ordinal a -> card (charac a) = charac a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* Since the character of an ordinal is a cardinal, taking its cardinal       *)
+  (* changes nothing.                                                           *)
+  symmetry. apply Number.WhenCardinal. apply IsCardinal. assumption.
+Qed.
+
 (* The character of cofinality of an infinite cardinal is infinite.             *)
 Proposition IsInfiniteCard : forall (a:U),
   InfiniteCard a -> InfiniteCard (charac a).

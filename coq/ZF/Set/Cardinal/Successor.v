@@ -52,11 +52,9 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a.
   (* Hartogs' number is an ordinal whose cardinal is strictly larger.           *)
-  assert (hartogs a = card (hartogs a)) as H1. {
-    apply Number.WhenCardinal. apply Hartogs.IsCardinal. }
   apply CEM.HasElem. exists (hartogs a). split.
   - apply Hartogs.IsOrdinal.
-  - rewrite <- H1. apply Hartogs.IsMore.
+  - rewrite Hartogs.Card. apply Hartogs.IsMore.
 Qed.
 
 (* The successor cardinal is below every ordinal with larger cardinal.          *)
@@ -152,6 +150,16 @@ Proof.
   apply Number.Charac. split; assumption.
 Qed.
 
+(* The cardinal of a successor cardinal is that successor cardinal.             *)
+Proposition Card : forall (a:U), card a^:+: = a^:+:.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a.
+  (* Since a successor cardinal is a cardinal, taking its cardinal changes      *)
+  (* nothing.                                                                   *)
+  symmetry. apply Number.WhenCardinal. apply IsCardinal.
+Qed.
+
 (* The cardinal of a is below the cardinal of its successor cardinal.           *)
 Proposition IsMoreCard : forall (a:U), card a :< card a^:+:.
 Proof.
@@ -165,9 +173,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros a.
   (* The successor cardinal is a cardinal, so it equals its own cardinal.       *)
-  assert (a^:+: = card a^:+:) as H1. {
-    apply Number.WhenCardinal. apply IsCardinal. }
-  rewrite H1. apply IsMoreCard.
+  rewrite <- Card. apply IsMoreCard.
 Qed.
 
 (* The successor cardinal of an Aleph is the next Aleph.                        *)
@@ -199,14 +205,10 @@ Proof.
     assert (card (Aleph!a)^:+: :<=: Aleph!a) as K2. {
       apply Aleph.CardBelowSucc; assumption. }
     (* But a successor cardinal is a cardinal and lies strictly above Aleph(a). *)
-    assert ((Aleph!a)^:+: = card (Aleph!a)^:+:) as K3. {
-      apply Number.WhenCardinal. apply IsCardinal. }
     assert (Aleph!a :< (Aleph!a)^:+:) as K4. {
-      assert (Aleph!a = card (Aleph!a)) as L1. {
-        apply Number.WhenCardinal. assumption. }
       assert (card (Aleph!a) :< (Aleph!a)^:+:) as L2. { apply IsMore. }
-      rewrite <- L1 in L2. apply L2. }
-    rewrite K3 in K4.
+      rewrite Aleph.Card in L2; assumption. }
+    rewrite <- Card in K4.
     assert (Aleph!a :< Aleph!a) as K5. { apply K2. assumption. }
     revert K5. apply Foundation.NoLoop1. }
   apply Incl.Double. split; assumption.

@@ -92,20 +92,16 @@ Proof.
           apply Fun.IsInRange with (Aleph!b); assumption. }
         assert (card (f!x) :<=: Aleph!a) as K16. {
           apply Aleph.CardBelowSucc; assumption. }
-        assert (Aleph!a = card Aleph!a) as K17. {
-          apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
-        rewrite <- K17. assumption. }
+        rewrite Aleph.Card; assumption. }
       rewrite <- K11 in K14.
-      assert (Aleph!(succ a) = card Aleph!(succ a)) as K18. {
-        apply Number.WhenCardinal. assumption. }
-      rewrite <- K18 in K14.
+      rewrite Aleph.Card in K14. 2: assumption.
       assert (card (Aleph!b :x: Aleph!a) :<=:
         card (Aleph!a :x: Aleph!a)) as K19. {
         apply WithChoice.InclCompatProdL. 1: assumption.
         apply WithChoice.InclCompat; assumption. }
       assert (card (Aleph!a :x: Aleph!a) = Aleph!a) as K20. {
         rewrite Number.SquareOrd.
-        + symmetry. apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption.
+        + apply Aleph.Card. assumption.
         + apply Aleph.IsOrdinal. assumption.
         + apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
       assert (Aleph!(succ a) :<=: Aleph!a) as K21. {

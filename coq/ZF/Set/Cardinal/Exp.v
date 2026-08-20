@@ -331,9 +331,7 @@ Proof.
   assert (card Aleph!a :< card (:2: :^^: Aleph!a)) as H2. {
     apply CantorCard. assumption. }
   (* An Aleph is already its own cardinal, so this is the desired bound.        *)
-  assert (Aleph!a = card Aleph!a) as H3. {
-    apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
-  rewrite <- H3 in H2. assumption.
+  rewrite Aleph.Card in H2; assumption.
 Qed.
 
 (* Currying identifies maps into a function set with maps on a product.         *)
@@ -507,26 +505,21 @@ Proof.
   assert (Cardinal Aleph!b) as G4. { apply Aleph.IsCardinal. assumption. }
   (* The smaller Aleph is at least two, because every Aleph contains N.         *)
   assert (:2: :<=: card Aleph!a) as H4. {
-    assert (Aleph!a = card Aleph!a) as K1. {
-      apply Number.WhenCardinal. assumption. }
-    rewrite <- K1.
+    rewrite Aleph.Card. 2: assumption.
     assert (:N :<=: Aleph!a) as K2. { apply InfiniteCard.IsIncl. assumption. }
     assert (:2: :< Aleph!a) as K3. { apply K2. apply Omega.HasTwo. }
     apply Ordinal.ElemIsIncl; assumption. }
   (* The upper bound follows from index inclusion and Cantor's theorem.         *)
   assert (card Aleph!a :<=: card :P(Aleph!b)) as H5. {
     assert (Aleph!a :<=: Aleph!b) as K0. { apply Aleph.InclCompat; assumption. }
-    assert (Aleph!a = card Aleph!a) as K1. {
-      apply Number.WhenCardinal. assumption. }
-    assert (Aleph!b = card Aleph!b) as K2. {
-      apply Number.WhenCardinal. assumption. }
     assert (card Aleph!b :< card :P(Aleph!b)) as K3. {
       apply WithChoice.Cantor. assumption. }
     assert (Ordinal (card :P(Aleph!b))) as K4. { apply Number.IsOrdinal. }
     assert (card Aleph!b :<=: card :P(Aleph!b)) as K5. {
       apply Ordinal.ElemIsIncl; assumption. }
-    rewrite <- K1. apply Incl.Tran with Aleph!b. 1: apply K0.
-    rewrite <- K2 in K5. assumption. }
+    rewrite Aleph.Card. 2: assumption.
+    apply Incl.Tran with Aleph!b. 1: apply K0.
+    rewrite Aleph.Card in K5; assumption. }
   (* The bounded theorem identifies the left side with P(Aleph b).              *)
   assert (card (Aleph!a :^^: Aleph!b) = card :P(Aleph!b)) as H6. {
     apply WhenBoundedCardL; try assumption. apply Aleph.IsInfinite. assumption. }
@@ -566,11 +559,7 @@ Proof.
   (* The index inclusion gives the corresponding Aleph cardinal bound.          *)
   assert (card Aleph!b :<=: card Aleph!a) as H5. {
     assert (Aleph!b :<=: Aleph!a) as K0. { apply Aleph.InclCompat; assumption. }
-    assert (Aleph!a = card Aleph!a) as K1. {
-      apply Number.WhenCardinal. assumption. }
-    assert (Aleph!b = card Aleph!b) as K2. {
-      apply Number.WhenCardinal. assumption. }
-    rewrite <- K1, <- K2. assumption. }
+    rewrite Aleph.Card, Aleph.Card; assumption. }
   (* Monotonicity in the exponent bounds the reversed Aleph power.              *)
   assert (card (Aleph!a :^^: Aleph!b) :<=: card (Aleph!a :^^: Aleph!a)) as H6. {
     apply InclCompatCardR; assumption. }
@@ -619,16 +608,12 @@ Proof.
         apply WhenAlephInclL; assumption. }
       assert (card (:2: :^^: Aleph!b) :<=: Aleph!a) as K7. {
         apply Ordinal.ElemIsIncl; try assumption. apply H3. assumption. }
-      assert (Aleph!a = card Aleph!a) as K8. {
-        apply Number.WhenCardinal. assumption. }
-      rewrite K6. rewrite <- K8. assumption.
+      rewrite K6. rewrite Aleph.Card; assumption.
     - assert (card (Aleph!c :^^: Aleph!b) :<=: card (:2: :^^: Aleph!c)) as K5. {
         apply WhenAlephInclR; assumption. }
       assert (card (Aleph!c :^^: Aleph!b) :<=: Aleph!a) as K6. {
         apply Incl.Tran with (card (:2: :^^: Aleph!c)); assumption. }
-      assert (Aleph!a = card Aleph!a) as K7. {
-        apply Number.WhenCardinal. assumption. }
-      rewrite <- K7. assumption. }
+      rewrite Aleph.Card; assumption. }
   (* The union-product estimate bounds the upper side by Aleph(a).              *)
   assert (card (Aleph!a :^^: Aleph!b) :<=: Aleph!a) as H7. {
     assert (Aleph!a :^^: Aleph!b = :\/:_{a} F) as K1. {
@@ -641,9 +626,7 @@ Proof.
     assert (card (a :x: Aleph!a) :<=: card (Aleph!a :x: Aleph!a)) as K5. {
       apply WithChoice.InclCompatProdL; assumption. }
     assert (:N :<=: card Aleph!a) as K6. {
-      assert (Aleph!a = card Aleph!a) as L1. {
-        apply Number.WhenCardinal. assumption. }
-      rewrite <- L1.
+      rewrite Aleph.Card. 2: assumption.
       apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
     assert (card (Aleph!a :x: Aleph!a) = card Aleph!a) as K7. {
       apply Number.Square. assumption. }
@@ -651,17 +634,13 @@ Proof.
       rewrite <- K7. assumption. }
     assert (card (:\/:_{a} F) :<=: card Aleph!a) as K9. {
       apply Incl.Tran with (card (a :x: Aleph!a)); assumption. }
-    assert (Aleph!a = card Aleph!a) as K10. {
-      apply Number.WhenCardinal. assumption. }
-    rewrite K10. assumption. }
+    rewrite Aleph.Card in K9; assumption. }
   (* Constant functions give the opposite bound.                                *)
   assert (Aleph!a :<=: card (Aleph!a :^^: Aleph!b)) as H8. {
     assert (Aleph!b <> :0:) as K1. { apply InfiniteCard.IsNotZero. assumption. }
     assert (card Aleph!a :<=: card (Aleph!a :^^: Aleph!b)) as K2. {
       apply IsInclCardR; assumption. }
-    assert (Aleph!a = card Aleph!a) as K3. {
-      apply Number.WhenCardinal. assumption. }
-    rewrite <- K3 in K2. assumption. }
+    rewrite Aleph.Card in K2; assumption. }
   apply Incl.Double. split; assumption.
 Qed.
 
@@ -714,9 +693,9 @@ Proof.
     assert (card (:\/:_{b} f) :< card (:prd:_{b} c)) as H8. {
       apply WithChoice.Zermelo; assumption. }
     assert (Aleph!a :< card (:prd:_{b} c)) as H9. {
-      assert (Aleph!a = card (:\/:_{b} f)) as K1. {
-        rewrite <- H6. apply Number.WhenCardinal, Aleph.IsCardinal. assumption. }
-      rewrite <- K1 in H8. assumption. }
+      assert (card (:\/:_{b} f) = Aleph!a) as K1. {
+        rewrite <- H6. apply Aleph.Card. assumption. }
+      rewrite K1 in H8. assumption. }
     (* The union of the successor-cardinal fibres is still below Aleph(a).      *)
     assert (:\/:_{b} c :<=: Aleph!a) as H10. {
       intros y H10. apply UnionGen.Charac in H10. destruct H10 as [x [H10 H11]].
@@ -750,9 +729,8 @@ Proof.
   remember (card (Aleph!a :^^: Aleph!b)) as c eqn:Hc.
   assert (InfiniteCard c) as H3. {
     rewrite Hc. apply IsInfiniteCard; try assumption.
-    - assert (Aleph!a = card Aleph!a) as K1. {
-        apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
-      rewrite <- K1. apply Aleph.IsInfiniteCard. assumption.
+    - rewrite Aleph.Card; try assumption.
+      apply Aleph.IsInfiniteCard. assumption.
     - apply Aleph.IsNotZero. assumption. }
   assert (Ordinal c) as G1. { apply InfiniteCard.IsOrdinal. assumption. }
   assert (Ordinal (charac c)) as G2. { apply Character.IsOrdinal. }
@@ -774,18 +752,12 @@ Proof.
   (* The contradictory assumption bounds the character by the exponent Aleph.   *)
   assert (card (c :^^: charac c) :<=: card (c :^^: Aleph!b)) as H10. {
     assert (card (charac c) :<=: card Aleph!b) as K1. {
-      assert (charac c = card (charac c)) as L1. {
-        apply Number.WhenCardinal. apply Character.IsCardinal. assumption. }
-      assert (Aleph!b = card Aleph!b) as L2. {
-        apply Number.WhenCardinal. apply Aleph.IsCardinal. assumption. }
-      rewrite <- L1, <- L2. assumption. }
+      rewrite Character.Card, Aleph.Card; assumption. }
     apply InclCompatCardR; assumption. }
   (* Currying and the infinite square law collapse this upper bound to c.       *)
   assert (card (c :^^: Aleph!b) = c) as H11. {
     assert (card c = card (Aleph!a :^^: Aleph!b)) as K1. {
-      assert (c = card c) as L1. {
-        apply Number.WhenCardinal. apply InfiniteCard.IsCardinal. assumption. }
-      rewrite <- L1. assumption. }
+      rewrite InfiniteCard.Card; assumption. }
     assert (card (c :^^: Aleph!b) =
       card ((Aleph!a :^^: Aleph!b) :^^: Aleph!b)) as K2. {
         apply CompatCardL; assumption. }
