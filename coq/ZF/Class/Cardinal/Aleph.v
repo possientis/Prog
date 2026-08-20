@@ -13,6 +13,7 @@ Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.Empty.
+Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Incl.
 Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InfOfClass.
@@ -315,6 +316,32 @@ Proof.
     + assert (b :<=: a) as H11. { apply Ordinal.ElemIsIncl; assumption. }
       assert (Aleph!b :<=: Aleph!a) as H12. { apply InclCompat; assumption. }
       rewrite <- H8. assumption.
+Qed.
+
+(* No cardinal lies strictly between consecutive Alephs.                        *)
+Proposition InBetween : forall (a b:U), Ordinal a ->
+  Aleph!a :< card b           ->
+  card b :<=: Aleph!(succ a)  ->
+  card b = Aleph!(succ a).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  assert (Ordinal (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal Aleph!(succ a)) as G2. { apply IsOrdinal. assumption. }
+  assert (Ordinal (card b)) as G3. { apply Number.IsOrdinal. }
+  (* The middle card reaches the upper endpoint, or it is strictly below it.    *)
+  assert (card b :< Aleph!(succ a) \/ Aleph!(succ a) :<=: card b) as H4. {
+    apply Ordinal.ElemOrIncl; assumption. }
+  destruct H4 as [H4|H4]. 1: exfalso.
+  - (* If it were strictly below the next Aleph, the Aleph gap theorem would    *)
+    (* force it back below the previous Aleph.                                  *)
+    assert (card (card b) :<=: Aleph!a) as H5. {
+      apply CardBelowSucc; assumption. }
+    rewrite Number.Idem in H5.
+    assert (Aleph!a :< Aleph!a) as H6. { apply H5. assumption. }
+    revert H6. apply Foundation.NoLoop1.
+  - (* Otherwise the two endpoint inclusions identify the cardinal.             *)
+    apply Incl.Double. split; assumption.
 Qed.
 
 (* At a limit ordinal, Aleph is the union of its earlier values.                *)
