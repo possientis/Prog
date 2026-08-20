@@ -11,6 +11,7 @@ Require Import ZF.Set.Foundation.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Ordinal.
+Require Import ZF.Set.Ordinal.Succ.
 Require Import ZF.Set.UnionGenOfClass.
 
 Require Import ZF.Notation.Eval.
@@ -167,6 +168,48 @@ Proof.
   assert (a^:+: = card a^:+:) as H1. {
     apply Number.WhenCardinal. apply IsCardinal. }
   rewrite H1. apply IsMoreCard.
+Qed.
+
+(* The successor cardinal of an Aleph is the next Aleph.                        *)
+Proposition WhenAleph : forall (a:U), Ordinal a ->
+  (Aleph!a)^:+: = Aleph!(succ a).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a H1.
+  assert (Ordinal (succ a)) as G1. { apply Succ.IsOrdinal. assumption. }
+  assert (Ordinal Aleph!a) as G2. { apply Aleph.IsOrdinal. assumption. }
+  assert (Ordinal Aleph!(succ a)) as G3. { apply Aleph.IsOrdinal. assumption. }
+  assert (Cardinal Aleph!a) as G4. { apply Aleph.IsCardinal. assumption. }
+  assert (Cardinal Aleph!(succ a)) as G5. { apply Aleph.IsCardinal. assumption. }
+  assert (Ordinal (Aleph!a)^:+:) as G6. { apply IsOrdinal. }
+  (* Since Aleph(a) is strictly below the next Aleph, the successor cardinal    *)
+  (* of Aleph(a) is bounded by that next cardinal.                              *)
+  assert ((Aleph!a)^:+: :<=: Aleph!(succ a)) as H2. {
+    assert (Aleph!a :< Aleph!(succ a)) as K1. {
+      apply Aleph.ElemCompat; try assumption. apply Succ.IsIn. }
+    apply IsLowerBoundCard; assumption. }
+  (* If the next Aleph were not below the successor cardinal, the successor     *)
+  (* cardinal would be an ordinal strictly below that next Aleph.               *)
+  assert (Aleph!(succ a) :<=: (Aleph!a)^:+:) as H3. {
+    assert ((Aleph!a)^:+: :< Aleph!(succ a) \/
+      Aleph!(succ a) :<=: (Aleph!a)^:+:) as K1. {
+        apply Ordinal.ElemOrIncl; assumption. }
+    destruct K1 as [K1|K1]. 2: assumption. exfalso.
+    (* Anything below the next Aleph has cardinal at most Aleph(a).             *)
+    assert (card (Aleph!a)^:+: :<=: Aleph!a) as K2. {
+      apply Aleph.CardBelowSucc; assumption. }
+    (* But a successor cardinal is a cardinal and lies strictly above Aleph(a). *)
+    assert ((Aleph!a)^:+: = card (Aleph!a)^:+:) as K3. {
+      apply Number.WhenCardinal. apply IsCardinal. }
+    assert (Aleph!a :< (Aleph!a)^:+:) as K4. {
+      assert (Aleph!a = card (Aleph!a)) as L1. {
+        apply Number.WhenCardinal. assumption. }
+      assert (card (Aleph!a) :< (Aleph!a)^:+:) as L2. { apply IsMore. }
+      rewrite <- L1 in L2. apply L2. }
+    rewrite K3 in K4.
+    assert (Aleph!a :< Aleph!a) as K5. { apply K2. assumption. }
+    revert K5. apply Foundation.NoLoop1. }
+  apply Incl.Double. split; assumption.
 Qed.
 
 (* The successor-cardinal operation is monotone on ordinals.                    *)
