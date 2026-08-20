@@ -208,6 +208,26 @@ Proof.
   apply WithChoice.WhenInj with h; assumption.
 Qed.
 
+(* A non-empty exponent of an infinite-cardinal base is infinite.               *)
+Proposition IsInfiniteCard : forall (a b:U),
+  Choice                            ->
+  InfiniteCard (card a)             ->
+  b <> :0:                          ->
+  InfiniteCard (card (a :^^: b)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2.
+  (* The base cardinal already contains omega.                                  *)
+  assert (:N :<=: card a) as H3. { apply InfiniteCard.IsIncl. assumption. }
+  (* Constant functions embed the base cardinal into the exponent.              *)
+  assert (card a :<=: card (a :^^: b)) as H4. {apply IsInclCardR; assumption. }
+  (* Hence omega is contained in the exponent cardinal as well.                 *)
+  assert (:N :<=: card (a :^^: b)) as H5. {
+    apply Incl.Tran with (card a); assumption. }
+  (* Any cardinal containing omega is an infinite cardinal.                     *)
+  apply InfiniteCard.WhenIncl. 2: assumption. exists (a :^^: b). reflexivity.
+Qed.
+
 (* At a limit Aleph base, exponentiation is the union of earlier powers.        *)
 Proposition WhenLimitAlephL : forall (a b:U),
   Limit a                                                   ->
