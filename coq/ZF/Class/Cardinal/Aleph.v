@@ -283,6 +283,16 @@ Proof.
   symmetry. apply Union2.WhenEqualR. assumption.
 Qed.
 
+(* The square of an Aleph has that Aleph as its cardinal.                       *)
+Proposition Square : forall (a:U), Ordinal a ->
+  card (Aleph!a :x: Aleph!a) = Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* This is the equal-Aleph case of the right product calculation.             *)
+  apply ProdR; try assumption. apply Incl.Refl.
+Qed.
+
 (* Aleph reflects inclusion between ordinal indices.                            *)
 Proposition InclCompatRev : forall (a b:U), Ordinal a -> Ordinal b ->
   Aleph!a :<=: Aleph!b -> a :<=: b.
