@@ -19,6 +19,7 @@ Require Import ZF.Set.Ordinal.Ordinal.
 Require Import ZF.Set.Ordinal.InfOfClass.
 Require Import ZF.Set.Ordinal.Limit.
 Require Import ZF.Set.Ordinal.Monotone.
+Require Import ZF.Set.Ordinal.Natural.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
@@ -320,6 +321,29 @@ Proof.
   intros a H1. apply COM.IsIncl.
   - apply IsMonotone.
   - apply DomainOf. assumption.
+Qed.
+
+(* Every Aleph contains omega.                                                  *)
+Proposition IsInclN : forall (a:U), Ordinal a ->
+  :N :<=: Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* Alephs are infinite cardinals, and every infinite cardinal contains omega. *)
+  apply InfiniteCard.IsIncl. apply IsInfiniteCard. assumption.
+Qed.
+
+(* Every Aleph contains two.                                                    *)
+Proposition IsInclTwo : forall (a:U), Ordinal a ->
+  :2: :<=: Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* Since two belongs to omega, the omega bound places two below the Aleph.    *)
+  assert (:N :<=: Aleph!a) as H2. { apply IsInclN. assumption. }
+  assert (:2: :< Aleph!a) as H3. { apply H2. apply Omega.HasTwo. }
+  (* A member of an ordinal is included in that ordinal.                        *)
+  apply Ordinal.ElemIsIncl; try assumption. apply IsOrdinal. assumption.
 Qed.
 
 (* The zeroth infinite cardinal is omega.                                       *)
