@@ -95,18 +95,11 @@ Proof.
         rewrite Aleph.Card; assumption. }
       rewrite <- K11 in K14.
       rewrite Aleph.Card in K14. 2: assumption.
-      assert (card (Aleph!b :x: Aleph!a) :<=:
-        card (Aleph!a :x: Aleph!a)) as K19. {
-        apply WithChoice.InclCompatProdL. 1: assumption.
-        apply WithChoice.InclCompat; assumption. }
-      assert (card (Aleph!a :x: Aleph!a) = Aleph!a) as K20. {
-        rewrite Number.SquareOrd.
-        + apply Aleph.Card. assumption.
-        + apply Aleph.IsOrdinal. assumption.
-        + apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
+      assert (card (Aleph!b :x: Aleph!a) = Aleph!a) as K19. {
+        apply Aleph.ProdR; try assumption. }
       assert (Aleph!(succ a) :<=: Aleph!a) as K21. {
         apply Incl.Tran with (card (Aleph!b :x: Aleph!a)). 1: assumption.
-        rewrite K20 in K19. assumption. }
+        rewrite K19. apply Incl.Refl. }
       assert (Aleph!a :< Aleph!a) as K22. { apply K21. assumption. }
       apply Foundation.NoLoop1 with Aleph!a. assumption. }
   apply Incl.Double. split; assumption.

@@ -627,16 +627,13 @@ Proof.
       apply WithChoice.InclCompat. 1: assumption. apply Aleph.IsIncl. assumption. }
     assert (card (a :x: Aleph!a) :<=: card (Aleph!a :x: Aleph!a)) as K5. {
       apply WithChoice.InclCompatProdL; assumption. }
-    assert (:N :<=: card Aleph!a) as K6. {
-      rewrite Aleph.Card. 2: assumption.
-      apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
-    assert (card (Aleph!a :x: Aleph!a) = card Aleph!a) as K7. {
-      apply Number.Square. assumption. }
-    assert (card (a :x: Aleph!a) :<=: card Aleph!a) as K8. {
-      rewrite <- K7. assumption. }
-    assert (card (:\/:_{a} F) :<=: card Aleph!a) as K9. {
+    assert (card (Aleph!a :x: Aleph!a) = Aleph!a) as K7. {
+      apply Aleph.Square. assumption. }
+    assert (card (a :x: Aleph!a) :<=: Aleph!a) as K8. {
+      rewrite K7 in K5. assumption. }
+    assert (card (:\/:_{a} F) :<=: Aleph!a) as K9. {
       apply Incl.Tran with (card (a :x: Aleph!a)); assumption. }
-    rewrite Aleph.Card in K9; assumption. }
+    assumption. }
   (* Constant functions give the opposite bound.                                *)
   assert (Aleph!a :<=: card (Aleph!a :^^: Aleph!b)) as H8. {
     assert (Aleph!b <> :0:) as K1. { apply InfiniteCard.IsNotZero. assumption. }
@@ -768,11 +765,8 @@ Proof.
     assert (card (Aleph!a :^^: (Aleph!b :x: Aleph!b)) =
       card (Aleph!a :^^: Aleph!b)) as K4. {
         apply CompatCardR. 1: assumption.
-        apply Number.SquareOrd.
-        - apply Aleph.IsOrdinal. assumption.
-        - assert (InfiniteCard Aleph!b) as L1. {
-            apply Aleph.IsInfiniteCard. assumption. }
-          apply InfiniteCard.IsIncl. assumption. }
+        rewrite Aleph.Square. 2: assumption.
+        symmetry. apply Aleph.Card. assumption. }
     rewrite K2, K3, K4. symmetry. assumption. }
   assert (card (c :^^: charac c) :<=: c) as H12. {
     assert (card (c :^^: Aleph!b) :<=: c) as K1. {
@@ -840,20 +834,7 @@ Proof.
       rewrite <- K1. apply WhenTwoCardL. }
     (* The comparable product of the two Alephs has the larger cardinal.        *)
     assert (card (Aleph!c :x: Aleph!b) = Aleph!c) as H7. {
-      assert (:N :<=: card Aleph!c) as K1. {
-        rewrite Aleph.Card. 2: assumption.
-        apply InfiniteCard.IsIncl. apply Aleph.IsInfiniteCard. assumption. }
-      assert (:0: :< card Aleph!b) as K2. {
-        rewrite Aleph.Card. 2: assumption.
-        apply Ordinal.HasZero.
-        - apply Aleph.IsOrdinal; assumption.
-        - apply Aleph.IsNotZero. assumption. }
-      assert (card (Aleph!c :x: Aleph!b) = card Aleph!c :\/: card Aleph!b) as K3. {
-        apply Number.ProdMax; assumption. }
-      assert (Aleph!b :<=: Aleph!c) as K4. { apply Aleph.InclCompat; assumption. }
-      assert (Aleph!c = Aleph!c :\/: Aleph!b) as K5. {
-        apply Union2.WhenEqualL. assumption. }
-      rewrite K3, Aleph.Card, Aleph.Card; try assumption. symmetry. assumption. }
+      apply Aleph.ProdL; try assumption. apply Aleph.InclCompat; assumption. }
     (* Currying transports the calculation back to the original power.          *)
     assert (card (Aleph!(succ c) :^^: Aleph!b) =
       card ((:2: :^^: Aleph!c) :^^: Aleph!b)) as H8. {
