@@ -4,6 +4,9 @@ Require Import ZF.Class.Order.Closed.
 Require Import ZF.Class.Relation.EvalAsClass.
 Require Import ZF.Class.Relation.Fun.From.
 Require Import ZF.Class.Relation.Functional.
+Require Import ZF.Class.Relation.Image.
+Require Import ZF.Class.Small.
+Require Import ZF.Set.Cardinal.Infinite.
 Require Import ZF.Set.Cardinal.Number.
 Require Import ZF.Set.Cardinal.WithChoice.
 Require Import ZF.Set.Core.
@@ -135,4 +138,54 @@ Proof.
   (* The square of an infinite set has the same cardinal as the set.            *)
   assert (card (a :x: a) = card a) as H8. { apply Number.Square. assumption. }
   rewrite H8 in H7. apply Incl.Tran with (card (:N :x: a)); assumption.
+Qed.
+
+(* Infinite subsets have closed supersets of the same cardinality.              *)
+Proposition Exists : forall (R S A:Class) (p q a:U), Choice ->
+  Infinite a                                                              ->
+  p :< :N                                                                 ->
+  q :< :N                                                                 ->
+  toClass a :<=: A                                                        ->
+  (forall i, i :< p -> Closed  R$i A)                                     ->
+  (forall i, i :< q -> Closed2 S$i A)                                     ->
+  (forall i, i :< p -> Functional R$i)                                    ->
+  (forall i, i :< q -> Functional S$i)                                    ->
+  exists b,
+    a :<=: b                                      /\
+    toClass b :<=: A                              /\
+    card a = card b                               /\
+    (forall i, i :< p -> Closed  R$i (toClass b)) /\
+    (forall i, i :< q -> Closed2 S$i (toClass b)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros R S A p q a AC H1 H2 H3 H4 H5 H6 H7 H8.
+  remember (hull R S p q a) as b eqn:H9.
+  (* The initial set is infinite in the cardinal sense.                         *)
+  assert (:N :<=: card a) as H10. { apply Infinite.Card; assumption. }
+  (* Functional images of sets are small, so the pure hull theorem applies.     *)
+  assert (forall i x,
+    i :< p -> toClass x :<=: A -> Small R$i:[toClass x]:) as H11. {
+      intros i x H11 H12. apply Image.IsSmallR.
+      - apply H7. assumption.
+      - apply SetIsSmall. }
+  assert (forall i x,
+    i :< q -> toClass x :<=: A -> Small S$i:[toClass (x:x:x)]:) as H12. {
+      intros i x H12 H13. apply Image.IsSmallR.
+      - apply H8. assumption.
+      - apply SetIsSmall. }
+  assert (
+    a :<=: b                                      /\
+    toClass b :<=: A                              /\
+    (forall i, i :< p -> Closed R$i (toClass b))  /\
+    (forall i, i :< q -> Closed2 S$i (toClass b))) as H13. {
+      rewrite H9. apply Closed.Hull; assumption. }
+  destruct H13 as [H13 [H14 [H15 H16]]].
+  (* The hull has cardinal at most that of the initial set.                     *)
+  assert (card b :<=: card a) as H17. {
+    rewrite H9. apply HullCardIncl; assumption. }
+  (* The initial set lies in the hull, giving the reverse cardinal bound.       *)
+  assert (card a :<=: card b) as H18. { apply WithChoice.InclCompat; assumption. }
+  assert (card a = card b) as H19. { apply Incl.Anti; assumption. }
+  exists b. split. 1: assumption. split. 1: assumption. split. 1: assumption.
+  split; assumption.
 Qed.
