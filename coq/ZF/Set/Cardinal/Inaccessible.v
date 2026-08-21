@@ -63,11 +63,7 @@ Proof.
   - (* Finite cardinals power to finite cardinals, hence stay below Aleph(a).   *)
     assert (card :P(x) :< :N) as H5. { apply Finite.CardPower. assumption. }
     assert (Ordinal (card :P(x))) as H6. { apply Number.IsOrdinal. }
-    assert (:N :<=: Aleph!a) as H7. {
-      rewrite <- Aleph.WhenZero.
-      assert (Ordinal :0:) as H8. { apply Ordinal.Zero. }
-      assert (:0: :<=: a) as H9. { apply Empty.IsIncl. }
-      apply Aleph.InclCompat; assumption. }
+    assert (:N :<=: Aleph!a) as H7. { apply Aleph.IsInclN. assumption. }
     apply Ordinal.ElemInclTran with :N; try assumption. apply Omega.IsOrdinal.
   - (* Infinite cardinals below Aleph(a) are earlier Aleph values.              *)
     assert (InfiniteCard (card x)) as H5. {

@@ -237,6 +237,38 @@ Proof.
     + apply ElemCompat; assumption.
 Qed.
 
+(* Aleph(a) is no less than a.                                                  *)
+Proposition IsIncl : forall (a:U), Ordinal a ->
+  a :<=: Aleph!a.
+Proof.
+  intros a H1. apply COM.IsIncl.
+  - apply IsMonotone.
+  - apply DomainOf. assumption.
+Qed.
+
+(* Every Aleph contains omega.                                                  *)
+Proposition IsInclN : forall (a:U), Ordinal a ->
+  :N :<=: Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* Alephs are infinite cardinals, and every infinite cardinal contains omega. *)
+  apply InfiniteCard.IsIncl. apply IsInfiniteCard. assumption.
+Qed.
+
+(* Every Aleph contains two.                                                    *)
+Proposition IsInclTwo : forall (a:U), Ordinal a ->
+  :2: :<=: Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a H1.
+  (* Since two belongs to omega, the omega bound places two below the Aleph.    *)
+  assert (:N :<=: Aleph!a) as H2. { apply IsInclN. assumption. }
+  assert (:2: :< Aleph!a) as H3. { apply H2. apply Omega.HasTwo. }
+  (* A member of an ordinal is included in that ordinal.                        *)
+  apply Ordinal.ElemIsIncl; try assumption. apply IsOrdinal. assumption.
+Qed.
+
 (* The product of two Alephs has the maximum of the two Aleph values.           *)
 Proposition ProdMax : forall (a b:U), Ordinal a -> Ordinal b ->
   card (Aleph!a :x: Aleph!b) = Aleph!a :\/: Aleph!b.
@@ -245,8 +277,7 @@ Proof.
   intros a b H1 H2.
   (* The left Aleph is infinite, so omega embeds into its cardinal.             *)
   assert (:N :<=: card Aleph!a) as H3. {
-    rewrite Card. 2: assumption.
-    apply InfiniteCard.IsIncl. apply IsInfiniteCard. assumption. }
+    rewrite Card. 2: assumption. apply IsInclN. assumption. }
   (* The right Aleph is a non-empty ordinal, hence has positive cardinal.       *)
   assert (:0: :< card Aleph!b) as H4. {
     rewrite Card. 2: assumption.
@@ -314,38 +345,6 @@ Proof.
     subst. apply Incl.Refl.
 Qed.
 
-(* Aleph(a) is no less than a.                                                  *)
-Proposition IsIncl : forall (a:U), Ordinal a ->
-  a :<=: Aleph!a.
-Proof.
-  intros a H1. apply COM.IsIncl.
-  - apply IsMonotone.
-  - apply DomainOf. assumption.
-Qed.
-
-(* Every Aleph contains omega.                                                  *)
-Proposition IsInclN : forall (a:U), Ordinal a ->
-  :N :<=: Aleph!a.
-Proof.
-(* Proof by Hermes + gpt 5.5                                                    *)
-  intros a H1.
-  (* Alephs are infinite cardinals, and every infinite cardinal contains omega. *)
-  apply InfiniteCard.IsIncl. apply IsInfiniteCard. assumption.
-Qed.
-
-(* Every Aleph contains two.                                                    *)
-Proposition IsInclTwo : forall (a:U), Ordinal a ->
-  :2: :<=: Aleph!a.
-Proof.
-(* Proof by Hermes + gpt 5.5                                                    *)
-  intros a H1.
-  (* Since two belongs to omega, the omega bound places two below the Aleph.    *)
-  assert (:N :<=: Aleph!a) as H2. { apply IsInclN. assumption. }
-  assert (:2: :< Aleph!a) as H3. { apply H2. apply Omega.HasTwo. }
-  (* A member of an ordinal is included in that ordinal.                        *)
-  apply Ordinal.ElemIsIncl; try assumption. apply IsOrdinal. assumption.
-Qed.
-
 (* The zeroth infinite cardinal is omega.                                       *)
 Proposition WhenZero : Aleph!:0: = :N.
 Proof.
@@ -380,10 +379,7 @@ Proof.
   destruct H4 as [H4|H4].
   - (* Finite cardinals are bounded by Aleph(0), hence by Aleph(a).             *)
     assert (card x :<=: :N) as H5. { apply Ordinal.ElemIsIncl; assumption. }
-    assert (:N :<=: Aleph!a) as H6. {
-      rewrite <- WhenZero. apply InclCompat; try assumption.
-      - apply Ordinal.Zero.
-      - apply Empty.IsIncl. }
+    assert (:N :<=: Aleph!a) as H6. { apply IsInclN. assumption. }
     apply Incl.Tran with :N; assumption.
   - (* An infinite cardinal below Aleph(a+1) is an earlier Aleph value.         *)
     assert (Cardinal (card x)) as H5. { exists x. reflexivity. }

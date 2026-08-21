@@ -505,12 +505,9 @@ Proof.
   assert (Cardinal Aleph!a) as G2. { apply Aleph.IsCardinal. assumption. }
   assert (Ordinal Aleph!a) as G3. { apply Aleph.IsOrdinal. assumption. }
   assert (Cardinal Aleph!b) as G4. { apply Aleph.IsCardinal. assumption. }
-  (* The smaller Aleph is at least two, because every Aleph contains N.         *)
+  (* The smaller Aleph is at least two.                                         *)
   assert (:2: :<=: card Aleph!a) as H4. {
-    rewrite Aleph.Card. 2: assumption.
-    assert (:N :<=: Aleph!a) as K2. { apply InfiniteCard.IsIncl. assumption. }
-    assert (:2: :< Aleph!a) as K3. { apply K2. apply Omega.HasTwo. }
-    apply Ordinal.ElemIsIncl; assumption. }
+    rewrite Aleph.Card. 2: assumption. apply Aleph.IsInclTwo. assumption. }
   (* The upper bound follows from Aleph inclusion and Cantor's theorem.         *)
   assert (card Aleph!a :<=: card :P(Aleph!b)) as H5. {
     assert (card Aleph!b :< card :P(Aleph!b)) as K3. {
