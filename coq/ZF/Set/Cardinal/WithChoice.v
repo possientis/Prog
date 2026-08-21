@@ -437,9 +437,8 @@ Proof.
 Qed.
 
 (* The cardinal of a union is bounded by the cardinal of a product.             *)
-Proposition UnionProd : forall (a b:U),
-  Choice                                      ->
-  (forall x, x :< a -> card x :<=: card b)    ->
+Proposition UnionProd : forall (a b:U), Choice ->
+  (forall x, x :< a -> card x :<=: card b)     ->
   card :U(a) :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -477,9 +476,8 @@ Proof.
 Qed.
 
 (* The cardinal of a generalized union is bounded by a product.                 *)
-Proposition UnionGenProd : forall (F:Class) (a b:U),
-  Choice                                          ->
-  (forall x, x :< a -> card (F!x) :<=: card b)    ->
+Proposition UnionGenProd : forall (F:Class) (a b:U), Choice ->
+  (forall x, x :< a -> card (F!x) :<=: card b) ->
   card (:\/:_{a} F) :<=: card (a :x: b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -509,9 +507,33 @@ Proof.
   assumption.
 Qed.
 
+(* A finite generalized union bounded by an infinite set is bounded by it.      *)
+Proposition UnionGenFinite : forall (F:Class) (p a:U), Choice -> p :< :N ->
+  :N :<=: card a                                  ->
+  (forall i, i :< p -> card (F!i) :<=: card a)    ->
+  card (:\/:_{p} F) :<=: card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros F p a AC H1 H2 H3.
+  (* The general product bound reduces the finite union to p x a.               *)
+  assert (card (:\/:_{p} F) :<=: card (p :x: a)) as H4. {
+    apply UnionGenProd; assumption. }
+  (* The finite index set has cardinal below the infinite bound.                *)
+  assert (card p :<=: card a) as H5. {
+    rewrite Number.WhenNat. 2: assumption.
+    apply Ordinal.ElemIsIncl.
+    - apply Number.IsOrdinal.
+    - apply H2. assumption. }
+  (* Hence p x a is bounded by a x a.                                           *)
+  assert (card (p :x: a) :<=: card (a :x: a)) as H6. {
+    apply InclCompatProd; try assumption. apply Incl.Refl. }
+  (* The square of an infinite set has the same cardinal as the set.            *)
+  assert (card (a :x: a) = card a) as H7. { apply Number.Square. assumption. }
+  rewrite H7 in H6. apply Incl.Tran with (card (p :x: a)); assumption.
+Qed.
+
 (* The cardinal of a set-indexed generalized union is bounded by a product.     *)
-Proposition UnionGenProdSet : forall (f a b:U),
-  Choice                                          ->
+Proposition UnionGenProdSet : forall (f a b:U), Choice ->
   (forall x, x :< a -> card (f!x) :<=: card b)    ->
   card (:\/:_{a} f) :<=: card (a :x: b).
 Proof.
@@ -527,9 +549,8 @@ Proof.
 Qed.
 
 (* Zermelo's theorem bounds a generalized union by a product.                   *)
-Proposition Zermelo : forall (a b c:U),
-  Choice                                            ->
-  (forall x, x :< a -> card (b!x) :< card (c!x))    ->
+Proposition Zermelo : forall (a b c:U), Choice ->
+  (forall x, x :< a -> card (b!x) :< card (c!x))  ->
   card (:\/:_{a} b) :< card (:prd:_{a} c).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
