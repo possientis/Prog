@@ -496,7 +496,7 @@ Proposition WhenAlephInclL : forall (a b:U),
   Choice                                                  ->
   Ordinal a                                               ->
   Ordinal b                                               ->
-  a :<=: b                                                ->
+  Aleph!a :<=: Aleph!b                                    ->
   card (Aleph!a :^^: Aleph!b) = card (:2: :^^: Aleph!b).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -511,16 +511,15 @@ Proof.
     assert (:N :<=: Aleph!a) as K2. { apply InfiniteCard.IsIncl. assumption. }
     assert (:2: :< Aleph!a) as K3. { apply K2. apply Omega.HasTwo. }
     apply Ordinal.ElemIsIncl; assumption. }
-  (* The upper bound follows from index inclusion and Cantor's theorem.         *)
+  (* The upper bound follows from Aleph inclusion and Cantor's theorem.         *)
   assert (card Aleph!a :<=: card :P(Aleph!b)) as H5. {
-    assert (Aleph!a :<=: Aleph!b) as K0. { apply Aleph.InclCompat; assumption. }
     assert (card Aleph!b :< card :P(Aleph!b)) as K3. {
       apply WithChoice.Cantor. assumption. }
     assert (Ordinal (card :P(Aleph!b))) as K4. { apply Number.IsOrdinal. }
     assert (card Aleph!b :<=: card :P(Aleph!b)) as K5. {
       apply Ordinal.ElemIsIncl; assumption. }
     rewrite Aleph.Card. 2: assumption.
-    apply Incl.Tran with Aleph!b. 1: apply K0.
+    apply Incl.Tran with Aleph!b. 1: assumption.
     rewrite Aleph.Card in K5; assumption. }
   (* The bounded theorem identifies the left side with P(Aleph b).              *)
   assert (card (Aleph!a :^^: Aleph!b) = card :P(Aleph!b)) as H6. {
@@ -548,7 +547,7 @@ Proposition WhenAlephInclR : forall (a b:U),
   Choice                                                  ->
   Ordinal a                                               ->
   Ordinal b                                               ->
-  b :<=: a                                                ->
+  Aleph!b :<=: Aleph!a                                    ->
   card (Aleph!a :^^: Aleph!b) :<=: card (:2: :^^: Aleph!a).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -558,9 +557,8 @@ Proof.
   assert (Cardinal Aleph!b) as G3. { apply Aleph.IsCardinal. assumption. }
   (* The smaller Aleph is non-empty, because every Aleph is infinite.           *)
   assert (Aleph!b <> :0:) as H4. { apply InfiniteCard.IsNotZero. assumption. }
-  (* The index inclusion gives the corresponding Aleph cardinal bound.          *)
+  (* The Aleph inclusion gives the corresponding cardinal bound.                *)
   assert (card Aleph!b :<=: card Aleph!a) as H5. {
-    assert (Aleph!b :<=: Aleph!a) as K0. { apply Aleph.InclCompat; assumption. }
     rewrite Aleph.Card, Aleph.Card; assumption. }
   (* Monotonicity in the exponent bounds the reversed Aleph power.              *)
   assert (card (Aleph!a :^^: Aleph!b) :<=: card (Aleph!a :^^: Aleph!a)) as H6. {
@@ -606,14 +604,16 @@ Proof.
     assert (c :< b \/ b :<=: c) as K4. { apply Ordinal.ElemOrIncl; assumption. }
     destruct K4 as [K4|K4].
     - assert (c :<=: b) as K5. { apply Ordinal.ElemIsIncl; assumption. }
-      assert (card (Aleph!c :^^: Aleph!b) = card (:2: :^^: Aleph!b)) as K6. {
+      assert (Aleph!c :<=: Aleph!b) as K6. { apply Aleph.InclCompat; assumption. }
+      assert (card (Aleph!c :^^: Aleph!b) = card (:2: :^^: Aleph!b)) as K7. {
         apply WhenAlephInclL; assumption. }
-      assert (card (:2: :^^: Aleph!b) :<=: Aleph!a) as K7. {
+      assert (card (:2: :^^: Aleph!b) :<=: Aleph!a) as K8. {
         apply Ordinal.ElemIsIncl; try assumption. apply H3. assumption. }
-      rewrite K6. rewrite Aleph.Card; assumption.
-    - assert (card (Aleph!c :^^: Aleph!b) :<=: card (:2: :^^: Aleph!c)) as K5. {
+      rewrite K7. rewrite Aleph.Card; assumption.
+    - assert (Aleph!b :<=: Aleph!c) as K5. { apply Aleph.InclCompat; assumption. }
+      assert (card (Aleph!c :^^: Aleph!b) :<=: card (:2: :^^: Aleph!c)) as K6. {
         apply WhenAlephInclR; assumption. }
-      assert (card (Aleph!c :^^: Aleph!b) :<=: Aleph!a) as K6. {
+      assert (card (Aleph!c :^^: Aleph!b) :<=: Aleph!a) as K7. {
         apply Incl.Tran with (card (:2: :^^: Aleph!c)); assumption. }
       rewrite Aleph.Card; assumption. }
   (* The union-product estimate bounds the upper side by Aleph(a).              *)
@@ -794,7 +794,9 @@ Proof.
     assert (card (Aleph!:0: :^^: Aleph!a) = card (:2: :^^: Aleph!a)) as K1. {
       apply WhenAlephInclL; try assumption.
         - apply Ordinal.Zero.
-        - apply Empty.IsIncl. }
+        - apply Aleph.InclCompat. 2: assumption.
+          + apply Ordinal.Zero.
+          + apply Empty.IsIncl. }
     rewrite Aleph.WhenZero in K1. assumption. }
   assert (Aleph!a :< charac (card (Aleph!:0: :^^: Aleph!a))) as H3. {
     apply IsLessCharacR; try assumption. apply Ordinal.Zero. }
@@ -917,9 +919,8 @@ Proof.
     assert ((Aleph!a)^:+: :<=: card (Aleph!a :^^: Aleph!b)) as K2. {
       apply Successor.IsLowerBoundCard; assumption. }
     rewrite Successor.WhenAleph in K2; assumption. }
-  (* The exponent index bound reduces the power to the two-valued diagonal.     *)
+  (* The exponent Aleph bound reduces the power to the two-valued diagonal.     *)
   assert (card (Aleph!a :^^: Aleph!b) :<=: Aleph!(succ a)) as H8. {
-    assert (b :<=: a) as K1. { apply Aleph.InclCompatRev; assumption. }
     assert (card (Aleph!a :^^: Aleph!b) :<=: card (:2: :^^: Aleph!a)) as K2. {
       apply WhenAlephInclR; assumption. }
     assert (card (:2: :^^: Aleph!a) = card :P(Aleph!a)) as K3. {
