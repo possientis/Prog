@@ -402,6 +402,40 @@ Proof.
   apply WhenOnto with f; assumption.
 Qed.
 
+(* The union with an infinite set has cardinality the maximum cardinal.         *)
+Proposition UnionMax : forall (a b:U), Choice ->
+  :N :<=: card a -> card (a :\/: b) = card a :\/: card b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1.
+  (* Choice makes the second set well-orderable, so the general theorem applies.*)
+  apply Number.UnionMax. 1: assumption.
+  apply WellOrderable.WithChoice. assumption.
+Qed.
+
+(* If the left set is infinite and absorbs the right cardinal, it absorbs union.*)
+Proposition UnionL : forall (a b:U), Choice ->
+  :N :<=: card a -> card b :<=: card a -> card (a :\/: b) = card a.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2.
+  (* First compute the union as the maximum of the two cardinals.               *)
+  assert (card (a :\/: b) = card a :\/: card b) as H3. {
+    apply UnionMax; assumption. }
+  (* The right cardinal is included in the left one, so the maximum is left.    *)
+  rewrite H3. symmetry. apply Union2.WhenEqualL. assumption.
+Qed.
+
+(* If the right set is infinite and absorbs the left cardinal, it absorbs union.*)
+Proposition UnionR : forall (a b:U), Choice ->
+  :N :<=: card b -> card a :<=: card b -> card (a :\/: b) = card b.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC H1 H2.
+  (* Commute the union, then use the left-absorbing theorem.                    *)
+  rewrite Union2.Comm. apply UnionL; assumption.
+Qed.
+
 (* The cardinal of a union is bounded by the cardinal of a product.             *)
 Proposition UnionProd : forall (a b:U),
   Choice                                      ->
