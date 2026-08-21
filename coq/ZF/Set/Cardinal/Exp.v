@@ -909,3 +909,25 @@ Proof.
   apply Incl.Double. split; assumption.
 Qed.
 
+(* Under GCH, a large Aleph exponent has the next exponent cardinal.            *)
+Proposition WhenGCHR : forall (a b:U),
+  Choice                                                      ->
+  GCH                                                         ->
+  Ordinal a                                                   ->
+  Ordinal b                                                   ->
+  Aleph!a :<=: Aleph!b                                        ->
+  card (Aleph!a :^^: Aleph!b) = Aleph!(succ b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b AC GCH H1 H2 H3.
+  (* The larger exponent reduces the Aleph power to the two-valued power.       *)
+  assert (card (Aleph!a :^^: Aleph!b) = card (:2: :^^: Aleph!b)) as H4. {
+    apply WhenAlephInclL; assumption. }
+  (* Two-valued maps have the cardinal of the power set.                        *)
+  assert (card (:2: :^^: Aleph!b) = card :P(Aleph!b)) as H5. {
+    apply WhenTwoCardL. }
+  (* GCH evaluates that power set as the successor Aleph of the exponent index. *)
+  assert (card :P(Aleph!b) = Aleph!(succ b)) as H6. { apply GCH. assumption. }
+  rewrite H4, H5, H6. reflexivity.
+Qed.
+
