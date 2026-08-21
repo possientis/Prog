@@ -22,11 +22,13 @@ Require Import ZF.Set.Ordinal.Monotone.
 Require Import ZF.Set.Ordinal.Omega.
 Require Import ZF.Set.Ordinal.RecursionNOfClass.
 Require Import ZF.Set.Ordinal.Succ.
+Require Import ZF.Set.Prod.
 Require Import ZF.Set.Relation.EvalOfClass.
 Require Import ZF.Set.Relation.Fun.
 Require Import ZF.Set.Relation.ImageUnderClass.
 Require Import ZF.Set.Relation.RestrictOfClass.
 Require Import ZF.Set.Union.
+Require Import ZF.Set.Union2.
 Require Import ZF.Set.UnionGen.
 Require Import ZF.Set.UnionGenOfClass.
 
@@ -232,6 +234,39 @@ Proof.
   - apply Ordinal.ElemIsIncl.
     + apply IsOrdinal. assumption.
     + apply ElemCompat; assumption.
+Qed.
+
+(* The product of two Alephs has the Aleph at the maximum index.                *)
+Proposition ProdMax : forall (a b:U), Ordinal a -> Ordinal b ->
+  card (Aleph!a :x: Aleph!b) = Aleph!(a :\/: b).
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2.
+  (* The left Aleph is infinite, so omega embeds into its cardinal.             *)
+  assert (:N :<=: card Aleph!a) as H3. {
+    rewrite Card. 2: assumption.
+    apply InfiniteCard.IsIncl. apply IsInfiniteCard. assumption. }
+  (* The right Aleph is a non-empty ordinal, hence has positive cardinal.       *)
+  assert (:0: :< card Aleph!b) as H4. {
+    rewrite Card. 2: assumption.
+    apply Ordinal.HasZero.
+    - apply IsOrdinal. assumption.
+    - apply IsNotZero. assumption. }
+  (* The general product theorem gives the maximum of the two cardinals.        *)
+  assert (card (Aleph!a :x: Aleph!b) = card Aleph!a :\/: card Aleph!b) as H5. {
+    apply Number.ProdMax; assumption. }
+  (* Since Aleph is increasing, the maximum of the values is the value at the   *)
+  (* maximum of the indices.                                                    *)
+  assert (Aleph!a :\/: Aleph!b = Aleph!(a :\/: b)) as H6. {
+    assert (a :<=: b \/ b :<=: a) as H6. { apply Ordinal.InclOrIncl; assumption. }
+    destruct H6 as [H6|H6].
+    - assert (Aleph!a :<=: Aleph!b) as H7. { apply InclCompat; assumption. }
+      assert (b = a :\/: b) as H8. { apply Union2.WhenEqualR. assumption. }
+      rewrite <- H8. symmetry. apply Union2.WhenEqualR. assumption.
+    - assert (Aleph!b :<=: Aleph!a) as H7. { apply InclCompat; assumption. }
+      assert (a = a :\/: b) as H8. { apply Union2.WhenEqualL. assumption. }
+      rewrite <- H8. symmetry. apply Union2.WhenEqualL. assumption. }
+  rewrite H5, Card, Card; try assumption.
 Qed.
 
 (* Aleph reflects inclusion between ordinal indices.                            *)
