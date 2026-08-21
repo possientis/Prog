@@ -236,9 +236,9 @@ Proof.
     + apply ElemCompat; assumption.
 Qed.
 
-(* The product of two Alephs has the Aleph at the maximum index.                *)
+(* The product of two Alephs has the maximum of the two Aleph values.           *)
 Proposition ProdMax : forall (a b:U), Ordinal a -> Ordinal b ->
-  card (Aleph!a :x: Aleph!b) = Aleph!(a :\/: b).
+  card (Aleph!a :x: Aleph!b) = Aleph!a :\/: Aleph!b.
 Proof.
 (* Proof by Hermes + gpt 5.5                                                    *)
   intros a b H1 H2.
@@ -255,18 +255,32 @@ Proof.
   (* The general product theorem gives the maximum of the two cardinals.        *)
   assert (card (Aleph!a :x: Aleph!b) = card Aleph!a :\/: card Aleph!b) as H5. {
     apply Number.ProdMax; assumption. }
-  (* Since Aleph is increasing, the maximum of the values is the value at the   *)
-  (* maximum of the indices.                                                    *)
-  assert (Aleph!a :\/: Aleph!b = Aleph!(a :\/: b)) as H6. {
-    assert (a :<=: b \/ b :<=: a) as H6. { apply Ordinal.InclOrIncl; assumption. }
-    destruct H6 as [H6|H6].
-    - assert (Aleph!a :<=: Aleph!b) as H7. { apply InclCompat; assumption. }
-      assert (b = a :\/: b) as H8. { apply Union2.WhenEqualR. assumption. }
-      rewrite <- H8. symmetry. apply Union2.WhenEqualR. assumption.
-    - assert (Aleph!b :<=: Aleph!a) as H7. { apply InclCompat; assumption. }
-      assert (a = a :\/: b) as H8. { apply Union2.WhenEqualL. assumption. }
-      rewrite <- H8. symmetry. apply Union2.WhenEqualL. assumption. }
-  rewrite H5, Card, Card; try assumption.
+  (* Aleph values are cardinals, so their cardinals are themselves.             *)
+  rewrite H5, Card, Card; try assumption. reflexivity.
+Qed.
+
+(* The product of two Alephs is the left one when the right is smaller.         *)
+Proposition ProdL : forall (a b:U), Ordinal a -> Ordinal b ->
+  Aleph!b :<=: Aleph!a -> card (Aleph!a :x: Aleph!b) = Aleph!a.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  (* The maximum-product theorem reduces this to identifying the max.           *)
+  rewrite ProdMax; try assumption.
+  (* Since the right Aleph is included in the left, the maximum is the left.    *)
+  symmetry. apply Union2.WhenEqualL. assumption.
+Qed.
+
+(* The product of two Alephs is the right one when the left is smaller.         *)
+Proposition ProdR : forall (a b:U), Ordinal a -> Ordinal b ->
+  Aleph!a :<=: Aleph!b -> card (Aleph!a :x: Aleph!b) = Aleph!b.
+Proof.
+(* Proof by Hermes + gpt 5.5                                                    *)
+  intros a b H1 H2 H3.
+  (* The maximum-product theorem reduces this to identifying the max.           *)
+  rewrite ProdMax; try assumption.
+  (* Since the left Aleph is included in the right, the maximum is the right.   *)
+  symmetry. apply Union2.WhenEqualR. assumption.
 Qed.
 
 (* Aleph reflects inclusion between ordinal indices.                            *)
