@@ -507,6 +507,15 @@ Proof.
   assumption.
 Qed.
 
+(* The cardinal of a set-indexed generalized union is bounded by a product.     *)
+Proposition UnionGenProdSet : forall (f a b:U), Choice ->
+  (forall x, x :< a -> card (f!x) :<=: card b)    ->
+  card (:\/:_{a} f) :<=: card (a :x: b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros f a b AC H1. apply UnionGenProd; assumption.
+Qed.
+
 (* A finite generalized union bounded by an infinite set is bounded by it.      *)
 Proposition UnionGenFinite : forall (F:Class) (p a:U), Choice -> p :< :N ->
   :N :<=: card a                                  ->
@@ -532,20 +541,14 @@ Proof.
   rewrite H7 in H6. apply Incl.Tran with (card (p :x: a)); assumption.
 Qed.
 
-(* The cardinal of a set-indexed generalized union is bounded by a product.     *)
-Proposition UnionGenProdSet : forall (f a b:U), Choice ->
-  (forall x, x :< a -> card (f!x) :<=: card b)    ->
-  card (:\/:_{a} f) :<=: card (a :x: b).
+(* A finite set-indexed generalized union bounded by an infinite set is bounded.*)
+Proposition UnionGenFiniteSet : forall (f p a:U), Choice -> p :< :N ->
+  :N :<=: card a                                  ->
+  (forall i, i :< p -> card (f!i) :<=: card a)    ->
+  card (:\/:_{p} f) :<=: card a.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros f a b AC H1.
-  (* Replace the set family by the functional class of its displayed values.    *)
-  assert (:\/:_{a} f = :\/:_{a} :[fun x => f!x]:) as H2. {
-    symmetry. apply UnionGenOfClass.EtaReduce. }
-  rewrite H2.
-  (* The class-family theorem applies to that displayed value class.            *)
-  apply UnionGenProd. 1: assumption.
-  intros x H3. rewrite CFF.Eval. apply H1. assumption.
+  intros f p a AC H1 H2 H3. apply UnionGenFinite; assumption.
 Qed.
 
 (* Zermelo's theorem bounds a generalized union by a product.                   *)
@@ -628,4 +631,3 @@ Proof.
   rewrite CFF.Eval in H19. apply Diff.Charac in H19.
   destruct H19 as [_ H19]. contradiction.
 Qed.
-
