@@ -1,7 +1,9 @@
-.PHONY : all clean
+.PHONY : all clean meta
 
 VFILES  	:= $(shell find . -name "*.v")
 VOFILES   := $(VFILES:.v=.vo)
+METAVFILES  := $(shell find ./Meta -name "*.v")
+METAVOFILES := $(METAVFILES:.v=.vo)
 
 VOKFILES  = $(shell find . -name "*.vok")
 VOSFILES  = $(shell find . -name "*.vos")
@@ -11,6 +13,8 @@ GLOBFILES = $(shell find . -name "*.glob")
 ARTIFACTS = $(VOFILES) $(VOKFILES) $(VOSFILES) $(AUXFILES) $(GLOBFILES)
 
 all : deps $(VOFILES)
+
+meta : deps $(METAVOFILES)
 
 %.vo : %.v
 	@echo "Compiling $<"
