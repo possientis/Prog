@@ -1,5 +1,7 @@
 Require Import Coq.Lists.List.
+Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
+Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -8,94 +10,108 @@ Inductive Term : Type :=
 | Bot   : Term
 | Top   : Term
 | Var   : nat    -> Term
-| Elem  : Term   -> Term -> Term
-| Leq   : Term   -> Term -> Term
-| Geq   : Term   -> Term -> Term
-| Lt    : Term   -> Term -> Term
-| Gt    : Term   -> Term -> Term
-| Equal : Term   -> Term -> Term
-| NotEq : Term   -> Term -> Term
-| Imp   : Term   -> Term -> Term
-| Iff   : Term   -> Term -> Term
-| And   : Term   -> Term -> Term
-| Or    : Term   -> Term -> Term
+| Ident : string -> list Term -> Term
+| Elem  : Term   -> Term      -> Term
+| Leq   : Term   -> Term      -> Term
+| Geq   : Term   -> Term      -> Term
+| Lt    : Term   -> Term      -> Term
+| Gt    : Term   -> Term      -> Term
+| Equal : Term   -> Term      -> Term
+| NotEq : Term   -> Term      -> Term
+| Imp   : Term   -> Term      -> Term
+| Iff   : Term   -> Term      -> Term
+| And   : Term   -> Term      -> Term
+| Or    : Term   -> Term      -> Term
 | Not   : Term   -> Term
-| All   : VarTy  -> Term -> Term
-| Ex    : VarTy  -> Term -> Term
+| All   : VarTy  -> Term      -> Term
+| Ex    : VarTy  -> Term      -> Term
 | The   : Term   -> Term
 | Lam   : Term   -> Term
-| App   : Term   -> Term -> Term
+| App   : Term   -> Term      -> Term
 .
 
-Inductive HasTy : Ctx -> Term -> Ty -> Prop :=
+Inductive HasTy (S:Sig) : Ctx -> Term -> Ty -> Prop :=
 | HasTyBot : forall (G:Ctx),
-    HasTy G Bot TyProp
+    HasTy S G Bot TyProp
 | HasTyTop : forall (G:Ctx),
-    HasTy G Top TyProp
+    HasTy S G Top TyProp
 | HasTyVar : forall (G:Ctx) (n:nat) (vty:VarTy),
     typeOf G n = Some vty ->
-    HasTy G (Var n) (toTy vty)
+    HasTy S G (Var n) (toTy vty)
+| HasTyIdent : forall (G:Ctx) (name:string) (args:list Term)
+    (argTys:list Ty) (ty:Ty),
+    S name = Some (argTys, ty) ->
+    HasTys S G args argTys ->
+    HasTy S G (Ident name args) ty
 | HasTyElem : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (Elem x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (Elem x y) TyProp
 | HasTyLeq : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (Leq x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (Leq x y) TyProp
 | HasTyGeq : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (Geq x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (Geq x y) TyProp
 | HasTyLt : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (Lt x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (Lt x y) TyProp
 | HasTyGt : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (Gt x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (Gt x y) TyProp
 | HasTyEqual : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (Equal x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (Equal x y) TyProp
 | HasTyNotEq : forall (G:Ctx) (x y:Term),
-    HasTy G x TySet ->
-    HasTy G y TySet ->
-    HasTy G (NotEq x y) TyProp
+    HasTy S G x TySet ->
+    HasTy S G y TySet ->
+    HasTy S G (NotEq x y) TyProp
 | HasTyImp : forall (G:Ctx) (p q:Term),
-    HasTy G p TyProp ->
-    HasTy G q TyProp ->
-    HasTy G (Imp p q) TyProp
+    HasTy S G p TyProp ->
+    HasTy S G q TyProp ->
+    HasTy S G (Imp p q) TyProp
 | HasTyIff : forall (G:Ctx) (p q:Term),
-    HasTy G p TyProp ->
-    HasTy G q TyProp ->
-    HasTy G (Iff p q) TyProp
+    HasTy S G p TyProp ->
+    HasTy S G q TyProp ->
+    HasTy S G (Iff p q) TyProp
 | HasTyAnd : forall (G:Ctx) (p q:Term),
-    HasTy G p TyProp ->
-    HasTy G q TyProp ->
-    HasTy G (And p q) TyProp
+    HasTy S G p TyProp ->
+    HasTy S G q TyProp ->
+    HasTy S G (And p q) TyProp
 | HasTyOr : forall (G:Ctx) (p q:Term),
-    HasTy G p TyProp ->
-    HasTy G q TyProp ->
-    HasTy G (Or p q) TyProp
+    HasTy S G p TyProp ->
+    HasTy S G q TyProp ->
+    HasTy S G (Or p q) TyProp
 | HasTyNot : forall (G:Ctx) (p:Term),
-    HasTy G p TyProp ->
-    HasTy G (Not p) TyProp
+    HasTy S G p TyProp ->
+    HasTy S G (Not p) TyProp
 | HasTyAll : forall (G:Ctx) (vty:VarTy) (p:Term),
-    HasTy (vty :: G) p TyProp ->
-    HasTy G (All vty p) TyProp
+    HasTy S (vty :: G) p TyProp ->
+    HasTy S G (All vty p) TyProp
 | HasTyEx : forall (G:Ctx) (vty:VarTy) (p:Term),
-    HasTy (vty :: G) p TyProp ->
-    HasTy G (Ex vty p) TyProp
+    HasTy S (vty :: G) p TyProp ->
+    HasTy S G (Ex vty p) TyProp
 | HasTyThe : forall (G:Ctx) (p:Term),
-    HasTy (VarTySet :: G) p TyProp ->
-    HasTy G (The p) TySet
+    HasTy S (VarTySet :: G) p TyProp ->
+    HasTy S G (The p) TySet
 | HasTyLam : forall (G:Ctx) (p:Term),
-    HasTy (VarTySet :: G) p TyProp ->
-    HasTy G (Lam p) TyClass
+    HasTy S (VarTySet :: G) p TyProp ->
+    HasTy S G (Lam p) TyClass
 | HasTyApp : forall (G:Ctx) (A x:Term),
-    HasTy G A TyClass ->
-    HasTy G x TySet ->
-    HasTy G (App A x) TyProp
+    HasTy S G A TyClass ->
+    HasTy S G x TySet ->
+    HasTy S G (App A x) TyProp
+with HasTys (S:Sig) : Ctx -> list Term -> list Ty -> Prop :=
+| HasTysNil : forall (G:Ctx),
+    HasTys S G [] []
+| HasTysCons : forall (G:Ctx) (t:Term) (ts:list Term) (ty:Ty)
+    (tys:list Ty),
+    HasTy S G t ty ->
+    HasTys S G ts tys ->
+    HasTys S G (t :: ts) (ty :: tys)
 .
