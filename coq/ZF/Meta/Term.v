@@ -6,8 +6,13 @@ Import ListNotations.
 
 Inductive Term : Type :=
 | Bot   : Term
+| Top   : Term
 | Var   : nat    -> Term
 | Elem  : Term   -> Term -> Term
+| Leq   : Term   -> Term -> Term
+| Geq   : Term   -> Term -> Term
+| Lt    : Term   -> Term -> Term
+| Gt    : Term   -> Term -> Term
 | Equal : Term   -> Term -> Term
 | NotEq : Term   -> Term -> Term
 | Imp   : Term   -> Term -> Term
@@ -23,15 +28,33 @@ Inductive Term : Type :=
 .
 
 Inductive HasTy : Ctx -> Term -> Ty -> Prop :=
+| HasTyBot : forall (G:Ctx),
+    HasTy G Bot TyProp
+| HasTyTop : forall (G:Ctx),
+    HasTy G Top TyProp
 | HasTyVar : forall (G:Ctx) (n:nat) (vty:VarTy),
     typeOf G n = Some vty ->
     HasTy G (Var n) (toTy vty)
-| HasTyBot : forall (G:Ctx),
-    HasTy G Bot TyProp
 | HasTyElem : forall (G:Ctx) (x y:Term),
     HasTy G x TySet ->
     HasTy G y TySet ->
     HasTy G (Elem x y) TyProp
+| HasTyLeq : forall (G:Ctx) (x y:Term),
+    HasTy G x TySet ->
+    HasTy G y TySet ->
+    HasTy G (Leq x y) TyProp
+| HasTyGeq : forall (G:Ctx) (x y:Term),
+    HasTy G x TySet ->
+    HasTy G y TySet ->
+    HasTy G (Geq x y) TyProp
+| HasTyLt : forall (G:Ctx) (x y:Term),
+    HasTy G x TySet ->
+    HasTy G y TySet ->
+    HasTy G (Lt x y) TyProp
+| HasTyGt : forall (G:Ctx) (x y:Term),
+    HasTy G x TySet ->
+    HasTy G y TySet ->
+    HasTy G (Gt x y) TyProp
 | HasTyEqual : forall (G:Ctx) (x y:Term),
     HasTy G x TySet ->
     HasTy G y TySet ->
