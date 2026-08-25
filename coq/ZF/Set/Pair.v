@@ -1,14 +1,35 @@
 Declare Scope ZF_Set_Pair_scope.
 Open    Scope ZF_Set_Pair_scope.
 
+Require Import ZF.Axiom.Define.
+Require Import ZF.Axiom.Pairing.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Pair.
 Require Import ZF.Set.Core.
-Require Import ZF.Set.FromClass.
 
-(* We consider the set corresponding by the small class 'pair a b'.             *)
-Definition pair (a b:U) : U := fromClass (pair a b) (IsSmall a b).
+(* Predicate saying that a set contains exactly a and b.                        *)
+Definition IsPairOf (a b:U) : Class := fun x =>
+  forall y, y :< x <-> y = a \/ y = b.
+
+(* The pairing axiom gives a set containing exactly a and b.                    *)
+Proposition Exists : forall (a b:U), Define.Exists (IsPairOf a b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b. apply Pairing.
+Qed.
+
+(* A set containing exactly a and b is unique.                                  *)
+Proposition Unique : forall (a b:U), Define.Unique (IsPairOf a b).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b c d H1 H2. apply EqualToClass. intros x. split; intros H3.
+  - apply H2, H1, H3.
+  - apply H1, H2, H3.
+Qed.
+
+(* We consider the set containing exactly a and b.                              *)
+Definition pair (a b:U) : U :=
+  define (IsPairOf a b) (Exists a b) (Unique a b).
 
 Notation ":{ a , b }:" := (pair a b)
   (at level 1, no associativity) : ZF_Set_Pair_scope.
@@ -17,7 +38,8 @@ Notation ":{ a , b }:" := (pair a b)
 Proposition Charac : forall (a b:U),
   forall x, x :< :{a,b}: <-> x = a \/ x = b.
 Proof.
-  intros a b. apply FromClass.Charac.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros a b. unfold pair. apply Define.IsIn.
 Qed.
 
 (* The set a is an element of the set {a,b}.                                    *)
@@ -43,3 +65,4 @@ Proof.
     + apply IsInL.
     + apply IsInR.
 Qed.
+

@@ -1,7 +1,9 @@
 Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.OrdPair.
 
 (* Predicate on classes, stating that a class is actually a set.                *)
 Definition Small (P:Class) : Prop := exists a, forall x, x :< a <-> P x.
@@ -30,8 +32,6 @@ Proof.
   - apply H2, H1, H3.
 Qed.
 
-(* Axiom.Replacement is used directly here because Class.Relation.Replacement   *)
-(* transitively imports Class.Small, which would be circular.                   *)
 (* The property of being small is compatible with class inclusion.              *)
 Proposition InclCompat : forall (A B:Class),
   A :<=: B -> Small B -> Small A.
@@ -41,25 +41,29 @@ Proof.
   (* Let A and B be classes with A included in B, and let b witness Small B.    *)
   intros A B H1 [b H2].
 
-  (* The binary predicate F(x,y) := (x = y) and A(x) is functional.             *)
-  assert (Replacement.Functional (fun x y => x = y /\ A x)) as H3. {
-    intros x y z [H4 _] [H5 _]. rewrite <- H4, <- H5. reflexivity.
+  (* The relation sending each x in A to itself is functional.                  *)
+  assert (Functional (fun p => exists x, p = :(x,x): /\ A x)) as H3. {
+    intros x y z H3 H4.
+    destruct H3 as [x1 [H3 _]].
+    destruct H4 as [x2 [H4 _]].
+    apply OrdPair.Equal in H3. destruct H3 as [H3 H5].
+    apply OrdPair.Equal in H4. destruct H4 as [H4 H6].
+    subst. reflexivity.
   }
 
-  (* By replacement applied to F and b, there exists a set c with               *)
-  (* y in c iff some x in b satisfies x = y and A(x), hence y in c iff A(y).    *)
-  destruct (Replacement.Replacement _ H3 b) as [c H4].
+  (* By replacement, there is a set c containing exactly those elements of A.   *)
+  destruct (Replacement _ H3 b) as [c H4].
 
   (* We claim c witnesses Small A.                                              *)
   exists c. intros x. split; intros H5.
 
-  (* If x is in c, some w in b satisfies w = x and A(w), so A(x).               *)
-  - apply H4 in H5. destruct H5 as [w [_ [H6 H7]]].
-    rewrite <- H6. apply H7.
+  (* If x is in c, some w in b is related to x by the identity relation on A.   *)
+  - apply H4 in H5. destruct H5 as [w [_ [u [H6 H7]]]].
+    apply OrdPair.Equal in H6. destruct H6 as [H6 H8]. subst. assumption.
 
   (* If A(x), then A <= B gives B(x), so x is in b, hence x is in c.            *)
   - apply H4. exists x. split.
     + apply H2, H1, H5.
-    + split. 1: reflexivity. apply H5.
+    + exists x. split. 2: assumption. reflexivity.
 Qed.
 

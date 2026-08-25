@@ -1,13 +1,10 @@
+Require Import ZF.Class.Equiv.
+Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Set.Core.
+Require Import ZF.Set.OrdPair.
 
-(* A binary class is simply a binary predicate on sets.                         *)
-Definition Binary : Type := U -> U -> Prop.
 
-(* Predicate expressing the fact that a binary class is functional.             *)
-Definition Functional (F:Binary) : Prop :=
-  forall x y z, F x y -> F x z -> y = z.
-
-(* Given a functional binary class F and a set a, there exist a set b whose     *)
-(* elements are the images of the elements of a by F.                           *)
-Axiom Replacement : forall (F:Binary), Functional F ->
-  forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F x y.
+(* Given a functional class F and a set a, there exists a set b whose elements  *)
+(* are the images of the elements of a by F.                                    *)
+Axiom Replacement : forall (F:Class), Functional F ->
+  forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):.

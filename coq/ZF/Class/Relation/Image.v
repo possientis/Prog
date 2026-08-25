@@ -1,7 +1,7 @@
 Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Relation.Functional.
 Require Import ZF.Class.Incl.
-Require Import ZF.Class.Relation.Replacement.
+Require Import ZF.Axiom.Replacement.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
 Require Import ZF.Set.OrdPair.
