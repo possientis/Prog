@@ -14,8 +14,8 @@ Definition sig : Sig := fun name =>
   if String.eqb name "eval"       then Some ([TySet; TySet], TySet ) else
   None.
 
-(* Source: forall a, exists f, FunctionOn f a /\ forall x, x :< a -> x <>       *)
-(* empty -> eval f x :< x.                                                      *)
+(* forall a,                                                                    *)
+(*  exists f, FunctionOn f a /\ forall x, x :< a -> x <> empty -> eval f x :< x *)
 Definition Choice : Term :=
   All VarTySet
     (Ex VarTySet

@@ -3,7 +3,7 @@ Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
-(* Source: exists x, True.                                                      *)
+(* exists x, True                                                               *)
 Definition NonEmptyUniverse : Term :=
   Ex VarTySet Top.
 

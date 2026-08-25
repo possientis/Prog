@@ -3,7 +3,7 @@ Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
-(* Source: forall a b, exists c, forall x, x :< c <-> x = a \/ x = b.           *)
+(* forall a b, exists c, forall x, x :< c <-> x = a \/ x = b                    *)
 Definition Pairing : Term :=
   All VarTySet
     (All VarTySet

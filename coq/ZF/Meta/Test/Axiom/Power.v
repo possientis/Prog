@@ -3,7 +3,7 @@ Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
-(* Source: forall a, exists b, forall x, x :< b <-> x <= a.                     *)
+(* forall a, exists b, forall x, x :< b <-> x <= a                              *)
 Definition Power : Term :=
   All VarTySet
     (Ex VarTySet

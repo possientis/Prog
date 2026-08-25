@@ -3,7 +3,7 @@ Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
-(* Source: forall a, exists b, forall x, x :< b <-> exists y, x :< y /\ y :< a. *)
+(* forall a, exists b, forall x, x :< b <-> exists y, x :< y /\ y :< a          *)
 Definition Union : Term :=
   All VarTySet
     (Ex VarTySet

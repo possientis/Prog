@@ -3,7 +3,7 @@ Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
-(* Source: forall a b, (forall x, x :< a <-> x :< b) -> a = b.                  *)
+(* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
 Definition Extensionality : Term :=
   All VarTySet
     (All VarTySet
