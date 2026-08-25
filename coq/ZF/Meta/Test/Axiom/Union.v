@@ -20,8 +20,8 @@ Proposition HasTy : HasTy Sig.empty Ctx.empty Union TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyEx, HasTyAll, HasTyIff.
-  - apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+  - apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
   - apply HasTyEx, HasTyAnd.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
 Qed.

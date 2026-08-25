@@ -34,23 +34,23 @@ Proof.
   apply HasTyAll, HasTyEx, HasTyAnd.
   - apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.
     apply HasTysCons.
-    + apply (HasTyVar _ _ _ VarTySet). reflexivity.
+    + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTysCons.
-      * apply (HasTyVar _ _ _ VarTySet). reflexivity.
+      * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTysNil.
   - apply HasTyAll, HasTyImp.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyImp.
       * apply HasTyNotEq.
-        -- apply (HasTyVar _ _ _ VarTySet). reflexivity.
+        -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTyIdent with (argTys := []). 1: reflexivity.
            apply HasTysNil.
       * apply HasTyElem.
         -- apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.
            apply HasTysCons.
-           ++ apply (HasTyVar _ _ _ VarTySet). reflexivity.
+           ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysCons.
-              ** apply (HasTyVar _ _ _ VarTySet). reflexivity.
+              ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTysNil.
-        -- apply (HasTyVar _ _ _ VarTySet). reflexivity.
+        -- apply (HasTyVar _ _ _ TySet). reflexivity.
 Qed.

@@ -18,7 +18,7 @@ Proposition HasTy : HasTy Sig.empty Ctx.empty Extensionality TyProp.
 Proof.
   apply HasTyAll, HasTyAll, HasTyImp.
   - apply HasTyAll, HasTyIff.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
-  - apply HasTyEqual;  apply (HasTyVar _ _ _ VarTySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
+  - apply HasTyEqual;  apply (HasTyVar _ _ _ TySet); reflexivity.
 Qed.

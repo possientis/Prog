@@ -35,9 +35,9 @@ Inductive HasTy (S:Sig) : Ctx -> Term -> Ty -> Prop :=
     HasTy S G Bot TyProp
 | HasTyTop : forall (G:Ctx),
     HasTy S G Top TyProp
-| HasTyVar : forall (G:Ctx) (n:nat) (vty:VarTy),
-    typeOf G n = Some vty ->
-    HasTy S G (Var n) (toTy vty)
+| HasTyVar : forall (G:Ctx) (n:nat) (ty:Ty),
+    typeOf G n = Some ty ->
+    HasTy S G (Var n) ty
 | HasTyIdent : forall (G:Ctx) (name:string) (args:list Term)
     (argTys:list Ty) (ty:Ty),
     S name = Some (argTys, ty) ->
@@ -91,16 +91,16 @@ Inductive HasTy (S:Sig) : Ctx -> Term -> Ty -> Prop :=
     HasTy S G p TyProp ->
     HasTy S G (Not p) TyProp
 | HasTyAll : forall (G:Ctx) (vty:VarTy) (p:Term),
-    HasTy S (vty :: G) p TyProp ->
+    HasTy S (toTy vty :: G) p TyProp ->
     HasTy S G (All vty p) TyProp
 | HasTyEx : forall (G:Ctx) (vty:VarTy) (p:Term),
-    HasTy S (vty :: G) p TyProp ->
+    HasTy S (toTy vty :: G) p TyProp ->
     HasTy S G (Ex vty p) TyProp
 | HasTyThe : forall (G:Ctx) (p:Term),
-    HasTy S (VarTySet :: G) p TyProp ->
+    HasTy S (TySet :: G) p TyProp ->
     HasTy S G (The p) TySet
 | HasTyLam : forall (G:Ctx) (p:Term),
-    HasTy S (VarTySet :: G) p TyProp ->
+    HasTy S (TySet :: G) p TyProp ->
     HasTy S G (Lam p) TyClass
 | HasTyApp : forall (G:Ctx) (A x:Term),
     HasTy S G A TyClass ->

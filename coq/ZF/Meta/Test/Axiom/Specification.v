@@ -20,10 +20,10 @@ Proposition HasTy : HasTy Sig.empty Ctx.empty Specification TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyEx, HasTyAll, HasTyIff.
-  - apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+  - apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
   - apply HasTyAnd.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyApp.
-      * apply (HasTyVar _ _ _ VarTyClass). reflexivity.
-      * apply (HasTyVar _ _ _ VarTySet). reflexivity.
+      * apply (HasTyVar _ _ _ TyClass). reflexivity.
+      * apply (HasTyVar _ _ _ TySet). reflexivity.
 Qed.

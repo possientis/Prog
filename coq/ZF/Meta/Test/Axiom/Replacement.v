@@ -14,7 +14,7 @@ Definition sig : Sig := fun name =>
   None.
 
 (* forall F, Functional F ->                                                    *)
-(* forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):      *)
+(* forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):       *)
 Definition Replacement : Term :=
   All VarTyClass
     (Imp
@@ -38,18 +38,18 @@ Proof.
   apply HasTyAll, HasTyImp.
   - apply HasTyIdent with (argTys := [TyClass]). 1: reflexivity.
     apply HasTysCons.
-    + apply (HasTyVar _ _ _ VarTyClass). reflexivity.
+    + apply (HasTyVar _ _ _ TyClass). reflexivity.
     + apply HasTysNil.
   - apply HasTyAll, HasTyEx, HasTyAll, HasTyIff.
-    + apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyEx, HasTyAnd.
-      * apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+      * apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
       * apply HasTyApp.
-        -- apply (HasTyVar _ _ _ VarTyClass). reflexivity.
+        -- apply (HasTyVar _ _ _ TyClass). reflexivity.
         -- apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.
            apply HasTysCons.
-           ++ apply (HasTyVar _ _ _ VarTySet). reflexivity.
+           ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysCons.
-              ** apply (HasTyVar _ _ _ VarTySet). reflexivity.
+              ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTysNil.
 Qed.

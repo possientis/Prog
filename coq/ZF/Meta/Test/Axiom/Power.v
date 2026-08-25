@@ -17,6 +17,6 @@ Proposition HasTy : HasTy Sig.empty Ctx.empty Power TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyEx, HasTyAll, HasTyIff.
-  - apply HasTyElem; apply (HasTyVar _ _ _ VarTySet); reflexivity.
-  - apply HasTyLeq; apply (HasTyVar _ _ _ VarTySet); reflexivity.
+  - apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
+  - apply HasTyLeq; apply (HasTyVar _ _ _ TySet); reflexivity.
 Qed.
