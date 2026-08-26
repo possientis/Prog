@@ -16,7 +16,8 @@ Definition Extensionality : Term :=
         (Equal (Var 1) (Var 0)))).
 
 (* The extensionality example is a proposition in the empty environment.        *)
-Proposition HasTy : HasTyIn Env.empty Ctx.empty Extensionality TyProp.
+Proposition ExtensionalityCheck :
+  HasTyIn Env.empty Ctx.empty Extensionality TyProp.
 Proof.
   apply HasTyAll, HasTyAll, HasTyImp.
   - apply HasTyAll, HasTyIff.

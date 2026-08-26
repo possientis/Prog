@@ -18,7 +18,7 @@ Definition Pairing : Term :=
               (Equal (Var 0) (Var 2))))))).
 
 (* The pairing example is a proposition in the empty environment.               *)
-Proposition HasTy : HasTyIn Env.empty Ctx.empty Pairing TyProp.
+Proposition PairingCheck : HasTyIn Env.empty Ctx.empty Pairing TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyEx, HasTyAll, HasTyIff.
