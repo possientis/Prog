@@ -37,6 +37,13 @@ Definition env : Env := fun name =>
   if String.eqb name "equiv"   then Some equiv else
   None.
 
+(* Propositions.                                                                *)
+
+(* Proposition Refl : forall (P:Class), equiv P P.                              *)
+Definition Refl : Term :=
+  All VarTyClass
+    (Ident "equiv" [Var 0; Var 0]).
+
 (* Declaration typing.                                                          *)
 
 (* The declaration body for toClass maps a set to its membership class.         *)
@@ -78,6 +85,21 @@ Proposition equivHasTy :
     (Ident "equiv" [Var 1; Var 0]) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
+  apply HasTysCons.
+  - apply (HasTyVar _ _ _ TyClass). reflexivity.
+  - apply HasTysCons.
+    + apply (HasTyVar _ _ _ TyClass). reflexivity.
+    + apply HasTysNil.
+Qed.
+
+(* Proposition typing.                                                          *)
+
+(* The reflexivity proposition is well sorted using equivalence.                *)
+Proposition ReflHasTy : HasTyIn env Ctx.empty Refl TyProp.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyAll.
   apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
   apply HasTysCons.
   - apply (HasTyVar _ _ _ TyClass). reflexivity.
