@@ -16,7 +16,9 @@ Import ListNotations.
 (* Environment.                                                                 *)
 
 Definition env : Env := Env.unions
-  [ZF.Meta.Test.Decl.Class.Incl.env; ZF.Meta.Test.Decl.Class.Equiv.env].
+  [ Incl.env
+  ; Equiv.env
+  ].
 
 (* Propositions.                                                                *)
 
