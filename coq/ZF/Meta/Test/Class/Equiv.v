@@ -2,40 +2,14 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Decl.
-Require Import ZF.Meta.Env.
-Require Import ZF.Meta.HasTyDecl.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
+Require Import ZF.Meta.Test.Decl.Class.Equiv.
+
 Import ListNotations.
-
-(* Declarations.                                                                *)
-
-(* Definition toClass (a:U) : Class := fun x => x :< a.                         *)
-Definition toClass : Decl :=
-  {| para := [TySet];
-     res  := TyClass;
-     body := Some (Lam (Elem (Var 0) (Var 1))) |}.
-
-(* Definition equiv (P Q:Class) : Prop := forall x, P x <-> Q x.                *)
-Definition equiv : Decl :=
-  {| para := [TyClass; TyClass];
-     res  := TyProp;
-     body := Some
-       (All VarTySet
-         (Iff
-           (App (Var 2) (Var 0))
-           (App (Var 1) (Var 0)))) |}.
-
-(* Environment.                                                                 *)
-
-Definition env : Env := fun name =>
-  if String.eqb name "toClass" then Some toClass else
-  if String.eqb name "equiv"   then Some equiv else
-  None.
 
 (* Propositions.                                                                *)
 
@@ -171,100 +145,10 @@ Definition NotCompatR : Term :=
             (Not (Ident "equiv" [Var 0; Var 2]))
             (Not (Ident "equiv" [Var 0; Var 1])))))).
 
-(* Declaration typing.                                                          *)
-
-(* The declaration body for toClass maps a set to its membership class.         *)
-Proposition toClassHasTyDecl : HasTyDecl Env.empty toClass.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyLam, HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
-Qed.
-
-(* The declaration body for equivalence compares two classes pointwise.         *)
-Proposition equivHasTyDecl : HasTyDecl Env.empty equiv.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyIff.
-  - apply HasTyApp.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyApp.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-Qed.
-
-(* Identifier typing.                                                           *)
-
-(* The identifier toClass sends a set argument to a class.                      *)
-Proposition toClassHasTy :
-  HasTyIn env [TySet] (Ident "toClass" [Var 0]) TyClass.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
-  apply HasTysCons.
-  - apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTysNil.
-Qed.
-
-(* The identifier toClass sends any set variable to a class.                    *)
-Proposition toClassVarHasTy : forall (G:Ctx) (n:nat),
-  typeOf G n = Some TySet ->
-  HasTyIn env G (Ident "toClass" [Var n]) TyClass.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros G n H1.
-  apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
-  apply HasTysCons.
-  - apply HasTyVar. assumption.
-  - apply HasTysNil.
-Qed.
-
-(* The identifier equiv sends two class arguments to a proposition.             *)
-Proposition equivHasTy :
-  HasTyIn env [TyClass; TyClass]
-    (Ident "equiv" [Var 1; Var 0]) TyProp.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
-  apply HasTysCons.
-  - apply (HasTyVar _ _ _ TyClass). reflexivity.
-  - apply HasTysCons.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply HasTysNil.
-Qed.
-
-(* Equivalence applied to two class variables is well sorted.                   *)
-Proposition equivVarsHasTy : forall (G:Ctx) (m n:nat),
-  typeOf G m = Some TyClass ->
-  typeOf G n = Some TyClass ->
-  HasTyIn env G (Ident "equiv" [Var m; Var n]) TyProp.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros G m n H1 H2.
-  apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
-  apply HasTysCons.
-  - apply HasTyVar. assumption.
-  - apply HasTysCons.
-    + apply HasTyVar. assumption.
-    + apply HasTysNil.
-Qed.
-
-(* Negated equivalence of two class variables is well sorted.                   *)
-Proposition notEquivVarsHasTy : forall (G:Ctx) (m n:nat),
-  typeOf G m = Some TyClass ->
-  typeOf G n = Some TyClass ->
-  HasTyIn env G (Not (Ident "equiv" [Var m; Var n])) TyProp.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros G m n H1 H2.
-  apply HasTyNot.
-  apply equivVarsHasTy; assumption.
-Qed.
-
 (* Proposition typing.                                                          *)
 
 (* The reflexivity proposition is well sorted using equivalence.                *)
-Proposition ReflHasTy : HasTyIn env Ctx.empty Refl TyProp.
+Proposition ReflCheck : HasTyIn env Ctx.empty Refl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll.
@@ -277,75 +161,75 @@ Proof.
 Qed.
 
 (* Equivalence compatibility is a well-sorted proposition.                      *)
-Proposition EquivCompatHasTy : HasTyIn env Ctx.empty EquivCompat TyProp.
+Proposition EquivCompatCheck : HasTyIn env Ctx.empty EquivCompat TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
   - apply HasTyImp.
-    + apply equivVarsHasTy; reflexivity.
+    + apply equivCheckIdent; reflexivity.
     + apply HasTyImp.
-      * apply equivVarsHasTy; reflexivity.
-      * apply equivVarsHasTy; reflexivity.
+      * apply equivCheckIdent; reflexivity.
+      * apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Left compatibility of equivalence is a well-sorted proposition.              *)
-Proposition EquivCompatLHasTy : HasTyIn env Ctx.empty EquivCompatL TyProp.
+Proposition EquivCompatLCheck : HasTyIn env Ctx.empty EquivCompatL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
-  - apply HasTyImp; apply equivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
+  - apply HasTyImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Right compatibility of equivalence is a well-sorted proposition.             *)
-Proposition EquivCompatRHasTy : HasTyIn env Ctx.empty EquivCompatR TyProp.
+Proposition EquivCompatRCheck : HasTyIn env Ctx.empty EquivCompatR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
-  - apply HasTyImp; apply equivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
+  - apply HasTyImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Symmetry of equivalence is a well-sorted proposition.                        *)
-Proposition SymHasTy : HasTyIn env Ctx.empty Sym TyProp.
+Proposition SymCheck : HasTyIn env Ctx.empty Sym TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyImp; apply equivVarsHasTy; reflexivity.
+  apply HasTyAll, HasTyAll, HasTyImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Transitivity of equivalence is a well-sorted proposition.                    *)
-Proposition TranHasTy : HasTyIn env Ctx.empty Tran TyProp.
+Proposition TranCheck : HasTyIn env Ctx.empty Tran TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
-  - apply HasTyImp; apply equivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
+  - apply HasTyImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Symmetry of non-equivalence is a well-sorted proposition.                    *)
-Proposition NotSymHasTy : HasTyIn env Ctx.empty NotSym TyProp.
+Proposition NotSymCheck : HasTyIn env Ctx.empty NotSym TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyImp; apply notEquivVarsHasTy; reflexivity.
+  apply HasTyAll, HasTyAll, HasTyImp; apply notEquivCheckIdent; reflexivity.
 Qed.
 
 (* Equality of sets and equivalence of their classes is well sorted.            *)
-Proposition EqualToClassHasTy : HasTyIn env Ctx.empty EqualToClass TyProp.
+Proposition EqualToClassCheck : HasTyIn env Ctx.empty EqualToClass TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyIff.
   - apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
   - apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
     apply HasTysCons.
-    + apply toClassVarHasTy. reflexivity.
+    + apply toClassCheckIdent; reflexivity.
     + apply HasTysCons.
-      * apply toClassVarHasTy. reflexivity.
+      * apply toClassCheckIdent; reflexivity.
       * apply HasTysNil.
 Qed.
 
 (* Inequality of sets and non-equivalence of their classes is well sorted.      *)
-Proposition NotEqualToClassHasTy :
+Proposition NotEqualToClassCheck :
   HasTyIn env Ctx.empty NotEqualToClass TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -354,39 +238,39 @@ Proof.
   - apply HasTyNot.
     apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
     apply HasTysCons.
-    + apply toClassVarHasTy. reflexivity.
+    + apply toClassCheckIdent; reflexivity.
     + apply HasTysCons.
-      * apply toClassVarHasTy. reflexivity.
+      * apply toClassCheckIdent; reflexivity.
       * apply HasTysNil.
 Qed.
 
 (* Non-equivalence is compatible with equivalence.                              *)
-Proposition NotCompatHasTy : HasTyIn env Ctx.empty NotCompat TyProp.
+Proposition NotCompatCheck : HasTyIn env Ctx.empty NotCompat TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
   - apply HasTyImp.
-    + apply equivVarsHasTy; reflexivity.
+    + apply equivCheckIdent; reflexivity.
     + apply HasTyImp.
-      * apply notEquivVarsHasTy; reflexivity.
-      * apply notEquivVarsHasTy; reflexivity.
+      * apply notEquivCheckIdent; reflexivity.
+      * apply notEquivCheckIdent; reflexivity.
 Qed.
 
 (* Non-equivalence is left-compatible with equivalence.                         *)
-Proposition NotCompatLHasTy : HasTyIn env Ctx.empty NotCompatL TyProp.
+Proposition NotCompatLCheck : HasTyIn env Ctx.empty NotCompatL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
-  - apply HasTyImp; apply notEquivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
+  - apply HasTyImp; apply notEquivCheckIdent; reflexivity.
 Qed.
 
 (* Non-equivalence is right-compatible with equivalence.                        *)
-Proposition NotCompatRHasTy : HasTyIn env Ctx.empty NotCompatR TyProp.
+Proposition NotCompatRCheck : HasTyIn env Ctx.empty NotCompatR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
-  - apply equivVarsHasTy; reflexivity.
-  - apply HasTyImp; apply notEquivVarsHasTy; reflexivity.
+  - apply equivCheckIdent; reflexivity.
+  - apply HasTyImp; apply notEquivCheckIdent; reflexivity.
 Qed.
