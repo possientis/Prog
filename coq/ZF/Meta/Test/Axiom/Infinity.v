@@ -2,17 +2,34 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sigs.
+Require Import ZF.Meta.Decl.
+Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sigs : Sigs := fun name =>
-  if String.eqb name "empty"  then Some ([]              , TySet) else
-  if String.eqb name "single" then Some ([TySet]         , TySet) else
-  if String.eqb name "union2" then Some ([TySet; TySet]  , TySet) else
+Definition empty : Decl :=
+  {| para := [];
+     res  := TySet;
+     body := None |}.
+
+Definition single : Decl :=
+  {| para := [TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition union2 : Decl :=
+  {| para := [TySet; TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition env : Env := fun name =>
+  if String.eqb name "empty"  then Some empty else
+  if String.eqb name "single" then Some single else
+  if String.eqb name "union2" then Some union2 else
   None.
 
 (* exists a, empty :< a /\ forall x, x :< a -> union2 x (single x) :< a         *)
@@ -27,8 +44,8 @@ Definition Infinity : Term :=
             (Ident "union2" [Var 0; Ident "single" [Var 0]])
             (Var 1))))).
 
-(* The infinity example is a proposition in the local test signature.           *)
-Proposition HasTy : HasTy sigs Ctx.empty Infinity TyProp.
+(* The infinity example is a proposition in the local test environment.         *)
+Proposition HasTy : HasTyIn env Ctx.empty Infinity TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyAnd.

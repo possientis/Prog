@@ -1,7 +1,8 @@
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sigs.
+Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 (* forall a, exists b, forall x, x :< b <-> x <= a                              *)
@@ -14,7 +15,7 @@ Definition Power : Term :=
           (Leq (Var 0) (Var 2))))).
 
 (* The power example is a proposition in the empty environment.                 *)
-Proposition HasTy : HasTy Sigs.empty Ctx.empty Power TyProp.
+Proposition HasTy : HasTyIn Env.empty Ctx.empty Power TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyEx, HasTyAll, HasTyIff.

@@ -2,16 +2,28 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sigs.
+Require Import ZF.Meta.Decl.
+Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sigs : Sigs := fun name =>
-  if String.eqb name "Functional" then Some ([TyClass]     , TyProp) else
-  if String.eqb name "ordPair"    then Some ([TySet; TySet], TySet ) else
+Definition Functional : Decl :=
+  {| para := [TyClass];
+     res  := TyProp;
+     body := None |}.
+
+Definition ordPair : Decl :=
+  {| para := [TySet; TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition env : Env := fun name =>
+  if String.eqb name "Functional" then Some Functional else
+  if String.eqb name "ordPair"    then Some ordPair else
   None.
 
 (* forall F, Functional F ->                                                    *)
@@ -32,8 +44,8 @@ Definition Replacement : Term :=
                     (Var 4)
                     (Ident "ordPair" [Var 0; Var 1]))))))))).
 
-(* The replacement example is a proposition in the local test signature.        *)
-Proposition HasTy : HasTy sigs Ctx.empty Replacement TyProp.
+(* The replacement example is a proposition in the local test environment.      *)
+Proposition HasTy : HasTyIn env Ctx.empty Replacement TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.

@@ -1,7 +1,8 @@
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sigs.
+Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 (* forall P, forall a, exists b, forall x, x :< b <-> x :< a /\ P x             *)
@@ -16,8 +17,8 @@ Definition Specification : Term :=
               (Elem (Var 0) (Var 2))
               (App (Var 3) (Var 0))))))).
 
-(* The specification example is a proposition in the empty signature.           *)
-Proposition HasTy : HasTy Sigs.empty Ctx.empty Specification TyProp.
+(* The specification example is a proposition in the empty environment.         *)
+Proposition HasTy : HasTyIn Env.empty Ctx.empty Specification TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyEx, HasTyAll, HasTyIff.

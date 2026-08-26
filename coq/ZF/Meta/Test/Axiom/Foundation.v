@@ -2,16 +2,28 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sigs.
+Require Import ZF.Meta.Decl.
+Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sigs : Sigs := fun name =>
-  if String.eqb name "empty" then Some ([]              , TySet) else
-  if String.eqb name "inter" then Some ([TySet; TySet]  , TySet) else
+Definition empty : Decl :=
+  {| para := [];
+     res  := TySet;
+     body := None |}.
+
+Definition inter : Decl :=
+  {| para := [TySet; TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition env : Env := fun name =>
+  if String.eqb name "empty" then Some empty else
+  if String.eqb name "inter" then Some inter else
   None.
 
 (* forall a, a <> empty -> exists x, x :< a /\ inter x a = empty                *)
@@ -26,8 +38,8 @@ Definition Foundation : Term :=
             (Ident "inter" [Var 0; Var 1])
             (Ident "empty" []))))).
 
-(* The foundation example is a proposition in the local test signature.         *)
-Proposition HasTy : HasTy sigs Ctx.empty Foundation TyProp.
+(* The foundation example is a proposition in the local test environment.       *)
+Proposition HasTy : HasTyIn env Ctx.empty Foundation TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.

@@ -2,20 +2,52 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sigs.
+Require Import ZF.Meta.Decl.
+Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sigs : Sigs := fun name =>
-  if String.eqb name "Aleph"   then Some ([]              , TyClass) else
-  if String.eqb name "Ordinal" then Some ([TySet]         , TyProp ) else
-  if String.eqb name "card"    then Some ([TySet]         , TySet  ) else
-  if String.eqb name "power"   then Some ([TySet]         , TySet  ) else
-  if String.eqb name "eval"    then Some ([TyClass; TySet], TySet  ) else
-  if String.eqb name "succ"    then Some ([TySet]         , TySet  ) else
+Definition Aleph : Decl :=
+  {| para := [];
+     res  := TyClass;
+     body := None |}.
+
+Definition Ordinal : Decl :=
+  {| para := [TySet];
+     res  := TyProp;
+     body := None |}.
+
+Definition card : Decl :=
+  {| para := [TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition power : Decl :=
+  {| para := [TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition eval : Decl :=
+  {| para := [TyClass; TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition succ : Decl :=
+  {| para := [TySet];
+     res  := TySet;
+     body := None |}.
+
+Definition env : Env := fun name =>
+  if String.eqb name "Aleph"   then Some Aleph else
+  if String.eqb name "Ordinal" then Some Ordinal else
+  if String.eqb name "card"    then Some card else
+  if String.eqb name "power"   then Some power else
+  if String.eqb name "eval"    then Some eval else
+  if String.eqb name "succ"    then Some succ else
   None.
 
 (* forall a, Ordinal a -> card (power (eval Aleph a)) = eval Aleph (succ a)     *)
@@ -29,8 +61,8 @@ Definition GCH : Term :=
             [Ident "eval" [Ident "Aleph" []; Var 0]]])
         (Ident "eval" [Ident "Aleph" []; Ident "succ" [Var 0]]))).
 
-(* The generalized-continuum example is a proposition in the local signature.   *)
-Proposition HasTy : HasTy sigs Ctx.empty GCH TyProp.
+(* The generalized-continuum example is a proposition in the local environment. *)
+Proposition HasTy : HasTyIn env Ctx.empty GCH TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
