@@ -1,5 +1,5 @@
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
@@ -15,7 +15,7 @@ Definition Extensionality : Term :=
         (Equal (Var 1) (Var 0)))).
 
 (* The extensionality example is a proposition in the empty environment.        *)
-Proposition HasTy : HasTy Sig.empty Ctx.empty Extensionality TyProp.
+Proposition HasTy : HasTy Sigs.empty Ctx.empty Extensionality TyProp.
 Proof.
   apply HasTyAll, HasTyAll, HasTyImp.
   - apply HasTyAll, HasTyIff.

@@ -2,13 +2,13 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Inductive HasTy (S:Sig) : Ctx -> Term -> Ty -> Prop :=
+Inductive HasTy (S:Sigs) : Ctx -> Term -> Ty -> Prop :=
 | HasTyBot : forall (G:Ctx),
     HasTy S G Bot TyProp
 | HasTyTop : forall (G:Ctx),
@@ -84,7 +84,7 @@ Inductive HasTy (S:Sig) : Ctx -> Term -> Ty -> Prop :=
     HasTy S G A TyClass ->
     HasTy S G x TySet ->
     HasTy S G (App A x) TyProp
-with HasTys (S:Sig) : Ctx -> list Term -> list Ty -> Prop :=
+with HasTys (S:Sigs) : Ctx -> list Term -> list Ty -> Prop :=
 | HasTysNil : forall (G:Ctx),
     HasTys S G [] []
 | HasTysCons : forall (G:Ctx) (t:Term) (ts:list Term) (ty:Ty)

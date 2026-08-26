@@ -1,5 +1,5 @@
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
@@ -17,7 +17,7 @@ Definition Pairing : Term :=
               (Equal (Var 0) (Var 2))))))).
 
 (* The pairing example is a proposition in the empty environment.               *)
-Proposition HasTy : HasTy Sig.empty Ctx.empty Pairing TyProp.
+Proposition HasTy : HasTy Sigs.empty Ctx.empty Pairing TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyEx, HasTyAll, HasTyIff.

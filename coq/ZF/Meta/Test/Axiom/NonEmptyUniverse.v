@@ -1,5 +1,5 @@
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
@@ -9,7 +9,7 @@ Definition NonEmptyUniverse : Term :=
   Ex VarTySet Top.
 
 (* The non-empty-universe example is a proposition in the empty environment.    *)
-Proposition HasTy : HasTy Sig.empty Ctx.empty NonEmptyUniverse TyProp.
+Proposition HasTy : HasTy Sigs.empty Ctx.empty NonEmptyUniverse TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyTop.

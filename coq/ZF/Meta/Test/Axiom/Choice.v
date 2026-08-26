@@ -2,14 +2,14 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sig : Sig := fun name =>
+Definition sigs : Sigs := fun name =>
   if String.eqb name "FunctionOn" then Some ([TySet; TySet], TyProp) else
   if String.eqb name "empty"      then Some ([]              , TySet ) else
   if String.eqb name "eval"       then Some ([TySet; TySet], TySet ) else
@@ -30,7 +30,7 @@ Definition Choice : Term :=
               (Elem (Ident "eval" [Var 1; Var 0]) (Var 0))))))).
 
 (* The choice example is a proposition in the local test signature.             *)
-Proposition HasTy : HasTy sig Ctx.empty Choice TyProp.
+Proposition HasTy : HasTy sigs Ctx.empty Choice TyProp.
 Proof.
   apply HasTyAll, HasTyEx, HasTyAnd.
   - apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.

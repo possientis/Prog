@@ -2,14 +2,14 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sig : Sig := fun name =>
+Definition sigs : Sigs := fun name =>
   if String.eqb name "empty" then Some ([]              , TySet) else
   if String.eqb name "inter" then Some ([TySet; TySet]  , TySet) else
   None.
@@ -27,7 +27,7 @@ Definition Foundation : Term :=
             (Ident "empty" []))))).
 
 (* The foundation example is a proposition in the local test signature.         *)
-Proposition HasTy : HasTy sig Ctx.empty Foundation TyProp.
+Proposition HasTy : HasTy sigs Ctx.empty Foundation TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.

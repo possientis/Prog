@@ -2,20 +2,20 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sig : Sig := fun name =>
-  if String.eqb name "Aleph"   then Some ([]        , TyClass) else
-  if String.eqb name "Ordinal" then Some ([TySet]   , TyProp ) else
-  if String.eqb name "card"    then Some ([TySet]   , TySet  ) else
-  if String.eqb name "power"   then Some ([TySet]   , TySet  ) else
-  if String.eqb name "eval"    then Some ([TyClass; TySet], TySet) else
-  if String.eqb name "succ"    then Some ([TySet]   , TySet  ) else
+Definition sigs : Sigs := fun name =>
+  if String.eqb name "Aleph"   then Some ([]              , TyClass) else
+  if String.eqb name "Ordinal" then Some ([TySet]         , TyProp ) else
+  if String.eqb name "card"    then Some ([TySet]         , TySet  ) else
+  if String.eqb name "power"   then Some ([TySet]         , TySet  ) else
+  if String.eqb name "eval"    then Some ([TyClass; TySet], TySet  ) else
+  if String.eqb name "succ"    then Some ([TySet]         , TySet  ) else
   None.
 
 (* forall a, Ordinal a -> card (power (eval Aleph a)) = eval Aleph (succ a)     *)
@@ -30,7 +30,7 @@ Definition GCH : Term :=
         (Ident "eval" [Ident "Aleph" []; Ident "succ" [Var 0]]))).
 
 (* The generalized-continuum example is a proposition in the local signature.   *)
-Proposition HasTy : HasTy sig Ctx.empty GCH TyProp.
+Proposition HasTy : HasTy sigs Ctx.empty GCH TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.

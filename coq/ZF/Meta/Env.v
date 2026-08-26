@@ -1,7 +1,7 @@
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Decl.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 
 (* A global environment maps names to declarations.                             *)
 Definition Env : Type := string -> option Decl.
@@ -10,8 +10,8 @@ Definition Env : Type := string -> option Decl.
 Definition empty : Env := fun _ => None.
 
 (* The signature view forgets declaration bodies.                               *)
-Definition toSig (e:Env) : Sig := fun name =>
+Definition toSigs (e:Env) : Sigs := fun name =>
   match e name with
-  | Some d => Some (Decl.arity d)
+  | Some d => Some (Decl.signature d)
   | None   => None
   end.

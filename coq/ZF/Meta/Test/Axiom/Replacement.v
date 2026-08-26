@@ -2,15 +2,15 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Sig.
+Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition sig : Sig := fun name =>
-  if String.eqb name "Functional" then Some ([TyClass]      , TyProp) else
+Definition sigs : Sigs := fun name =>
+  if String.eqb name "Functional" then Some ([TyClass]     , TyProp) else
   if String.eqb name "ordPair"    then Some ([TySet; TySet], TySet ) else
   None.
 
@@ -33,7 +33,7 @@ Definition Replacement : Term :=
                     (Ident "ordPair" [Var 0; Var 1]))))))))).
 
 (* The replacement example is a proposition in the local test signature.        *)
-Proposition HasTy : HasTy sig Ctx.empty Replacement TyProp.
+Proposition HasTy : HasTy sigs Ctx.empty Replacement TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
