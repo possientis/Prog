@@ -44,6 +44,45 @@ Definition Refl : Term :=
   All VarTyClass
     (Ident "equiv" [Var 0; Var 0]).
 
+(* Proposition EquivCompat : forall A B C D,                                    *)
+(* equiv A C -> equiv B D -> equiv A B -> equiv C D.                            *)
+Definition EquivCompat : Term :=
+  All VarTyClass
+    (All VarTyClass
+      (All VarTyClass
+        (All VarTyClass
+          (Imp
+            (Ident "equiv" [Var 3; Var 1])
+            (Imp
+              (Ident "equiv" [Var 2; Var 0])
+              (Imp
+                (Ident "equiv" [Var 3; Var 2])
+                (Ident "equiv" [Var 1; Var 0]))))))).
+
+(* Proposition EquivCompatL : forall A B C,                                     *)
+(* equiv A C -> equiv A B -> equiv C B.                                         *)
+Definition EquivCompatL : Term :=
+  All VarTyClass
+    (All VarTyClass
+      (All VarTyClass
+        (Imp
+          (Ident "equiv" [Var 2; Var 0])
+          (Imp
+            (Ident "equiv" [Var 2; Var 1])
+            (Ident "equiv" [Var 0; Var 1]))))).
+
+(* Proposition EquivCompatR : forall A B C,                                     *)
+(* equiv B C -> equiv A B -> equiv A C.                                         *)
+Definition EquivCompatR : Term :=
+  All VarTyClass
+    (All VarTyClass
+      (All VarTyClass
+        (Imp
+          (Ident "equiv" [Var 1; Var 0])
+          (Imp
+            (Ident "equiv" [Var 2; Var 1])
+            (Ident "equiv" [Var 2; Var 0]))))).
+
 (* Declaration typing.                                                          *)
 
 (* The declaration body for toClass maps a set to its membership class.         *)
@@ -93,6 +132,22 @@ Proof.
     + apply HasTysNil.
 Qed.
 
+(* Equivalence applied to two class variables is well sorted.                   *)
+Proposition equivVarsHasTy : forall (G:Ctx) (m n:nat),
+  typeOf G m = Some TyClass ->
+  typeOf G n = Some TyClass ->
+  HasTyIn env G (Ident "equiv" [Var m; Var n]) TyProp.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G m n H1 H2.
+  apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
+  apply HasTysCons.
+  - apply HasTyVar. assumption.
+  - apply HasTysCons.
+    + apply HasTyVar. assumption.
+    + apply HasTysNil.
+Qed.
+
 (* Proposition typing.                                                          *)
 
 (* The reflexivity proposition is well sorted using equivalence.                *)
@@ -106,4 +161,35 @@ Proof.
   - apply HasTysCons.
     + apply (HasTyVar _ _ _ TyClass). reflexivity.
     + apply HasTysNil.
+Qed.
+
+(* Equivalence compatibility is a well-sorted proposition.                      *)
+Proposition EquivCompatHasTy : HasTyIn env Ctx.empty EquivCompat TyProp.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  - apply equivVarsHasTy; reflexivity.
+  - apply HasTyImp.
+    + apply equivVarsHasTy; reflexivity.
+    + apply HasTyImp.
+      * apply equivVarsHasTy; reflexivity.
+      * apply equivVarsHasTy; reflexivity.
+Qed.
+
+(* Left compatibility of equivalence is a well-sorted proposition.              *)
+Proposition EquivCompatLHasTy : HasTyIn env Ctx.empty EquivCompatL TyProp.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  - apply equivVarsHasTy; reflexivity.
+  - apply HasTyImp; apply equivVarsHasTy; reflexivity.
+Qed.
+
+(* Right compatibility of equivalence is a well-sorted proposition.             *)
+Proposition EquivCompatRHasTy : HasTyIn env Ctx.empty EquivCompatR TyProp.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  - apply equivVarsHasTy; reflexivity.
+  - apply HasTyImp; apply equivVarsHasTy; reflexivity.
 Qed.
