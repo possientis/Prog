@@ -1,6 +1,7 @@
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Sig.
 Require Import ZF.Meta.Term.
+Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 (* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
