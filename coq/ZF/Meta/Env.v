@@ -2,7 +2,6 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Proof.Decl.
-Require Import ZF.Meta.Sigs.
 Require Import ZF.Meta.Term.Decl.
 
 Import ListNotations.
@@ -64,9 +63,4 @@ Fixpoint fromListP (ds:list (string * DeclP)) : Env :=
   | (name,d) :: ds => union (singleP name d) (fromListP ds)
   end.
 
-(* The signature view forgets term declaration bodies.                          *)
-Definition toSigs (e:Env) : Sigs := fun name =>
-  match terms e name with
-  | Some d => Some (signatureT d)
-  | None   => None
-  end.
+

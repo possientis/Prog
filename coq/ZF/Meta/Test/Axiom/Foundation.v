@@ -44,17 +44,17 @@ Proof.
   apply HasTyAll, HasTyImp.
   - apply HasTyNotEq.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyIdentT with []. 1: reflexivity.
+    + apply HasTyIdentT with (d:=empty). 1: reflexivity.
       apply HasTyTsNil.
   - apply HasTyEx, HasTyAnd.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyEqual.
-      * apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+      * apply HasTyIdentT with (d:=inter). 1: reflexivity.
         apply HasTyTsCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTyTsNil.
-      * apply HasTyIdentT with []. 1: reflexivity.
+      * apply HasTyIdentT with (d:=empty). 1: reflexivity.
         apply HasTyTsNil.
 Qed.

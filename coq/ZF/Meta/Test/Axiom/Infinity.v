@@ -49,17 +49,17 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyAnd.
   - apply HasTyElem.
-    + apply HasTyIdentT with []. 1: reflexivity.
+    + apply HasTyIdentT with (d:=empty). 1: reflexivity.
       apply HasTyTsNil.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
   - apply HasTyAll, HasTyImp.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyElem.
-      * apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+      * apply HasTyIdentT with (d:=union2). 1: reflexivity.
         apply HasTyTsCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTyTsCons.
-           ++ apply HasTyIdentT with [TySet]. 1: reflexivity.
+           ++ apply HasTyIdentT with (d:=single). 1: reflexivity.
               apply HasTyTsCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTyTsNil.

@@ -102,9 +102,9 @@ Proof.
     + apply HasTyApp.
       * apply (HasTyVar _ _ _ TyClass). reflexivity.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyIdentT with [TyClass; TyClass]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=Incl). 1: reflexivity.
     apply HasTyTsCons.
-    + apply HasTyIdentT with [TySet]. 1: reflexivity.
+    + apply HasTyIdentT with (d:=toClass). 1: reflexivity.
       apply HasTyTsCons.
       * apply pairCheckIdent; reflexivity.
       * apply HasTyTsNil.

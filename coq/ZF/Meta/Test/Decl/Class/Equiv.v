@@ -68,8 +68,8 @@ Proposition toClassCheckIdent : forall (e:Env) (G:Ctx) (n:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G n H1 H2.
-  apply HasTyIdentT with [TySet].
-  - unfold Env.toSigs. rewrite H1. reflexivity.
+  apply HasTyIdentT with (d:=toClass).
+  - assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsNil.
@@ -84,8 +84,8 @@ Proposition equivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TyClass; TyClass].
-  - unfold Env.toSigs. rewrite H1. reflexivity.
+  apply HasTyIdentT with (d:=equiv).
+  - assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsCons.

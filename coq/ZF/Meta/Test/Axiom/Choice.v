@@ -50,7 +50,7 @@ Proposition HasTy : HasTyT env Ctx.empty Choice TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyEx, HasTyAnd.
-  - apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=FunctionOn). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
@@ -61,10 +61,10 @@ Proof.
     + apply HasTyImp.
       * apply HasTyNotEq.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
-        -- apply HasTyIdentT with []. 1: reflexivity.
+        -- apply HasTyIdentT with (d:=empty). 1: reflexivity.
            apply HasTyTsNil.
       * apply HasTyElem.
-        -- apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with (d:=eval). 1: reflexivity.
            apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTyTsCons.

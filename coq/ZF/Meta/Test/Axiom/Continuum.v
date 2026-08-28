@@ -65,30 +65,30 @@ Proposition HasTy : HasTyT env Ctx.empty GCH TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
-  - apply HasTyIdentT with [TySet]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=Ordinal). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsNil.
   - apply HasTyEqual.
-    + apply HasTyIdentT with [TySet]. 1: reflexivity.
+    + apply HasTyIdentT with (d:=card). 1: reflexivity.
       apply HasTyTsCons.
-      * apply HasTyIdentT with [TySet]. 1: reflexivity.
+      * apply HasTyIdentT with (d:=power). 1: reflexivity.
         apply HasTyTsCons.
-        -- apply HasTyIdentT with [TyClass; TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with (d:=eval). 1: reflexivity.
            apply HasTyTsCons.
-           ++ apply HasTyIdentT with []. 1: reflexivity.
+           ++ apply HasTyIdentT with (d:=Aleph). 1: reflexivity.
               apply HasTyTsNil.
            ++ apply HasTyTsCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTyTsNil.
         -- apply HasTyTsNil.
       * apply HasTyTsNil.
-    + apply HasTyIdentT with [TyClass; TySet]. 1: reflexivity.
+    + apply HasTyIdentT with (d:=eval). 1: reflexivity.
       apply HasTyTsCons.
-      * apply HasTyIdentT with []. 1: reflexivity.
+      * apply HasTyIdentT with (d:=Aleph). 1: reflexivity.
         apply HasTyTsNil.
       * apply HasTyTsCons.
-        -- apply HasTyIdentT with [TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with (d:=succ). 1: reflexivity.
            apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTyTsNil.

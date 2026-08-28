@@ -87,7 +87,7 @@ Proposition pairExistsCheckConcl :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyApp.
-  - apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
@@ -103,7 +103,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyImp.
   - apply HasTyApp.
-    + apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+    + apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
       apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsCons.
@@ -112,7 +112,7 @@ Proof.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
   - apply HasTyImp.
     + apply HasTyApp.
-      * apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+      * apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
         apply HasTyTsCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTyTsCons.
@@ -127,7 +127,7 @@ Proposition pairCheckBody : HasTyDecl env pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyDef.
-  - apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
@@ -158,8 +158,8 @@ Proposition IsPairOfCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TySet; TySet].
-  - unfold Env.toSigs. rewrite H1. reflexivity.
+  apply HasTyIdentT with (d:=IsPairOf).
+  - assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsCons.
@@ -176,8 +176,8 @@ Proposition pairCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TySet; TySet].
-  - unfold Env.toSigs. rewrite H1. reflexivity.
+  apply HasTyIdentT with (d:=pair).
+  - assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsCons.

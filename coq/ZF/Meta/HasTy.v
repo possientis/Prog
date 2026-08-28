@@ -5,6 +5,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -17,10 +18,10 @@ Inductive HasTyT (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | HasTyVar : forall (G:Ctx) (n:nat) (ty:Ty),
     typeOf G n = Some ty                     ->
     HasTyT E G (Var n) ty
-| HasTyIdentT : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (ty:Ty),
-    Env.toSigs E name = Some (tys, ty)       ->
-    HasTyTs E G args tys                     ->
-    HasTyT E G (IdentT name args) ty
+| HasTyIdentT : forall (G:Ctx) (name:string) (args:list Term) (d:DeclT),
+    Env.terms E name = Some d                ->
+    HasTyTs E G args (paraT d)               ->
+    HasTyT E G (IdentT name args) (resT d)
 | HasTyElem : forall (G:Ctx) (x y:Term),
     HasTyT E G x TySet                       ->
     HasTyT E G y TySet                       ->

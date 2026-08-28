@@ -48,7 +48,7 @@ Proposition HasTy : HasTyT env Ctx.empty Replacement TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
-  - apply HasTyIdentT with [TyClass]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=Functional). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TyClass). reflexivity.
     + apply HasTyTsNil.
@@ -58,7 +58,7 @@ Proof.
       * apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
       * apply HasTyApp.
         -- apply (HasTyVar _ _ _ TyClass). reflexivity.
-        -- apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with (d:=ordPair). 1: reflexivity.
            apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTyTsCons.

@@ -151,7 +151,7 @@ Proposition ReflCheck : HasTyT env Ctx.empty Refl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll.
-  apply HasTyIdentT with [TyClass; TyClass]. 1: reflexivity.
+  apply HasTyIdentT with (d:=equiv). 1: reflexivity.
   apply HasTyTsCons.
   - apply (HasTyVar _ _ _ TyClass). reflexivity.
   - apply HasTyTsCons.
@@ -219,7 +219,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyIff.
   - apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
-  - apply HasTyIdentT with [TyClass; TyClass]. 1: reflexivity.
+  - apply HasTyIdentT with (d:=equiv). 1: reflexivity.
     apply HasTyTsCons.
     + apply toClassCheckIdent; reflexivity.
     + apply HasTyTsCons.
@@ -235,7 +235,7 @@ Proof.
   apply HasTyAll, HasTyAll, HasTyIff.
   - apply HasTyNotEq; apply (HasTyVar _ _ _ TySet); reflexivity.
   - apply HasTyNot.
-    apply HasTyIdentT with [TyClass; TyClass]. 1: reflexivity.
+    apply HasTyIdentT with (d:=equiv). 1: reflexivity.
     apply HasTyTsCons.
     + apply toClassCheckIdent; reflexivity.
     + apply HasTyTsCons.

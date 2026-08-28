@@ -1,7 +1,6 @@
 Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Signature.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -14,10 +13,6 @@ Record Decl : Type := mkDecl
   ; body : option Term
   }.
 
-(* The signature of a term declaration seen by identifier application.          *)
-Definition signature (d:Decl) : Signature :=
-  (para d, res d).
-
 (* A term declaration body is checked in de Bruijn context order.               *)
 Definition ctx (d:Decl) : Ctx := rev (para d).
 
@@ -26,5 +21,4 @@ Definition mkDeclT    := mkDecl.
 Definition paraT      := para.
 Definition resT       := res.
 Definition bodyT      := body.
-Definition signatureT := signature.
 Definition ctxT       := ctx.
