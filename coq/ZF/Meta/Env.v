@@ -7,9 +7,6 @@ Require Import ZF.Meta.Term.Decl.
 
 Import ListNotations.
 
-Definition DeclT : Type := Term.Decl.Decl.
-Definition DeclP : Type := Proof.Decl.Decl.
-
 (* A global environment has separate term and proof declaration namespaces.     *)
 Record Env : Type := mkEnv
   { terms  : string -> option DeclT
@@ -70,6 +67,6 @@ Fixpoint fromListP (ds:list (string * DeclP)) : Env :=
 (* The signature view forgets term declaration bodies.                          *)
 Definition toSigs (e:Env) : Sigs := fun name =>
   match terms e name with
-  | Some d => Some (Term.Decl.signature d)
+  | Some d => Some (signatureT d)
   | None   => None
   end.

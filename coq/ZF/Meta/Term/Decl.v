@@ -20,3 +20,11 @@ Definition signature (d:Decl) : Signature :=
 
 (* A term declaration body is checked in de Bruijn context order.               *)
 Definition ctx (d:Decl) : Ctx := rev (para d).
+
+Definition DeclT      := Decl.
+Definition mkDeclT    := mkDecl.
+Definition paraT      := para.
+Definition resT       := res.
+Definition bodyT      := body.
+Definition signatureT := signature.
+Definition ctxT       := ctx.

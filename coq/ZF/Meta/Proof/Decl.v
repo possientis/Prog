@@ -15,3 +15,10 @@ Record Decl : Type := mkDecl
 
 (* A proof declaration conclusion is checked in de Bruijn context order.        *)
 Definition ctx (d:Decl) : Ctx := rev (para d).
+
+Definition DeclP    := Decl.
+Definition mkDeclP  := mkDecl.
+Definition paraP    := para.
+Definition conclP   := concl.
+Definition bodyP    := body.
+Definition ctxP     := ctx.

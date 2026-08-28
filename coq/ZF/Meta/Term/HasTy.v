@@ -3,7 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
-Require ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -94,9 +94,9 @@ with HasTys (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
     HasTys E G ts tys                       ->
     HasTys E G (t :: ts) (ty :: tys)
 with HasTyProof (E:Env) : Ctx -> Proof -> Prop :=
-| HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:Proof.Decl.Decl),
+| HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:DeclP),
     Env.proofs E name = Some d                             ->
-    HasTys E G args (Proof.Decl.para d)                    ->
-    HasTy E (Proof.Decl.ctx d) (Proof.Decl.concl d) TyProp ->
+    HasTys E G args (paraP d)                              ->
+    HasTy E (ctxP d) (conclP d) TyProp                     ->
     HasTyProof E G (IdentP name args)
 .

@@ -16,33 +16,28 @@ Import ListNotations.
 
 (* Definition IsPairOf (a b:U) : Class := fun x =>                              *)
 (* forall y, y :< x <-> y = a \/ y = b.                                         *)
-Definition IsPairOf : Decl :=
-  {| para := [TySet; TySet];
-     res  := TyClass;
-     body := Some
+Definition IsPairOf : DeclT :=
+  mkDeclT [TySet; TySet] TyClass (Some
        (Lam
          (All VarTySet
            (Iff
              (Elem (Var 0) (Var 1))
              (Or
                (Equal (Var 0) (Var 3))
-               (Equal (Var 0) (Var 2)))))) |}.
+               (Equal (Var 0) (Var 2))))))).
 
 (* The existence proof declaration states that some set is a pair of a and b.   *)
-Definition pairExists : Proof.Decl.Decl :=
-  {| Proof.Decl.para  := [TySet; TySet];
-     Proof.Decl.concl :=
-       Ex VarTySet
+Definition pairExists : DeclP :=
+  mkDeclP [TySet; TySet]
+      (Ex VarTySet
          (App
            (IdentT "IsPairOf" [Var 2; Var 1])
-           (Var 0));
-     Proof.Decl.body  := None |}.
+           (Var 0))) None.
 
 (* The uniqueness proof declaration states that any two such sets are equal.    *)
-Definition pairUnique : Proof.Decl.Decl :=
-  {| Proof.Decl.para  := [TySet; TySet];
-     Proof.Decl.concl :=
-       All VarTySet
+Definition pairUnique : DeclP :=
+  mkDeclP [TySet; TySet]
+      (All VarTySet
          (All VarTySet
            (Imp
              (App
@@ -52,18 +47,15 @@ Definition pairUnique : Proof.Decl.Decl :=
                (App
                  (IdentT "IsPairOf" [Var 3; Var 2])
                  (Var 0))
-               (Equal (Var 1) (Var 0)))));
-     Proof.Decl.body  := None |}.
+               (Equal (Var 1) (Var 0)))))) None.
 
 (* Definition pair (a b:U) : U := Def (IsPairOf a b) exists unique.             *)
-Definition pair : Term.Decl.Decl :=
-  {| para := [TySet; TySet];
-     res  := TySet;
-     body := Some
+Definition pair : DeclT :=
+  mkDeclT [TySet; TySet] TySet (Some
        (Def
          (IdentT "IsPairOf" [Var 1; Var 0])
          (IdentP "pairExists" [Var 1; Var 0])
-         (IdentP "pairUnique" [Var 1; Var 0])) |}.
+         (IdentP "pairUnique" [Var 1; Var 0]))).
 
 (* Environment.                                                                 *)
 
@@ -91,7 +83,7 @@ Qed.
 
 (* The existence proof declaration conclusion is a well-sorted proposition.     *)
 Proposition pairExistsCheckConcl :
-  HasTy env (Proof.Decl.ctx pairExists) (Proof.Decl.concl pairExists) TyProp.
+  HasTy env (ctxP pairExists) (conclP pairExists) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyApp.
@@ -106,7 +98,7 @@ Qed.
 
 (* The uniqueness proof declaration conclusion is a well-sorted proposition.    *)
 Proposition pairUniqueCheckConcl :
-  HasTy env (Proof.Decl.ctx pairUnique) (Proof.Decl.concl pairUnique) TyProp.
+  HasTy env (ctxP pairUnique) (conclP pairUnique) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyImp.
