@@ -5,7 +5,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTyDecl.
-Require Import ZF.Meta.Term.HasTy.
+Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -64,15 +64,15 @@ Qed.
 Proposition toClassCheckIdent : forall (e:Env) (G:Ctx) (n:nat),
   e "toClass"%string = Some toClass ->
   typeOf G n = Some TySet ->
-  HasTy e G (IdentT "toClass" [Var n]) TyClass.
+  HasTyT e G (IdentT "toClass" [Var n]) TyClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G n H1 H2.
   apply HasTyIdentT with [TySet].
   - unfold Env.toSigs. rewrite H1. reflexivity.
-  - apply HasTysCons.
+  - apply HasTyTsCons.
     + apply HasTyVar. assumption.
-    + apply HasTysNil.
+    + apply HasTyTsNil.
 Qed.
 
 (* Equivalence applied to two class variables is well sorted anywhere.          *)
@@ -80,17 +80,17 @@ Proposition equivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   e "equiv"%string = Some equiv ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
-  HasTy e G (IdentT "equiv" [Var m; Var n]) TyProp.
+  HasTyT e G (IdentT "equiv" [Var m; Var n]) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
   apply HasTyIdentT with [TyClass; TyClass].
   - unfold Env.toSigs. rewrite H1. reflexivity.
-  - apply HasTysCons.
+  - apply HasTyTsCons.
     + apply HasTyVar. assumption.
-    + apply HasTysCons.
+    + apply HasTyTsCons.
       * apply HasTyVar. assumption.
-      * apply HasTysNil.
+      * apply HasTyTsNil.
 Qed.
 
 (* Negated equivalence of two class variables is well sorted anywhere.          *)
@@ -98,7 +98,7 @@ Proposition notEquivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   e "equiv"%string = Some equiv ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
-  HasTy e G (Not (IdentT "equiv" [Var m; Var n])) TyProp.
+  HasTyT e G (Not (IdentT "equiv" [Var m; Var n])) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.

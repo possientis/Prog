@@ -1,7 +1,7 @@
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.HasTy.
+Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 (* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
@@ -16,7 +16,7 @@ Definition Extensionality : Term :=
 
 (* The extensionality example is a proposition in the empty environment.        *)
 Proposition ExtensionalityCheck :
-  HasTy Env.empty Ctx.empty Extensionality TyProp.
+  HasTyT Env.empty Ctx.empty Extensionality TyProp.
 Proof.
   apply HasTyAll, HasTyAll, HasTyImp.
   - apply HasTyAll, HasTyIff.

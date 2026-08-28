@@ -5,7 +5,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.HasTy.
+Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -38,23 +38,23 @@ Definition Foundation : Term :=
             (IdentT "empty" []))))).
 
 (* The foundation example is a proposition in the local test environment.       *)
-Proposition HasTy : HasTy env Ctx.empty Foundation TyProp.
+Proposition HasTy : HasTyT env Ctx.empty Foundation TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
   - apply HasTyNotEq.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyIdentT with []. 1: reflexivity.
-      apply HasTysNil.
+      apply HasTyTsNil.
   - apply HasTyEx, HasTyAnd.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyEqual.
       * apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
-        apply HasTysCons.
+        apply HasTyTsCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
-        -- apply HasTysCons.
+        -- apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
-           ++ apply HasTysNil.
+           ++ apply HasTyTsNil.
       * apply HasTyIdentT with []. 1: reflexivity.
-        apply HasTysNil.
+        apply HasTyTsNil.
 Qed.

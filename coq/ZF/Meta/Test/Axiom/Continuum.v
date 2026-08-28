@@ -5,7 +5,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.HasTy.
+Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -61,36 +61,36 @@ Definition GCH : Term :=
         (IdentT "eval" [IdentT "Aleph" []; IdentT "succ" [Var 0]]))).
 
 (* The generalized-continuum example is a proposition in the local environment. *)
-Proposition HasTy : HasTy env Ctx.empty GCH TyProp.
+Proposition HasTy : HasTyT env Ctx.empty GCH TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
   - apply HasTyIdentT with [TySet]. 1: reflexivity.
-    apply HasTysCons.
+    apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTysNil.
+    + apply HasTyTsNil.
   - apply HasTyEqual.
     + apply HasTyIdentT with [TySet]. 1: reflexivity.
-      apply HasTysCons.
+      apply HasTyTsCons.
       * apply HasTyIdentT with [TySet]. 1: reflexivity.
-        apply HasTysCons.
+        apply HasTyTsCons.
         -- apply HasTyIdentT with [TyClass; TySet]. 1: reflexivity.
-           apply HasTysCons.
+           apply HasTyTsCons.
            ++ apply HasTyIdentT with []. 1: reflexivity.
-              apply HasTysNil.
-           ++ apply HasTysCons.
+              apply HasTyTsNil.
+           ++ apply HasTyTsCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
-              ** apply HasTysNil.
-        -- apply HasTysNil.
-      * apply HasTysNil.
+              ** apply HasTyTsNil.
+        -- apply HasTyTsNil.
+      * apply HasTyTsNil.
     + apply HasTyIdentT with [TyClass; TySet]. 1: reflexivity.
-      apply HasTysCons.
+      apply HasTyTsCons.
       * apply HasTyIdentT with []. 1: reflexivity.
-        apply HasTysNil.
-      * apply HasTysCons.
+        apply HasTyTsNil.
+      * apply HasTyTsCons.
         -- apply HasTyIdentT with [TySet]. 1: reflexivity.
-           apply HasTysCons.
+           apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
-           ++ apply HasTysNil.
-        -- apply HasTysNil.
+           ++ apply HasTyTsNil.
+        -- apply HasTyTsNil.
 Qed.

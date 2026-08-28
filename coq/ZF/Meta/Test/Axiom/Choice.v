@@ -5,7 +5,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.HasTy.
+Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -46,29 +46,29 @@ Definition Choice : Term :=
               (Elem (IdentT "eval" [Var 1; Var 0]) (Var 0))))))).
 
 (* The choice example is a proposition in the local test environment.           *)
-Proposition HasTy : HasTy env Ctx.empty Choice TyProp.
+Proposition HasTy : HasTyT env Ctx.empty Choice TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyEx, HasTyAnd.
   - apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
-    apply HasTysCons.
+    apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTysCons.
+    + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTysNil.
+      * apply HasTyTsNil.
   - apply HasTyAll, HasTyImp.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyImp.
       * apply HasTyNotEq.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTyIdentT with []. 1: reflexivity.
-           apply HasTysNil.
+           apply HasTyTsNil.
       * apply HasTyElem.
         -- apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
-           apply HasTysCons.
+           apply HasTyTsCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
-           ++ apply HasTysCons.
+           ++ apply HasTyTsCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
-              ** apply HasTysNil.
+              ** apply HasTyTsNil.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
 Qed.
