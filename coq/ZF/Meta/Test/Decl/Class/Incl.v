@@ -2,9 +2,9 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Decl.
+Require Import ZF.Meta.DeclTerm.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.HasTyDecl.
+Require Import ZF.Meta.HasTyDeclTerm.
 Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Term.
@@ -15,7 +15,7 @@ Import ListNotations.
 (* Declarations.                                                                *)
 
 (* Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.                  *)
-Definition Incl : Decl :=
+Definition Incl : DeclTerm :=
   {| para := [TyClass; TyClass];
      res  := TyProp;
      body := Some
@@ -31,7 +31,7 @@ Definition env : Env := Env.fromList [("Incl"%string, Incl)].
 (* Body checks.                                                                 *)
 
 (* The declaration body for inclusion compares two classes pointwise.           *)
-Proposition InclCheckBody : HasTyDecl Env.empty Incl.
+Proposition InclCheckBody : HasTyDeclTerm Env.empty Incl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
