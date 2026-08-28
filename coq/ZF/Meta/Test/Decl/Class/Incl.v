@@ -26,7 +26,7 @@ Definition Incl : Decl :=
 
 (* Environment.                                                                 *)
 
-Definition env : Env := Env.fromList [("Incl"%string, Incl)].
+Definition env : Env := Env.fromListT [("Incl"%string, Incl)].
 
 (* Body checks.                                                                 *)
 

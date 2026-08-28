@@ -26,11 +26,11 @@ Definition eval : Decl :=
      res  := TySet;
      body := None |}.
 
-Definition env : Env := fun name =>
-  if String.eqb name "FunctionOn" then Some FunctionOn else
-  if String.eqb name "empty"      then Some empty else
-  if String.eqb name "eval"       then Some eval else
-  None.
+Definition env : Env := Env.fromListT
+  [ ("FunctionOn"%string, FunctionOn)
+  ; ("empty"%string     , empty)
+  ; ("eval"%string      , eval)
+  ].
 
 (* forall a,                                                                    *)
 (*  exists f, FunctionOn f a /\ forall x, x :< a -> x <> empty -> eval f x :< x *)

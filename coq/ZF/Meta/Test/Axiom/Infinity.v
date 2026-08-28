@@ -26,11 +26,11 @@ Definition union2 : Decl :=
      res  := TySet;
      body := None |}.
 
-Definition env : Env := fun name =>
-  if String.eqb name "empty"  then Some empty else
-  if String.eqb name "single" then Some single else
-  if String.eqb name "union2" then Some union2 else
-  None.
+Definition env : Env := Env.fromListT
+  [ ("empty"%string , empty)
+  ; ("single"%string, single)
+  ; ("union2"%string, union2)
+  ].
 
 (* exists a, empty :< a /\ forall x, x :< a -> union2 x (single x) :< a         *)
 Definition Infinity : Term :=

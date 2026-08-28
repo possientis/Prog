@@ -21,10 +21,10 @@ Definition ordPair : Decl :=
      res  := TySet;
      body := None |}.
 
-Definition env : Env := fun name =>
-  if String.eqb name "Functional" then Some Functional else
-  if String.eqb name "ordPair"    then Some ordPair else
-  None.
+Definition env : Env := Env.fromListT
+  [ ("Functional"%string, Functional)
+  ; ("ordPair"%string  , ordPair)
+  ].
 
 (* forall F, Functional F ->                                                    *)
 (* forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):       *)

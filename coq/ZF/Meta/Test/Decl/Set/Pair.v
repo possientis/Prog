@@ -40,9 +40,10 @@ Definition pair : Decl :=
 
 (* Environment.                                                                 *)
 
-Definition env : Env := Env.fromList
-  [("IsPairOf"%string, IsPairOf)
-  ; ("pair"%string, pair)].
+Definition env : Env := Env.fromListT
+  [ ("IsPairOf"%string, IsPairOf)
+  ; ("pair"%string    , pair)
+  ].
 
 (* Body checks.                                                                 *)
 

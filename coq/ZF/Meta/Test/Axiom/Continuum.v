@@ -41,14 +41,14 @@ Definition succ : Decl :=
      res  := TySet;
      body := None |}.
 
-Definition env : Env := fun name =>
-  if String.eqb name "Aleph"   then Some Aleph else
-  if String.eqb name "Ordinal" then Some Ordinal else
-  if String.eqb name "card"    then Some card else
-  if String.eqb name "power"   then Some power else
-  if String.eqb name "eval"    then Some eval else
-  if String.eqb name "succ"    then Some succ else
-  None.
+Definition env : Env := Env.fromListT
+  [ ("Aleph"%string  , Aleph)
+  ; ("Ordinal"%string, Ordinal)
+  ; ("card"%string   , card)
+  ; ("power"%string  , power)
+  ; ("eval"%string   , eval)
+  ; ("succ"%string   , succ)
+  ].
 
 (* forall a, Ordinal a -> card (power (eval Aleph a)) = eval Aleph (succ a)     *)
 Definition GCH : Term :=

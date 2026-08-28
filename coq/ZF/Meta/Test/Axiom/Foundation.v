@@ -21,10 +21,10 @@ Definition inter : Decl :=
      res  := TySet;
      body := None |}.
 
-Definition env : Env := fun name =>
-  if String.eqb name "empty" then Some empty else
-  if String.eqb name "inter" then Some inter else
-  None.
+Definition env : Env := Env.fromListT
+  [ ("empty"%string, empty)
+  ; ("inter"%string, inter)
+  ].
 
 (* forall a, a <> empty -> exists x, x :< a /\ inter x a = empty                *)
 Definition Foundation : Term :=

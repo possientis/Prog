@@ -32,9 +32,10 @@ Definition equiv : Decl :=
 
 (* Environment.                                                                 *)
 
-Definition env : Env := Env.fromList
-  [("toClass"%string, toClass)
-  ; ("equiv"%string, equiv)].
+Definition env : Env := Env.fromListT
+  [ ("toClass"%string, toClass)
+  ; ("equiv"%string  , equiv)
+  ].
 
 (* Body checks.                                                                 *)
 
