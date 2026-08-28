@@ -2,12 +2,12 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.DeclTerm.
+Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.HasTyDeclTerm.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.HasTyDecl.
+Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.HasTyIn.
-Require Import ZF.Meta.Term.
+Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -16,7 +16,7 @@ Import ListNotations.
 
 (* Definition IsPairOf (a b:U) : Class := fun x =>                              *)
 (* forall y, y :< x <-> y = a \/ y = b.                                         *)
-Definition IsPairOf : DeclTerm :=
+Definition IsPairOf : Decl :=
   {| para := [TySet; TySet];
      res  := TyClass;
      body := Some
@@ -29,7 +29,7 @@ Definition IsPairOf : DeclTerm :=
                (Equal (Var 0) (Var 2)))))) |}.
 
 (* Definition pair (a b:U) : U := The (IsPairOf a b).                           *)
-Definition pair : DeclTerm :=
+Definition pair : Decl :=
   {| para := [TySet; TySet];
      res  := TySet;
      body := Some
@@ -47,7 +47,7 @@ Definition env : Env := Env.fromList
 (* Body checks.                                                                 *)
 
 (* The declaration body for IsPairOf recognizes the two selected sets.          *)
-Proposition IsPairOfCheckBody : HasTyDeclTerm Env.empty IsPairOf.
+Proposition IsPairOfCheckBody : HasTyDecl Env.empty IsPairOf.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyLam, HasTyAll, HasTyIff.
@@ -56,7 +56,7 @@ Proof.
 Qed.
 
 (* The declaration body for pair denotes the set satisfying IsPairOf.           *)
-Proposition pairCheckBody : HasTyDeclTerm env pair.
+Proposition pairCheckBody : HasTyDecl env pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyThe, HasTyApp.

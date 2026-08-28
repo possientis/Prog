@@ -1,7 +1,7 @@
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 

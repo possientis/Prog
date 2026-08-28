@@ -3,7 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Sigs.
-Require Import ZF.Meta.Term.
+Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.

@@ -2,21 +2,21 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.DeclTerm.
+Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition Functional : DeclTerm :=
+Definition Functional : Decl :=
   {| para := [TyClass];
      res  := TyProp;
      body := None |}.
 
-Definition ordPair : DeclTerm :=
+Definition ordPair : Decl :=
   {| para := [TySet; TySet];
      res  := TySet;
      body := None |}.
