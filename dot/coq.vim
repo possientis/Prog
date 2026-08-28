@@ -41,13 +41,16 @@ endif
 " Coq is case sensitive.
 syn case match
 
-syn cluster coqVernac contains=coqRequire,coqCheck,coqEval,coqNotation,coqTacNotation,coqDecl,coqThm,coqLtacDecl,coqDef,coqFix,coqInd,coqRec,coqShow,coqModule,coqDeclare
+syn cluster coqVernac contains=coqRequire,coqCheck,coqEval,coqNotation,coqTacNotation,coqDecl,coqThm,coqLtacDecl,coqDef,coqFix,coqInd,coqRec,coqShow,coqModule,coqDeclare,coqCoercion
 
 " Various
 syn match   coqError             "\S\+"
 syn match   coqVernacPunctuation ":=\|\.\|:"
 syn match   coqIdent             contained "[_[:alpha:]][_'[:alnum:]]*"
-syn keyword coqTopLevel          Type Canonical Structure Cd Coercion Derive Drop Existential
+syn keyword coqTopLevel          Type Canonical Structure Cd Derive Drop Existential
+syn region  coqCoercion          contains=coqIdent,coqCoercionClass,coqCoercionKwd,coqVernacPunctuation matchgroup=coqVernacCmd start="\<Coercion\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
+syn keyword coqCoercionClass     contained Funclass
+syn match   coqCoercionKwd       contained ">->"
 "...
 syn keyword coqVernacCmd         Functional Scheme Back Combined
 syn keyword coqFeedback          Show About Print
@@ -366,6 +369,8 @@ if version >= 508 || !exists("did_coq_syntax_inits")
  HiLink coqHint              coqVernacular
  HiLink coqFeedback          coqVernacular
  HiLink coqTopLevel          coqVernacular
+ HiLink coqCoercionKwd       coqVernacular
+ HiLink coqCoercionClass     coqIdent
 
  " DEFINED OBJECTS
  HiLink coqIdent                     Identifier
