@@ -6,7 +6,6 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -45,11 +44,11 @@ Definition Replacement : Term :=
                     (Ident "ordPair" [Var 0; Var 1]))))))))).
 
 (* The replacement example is a proposition in the local test environment.      *)
-Proposition HasTy : HasTyIn env Ctx.empty Replacement TyProp.
+Proposition HasTy : HasTy env Ctx.empty Replacement TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
-  - apply HasTyIdent with (argTys := [TyClass]). 1: reflexivity.
+  - apply HasTyIdent with [TyClass]. 1: reflexivity.
     apply HasTysCons.
     + apply (HasTyVar _ _ _ TyClass). reflexivity.
     + apply HasTysNil.
@@ -59,7 +58,7 @@ Proof.
       * apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
       * apply HasTyApp.
         -- apply (HasTyVar _ _ _ TyClass). reflexivity.
-        -- apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.
+        -- apply HasTyIdent with [TySet; TySet]. 1: reflexivity.
            apply HasTysCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysCons.

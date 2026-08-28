@@ -4,7 +4,6 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -100,7 +99,7 @@ Definition Tran : Term :=
 (* Proposition typing.                                                          *)
 
 (* Double inclusion and equivalence form a well-sorted proposition.             *)
-Proposition DoubleCheck : HasTyIn env Ctx.empty Double TyProp.
+Proposition DoubleCheck : HasTy env Ctx.empty Double TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyIff.
@@ -109,7 +108,7 @@ Proof.
 Qed.
 
 (* Compatibility of inclusion with equivalence is well sorted.                  *)
-Proposition EquivCompatCheck : HasTyIn env Ctx.empty EquivCompat TyProp.
+Proposition EquivCompatCheck : HasTy env Ctx.empty EquivCompat TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
@@ -122,7 +121,7 @@ Proof.
 Qed.
 
 (* Left compatibility of inclusion with equivalence is well sorted.             *)
-Proposition EquivCompatLCheck : HasTyIn env Ctx.empty EquivCompatL TyProp.
+Proposition EquivCompatLCheck : HasTy env Ctx.empty EquivCompatL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
@@ -131,7 +130,7 @@ Proof.
 Qed.
 
 (* Right compatibility of inclusion with equivalence is well sorted.            *)
-Proposition EquivCompatRCheck : HasTyIn env Ctx.empty EquivCompatR TyProp.
+Proposition EquivCompatRCheck : HasTy env Ctx.empty EquivCompatR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
@@ -140,11 +139,11 @@ Proof.
 Qed.
 
 (* Reflexivity of inclusion is a well-sorted proposition.                       *)
-Proposition ReflCheck : HasTyIn env Ctx.empty Refl TyProp.
+Proposition ReflCheck : HasTy env Ctx.empty Refl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll.
-  apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
+  apply HasTyIdent with [TyClass; TyClass]. 1: reflexivity.
   apply HasTysCons.
   - apply (HasTyVar _ _ _ TyClass). reflexivity.
   - apply HasTysCons.
@@ -153,7 +152,7 @@ Proof.
 Qed.
 
 (* Antisymmetry of inclusion is a well-sorted proposition.                      *)
-Proposition AntiCheck : HasTyIn env Ctx.empty Anti TyProp.
+Proposition AntiCheck : HasTy env Ctx.empty Anti TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyImp.
@@ -164,7 +163,7 @@ Proof.
 Qed.
 
 (* Transitivity of inclusion is a well-sorted proposition.                      *)
-Proposition TranCheck : HasTyIn env Ctx.empty Tran TyProp.
+Proposition TranCheck : HasTy env Ctx.empty Tran TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.

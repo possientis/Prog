@@ -6,7 +6,6 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTyDecl.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -50,11 +49,11 @@ Proposition InclCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   e "Incl"%string = Some Incl ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
-  HasTyIn e G (Ident "Incl" [Var m; Var n]) TyProp.
+  HasTy e G (Ident "Incl" [Var m; Var n]) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdent with (argTys := [TyClass; TyClass]).
+  apply HasTyIdent with [TyClass; TyClass].
   - unfold Env.toSigs. rewrite H1. reflexivity.
   - apply HasTysCons.
     + apply HasTyVar. assumption.

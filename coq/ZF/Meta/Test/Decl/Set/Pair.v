@@ -6,7 +6,6 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTyDecl.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -61,7 +60,7 @@ Proposition pairCheckBody : HasTyDecl env pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyThe, HasTyApp.
-  - apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.
+  - apply HasTyIdent with [TySet; TySet]. 1: reflexivity.
     apply HasTysCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTysCons.
@@ -77,11 +76,11 @@ Proposition IsPairOfCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   e "IsPairOf"%string = Some IsPairOf ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
-  HasTyIn e G (Ident "IsPairOf" [Var m; Var n]) TyClass.
+  HasTy e G (Ident "IsPairOf" [Var m; Var n]) TyClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdent with (argTys := [TySet; TySet]).
+  apply HasTyIdent with [TySet; TySet].
   - unfold Env.toSigs. rewrite H1. reflexivity.
   - apply HasTysCons.
     + apply HasTyVar. assumption.
@@ -95,11 +94,11 @@ Proposition pairCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   e "pair"%string = Some pair ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
-  HasTyIn e G (Ident "pair" [Var m; Var n]) TySet.
+  HasTy e G (Ident "pair" [Var m; Var n]) TySet.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdent with (argTys := [TySet; TySet]).
+  apply HasTyIdent with [TySet; TySet].
   - unfold Env.toSigs. rewrite H1. reflexivity.
   - apply HasTysCons.
     + apply HasTyVar. assumption.

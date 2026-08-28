@@ -6,7 +6,6 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -45,22 +44,22 @@ Definition Infinity : Term :=
             (Var 1))))).
 
 (* The infinity example is a proposition in the local test environment.         *)
-Proposition HasTy : HasTyIn env Ctx.empty Infinity TyProp.
+Proposition HasTy : HasTy env Ctx.empty Infinity TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyAnd.
   - apply HasTyElem.
-    + apply HasTyIdent with (argTys := []). 1: reflexivity.
+    + apply HasTyIdent with []. 1: reflexivity.
       apply HasTysNil.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
   - apply HasTyAll, HasTyImp.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyElem.
-      * apply HasTyIdent with (argTys := [TySet; TySet]). 1: reflexivity.
+      * apply HasTyIdent with [TySet; TySet]. 1: reflexivity.
         apply HasTysCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTysCons.
-           ++ apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
+           ++ apply HasTyIdent with [TySet]. 1: reflexivity.
               apply HasTysCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTysNil.

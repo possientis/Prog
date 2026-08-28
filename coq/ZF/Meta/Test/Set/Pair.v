@@ -4,7 +4,6 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -63,7 +62,7 @@ Definition ToClassIncl : Term :=
 (* Proposition typing.                                                          *)
 
 (* The characterization of membership in a pair is well sorted.                 *)
-Proposition CharacCheck : HasTyIn env Ctx.empty Charac TyProp.
+Proposition CharacCheck : HasTy env Ctx.empty Charac TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyIff.
@@ -74,7 +73,7 @@ Proof.
 Qed.
 
 (* The left element belongs to its pair, and it is well sorted.                 *)
-Proposition IsInLCheck : HasTyIn env Ctx.empty IsInL TyProp.
+Proposition IsInLCheck : HasTy env Ctx.empty IsInL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyElem.
@@ -83,7 +82,7 @@ Proof.
 Qed.
 
 (* The right element belongs to its pair, and it is well sorted.                *)
-Proposition IsInRCheck : HasTyIn env Ctx.empty IsInR TyProp.
+Proposition IsInRCheck : HasTy env Ctx.empty IsInR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyElem.
@@ -92,7 +91,7 @@ Proof.
 Qed.
 
 (* Containment of both elements and class inclusion are well sorted.            *)
-Proposition ToClassInclCheck : HasTyIn env Ctx.empty ToClassIncl TyProp.
+Proposition ToClassInclCheck : HasTy env Ctx.empty ToClassIncl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyAll, HasTyIff.
@@ -103,9 +102,9 @@ Proof.
     + apply HasTyApp.
       * apply (HasTyVar _ _ _ TyClass). reflexivity.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyIdent with (argTys := [TyClass; TyClass]). 1: reflexivity.
+  - apply HasTyIdent with [TyClass; TyClass]. 1: reflexivity.
     apply HasTysCons.
-    + apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
+    + apply HasTyIdent with [TySet]. 1: reflexivity.
       apply HasTysCons.
       * apply pairCheckIdent; reflexivity.
       * apply HasTysNil.

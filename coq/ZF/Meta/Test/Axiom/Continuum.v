@@ -6,7 +6,6 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.Syntax.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.HasTyIn.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -62,34 +61,34 @@ Definition GCH : Term :=
         (Ident "eval" [Ident "Aleph" []; Ident "succ" [Var 0]]))).
 
 (* The generalized-continuum example is a proposition in the local environment. *)
-Proposition HasTy : HasTyIn env Ctx.empty GCH TyProp.
+Proposition HasTy : HasTy env Ctx.empty GCH TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
-  - apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
+  - apply HasTyIdent with [TySet]. 1: reflexivity.
     apply HasTysCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTysNil.
   - apply HasTyEqual.
-    + apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
+    + apply HasTyIdent with [TySet]. 1: reflexivity.
       apply HasTysCons.
-      * apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
+      * apply HasTyIdent with [TySet]. 1: reflexivity.
         apply HasTysCons.
-        -- apply HasTyIdent with (argTys := [TyClass; TySet]). 1: reflexivity.
+        -- apply HasTyIdent with [TyClass; TySet]. 1: reflexivity.
            apply HasTysCons.
-           ++ apply HasTyIdent with (argTys := []). 1: reflexivity.
+           ++ apply HasTyIdent with []. 1: reflexivity.
               apply HasTysNil.
            ++ apply HasTysCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTysNil.
         -- apply HasTysNil.
       * apply HasTysNil.
-    + apply HasTyIdent with (argTys := [TyClass; TySet]). 1: reflexivity.
+    + apply HasTyIdent with [TyClass; TySet]. 1: reflexivity.
       apply HasTysCons.
-      * apply HasTyIdent with (argTys := []). 1: reflexivity.
+      * apply HasTyIdent with []. 1: reflexivity.
         apply HasTysNil.
       * apply HasTysCons.
-        -- apply HasTyIdent with (argTys := [TySet]). 1: reflexivity.
+        -- apply HasTyIdent with [TySet]. 1: reflexivity.
            apply HasTysCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysNil.
