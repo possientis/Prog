@@ -2,7 +2,7 @@ Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Signature.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.

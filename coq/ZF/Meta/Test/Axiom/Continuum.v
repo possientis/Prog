@@ -4,7 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.Ty.
 
@@ -53,42 +53,42 @@ Definition env : Env := Env.fromListT
 Definition GCH : Term :=
   All VarTySet
     (Imp
-      (Ident "Ordinal" [Var 0])
+      (IdentT "Ordinal" [Var 0])
       (Equal
-        (Ident "card"
-          [Ident "power"
-            [Ident "eval" [Ident "Aleph" []; Var 0]]])
-        (Ident "eval" [Ident "Aleph" []; Ident "succ" [Var 0]]))).
+        (IdentT "card"
+          [IdentT "power"
+            [IdentT "eval" [IdentT "Aleph" []; Var 0]]])
+        (IdentT "eval" [IdentT "Aleph" []; IdentT "succ" [Var 0]]))).
 
 (* The generalized-continuum example is a proposition in the local environment. *)
 Proposition HasTy : HasTy env Ctx.empty GCH TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
-  - apply HasTyIdent with [TySet]. 1: reflexivity.
+  - apply HasTyIdentT with [TySet]. 1: reflexivity.
     apply HasTysCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTysNil.
   - apply HasTyEqual.
-    + apply HasTyIdent with [TySet]. 1: reflexivity.
+    + apply HasTyIdentT with [TySet]. 1: reflexivity.
       apply HasTysCons.
-      * apply HasTyIdent with [TySet]. 1: reflexivity.
+      * apply HasTyIdentT with [TySet]. 1: reflexivity.
         apply HasTysCons.
-        -- apply HasTyIdent with [TyClass; TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with [TyClass; TySet]. 1: reflexivity.
            apply HasTysCons.
-           ++ apply HasTyIdent with []. 1: reflexivity.
+           ++ apply HasTyIdentT with []. 1: reflexivity.
               apply HasTysNil.
            ++ apply HasTysCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTysNil.
         -- apply HasTysNil.
       * apply HasTysNil.
-    + apply HasTyIdent with [TyClass; TySet]. 1: reflexivity.
+    + apply HasTyIdentT with [TyClass; TySet]. 1: reflexivity.
       apply HasTysCons.
-      * apply HasTyIdent with []. 1: reflexivity.
+      * apply HasTyIdentT with []. 1: reflexivity.
         apply HasTysNil.
       * apply HasTysCons.
-        -- apply HasTyIdent with [TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with [TySet]. 1: reflexivity.
            apply HasTysCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysNil.

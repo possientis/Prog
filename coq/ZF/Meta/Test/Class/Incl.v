@@ -4,7 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
 Require Import ZF.Meta.Test.Decl.Class.Equiv.
@@ -26,10 +26,10 @@ Definition Double : Term :=
   All VarTyClass
     (All VarTyClass
       (Iff
-        (Ident "equiv" [Var 1; Var 0])
+        (IdentT "equiv" [Var 1; Var 0])
         (And
-          (Ident "Incl" [Var 1; Var 0])
-          (Ident "Incl" [Var 0; Var 1])))).
+          (IdentT "Incl" [Var 1; Var 0])
+          (IdentT "Incl" [Var 0; Var 1])))).
 
 (* Proposition EquivCompat : forall P Q R S,                                    *)
 (* equiv P Q -> equiv R S -> Incl P R -> Incl Q S.                              *)
@@ -39,12 +39,12 @@ Definition EquivCompat : Term :=
       (All VarTyClass
         (All VarTyClass
           (Imp
-            (Ident "equiv" [Var 3; Var 2])
+            (IdentT "equiv" [Var 3; Var 2])
             (Imp
-              (Ident "equiv" [Var 1; Var 0])
+              (IdentT "equiv" [Var 1; Var 0])
               (Imp
-                (Ident "Incl" [Var 3; Var 1])
-                (Ident "Incl" [Var 2; Var 0]))))))).
+                (IdentT "Incl" [Var 3; Var 1])
+                (IdentT "Incl" [Var 2; Var 0]))))))).
 
 (* Proposition EquivCompatL : forall P Q R,                                     *)
 (* equiv P Q -> Incl P R -> Incl Q R.                                           *)
@@ -53,10 +53,10 @@ Definition EquivCompatL : Term :=
     (All VarTyClass
       (All VarTyClass
         (Imp
-          (Ident "equiv" [Var 2; Var 1])
+          (IdentT "equiv" [Var 2; Var 1])
           (Imp
-            (Ident "Incl" [Var 2; Var 0])
-            (Ident "Incl" [Var 1; Var 0]))))).
+            (IdentT "Incl" [Var 2; Var 0])
+            (IdentT "Incl" [Var 1; Var 0]))))).
 
 (* Proposition EquivCompatR : forall P Q R,                                     *)
 (* equiv P Q -> Incl R P -> Incl R Q.                                           *)
@@ -65,25 +65,25 @@ Definition EquivCompatR : Term :=
     (All VarTyClass
       (All VarTyClass
         (Imp
-          (Ident "equiv" [Var 2; Var 1])
+          (IdentT "equiv" [Var 2; Var 1])
           (Imp
-            (Ident "Incl" [Var 0; Var 2])
-            (Ident "Incl" [Var 0; Var 1]))))).
+            (IdentT "Incl" [Var 0; Var 2])
+            (IdentT "Incl" [Var 0; Var 1]))))).
 
 (* Proposition Refl : forall (P:Class), Incl P P.                               *)
 Definition Refl : Term :=
   All VarTyClass
-    (Ident "Incl" [Var 0; Var 0]).
+    (IdentT "Incl" [Var 0; Var 0]).
 
 (* Proposition Anti : forall P Q, Incl P Q -> Incl Q P -> equiv P Q.            *)
 Definition Anti : Term :=
   All VarTyClass
     (All VarTyClass
       (Imp
-        (Ident "Incl" [Var 1; Var 0])
+        (IdentT "Incl" [Var 1; Var 0])
         (Imp
-          (Ident "Incl" [Var 0; Var 1])
-          (Ident "equiv" [Var 1; Var 0])))).
+          (IdentT "Incl" [Var 0; Var 1])
+          (IdentT "equiv" [Var 1; Var 0])))).
 
 (* Proposition Tran : forall P Q R, Incl P Q -> Incl Q R -> Incl P R.           *)
 Definition Tran : Term :=
@@ -91,10 +91,10 @@ Definition Tran : Term :=
     (All VarTyClass
       (All VarTyClass
         (Imp
-          (Ident "Incl" [Var 2; Var 1])
+          (IdentT "Incl" [Var 2; Var 1])
           (Imp
-            (Ident "Incl" [Var 1; Var 0])
-            (Ident "Incl" [Var 2; Var 0]))))).
+            (IdentT "Incl" [Var 1; Var 0])
+            (IdentT "Incl" [Var 2; Var 0]))))).
 
 (* Proposition typing.                                                          *)
 
@@ -143,7 +143,7 @@ Proposition ReflCheck : HasTy env Ctx.empty Refl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll.
-  apply HasTyIdent with [TyClass; TyClass]. 1: reflexivity.
+  apply HasTyIdentT with [TyClass; TyClass]. 1: reflexivity.
   apply HasTysCons.
   - apply (HasTyVar _ _ _ TyClass). reflexivity.
   - apply HasTysCons.

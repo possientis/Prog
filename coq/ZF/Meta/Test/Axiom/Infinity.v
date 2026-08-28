@@ -4,7 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.Ty.
 
@@ -35,12 +35,12 @@ Definition env : Env := Env.fromListT
 Definition Infinity : Term :=
   Ex VarTySet
     (And
-      (Elem (Ident "empty" []) (Var 0))
+      (Elem (IdentT "empty" []) (Var 0))
       (All VarTySet
         (Imp
           (Elem (Var 0) (Var 1))
           (Elem
-            (Ident "union2" [Var 0; Ident "single" [Var 0]])
+            (IdentT "union2" [Var 0; IdentT "single" [Var 0]])
             (Var 1))))).
 
 (* The infinity example is a proposition in the local test environment.         *)
@@ -49,17 +49,17 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyAnd.
   - apply HasTyElem.
-    + apply HasTyIdent with []. 1: reflexivity.
+    + apply HasTyIdentT with []. 1: reflexivity.
       apply HasTysNil.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
   - apply HasTyAll, HasTyImp.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyElem.
-      * apply HasTyIdent with [TySet; TySet]. 1: reflexivity.
+      * apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
         apply HasTysCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTysCons.
-           ++ apply HasTyIdent with [TySet]. 1: reflexivity.
+           ++ apply HasTyIdentT with [TySet]. 1: reflexivity.
               apply HasTysCons.
               ** apply (HasTyVar _ _ _ TySet). reflexivity.
               ** apply HasTysNil.

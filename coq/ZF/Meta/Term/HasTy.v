@@ -3,7 +3,8 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.Syntax.
+Require ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -16,10 +17,10 @@ Inductive HasTy (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | HasTyVar : forall (G:Ctx) (n:nat) (ty:Ty),
     typeOf G n = Some ty                    ->
     HasTy E G (Var n) ty
-| HasTyIdent : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (ty:Ty),
+| HasTyIdentT : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (ty:Ty),
     Env.toSigs E name = Some (tys, ty)      ->
     HasTys E G args tys                     ->
-    HasTy E G (Ident name args) ty
+    HasTy E G (IdentT name args) ty
 | HasTyElem : forall (G:Ctx) (x y:Term),
     HasTy E G x TySet                       ->
     HasTy E G y TySet                       ->
@@ -73,9 +74,6 @@ Inductive HasTy (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | HasTyEx : forall (G:Ctx) (vty:VarTy) (p:Term),
     HasTy E (toTy vty :: G) p TyProp        ->
     HasTy E G (Ex vty p) TyProp
-| HasTyThe : forall (G:Ctx) (p:Term),
-    HasTy E (TySet :: G) p TyProp           ->
-    HasTy E G (The p) TySet
 | HasTyLam : forall (G:Ctx) (p:Term),
     HasTy E (TySet :: G) p TyProp           ->
     HasTy E G (Lam p) TyClass
@@ -83,6 +81,11 @@ Inductive HasTy (E:Env) : Ctx -> Term -> Ty -> Prop :=
     HasTy E G A TyClass                     ->
     HasTy E G x TySet                       ->
     HasTy E G (App A x) TyProp
+| HasTyDef : forall (G:Ctx) (A:Term) (p q:Proof),
+    HasTy E G A TyClass                     ->
+    HasTyProof E G p                        ->
+    HasTyProof E G q                        ->
+    HasTy E G (Def A p q) TySet
 with HasTys (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
 | HasTysNil : forall (G:Ctx),
     HasTys E G [] []
@@ -90,4 +93,10 @@ with HasTys (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
     HasTy E G t ty                          ->
     HasTys E G ts tys                       ->
     HasTys E G (t :: ts) (ty :: tys)
+with HasTyProof (E:Env) : Ctx -> Proof -> Prop :=
+| HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:Proof.Decl.Decl),
+    Env.proofs E name = Some d                             ->
+    HasTys E G args (Proof.Decl.para d)                    ->
+    HasTy E (Proof.Decl.ctx d) (Proof.Decl.concl d) TyProp ->
+    HasTyProof E G (IdentP name args)
 .

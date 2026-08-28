@@ -4,7 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Term.HasTy.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
 Require Import ZF.Meta.Test.Decl.Class.Equiv.
@@ -29,7 +29,7 @@ Definition Charac : Term :=
     (All VarTySet
       (All VarTySet
         (Iff
-          (Elem (Var 0) (Ident "pair" [Var 2; Var 1]))
+          (Elem (Var 0) (IdentT "pair" [Var 2; Var 1]))
           (Or
             (Equal (Var 0) (Var 2))
             (Equal (Var 0) (Var 1)))))).
@@ -38,13 +38,13 @@ Definition Charac : Term :=
 Definition IsInL : Term :=
   All VarTySet
     (All VarTySet
-      (Elem (Var 1) (Ident "pair" [Var 1; Var 0]))).
+      (Elem (Var 1) (IdentT "pair" [Var 1; Var 0]))).
 
 (* Proposition IsInR : forall a b, b :< pair a b.                               *)
 Definition IsInR : Term :=
   All VarTySet
     (All VarTySet
-      (Elem (Var 0) (Ident "pair" [Var 1; Var 0]))).
+      (Elem (Var 0) (IdentT "pair" [Var 1; Var 0]))).
 
 (* Proposition ToClassIncl : forall A a b,                                      *)
 (* A a /\ A b <-> Incl (toClass (pair a b)) A.                                  *)
@@ -56,8 +56,8 @@ Definition ToClassIncl : Term :=
           (And
             (App (Var 2) (Var 1))
             (App (Var 2) (Var 0)))
-          (Ident "Incl"
-            [Ident "toClass" [Ident "pair" [Var 1; Var 0]]; Var 2])))).
+          (IdentT "Incl"
+            [IdentT "toClass" [IdentT "pair" [Var 1; Var 0]]; Var 2])))).
 
 (* Proposition typing.                                                          *)
 
@@ -102,9 +102,9 @@ Proof.
     + apply HasTyApp.
       * apply (HasTyVar _ _ _ TyClass). reflexivity.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyIdent with [TyClass; TyClass]. 1: reflexivity.
+  - apply HasTyIdentT with [TyClass; TyClass]. 1: reflexivity.
     apply HasTysCons.
-    + apply HasTyIdent with [TySet]. 1: reflexivity.
+    + apply HasTyIdentT with [TySet]. 1: reflexivity.
       apply HasTysCons.
       * apply pairCheckIdent; reflexivity.
       * apply HasTysNil.

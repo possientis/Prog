@@ -4,7 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.Ty.
 
@@ -29,13 +29,13 @@ Definition env : Env := Env.fromListT
 Definition Foundation : Term :=
   All VarTySet
     (Imp
-      (NotEq (Var 0) (Ident "empty" []))
+      (NotEq (Var 0) (IdentT "empty" []))
       (Ex VarTySet
         (And
           (Elem (Var 0) (Var 1))
           (Equal
-            (Ident "inter" [Var 0; Var 1])
-            (Ident "empty" []))))).
+            (IdentT "inter" [Var 0; Var 1])
+            (IdentT "empty" []))))).
 
 (* The foundation example is a proposition in the local test environment.       *)
 Proposition HasTy : HasTy env Ctx.empty Foundation TyProp.
@@ -44,17 +44,17 @@ Proof.
   apply HasTyAll, HasTyImp.
   - apply HasTyNotEq.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyIdent with []. 1: reflexivity.
+    + apply HasTyIdentT with []. 1: reflexivity.
       apply HasTysNil.
   - apply HasTyEx, HasTyAnd.
     + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
     + apply HasTyEqual.
-      * apply HasTyIdent with [TySet; TySet]. 1: reflexivity.
+      * apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
         apply HasTysCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTysCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysNil.
-      * apply HasTyIdent with []. 1: reflexivity.
+      * apply HasTyIdentT with []. 1: reflexivity.
         apply HasTysNil.
 Qed.

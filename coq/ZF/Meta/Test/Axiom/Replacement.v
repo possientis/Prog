@@ -4,7 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.Syntax.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.HasTy.
 Require Import ZF.Meta.Ty.
 
@@ -30,7 +30,7 @@ Definition env : Env := Env.fromListT
 Definition Replacement : Term :=
   All VarTyClass
     (Imp
-      (Ident "Functional" [Var 0])
+      (IdentT "Functional" [Var 0])
       (All VarTySet
         (Ex VarTySet
           (All VarTySet
@@ -41,14 +41,14 @@ Definition Replacement : Term :=
                   (Elem (Var 0) (Var 3))
                   (App
                     (Var 4)
-                    (Ident "ordPair" [Var 0; Var 1]))))))))).
+                    (IdentT "ordPair" [Var 0; Var 1]))))))))).
 
 (* The replacement example is a proposition in the local test environment.      *)
 Proposition HasTy : HasTy env Ctx.empty Replacement TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
-  - apply HasTyIdent with [TyClass]. 1: reflexivity.
+  - apply HasTyIdentT with [TyClass]. 1: reflexivity.
     apply HasTysCons.
     + apply (HasTyVar _ _ _ TyClass). reflexivity.
     + apply HasTysNil.
@@ -58,7 +58,7 @@ Proof.
       * apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
       * apply HasTyApp.
         -- apply (HasTyVar _ _ _ TyClass). reflexivity.
-        -- apply HasTyIdent with [TySet; TySet]. 1: reflexivity.
+        -- apply HasTyIdentT with [TySet; TySet]. 1: reflexivity.
            apply HasTysCons.
            ++ apply (HasTyVar _ _ _ TySet). reflexivity.
            ++ apply HasTysCons.
