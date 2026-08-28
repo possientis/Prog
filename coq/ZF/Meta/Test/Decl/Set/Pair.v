@@ -134,19 +134,17 @@ Proof.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsNil.
   - apply HasTyIdentP with pairExists. 1: reflexivity.
+    apply HasTyTsCons.
+    + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsCons.
-        -- apply (HasTyVar _ _ _ TySet). reflexivity.
-        -- apply HasTyTsNil.
-    + apply pairExistsCheckConcl.
+      * apply HasTyTsNil.
   - apply HasTyIdentP with pairUnique. 1: reflexivity.
+    apply HasTyTsCons.
+    + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsCons.
-        -- apply (HasTyVar _ _ _ TySet). reflexivity.
-        -- apply HasTyTsNil.
-    + apply pairUniqueCheckConcl.
+      * apply HasTyTsNil.
 Qed.
 
 (* Identifier checks.                                                           *)

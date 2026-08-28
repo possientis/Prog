@@ -97,6 +97,5 @@ with HasTyP (E:Env) : Ctx -> Proof -> Prop :=
 | HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:DeclP),
     Env.proofs E name = Some d               ->
     HasTyTs E G args (paraP d)               ->
-    HasTyT E (ctxP d) (conclP d) TyProp      ->
     HasTyP E G (IdentP name args)
 .

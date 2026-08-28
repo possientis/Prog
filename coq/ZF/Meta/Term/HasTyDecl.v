@@ -8,3 +8,5 @@ Definition HasTyDecl (e:Env) (d:Decl) : Prop :=
   | Some t => HasTyT e (ctxT d) t (resT d)
   | None   => True
   end.
+
+Definition HasTyDeclT := HasTyDecl.
