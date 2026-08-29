@@ -7,8 +7,8 @@ Require Import ZF.Meta.HasTy.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
-Require Import ZF.Meta.Test.Decl.Class.Equiv.
-Require Import ZF.Meta.Test.Decl.Class.Incl.
+Require Import ZF.Meta.Decl.Class.Equiv.
+Require Import ZF.Meta.Decl.Class.Incl.
 
 Import ListNotations.
 
