@@ -12,8 +12,6 @@ Record Env : Type := mkEnv
   ; proofs : string -> option DeclP
   }.
 
-Coercion terms : Env >-> Funclass.
-
 (* The empty environment has no declarations.                                   *)
 Definition empty : Env :=
   {| terms  := fun _ => None

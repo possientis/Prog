@@ -151,7 +151,7 @@ Qed.
 
 (* IsPairOf applied to two set variables is well sorted anywhere.               *)
 Proposition IsPairOfCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  e "IsPairOf"%string = Some IsPairOf ->
+  Env.terms e "IsPairOf"%string = Some IsPairOf ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
   HasTyT e G (IdentT "IsPairOf" [Var m; Var n]) TyClass.
@@ -169,7 +169,7 @@ Qed.
 
 (* Pair applied to two set variables is well sorted anywhere.                   *)
 Proposition pairCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  e "pair"%string = Some pair ->
+  Env.terms e "pair"%string = Some pair ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
   HasTyT e G (IdentT "pair" [Var m; Var n]) TySet.

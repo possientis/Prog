@@ -62,7 +62,7 @@ Qed.
 
 (* The identifier toClass sends any set variable to a class in any environment. *)
 Proposition toClassCheckIdent : forall (e:Env) (G:Ctx) (n:nat),
-  e "toClass"%string = Some toClass ->
+  Env.terms e "toClass"%string = Some toClass ->
   typeOf G n = Some TySet ->
   HasTyT e G (IdentT "toClass" [Var n]) TyClass.
 Proof.
@@ -77,7 +77,7 @@ Qed.
 
 (* Equivalence applied to two class variables is well sorted anywhere.          *)
 Proposition equivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  e "equiv"%string = Some equiv ->
+  Env.terms e "equiv"%string = Some equiv ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
   HasTyT e G (IdentT "equiv" [Var m; Var n]) TyProp.
@@ -95,7 +95,7 @@ Qed.
 
 (* Negated equivalence of two class variables is well sorted anywhere.          *)
 Proposition notEquivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  e "equiv"%string = Some equiv ->
+  Env.terms e "equiv"%string = Some equiv ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
   HasTyT e G (Not (IdentT "equiv" [Var m; Var n])) TyProp.

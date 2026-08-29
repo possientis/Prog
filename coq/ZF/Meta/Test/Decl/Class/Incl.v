@@ -46,7 +46,7 @@ Qed.
 
 (* Inclusion applied to two class variables is well sorted anywhere.            *)
 Proposition InclCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  e "Incl"%string = Some Incl ->
+  Env.terms e "Incl"%string = Some Incl ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
   HasTyT e G (IdentT "Incl" [Var m; Var n]) TyProp.
