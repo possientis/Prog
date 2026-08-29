@@ -20,9 +20,9 @@ Export ZF.Meta.Decl.Set.Relation.FunctionOn.
 (* forall a,                                                                    *)
 (*  exists f, FunctionOn f a /\ forall x, x :< a -> x <> empty -> eval f x :< x *)
 Definition Choice : DeclT :=
-  {| para := []
-  ;  res  := TyProp
-  ;  body :=
+  {| paraT := []
+  ;  resT  := TyProp
+  ;  bodyT :=
       All VarTySet
         (Ex VarTySet
           (And

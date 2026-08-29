@@ -1,0 +1,5 @@
+HasTyT -> HasTy and HasTyP -> HasTerm
+Get rid of Export in Meta.Decl modules
+split Decl env -> env + checkEnv : do not re-export
+eval + eval (Eval vs EvalOfClass)
+do not repeat conclusion (see declaration of WhenGCH)

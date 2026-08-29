@@ -13,9 +13,9 @@ Require Import ZF.Meta.Decl.Set.Empty.
 Require Import ZF.Meta.Decl.Set.Relation.FunctionOn.
 
 Definition eval : DeclT :=
-  {| para := [TySet; TySet]
-  ;  res  := TySet
-  ;  body := HoleT TySet
+  {| paraT := [TySet; TySet]
+  ;  resT  := TySet
+  ;  bodyT := HoleT TySet
   |}.
 
 Definition env : Env := Env.unions

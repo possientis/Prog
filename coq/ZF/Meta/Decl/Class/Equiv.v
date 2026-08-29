@@ -15,15 +15,15 @@ Import ListNotations.
 
 (* Definition toClass (a:U) : Class := fun x => x :< a.                         *)
 Definition toClass : Decl :=
-  {| para := [TySet];
-     res  := TyClass;
-     body := Lam (Elem (Var 0) (Var 1)) |}.
+  {| paraT := [TySet];
+     resT  := TyClass;
+     bodyT := Lam (Elem (Var 0) (Var 1)) |}.
 
 (* Definition equiv (P Q:Class) : Prop := forall x, P x <-> Q x.                *)
 Definition equiv : Decl :=
-  {| para := [TyClass; TyClass];
-     res  := TyProp;
-     body :=
+  {| paraT := [TyClass; TyClass];
+     resT  := TyProp;
+     bodyT :=
        (All VarTySet
          (Iff
            (App (Var 2) (Var 0))

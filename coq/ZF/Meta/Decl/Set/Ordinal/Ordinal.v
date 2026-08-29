@@ -9,9 +9,9 @@ Require Import ZF.Meta.Ty.
 Import ListNotations.
 
 Definition Ordinal : DeclT :=
-  {| para := [TySet]
-  ;  res  := TyProp
-  ;  body := HoleT TyProp
+  {| paraT := [TySet]
+  ;  resT  := TyProp
+  ;  bodyT := HoleT TyProp
   |}.
 
 Definition env : Env := Env.unions

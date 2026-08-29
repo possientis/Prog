@@ -10,9 +10,9 @@ Require Import ZF.Meta.Ty.
 Import ListNotations.
 
 Definition empty : DeclT :=
-  {| para := [];
-     res  := TySet;
-     body := HoleT TySet |}.
+  {| paraT := [];
+     resT  := TySet;
+     bodyT := HoleT TySet |}.
 
 Definition env : Env := Env.unions
   [ Env.fromListT

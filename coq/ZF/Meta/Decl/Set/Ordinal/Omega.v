@@ -2,20 +2,19 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition FunctionOn : DeclT :=
-  {| paraT := [TySet; TySet];
-     resT  := TyProp;
-     bodyT := HoleT TyProp |}.
+Definition omega : DeclT :=
+  {| paraT := []
+  ;  resT  := TySet
+  ;  bodyT := HoleT TySet
+  |}.
 
 Definition env : Env := Env.unions
   [ Env.fromListT
-    [ ("FunctionOn"%string  , FunctionOn)]
+    [ ("omega"%string, omega)]
   ].
-

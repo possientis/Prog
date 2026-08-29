@@ -11,14 +11,14 @@ Require Import ZF.Meta.Ty.
 Import ListNotations.
 
 Definition Functional : Decl :=
-  {| para := [TyClass];
-     res  := TyProp;
-     body := HoleT TyProp |}.
+  {| paraT := [TyClass];
+     resT  := TyProp;
+     bodyT := HoleT TyProp |}.
 
 Definition ordPair : Decl :=
-  {| para := [TySet; TySet];
-     res  := TySet;
-     body := HoleT TySet |}.
+  {| paraT := [TySet; TySet];
+     resT  := TySet;
+     bodyT := HoleT TySet |}.
 
 Definition env : Env := Env.fromListT
   [ ("Functional"%string, Functional)

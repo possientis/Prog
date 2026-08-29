@@ -9,9 +9,9 @@ Require Import ZF.Meta.Ty.
 Import ListNotations.
 
 Definition card : DeclT :=
-  {| para := [TySet]
-  ;  res  := TySet
-  ;  body := HoleT TySet
+  {| paraT := [TySet]
+  ;  resT  := TySet
+  ;  bodyT := HoleT TySet
   |}.
 
 Definition env : Env := Env.unions

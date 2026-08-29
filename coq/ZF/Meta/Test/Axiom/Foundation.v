@@ -11,14 +11,14 @@ Require Import ZF.Meta.Ty.
 Import ListNotations.
 
 Definition empty : Decl :=
-  {| para := [];
-     res  := TySet;
-     body := HoleT TySet |}.
+  {| paraT := [];
+     resT  := TySet;
+     bodyT := HoleT TySet |}.
 
 Definition inter : Decl :=
-  {| para := [TySet; TySet];
-     res  := TySet;
-     body := HoleT TySet |}.
+  {| paraT := [TySet; TySet];
+     resT  := TySet;
+     bodyT := HoleT TySet |}.
 
 Definition env : Env := Env.fromListT
   [ ("empty"%string, empty)

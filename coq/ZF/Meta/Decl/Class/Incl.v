@@ -15,9 +15,9 @@ Import ListNotations.
 
 (* Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.                  *)
 Definition Incl : Decl :=
-  {| para := [TyClass; TyClass];
-     res  := TyProp;
-     body :=
+  {| paraT := [TyClass; TyClass];
+     resT  := TyProp;
+     bodyT :=
        (All VarTySet
          (Imp
            (App (Var 2) (Var 0))

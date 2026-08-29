@@ -8,17 +8,14 @@ Import ListNotations.
 
 (* A term declaration records parameters, result sort and body.                 *)
 Record Decl : Type := mkDecl
-  { para : list Ty
-  ; res  : Ty
-  ; body : Term
+  { paraT : list Ty
+  ; resT  : Ty
+  ; bodyT : Term
   }.
 
 (* A term declaration body is checked in de Bruijn context order.               *)
-Definition ctx (d:Decl) : Ctx := rev (para d).
+Definition ctx (d:Decl) : Ctx := rev (paraT d).
 
 Definition DeclT      := Decl.
 Definition mkDeclT    := mkDecl.
-Definition paraT      := para.
-Definition resT       := res.
-Definition bodyT      := body.
 Definition ctxT       := ctx.

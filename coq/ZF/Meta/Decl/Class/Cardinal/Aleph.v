@@ -9,9 +9,9 @@ Require Import ZF.Meta.Ty.
 Import ListNotations.
 
 Definition Aleph : DeclT :=
-  {| para := []
-  ;  res  := TyClass
-  ;  body := HoleT TyClass
+  {| paraT := []
+  ;  resT  := TyClass
+  ;  bodyT := HoleT TyClass
   |}.
 
 Definition env : Env := Env.unions
