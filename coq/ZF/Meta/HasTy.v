@@ -100,6 +100,9 @@ with HasTyP (E:Env) : Ctx -> Proof -> Term -> Prop :=
 | HasTyHoleP : forall (G:Ctx) (t:Term),
     HasTyT E G t TyProp                      ->
     HasTyP E G (HoleP t) t
+| HasTyAxiomP : forall (G:Ctx) (t:Term),
+    HasTyT E G t TyProp                      ->
+    HasTyP E G (AxiomP t) t
 | HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:DeclP),
     Env.proofs E name = Some d               ->
     HasTyTs E G args (paraP d)               ->

@@ -29,5 +29,6 @@ Inductive Term : Type :=
 | Def     : Term   -> Proof     -> Proof     -> Term
 with Proof : Type :=
 | HoleP  : Term    -> Proof
+| AxiomP : Term    -> Proof
 | IdentP : string  -> list Term -> Proof
 .
