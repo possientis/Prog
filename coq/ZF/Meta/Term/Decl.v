@@ -6,11 +6,11 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-(* A term declaration records parameters, result sort and optional body.        *)
+(* A term declaration records parameters, result sort and body.                 *)
 Record Decl : Type := mkDecl
   { para : list Ty
   ; res  : Ty
-  ; body : option Term
+  ; body : Term
   }.
 
 (* A term declaration body is checked in de Bruijn context order.               *)

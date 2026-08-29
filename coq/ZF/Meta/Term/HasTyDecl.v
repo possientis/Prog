@@ -4,9 +4,6 @@ Require Import ZF.Meta.Term.Decl.
 
 (* A term declaration is well typed when its body has its declared sort.        *)
 Definition HasTyDecl (e:Env) (d:Decl) : Prop :=
-  match bodyT d with
-  | Some t => HasTyT e (ctxT d) t (resT d)
-  | None   => True
-  end.
+  HasTyT e (ctxT d) (bodyT d) (resT d).
 
 Definition HasTyDeclT := HasTyDecl.

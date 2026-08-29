@@ -13,32 +13,32 @@ Import ListNotations.
 Definition Aleph : Decl :=
   {| para := [];
      res  := TyClass;
-     body := None |}.
+     body := HoleT TyClass |}.
 
 Definition Ordinal : Decl :=
   {| para := [TySet];
      res  := TyProp;
-     body := None |}.
+     body := HoleT TyProp |}.
 
 Definition card : Decl :=
   {| para := [TySet];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition power : Decl :=
   {| para := [TySet];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition eval : Decl :=
   {| para := [TyClass; TySet];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition succ : Decl :=
   {| para := [TySet];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition env : Env := Env.fromListT
   [ ("Aleph"%string  , Aleph)

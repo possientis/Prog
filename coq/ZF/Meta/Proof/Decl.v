@@ -6,11 +6,11 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-(* A proof declaration records parameters, conclusion and optional proof body.  *)
+(* A proof declaration records parameters, conclusion and proof body.           *)
 Record Decl : Type := mkDecl
   { para  : list Ty
   ; concl : Term
-  ; body  : option Proof
+  ; body  : Proof
   }.
 
 (* A proof declaration conclusion is checked in de Bruijn context order.        *)

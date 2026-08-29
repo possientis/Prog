@@ -17,14 +17,14 @@ Import ListNotations.
 (* Definition IsPairOf (a b:U) : Class := fun x =>                              *)
 (* forall y, y :< x <-> y = a \/ y = b.                                         *)
 Definition IsPairOf : DeclT :=
-  mkDeclT [TySet; TySet] TyClass (Some
+  mkDeclT [TySet; TySet] TyClass
        (Lam
          (All VarTySet
            (Iff
              (Elem (Var 0) (Var 1))
              (Or
                (Equal (Var 0) (Var 3))
-               (Equal (Var 0) (Var 2))))))).
+               (Equal (Var 0) (Var 2)))))).
 
 (* The existence proof declaration states that some set is a pair of a and b.   *)
 Definition pairExists : DeclP :=
@@ -32,7 +32,12 @@ Definition pairExists : DeclP :=
       (Ex VarTySet
          (App
            (IdentT "IsPairOf" [Var 2; Var 1])
-           (Var 0))) None.
+           (Var 0)))
+      (HoleP
+        (Ex VarTySet
+          (App
+            (IdentT "IsPairOf" [Var 2; Var 1])
+            (Var 0)))).
 
 (* The uniqueness proof declaration states that any two such sets are equal.    *)
 Definition pairUnique : DeclP :=
@@ -47,15 +52,27 @@ Definition pairUnique : DeclP :=
                (App
                  (IdentT "IsPairOf" [Var 3; Var 2])
                  (Var 0))
-               (Equal (Var 1) (Var 0)))))) None.
+               (Equal (Var 1) (Var 0))))))
+      (HoleP
+        (All VarTySet
+          (All VarTySet
+            (Imp
+              (App
+                (IdentT "IsPairOf" [Var 3; Var 2])
+                (Var 1))
+              (Imp
+                (App
+                  (IdentT "IsPairOf" [Var 3; Var 2])
+                  (Var 0))
+                (Equal (Var 1) (Var 0))))))).
 
 (* Definition pair (a b:U) : U := Def (IsPairOf a b) exists unique.             *)
 Definition pair : DeclT :=
-  mkDeclT [TySet; TySet] TySet (Some
+  mkDeclT [TySet; TySet] TySet
        (Def
          (IdentT "IsPairOf" [Var 1; Var 0])
          (IdentP "pairExists" [Var 1; Var 0])
-         (IdentP "pairUnique" [Var 1; Var 0]))).
+         (IdentP "pairUnique" [Var 1; Var 0])).
 
 (* Environment.                                                                 *)
 
@@ -96,6 +113,15 @@ Proof.
   - apply (HasTyVar _ _ _ TySet). reflexivity.
 Qed.
 
+(* The existence proof body is a hole for its stated proposition.               *)
+Proposition pairExistsCheckBody :
+  HasTyP env (ctxP pairExists) (bodyP pairExists) (conclP pairExists).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyHoleP.
+  apply pairExistsCheckConcl.
+Qed.
+
 (* The uniqueness proof declaration conclusion is a well-sorted proposition.    *)
 Proposition pairUniqueCheckConcl :
   HasTyT env (ctxP pairUnique) (conclP pairUnique) TyProp.
@@ -120,6 +146,15 @@ Proof.
            ++ apply HasTyTsNil.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
+Qed.
+
+(* The uniqueness proof body is a hole for its stated proposition.              *)
+Proposition pairUniqueCheckBody :
+  HasTyP env (ctxP pairUnique) (bodyP pairUnique) (conclP pairUnique).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply HasTyHoleP.
+  apply pairUniqueCheckConcl.
 Qed.
 
 (* The declaration body for pair denotes a set backed by proof references.      *)

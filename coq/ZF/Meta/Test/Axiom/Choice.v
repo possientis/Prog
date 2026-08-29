@@ -13,17 +13,17 @@ Import ListNotations.
 Definition FunctionOn : Decl :=
   {| para := [TySet; TySet];
      res  := TyProp;
-     body := None |}.
+     body := HoleT TyProp |}.
 
 Definition empty : Decl :=
   {| para := [];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition eval : Decl :=
   {| para := [TySet; TySet];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition env : Env := Env.fromListT
   [ ("FunctionOn"%string, FunctionOn)

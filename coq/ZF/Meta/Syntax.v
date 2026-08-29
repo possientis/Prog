@@ -8,6 +8,7 @@ Inductive Term : Type :=
 | Bot     : Term
 | Top     : Term
 | Var     : nat    -> Term
+| HoleT   : Ty     -> Term
 | IdentT  : string -> list Term -> Term
 | Elem    : Term   -> Term      -> Term
 | Leq     : Term   -> Term      -> Term
@@ -27,5 +28,6 @@ Inductive Term : Type :=
 | App     : Term   -> Term      -> Term
 | Def     : Term   -> Proof     -> Proof     -> Term
 with Proof : Type :=
-| IdentP : string -> list Term -> Proof
+| HoleP  : Term    -> Proof
+| IdentP : string  -> list Term -> Proof
 .

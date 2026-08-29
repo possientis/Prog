@@ -17,13 +17,13 @@ Import ListNotations.
 Definition toClass : Decl :=
   {| para := [TySet];
      res  := TyClass;
-     body := Some (Lam (Elem (Var 0) (Var 1))) |}.
+     body := Lam (Elem (Var 0) (Var 1)) |}.
 
 (* Definition equiv (P Q:Class) : Prop := forall x, P x <-> Q x.                *)
 Definition equiv : Decl :=
   {| para := [TyClass; TyClass];
      res  := TyProp;
-     body := Some
+     body :=
        (All VarTySet
          (Iff
            (App (Var 2) (Var 0))

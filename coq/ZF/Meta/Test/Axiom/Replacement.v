@@ -13,12 +13,12 @@ Import ListNotations.
 Definition Functional : Decl :=
   {| para := [TyClass];
      res  := TyProp;
-     body := None |}.
+     body := HoleT TyProp |}.
 
 Definition ordPair : Decl :=
   {| para := [TySet; TySet];
      res  := TySet;
-     body := None |}.
+     body := HoleT TySet |}.
 
 Definition env : Env := Env.fromListT
   [ ("Functional"%string, Functional)

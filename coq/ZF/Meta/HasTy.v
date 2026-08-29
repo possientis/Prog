@@ -18,6 +18,8 @@ Inductive HasTyT (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | HasTyVar : forall (G:Ctx) (n:nat) (ty:Ty),
     typeOf G n = Some ty                     ->
     HasTyT E G (Var n) ty
+| HasTyHoleT : forall (G:Ctx) (ty:Ty),
+    HasTyT E G (HoleT ty) ty
 | HasTyIdentT : forall (G:Ctx) (name:string) (args:list Term) (d:DeclT),
     Env.terms E name = Some d                ->
     HasTyTs E G args (paraT d)               ->
@@ -95,6 +97,9 @@ with HasTyTs (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
     HasTyTs E G ts tys                       ->
     HasTyTs E G (t :: ts) (ty :: tys)
 with HasTyP (E:Env) : Ctx -> Proof -> Term -> Prop :=
+| HasTyHoleP : forall (G:Ctx) (t:Term),
+    HasTyT E G t TyProp                      ->
+    HasTyP E G (HoleP t) t
 | HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:DeclP),
     Env.proofs E name = Some d               ->
     HasTyTs E G args (paraP d)               ->

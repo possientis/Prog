@@ -17,7 +17,7 @@ Import ListNotations.
 Definition Incl : Decl :=
   {| para := [TyClass; TyClass];
      res  := TyProp;
-     body := Some
+     body :=
        (All VarTySet
          (Imp
            (App (Var 2) (Var 0))

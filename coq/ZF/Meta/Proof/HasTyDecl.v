@@ -6,9 +6,6 @@ Require Import ZF.Meta.Ty.
 (* A proof declaration is well typed when its conclusion is a proposition.      *)
 Definition HasTyDecl (e:Env) (d:Decl) : Prop :=
   HasTyT e (ctxP d) (conclP d) TyProp /\
-  match bodyP d with
-  | Some p => HasTyP e (ctxP d) p (conclP d)
-  | None   => True
-  end.
+  HasTyP e (ctxP d) (bodyP d) (conclP d).
 
 Definition HasTyDeclP := HasTyDecl.
