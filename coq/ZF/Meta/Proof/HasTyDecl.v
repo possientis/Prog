@@ -7,7 +7,7 @@ Require Import ZF.Meta.Ty.
 Definition HasTyDecl (e:Env) (d:Decl) : Prop :=
   HasTyT e (ctxP d) (conclP d) TyProp /\
   match bodyP d with
-  | Some p => HasTyP e (ctxP d) p
+  | Some p => HasTyP e (ctxP d) p (conclP d)
   | None   => True
   end.
 

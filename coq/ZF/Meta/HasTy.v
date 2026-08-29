@@ -82,10 +82,10 @@ Inductive HasTyT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     HasTyT E G A TyClass                     ->
     HasTyT E G x TySet                       ->
     HasTyT E G (App A x) TyProp
-| HasTyDef : forall (G:Ctx) (A:Term) (p q:Proof),
+| HasTyDef : forall (G:Ctx) (A P Q:Term) (p q:Proof),
     HasTyT E G A TyClass                     ->
-    HasTyP E G p                             ->
-    HasTyP E G q                             ->
+    HasTyP E G p P                           ->
+    HasTyP E G q Q                           ->
     HasTyT E G (Def A p q) TySet
 with HasTyTs (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
 | HasTyTsNil : forall (G:Ctx),
@@ -94,9 +94,9 @@ with HasTyTs (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
     HasTyT E G t ty                          ->
     HasTyTs E G ts tys                       ->
     HasTyTs E G (t :: ts) (ty :: tys)
-with HasTyP (E:Env) : Ctx -> Proof -> Prop :=
+with HasTyP (E:Env) : Ctx -> Proof -> Term -> Prop :=
 | HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:DeclP),
     Env.proofs E name = Some d               ->
     HasTyTs E G args (paraP d)               ->
-    HasTyP E G (IdentP name args)
+    HasTyP E G (IdentP name args) (conclP d)
 .

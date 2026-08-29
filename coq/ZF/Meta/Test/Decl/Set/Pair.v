@@ -126,20 +126,20 @@ Qed.
 Proposition pairCheckBody : HasTyDecl env pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyDef.
+  apply (HasTyDef _ _ _ (conclP pairExists) (conclP pairUnique)).
   - apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsNil.
-  - apply HasTyIdentP with pairExists. 1: reflexivity.
+  - apply HasTyIdentP with (d:=pairExists). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsNil.
-  - apply HasTyIdentP with pairUnique. 1: reflexivity.
+  - apply HasTyIdentP with (d:=pairUnique). 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
