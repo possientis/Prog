@@ -1,67 +1,16 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Term.Decl.
-Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.HasTyDecl.
+Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition Aleph : Decl :=
-  {| para := [];
-     res  := TyClass;
-     body := HoleT TyClass |}.
+Require Import ZF.Meta.Decl.Axiom.Continuum.
 
-Definition Ordinal : Decl :=
-  {| para := [TySet];
-     res  := TyProp;
-     body := HoleT TyProp |}.
-
-Definition card : Decl :=
-  {| para := [TySet];
-     res  := TySet;
-     body := HoleT TySet |}.
-
-Definition power : Decl :=
-  {| para := [TySet];
-     res  := TySet;
-     body := HoleT TySet |}.
-
-Definition eval : Decl :=
-  {| para := [TyClass; TySet];
-     res  := TySet;
-     body := HoleT TySet |}.
-
-Definition succ : Decl :=
-  {| para := [TySet];
-     res  := TySet;
-     body := HoleT TySet |}.
-
-Definition env : Env := Env.fromListT
-  [ ("Aleph"%string  , Aleph)
-  ; ("Ordinal"%string, Ordinal)
-  ; ("card"%string   , card)
-  ; ("power"%string  , power)
-  ; ("eval"%string   , eval)
-  ; ("succ"%string   , succ)
-  ].
-
-(* forall a, Ordinal a -> card (power (eval Aleph a)) = eval Aleph (succ a)     *)
-Definition GCH : Term :=
-  All VarTySet
-    (Imp
-      (IdentT "Ordinal" [Var 0])
-      (Equal
-        (IdentT "card"
-          [IdentT "power"
-            [IdentT "eval" [IdentT "Aleph" []; Var 0]]])
-        (IdentT "eval" [IdentT "Aleph" []; IdentT "succ" [Var 0]]))).
-
-(* The generalized-continuum example is a proposition in the local environment. *)
-Proposition HasTy : HasTyT env Ctx.empty GCH TyProp.
+Proposition GCH : HasTyDeclT (Continuum.env) GCH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyImp.
