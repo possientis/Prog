@@ -168,13 +168,13 @@ Proof.
     + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsNil.
-  - apply HasTyIdentP with (d:=pairExists). 1: reflexivity.
+  - apply HasTyIdentP with [TySet;TySet]. 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsNil.
-  - apply HasTyIdentP with (d:=pairUnique). 1: reflexivity.
+  - apply HasTyIdentP with [TySet;TySet]. 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.

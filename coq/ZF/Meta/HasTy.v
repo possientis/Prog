@@ -103,8 +103,8 @@ with HasTyP (E:Env) : Ctx -> Proof -> Term -> Prop :=
 | HasTyAxiomP : forall (G:Ctx) (t:Term),
     HasTyT E G t TyProp                      ->
     HasTyP E G (AxiomP t) t
-| HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (d:DeclP),
-    Env.proofs E name = Some d               ->
-    HasTyTs E G args (paraP d)               ->
-    HasTyP E G (IdentP name args) (conclP d)
+| HasTyIdentP : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (t:Term),
+    sigP E name = Some (tys,t)               ->
+    HasTyTs E G args tys                     ->
+    HasTyP E G (IdentP name args) t
 .
