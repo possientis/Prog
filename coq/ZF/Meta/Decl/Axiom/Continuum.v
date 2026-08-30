@@ -51,7 +51,18 @@ Definition WhenGCH : DeclP :=
   ;  bodyP  := HoleP (Imp (IdentT "GCH" []) (IdentT "CH" []))
   |}.
 
-Definition env : Env := Env.unions
+Definition imports : Env := Env.unions
+  [ Aleph.exports
+  ; Number.exports
+  ; Natural.exports
+  ; Omega.exports
+  ; Ordinal.exports
+  ; Succ.exports
+  ; Power.exports
+  ; EvalOfClass.exports
+  ].
+
+Definition exports : Env := Env.unions
   [ Env.fromListT
     [ ("CH"%string , CH)
     ; ("GCH"%string, GCH)
@@ -59,12 +70,6 @@ Definition env : Env := Env.unions
   ; Env.fromListP
     [ ("WhenGCH"%string, WhenGCH)
     ]
-  ; Aleph.env
-  ; Number.env
-  ; Natural.env
-  ; Omega.env
-  ; Ordinal.env
-  ; Succ.env
-  ; Power.env
-  ; EvalOfClass.env
   ].
+
+Definition env : Env := Env.union imports exports.

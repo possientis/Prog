@@ -14,7 +14,10 @@ Definition power : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("power"%string, power)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("power"%string, power)
   ].
+
+Definition env : Env := Env.union imports exports.

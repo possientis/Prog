@@ -14,8 +14,11 @@ Definition FunctionOn : DeclT :=
      resT  := TyProp;
      bodyT := HoleT TyProp |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("FunctionOn"%string  , FunctionOn)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("FunctionOn"%string, FunctionOn)
   ].
+
+Definition env : Env := Env.union imports exports.
 

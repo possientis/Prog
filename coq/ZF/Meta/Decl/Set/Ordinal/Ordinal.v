@@ -14,7 +14,10 @@ Definition Ordinal : DeclT :=
   ;  bodyT := HoleT TyProp
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("Ordinal"%string, Ordinal)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("Ordinal"%string, Ordinal)
   ].
+
+Definition env : Env := Env.union imports exports.

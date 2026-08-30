@@ -31,10 +31,14 @@ Definition equiv : Decl :=
 
 (* Environment.                                                                 *)
 
-Definition env : Env := Env.fromListT
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
   [ ("toClass"%string, toClass)
   ; ("equiv"%string  , equiv)
   ].
+
+Definition env : Env := Env.union imports exports.
 
 (* Body checks.                                                                 *)
 

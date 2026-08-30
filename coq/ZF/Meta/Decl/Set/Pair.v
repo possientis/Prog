@@ -76,7 +76,9 @@ Definition pair : DeclT :=
 
 (* Environment.                                                                 *)
 
-Definition env : Env := Env.unions
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.unions
   [ Env.fromListT
       [ ("IsPairOf"%string  , IsPairOf)
       ; ("pair"%string      , pair)
@@ -86,6 +88,8 @@ Definition env : Env := Env.unions
       ; ("pairUnique"%string, pairUnique)
       ]
   ].
+
+Definition env : Env := Env.union imports exports.
 
 (* Body checks.                                                                 *)
 

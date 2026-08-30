@@ -1,4 +1,3 @@
-split Decl env -> env + checkEnv : do not re-export
 eval + eval (Eval vs EvalOfClass)
 do not repeat conclusion (see declaration of WhenGCH)
 get around the (CheckVar _ _ _ TySet) syndrome

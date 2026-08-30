@@ -25,7 +25,13 @@ Definition Incl : Decl :=
 
 (* Environment.                                                                 *)
 
-Definition env : Env := Env.fromListT [("Incl"%string, Incl)].
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("Incl"%string, Incl)
+  ].
+
+Definition env : Env := Env.union imports exports.
 
 (* Body checks.                                                                 *)
 

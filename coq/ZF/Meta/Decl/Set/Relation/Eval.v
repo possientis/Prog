@@ -18,9 +18,15 @@ Definition eval : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("eval"%string, eval)]
+Definition imports : Env := Env.unions
+  [ Empty.exports
+  ; FunctionOn.exports
   ].
+
+Definition exports : Env := Env.fromListT
+  [ ("eval"%string, eval)
+  ].
+
+Definition env : Env := Env.union imports exports.
 
 

@@ -14,7 +14,10 @@ Definition succ : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("succ"%string, succ)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("succ"%string, succ)
   ].
+
+Definition env : Env := Env.union imports exports.

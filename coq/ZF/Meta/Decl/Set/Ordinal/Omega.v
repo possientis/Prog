@@ -14,7 +14,10 @@ Definition omega : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("omega"%string, omega)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("omega"%string, omega)
   ].
+
+Definition env : Env := Env.union imports exports.

@@ -31,13 +31,16 @@ Definition Choice : DeclT :=
                   (Elem (IdentT "eval" [Var 1; Var 0]) (Var 0)))))))
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("Choice"%string, Choice)
-    ]
-  ; FunctionOn.env
-  ; Empty.env
-  ; Eval.env
+Definition imports : Env := Env.unions
+  [ FunctionOn.exports
+  ; Empty.exports
+  ; Eval.exports
   ].
+
+Definition exports : Env := Env.fromListT
+  [ ("Choice"%string, Choice)
+  ].
+
+Definition env : Env := Env.union imports exports.
 
 

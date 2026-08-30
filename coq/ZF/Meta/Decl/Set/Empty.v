@@ -14,9 +14,12 @@ Definition empty : DeclT :=
      resT  := TySet;
      bodyT := HoleT TySet |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("empty"%string  , empty)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("empty"%string, empty)
   ].
+
+Definition env : Env := Env.union imports exports.
 
 

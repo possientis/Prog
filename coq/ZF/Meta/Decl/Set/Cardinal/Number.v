@@ -14,7 +14,10 @@ Definition card : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("card"%string, card)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("card"%string, card)
   ].
+
+Definition env : Env := Env.union imports exports.

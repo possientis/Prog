@@ -14,7 +14,10 @@ Definition Aleph : DeclT :=
   ;  bodyT := HoleT TyClass
   |}.
 
-Definition env : Env := Env.unions
-  [ Env.fromListT
-    [ ("Aleph"%string, Aleph)]
+Definition imports : Env := Env.empty.
+
+Definition exports : Env := Env.fromListT
+  [ ("Aleph"%string, Aleph)
   ].
+
+Definition env : Env := Env.union imports exports.
