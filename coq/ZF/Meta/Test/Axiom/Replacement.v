@@ -50,18 +50,18 @@ Proof.
   apply CheckAll, CheckImp.
   - apply CheckIdentT with [TyClass]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsNil.
   - apply CheckAll, CheckEx, CheckAll, CheckIff.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
     + apply CheckEx, CheckAnd.
-      * apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+      * apply CheckElem; apply CheckVar; reflexivity.
       * apply CheckApp.
-        -- apply (CheckVar _ _ _ TyClass). reflexivity.
+        -- apply CheckVar. reflexivity.
         -- apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
            apply CheckTsCons.
-           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckVar. reflexivity.
            ++ apply CheckTsCons.
-              ** apply (CheckVar _ _ _ TySet). reflexivity.
+              ** apply CheckVar. reflexivity.
               ** apply CheckTsNil.
 Qed.

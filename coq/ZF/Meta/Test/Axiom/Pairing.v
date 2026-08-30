@@ -21,8 +21,8 @@ Proposition PairingCheck : CheckT Env.empty Ctx.empty Pairing TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckEx, CheckAll, CheckIff.
-  - apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckElem; apply CheckVar; reflexivity.
   - apply CheckOr.
-    + apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
-    + apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckEqual; apply CheckVar; reflexivity.
+    + apply CheckEqual; apply CheckVar; reflexivity.
 Qed.

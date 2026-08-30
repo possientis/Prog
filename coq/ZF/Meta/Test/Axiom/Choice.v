@@ -15,23 +15,23 @@ Proof.
   apply CheckAll, CheckEx, CheckAnd.
   - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsCons.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsNil.
   - apply CheckAll, CheckImp.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
     + apply CheckImp.
       * apply CheckNotEq.
-        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckVar. reflexivity.
         -- apply CheckIdentT with []. 1: reflexivity.
            apply CheckTsNil.
       * apply CheckElem.
         -- apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
            apply CheckTsCons.
-           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckVar. reflexivity.
            ++ apply CheckTsCons.
-              ** apply (CheckVar _ _ _ TySet). reflexivity.
+              ** apply CheckVar. reflexivity.
               ** apply CheckTsNil.
-        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckVar. reflexivity.
 Qed.

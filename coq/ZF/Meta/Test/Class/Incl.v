@@ -145,9 +145,9 @@ Proof.
   apply CheckAll.
   apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
   apply CheckTsCons.
-  - apply (CheckVar _ _ _ TyClass). reflexivity.
+  - apply CheckVar. reflexivity.
   - apply CheckTsCons.
-    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsNil.
 Qed.
 

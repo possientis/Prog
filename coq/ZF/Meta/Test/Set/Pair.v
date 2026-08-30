@@ -67,9 +67,9 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckAll, CheckIff.
   - apply CheckElem.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply pairCheckIdent; reflexivity.
-  - apply CheckOr; apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckOr; apply CheckEqual; apply CheckVar; reflexivity.
 Qed.
 
 (* The left element belongs to its pair, and it is well sorted.                 *)
@@ -77,7 +77,7 @@ Proposition IsInLCheck : CheckT env Ctx.empty IsInL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckElem.
-  - apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckVar. reflexivity.
   - apply pairCheckIdent; reflexivity.
 Qed.
 
@@ -86,7 +86,7 @@ Proposition IsInRCheck : CheckT env Ctx.empty IsInR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckElem.
-  - apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckVar. reflexivity.
   - apply pairCheckIdent; reflexivity.
 Qed.
 
@@ -97,11 +97,11 @@ Proof.
   apply CheckAll, CheckAll, CheckAll, CheckIff.
   - apply CheckAnd.
     + apply CheckApp.
-      * apply (CheckVar _ _ _ TyClass). reflexivity.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
+      * apply CheckVar. reflexivity.
     + apply CheckApp.
-      * apply (CheckVar _ _ _ TyClass). reflexivity.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
+      * apply CheckVar. reflexivity.
   - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.
     + apply CheckIdentT with [TySet]. 1: reflexivity.
@@ -109,6 +109,6 @@ Proof.
       * apply pairCheckIdent; reflexivity.
       * apply CheckTsNil.
     + apply CheckTsCons.
-      * apply (CheckVar _ _ _ TyClass). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsNil.
 Qed.

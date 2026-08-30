@@ -91,8 +91,8 @@ Proposition IsPairOfCheckBody : CheckDecl Env.empty IsPairOf.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckLam, CheckAll, CheckIff.
-  - apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
-  - apply CheckOr; apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckElem; apply CheckVar; reflexivity.
+  - apply CheckOr; apply CheckEqual; apply CheckVar; reflexivity.
 Qed.
 
 (* The existence proof declaration conclusion is a well-sorted proposition.     *)
@@ -103,11 +103,11 @@ Proof.
   apply CheckEx, CheckApp.
   - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsCons.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsNil.
-  - apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckVar. reflexivity.
 Qed.
 
 (* The existence proof body is a hole for its stated proposition.               *)
@@ -128,21 +128,21 @@ Proof.
   - apply CheckApp.
     + apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
       apply CheckTsCons.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsCons.
-        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckVar. reflexivity.
         -- apply CheckTsNil.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
   - apply CheckImp.
     + apply CheckApp.
       * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
         apply CheckTsCons.
-        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckVar. reflexivity.
         -- apply CheckTsCons.
-           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckVar. reflexivity.
            ++ apply CheckTsNil.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
-    + apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+      * apply CheckVar. reflexivity.
+    + apply CheckEqual; apply CheckVar; reflexivity.
 Qed.
 
 (* The uniqueness proof body is a hole for its stated proposition.              *)
@@ -161,21 +161,21 @@ Proof.
   apply (CheckDef _ _ _ (conclP pairExists) (conclP pairUnique)).
   - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsCons.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsNil.
   - apply CheckIdentP with [TySet;TySet]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsCons.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsNil.
   - apply CheckIdentP with [TySet;TySet]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsCons.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
       * apply CheckTsNil.
 Qed.
 

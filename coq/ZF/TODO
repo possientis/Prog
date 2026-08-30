@@ -1,2 +1,2 @@
 eval + eval (Eval vs EvalOfClass)
-get around the (CheckVar _ _ _ TySet) syndrome
+Should we remove quantification over classes 

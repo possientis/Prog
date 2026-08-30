@@ -39,7 +39,7 @@ Proof.
   apply CheckAll, CheckImp.
   - apply CheckIdentT with [TySet]. 1: reflexivity.
     apply CheckTsCons.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsNil.
   - apply CheckEqual.
     + apply CheckIdentT with [TySet]. 1: reflexivity.
@@ -51,7 +51,7 @@ Proof.
            ++ apply CheckIdentT with []. 1: reflexivity.
               apply CheckTsNil.
            ++ apply CheckTsCons.
-              ** apply (CheckVar _ _ _ TySet). reflexivity.
+              ** apply CheckVar. reflexivity.
               ** apply CheckTsNil.
         -- apply CheckTsNil.
       * apply CheckTsNil.
@@ -62,7 +62,7 @@ Proof.
       * apply CheckTsCons.
         -- apply CheckIdentT with [TySet]. 1: reflexivity.
            apply CheckTsCons.
-           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckVar. reflexivity.
            ++ apply CheckTsNil.
         -- apply CheckTsNil.
 Qed.

@@ -153,9 +153,9 @@ Proof.
   apply CheckAll.
   apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
   apply CheckTsCons.
-  - apply (CheckVar _ _ _ TyClass). reflexivity.
+  - apply CheckVar. reflexivity.
   - apply CheckTsCons.
-    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckTsNil.
 Qed.
 
@@ -218,7 +218,7 @@ Proposition EqualToClassCheck : CheckT env Ctx.empty EqualToClass TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckIff.
-  - apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckEqual; apply CheckVar; reflexivity.
   - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.
     + apply toClassCheckIdent; reflexivity.
@@ -233,7 +233,7 @@ Proposition NotEqualToClassCheck :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckIff.
-  - apply CheckNotEq; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckNotEq; apply CheckVar; reflexivity.
   - apply CheckNot.
     apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.

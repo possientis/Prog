@@ -21,10 +21,10 @@ Proposition Check : CheckT Env.empty Ctx.empty Specification TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckEx, CheckAll, CheckIff.
-  - apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckElem; apply CheckVar; reflexivity.
   - apply CheckAnd.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
     + apply CheckApp.
-      * apply (CheckVar _ _ _ TyClass). reflexivity.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
+      * apply CheckVar. reflexivity.
 Qed.

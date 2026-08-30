@@ -43,17 +43,17 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckImp.
   - apply CheckNotEq.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
     + apply CheckIdentT with []. 1: reflexivity.
       apply CheckTsNil.
   - apply CheckEx, CheckAnd.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
     + apply CheckEqual.
       * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
         apply CheckTsCons.
-        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckVar. reflexivity.
         -- apply CheckTsCons.
-           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckVar. reflexivity.
            ++ apply CheckTsNil.
       * apply CheckIdentT with []. 1: reflexivity.
         apply CheckTsNil.

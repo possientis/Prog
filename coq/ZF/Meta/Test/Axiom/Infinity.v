@@ -51,18 +51,18 @@ Proof.
   - apply CheckElem.
     + apply CheckIdentT with []. 1: reflexivity.
       apply CheckTsNil.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
   - apply CheckAll, CheckImp.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
     + apply CheckElem.
       * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
         apply CheckTsCons.
-        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckVar. reflexivity.
         -- apply CheckTsCons.
            ++ apply CheckIdentT with [TySet]. 1: reflexivity.
               apply CheckTsCons.
-              ** apply (CheckVar _ _ _ TySet). reflexivity.
+              ** apply CheckVar. reflexivity.
               ** apply CheckTsNil.
            ++ apply CheckTsNil.
-      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckVar. reflexivity.
 Qed.

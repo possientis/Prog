@@ -46,7 +46,7 @@ Definition env : Env := Env.union imports exports.
 Proposition toClassCheckBody : CheckDecl Env.empty toClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckLam, CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+  apply CheckLam, CheckElem; apply CheckVar; reflexivity.
 Qed.
 
 (* The declaration body for equivalence compares two classes pointwise.         *)
@@ -55,11 +55,11 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckIff.
   - apply CheckApp.
-    + apply (CheckVar _ _ _ TyClass). reflexivity.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
+    + apply CheckVar. reflexivity.
   - apply CheckApp.
-    + apply (CheckVar _ _ _ TyClass). reflexivity.
-    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckVar. reflexivity.
+    + apply CheckVar. reflexivity.
 Qed.
 
 (* Identifier checks.                                                           *)

@@ -20,7 +20,7 @@ Proposition ExtensionalityCheck :
 Proof.
   apply CheckAll, CheckAll, CheckImp.
   - apply CheckAll, CheckIff.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
-  - apply CheckEqual;  apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
+  - apply CheckEqual;  apply CheckVar; reflexivity.
 Qed.

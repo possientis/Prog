@@ -21,8 +21,8 @@ Proposition Check : CheckT Env.empty Ctx.empty Union TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckEx, CheckAll, CheckIff.
-  - apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckElem; apply CheckVar; reflexivity.
   - apply CheckEx, CheckAnd.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
-    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
+    + apply CheckElem; apply CheckVar; reflexivity.
 Qed.
