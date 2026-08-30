@@ -3,6 +3,8 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Term.Decl.
+Require Import ZF.Meta.Ty.
+Require Import ZF.Meta.Syntax.
 
 Import ListNotations.
 
@@ -11,6 +13,18 @@ Record Env : Type := mkEnv
   { terms  : string -> option DeclT
   ; proofs : string -> option DeclP
   }.
+
+Definition sigT (e:Env) (name: string) : option (list Ty * Ty) :=
+  match terms e name with
+  | None   => None
+  | Some d => Some (paraT d, resT d)
+  end.
+
+Definition sigP (e:Env) (name: string) : option (list Ty * Term) :=
+  match proofs e name with
+  | None   => None
+  | Some d => Some (paraP d, conclP d)
+  end.
 
 (* The empty environment has no declarations.                                   *)
 Definition empty : Env :=

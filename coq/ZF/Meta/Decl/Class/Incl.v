@@ -46,15 +46,14 @@ Qed.
 
 (* Inclusion applied to two class variables is well sorted anywhere.            *)
 Proposition InclCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  Env.terms e "Incl"%string = Some Incl ->
+  Env.sigT e "Incl"%string = Some ([TyClass; TyClass], TyProp) ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
   HasTyT e G (IdentT "Incl" [Var m; Var n]) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with (d:=Incl).
-  - assumption.
+  apply HasTyIdentT with [TyClass;TyClass]. 1: assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsCons.

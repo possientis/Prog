@@ -104,7 +104,7 @@ Proposition pairExistsCheckConcl :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyEx, HasTyApp.
-  - apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
+  - apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
@@ -129,7 +129,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply HasTyAll, HasTyAll, HasTyImp.
   - apply HasTyApp.
-    + apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
+    + apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
       apply HasTyTsCons.
       * apply (HasTyVar _ _ _ TySet). reflexivity.
       * apply HasTyTsCons.
@@ -138,7 +138,7 @@ Proof.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
   - apply HasTyImp.
     + apply HasTyApp.
-      * apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
+      * apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
         apply HasTyTsCons.
         -- apply (HasTyVar _ _ _ TySet). reflexivity.
         -- apply HasTyTsCons.
@@ -162,7 +162,7 @@ Proposition pairCheckBody : HasTyDecl env pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply (HasTyDef _ _ _ (conclP pairExists) (conclP pairUnique)).
-  - apply HasTyIdentT with (d:=IsPairOf). 1: reflexivity.
+  - apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
     apply HasTyTsCons.
     + apply (HasTyVar _ _ _ TySet). reflexivity.
     + apply HasTyTsCons.
@@ -186,15 +186,14 @@ Qed.
 
 (* IsPairOf applied to two set variables is well sorted anywhere.               *)
 Proposition IsPairOfCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  Env.terms e "IsPairOf"%string = Some IsPairOf ->
+  Env.sigT e "IsPairOf"%string = Some ([TySet; TySet], TyClass) ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
   HasTyT e G (IdentT "IsPairOf" [Var m; Var n]) TyClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with (d:=IsPairOf).
-  - assumption.
+  apply HasTyIdentT with [TySet;TySet]. 1: assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsCons.
@@ -204,15 +203,14 @@ Qed.
 
 (* Pair applied to two set variables is well sorted anywhere.                   *)
 Proposition pairCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  Env.terms e "pair"%string = Some pair ->
+  Env.sigT e "pair"%string = Some ([TySet; TySet], TySet) ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
   HasTyT e G (IdentT "pair" [Var m; Var n]) TySet.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with (d:=pair).
-  - assumption.
+  apply HasTyIdentT with [TySet;TySet]. 1: assumption.
   - apply HasTyTsCons.
     + apply HasTyVar. assumption.
     + apply HasTyTsCons.

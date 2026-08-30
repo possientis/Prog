@@ -20,10 +20,10 @@ Inductive HasTyT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     HasTyT E G (Var n) ty
 | HasTyHoleT : forall (G:Ctx) (ty:Ty),
     HasTyT E G (HoleT ty) ty
-| HasTyIdentT : forall (G:Ctx) (name:string) (args:list Term) (d:DeclT),
-    Env.terms E name = Some d                ->
-    HasTyTs E G args (paraT d)               ->
-    HasTyT E G (IdentT name args) (resT d)
+| HasTyIdentT : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (ty:Ty),
+    sigT E name = Some (tys,ty)              ->
+    HasTyTs E G args tys                     ->
+    HasTyT E G (IdentT name args) ty
 | HasTyElem : forall (G:Ctx) (x y:Term),
     HasTyT E G x TySet                       ->
     HasTyT E G y TySet                       ->
