@@ -4,8 +4,8 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.HasTyDecl.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -30,16 +30,16 @@ Definition env : Env := Env.fromListT [("Incl"%string, Incl)].
 (* Body checks.                                                                 *)
 
 (* The declaration body for inclusion compares two classes pointwise.           *)
-Proposition InclCheckBody : HasTyDecl Env.empty Incl.
+Proposition InclCheckBody : CheckDecl Env.empty Incl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyImp.
-  - apply HasTyApp.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyApp.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
+  apply CheckAll, CheckImp.
+  - apply CheckApp.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckApp.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
 Qed.
 
 (* Identifier checks.                                                           *)
@@ -49,14 +49,14 @@ Proposition InclCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   Env.sigT e "Incl"%string = Some ([TyClass; TyClass], TyProp) ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
-  HasTyT e G (IdentT "Incl" [Var m; Var n]) TyProp.
+  CheckT e G (IdentT "Incl" [Var m; Var n]) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TyClass;TyClass]. 1: assumption.
-  - apply HasTyTsCons.
-    + apply HasTyVar. assumption.
-    + apply HasTyTsCons.
-      * apply HasTyVar. assumption.
-      * apply HasTyTsNil.
+  apply CheckIdentT with [TyClass;TyClass]. 1: assumption.
+  - apply CheckTsCons.
+    + apply CheckVar. assumption.
+    + apply CheckTsCons.
+      * apply CheckVar. assumption.
+      * apply CheckTsNil.
 Qed.

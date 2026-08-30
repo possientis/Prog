@@ -6,8 +6,8 @@ Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.Decl.
-Require Import ZF.Meta.Term.HasTyDecl.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -90,96 +90,96 @@ Definition env : Env := Env.unions
 (* Body checks.                                                                 *)
 
 (* The declaration body for IsPairOf recognizes the two selected sets.          *)
-Proposition IsPairOfCheckBody : HasTyDecl Env.empty IsPairOf.
+Proposition IsPairOfCheckBody : CheckDecl Env.empty IsPairOf.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyLam, HasTyAll, HasTyIff.
-  - apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
-  - apply HasTyOr; apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
+  apply CheckLam, CheckAll, CheckIff.
+  - apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckOr; apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
 Qed.
 
 (* The existence proof declaration conclusion is a well-sorted proposition.     *)
 Proposition pairExistsCheckConcl :
-  HasTyT env (ctxP pairExists) (conclP pairExists) TyProp.
+  CheckT env (ctxP pairExists) (conclP pairExists) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyEx, HasTyApp.
-  - apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
-    apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyTsCons.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsNil.
-  - apply (HasTyVar _ _ _ TySet). reflexivity.
+  apply CheckEx, CheckApp.
+  - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
+    apply CheckTsCons.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckTsCons.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckTsNil.
+  - apply (CheckVar _ _ _ TySet). reflexivity.
 Qed.
 
 (* The existence proof body is a hole for its stated proposition.               *)
 Proposition pairExistsCheckBody :
-  HasTyP env (ctxP pairExists) (bodyP pairExists) (conclP pairExists).
+  CheckP env (ctxP pairExists) (bodyP pairExists) (conclP pairExists).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyHoleP.
+  apply CheckHoleP.
   apply pairExistsCheckConcl.
 Qed.
 
 (* The uniqueness proof declaration conclusion is a well-sorted proposition.    *)
 Proposition pairUniqueCheckConcl :
-  HasTyT env (ctxP pairUnique) (conclP pairUnique) TyProp.
+  CheckT env (ctxP pairUnique) (conclP pairUnique) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyImp.
-  - apply HasTyApp.
-    + apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
-      apply HasTyTsCons.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsCons.
-        -- apply (HasTyVar _ _ _ TySet). reflexivity.
-        -- apply HasTyTsNil.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyImp.
-    + apply HasTyApp.
-      * apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
-        apply HasTyTsCons.
-        -- apply (HasTyVar _ _ _ TySet). reflexivity.
-        -- apply HasTyTsCons.
-           ++ apply (HasTyVar _ _ _ TySet). reflexivity.
-           ++ apply HasTyTsNil.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
+  apply CheckAll, CheckAll, CheckImp.
+  - apply CheckApp.
+    + apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
+      apply CheckTsCons.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckTsCons.
+        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckTsNil.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckImp.
+    + apply CheckApp.
+      * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
+        apply CheckTsCons.
+        -- apply (CheckVar _ _ _ TySet). reflexivity.
+        -- apply CheckTsCons.
+           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckTsNil.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
 Qed.
 
 (* The uniqueness proof body is a hole for its stated proposition.              *)
 Proposition pairUniqueCheckBody :
-  HasTyP env (ctxP pairUnique) (bodyP pairUnique) (conclP pairUnique).
+  CheckP env (ctxP pairUnique) (bodyP pairUnique) (conclP pairUnique).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyHoleP.
+  apply CheckHoleP.
   apply pairUniqueCheckConcl.
 Qed.
 
 (* The declaration body for pair denotes a set backed by proof references.      *)
-Proposition pairCheckBody : HasTyDecl env pair.
+Proposition pairCheckBody : CheckDecl env pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply (HasTyDef _ _ _ (conclP pairExists) (conclP pairUnique)).
-  - apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
-    apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyTsCons.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsNil.
-  - apply HasTyIdentP with [TySet;TySet]. 1: reflexivity.
-    apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyTsCons.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsNil.
-  - apply HasTyIdentP with [TySet;TySet]. 1: reflexivity.
-    apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyTsCons.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-      * apply HasTyTsNil.
+  apply (CheckDef _ _ _ (conclP pairExists) (conclP pairUnique)).
+  - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
+    apply CheckTsCons.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckTsCons.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckTsNil.
+  - apply CheckIdentP with [TySet;TySet]. 1: reflexivity.
+    apply CheckTsCons.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckTsCons.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckTsNil.
+  - apply CheckIdentP with [TySet;TySet]. 1: reflexivity.
+    apply CheckTsCons.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckTsCons.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+      * apply CheckTsNil.
 Qed.
 
 (* Identifier checks.                                                           *)
@@ -189,16 +189,16 @@ Proposition IsPairOfCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   Env.sigT e "IsPairOf"%string = Some ([TySet; TySet], TyClass) ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
-  HasTyT e G (IdentT "IsPairOf" [Var m; Var n]) TyClass.
+  CheckT e G (IdentT "IsPairOf" [Var m; Var n]) TyClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TySet;TySet]. 1: assumption.
-  - apply HasTyTsCons.
-    + apply HasTyVar. assumption.
-    + apply HasTyTsCons.
-      * apply HasTyVar. assumption.
-      * apply HasTyTsNil.
+  apply CheckIdentT with [TySet;TySet]. 1: assumption.
+  - apply CheckTsCons.
+    + apply CheckVar. assumption.
+    + apply CheckTsCons.
+      * apply CheckVar. assumption.
+      * apply CheckTsNil.
 Qed.
 
 (* Pair applied to two set variables is well sorted anywhere.                   *)
@@ -206,14 +206,14 @@ Proposition pairCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   Env.sigT e "pair"%string = Some ([TySet; TySet], TySet) ->
   typeOf G m = Some TySet ->
   typeOf G n = Some TySet ->
-  HasTyT e G (IdentT "pair" [Var m; Var n]) TySet.
+  CheckT e G (IdentT "pair" [Var m; Var n]) TySet.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TySet;TySet]. 1: assumption.
-  - apply HasTyTsCons.
-    + apply HasTyVar. assumption.
-    + apply HasTyTsCons.
-      * apply HasTyVar. assumption.
-      * apply HasTyTsNil.
+  apply CheckIdentT with [TySet;TySet]. 1: assumption.
+  - apply CheckTsCons.
+    + apply CheckVar. assumption.
+    + apply CheckTsCons.
+      * apply CheckVar. assumption.
+      * apply CheckTsNil.
 Qed.

@@ -3,7 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -62,53 +62,53 @@ Definition ToClassIncl : Term :=
 (* Proposition typing.                                                          *)
 
 (* The characterization of membership in a pair is well sorted.                 *)
-Proposition CharacCheck : HasTyT env Ctx.empty Charac TyProp.
+Proposition CharacCheck : CheckT env Ctx.empty Charac TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyIff.
-  - apply HasTyElem.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
+  apply CheckAll, CheckAll, CheckAll, CheckIff.
+  - apply CheckElem.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
     + apply pairCheckIdent; reflexivity.
-  - apply HasTyOr; apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
+  - apply CheckOr; apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
 Qed.
 
 (* The left element belongs to its pair, and it is well sorted.                 *)
-Proposition IsInLCheck : HasTyT env Ctx.empty IsInL TyProp.
+Proposition IsInLCheck : CheckT env Ctx.empty IsInL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyElem.
-  - apply (HasTyVar _ _ _ TySet). reflexivity.
+  apply CheckAll, CheckAll, CheckElem.
+  - apply (CheckVar _ _ _ TySet). reflexivity.
   - apply pairCheckIdent; reflexivity.
 Qed.
 
 (* The right element belongs to its pair, and it is well sorted.                *)
-Proposition IsInRCheck : HasTyT env Ctx.empty IsInR TyProp.
+Proposition IsInRCheck : CheckT env Ctx.empty IsInR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyElem.
-  - apply (HasTyVar _ _ _ TySet). reflexivity.
+  apply CheckAll, CheckAll, CheckElem.
+  - apply (CheckVar _ _ _ TySet). reflexivity.
   - apply pairCheckIdent; reflexivity.
 Qed.
 
 (* Containment of both elements and class inclusion are well sorted.            *)
-Proposition ToClassInclCheck : HasTyT env Ctx.empty ToClassIncl TyProp.
+Proposition ToClassInclCheck : CheckT env Ctx.empty ToClassIncl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyIff.
-  - apply HasTyAnd.
-    + apply HasTyApp.
-      * apply (HasTyVar _ _ _ TyClass). reflexivity.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-    + apply HasTyApp.
-      * apply (HasTyVar _ _ _ TyClass). reflexivity.
-      * apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyIdentT with [TyClass;TyClass]. 1: reflexivity.
-    apply HasTyTsCons.
-    + apply HasTyIdentT with [TySet]. 1: reflexivity.
-      apply HasTyTsCons.
+  apply CheckAll, CheckAll, CheckAll, CheckIff.
+  - apply CheckAnd.
+    + apply CheckApp.
+      * apply (CheckVar _ _ _ TyClass). reflexivity.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+    + apply CheckApp.
+      * apply (CheckVar _ _ _ TyClass). reflexivity.
+      * apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+    apply CheckTsCons.
+    + apply CheckIdentT with [TySet]. 1: reflexivity.
+      apply CheckTsCons.
       * apply pairCheckIdent; reflexivity.
-      * apply HasTyTsNil.
-    + apply HasTyTsCons.
-      * apply (HasTyVar _ _ _ TyClass). reflexivity.
-      * apply HasTyTsNil.
+      * apply CheckTsNil.
+    + apply CheckTsCons.
+      * apply (CheckVar _ _ _ TyClass). reflexivity.
+      * apply CheckTsNil.
 Qed.

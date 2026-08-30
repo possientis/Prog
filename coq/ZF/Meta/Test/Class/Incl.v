@@ -3,7 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -99,74 +99,74 @@ Definition Tran : Term :=
 (* Proposition typing.                                                          *)
 
 (* Double inclusion and equivalence form a well-sorted proposition.             *)
-Proposition DoubleCheck : HasTyT env Ctx.empty Double TyProp.
+Proposition DoubleCheck : CheckT env Ctx.empty Double TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyIff.
+  apply CheckAll, CheckAll, CheckIff.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyAnd; apply InclCheckIdent; reflexivity.
+  - apply CheckAnd; apply InclCheckIdent; reflexivity.
 Qed.
 
 (* Compatibility of inclusion with equivalence is well sorted.                  *)
-Proposition EquivCompatCheck : HasTyT env Ctx.empty EquivCompat TyProp.
+Proposition EquivCompatCheck : CheckT env Ctx.empty EquivCompat TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp.
+  - apply CheckImp.
     + apply equivCheckIdent; reflexivity.
-    + apply HasTyImp.
+    + apply CheckImp.
       * apply InclCheckIdent; reflexivity.
       * apply InclCheckIdent; reflexivity.
 Qed.
 
 (* Left compatibility of inclusion with equivalence is well sorted.             *)
-Proposition EquivCompatLCheck : HasTyT env Ctx.empty EquivCompatL TyProp.
+Proposition EquivCompatLCheck : CheckT env Ctx.empty EquivCompatL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply InclCheckIdent; reflexivity.
+  - apply CheckImp; apply InclCheckIdent; reflexivity.
 Qed.
 
 (* Right compatibility of inclusion with equivalence is well sorted.            *)
-Proposition EquivCompatRCheck : HasTyT env Ctx.empty EquivCompatR TyProp.
+Proposition EquivCompatRCheck : CheckT env Ctx.empty EquivCompatR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply InclCheckIdent; reflexivity.
+  - apply CheckImp; apply InclCheckIdent; reflexivity.
 Qed.
 
 (* Reflexivity of inclusion is a well-sorted proposition.                       *)
-Proposition ReflCheck : HasTyT env Ctx.empty Refl TyProp.
+Proposition ReflCheck : CheckT env Ctx.empty Refl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll.
-  apply HasTyIdentT with [TyClass;TyClass]. 1: reflexivity.
-  apply HasTyTsCons.
-  - apply (HasTyVar _ _ _ TyClass). reflexivity.
-  - apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply HasTyTsNil.
+  apply CheckAll.
+  apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+  apply CheckTsCons.
+  - apply (CheckVar _ _ _ TyClass). reflexivity.
+  - apply CheckTsCons.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply CheckTsNil.
 Qed.
 
 (* Antisymmetry of inclusion is a well-sorted proposition.                      *)
-Proposition AntiCheck : HasTyT env Ctx.empty Anti TyProp.
+Proposition AntiCheck : CheckT env Ctx.empty Anti TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckImp.
   - apply InclCheckIdent; reflexivity.
-  - apply HasTyImp.
+  - apply CheckImp.
     + apply InclCheckIdent; reflexivity.
     + apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Transitivity of inclusion is a well-sorted proposition.                      *)
-Proposition TranCheck : HasTyT env Ctx.empty Tran TyProp.
+Proposition TranCheck : CheckT env Ctx.empty Tran TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply InclCheckIdent; reflexivity.
-  - apply HasTyImp; apply InclCheckIdent; reflexivity.
+  - apply CheckImp; apply InclCheckIdent; reflexivity.
 Qed.

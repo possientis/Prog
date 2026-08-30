@@ -5,7 +5,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -44,24 +44,24 @@ Definition Replacement : Term :=
                     (IdentT "ordPair" [Var 0; Var 1]))))))))).
 
 (* The replacement example is a proposition in the local test environment.      *)
-Proposition HasTy : HasTyT env Ctx.empty Replacement TyProp.
+Proposition Check : CheckT env Ctx.empty Replacement TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyImp.
-  - apply HasTyIdentT with [TyClass]. 1: reflexivity.
-    apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply HasTyTsNil.
-  - apply HasTyAll, HasTyEx, HasTyAll, HasTyIff.
-    + apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
-    + apply HasTyEx, HasTyAnd.
-      * apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
-      * apply HasTyApp.
-        -- apply (HasTyVar _ _ _ TyClass). reflexivity.
-        -- apply HasTyIdentT with [TySet;TySet]. 1: reflexivity.
-           apply HasTyTsCons.
-           ++ apply (HasTyVar _ _ _ TySet). reflexivity.
-           ++ apply HasTyTsCons.
-              ** apply (HasTyVar _ _ _ TySet). reflexivity.
-              ** apply HasTyTsNil.
+  apply CheckAll, CheckImp.
+  - apply CheckIdentT with [TyClass]. 1: reflexivity.
+    apply CheckTsCons.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply CheckTsNil.
+  - apply CheckAll, CheckEx, CheckAll, CheckIff.
+    + apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckEx, CheckAnd.
+      * apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+      * apply CheckApp.
+        -- apply (CheckVar _ _ _ TyClass). reflexivity.
+        -- apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
+           apply CheckTsCons.
+           ++ apply (CheckVar _ _ _ TySet). reflexivity.
+           ++ apply CheckTsCons.
+              ** apply (CheckVar _ _ _ TySet). reflexivity.
+              ** apply CheckTsNil.
 Qed.

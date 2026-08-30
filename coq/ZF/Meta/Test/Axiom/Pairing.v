@@ -1,7 +1,7 @@
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Ty.
 
 (* forall a b, exists c, forall x, x :< c <-> x = a \/ x = b                    *)
@@ -17,12 +17,12 @@ Definition Pairing : Term :=
               (Equal (Var 0) (Var 2))))))).
 
 (* The pairing example is a proposition in the empty environment.               *)
-Proposition PairingCheck : HasTyT Env.empty Ctx.empty Pairing TyProp.
+Proposition PairingCheck : CheckT Env.empty Ctx.empty Pairing TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyEx, HasTyAll, HasTyIff.
-  - apply HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
-  - apply HasTyOr.
-    + apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
-    + apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
+  apply CheckAll, CheckAll, CheckEx, CheckAll, CheckIff.
+  - apply CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckOr.
+    + apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+    + apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
 Qed.

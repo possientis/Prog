@@ -2,7 +2,7 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -147,129 +147,129 @@ Definition NotCompatR : Term :=
 (* Proposition typing.                                                          *)
 
 (* The reflexivity proposition is well sorted using equivalence.                *)
-Proposition ReflCheck : HasTyT env Ctx.empty Refl TyProp.
+Proposition ReflCheck : CheckT env Ctx.empty Refl TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll.
-  apply HasTyIdentT with [TyClass;TyClass]. 1: reflexivity.
-  apply HasTyTsCons.
-  - apply (HasTyVar _ _ _ TyClass). reflexivity.
-  - apply HasTyTsCons.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply HasTyTsNil.
+  apply CheckAll.
+  apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+  apply CheckTsCons.
+  - apply (CheckVar _ _ _ TyClass). reflexivity.
+  - apply CheckTsCons.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply CheckTsNil.
 Qed.
 
 (* Equivalence compatibility is a well-sorted proposition.                      *)
-Proposition EquivCompatCheck : HasTyT env Ctx.empty EquivCompat TyProp.
+Proposition EquivCompatCheck : CheckT env Ctx.empty EquivCompat TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp.
+  - apply CheckImp.
     + apply equivCheckIdent; reflexivity.
-    + apply HasTyImp.
+    + apply CheckImp.
       * apply equivCheckIdent; reflexivity.
       * apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Left compatibility of equivalence is a well-sorted proposition.              *)
-Proposition EquivCompatLCheck : HasTyT env Ctx.empty EquivCompatL TyProp.
+Proposition EquivCompatLCheck : CheckT env Ctx.empty EquivCompatL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply equivCheckIdent; reflexivity.
+  - apply CheckImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Right compatibility of equivalence is a well-sorted proposition.             *)
-Proposition EquivCompatRCheck : HasTyT env Ctx.empty EquivCompatR TyProp.
+Proposition EquivCompatRCheck : CheckT env Ctx.empty EquivCompatR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply equivCheckIdent; reflexivity.
+  - apply CheckImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Symmetry of equivalence is a well-sorted proposition.                        *)
-Proposition SymCheck : HasTyT env Ctx.empty Sym TyProp.
+Proposition SymCheck : CheckT env Ctx.empty Sym TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyImp; apply equivCheckIdent; reflexivity.
+  apply CheckAll, CheckAll, CheckImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Transitivity of equivalence is a well-sorted proposition.                    *)
-Proposition TranCheck : HasTyT env Ctx.empty Tran TyProp.
+Proposition TranCheck : CheckT env Ctx.empty Tran TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply equivCheckIdent; reflexivity.
+  - apply CheckImp; apply equivCheckIdent; reflexivity.
 Qed.
 
 (* Symmetry of non-equivalence is a well-sorted proposition.                    *)
-Proposition NotSymCheck : HasTyT env Ctx.empty NotSym TyProp.
+Proposition NotSymCheck : CheckT env Ctx.empty NotSym TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyImp; apply notEquivCheckIdent; reflexivity.
+  apply CheckAll, CheckAll, CheckImp; apply notEquivCheckIdent; reflexivity.
 Qed.
 
 (* Equality of sets and equivalence of their classes is well sorted.            *)
-Proposition EqualToClassCheck : HasTyT env Ctx.empty EqualToClass TyProp.
+Proposition EqualToClassCheck : CheckT env Ctx.empty EqualToClass TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyIff.
-  - apply HasTyEqual; apply (HasTyVar _ _ _ TySet); reflexivity.
-  - apply HasTyIdentT with [TyClass;TyClass]. 1: reflexivity.
-    apply HasTyTsCons.
+  apply CheckAll, CheckAll, CheckIff.
+  - apply CheckEqual; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+    apply CheckTsCons.
     + apply toClassCheckIdent; reflexivity.
-    + apply HasTyTsCons.
+    + apply CheckTsCons.
       * apply toClassCheckIdent; reflexivity.
-      * apply HasTyTsNil.
+      * apply CheckTsNil.
 Qed.
 
 (* Inequality of sets and non-equivalence of their classes is well sorted.      *)
 Proposition NotEqualToClassCheck :
-  HasTyT env Ctx.empty NotEqualToClass TyProp.
+  CheckT env Ctx.empty NotEqualToClass TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyIff.
-  - apply HasTyNotEq; apply (HasTyVar _ _ _ TySet); reflexivity.
-  - apply HasTyNot.
-    apply HasTyIdentT with [TyClass;TyClass]. 1: reflexivity.
-    apply HasTyTsCons.
+  apply CheckAll, CheckAll, CheckIff.
+  - apply CheckNotEq; apply (CheckVar _ _ _ TySet); reflexivity.
+  - apply CheckNot.
+    apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+    apply CheckTsCons.
     + apply toClassCheckIdent; reflexivity.
-    + apply HasTyTsCons.
+    + apply CheckTsCons.
       * apply toClassCheckIdent; reflexivity.
-      * apply HasTyTsNil.
+      * apply CheckTsNil.
 Qed.
 
 (* Non-equivalence is compatible with equivalence.                              *)
-Proposition NotCompatCheck : HasTyT env Ctx.empty NotCompat TyProp.
+Proposition NotCompatCheck : CheckT env Ctx.empty NotCompat TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp.
+  - apply CheckImp.
     + apply equivCheckIdent; reflexivity.
-    + apply HasTyImp.
+    + apply CheckImp.
       * apply notEquivCheckIdent; reflexivity.
       * apply notEquivCheckIdent; reflexivity.
 Qed.
 
 (* Non-equivalence is left-compatible with equivalence.                         *)
-Proposition NotCompatLCheck : HasTyT env Ctx.empty NotCompatL TyProp.
+Proposition NotCompatLCheck : CheckT env Ctx.empty NotCompatL TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply notEquivCheckIdent; reflexivity.
+  - apply CheckImp; apply notEquivCheckIdent; reflexivity.
 Qed.
 
 (* Non-equivalence is right-compatible with equivalence.                        *)
-Proposition NotCompatRCheck : HasTyT env Ctx.empty NotCompatR TyProp.
+Proposition NotCompatRCheck : CheckT env Ctx.empty NotCompatR TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyAll, HasTyAll, HasTyImp.
+  apply CheckAll, CheckAll, CheckAll, CheckImp.
   - apply equivCheckIdent; reflexivity.
-  - apply HasTyImp; apply notEquivCheckIdent; reflexivity.
+  - apply CheckImp; apply notEquivCheckIdent; reflexivity.
 Qed.

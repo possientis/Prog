@@ -4,8 +4,8 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.HasTyDecl.
-Require Import ZF.Meta.HasTy.
+Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.Check.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -39,23 +39,23 @@ Definition env : Env := Env.fromListT
 (* Body checks.                                                                 *)
 
 (* The declaration body for toClass maps a set to its membership class.         *)
-Proposition toClassCheckBody : HasTyDecl Env.empty toClass.
+Proposition toClassCheckBody : CheckDecl Env.empty toClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyLam, HasTyElem; apply (HasTyVar _ _ _ TySet); reflexivity.
+  apply CheckLam, CheckElem; apply (CheckVar _ _ _ TySet); reflexivity.
 Qed.
 
 (* The declaration body for equivalence compares two classes pointwise.         *)
-Proposition equivCheckBody : HasTyDecl Env.empty equiv.
+Proposition equivCheckBody : CheckDecl Env.empty equiv.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply HasTyAll, HasTyIff.
-  - apply HasTyApp.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
-  - apply HasTyApp.
-    + apply (HasTyVar _ _ _ TyClass). reflexivity.
-    + apply (HasTyVar _ _ _ TySet). reflexivity.
+  apply CheckAll, CheckIff.
+  - apply CheckApp.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
+  - apply CheckApp.
+    + apply (CheckVar _ _ _ TyClass). reflexivity.
+    + apply (CheckVar _ _ _ TySet). reflexivity.
 Qed.
 
 (* Identifier checks.                                                           *)
@@ -64,14 +64,14 @@ Qed.
 Proposition toClassCheckIdent : forall (e:Env) (G:Ctx) (n:nat),
   Env.sigT e "toClass"%string = Some ([TySet], TyClass) ->
   typeOf G n = Some TySet ->
-  HasTyT e G (IdentT "toClass" [Var n]) TyClass.
+  CheckT e G (IdentT "toClass" [Var n]) TyClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G n H1 H2.
-  apply HasTyIdentT with [TySet]. 1: assumption.
-  - apply HasTyTsCons.
-    + apply HasTyVar. assumption.
-    + apply HasTyTsNil.
+  apply CheckIdentT with [TySet]. 1: assumption.
+  - apply CheckTsCons.
+    + apply CheckVar. assumption.
+    + apply CheckTsNil.
 Qed.
 
 (* Equivalence applied to two class variables is well sorted anywhere.          *)
@@ -79,16 +79,16 @@ Proposition equivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   Env.sigT e "equiv"%string = Some ([TyClass; TyClass], TyProp) ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
-  HasTyT e G (IdentT "equiv" [Var m; Var n]) TyProp.
+  CheckT e G (IdentT "equiv" [Var m; Var n]) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyIdentT with [TyClass;TyClass]. 1: assumption.
-  - apply HasTyTsCons.
-    + apply HasTyVar. assumption.
-    + apply HasTyTsCons.
-      * apply HasTyVar. assumption.
-      * apply HasTyTsNil.
+  apply CheckIdentT with [TyClass;TyClass]. 1: assumption.
+  - apply CheckTsCons.
+    + apply CheckVar. assumption.
+    + apply CheckTsCons.
+      * apply CheckVar. assumption.
+      * apply CheckTsNil.
 Qed.
 
 (* Negated equivalence of two class variables is well sorted anywhere.          *)
@@ -96,10 +96,10 @@ Proposition notEquivCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
   Env.sigT e "equiv"%string = Some ([TyClass; TyClass], TyProp) ->
   typeOf G m = Some TyClass ->
   typeOf G n = Some TyClass ->
-  HasTyT e G (Not (IdentT "equiv" [Var m; Var n])) TyProp.
+  CheckT e G (Not (IdentT "equiv" [Var m; Var n])) TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros e G m n H1 H2 H3.
-  apply HasTyNot.
+  apply CheckNot.
   apply equivCheckIdent; assumption.
 Qed.

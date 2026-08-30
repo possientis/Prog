@@ -1,5 +1,4 @@
-HasTyT -> HasTy and HasTyP -> HasTerm
 split Decl env -> env + checkEnv : do not re-export
 eval + eval (Eval vs EvalOfClass)
 do not repeat conclusion (see declaration of WhenGCH)
-What is the value of the checkIdent tests?
+get around the (CheckVar _ _ _ TySet) syndrome
