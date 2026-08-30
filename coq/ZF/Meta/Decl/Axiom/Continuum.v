@@ -46,10 +46,15 @@ Definition GCH : DeclT :=
 
 (* The generalized continuum hypothesis implies the continuum hypothesis.       *)
 Definition WhenGCH : DeclP :=
-  {| paraP  := []
-  ;  conclP := Imp (IdentT "GCH" []) (IdentT "CH" [])
-  ;  bodyP  := HoleP (Imp (IdentT "GCH" []) (IdentT "CH" []))
-  |}.
+  let concl :=
+    Imp
+      (IdentT "GCH" [])
+      (IdentT "CH" [])
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
 
 Definition imports : Env := Env.unions
   [ Aleph.exports

@@ -1,3 +1,2 @@
 eval + eval (Eval vs EvalOfClass)
-do not repeat conclusion (see declaration of WhenGCH)
 get around the (CheckVar _ _ _ TySet) syndrome

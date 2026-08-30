@@ -28,43 +28,36 @@ Definition IsPairOf : DeclT :=
 
 (* The existence proof declaration states that some set is a pair of a and b.   *)
 Definition pairExists : DeclP :=
-  mkDeclP [TySet; TySet]
-      (Ex VarTySet
-         (App
-           (IdentT "IsPairOf" [Var 2; Var 1])
-           (Var 0)))
-      (HoleP
-        (Ex VarTySet
-          (App
-            (IdentT "IsPairOf" [Var 2; Var 1])
-            (Var 0)))).
+  let concl :=
+    (Ex VarTySet
+      (App
+        (IdentT "IsPairOf" [Var 2; Var 1])
+        (Var 0)))
+  in
+    {| paraP := [TySet; TySet]
+    ; conclP := concl
+    ; bodyP  := HoleP concl
+    |}.
 
 (* The uniqueness proof declaration states that any two such sets are equal.    *)
 Definition pairUnique : DeclP :=
-  mkDeclP [TySet; TySet]
+  let concl :=
+    (All VarTySet
       (All VarTySet
-         (All VarTySet
-           (Imp
-             (App
-               (IdentT "IsPairOf" [Var 3; Var 2])
-               (Var 1))
-             (Imp
-               (App
-                 (IdentT "IsPairOf" [Var 3; Var 2])
-                 (Var 0))
-               (Equal (Var 1) (Var 0))))))
-      (HoleP
-        (All VarTySet
-          (All VarTySet
-            (Imp
-              (App
-                (IdentT "IsPairOf" [Var 3; Var 2])
-                (Var 1))
-              (Imp
-                (App
-                  (IdentT "IsPairOf" [Var 3; Var 2])
-                  (Var 0))
-                (Equal (Var 1) (Var 0))))))).
+        (Imp
+          (App
+            (IdentT "IsPairOf" [Var 3; Var 2])
+             (Var 1))
+          (Imp
+            (App
+              (IdentT "IsPairOf" [Var 3; Var 2])
+              (Var 0))
+            (Equal (Var 1) (Var 0))))))
+  in
+    {| paraP := [TySet; TySet]
+    ; conclP := concl
+    ; bodyP  := HoleP concl
+    |}.
 
 (* Definition pair (a b:U) : U := Def (IsPairOf a b) exists unique.             *)
 Definition pair : DeclT :=
