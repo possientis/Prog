@@ -13,10 +13,6 @@ Require Import ZF.Meta.Decl.Set.Empty.
 Require Import ZF.Meta.Decl.Set.Relation.Eval.
 Require Import ZF.Meta.Decl.Set.Relation.FunctionOn.
 
-Export ZF.Meta.Decl.Set.Empty.
-Export ZF.Meta.Decl.Set.Relation.Eval.
-Export ZF.Meta.Decl.Set.Relation.FunctionOn.
-
 (* forall a,                                                                    *)
 (*  exists f, FunctionOn f a /\ forall x, x :< a -> x <> empty -> eval f x :< x *)
 Definition Choice : DeclT :=

@@ -18,14 +18,6 @@ Require Import ZF.Meta.Decl.Set.Ordinal.Succ.
 Require Import ZF.Meta.Decl.Set.Power.
 Require Import ZF.Meta.Decl.Set.Relation.EvalOfClass.
 
-Export ZF.Meta.Decl.Class.Cardinal.Aleph.
-Export ZF.Meta.Decl.Set.Cardinal.Number.
-Export ZF.Meta.Decl.Set.Ordinal.Natural.
-Export ZF.Meta.Decl.Set.Ordinal.Omega.
-Export ZF.Meta.Decl.Set.Ordinal.Ordinal.
-Export ZF.Meta.Decl.Set.Ordinal.Succ.
-Export ZF.Meta.Decl.Set.Power.
-Export ZF.Meta.Decl.Set.Relation.EvalOfClass.
 
 (* The continuum hypothesis says that the continuum is the first uncountable.   *)
 Definition CH : DeclT :=
