@@ -1,3 +1,2 @@
 eval + eval (Eval vs EvalOfClass)
-Add Axiom.Classic
 remove eapply after unique/exists infrastructure in place (Set.Pair)
