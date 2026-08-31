@@ -7,6 +7,7 @@ Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Axiom.Choice.
 

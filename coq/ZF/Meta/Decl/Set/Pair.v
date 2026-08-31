@@ -8,6 +8,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Class.Equiv.
 Require Import ZF.Meta.Decl.Class.Incl.
@@ -140,16 +141,16 @@ Definition imports : Env := Env.unions
 
 Definition exports : Env := Env.unions
   [ Env.fromListT
-      [ ("IsPairOf"%string  , IsPairOf)
-      ; ("pair"%string      , pair)
+      [ (Name.local "IsPairOf"  , IsPairOf)
+      ; (Name.local "pair"      , pair)
       ]
   ; Env.fromListP
-      [ ("Exists"%string     , Exists)
-      ; ("Unique"%string     , Unique)
-      ; ("Charac"%string     , Charac)
-      ; ("IsInL"%string      , IsInL)
-      ; ("IsInR"%string      , IsInR)
-      ; ("ToClassIncl"%string, ToClassIncl)
+      [ (Name.local "Exists"     , Exists)
+      ; (Name.local "Unique"     , Unique)
+      ; (Name.local "Charac"     , Charac)
+      ; (Name.local "IsInL"      , IsInL)
+      ; (Name.local "IsInR"      , IsInR)
+      ; (Name.local "ToClassIncl", ToClassIncl)
       ]
   ].
 

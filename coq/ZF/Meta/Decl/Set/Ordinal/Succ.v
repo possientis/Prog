@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* succ a : U.                                                                  *)
 Definition succ : DeclT :=
@@ -18,7 +19,7 @@ Definition succ : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("succ"%string, succ)
+  [ (Name.local "succ", succ)
   ].
 
 Definition env : Env := Env.union imports exports.

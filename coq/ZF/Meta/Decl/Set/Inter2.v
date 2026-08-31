@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* inter2 a b : U.                                                              *)
 Definition inter2 : DeclT :=
@@ -18,7 +19,7 @@ Definition inter2 : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("inter2"%string, inter2)
+  [ (Name.local "inter2", inter2)
   ].
 
 Definition env : Env := Env.union imports exports.

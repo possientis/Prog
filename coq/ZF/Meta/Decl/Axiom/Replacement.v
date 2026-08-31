@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Class.Relation.Functional.
 Require Import ZF.Meta.Decl.Set.OrdPair.
@@ -40,7 +41,7 @@ Definition imports : Env := Env.unions
   ].
 
 Definition exports : Env := Env.fromListP
-  [ ("Replacement"%string, Replacement)
+  [ (Name.local "Replacement", Replacement)
   ].
 
 Definition env : Env := Env.union imports exports.

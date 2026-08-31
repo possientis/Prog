@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* forall a, exists b, forall x, x :< b <-> exists y, x :< y /\ y :< a          *)
 Definition Union : DeclP :=
@@ -29,7 +30,7 @@ Definition Union : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("Union"%string, Union)
+  [ (Name.local "Union", Union)
   ].
 
 Definition env : Env := Env.union imports exports.

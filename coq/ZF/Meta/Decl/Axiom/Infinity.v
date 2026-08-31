@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Set.Empty.
 Require Import ZF.Meta.Decl.Set.Single.
@@ -37,7 +38,7 @@ Definition imports : Env := Env.unions
   ].
 
 Definition exports : Env := Env.fromListP
-  [ ("Infinity"%string, Infinity)
+  [ (Name.local "Infinity", Infinity)
   ].
 
 Definition env : Env := Env.union imports exports.

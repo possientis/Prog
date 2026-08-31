@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* ~~A -> A.                                                                    *)
 Definition DoubleNegation : DeclP :=
@@ -67,10 +68,10 @@ Definition LawExcludedMiddle : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("DoubleNegation"%string    , DoubleNegation)
-  ; ("NotForAll"%string         , NotForAll)
-  ; ("NotForAllNot"%string      , NotForAllNot)
-  ; ("LawExcludedMiddle"%string , LawExcludedMiddle)
+  [ (Name.local "DoubleNegation"    , DoubleNegation)
+  ; (Name.local "NotForAll"         , NotForAll)
+  ; (Name.local "NotForAllNot"      , NotForAllNot)
+  ; (Name.local "LawExcludedMiddle" , LawExcludedMiddle)
   ].
 
 Definition env : Env := Env.union imports exports.

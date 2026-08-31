@@ -3,6 +3,7 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Definition ModuleName : Type := list string.
 

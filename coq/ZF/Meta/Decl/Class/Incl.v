@@ -8,6 +8,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Class.Equiv.
 
@@ -128,16 +129,16 @@ Definition imports : Env := Equiv.exports.
 
 Definition exports : Env := Env.unions
   [ Env.fromListT
-    [ ("Incl"%string, Incl)
+    [ (Name.local "Incl", Incl)
     ]
   ; Env.fromListP
-    [ ("Double"%string       , Double)
-    ; ("EquivCompat"%string  , EquivCompat)
-    ; ("EquivCompatL"%string , EquivCompatL)
-    ; ("EquivCompatR"%string , EquivCompatR)
-    ; ("Refl"%string         , Refl)
-    ; ("Anti"%string         , Anti)
-    ; ("Tran"%string         , Tran)
+    [ (Name.local "Double"       , Double)
+    ; (Name.local "EquivCompat"  , EquivCompat)
+    ; (Name.local "EquivCompatL" , EquivCompatL)
+    ; (Name.local "EquivCompatR" , EquivCompatR)
+    ; (Name.local "Refl"         , Refl)
+    ; (Name.local "Anti"         , Anti)
+    ; (Name.local "Tran"         , Tran)
     ]
   ].
 

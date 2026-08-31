@@ -3,6 +3,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Inductive Term : Type :=
 | Bot     : Term

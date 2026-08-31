@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* one : U.                                                                     *)
 Definition one : DeclT :=
@@ -18,7 +19,7 @@ Definition one : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("one"%string, one)
+  [ (Name.local "one", one)
   ].
 
 Definition env : Env := Env.union imports exports.

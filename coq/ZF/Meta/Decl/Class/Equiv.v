@@ -8,6 +8,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 
 
@@ -204,22 +205,22 @@ Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.unions
   [ Env.fromListT
-    [ ("toClass"%string, toClass)
-    ; ("equiv"%string  , equiv)
+    [ (Name.local "toClass", toClass)
+    ; (Name.local "equiv"  , equiv)
     ]
   ; Env.fromListP
-    [ ("Refl"%string           , Refl)
-    ; ("EquivCompat"%string    , EquivCompat)
-    ; ("EquivCompatL"%string   , EquivCompatL)
-    ; ("EquivCompatR"%string   , EquivCompatR)
-    ; ("Sym"%string            , Sym)
-    ; ("Tran"%string           , Tran)
-    ; ("NotSym"%string         , NotSym)
-    ; ("EqualToClass"%string   , EqualToClass)
-    ; ("NotEqualToClass"%string, NotEqualToClass)
-    ; ("NotCompat"%string      , NotCompat)
-    ; ("NotCompatL"%string     , NotCompatL)
-    ; ("NotCompatR"%string     , NotCompatR)
+    [ (Name.local "Refl"           , Refl)
+    ; (Name.local "EquivCompat"    , EquivCompat)
+    ; (Name.local "EquivCompatL"   , EquivCompatL)
+    ; (Name.local "EquivCompatR"   , EquivCompatR)
+    ; (Name.local "Sym"            , Sym)
+    ; (Name.local "Tran"           , Tran)
+    ; (Name.local "NotSym"         , NotSym)
+    ; (Name.local "EqualToClass"   , EqualToClass)
+    ; (Name.local "NotEqualToClass", NotEqualToClass)
+    ; (Name.local "NotCompat"      , NotCompat)
+    ; (Name.local "NotCompatL"     , NotCompatL)
+    ; (Name.local "NotCompatR"     , NotCompatR)
     ]
   ].
 

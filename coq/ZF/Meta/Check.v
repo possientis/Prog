@@ -3,12 +3,14 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
+Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | CheckBot : forall (G:Ctx),
@@ -21,7 +23,7 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | CheckHoleT : forall (G:Ctx) (ty:Ty),
     CheckT E G (HoleT ty) ty
 | CheckIdentT : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (ty:Ty),
-    sigT E name = Some (tys,ty)              ->
+    sigT E (Name.local name) = Some (tys,ty) ->
     CheckTs E G args tys                     ->
     CheckT E G (IdentT name args) ty
 | CheckElem : forall (G:Ctx) (x y:Term),
@@ -104,7 +106,7 @@ with CheckP (E:Env) : Ctx -> Proof -> Term -> Prop :=
     CheckT E G t TyProp                      ->
     CheckP E G (AxiomP t) t
 | CheckIdentP : forall (G:Ctx) (name:string) (args:list Term) (tys:list Ty) (t:Term),
-    sigP E name = Some (tys,t)               ->
+    sigP E (Name.local name) = Some (tys,t)  ->
     CheckTs E G args tys                     ->
     CheckP E G (IdentP name args) t
 .

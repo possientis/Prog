@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* forall a, exists b, forall x, x :< b <-> x <= a                              *)
 Definition Power : DeclP :=
@@ -26,7 +27,7 @@ Definition Power : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("Power"%string, Power)
+  [ (Name.local "Power", Power)
   ].
 
 Definition env : Env := Env.union imports exports.

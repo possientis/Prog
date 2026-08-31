@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* ordPair a b : U.                                                             *)
 Definition ordPair : DeclT :=
@@ -18,7 +19,7 @@ Definition ordPair : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("ordPair"%string, ordPair)
+  [ (Name.local "ordPair", ordPair)
   ].
 
 Definition env : Env := Env.union imports exports.

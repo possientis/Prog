@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* forall a b, exists c, forall x, x :< c <-> x = a \/ x = b                    *)
 Definition Pairing : DeclP :=
@@ -29,7 +30,7 @@ Definition Pairing : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("Pairing"%string, Pairing)
+  [ (Name.local "Pairing", Pairing)
   ].
 
 Definition env : Env := Env.union imports exports.

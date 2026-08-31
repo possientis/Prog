@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* forall P, forall a, exists b, forall x, x :< b <-> x :< a /\ P x             *)
 Definition Specification : DeclP :=
@@ -28,7 +29,7 @@ Definition Specification : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("Specification"%string, Specification)
+  [ (Name.local "Specification", Specification)
   ].
 
 Definition env : Env := Env.union imports exports.

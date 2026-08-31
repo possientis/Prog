@@ -8,6 +8,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Set.Empty.
 Require Import ZF.Meta.Decl.Set.Relation.FunctionOn.
@@ -25,7 +26,7 @@ Definition imports : Env := Env.unions
   ].
 
 Definition exports : Env := Env.fromListT
-  [ ("eval"%string, eval)
+  [ (Name.local "eval", eval)
   ].
 
 Definition env : Env := Env.union imports exports.

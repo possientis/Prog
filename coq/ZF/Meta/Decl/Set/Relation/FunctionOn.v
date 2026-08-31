@@ -8,6 +8,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* FunctionOn f a : Prop.                                                       *)
 Definition FunctionOn : DeclT :=
@@ -18,7 +19,7 @@ Definition FunctionOn : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("FunctionOn"%string, FunctionOn)
+  [ (Name.local "FunctionOn", FunctionOn)
   ].
 
 Definition env : Env := Env.union imports exports.

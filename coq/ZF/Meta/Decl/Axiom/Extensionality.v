@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
 Definition Extensionality : DeclP :=
@@ -27,7 +28,7 @@ Definition Extensionality : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("Extensionality"%string, Extensionality)
+  [ (Name.local "Extensionality", Extensionality)
   ].
 
 Definition env : Env := Env.union imports exports.

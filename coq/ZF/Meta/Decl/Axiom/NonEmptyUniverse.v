@@ -7,6 +7,7 @@ Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* exists x, True                                                               *)
 Definition NonEmptyUniverse : DeclP :=
@@ -21,7 +22,7 @@ Definition NonEmptyUniverse : DeclP :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListP
-  [ ("NonEmptyUniverse"%string, NonEmptyUniverse)
+  [ (Name.local "NonEmptyUniverse", NonEmptyUniverse)
   ].
 
 Definition env : Env := Env.union imports exports.

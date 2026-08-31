@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* omega : U.                                                                   *)
 Definition omega : DeclT :=
@@ -18,7 +19,7 @@ Definition omega : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("omega"%string, omega)
+  [ (Name.local "omega", omega)
   ].
 
 Definition env : Env := Env.union imports exports.

@@ -11,6 +11,7 @@ Require Import ZF.Meta.Ty.
 Require Import ZF.Meta.Decl.Class.Equiv.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* Declaration typing.                                                          *)
 

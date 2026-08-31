@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* Ordinal a : Prop.                                                            *)
 Definition Ordinal : DeclT :=
@@ -18,7 +19,7 @@ Definition Ordinal : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("Ordinal"%string, Ordinal)
+  [ (Name.local "Ordinal", Ordinal)
   ].
 
 Definition env : Env := Env.union imports exports.

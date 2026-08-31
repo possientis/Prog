@@ -8,6 +8,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Class.Cardinal.Aleph.
 Require Import ZF.Meta.Decl.Set.Cardinal.Number.
@@ -69,11 +70,11 @@ Definition imports : Env := Env.unions
 
 Definition exports : Env := Env.unions
   [ Env.fromListT
-    [ ("CH"%string , CH)
-    ; ("GCH"%string, GCH)
+    [ (Name.local "CH" , CH)
+    ; (Name.local "GCH", GCH)
     ]
   ; Env.fromListP
-    [ ("WhenGCH"%string, WhenGCH)
+    [ (Name.local "WhenGCH", WhenGCH)
     ]
   ].
 

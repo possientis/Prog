@@ -7,6 +7,7 @@ Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
+Open Scope string_scope.
 
 (* Aleph : Class.                                                               *)
 Definition Aleph : DeclT :=
@@ -18,7 +19,7 @@ Definition Aleph : DeclT :=
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ ("Aleph"%string, Aleph)
+  [ (Name.local "Aleph", Aleph)
   ].
 
 Definition env : Env := Env.union imports exports.
