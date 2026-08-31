@@ -1,20 +1,16 @@
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Env.
+Require Import Coq.Lists.List.
+Require Import Coq.Strings.String.
+
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
-(* forall a, exists b, forall x, x :< b <-> x <= a                              *)
-Definition Power : Term :=
-  All VarTySet
-    (Ex VarTySet
-      (All VarTySet
-        (Iff
-          (Elem (Var 0) (Var 1))
-          (Leq (Var 0) (Var 2))))).
+Import ListNotations.
 
-(* The power example is a proposition in the empty environment.                 *)
-Proposition Check : CheckT Env.empty Ctx.empty Power TyProp.
+Require Import ZF.Meta.Decl.Axiom.Power.
+
+Proposition Power : CheckDeclT (Power.env) Power.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckEx, CheckAll, CheckIff.
