@@ -14,10 +14,10 @@ Require Import ZF.Meta.Decl.Set.Inter2.
 (* forall a, a <> empty -> exists x, x :< a /\ inter2 x a = empty               *)
 Definition Foundation : DeclP :=
   let concl :=
-      All VarTySet
+      All
         (Imp
           (NotEq (Var 0) (IdentT "empty" []))
-          (Ex VarTySet
+          (Ex
             (And
               (Elem (Var 0) (Var 1))
               (Equal

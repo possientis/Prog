@@ -11,9 +11,9 @@ Import ListNotations.
 (* forall a, exists b, forall x, x :< b <-> x <= a                              *)
 Definition Power : DeclP :=
   let concl :=
-      All VarTySet
-        (Ex VarTySet
-          (All VarTySet
+      All
+        (Ex
+          (All
             (Iff
               (Elem (Var 0) (Var 1))
               (Leq (Var 0) (Var 2)))))

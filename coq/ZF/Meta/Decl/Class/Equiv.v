@@ -23,7 +23,7 @@ Definition equiv : DeclT :=
   {| paraT := [TyClass; TyClass]
   ;  resT  := TyProp
   ;  bodyT :=
-      All VarTySet
+      All
         (Iff
           (App (Var 2) (Var 0))
           (App (Var 1) (Var 0)))
@@ -34,10 +34,9 @@ Definition equiv : DeclT :=
 (* forall P, equiv P P.                                                         *)
 Definition Refl : DeclP :=
   let concl :=
-      All VarTyClass
-        (IdentT "equiv" [Var 0; Var 0])
+    IdentT "equiv" [Var 0; Var 0]
   in
-    {| paraP  := []
+    {| paraP  := [TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -45,19 +44,15 @@ Definition Refl : DeclP :=
 (* forall A B C D, equiv A C -> equiv B D -> equiv A B -> equiv C D.            *)
 Definition EquivCompat : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (All VarTyClass
-              (Imp
-                (IdentT "equiv" [Var 3; Var 1])
-                (Imp
-                  (IdentT "equiv" [Var 2; Var 0])
-                  (Imp
-                    (IdentT "equiv" [Var 3; Var 2])
-                    (IdentT "equiv" [Var 1; Var 0])))))))
+    Imp
+      (IdentT "equiv" [Var 3; Var 1])
+      (Imp
+        (IdentT "equiv" [Var 2; Var 0])
+        (Imp
+          (IdentT "equiv" [Var 3; Var 2])
+          (IdentT "equiv" [Var 1; Var 0])))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -65,16 +60,13 @@ Definition EquivCompat : DeclP :=
 (* forall A B C, equiv A C -> equiv A B -> equiv C B.                           *)
 Definition EquivCompatL : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (Imp
-              (IdentT "equiv" [Var 2; Var 0])
-              (Imp
-                (IdentT "equiv" [Var 2; Var 1])
-                (IdentT "equiv" [Var 0; Var 1])))))
+    Imp
+      (IdentT "equiv" [Var 2; Var 0])
+      (Imp
+        (IdentT "equiv" [Var 2; Var 1])
+        (IdentT "equiv" [Var 0; Var 1]))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -82,16 +74,13 @@ Definition EquivCompatL : DeclP :=
 (* forall A B C, equiv B C -> equiv A B -> equiv A C.                           *)
 Definition EquivCompatR : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (Imp
-              (IdentT "equiv" [Var 1; Var 0])
-              (Imp
-                (IdentT "equiv" [Var 2; Var 1])
-                (IdentT "equiv" [Var 2; Var 0])))))
+    Imp
+      (IdentT "equiv" [Var 1; Var 0])
+      (Imp
+        (IdentT "equiv" [Var 2; Var 1])
+        (IdentT "equiv" [Var 2; Var 0]))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -99,13 +88,11 @@ Definition EquivCompatR : DeclP :=
 (* forall P Q, equiv P Q -> equiv Q P.                                          *)
 Definition Sym : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (Imp
-            (IdentT "equiv" [Var 1; Var 0])
-            (IdentT "equiv" [Var 0; Var 1])))
+    Imp
+      (IdentT "equiv" [Var 1; Var 0])
+      (IdentT "equiv" [Var 0; Var 1])
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -113,16 +100,13 @@ Definition Sym : DeclP :=
 (* forall P Q R, equiv P Q -> equiv Q R -> equiv P R.                           *)
 Definition Tran : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (Imp
-              (IdentT "equiv" [Var 2; Var 1])
-              (Imp
-                (IdentT "equiv" [Var 1; Var 0])
-                (IdentT "equiv" [Var 2; Var 0])))))
+    Imp
+      (IdentT "equiv" [Var 2; Var 1])
+      (Imp
+        (IdentT "equiv" [Var 1; Var 0])
+        (IdentT "equiv" [Var 2; Var 0]))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -130,13 +114,11 @@ Definition Tran : DeclP :=
 (* forall P Q, ~ equiv P Q -> ~ equiv Q P.                                      *)
 Definition NotSym : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (Imp
-            (Not (IdentT "equiv" [Var 1; Var 0]))
-            (Not (IdentT "equiv" [Var 0; Var 1]))))
+    Imp
+      (Not (IdentT "equiv" [Var 1; Var 0]))
+      (Not (IdentT "equiv" [Var 0; Var 1]))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -144,8 +126,8 @@ Definition NotSym : DeclP :=
 (* forall a b, a = b <-> equiv (toClass a) (toClass b).                         *)
 Definition EqualToClass : DeclP :=
   let concl :=
-      All VarTySet
-        (All VarTySet
+      All
+        (All
           (Iff
             (Equal (Var 1) (Var 0))
             (IdentT "equiv"
@@ -159,8 +141,8 @@ Definition EqualToClass : DeclP :=
 (* forall a b, a <> b <-> ~ equiv (toClass a) (toClass b).                      *)
 Definition NotEqualToClass : DeclP :=
   let concl :=
-      All VarTySet
-        (All VarTySet
+      All
+        (All
           (Iff
             (NotEq (Var 1) (Var 0))
             (Not
@@ -175,19 +157,15 @@ Definition NotEqualToClass : DeclP :=
 (* forall P Q R S, equiv P Q -> equiv R S -> ~ equiv P R -> ~ equiv Q S.        *)
 Definition NotCompat : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (All VarTyClass
-              (Imp
-                (IdentT "equiv" [Var 3; Var 2])
-                (Imp
-                  (IdentT "equiv" [Var 1; Var 0])
-                  (Imp
-                    (Not (IdentT "equiv" [Var 3; Var 1]))
-                    (Not (IdentT "equiv" [Var 2; Var 0]))))))))
+    Imp
+      (IdentT "equiv" [Var 3; Var 2])
+      (Imp
+        (IdentT "equiv" [Var 1; Var 0])
+        (Imp
+          (Not (IdentT "equiv" [Var 3; Var 1]))
+          (Not (IdentT "equiv" [Var 2; Var 0]))))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -195,16 +173,13 @@ Definition NotCompat : DeclP :=
 (* forall P Q R, equiv P Q -> ~ equiv P R -> ~ equiv Q R.                       *)
 Definition NotCompatL : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (Imp
-              (IdentT "equiv" [Var 2; Var 1])
-              (Imp
-                (Not (IdentT "equiv" [Var 2; Var 0]))
-                (Not (IdentT "equiv" [Var 1; Var 0]))))))
+    Imp
+      (IdentT "equiv" [Var 2; Var 1])
+      (Imp
+        (Not (IdentT "equiv" [Var 2; Var 0]))
+        (Not (IdentT "equiv" [Var 1; Var 0])))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -212,16 +187,13 @@ Definition NotCompatL : DeclP :=
 (* forall P Q R, equiv P Q -> ~ equiv R P -> ~ equiv R Q.                       *)
 Definition NotCompatR : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTyClass
-          (All VarTyClass
-            (Imp
-              (IdentT "equiv" [Var 2; Var 1])
-              (Imp
-                (Not (IdentT "equiv" [Var 0; Var 2]))
-                (Not (IdentT "equiv" [Var 0; Var 1]))))))
+    Imp
+      (IdentT "equiv" [Var 2; Var 1])
+      (Imp
+        (Not (IdentT "equiv" [Var 0; Var 2]))
+        (Not (IdentT "equiv" [Var 0; Var 1])))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.

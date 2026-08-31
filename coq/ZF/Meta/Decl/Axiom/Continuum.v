@@ -34,7 +34,7 @@ Definition GCH : DeclT :=
   {| paraT := []
   ;  resT  := TyProp
   ;  bodyT :=
-      All VarTySet
+      All
         (Imp
           (IdentT "Ordinal" [Var 0])
           (Equal

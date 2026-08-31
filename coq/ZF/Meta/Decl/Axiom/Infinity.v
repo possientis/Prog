@@ -15,10 +15,10 @@ Require Import ZF.Meta.Decl.Set.Union2.
 (* exists a, empty :< a /\ forall x, x :< a -> union2 x (single x) :< a         *)
 Definition Infinity : DeclP :=
   let concl :=
-      Ex VarTySet
+      Ex
         (And
           (Elem (IdentT "empty" []) (Var 0))
-          (All VarTySet
+          (All
             (Imp
               (Elem (Var 0) (Var 1))
               (Elem

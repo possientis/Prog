@@ -11,7 +11,7 @@ Import ListNotations.
 (* exists x, True                                                               *)
 Definition NonEmptyUniverse : DeclP :=
   let concl :=
-    Ex VarTySet Top
+    Ex Top
   in
     {| paraP  := []
     ;  conclP := concl

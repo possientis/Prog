@@ -11,10 +11,10 @@ Import ListNotations.
 (* forall a b, exists c, forall x, x :< c <-> x = a \/ x = b                    *)
 Definition Pairing : DeclP :=
   let concl :=
-      All VarTySet
-        (All VarTySet
-          (Ex VarTySet
-            (All VarTySet
+      All
+        (All
+          (Ex
+            (All
               (Iff
                 (Elem (Var 0) (Var 1))
                 (Or

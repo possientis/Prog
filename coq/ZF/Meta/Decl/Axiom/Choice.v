@@ -19,11 +19,11 @@ Definition Choice : DeclT :=
   {| paraT := []
   ;  resT  := TyProp
   ;  bodyT :=
-      All VarTySet
-        (Ex VarTySet
+      All
+        (Ex
           (And
             (IdentT "FunctionOn" [Var 0; Var 1])
-            (All VarTySet
+            (All
               (Imp
                 (Elem (Var 0) (Var 2))
                 (Imp

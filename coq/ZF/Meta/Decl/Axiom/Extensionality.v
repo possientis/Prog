@@ -11,10 +11,10 @@ Import ListNotations.
 (* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
 Definition Extensionality : DeclP :=
   let concl :=
-      All VarTySet
-        (All VarTySet
+      All
+        (All
           (Imp
-            (All VarTySet
+            (All
               (Iff (Elem (Var 0) (Var 2))
                    (Elem (Var 0) (Var 1))))
             (Equal (Var 1) (Var 0))))

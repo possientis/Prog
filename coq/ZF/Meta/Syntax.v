@@ -22,8 +22,8 @@ Inductive Term : Type :=
 | And     : Term   -> Term      -> Term
 | Or      : Term   -> Term      -> Term
 | Not     : Term   -> Term
-| All     : VarTy  -> Term      -> Term
-| Ex      : VarTy  -> Term      -> Term
+| All     : Term   -> Term
+| Ex      : Term   -> Term
 | Lam     : Term   -> Term
 | App     : Term   -> Term      -> Term
 | Def     : Term   -> Proof     -> Proof     -> Term

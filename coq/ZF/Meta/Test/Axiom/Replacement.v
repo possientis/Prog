@@ -14,8 +14,9 @@ Require Import ZF.Meta.Decl.Axiom.Replacement.
 Proposition Replacement : CheckDeclP (Replacement.env) Replacement.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT Replacement.env [] (conclP Replacement) TyProp) as H1. {
-    apply CheckAll, CheckImp.
+  assert (CheckT Replacement.env (ctxP Replacement)
+    (conclP Replacement) TyProp) as H1. {
+    apply CheckImp.
     - apply CheckIdentT with [TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.

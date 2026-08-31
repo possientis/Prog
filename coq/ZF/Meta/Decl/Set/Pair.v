@@ -20,7 +20,7 @@ Definition IsPairOf : DeclT :=
   ;  resT  := TyClass
   ;  bodyT :=
       Lam
-        (All VarTySet
+        (All
           (Iff
             (Elem (Var 0) (Var 1))
             (Or
@@ -31,7 +31,7 @@ Definition IsPairOf : DeclT :=
 (* forall a b, exists x, IsPairOf a b x.                                        *)
 Definition Exists : DeclP :=
   let concl :=
-    (Ex VarTySet
+    (Ex
       (App
         (IdentT "IsPairOf" [Var 2; Var 1])
         (Var 0)))
@@ -44,8 +44,8 @@ Definition Exists : DeclP :=
 (* forall a b x y, IsPairOf a b x -> IsPairOf a b y -> x = y.                   *)
 Definition Unique : DeclP :=
   let concl :=
-    (All VarTySet
-      (All VarTySet
+    (All
+      (All
         (Imp
           (App
             (IdentT "IsPairOf" [Var 3; Var 2])
@@ -76,9 +76,9 @@ Definition pair : DeclT :=
 (* forall a b x, x :< pair a b <-> x = a \/ x = b.                              *)
 Definition Charac : DeclP :=
   let concl :=
-    All VarTySet
-      (All VarTySet
-        (All VarTySet
+    All
+      (All
+        (All
           (Iff
             (Elem (Var 0) (IdentT "pair" [Var 2; Var 1]))
             (Or
@@ -93,8 +93,8 @@ Definition Charac : DeclP :=
 (* forall a b, a :< pair a b.                                                   *)
 Definition IsInL : DeclP :=
   let concl :=
-    All VarTySet
-      (All VarTySet
+    All
+      (All
         (Elem (Var 1) (IdentT "pair" [Var 1; Var 0])))
   in
     {| paraP := []
@@ -105,8 +105,8 @@ Definition IsInL : DeclP :=
 (* forall a b, b :< pair a b.                                                   *)
 Definition IsInR : DeclP :=
   let concl :=
-    All VarTySet
-      (All VarTySet
+    All
+      (All
         (Elem (Var 0) (IdentT "pair" [Var 1; Var 0])))
   in
     {| paraP := []
@@ -117,17 +117,16 @@ Definition IsInR : DeclP :=
 (* forall A a b, A a /\ A b <-> Incl (toClass (pair a b)) A.                    *)
 Definition ToClassIncl : DeclP :=
   let concl :=
-    All VarTyClass
-      (All VarTySet
-        (All VarTySet
-          (Iff
-            (And
-              (App (Var 2) (Var 1))
-              (App (Var 2) (Var 0)))
-            (IdentT "Incl"
-              [IdentT "toClass" [IdentT "pair" [Var 1; Var 0]]; Var 2]))))
+    All
+      (All
+        (Iff
+          (And
+            (App (Var 2) (Var 1))
+            (App (Var 2) (Var 0)))
+          (IdentT "Incl"
+            [IdentT "toClass" [IdentT "pair" [Var 1; Var 0]]; Var 2])))
   in
-    {| paraP := []
+    {| paraP := [TyClass]
     ; conclP := concl
     ; bodyP  := HoleP concl
     |}.

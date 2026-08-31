@@ -11,17 +11,16 @@ Import ListNotations.
 (* forall P, forall a, exists b, forall x, x :< b <-> x :< a /\ P x             *)
 Definition Specification : DeclP :=
   let concl :=
-      All VarTyClass
-        (All VarTySet
-          (Ex VarTySet
-            (All VarTySet
-              (Iff
-                (Elem (Var 0) (Var 1))
-                (And
-                  (Elem (Var 0) (Var 2))
-                  (App (Var 3) (Var 0)))))))
+    All
+      (Ex
+        (All
+          (Iff
+            (Elem (Var 0) (Var 1))
+            (And
+              (Elem (Var 0) (Var 2))
+              (App (Var 3) (Var 0))))))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.

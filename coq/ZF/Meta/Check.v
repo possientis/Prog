@@ -71,12 +71,12 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
 | CheckNot : forall (G:Ctx) (p:Term),
     CheckT E G p TyProp                      ->
     CheckT E G (Not p) TyProp
-| CheckAll : forall (G:Ctx) (vty:VarTy) (p:Term),
-    CheckT E (toTy vty :: G) p TyProp        ->
-    CheckT E G (All vty p) TyProp
-| CheckEx : forall (G:Ctx) (vty:VarTy) (p:Term),
-    CheckT E (toTy vty :: G) p TyProp        ->
-    CheckT E G (Ex vty p) TyProp
+| CheckAll : forall (G:Ctx) (p:Term),
+    CheckT E (TySet :: G) p TyProp           ->
+    CheckT E G (All p) TyProp
+| CheckEx : forall (G:Ctx) (p:Term),
+    CheckT E (TySet :: G) p TyProp           ->
+    CheckT E G (Ex p) TyProp
 | CheckLam : forall (G:Ctx) (p:Term),
     CheckT E (TySet :: G) p TyProp           ->
     CheckT E G (Lam p) TyClass

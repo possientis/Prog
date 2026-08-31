@@ -15,22 +15,21 @@ Require Import ZF.Meta.Decl.Set.OrdPair.
 (* forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):       *)
 Definition Replacement : DeclP :=
   let concl :=
-      All VarTyClass
-        (Imp
-          (IdentT "Functional" [Var 0])
-          (All VarTySet
-            (Ex VarTySet
-              (All VarTySet
-                (Iff
-                  (Elem (Var 0) (Var 1))
-                  (Ex VarTySet
-                    (And
-                      (Elem (Var 0) (Var 3))
-                      (App
-                        (Var 4)
-                        (IdentT "ordPair" [Var 0; Var 1])))))))))
+    Imp
+      (IdentT "Functional" [Var 0])
+      (All
+        (Ex
+          (All
+            (Iff
+              (Elem (Var 0) (Var 1))
+              (Ex
+                (And
+                  (Elem (Var 0) (Var 3))
+                  (App
+                    (Var 4)
+                    (IdentT "ordPair" [Var 0; Var 1]))))))))
   in
-    {| paraP  := []
+    {| paraP  := [TyClass]
     ;  conclP := concl
     ;  bodyP  := AxiomP concl
     |}.

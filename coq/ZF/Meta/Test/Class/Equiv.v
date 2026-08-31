@@ -41,7 +41,6 @@ Proposition Refl : CheckDeclP (Equiv.env) Refl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP Refl) (conclP Refl) TyProp) as H1. {
-    apply CheckAll.
     apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.
     + apply CheckVar. reflexivity.
@@ -57,7 +56,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP EquivCompat)
     (conclP EquivCompat) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -93,7 +92,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP EquivCompatL)
     (conclP EquivCompatL) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -122,7 +121,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP EquivCompatR)
     (conclP EquivCompatR) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -150,7 +149,7 @@ Proposition Sym : CheckDeclP (Equiv.env) Sym.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP Sym) (conclP Sym) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -171,7 +170,7 @@ Proposition Tran : CheckDeclP (Equiv.env) Tran.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP Tran) (conclP Tran) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -199,7 +198,7 @@ Proposition NotSym : CheckDeclP (Equiv.env) NotSym.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP NotSym) (conclP NotSym) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckNot.
       apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
@@ -269,7 +268,7 @@ Proposition NotCompat : CheckDeclP (Equiv.env) NotCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -307,7 +306,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP NotCompatL)
     (conclP NotCompatL) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.
@@ -338,7 +337,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Equiv.env) (ctxP NotCompatR)
   (conclP NotCompatR) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       * apply CheckVar. reflexivity.

@@ -35,7 +35,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.Double)
     (conclP Incl.Double) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckIff.
+    apply CheckIff.
     - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.
@@ -64,7 +64,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.EquivCompat)
     (conclP Incl.EquivCompat) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.
@@ -100,7 +100,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.EquivCompatL)
     (conclP Incl.EquivCompatL) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.
@@ -129,7 +129,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.EquivCompatR)
     (conclP Incl.EquivCompatR) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.
@@ -157,7 +157,6 @@ Proposition Refl : CheckDeclP (Incl.env) Incl.Refl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.Refl) (conclP Incl.Refl) TyProp) as H1. {
-    apply CheckAll.
     apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.
     - apply CheckVar. reflexivity.
@@ -172,7 +171,7 @@ Proposition Anti : CheckDeclP (Incl.env) Incl.Anti.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.Anti) (conclP Incl.Anti) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.
@@ -200,7 +199,7 @@ Proposition Tran : CheckDeclP (Incl.env) Incl.Tran.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (CheckT (Incl.env) (ctxP Incl.Tran) (conclP Incl.Tran) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    apply CheckImp.
     - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
       + apply CheckVar. reflexivity.
