@@ -1,23 +1,16 @@
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Env.
+Require Import Coq.Lists.List.
+Require Import Coq.Strings.String.
+
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
-(* forall P, forall a, exists b, forall x, x :< b <-> x :< a /\ P x             *)
-Definition Specification : Term :=
-  All VarTyClass
-    (All VarTySet
-      (Ex VarTySet
-        (All VarTySet
-          (Iff
-            (Elem (Var 0) (Var 1))
-            (And
-              (Elem (Var 0) (Var 2))
-              (App (Var 3) (Var 0))))))).
+Import ListNotations.
 
-(* The specification example is a proposition in the empty environment.         *)
-Proposition Check : CheckT Env.empty Ctx.empty Specification TyProp.
+Require Import ZF.Meta.Decl.Axiom.Specification.
+
+Proposition Specification : CheckDeclT (Specification.env) Specification.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckEx, CheckAll, CheckIff.
