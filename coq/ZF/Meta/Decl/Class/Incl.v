@@ -31,10 +31,10 @@ Definition Incl : DeclT :=
 Definition Double : DeclP :=
   let concl :=
     Iff
-      (IdentT "equiv" [Var 1; Var 0])
+      (IdentT (Name.local "equiv") [Var 1; Var 0])
       (And
-        (IdentT "Incl" [Var 1; Var 0])
-        (IdentT "Incl" [Var 0; Var 1]))
+        (IdentT (Name.local "Incl") [Var 1; Var 0])
+        (IdentT (Name.local "Incl") [Var 0; Var 1]))
   in
     {| paraP  := [TyClass; TyClass]
     ;  conclP := concl
@@ -45,12 +45,12 @@ Definition Double : DeclP :=
 Definition EquivCompat : DeclP :=
   let concl :=
     Imp
-      (IdentT "equiv" [Var 3; Var 2])
+      (IdentT (Name.local "equiv") [Var 3; Var 2])
       (Imp
-        (IdentT "equiv" [Var 1; Var 0])
+        (IdentT (Name.local "equiv") [Var 1; Var 0])
         (Imp
-          (IdentT "Incl" [Var 3; Var 1])
-          (IdentT "Incl" [Var 2; Var 0])))
+          (IdentT (Name.local "Incl") [Var 3; Var 1])
+          (IdentT (Name.local "Incl") [Var 2; Var 0])))
   in
     {| paraP  := [TyClass; TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -61,10 +61,10 @@ Definition EquivCompat : DeclP :=
 Definition EquivCompatL : DeclP :=
   let concl :=
     Imp
-      (IdentT "equiv" [Var 2; Var 1])
+      (IdentT (Name.local "equiv") [Var 2; Var 1])
       (Imp
-        (IdentT "Incl" [Var 2; Var 0])
-        (IdentT "Incl" [Var 1; Var 0]))
+        (IdentT (Name.local "Incl") [Var 2; Var 0])
+        (IdentT (Name.local "Incl") [Var 1; Var 0]))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -75,10 +75,10 @@ Definition EquivCompatL : DeclP :=
 Definition EquivCompatR : DeclP :=
   let concl :=
     Imp
-      (IdentT "equiv" [Var 2; Var 1])
+      (IdentT (Name.local "equiv") [Var 2; Var 1])
       (Imp
-        (IdentT "Incl" [Var 0; Var 2])
-        (IdentT "Incl" [Var 0; Var 1]))
+        (IdentT (Name.local "Incl") [Var 0; Var 2])
+        (IdentT (Name.local "Incl") [Var 0; Var 1]))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -88,7 +88,7 @@ Definition EquivCompatR : DeclP :=
 (* forall P, Incl P P.                                                          *)
 Definition Refl : DeclP :=
   let concl :=
-    IdentT "Incl" [Var 0; Var 0]
+    IdentT (Name.local "Incl") [Var 0; Var 0]
   in
     {| paraP  := [TyClass]
     ;  conclP := concl
@@ -99,10 +99,10 @@ Definition Refl : DeclP :=
 Definition Anti : DeclP :=
   let concl :=
     Imp
-      (IdentT "Incl" [Var 1; Var 0])
+      (IdentT (Name.local "Incl") [Var 1; Var 0])
       (Imp
-        (IdentT "Incl" [Var 0; Var 1])
-        (IdentT "equiv" [Var 1; Var 0]))
+        (IdentT (Name.local "Incl") [Var 0; Var 1])
+        (IdentT (Name.local "equiv") [Var 1; Var 0]))
   in
     {| paraP  := [TyClass; TyClass]
     ;  conclP := concl
@@ -113,10 +113,10 @@ Definition Anti : DeclP :=
 Definition Tran : DeclP :=
   let concl :=
     Imp
-      (IdentT "Incl" [Var 2; Var 1])
+      (IdentT (Name.local "Incl") [Var 2; Var 1])
       (Imp
-        (IdentT "Incl" [Var 1; Var 0])
-        (IdentT "Incl" [Var 2; Var 0]))
+        (IdentT (Name.local "Incl") [Var 1; Var 0])
+        (IdentT (Name.local "Incl") [Var 2; Var 0]))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl

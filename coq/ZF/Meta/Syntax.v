@@ -1,5 +1,6 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
+Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -10,7 +11,7 @@ Inductive Term : Type :=
 | Top     : Term
 | Var     : nat    -> Term
 | HoleT   : Ty     -> Term
-| IdentT  : string -> list Term -> Term
+| IdentT  : Name   -> list Term -> Term
 | Elem    : Term   -> Term      -> Term
 | Leq     : Term   -> Term      -> Term
 | Geq     : Term   -> Term      -> Term
@@ -31,5 +32,5 @@ Inductive Term : Type :=
 with Proof : Type :=
 | HoleP  : Term    -> Proof
 | AxiomP : Term    -> Proof
-| IdentP : string  -> list Term -> Proof
+| IdentP : Name    -> list Term -> Proof
 .

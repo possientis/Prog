@@ -268,7 +268,8 @@ Qed.
 Proposition NotCompat : CheckDeclP (Equiv.env) NotCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp) as H1. {
+  assert (CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp)
+    as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
