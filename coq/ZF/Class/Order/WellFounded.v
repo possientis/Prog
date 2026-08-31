@@ -100,7 +100,7 @@ Qed.
 Proposition IsomCompat : forall (F R S A B: Class),
   Isom F R S A B -> WellFounded R A <-> WellFounded S B.
 Proof.
-  (* It is sufficient to prove -> *)
+  (* It is sufficient to prove ->                                               *)
   assert (forall (F R S A B:Class),
     Isom F R S A B -> WellFounded R A -> WellFounded S B) as L. {
     intros F R S A B H1 [H2 H3]. assert (H4 := H1). destruct H4 as [H4 _]. split.
@@ -114,7 +114,7 @@ Proof.
       + apply InitSegment.IsomFullImage; assumption.
       + apply Bij.ImageIsSmall with A B. 1: assumption. apply H3. assumption. }
 
-  (* The proof of the equivalence follows. *)
+  (* The proof of the equivalence follows.                                      *)
   intros F R S A B H1. split.
   - apply L with F. assumption.
   - apply L with F^:-1:, Isom.Converse. assumption.
@@ -129,114 +129,114 @@ Proof.
   apply (IsomCompat F R S A B). 2: assumption.
   apply Isom.Transport; assumption.
 Qed.
-(* R can be founded for A, but not well-founded for A.                          *)
-Proposition Example : exists (R A:Class),
-  Founded R A /\ ~ WellFounded R A.
+
+(* A is the class of all singletons and unordered pairs.                        *)
+Definition A : Class := fun x =>
+  (exists y, x = :{y}:) \/ (exists y z, y <> z /\ x = :{y,z}:).
+
+(* R relates a singleton to an unordered pair.                                  *)
+Definition R : Class := fun x => exists y z, x = :(y,z): /\
+  (exists u, y = :{u}:) /\ (exists v w, v <> w /\ z = :{v,w}:).
+
+(* R is founded for A, but not well-founded for A.                              *)
+Proposition Example : Founded R A /\ ~ WellFounded R A.
 Proof.
-  (* Let A be the class of all singletons and pairs. *)
-  remember (fun x =>
-     (exists y, x = :{y}:) \/ (exists y z, y <> z /\ x = :{y,z}:)) as A eqn:EA.
+  (* We claim that R is founded on A but not well-founded on A.                 *)
+  split.
 
-  (* Let R be the class (relation) 'has fewer elements'. *)
-  remember (fun x => exists y z, x = :(y,z): /\
-    (exists u, y = :{u}:) /\ (exists v w, v <> w /\ z = :{v,w}:)) as R eqn:ER.
-
-  (* We claim that R and A satisfy the desired property. *)
-  exists R. exists A. split.
-
-  (* We first need to show that R is founded on A. *)
+  (* We first need to show that R is founded on A.                              *)
   - assert (Founded R A) as X. 2: apply X.
 
-    (* Let a be a non-empty set which is a subclass of A. *)
+    (* Let a be a non-empty set which is a subclass of A.                       *)
     intros a H1 H2.
 
-    (* Then a is a subclass of A. *)
+    (* Then a is a subclass of A.                                               *)
     assert (toClass a :<=: A) as X. apply H1. clear X.
 
-    (* And a is not empty. *)
+    (* And a is not empty.                                                      *)
     assert (a <> :0:) as X. apply H2. clear X.
 
-    (* We need to show that a as an R-minimal element, *)
+    (* We need to show that a has an R-minimal element.                         *)
     assert (exists x, Minimal R (toClass a) x) as X. 2: apply X.
 
-    (* We will consider two cases depending on whether a contains a singleton. *)
+    (* We will consider two cases depending on whether a contains a singleton.  *)
     assert ((exists x, :{x}: :< a) \/ ~ (exists x, :{x}: :< a)) as H3.
     apply LawExcludedMiddle. destruct H3 as [H3|H3].
 
-    (* We first assume that a contains a singleton *)
+    (* We first assume that a contains a singleton.                             *)
     + assert (exists x, :{x}: :< a) as X. apply H3. clear X.
 
-      (* So let x be such that {x} belongs to a. *)
+      (* So let x be such that {x} belongs to a.                                *)
       destruct H3 as [x H3]. assert (:{x}: :< a) as X. apply H3. clear X.
 
-      (* We claim that {x} is a desired R-minimal element of a. *)
+      (* We claim that {x} is a desired R-minimal element of a.                 *)
       exists :{x}:.
 
-      (* So we need to show this is the case. *)
+      (* So we need to show this is the case.                                   *)
       assert (Minimal R (toClass a) :{x}:) as X. 2: apply X.
 
       split. 1: assumption. intros b H4 H5.
-      rewrite ER in H5. destruct H5 as [y [z [H5 [_ H6]]]].
+      destruct H5 as [y [z [H5 [_ H6]]]].
       apply OrdPair.Equal in H5. destruct H5 as [_ H5]. subst.
       destruct H6 as [v [w [H6 H7]]]. revert H7.
       apply IsNotPair. assumption.
 
-    (* We now assume that a contains no singleton. *)
+    (* We now assume that a contains no singleton.                              *)
     + assert (~exists x, :{x}: :< a) as X. apply H3. clear X.
 
-      (* Let y z be such that {y,z} belongs to a and y <> z. *)
+      (* Let y z be such that {y,z} belongs to a and y <> z.                    *)
       apply HasElem in H2. destruct H2 as [x H2].
-      assert (H4 := H2). apply H1 in H4. rewrite EA in H4.
+      assert (H4 := H2). apply H1 in H4.
       destruct H4 as [H4|H4]. 1: {
         destruct H4 as [y H4]. rewrite H4 in H2. exfalso. apply H3.
         exists y. assumption.
       }
       destruct H4 as [y [z [H4 H5]]]. rewrite H5 in H2.
 
-      (* Then {y,z} belongs to a. *)
+      (* Then {y,z} belongs to a.                                               *)
       assert (:{y,z}: :< a) as X. apply H2. clear X.
 
-      (* And y <> z. *)
+      (* And y <> z.                                                            *)
       assert (y <> z) as X. apply H4. clear X.
 
-      (* We claim that {y,z} is a desired R-minimal elemen of a. *)
+      (* We claim that {y,z} is a desired R-minimal element of a.               *)
       exists :{y,z}:.
 
-      (* So we need to show this is the case. *)
+      (* So we need to show this is the case.                                   *)
       assert (Minimal R (toClass a) :{y,z}:) as X. 2: apply X.
 
       split. 1: assumption. intros b H6 H7.
-      rewrite ER in H7. destruct H7 as [c [d [H7 [H8 _]]]].
+      destruct H7 as [c [d [H7 [H8 _]]]].
       apply OrdPair.Equal in H7. destruct H7 as [H7 _]. subst.
       destruct H8 as [u H8]. subst. apply H3. exists u. assumption.
 
-  (* We now need to show that R is not well-founded on A. *)
+  (* We now need to show that R is not well-founded on A.                       *)
   - assert (~ WellFounded R A) as X. 2: apply X.
 
-    (* So let us assume that it is. *)
+    (* So let us assume that it is.                                             *)
     intros H1. assert (WellFounded R A) as X. apply H1. clear X.
 
-    (* In particular all initial segments of R in A are small. *)
+    (* In particular all initial segments of R in A are small.                  *)
     destruct H1 as [_ H1].
     assert (forall a, A a -> Small (initSegment R A a)) as X. apply H1. clear X.
 
-    (* Consider the set a = {0,{0}}. *)
+    (* Consider the set a = {0,{0}}.                                            *)
     remember :{:0:,:{:0:}:}: as a eqn:Ea.
 
-    (* Then a is an element of A. *)
-    assert (A a) as H2. { rewrite EA. right. exists :0:. exists :{:0:}:.
+    (* Then a is an element of A.                                               *)
+    assert (A a) as H2. { right. exists :0:. exists :{:0:}:.
       split. 2: assumption. intros H2. apply SingletonIsNotEmpty with :0:.
       symmetry. assumption.
     }
 
-    (* And the initial segment of R in A at a is the class of all singletons. *)
+    (* And the initial segment of R in A at a is the class of all singletons.   *)
     assert (initSegment R A a :~: Singleton) as H3. { intros x. split; intros H3.
-      - apply InitSegment.Charac in H3. destruct H3 as [_ H3]. rewrite ER in H3.
+      - apply InitSegment.Charac in H3. destruct H3 as [_ H3].
         destruct H3 as [y [z [H3 [[u H4] _]]]]. apply OrdPair.Equal in H3.
         destruct H3 as [H3 _]. subst. exists u. reflexivity.
       - destruct H3 as [u H3]. apply InitSegment.Charac. split.
-        + rewrite H3, EA. left. exists u. reflexivity.
-        + rewrite ER. exists :{u}:. exists a. split.
+        + rewrite H3. left. exists u. reflexivity.
+        + exists :{u}:. exists a. split.
           * rewrite H3. reflexivity.
           * split. { exists u. reflexivity. } {
               exists :0:. exists :{:0:}:. split. 2: assumption.
