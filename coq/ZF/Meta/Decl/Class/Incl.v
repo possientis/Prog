@@ -1,68 +1,165 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Term.CheckDecl.
-Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+Require Import ZF.Meta.Decl.Class.Equiv.
+
 (* Declarations.                                                                *)
 
 (* Definition Incl (P Q:Class) : Prop := forall x, P x -> Q x.                  *)
-Definition Incl : Decl :=
-  {| paraT := [TyClass; TyClass];
-     resT  := TyProp;
-     bodyT :=
-       (All VarTySet
-         (Imp
-           (App (Var 2) (Var 0))
-           (App (Var 1) (Var 0)))) |}.
+Definition Incl : DeclT :=
+  {| paraT := [TyClass; TyClass]
+  ;  resT  := TyProp
+  ;  bodyT :=
+      All VarTySet
+        (Imp
+          (App (Var 2) (Var 0))
+          (App (Var 1) (Var 0)))
+  |}.
+
+(* Propositions.                                                                *)
+
+(* Proposition Double : forall P Q, equiv P Q <-> Incl P Q /\ Incl Q P.         *)
+Definition Double : DeclP :=
+  let concl :=
+    All VarTyClass
+      (All VarTyClass
+        (Iff
+          (IdentT "equiv" [Var 1; Var 0])
+          (And
+            (IdentT "Incl" [Var 1; Var 0])
+            (IdentT "Incl" [Var 0; Var 1]))))
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
+
+(* Proposition EquivCompat : forall P Q R S,                                    *)
+(* equiv P Q -> equiv R S -> Incl P R -> Incl Q S.                              *)
+Definition EquivCompat : DeclP :=
+  let concl :=
+    All VarTyClass
+      (All VarTyClass
+        (All VarTyClass
+          (All VarTyClass
+            (Imp
+              (IdentT "equiv" [Var 3; Var 2])
+              (Imp
+                (IdentT "equiv" [Var 1; Var 0])
+                (Imp
+                  (IdentT "Incl" [Var 3; Var 1])
+                  (IdentT "Incl" [Var 2; Var 0])))))))
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
+
+(* Proposition EquivCompatL : forall P Q R,                                     *)
+(* equiv P Q -> Incl P R -> Incl Q R.                                           *)
+Definition EquivCompatL : DeclP :=
+  let concl :=
+    All VarTyClass
+      (All VarTyClass
+        (All VarTyClass
+          (Imp
+            (IdentT "equiv" [Var 2; Var 1])
+            (Imp
+              (IdentT "Incl" [Var 2; Var 0])
+              (IdentT "Incl" [Var 1; Var 0])))))
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
+
+(* Proposition EquivCompatR : forall P Q R,                                     *)
+(* equiv P Q -> Incl R P -> Incl R Q.                                           *)
+Definition EquivCompatR : DeclP :=
+  let concl :=
+    All VarTyClass
+      (All VarTyClass
+        (All VarTyClass
+          (Imp
+            (IdentT "equiv" [Var 2; Var 1])
+            (Imp
+              (IdentT "Incl" [Var 0; Var 2])
+              (IdentT "Incl" [Var 0; Var 1])))))
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
+
+(* Proposition Refl : forall (P:Class), Incl P P.                               *)
+Definition Refl : DeclP :=
+  let concl :=
+    All VarTyClass
+      (IdentT "Incl" [Var 0; Var 0])
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
+
+(* Proposition Anti : forall P Q, Incl P Q -> Incl Q P -> equiv P Q.            *)
+Definition Anti : DeclP :=
+  let concl :=
+    All VarTyClass
+      (All VarTyClass
+        (Imp
+          (IdentT "Incl" [Var 1; Var 0])
+          (Imp
+            (IdentT "Incl" [Var 0; Var 1])
+            (IdentT "equiv" [Var 1; Var 0]))))
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
+
+(* Proposition Tran : forall P Q R, Incl P Q -> Incl Q R -> Incl P R.           *)
+Definition Tran : DeclP :=
+  let concl :=
+    All VarTyClass
+      (All VarTyClass
+        (All VarTyClass
+          (Imp
+            (IdentT "Incl" [Var 2; Var 1])
+            (Imp
+              (IdentT "Incl" [Var 1; Var 0])
+              (IdentT "Incl" [Var 2; Var 0])))))
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := HoleP concl
+    |}.
 
 (* Environment.                                                                 *)
 
-Definition imports : Env := Env.empty.
+Definition imports : Env := Equiv.exports.
 
-Definition exports : Env := Env.fromListT
-  [ ("Incl"%string, Incl)
+Definition exports : Env := Env.unions
+  [ Env.fromListT
+    [ ("Incl"%string, Incl)
+    ]
+  ; Env.fromListP
+    [ ("Double"%string       , Double)
+    ; ("EquivCompat"%string  , EquivCompat)
+    ; ("EquivCompatL"%string , EquivCompatL)
+    ; ("EquivCompatR"%string , EquivCompatR)
+    ; ("Refl"%string         , Refl)
+    ; ("Anti"%string         , Anti)
+    ; ("Tran"%string         , Tran)
+    ]
   ].
 
 Definition env : Env := Env.union imports exports.
-
-(* Body checks.                                                                 *)
-
-(* The declaration body for inclusion compares two classes pointwise.           *)
-Proposition InclCheckBody : CheckDecl Env.empty Incl.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckImp.
-  - apply CheckApp.
-    + apply CheckVar. reflexivity.
-    + apply CheckVar. reflexivity.
-  - apply CheckApp.
-    + apply CheckVar. reflexivity.
-    + apply CheckVar. reflexivity.
-Qed.
-
-(* Identifier checks.                                                           *)
-
-(* Inclusion applied to two class variables is well sorted anywhere.            *)
-Proposition InclCheckIdent : forall (e:Env) (G:Ctx) (m n:nat),
-  Env.sigT e "Incl"%string = Some ([TyClass; TyClass], TyProp) ->
-  typeOf G m = Some TyClass ->
-  typeOf G n = Some TyClass ->
-  CheckT e G (IdentT "Incl" [Var m; Var n]) TyProp.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros e G m n H1 H2 H3.
-  apply CheckIdentT with [TyClass;TyClass]. 1: assumption.
-  - apply CheckTsCons.
-    + apply CheckVar. assumption.
-    + apply CheckTsCons.
-      * apply CheckVar. assumption.
-      * apply CheckTsNil.
-Qed.

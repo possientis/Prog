@@ -1,172 +1,224 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Proof.CheckDecl.
+Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
-Require Import ZF.Meta.Decl.Class.Equiv.
 Require Import ZF.Meta.Decl.Class.Incl.
 
 Import ListNotations.
 
-(* Environment.                                                                 *)
+(* Declaration typing.                                                          *)
 
-Definition env : Env := Env.unions
-  [ Incl.env
-  ; Equiv.env
-  ].
-
-(* Propositions.                                                                *)
-
-(* Proposition Double : forall P Q, equiv P Q <-> Incl P Q /\ Incl Q P.         *)
-Definition Double : Term :=
-  All VarTyClass
-    (All VarTyClass
-      (Iff
-        (IdentT "equiv" [Var 1; Var 0])
-        (And
-          (IdentT "Incl" [Var 1; Var 0])
-          (IdentT "Incl" [Var 0; Var 1])))).
-
-(* Proposition EquivCompat : forall P Q R S,                                    *)
-(* equiv P Q -> equiv R S -> Incl P R -> Incl Q S.                              *)
-Definition EquivCompat : Term :=
-  All VarTyClass
-    (All VarTyClass
-      (All VarTyClass
-        (All VarTyClass
-          (Imp
-            (IdentT "equiv" [Var 3; Var 2])
-            (Imp
-              (IdentT "equiv" [Var 1; Var 0])
-              (Imp
-                (IdentT "Incl" [Var 3; Var 1])
-                (IdentT "Incl" [Var 2; Var 0]))))))).
-
-(* Proposition EquivCompatL : forall P Q R,                                     *)
-(* equiv P Q -> Incl P R -> Incl Q R.                                           *)
-Definition EquivCompatL : Term :=
-  All VarTyClass
-    (All VarTyClass
-      (All VarTyClass
-        (Imp
-          (IdentT "equiv" [Var 2; Var 1])
-          (Imp
-            (IdentT "Incl" [Var 2; Var 0])
-            (IdentT "Incl" [Var 1; Var 0]))))).
-
-(* Proposition EquivCompatR : forall P Q R,                                     *)
-(* equiv P Q -> Incl R P -> Incl R Q.                                           *)
-Definition EquivCompatR : Term :=
-  All VarTyClass
-    (All VarTyClass
-      (All VarTyClass
-        (Imp
-          (IdentT "equiv" [Var 2; Var 1])
-          (Imp
-            (IdentT "Incl" [Var 0; Var 2])
-            (IdentT "Incl" [Var 0; Var 1]))))).
-
-(* Proposition Refl : forall (P:Class), Incl P P.                               *)
-Definition Refl : Term :=
-  All VarTyClass
-    (IdentT "Incl" [Var 0; Var 0]).
-
-(* Proposition Anti : forall P Q, Incl P Q -> Incl Q P -> equiv P Q.            *)
-Definition Anti : Term :=
-  All VarTyClass
-    (All VarTyClass
-      (Imp
-        (IdentT "Incl" [Var 1; Var 0])
-        (Imp
-          (IdentT "Incl" [Var 0; Var 1])
-          (IdentT "equiv" [Var 1; Var 0])))).
-
-(* Proposition Tran : forall P Q R, Incl P Q -> Incl Q R -> Incl P R.           *)
-Definition Tran : Term :=
-  All VarTyClass
-    (All VarTyClass
-      (All VarTyClass
-        (Imp
-          (IdentT "Incl" [Var 2; Var 1])
-          (Imp
-            (IdentT "Incl" [Var 1; Var 0])
-            (IdentT "Incl" [Var 2; Var 0]))))).
+(* The declaration body for inclusion compares two classes pointwise.           *)
+Proposition Incl : CheckDeclT (Incl.env) Incl.Incl.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply CheckAll, CheckImp.
+  - apply CheckApp.
+    + apply CheckVar. reflexivity.
+    + apply CheckVar. reflexivity.
+  - apply CheckApp.
+    + apply CheckVar. reflexivity.
+    + apply CheckVar. reflexivity.
+Qed.
 
 (* Proposition typing.                                                          *)
 
 (* Double inclusion and equivalence form a well-sorted proposition.             *)
-Proposition DoubleCheck : CheckT env Ctx.empty Double TyProp.
+Proposition Double : CheckDeclP (Incl.env) Incl.Double.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckAll, CheckIff.
-  - apply equivCheckIdent; reflexivity.
-  - apply CheckAnd; apply InclCheckIdent; reflexivity.
+  assert (CheckT (Incl.env) (ctxP Incl.Double)
+    (conclP Incl.Double) TyProp) as H1. {
+    apply CheckAll, CheckAll, CheckIff.
+    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+      apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsNil.
+    - apply CheckAnd.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
 
 (* Compatibility of inclusion with equivalence is well sorted.                  *)
-Proposition EquivCompatCheck : CheckT env Ctx.empty EquivCompat TyProp.
+Proposition EquivCompat : CheckDeclP (Incl.env) Incl.EquivCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
-  - apply equivCheckIdent; reflexivity.
-  - apply CheckImp.
-    + apply equivCheckIdent; reflexivity.
-    + apply CheckImp.
-      * apply InclCheckIdent; reflexivity.
-      * apply InclCheckIdent; reflexivity.
+  assert (CheckT (Incl.env) (ctxP Incl.EquivCompat)
+    (conclP Incl.EquivCompat) TyProp) as H1. {
+    apply CheckAll, CheckAll, CheckAll, CheckAll, CheckImp.
+    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+      apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsNil.
+    - apply CheckImp.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil.
+      + apply CheckImp.
+        * apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+          apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsCons.
+             ++ apply CheckVar. reflexivity.
+             ++ apply CheckTsNil.
+        * apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+          apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsCons.
+             ++ apply CheckVar. reflexivity.
+             ++ apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
 
 (* Left compatibility of inclusion with equivalence is well sorted.             *)
-Proposition EquivCompatLCheck : CheckT env Ctx.empty EquivCompatL TyProp.
+Proposition EquivCompatL : CheckDeclP (Incl.env) Incl.EquivCompatL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckAll, CheckAll, CheckImp.
-  - apply equivCheckIdent; reflexivity.
-  - apply CheckImp; apply InclCheckIdent; reflexivity.
+  assert (CheckT (Incl.env) (ctxP Incl.EquivCompatL)
+    (conclP Incl.EquivCompatL) TyProp) as H1. {
+    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+      apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsNil.
+    - apply CheckImp.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
 
 (* Right compatibility of inclusion with equivalence is well sorted.            *)
-Proposition EquivCompatRCheck : CheckT env Ctx.empty EquivCompatR TyProp.
+Proposition EquivCompatR : CheckDeclP (Incl.env) Incl.EquivCompatR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckAll, CheckAll, CheckImp.
-  - apply equivCheckIdent; reflexivity.
-  - apply CheckImp; apply InclCheckIdent; reflexivity.
+  assert (CheckT (Incl.env) (ctxP Incl.EquivCompatR)
+    (conclP Incl.EquivCompatR) TyProp) as H1. {
+    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+      apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsNil.
+    - apply CheckImp.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
 
 (* Reflexivity of inclusion is a well-sorted proposition.                       *)
-Proposition ReflCheck : CheckT env Ctx.empty Refl TyProp.
+Proposition Refl : CheckDeclP (Incl.env) Incl.Refl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll.
-  apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
-  apply CheckTsCons.
-  - apply CheckVar. reflexivity.
-  - apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsNil.
+  assert (CheckT (Incl.env) (ctxP Incl.Refl) (conclP Incl.Refl) TyProp) as H1. {
+    apply CheckAll.
+    apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+    apply CheckTsCons.
+    - apply CheckVar. reflexivity.
+    - apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
 
 (* Antisymmetry of inclusion is a well-sorted proposition.                      *)
-Proposition AntiCheck : CheckT env Ctx.empty Anti TyProp.
+Proposition Anti : CheckDeclP (Incl.env) Incl.Anti.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckAll, CheckImp.
-  - apply InclCheckIdent; reflexivity.
-  - apply CheckImp.
-    + apply InclCheckIdent; reflexivity.
-    + apply equivCheckIdent; reflexivity.
+  assert (CheckT (Incl.env) (ctxP Incl.Anti) (conclP Incl.Anti) TyProp) as H1. {
+    apply CheckAll, CheckAll, CheckImp.
+    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+      apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsNil.
+    - apply CheckImp.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
 
 (* Transitivity of inclusion is a well-sorted proposition.                      *)
-Proposition TranCheck : CheckT env Ctx.empty Tran TyProp.
+Proposition Tran : CheckDeclP (Incl.env) Incl.Tran.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckAll, CheckAll, CheckImp.
-  - apply InclCheckIdent; reflexivity.
-  - apply CheckImp; apply InclCheckIdent; reflexivity.
+  assert (CheckT (Incl.env) (ctxP Incl.Tran) (conclP Incl.Tran) TyProp) as H1. {
+    apply CheckAll, CheckAll, CheckAll, CheckImp.
+    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+      apply CheckTsCons.
+      + apply CheckVar. reflexivity.
+      + apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsNil.
+    - apply CheckImp.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil.
+      + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
+        apply CheckTsCons.
+        * apply CheckVar. reflexivity.
+        * apply CheckTsCons.
+          -- apply CheckVar. reflexivity.
+          -- apply CheckTsNil. }
+  split. 1: assumption. apply CheckHoleP. assumption.
 Qed.
