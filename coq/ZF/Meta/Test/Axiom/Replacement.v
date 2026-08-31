@@ -1,50 +1,16 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Term.Decl.
-Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-Definition Functional : Decl :=
-  {| paraT := [TyClass];
-     resT  := TyProp;
-     bodyT := HoleT TyProp |}.
+Require Import ZF.Meta.Decl.Axiom.Replacement.
 
-Definition ordPair : Decl :=
-  {| paraT := [TySet; TySet];
-     resT  := TySet;
-     bodyT := HoleT TySet |}.
-
-Definition env : Env := Env.fromListT
-  [ ("Functional"%string, Functional)
-  ; ("ordPair"%string  , ordPair)
-  ].
-
-(* forall F, Functional F ->                                                    *)
-(* forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):       *)
-Definition Replacement : Term :=
-  All VarTyClass
-    (Imp
-      (IdentT "Functional" [Var 0])
-      (All VarTySet
-        (Ex VarTySet
-          (All VarTySet
-            (Iff
-              (Elem (Var 0) (Var 1))
-              (Ex VarTySet
-                (And
-                  (Elem (Var 0) (Var 3))
-                  (App
-                    (Var 4)
-                    (IdentT "ordPair" [Var 0; Var 1]))))))))).
-
-(* The replacement example is a proposition in the local test environment.      *)
-Proposition Check : CheckT env Ctx.empty Replacement TyProp.
+Proposition Replacement : CheckDeclT (Replacement.env) Replacement.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckImp.
