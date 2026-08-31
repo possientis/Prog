@@ -1,23 +1,18 @@
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Env.
+Require Import Coq.Lists.List.
+Require Import Coq.Strings.String.
+
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
-(* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
-Definition Extensionality : Term :=
-  All VarTySet
-    (All VarTySet
-      (Imp
-        (All VarTySet
-          (Iff (Elem (Var 0) (Var 2))
-               (Elem (Var 0) (Var 1))))
-        (Equal (Var 1) (Var 0)))).
+Import ListNotations.
 
-(* The extensionality example is a proposition in the empty environment.        *)
-Proposition ExtensionalityCheck :
-  CheckT Env.empty Ctx.empty Extensionality TyProp.
+Require Import ZF.Meta.Decl.Axiom.Extensionality.
+
+Proposition Extensionality : CheckDeclT (Extensionality.env) Extensionality.
 Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckImp.
   - apply CheckAll, CheckIff.
     + apply CheckElem; apply CheckVar; reflexivity.
