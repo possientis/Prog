@@ -3,7 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.Decl.
+Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -13,10 +13,8 @@ Require Import ZF.Meta.Decl.Set.OrdPair.
 
 (* forall F, Functional F ->                                                    *)
 (* forall a, exists b, forall y, y :< b <-> exists x, x :< a /\ F :(x,y):       *)
-Definition Replacement : DeclT :=
-  {| paraT := []
-  ;  resT  := TyProp
-  ;  bodyT :=
+Definition Replacement : DeclP :=
+  let concl :=
       All VarTyClass
         (Imp
           (IdentT "Functional" [Var 0])
@@ -31,14 +29,18 @@ Definition Replacement : DeclT :=
                       (App
                         (Var 4)
                         (IdentT "ordPair" [Var 0; Var 1])))))))))
-  |}.
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := AxiomP concl
+    |}.
 
 Definition imports : Env := Env.unions
   [ Functional.exports
   ; OrdPair.exports
   ].
 
-Definition exports : Env := Env.fromListT
+Definition exports : Env := Env.fromListP
   [ ("Replacement"%string, Replacement)
   ].
 

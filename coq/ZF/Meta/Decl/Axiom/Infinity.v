@@ -3,7 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.Decl.
+Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -13,10 +13,8 @@ Require Import ZF.Meta.Decl.Set.Single.
 Require Import ZF.Meta.Decl.Set.Union2.
 
 (* exists a, empty :< a /\ forall x, x :< a -> union2 x (single x) :< a         *)
-Definition Infinity : DeclT :=
-  {| paraT := []
-  ;  resT  := TyProp
-  ;  bodyT :=
+Definition Infinity : DeclP :=
+  let concl :=
       Ex VarTySet
         (And
           (Elem (IdentT "empty" []) (Var 0))
@@ -26,7 +24,11 @@ Definition Infinity : DeclT :=
               (Elem
                 (IdentT "union2" [Var 0; IdentT "single" [Var 0]])
                 (Var 1)))))
-  |}.
+  in
+    {| paraP  := []
+    ;  conclP := concl
+    ;  bodyP  := AxiomP concl
+    |}.
 
 Definition imports : Env := Env.unions
   [ Empty.exports
@@ -34,7 +36,7 @@ Definition imports : Env := Env.unions
   ; Union2.exports
   ].
 
-Definition exports : Env := Env.fromListT
+Definition exports : Env := Env.fromListP
   [ ("Infinity"%string, Infinity)
   ].
 
