@@ -120,6 +120,15 @@ Proof.
   - apply L with F^:-1:, Isom.Converse. assumption.
 Qed.
 
+(* Well-foundedness is preserved under transport by a bijection.                *)
+Proposition Transport : forall (F R S A B:Class),
+  (S = transport F R A) -> Bij F A B -> WellFounded R A -> WellFounded S B.
+Proof.
+  (* Proof by Claude + sonnet 4.6                                               *)
+  intros F R S A B H1 H2 H3.
+  apply (IsomCompat F R S A B). 2: assumption.
+  apply Isom.Transport; assumption.
+Qed.
 (* R can be founded for A, but not well-founded for A.                          *)
 Proposition Example : exists (R A:Class),
   Founded R A /\ ~ WellFounded R A.
@@ -251,12 +260,4 @@ Proof.
     apply H1; assumption.
 Qed.
 
-(* Well-foundedness is preserved under transport by a bijection.                *)
-Proposition Transport : forall (F R S A B:Class),
-  (S = transport F R A) -> Bij F A B -> WellFounded R A -> WellFounded S B.
-Proof.
-  (* Proof by Claude + sonnet 4.6                                               *)
-  intros F R S A B H1 H2 H3.
-  apply (IsomCompat F R S A B). 2: assumption.
-  apply Isom.Transport; assumption.
-Qed.
+
