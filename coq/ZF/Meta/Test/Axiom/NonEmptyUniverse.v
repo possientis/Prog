@@ -1,15 +1,17 @@
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Env.
+Require Import Coq.Lists.List.
+Require Import Coq.Strings.String.
+
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
-(* exists x, True                                                               *)
-Definition NonEmptyUniverse : Term :=
-  Ex VarTySet Top.
+Import ListNotations.
 
-(* The non-empty-universe example is a proposition in the empty environment.    *)
-Proposition Check : CheckT Env.empty Ctx.empty NonEmptyUniverse TyProp.
+Require Import ZF.Meta.Decl.Axiom.NonEmptyUniverse.
+
+Proposition NonEmptyUniverse :
+  CheckDeclT (NonEmptyUniverse.env) NonEmptyUniverse.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckEx, CheckTop.
