@@ -30,7 +30,7 @@ Definition Choice : DeclT :=
                 (Imp
                   (NotEq (Var 0) (IdentT (Name.local "empty") []))
                   (Elem
-                    (IdentT (Name.local "eval") [Var 1; Var 0])
+                    (IdentT Eval.evalName [Var 1; Var 0])
                     (Var 0)))))))
   |}.
 

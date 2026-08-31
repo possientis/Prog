@@ -29,7 +29,7 @@ Definition CH : DeclT :=
         (IdentT (Name.local "card")
           [IdentT (Name.local "power")
             [IdentT (Name.local "omega") []]])
-        (IdentT (Name.local "eval")
+        (IdentT EvalOfClass.evalName
           [IdentT (Name.local "Aleph") [];
            IdentT (Name.local "one") []])
   |}.
@@ -45,9 +45,9 @@ Definition GCH : DeclT :=
           (Equal
             (IdentT (Name.local "card")
               [IdentT (Name.local "power")
-                [IdentT (Name.local "eval")
+                [IdentT EvalOfClass.evalName
                   [IdentT (Name.local "Aleph") []; Var 0]]])
-            (IdentT (Name.local "eval")
+            (IdentT EvalOfClass.evalName
               [IdentT (Name.local "Aleph") [];
                IdentT (Name.local "succ") [Var 0]])))
   |}.

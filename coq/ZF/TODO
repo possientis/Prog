@@ -1,2 +1,2 @@
-eval + eval (Eval vs EvalOfClass)
-remove eapply after unique/exists infrastructure in place (Set.Pair)
+implement CheckDef properly
+remove eapply after CheckDef properly implemented

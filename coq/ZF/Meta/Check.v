@@ -22,7 +22,8 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     CheckT E G (Var n) ty
 | CheckHoleT : forall (G:Ctx) (ty:Ty),
     CheckT E G (HoleT ty) ty
-| CheckIdentT : forall (G:Ctx) (name:Name) (args:list Term) (tys:list Ty) (ty:Ty),
+| CheckIdentT : forall (G:Ctx) (name:Name) (args:list Term)
+    (tys:list Ty) (ty:Ty),
     sigT E name = Some (tys,ty)              ->
     CheckTs E G args tys                     ->
     CheckT E G (IdentT name args) ty
@@ -105,7 +106,8 @@ with CheckP (E:Env) : Ctx -> Proof -> Term -> Prop :=
 | CheckAxiomP : forall (G:Ctx) (t:Term),
     CheckT E G t TyProp                      ->
     CheckP E G (AxiomP t) t
-| CheckIdentP : forall (G:Ctx) (name:Name) (args:list Term) (tys:list Ty) (t:Term),
+| CheckIdentP : forall (G:Ctx) (name:Name) (args:list Term)
+    (tys:list Ty) (t:Term),
     sigP E name = Some (tys,t)               ->
     CheckTs E G args tys                     ->
     CheckP E G (IdentP name args) t
