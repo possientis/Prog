@@ -1,23 +1,16 @@
-Require Import ZF.Meta.Ctx.
-Require Import ZF.Meta.Env.
+Require Import Coq.Lists.List.
+Require Import Coq.Strings.String.
+
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Term.CheckDecl.
 Require Import ZF.Meta.Ty.
 
-(* forall a b, exists c, forall x, x :< c <-> x = a \/ x = b                    *)
-Definition Pairing : Term :=
-  All VarTySet
-    (All VarTySet
-      (Ex VarTySet
-        (All VarTySet
-          (Iff
-            (Elem (Var 0) (Var 1))
-            (Or
-              (Equal (Var 0) (Var 3))
-              (Equal (Var 0) (Var 2))))))).
+Import ListNotations.
 
-(* The pairing example is a proposition in the empty environment.               *)
-Proposition PairingCheck : CheckT Env.empty Ctx.empty Pairing TyProp.
+Require Import ZF.Meta.Decl.Axiom.Pairing.
+
+Proposition Pairing : CheckDeclT (Pairing.env) Pairing.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckAll, CheckEx, CheckAll, CheckIff.
