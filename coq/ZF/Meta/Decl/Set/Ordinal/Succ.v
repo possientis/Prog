@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* succ a : U.                                                                  *)
 Definition succ : DeclT :=
   {| paraT := [TySet]
   ;  resT  := TySet

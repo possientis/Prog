@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* union2 a b : U.                                                              *)
 Definition union2 : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TySet

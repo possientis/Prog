@@ -9,6 +9,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* empty : U.                                                                   *)
 Definition empty : DeclT :=
   {| paraT := [];
      resT  := TySet;

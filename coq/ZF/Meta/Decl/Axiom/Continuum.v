@@ -19,7 +19,7 @@ Require Import ZF.Meta.Decl.Set.Power.
 Require Import ZF.Meta.Decl.Set.Relation.EvalOfClass.
 
 
-(* The continuum hypothesis says that the continuum is the first uncountable.   *)
+(* CH := card (power omega) = eval Aleph one.                                   *)
 Definition CH : DeclT :=
   {| paraT := []
   ;  resT  := TyProp
@@ -44,7 +44,7 @@ Definition GCH : DeclT :=
             (IdentT "eval" [IdentT "Aleph" []; IdentT "succ" [Var 0]])))
   |}.
 
-(* The generalized continuum hypothesis implies the continuum hypothesis.       *)
+(* GCH -> CH.                                                                   *)
 Definition WhenGCH : DeclP :=
   let concl :=
     Imp

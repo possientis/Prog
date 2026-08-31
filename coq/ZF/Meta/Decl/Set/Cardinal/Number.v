@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* card a : U.                                                                  *)
 Definition card : DeclT :=
   {| paraT := [TySet]
   ;  resT  := TySet

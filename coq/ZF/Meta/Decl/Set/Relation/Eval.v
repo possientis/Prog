@@ -12,6 +12,7 @@ Import ListNotations.
 Require Import ZF.Meta.Decl.Set.Empty.
 Require Import ZF.Meta.Decl.Set.Relation.FunctionOn.
 
+(* eval f a : U.                                                                *)
 Definition eval : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TySet

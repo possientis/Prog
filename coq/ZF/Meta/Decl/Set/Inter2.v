@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* inter2 a b : U.                                                              *)
 Definition inter2 : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TySet

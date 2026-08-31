@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* eval F a : U.                                                                *)
 Definition eval : DeclT :=
   {| paraT := [TyClass; TySet]
   ;  resT  := TySet

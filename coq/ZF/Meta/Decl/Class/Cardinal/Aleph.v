@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* Aleph : Class.                                                               *)
 Definition Aleph : DeclT :=
   {| paraT := []
   ;  resT  := TyClass

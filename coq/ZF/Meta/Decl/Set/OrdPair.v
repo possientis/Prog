@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* ordPair a b : U.                                                             *)
 Definition ordPair : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TySet

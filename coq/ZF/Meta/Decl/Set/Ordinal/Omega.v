@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* omega : U.                                                                   *)
 Definition omega : DeclT :=
   {| paraT := []
   ;  resT  := TySet

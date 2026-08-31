@@ -12,10 +12,9 @@ Import ListNotations.
 Require Import ZF.Meta.Decl.Class.Equiv.
 Require Import ZF.Meta.Decl.Class.Incl.
 
-(* Declarations.                                                                *)
 
-(* Definition IsPairOf (a b:U) : Class := fun x =>                              *)
-(* forall y, y :< x <-> y = a \/ y = b.                                         *)
+
+(* IsPairOf a b x <-> forall y, y :< x <-> y = a \/ y = b.                      *)
 Definition IsPairOf : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TyClass
@@ -29,7 +28,7 @@ Definition IsPairOf : DeclT :=
               (Equal (Var 0) (Var 2)))))
   |}.
 
-(* The existence proof declaration states that some set is a pair of a and b.   *)
+(* forall a b, exists x, IsPairOf a b x.                                        *)
 Definition Exists : DeclP :=
   let concl :=
     (Ex VarTySet
@@ -42,7 +41,7 @@ Definition Exists : DeclP :=
     ; bodyP  := HoleP concl
     |}.
 
-(* The uniqueness proof declaration states that any two such sets are equal.    *)
+(* forall a b x y, IsPairOf a b x -> IsPairOf a b y -> x = y.                   *)
 Definition Unique : DeclP :=
   let concl :=
     (All VarTySet
@@ -62,7 +61,7 @@ Definition Unique : DeclP :=
     ; bodyP  := HoleP concl
     |}.
 
-(* Definition pair (a b:U) : U := Def (IsPairOf a b) exists unique.             *)
+(* IsPairOf a b (pair a b).                                                     *)
 Definition pair : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TySet
@@ -74,7 +73,7 @@ Definition pair : DeclT :=
   |}.
 
 
-(* A set belongs to a pair exactly when it is one of the selected sets.         *)
+(* forall a b x, x :< pair a b <-> x = a \/ x = b.                              *)
 Definition Charac : DeclP :=
   let concl :=
     All VarTySet
@@ -91,7 +90,7 @@ Definition Charac : DeclP :=
     ; bodyP  := HoleP concl
     |}.
 
-(* The left selected set belongs to its pair.                                   *)
+(* forall a b, a :< pair a b.                                                   *)
 Definition IsInL : DeclP :=
   let concl :=
     All VarTySet
@@ -103,7 +102,7 @@ Definition IsInL : DeclP :=
     ; bodyP  := HoleP concl
     |}.
 
-(* The right selected set belongs to its pair.                                  *)
+(* forall a b, b :< pair a b.                                                   *)
 Definition IsInR : DeclP :=
   let concl :=
     All VarTySet
@@ -115,7 +114,7 @@ Definition IsInR : DeclP :=
     ; bodyP  := HoleP concl
     |}.
 
-(* Containment of both selected sets is equivalent to class inclusion.          *)
+(* forall A a b, A a /\ A b <-> Incl (toClass (pair a b)) A.                    *)
 Definition ToClassIncl : DeclP :=
   let concl :=
     All VarTyClass

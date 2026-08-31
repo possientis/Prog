@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* single a : U.                                                                *)
 Definition single : DeclT :=
   {| paraT := [TySet]
   ;  resT  := TySet

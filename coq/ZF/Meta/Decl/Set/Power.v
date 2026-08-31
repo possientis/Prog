@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* power a : U.                                                                 *)
 Definition power : DeclT :=
   {| paraT := [TySet]
   ;  resT  := TySet

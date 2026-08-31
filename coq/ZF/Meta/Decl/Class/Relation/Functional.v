@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* Functional F : Prop.                                                         *)
 Definition Functional : DeclT :=
   {| paraT := [TyClass]
   ;  resT  := TyProp

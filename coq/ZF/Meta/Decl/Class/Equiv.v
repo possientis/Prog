@@ -9,16 +9,16 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
-(* Term declarations.                                                           *)
 
-(* Definition toClass (a:U) : Class := fun x => x :< a.                         *)
+
+(* toClass a x <-> x :< a.                                                      *)
 Definition toClass : DeclT :=
   {| paraT := [TySet]
   ;  resT  := TyClass
   ;  bodyT := Lam (Elem (Var 0) (Var 1))
   |}.
 
-(* Definition equiv (P Q:Class) : Prop := forall x, P x <-> Q x.                *)
+(* equiv P Q <-> forall x, P x <-> Q x.                                         *)
 Definition equiv : DeclT :=
   {| paraT := [TyClass; TyClass]
   ;  resT  := TyProp
@@ -29,9 +29,9 @@ Definition equiv : DeclT :=
           (App (Var 1) (Var 0)))
   |}.
 
-(* Proof declarations                                                           *)
 
-(* Proposition Refl : forall (P:Class), equiv P P.                              *)
+
+(* forall P, equiv P P.                                                         *)
 Definition Refl : DeclP :=
   let concl :=
       All VarTyClass
@@ -42,8 +42,7 @@ Definition Refl : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition EquivCompat : forall A B C D,                                    *)
-(* equiv A C -> equiv B D -> equiv A B -> equiv C D.                            *)
+(* forall A B C D, equiv A C -> equiv B D -> equiv A B -> equiv C D.            *)
 Definition EquivCompat : DeclP :=
   let concl :=
       All VarTyClass
@@ -63,8 +62,7 @@ Definition EquivCompat : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition EquivCompatL : forall A B C,                                     *)
-(* equiv A C -> equiv A B -> equiv C B.                                         *)
+(* forall A B C, equiv A C -> equiv A B -> equiv C B.                           *)
 Definition EquivCompatL : DeclP :=
   let concl :=
       All VarTyClass
@@ -81,8 +79,7 @@ Definition EquivCompatL : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition EquivCompatR : forall A B C,                                     *)
-(* equiv B C -> equiv A B -> equiv A C.                                         *)
+(* forall A B C, equiv B C -> equiv A B -> equiv A C.                           *)
 Definition EquivCompatR : DeclP :=
   let concl :=
       All VarTyClass
@@ -99,7 +96,7 @@ Definition EquivCompatR : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition Sym : forall P Q, equiv P Q -> equiv Q P.                        *)
+(* forall P Q, equiv P Q -> equiv Q P.                                          *)
 Definition Sym : DeclP :=
   let concl :=
       All VarTyClass
@@ -113,8 +110,7 @@ Definition Sym : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition Tran : forall P Q R,                                             *)
-(* equiv P Q -> equiv Q R -> equiv P R.                                         *)
+(* forall P Q R, equiv P Q -> equiv Q R -> equiv P R.                           *)
 Definition Tran : DeclP :=
   let concl :=
       All VarTyClass
@@ -131,7 +127,7 @@ Definition Tran : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition NotSym : forall P Q, ~ equiv P Q -> ~ equiv Q P.                 *)
+(* forall P Q, ~ equiv P Q -> ~ equiv Q P.                                      *)
 Definition NotSym : DeclP :=
   let concl :=
       All VarTyClass
@@ -145,8 +141,7 @@ Definition NotSym : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition EqualToClass : forall a b,                                       *)
-(* a = b <-> equiv (toClass a) (toClass b).                                     *)
+(* forall a b, a = b <-> equiv (toClass a) (toClass b).                         *)
 Definition EqualToClass : DeclP :=
   let concl :=
       All VarTySet
@@ -161,8 +156,7 @@ Definition EqualToClass : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition NotEqualToClass : forall a b,                                    *)
-(* a <> b <-> ~ equiv (toClass a) (toClass b).                                  *)
+(* forall a b, a <> b <-> ~ equiv (toClass a) (toClass b).                      *)
 Definition NotEqualToClass : DeclP :=
   let concl :=
       All VarTySet
@@ -178,8 +172,7 @@ Definition NotEqualToClass : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition NotCompat : forall P Q R S,                                      *)
-(* equiv P Q -> equiv R S -> ~ equiv P R -> ~ equiv Q S.                        *)
+(* forall P Q R S, equiv P Q -> equiv R S -> ~ equiv P R -> ~ equiv Q S.        *)
 Definition NotCompat : DeclP :=
   let concl :=
       All VarTyClass
@@ -199,8 +192,7 @@ Definition NotCompat : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition NotCompatL : forall P Q R,                                       *)
-(* equiv P Q -> ~ equiv P R -> ~ equiv Q R.                                     *)
+(* forall P Q R, equiv P Q -> ~ equiv P R -> ~ equiv Q R.                       *)
 Definition NotCompatL : DeclP :=
   let concl :=
       All VarTyClass
@@ -217,8 +209,7 @@ Definition NotCompatL : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* Proposition NotCompatR : forall P Q R,                                       *)
-(* equiv P Q -> ~ equiv R P -> ~ equiv R Q.                                     *)
+(* forall P Q R, equiv P Q -> ~ equiv R P -> ~ equiv R Q.                       *)
 Definition NotCompatR : DeclP :=
   let concl :=
       All VarTyClass

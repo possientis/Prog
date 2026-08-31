@@ -9,6 +9,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* FunctionOn f a : Prop.                                                       *)
 Definition FunctionOn : DeclT :=
   {| paraT := [TySet; TySet];
      resT  := TyProp;

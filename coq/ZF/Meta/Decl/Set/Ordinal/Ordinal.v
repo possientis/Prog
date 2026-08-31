@@ -8,6 +8,7 @@ Require Import ZF.Meta.Ty.
 
 Import ListNotations.
 
+(* Ordinal a : Prop.                                                            *)
 Definition Ordinal : DeclT :=
   {| paraT := [TySet]
   ;  resT  := TyProp

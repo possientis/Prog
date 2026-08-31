@@ -1,4 +1,3 @@
 eval + eval (Eval vs EvalOfClass)
 Should we remove quantification over classes 
 Add Axiom.Classic
-comments for decl in style '(* forall a, a <> empty -> exists x, ... *)'
