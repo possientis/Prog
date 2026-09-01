@@ -73,7 +73,7 @@ Qed.
 Proposition pair : CheckDeclT (Pair.env) Pair.pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  eapply CheckDef.
+  apply CheckDef.
   - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
     apply CheckTsCons.
     + apply CheckVar. reflexivity.

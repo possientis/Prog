@@ -3,11 +3,13 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
+Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.Decl.
 Require Import ZF.Meta.Ty.
+Require Import ZF.Meta.Unique.
 
 Import ListNotations.
 Open Scope string_scope.
@@ -87,10 +89,10 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     CheckT E G A TyClass                     ->
     CheckT E G x TySet                       ->
     CheckT E G (App A x) TyProp
-| CheckDef : forall (G:Ctx) (A P Q:Term) (p q:Proof),
+| CheckDef : forall (G:Ctx) (A:Term) (p q:Proof),
     CheckT E G A TyClass                     ->
-    CheckP E G p P                           ->
-    CheckP E G q Q                           ->
+    CheckP E G p (Exists A)                  ->
+    CheckP E G q (Unique A)                  ->
     CheckT E G (Def A p q) TySet
 with CheckTs (E:Env) : Ctx -> list Term -> list Ty -> Prop :=
 | CheckTsNil : forall (G:Ctx),
