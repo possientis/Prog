@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DIR=${HOME}/Prog/rocq/CPDT/Haskell
+cd ${DIR}
+
+rm -f Main
+rm -f ./{*,.*}.{o,hi}
+rm -f */{*,.*}.{o,hi}

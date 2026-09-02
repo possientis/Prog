@@ -10,7 +10,7 @@ rm -f test.log
 ./clojure/clean.sh
 ./gradle/clean.sh
 ./haskell/clean.sh
-./coq/clean.sh
+./rocq/clean.sh
 ./agda/clean.sh
 ./lean/clean.sh
 ./idris/clean.sh

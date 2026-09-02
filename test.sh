@@ -22,7 +22,7 @@ testing () {
 
 DIR=${PROG}
 for target in c asm make c++ java ant maven gradle \
-  c# haskell coq idris scheme python ruby js php scala clojure sed tex bison
+  c# haskell rocq idris scheme python ruby js php scala clojure sed tex bison
 do
   testing "$target"
 done
