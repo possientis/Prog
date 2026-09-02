@@ -5,7 +5,7 @@ Definition Unique (A:Term) : Term :=
   All
     (All
       (Imp
-        (App (ShiftT 2 A) (Var 1))
+        (App (shiftT 2 A) (Var 1))
         (Imp
-          (App (ShiftT 2 A) (Var 0))
+          (App (shiftT 2 A) (Var 0))
           (Equal (Var 1) (Var 0))))).
