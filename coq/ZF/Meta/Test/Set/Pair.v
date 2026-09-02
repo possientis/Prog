@@ -80,13 +80,17 @@ Proof.
     + apply CheckTsCons.
       * apply CheckVar. reflexivity.
       * apply CheckTsNil.
-  - apply CheckIdentP with [TySet;TySet]. 1: reflexivity.
+  - apply CheckIdentP with
+      (tys := [TySet;TySet]) (t := conclP ZF.Meta.Decl.Set.Pair.Exists).
+    1: reflexivity.
     apply CheckTsCons.
     + apply CheckVar. reflexivity.
     + apply CheckTsCons.
       * apply CheckVar. reflexivity.
       * apply CheckTsNil.
-  - apply CheckIdentP with [TySet;TySet]. 1: reflexivity.
+  - apply CheckIdentP with
+      (tys := [TySet;TySet]) (t := conclP ZF.Meta.Decl.Set.Pair.Unique).
+    1: reflexivity.
     apply CheckTsCons.
     + apply CheckVar. reflexivity.
     + apply CheckTsCons.

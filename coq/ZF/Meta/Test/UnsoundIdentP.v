@@ -26,12 +26,12 @@ Definition env : Env := Env.singleP (Name.local "SelfElem") SelfElem.
 Proposition BadIdentP :
   CheckP env [TySet; TySet]
     (IdentP (Name.local "SelfElem") [Var 1])
-    (Elem (Var 0) (Var 0)).
+    (Elem (Var 1) (Var 1)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckIdentP with [TySet].
-  - reflexivity.
-  - apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsNil.
+  apply CheckIdentP with (tys := [TySet]) (t := conclP SelfElem).
+  1: reflexivity.
+  apply CheckTsCons.
+  - apply CheckVar. reflexivity.
+  - apply CheckTsNil.
 Qed.

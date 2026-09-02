@@ -1,6 +1,7 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
+Require Import ZF.Meta.Apply.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
@@ -112,5 +113,5 @@ with CheckP (E:Env) : Ctx -> Proof -> Term -> Prop :=
     (tys:list Ty) (t:Term),
     sigP E name = Some (tys,t)               ->
     CheckTs E G args tys                     ->
-    CheckP E G (IdentP name args) t
+    CheckP E G (IdentP name args) (applyT t args)
 .
