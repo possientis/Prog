@@ -127,3 +127,14 @@ Proof.
   induction H1 as [G|G t ts ty tys H1 H2 IH]. 1: reflexivity.
   simpl. rewrite IH. reflexivity.
 Qed.
+
+(* The first term in a well-sorted non-empty list has the first sort.           *)
+Proposition CheckTsHead :
+  forall (E:Env) (G:Ctx) (t:Term) (ts:list Term) (ty:Ty) (tys:list Ty),
+    CheckTs E G (t :: ts) (ty :: tys)        ->
+    CheckT E G t ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G t ts ty tys H1.
+  inversion H1. subst. assumption.
+Qed.
