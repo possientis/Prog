@@ -149,3 +149,23 @@ Proof.
   intros E G t ts ty tys H1.
   inversion H1. subst. assumption.
 Qed.
+
+(* Matching entries in a well-sorted term list have matching sorts.             *)
+Proposition CheckTsNth :
+  forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty) (n:nat) (t:Term) (ty:Ty),
+    CheckTs E G ts tys                       ->
+    nth_error ts n  = Some t                 ->
+    nth_error tys n = Some ty                ->
+    CheckT E G t ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G ts tys n t ty H1.
+  generalize dependent ty.
+  generalize dependent t.
+  generalize dependent n.
+  induction H1 as [G|G t' ts ty' tys H1 H2 IH]; intros n t ty H3 H4.
+  - destruct n as [|n]; discriminate.
+  - destruct n as [|n].
+    + inversion H3. subst. inversion H4. subst. assumption.
+    + apply IH with n; assumption.
+Qed.
