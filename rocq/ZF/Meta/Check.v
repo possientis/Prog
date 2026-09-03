@@ -115,3 +115,15 @@ with CheckP (E:Env) : Ctx -> Proof -> Term -> Prop :=
     CheckTs E G args tys                     ->
     CheckP E G (IdentP name args) (applyT t args)
 .
+
+(* A well-sorted term list has the same length as its sort list.                *)
+Proposition CheckTsLength :
+  forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty),
+    CheckTs E G ts tys                       ->
+    List.length ts = List.length tys.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G ts tys H1.
+  induction H1 as [G|G t ts ty tys H1 H2 IH]. 1: reflexivity.
+  simpl. rewrite IH. reflexivity.
+Qed.
