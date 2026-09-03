@@ -1,3 +1,4 @@
+Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Ty.
@@ -40,4 +41,20 @@ Proof.
   - destruct n as [|n].
     + rewrite <- H1. reflexivity.
     + apply IH. assumption.
+Qed.
+
+(* A successful lookup is within the length of its context.                     *)
+Proposition TypeOfLtLength :
+  forall (G:Ctx) (n:nat) (ty:Ty),
+    typeOf G n = Some ty                      ->
+    n < length G.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G n ty H1.
+  generalize dependent n.
+  induction G as [|ty' G IH]; intros n H1.
+  - discriminate.
+  - destruct n as [|n].
+    + apply le_n_S, Nat.le_0_l.
+    + apply le_n_S, IH. assumption.
 Qed.
