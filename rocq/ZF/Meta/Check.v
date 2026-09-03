@@ -138,3 +138,14 @@ Proof.
   intros E G t ts ty tys H1.
   inversion H1. subst. assumption.
 Qed.
+
+(* The tail of a well-sorted non-empty list is well sorted.                     *)
+Proposition CheckTsTail :
+  forall (E:Env) (G:Ctx) (t:Term) (ts:list Term) (ty:Ty) (tys:list Ty),
+    CheckTs E G (t :: ts) (ty :: tys)        ->
+    CheckTs E G ts tys.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G t ts ty tys H1.
+  inversion H1. subst. assumption.
+Qed.
