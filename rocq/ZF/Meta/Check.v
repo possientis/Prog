@@ -220,3 +220,30 @@ Proof.
   apply (CheckTsNth E G ts D n); assumption.
 Qed.
 
+(* A selected checked argument has the sort found in the reversed signature.    *)
+Proposition CheckArgT :
+  forall (E:Env) (G:Ctx) (args:list Term) (tys:list Ty) (n:nat) (ty:Ty),
+    CheckTs E G args tys                     ->
+    typeOf (rev tys) n = Some ty             ->
+    CheckT E G (argT args n) ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G args tys n ty H1 H2.
+  unfold argT.
+  (* If the reversed argument lookup succeeds, reversal and context lookup match
+     it with the corresponding sort.                                            *)
+  destruct (nth_error (rev args) n) as [t|] eqn:H3.
+  - apply (CheckTsTypeOf E G (rev args) (rev tys) n); try assumption.
+    apply CheckTsRev. assumption.
+    (* If the reversed argument lookup failed, the matching reversed sort lookup
+       would fail too, contradicting the successful context lookup.             *)
+  -  assert (List.length (rev args) = List.length (rev tys)) as H4. {
+      rewrite length_rev, length_rev. apply CheckTsLength with E G. assumption.
+    }
+    assert (nth_error (rev tys) n = None) as H5. {
+      apply nth_error_None. rewrite <- H4. apply nth_error_None. assumption.
+    }
+    rewrite TypeOfNthError in H2.
+    rewrite H2 in H5. discriminate.
+Qed.
+
