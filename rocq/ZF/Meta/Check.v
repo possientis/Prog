@@ -167,6 +167,23 @@ Proof.
   apply CheckTsCons. assumption. apply IH. assumption.
 Qed.
 
+(* Reversing a well-sorted term list preserves matching sorts.                  *)
+Proposition CheckTsRev :
+  forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty),
+    CheckTs E G ts tys                       ->
+    CheckTs E G (rev ts) (rev tys).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G ts tys H1.
+  (* The empty checked list remains empty after reversal.                       *)
+  induction H1 as [G|G t ts ty tys H1 H2 IH]. 1: apply CheckTsNil.
+  (* Reversal moves the checked head to the end of the checked reversed tail.   *)
+  assert (rev (t :: ts)   = List.app (rev ts) [t])   as H3. { reflexivity. }
+  assert (rev (ty :: tys) = List.app (rev tys) [ty]) as H4. { reflexivity. }
+  rewrite H3, H4. apply CheckTsApp. 1: assumption.
+  apply CheckTsCons. 1: assumption. apply CheckTsNil.
+Qed.
+
 (* Matching entries in a well-sorted term list have matching sorts.             *)
 Proposition CheckTsNth :
   forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty) (n:nat) (t:Term) (ty:Ty),
@@ -202,3 +219,4 @@ Proof.
   (* The structural list theorem then gives the sort of the selected term.      *)
   apply (CheckTsNth E G ts D n); assumption.
 Qed.
+
