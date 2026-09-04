@@ -16,6 +16,22 @@ Fixpoint typeOf (G:Ctx) (n:nat) : option Ty :=
   | _   :: H  , S n => typeOf H n
   end.
 
+(* Context lookup agrees with list lookup.                                      *)
+Proposition TypeOfNthError :
+  forall (G:Ctx) (n:nat),
+    typeOf G n = nth_error G n.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G n.
+  generalize dependent n.
+  induction G as [|ty G IH]; intros n.
+  - (* In the empty context, every lookup fails on both sides.                  *)
+    destruct n as [|n]; reflexivity.
+  - (* In a non-empty context, zero selects the head and successors descend.    *)
+    destruct n as [|n]. 1: reflexivity.
+    apply IH.
+Qed.
+
 (* A lookup remains valid after adding newer variables in front.                *)
 Proposition TypeOfAppR :
   forall (G D:Ctx) (n:nat) (ty:Ty),
