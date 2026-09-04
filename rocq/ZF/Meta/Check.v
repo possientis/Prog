@@ -169,3 +169,19 @@ Proof.
     + inversion H3. subst. inversion H4. subst. assumption.
     + apply IH with n; assumption.
 Qed.
+
+(* Matching entries in a well-sorted term list have matching context sorts.     *)
+Proposition CheckTsTypeOf :
+  forall (E:Env) (G:Ctx) (ts:list Term) (D:Ctx) (n:nat) (t:Term) (ty:Ty),
+    CheckTs E G ts D                         ->
+    nth_error ts n = Some t                  ->
+    typeOf D n = Some ty                     ->
+    CheckT E G t ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G ts D n t ty H1 H2 H3.
+  (* The type context lookup is the same as the matching list lookup.           *)
+  rewrite TypeOfNthError in H3.
+  (* The structural list theorem then gives the sort of the selected term.      *)
+  apply (CheckTsNth E G ts D n); assumption.
+Qed.
