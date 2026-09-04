@@ -150,6 +150,23 @@ Proof.
   inversion H1. subst. assumption.
 Qed.
 
+(* Appending well-sorted term lists preserves matching sorts.                   *)
+Proposition CheckTsApp :
+  forall (E:Env) (G:Ctx) (ts us:list Term) (tys uys:list Ty),
+    CheckTs E G ts tys                       ->
+    CheckTs E G us uys                       ->
+    CheckTs E G (ts ++ us) (tys ++ uys).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G ts us tys uys H1.
+  generalize dependent uys.
+  generalize dependent us.
+  (* The proof follows the checked prefix; the empty prefix adds nothing.       *)
+  induction H1 as [G|G t ts ty tys H1 H2 IH]; intros us uys H3. 1: assumption.
+  (* Matching heads remain matching heads after appending the same suffixes.    *)
+  apply CheckTsCons. assumption. apply IH. assumption.
+Qed.
+
 (* Matching entries in a well-sorted term list have matching sorts.             *)
 Proposition CheckTsNth :
   forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty) (n:nat) (t:Term) (ty:Ty),
