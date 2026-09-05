@@ -1,7 +1,10 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
+Require Import ZF.Meta.Induction.
+Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.Ty.
 
 (* De Bruijn lifting raises free variables by j at or above a level i.          *)
 Fixpoint fromT (i j:nat) (t:Term) : Term :=
@@ -46,3 +49,46 @@ Definition shiftT (n:nat) (t:Term) : Term := fromT 0 n t.
 
 (* De Bruijn lifting raises every free variable in a proof by n.                *)
 Definition shiftP (n:nat) (p:Proof) : Proof := fromP 0 n p.
+
+Proposition WhenZero :
+  (forall (t:Term)   (i:nat), fromT   i 0 t  = t)     /\
+  (forall (p:Proof)  (i:nat), fromP   i 0 p  = p)     /\
+  (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts).
+Proof.
+  apply Induction.
+  - intros i. reflexivity.
+  - intros i. reflexivity.
+  - intros n i. simpl.
+    destruct (n <? i). 1: reflexivity. rewrite Nat.add_0_r. reflexivity.
+  - intros ty i. reflexivity.
+  - intros name args IH i. simpl. rewrite IH. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p IH i. simpl. rewrite IH. reflexivity.
+  - intros p IH i. simpl. rewrite IH. reflexivity.
+  - intros p IH i. simpl. rewrite IH. reflexivity.
+  - intros p IH i. simpl. rewrite IH. reflexivity.
+  - intros A x IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A p q IH1 IH2 IH3 i. simpl. rewrite IH1, IH2, IH3. reflexivity.
+  - intros t IH i. simpl. rewrite IH. reflexivity.
+  - intros t IH i. simpl. rewrite IH. reflexivity.
+  - intros name args IH i. simpl. rewrite IH. reflexivity.
+  - intros i. reflexivity.
+  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+Qed.
+
+(* Lifting a term by zero leaves it unchanged.                                  *)
+Proposition ShiftZeroT : forall (t:Term),
+    shiftT 0 t = t.
+Proof.
+  intros t. apply WhenZero.
+Qed.
