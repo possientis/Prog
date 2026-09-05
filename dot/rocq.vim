@@ -45,6 +45,7 @@ syn cluster rocqVernac contains=rocqRequire,rocqCheck,rocqEval,rocqNotation,rocq
 
 " Various
 syn match   rocqError             "\S\+"
+syn region  rocqAttribute         matchgroup=rocqAttribute start="#\[" end="\]" keepend
 syn match   rocqVernacPunctuation ":=\|\.\|:"
 syn match   rocqIdent             contained "[_[:alpha:]][_'[:alnum:]]*"
 syn keyword rocqTopLevel          Type Canonical Structure Cd Derive Drop Existential
@@ -373,6 +374,7 @@ if version >= 508 || !exists("did_rocq_syntax_inits")
  HiLink rocqVernacular                PreProc
  HiLink rocqVernacCmd         rocqVernacular
  HiLink rocqVernacPunctuation rocqVernacular
+ HiLink rocqAttribute         rocqVernacular
  HiLink rocqSchemeKwd         rocqVernacular
  HiLink rocqSchemePunctuation rocqVernacular
  HiLink rocqIndPunctuation    rocqVernacular
