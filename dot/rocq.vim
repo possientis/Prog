@@ -1,10 +1,10 @@
 " Vim syntax file
 " Modified:     2026-05-24 by Hermes + gpt 5.5
-" Language:     Coq
+" Language:     Rocq
 " Filenames:    *.v
 " Maintainer:  Vincent Aravantinos <vincent.aravantinos@gmail.com>
 " Last Change: 2008 Dec 02 - Added Program and Obligation constructions
-"                            (Coq v8.2), with Serge Leblanc.
+"                            (Rocq v8.2), with Serge Leblanc.
 "              2008 Jan 30 - Applied improvements for all constructions;
 "                            added 'with' and 'where' for fixpoints and
 "                            inductives; fixed some old hard bugs.
@@ -34,306 +34,306 @@
 " For version 6.x: Quit when a syntax file was already loaded
 if version < 600
  syntax clear
-elseif exists("b:current_syntax") && b:current_syntax == "coq"
+elseif exists("b:current_syntax") && b:current_syntax == "rocq"
  finish
 endif
 
-" Coq is case sensitive.
+" Rocq is case sensitive.
 syn case match
 
-syn cluster coqVernac contains=coqRequire,coqCheck,coqEval,coqNotation,coqTacNotation,coqDecl,coqThm,coqLtacDecl,coqDef,coqFix,coqInd,coqRec,coqShow,coqModule,coqDeclare,coqCoercion,coqScheme
+syn cluster rocqVernac contains=rocqRequire,rocqCheck,rocqEval,rocqNotation,rocqTacNotation,rocqDecl,rocqThm,rocqLtacDecl,rocqDef,rocqFix,rocqInd,rocqRec,rocqShow,rocqModule,rocqDeclare,rocqCoercion,rocqScheme
 
 " Various
-syn match   coqError             "\S\+"
-syn match   coqVernacPunctuation ":=\|\.\|:"
-syn match   coqIdent             contained "[_[:alpha:]][_'[:alnum:]]*"
-syn keyword coqTopLevel          Type Canonical Structure Cd Derive Drop Existential
-syn region  coqCoercion          contains=coqIdent,coqCoercionClass,coqCoercionKwd,coqVernacPunctuation matchgroup=coqVernacCmd start="\<Coercion\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn keyword coqCoercionClass     contained Funclass
-syn match   coqCoercionKwd       contained ">->"
+syn match   rocqError             "\S\+"
+syn match   rocqVernacPunctuation ":=\|\.\|:"
+syn match   rocqIdent             contained "[_[:alpha:]][_'[:alnum:]]*"
+syn keyword rocqTopLevel          Type Canonical Structure Cd Derive Drop Existential
+syn region  rocqCoercion          contains=rocqIdent,rocqCoercionClass,rocqCoercionKwd,rocqVernacPunctuation matchgroup=rocqVernacCmd start="\<Coercion\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn keyword rocqCoercionClass     contained Funclass
+syn match   rocqCoercionKwd       contained ">->"
 "...
-syn keyword coqVernacCmd         Functional Back
-syn keyword coqFeedback          Show About Print
+syn keyword rocqVernacCmd         Functional Back
+syn keyword rocqFeedback          Show About Print
 
 " Terms
-syn cluster coqTerm            contains=coqKwd,coqTermPunctuation,coqKwdMatch,coqKwdLet,coqKwdParen
-syn region coqKwdMatch         contained contains=@coqTerm matchgroup=coqKwd start="\<match\>" end="\<with\>"
-syn region coqKwdLet           contained contains=@coqTerm matchgroup=coqKwd start="\<let\>"   end=":="
-syn region coqKwdParen         contained contains=@coqTerm matchgroup=coqTermPunctuation start="(" end=")" keepend extend
-syn keyword coqKwd             contained as else end exists2 fix forall fun if in return struct then
-syn match   coqKwd             contained "\<where\>"
-syn match   coqKwd             contained "\<exists!\?"
-syn match   coqKwd             contained "|\|/\\\|\\/\|<->\|\~\|->\|=>\|{\|}\|&\|+\|-\|*\|=\|>\|<\|<="
-syn match coqTermPunctuation   contained ":=\|:>\|:\|;\|,\|||\|\[\|\]\|@\|?\|\<_\>"
+syn cluster rocqTerm            contains=rocqKwd,rocqTermPunctuation,rocqKwdMatch,rocqKwdLet,rocqKwdParen
+syn region rocqKwdMatch         contained contains=@rocqTerm matchgroup=rocqKwd start="\<match\>" end="\<with\>"
+syn region rocqKwdLet           contained contains=@rocqTerm matchgroup=rocqKwd start="\<let\>"   end=":="
+syn region rocqKwdParen         contained contains=@rocqTerm matchgroup=rocqTermPunctuation start="(" end=")" keepend extend
+syn keyword rocqKwd             contained as else end exists2 fix forall fun if in return struct then
+syn match   rocqKwd             contained "\<where\>"
+syn match   rocqKwd             contained "\<exists!\?"
+syn match   rocqKwd             contained "|\|/\\\|\\/\|<->\|\~\|->\|=>\|{\|}\|&\|+\|-\|*\|=\|>\|<\|<="
+syn match rocqTermPunctuation   contained ":=\|:>\|:\|;\|,\|||\|\[\|\]\|@\|?\|\<_\>"
 
 " Various
-syn region coqRequire contains=coqString matchgroup=coqVernacCmd start="\<Require\>\%(\_s\+\%(Export\|Import\)\>\)\?" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqRequire matchgroup=coqVernacCmd start="\<Import\>" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqRequire matchgroup=coqVernacCmd start="\<Export\>" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqCheck   contains=@coqTerm matchgroup=coqVernacCmd start="\<Check\>" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqOpaque  matchgroup=coqVernacCmd start="\<\%(Opaque\|Transparent\)\>" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqShow       matchgroup=coqVernacCmd start="\<Show\_s\+\%(\%(Implicits\|Script\|Tree\|Proof\|Conjectures\|Intros\?\|Existentials\)\>\)\?" end="\.\_s"
+syn region rocqRequire contains=rocqString matchgroup=rocqVernacCmd start="\<Require\>\%(\_s\+\%(Export\|Import\)\>\)\?" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqRequire matchgroup=rocqVernacCmd start="\<Import\>" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqRequire matchgroup=rocqVernacCmd start="\<Export\>" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqCheck   contains=@rocqTerm matchgroup=rocqVernacCmd start="\<Check\>" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqOpaque  matchgroup=rocqVernacCmd start="\<\%(Opaque\|Transparent\)\>" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqShow       matchgroup=rocqVernacCmd start="\<Show\_s\+\%(\%(Implicits\|Script\|Tree\|Proof\|Conjectures\|Intros\?\|Existentials\)\>\)\?" end="\.\_s"
 
 " Schemes
-syn region coqScheme contains=coqIdent,coqSchemeKwd,coqSchemePunctuation matchgroup=coqVernacCmd start="\<Scheme\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqScheme contains=coqIdent,coqSchemeKwd,coqSchemePunctuation matchgroup=coqVernacCmd start="\<Combined\_s\+Scheme\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn keyword coqSchemeKwd contained Induction Minimality Elimination Sort Prop Set Type for with from
-syn match   coqSchemePunctuation contained ":=\|\.\|,"
+syn region rocqScheme contains=rocqIdent,rocqSchemeKwd,rocqSchemePunctuation matchgroup=rocqVernacCmd start="\<Scheme\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqScheme contains=rocqIdent,rocqSchemeKwd,rocqSchemePunctuation matchgroup=rocqVernacCmd start="\<Combined\_s\+Scheme\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn keyword rocqSchemeKwd contained Induction Minimality Elimination Sort Prop Set Type for with from
+syn match   rocqSchemePunctuation contained ":=\|\.\|,"
 
 " Declare
-syn region coqDeclare contains=coqDeclareScope,coqVernacPunctuation matchgroup=coqVernacCmd start="\<Declare\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqDeclareScope contained contains=coqDeclareArg matchgroup=coqVernacCmd start="\<Scope\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn match  coqDeclareArg contained "[_[:alpha:]][_'[:alnum:]]*"
+syn region rocqDeclare contains=rocqDeclareScope,rocqVernacPunctuation matchgroup=rocqVernacCmd start="\<Declare\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqDeclareScope contained contains=rocqDeclareArg matchgroup=rocqVernacCmd start="\<Scope\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn match  rocqDeclareArg contained "[_[:alpha:]][_'[:alnum:]]*"
 
 " Sections
-syn region coqSection contains=coqSection,@coqVernac matchgroup=coqVernacCmd start="\<Section\_s*\z(\S\+\)\_s*\.\_s" end="\<End\_s\+\z1\_s*\.\_s"
+syn region rocqSection contains=rocqSection,@rocqVernac matchgroup=rocqVernacCmd start="\<Section\_s*\z(\S\+\)\_s*\.\_s" end="\<End\_s\+\z1\_s*\.\_s"
 
 " Modules
-syn region coqModule contains=coqModuleName,coqModuleAlias,coqVernacPunctuation matchgroup=coqVernacCmd start="\<Module\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqModuleAlias contained contains=coqModulePath,coqVernacPunctuation matchgroup=coqVernacPunctuation start=":=" end="\.\_s" keepend
-syn match  coqModuleName contained "[_[:alpha:]][_'[:alnum:]]*"
-syn match  coqModulePath contained "[_[:alpha:]][_'[:alnum:]]*"
+syn region rocqModule contains=rocqModuleName,rocqModuleAlias,rocqVernacPunctuation matchgroup=rocqVernacCmd start="\<Module\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqModuleAlias contained contains=rocqModulePath,rocqVernacPunctuation matchgroup=rocqVernacPunctuation start=":=" end="\.\_s" keepend
+syn match  rocqModuleName contained "[_[:alpha:]][_'[:alnum:]]*"
+syn match  rocqModulePath contained "[_[:alpha:]][_'[:alnum:]]*"
 
 " Obligations
-syn region coqObligation contains=coqIdent   matchgroup=coqVernacCmd start="\<\%(\%(\%(Admit\_s\+\)\?Obligations\)\|\%(Obligation\_s\+\d\+\)\|\%(Next\_s\+Obligation\)\|Preterm\)\%(\_s\+of\)\?\>" end="\.\_s"
-syn region coqObligation contains=coqOblOf   matchgroup=coqVernacCmd start="\<Solve\_s\+Obligations\>" end="\.\_s" keepend
-syn region coqOblOf      contains=coqIdent,coqOblUsing matchgroup=coqVernacCmd start="\<of\>" end="\.\_s" keepend
-syn region coqObligation contains=coqOblUsing   matchgroup=coqVernacCmd start="\<Solve\_s\+All\_s\+Obligations\>" end="\.\_s" keepend
-syn region coqOblUsing   contains=coqLtac   matchgroup=coqVernacCmd start="\<using\>" end="\.\_s"
-syn region coqObligation contains=coqOblExpr matchgroup=coqVernacCmd start="\<Obligations\_s\+Tactic\>" end="\.\_s" keepend
-syn region coqOblExpr    contains=coqLtac   matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqObligation contains=rocqIdent   matchgroup=rocqVernacCmd start="\<\%(\%(\%(Admit\_s\+\)\?Obligations\)\|\%(Obligation\_s\+\d\+\)\|\%(Next\_s\+Obligation\)\|Preterm\)\%(\_s\+of\)\?\>" end="\.\_s"
+syn region rocqObligation contains=rocqOblOf   matchgroup=rocqVernacCmd start="\<Solve\_s\+Obligations\>" end="\.\_s" keepend
+syn region rocqOblOf      contains=rocqIdent,rocqOblUsing matchgroup=rocqVernacCmd start="\<of\>" end="\.\_s" keepend
+syn region rocqObligation contains=rocqOblUsing   matchgroup=rocqVernacCmd start="\<Solve\_s\+All\_s\+Obligations\>" end="\.\_s" keepend
+syn region rocqOblUsing   contains=rocqLtac   matchgroup=rocqVernacCmd start="\<using\>" end="\.\_s"
+syn region rocqObligation contains=rocqOblExpr matchgroup=rocqVernacCmd start="\<Obligations\_s\+Tactic\>" end="\.\_s" keepend
+syn region rocqOblExpr    contains=rocqLtac   matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
 
 " Scopes
-syn region coqBind    contains=coqScope matchgroup=coqVernacCmd start="\<Bind\|Delimit\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqArgsScope contains=coqScope matchgroup=coqVernacCmd start="\<Arguments\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqOpen    contains=coqScope matchgroup=coqVernacCmd start="\<Open\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqClose   contains=coqScope,coqLocalScope matchgroup=coqVernacCmd start="\<Close\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqScope   contained matchgroup=coqVernacCmd start="\<Scope\>" end="\.\_s"
-syn region coqLocalScope contained contains=coqScope matchgroup=coqVernacCmd start="\<Local\>" end="\.\_s"
+syn region rocqBind    contains=rocqScope matchgroup=rocqVernacCmd start="\<Bind\|Delimit\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqArgsScope contains=rocqScope matchgroup=rocqVernacCmd start="\<Arguments\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqOpen    contains=rocqScope matchgroup=rocqVernacCmd start="\<Open\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqClose   contains=rocqScope,rocqLocalScope matchgroup=rocqVernacCmd start="\<Close\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqScope   contained matchgroup=rocqVernacCmd start="\<Scope\>" end="\.\_s"
+syn region rocqLocalScope contained contains=rocqScope matchgroup=rocqVernacCmd start="\<Local\>" end="\.\_s"
 
 " Hints
-syn region coqHint contains=coqHintOption start="\<Hint\>" end="\.\_s" keepend
-syn region coqHintOption start="\<\%(Resolve\|Immediate\|Constructors\|Unfold\|Extern\)\>" end="\.\_s"
+syn region rocqHint contains=rocqHintOption start="\<Hint\>" end="\.\_s" keepend
+syn region rocqHintOption start="\<\%(Resolve\|Immediate\|Constructors\|Unfold\|Extern\)\>" end="\.\_s"
 
 " Add
-syn region coqAdd       contains=coqAddOption,coqAddOption2 matchgroup=coqVernacCmd start="\<Add\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqAddOption         contained contains=coqAddPrintingOption matchgroup=coqVernacCmd start="\<Printing\>" end="\.\_s"
-syn region coqAddPrintingOption contained matchgroup=coqVernacCmd start="\<\%(Let\|If\)\>" end="\.\_s"
-syn region coqAddOption         contained contains=coqAddLegacyOption matchgroup=coqVernacCmd start="\<Legacy\>" end="\.\_s"
-syn region coqAddLegacyOption   contained contains=coqAddRingOption,coqAddSemiRingOption matchgroup=coqVernacCmd start="\<Abstract\>" end="\.\_s"
-syn region coqAddRingOption     contained matchgroup=coqVernacCmd start="\<Ring\>" end="\.\_s"
-syn region coqAddSemiRingOption contained contains=coqAddRingOption matchgroup=coqVernacCmd start="\<Semi\>" end="\.\_s"
-syn region coqAddLegacyOption   contained matchgroup=coqVernacCmd start="\<Field\>" end="\.\_s"
-syn region coqAddOption         contained matchgroup=coqVernacCmd start="\<Field\>" end="\.\_s"
-syn region coqAddOption         contained matchgroup=coqVernacCmd start="\<Relation\>" end="\.\_s"
-syn region coqAddOption         contained matchgroup=coqVernacCmd start="\<Ring\>" end="\.\_s"
-syn region coqAddOption         contained matchgroup=coqVernacCmd start="\<Setoid\>" end="\.\_s"
-syn region coqAddOption         contained matchgroup=coqVernacCmd start="\<Morphism\>" end="\.\_s"
-syn region coqAddOption         contained contains=coqAddOption2 matchgroup=coqVernacCmd start="\<Rec\>" end="\.\_s"
-syn region coqAddOption2        contained contains=coqString matchgroup=coqVernacCmd start="\<LoadPath\>" end="\.\_s"
-syn region coqAddOption2        contained contains=coqAddMLPath matchgroup=coqVernacCmd start="\<ML\>" end="\.\_s"
-syn region coqAddMLPath         contained contains=coqString matchgroup=coqVernacCmd start="\<Path\>" end="\.\_s"
+syn region rocqAdd       contains=rocqAddOption,rocqAddOption2 matchgroup=rocqVernacCmd start="\<Add\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqAddOption         contained contains=rocqAddPrintingOption matchgroup=rocqVernacCmd start="\<Printing\>" end="\.\_s"
+syn region rocqAddPrintingOption contained matchgroup=rocqVernacCmd start="\<\%(Let\|If\)\>" end="\.\_s"
+syn region rocqAddOption         contained contains=rocqAddLegacyOption matchgroup=rocqVernacCmd start="\<Legacy\>" end="\.\_s"
+syn region rocqAddLegacyOption   contained contains=rocqAddRingOption,rocqAddSemiRingOption matchgroup=rocqVernacCmd start="\<Abstract\>" end="\.\_s"
+syn region rocqAddRingOption     contained matchgroup=rocqVernacCmd start="\<Ring\>" end="\.\_s"
+syn region rocqAddSemiRingOption contained contains=rocqAddRingOption matchgroup=rocqVernacCmd start="\<Semi\>" end="\.\_s"
+syn region rocqAddLegacyOption   contained matchgroup=rocqVernacCmd start="\<Field\>" end="\.\_s"
+syn region rocqAddOption         contained matchgroup=rocqVernacCmd start="\<Field\>" end="\.\_s"
+syn region rocqAddOption         contained matchgroup=rocqVernacCmd start="\<Relation\>" end="\.\_s"
+syn region rocqAddOption         contained matchgroup=rocqVernacCmd start="\<Ring\>" end="\.\_s"
+syn region rocqAddOption         contained matchgroup=rocqVernacCmd start="\<Setoid\>" end="\.\_s"
+syn region rocqAddOption         contained matchgroup=rocqVernacCmd start="\<Morphism\>" end="\.\_s"
+syn region rocqAddOption         contained contains=rocqAddOption2 matchgroup=rocqVernacCmd start="\<Rec\>" end="\.\_s"
+syn region rocqAddOption2        contained contains=rocqString matchgroup=rocqVernacCmd start="\<LoadPath\>" end="\.\_s"
+syn region rocqAddOption2        contained contains=rocqAddMLPath matchgroup=rocqVernacCmd start="\<ML\>" end="\.\_s"
+syn region rocqAddMLPath         contained contains=rocqString matchgroup=rocqVernacCmd start="\<Path\>" end="\.\_s"
 
 " Set
-syn region coqSet       contains=coqSetOption matchgroup=coqVernacCmd start="\<Set\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqSetOption           contained contains=coqSetPrintingOption matchgroup=coqVernacCmd start="\<Printing\>" end="\.\_s"
-syn region coqSetPrintingOption   contained matchgroup=coqVernacCmd start="\<\%(Coercions\|All\|Implicit\|Matching\|Notations\|Synth\|Universes\|Wildcard\)\>" end="\.\_s"
-syn region coqSetPrintingOption   contained matchgroup=coqVernacCmd start="\<\%(Width\|Depth\)\>" end="\.\_s"
-syn region coqSetPrintingOption   contained matchgroup=coqVernacCmd start="\<Coercion\>" end="\.\_s"
-syn region coqSetOption           contained matchgroup=coqVernacCmd start="\<\%(Silent\|Virtual\_s\+Machine\)\>" end="\.\_s"
-syn region coqSetOption           contained matchgroup=coqVernacCmd start="\<Undo\>" end="\.\_s"
-syn region coqSetOption           contained matchgroup=coqVernacCmd start="\<Hyps\>" end="\.\_s"
-syn region coqSetHypsOtion        contained matchgroup=coqVernacCmd start="\<Limit\>" end="\.\_s"
-syn region coqSetOption           contained contains=coqContextOption matchgroup=coqVernacCmd start="\<\%(Contextual\|Strict\)\>" end="\.\_s"
-syn region coqContextOption       contained matchgroup=coqVernacCmd start="\<Implicit\>" end="\.\_s"
-syn region coqSetOption           contained contains=coqExtractOption matchgroup=coqVernacCmd start="\<Extraction\>" end="\.\_s"
-syn region coqExtractOption       contained matchgroup=coqVernacCmd start="\<\%(AutoInline\|Optimize\)\>" end="\.\_s"
-syn region coqSetOption           contained contains=coqSetFirstorderOption matchgroup=coqVernacCmd start="\<Firstorder\>" end="\.\_s"
-syn region coqSetFirstorderOption contained matchgroup=coqVernacCmd start="\<Depth\>" end="\.\_s"
-syn region coqSetOption           contained contains=coqImplicitOption matchgroup=coqVernacCmd start="\<Implicit\>" end="\.\_s"
-syn region coqImplicitOption      contained matchgroup=coqVernacCmd start="\<Arguments\>" end="\.\_s"
-syn region coqSetOption           contained contains=coqLtacOption matchgroup=coqVernacCmd start="\<Ltac\>" end="\.\_s"
-syn region coqLtacOption          contained matchgroup=coqVernacCmd start="\<Debug\>" end="\.\_s"
-syn region coqSetOption           contained contains=coqLtacOption matchgroup=coqVernacCmd start="\<Transparent\_s\+Obligations\>" end="\.\_s"
+syn region rocqSet       contains=rocqSetOption matchgroup=rocqVernacCmd start="\<Set\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqSetOption           contained contains=rocqSetPrintingOption matchgroup=rocqVernacCmd start="\<Printing\>" end="\.\_s"
+syn region rocqSetPrintingOption   contained matchgroup=rocqVernacCmd start="\<\%(Coercions\|All\|Implicit\|Matching\|Notations\|Synth\|Universes\|Wildcard\)\>" end="\.\_s"
+syn region rocqSetPrintingOption   contained matchgroup=rocqVernacCmd start="\<\%(Width\|Depth\)\>" end="\.\_s"
+syn region rocqSetPrintingOption   contained matchgroup=rocqVernacCmd start="\<Coercion\>" end="\.\_s"
+syn region rocqSetOption           contained matchgroup=rocqVernacCmd start="\<\%(Silent\|Virtual\_s\+Machine\)\>" end="\.\_s"
+syn region rocqSetOption           contained matchgroup=rocqVernacCmd start="\<Undo\>" end="\.\_s"
+syn region rocqSetOption           contained matchgroup=rocqVernacCmd start="\<Hyps\>" end="\.\_s"
+syn region rocqSetHypsOtion        contained matchgroup=rocqVernacCmd start="\<Limit\>" end="\.\_s"
+syn region rocqSetOption           contained contains=rocqContextOption matchgroup=rocqVernacCmd start="\<\%(Contextual\|Strict\)\>" end="\.\_s"
+syn region rocqContextOption       contained matchgroup=rocqVernacCmd start="\<Implicit\>" end="\.\_s"
+syn region rocqSetOption           contained contains=rocqExtractOption matchgroup=rocqVernacCmd start="\<Extraction\>" end="\.\_s"
+syn region rocqExtractOption       contained matchgroup=rocqVernacCmd start="\<\%(AutoInline\|Optimize\)\>" end="\.\_s"
+syn region rocqSetOption           contained contains=rocqSetFirstorderOption matchgroup=rocqVernacCmd start="\<Firstorder\>" end="\.\_s"
+syn region rocqSetFirstorderOption contained matchgroup=rocqVernacCmd start="\<Depth\>" end="\.\_s"
+syn region rocqSetOption           contained contains=rocqImplicitOption matchgroup=rocqVernacCmd start="\<Implicit\>" end="\.\_s"
+syn region rocqImplicitOption      contained matchgroup=rocqVernacCmd start="\<Arguments\>" end="\.\_s"
+syn region rocqSetOption           contained contains=rocqLtacOption matchgroup=rocqVernacCmd start="\<Ltac\>" end="\.\_s"
+syn region rocqLtacOption          contained matchgroup=rocqVernacCmd start="\<Debug\>" end="\.\_s"
+syn region rocqSetOption           contained contains=rocqLtacOption matchgroup=rocqVernacCmd start="\<Transparent\_s\+Obligations\>" end="\.\_s"
 
 " Unset
-syn region coqUnset       contains=coqUnsetOption matchgroup=coqVernacCmd start="\<Unset\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqUnsetOption           contained contains=coqUnsetPrintingOption matchgroup=coqVernacCmd start="\<Printing\>" end="\.\_s"
-syn region coqUnsetPrintingOption   contained matchgroup=coqVernacCmd start="\<\%(Coercions\?\|All\|Implicit\|Matching\|Notations\|Synth\|Universes\|Wildcard\|Width\|Depth\)\>" end="\.\_s"
-syn region coqUnsetOption           contained matchgroup=coqVernacCmd start="\<\%(Silent\|Virtual\_s\+Machine\)\>" end="\.\_s"
-syn region coqUnsetOption           contained matchgroup=coqVernacCmd start="\<Undo\>" end="\.\_s"
-syn region coqUnsetOption           contained matchgroup=coqVernacCmd start="\<Hyps\>" end="\.\_s"
-syn region coqUnsetHypsOtion        contained matchgroup=coqVernacCmd start="\<Limit\>" end="\.\_s"
-syn region coqUnsetOption           contained contains=coqContextOption matchgroup=coqVernacCmd start="\<\%(Contextual\|Strict\)\>" end="\.\_s"
-syn region coqContextOption         contained matchgroup=coqVernacCmd start="\<Implicit\>" end="\.\_s"
-syn region coqUnsetOption           contained contains=coqExtractOption matchgroup=coqVernacCmd start="\<Extraction\>" end="\.\_s"
-syn region coqExtractOption         contained matchgroup=coqVernacCmd start="\<\%(AutoInline\|Optimize\)\>" end="\.\_s"
-syn region coqUnsetOption           contained contains=coqUnsetFirstorderOption matchgroup=coqVernacCmd start="\<Firstorder\>" end="\.\_s"
-syn region coqUnsetFirstorderOption contained matchgroup=coqVernacCmd start="\<Depth\>" end="\.\_s"
-syn region coqUnsetOption           contained contains=coqImplicitOption matchgroup=coqVernacCmd start="\<Implicit\>" end="\.\_s"
-syn region coqImplicitOption        contained matchgroup=coqVernacCmd start="\<Arguments\>" end="\.\_s"
-syn region coqUnsetOption           contained contains=coqLtacOption matchgroup=coqVernacCmd start="\<Ltac\>" end="\.\_s"
-syn region coqLtacOption            contained matchgroup=coqVernacCmd start="\<Debug\>" end="\.\_s"
+syn region rocqUnset       contains=rocqUnsetOption matchgroup=rocqVernacCmd start="\<Unset\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqUnsetOption           contained contains=rocqUnsetPrintingOption matchgroup=rocqVernacCmd start="\<Printing\>" end="\.\_s"
+syn region rocqUnsetPrintingOption   contained matchgroup=rocqVernacCmd start="\<\%(Coercions\?\|All\|Implicit\|Matching\|Notations\|Synth\|Universes\|Wildcard\|Width\|Depth\)\>" end="\.\_s"
+syn region rocqUnsetOption           contained matchgroup=rocqVernacCmd start="\<\%(Silent\|Virtual\_s\+Machine\)\>" end="\.\_s"
+syn region rocqUnsetOption           contained matchgroup=rocqVernacCmd start="\<Undo\>" end="\.\_s"
+syn region rocqUnsetOption           contained matchgroup=rocqVernacCmd start="\<Hyps\>" end="\.\_s"
+syn region rocqUnsetHypsOtion        contained matchgroup=rocqVernacCmd start="\<Limit\>" end="\.\_s"
+syn region rocqUnsetOption           contained contains=rocqContextOption matchgroup=rocqVernacCmd start="\<\%(Contextual\|Strict\)\>" end="\.\_s"
+syn region rocqContextOption         contained matchgroup=rocqVernacCmd start="\<Implicit\>" end="\.\_s"
+syn region rocqUnsetOption           contained contains=rocqExtractOption matchgroup=rocqVernacCmd start="\<Extraction\>" end="\.\_s"
+syn region rocqExtractOption         contained matchgroup=rocqVernacCmd start="\<\%(AutoInline\|Optimize\)\>" end="\.\_s"
+syn region rocqUnsetOption           contained contains=rocqUnsetFirstorderOption matchgroup=rocqVernacCmd start="\<Firstorder\>" end="\.\_s"
+syn region rocqUnsetFirstorderOption contained matchgroup=rocqVernacCmd start="\<Depth\>" end="\.\_s"
+syn region rocqUnsetOption           contained contains=rocqImplicitOption matchgroup=rocqVernacCmd start="\<Implicit\>" end="\.\_s"
+syn region rocqImplicitOption        contained matchgroup=rocqVernacCmd start="\<Arguments\>" end="\.\_s"
+syn region rocqUnsetOption           contained contains=rocqLtacOption matchgroup=rocqVernacCmd start="\<Ltac\>" end="\.\_s"
+syn region rocqLtacOption            contained matchgroup=rocqVernacCmd start="\<Debug\>" end="\.\_s"
 
 " Eval
-syn region coqEval      contains=coqEvalTac matchgroup=coqVernacCmd start="\<Eval\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqEvalTac   contained contains=coqEvalIn matchgroup=coqTactic start="\<\%(\%(vm_\)\?compute\|red\|hnf\|simpl\|fold\)\>" end="\.\_s" keepend
-syn region coqEvalTac   contained contains=coqEvalFlag,coqEvalIn matchgroup=coqTactic start="\<\%(cbv\|lazy\)\>" end="\.\_s"
-syn keyword coqEvalFlag contained beta delta iota zeta
-syn region coqEvalFlag  contained start="-\?\[" end="\]"
-syn region coqEvalTac   contained contains=@coqTerm,coqEvalIn matchgroup=coqTactic start="\<\%(unfold\|pattern\)\>" end="\.\_s"
-syn region coqEvalIn    contained contains=@coqTerm matchgroup=coqVernacCmd start="in" matchgroup=coqVernacPunctuation end="\.\_s"
+syn region rocqEval      contains=rocqEvalTac matchgroup=rocqVernacCmd start="\<Eval\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqEvalTac   contained contains=rocqEvalIn matchgroup=rocqTactic start="\<\%(\%(vm_\)\?compute\|red\|hnf\|simpl\|fold\)\>" end="\.\_s" keepend
+syn region rocqEvalTac   contained contains=rocqEvalFlag,rocqEvalIn matchgroup=rocqTactic start="\<\%(cbv\|lazy\)\>" end="\.\_s"
+syn keyword rocqEvalFlag contained beta delta iota zeta
+syn region rocqEvalFlag  contained start="-\?\[" end="\]"
+syn region rocqEvalTac   contained contains=@rocqTerm,rocqEvalIn matchgroup=rocqTactic start="\<\%(unfold\|pattern\)\>" end="\.\_s"
+syn region rocqEvalIn    contained contains=@rocqTerm matchgroup=rocqVernacCmd start="in" matchgroup=rocqVernacPunctuation end="\.\_s"
 
 " Notations
-syn region coqNotation     contains=coqNotationDef start="\%(\%(\%(\<Reserved\>\_s*\)\?\<Notation\>\)\|\<Infix\>\)\(\_s*\<Local\>\)\?" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqNotationDef       contained contains=coqNotationString,coqNotationTerm matchgroup=coqVernacCmd start="\%(\%(\%(\<Reserved\>\_s*\)\?\<Notation\>\)\|\<Infix\>\)\(\_s*\<Local\>\)\?" end="\.\_s"
-syn region coqNotationTerm      contained contains=coqNotationExpr matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqNotationExpr      contained contains=@coqTerm,coqNotationEndExpr matchgroup=coqTermPunctuation start="(" end="\.\_s"
-syn region coqNotationEndExpr   contained contains=coqNotationFormat,coqNotationScope matchgroup=coqTermPunctuation start=")" end="\.\_s"
-syn region coqNotationExpr      contained contains=@coqTerm,coqNotationFormat,coqNotationScope start="[^[:blank:](]" matchgroup=NONE end="\.\_s"
-syn region coqNotationFormat    contained contains=coqNotationKwd,coqString,coqNotationEndFormat matchgroup=coqVernacPunctuation start="(" end="\.\_s"
-syn region coqNotationEndFormat contained contains=coqNotationScope matchgroup=coqVernacPunctuation start=")" end="\.\_s"
-syn region coqNotationScope     contained matchgroup=coqVernacPunctuation start=":" end="\.\_s"
+syn region rocqNotation     contains=rocqNotationDef start="\%(\%(\%(\<Reserved\>\_s*\)\?\<Notation\>\)\|\<Infix\>\)\(\_s*\<Local\>\)\?" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqNotationDef       contained contains=rocqNotationString,rocqNotationTerm matchgroup=rocqVernacCmd start="\%(\%(\%(\<Reserved\>\_s*\)\?\<Notation\>\)\|\<Infix\>\)\(\_s*\<Local\>\)\?" end="\.\_s"
+syn region rocqNotationTerm      contained contains=rocqNotationExpr matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqNotationExpr      contained contains=@rocqTerm,rocqNotationEndExpr matchgroup=rocqTermPunctuation start="(" end="\.\_s"
+syn region rocqNotationEndExpr   contained contains=rocqNotationFormat,rocqNotationScope matchgroup=rocqTermPunctuation start=")" end="\.\_s"
+syn region rocqNotationExpr      contained contains=@rocqTerm,rocqNotationFormat,rocqNotationScope start="[^[:blank:](]" matchgroup=NONE end="\.\_s"
+syn region rocqNotationFormat    contained contains=rocqNotationKwd,rocqString,rocqNotationEndFormat matchgroup=rocqVernacPunctuation start="(" end="\.\_s"
+syn region rocqNotationEndFormat contained contains=rocqNotationScope matchgroup=rocqVernacPunctuation start=")" end="\.\_s"
+syn region rocqNotationScope     contained matchgroup=rocqVernacPunctuation start=":" end="\.\_s"
 
-syn match   coqNotationKwd contained "at \(next \)\?level"
-syn match   coqNotationKwd contained "\(no\|left\|right\) associativity"
-syn match   coqNotationKwd contained "only parsing"
-syn match   coqNotationKwd contained "(\|,\|)\|:"
-syn keyword coqNotationKwd contained ident global bigint format
+syn match   rocqNotationKwd contained "at \(next \)\?level"
+syn match   rocqNotationKwd contained "\(no\|left\|right\) associativity"
+syn match   rocqNotationKwd contained "only parsing"
+syn match   rocqNotationKwd contained "(\|,\|)\|:"
+syn keyword rocqNotationKwd contained ident global bigint format
 
-syn region coqNotationString contained start=+"+ skip=+""+ end=+"+ extend
+syn region rocqNotationString contained start=+"+ skip=+""+ end=+"+ extend
 
 " Tactic notations
-syn region coqTacNotation     contains=coqTacNotationDef start="\<Tactic\_s\+Notation\>" end="\.\_s" keepend
-syn region coqTacNotationDef  contained contains=coqNotationString,coqTacNotationKwd,coqTacNotationTerm matchgroup=coqVernacCmd start="Tactic\_s\+Notation" end="\.\_s"
-syn region coqTacNotationTerm contained contains=coqString,coqTactic,coqTacticKwd,coqLtac,coqProofPunctuation matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqTacNotation     contains=rocqTacNotationDef start="\<Tactic\_s\+Notation\>" end="\.\_s" keepend
+syn region rocqTacNotationDef  contained contains=rocqNotationString,rocqTacNotationKwd,rocqTacNotationTerm matchgroup=rocqVernacCmd start="Tactic\_s\+Notation" end="\.\_s"
+syn region rocqTacNotationTerm contained contains=rocqString,rocqTactic,rocqTacticKwd,rocqLtac,rocqProofPunctuation matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
 
-syn keyword coqTacNotationKwd contained ident simple_intropattern hyp reference constr integer int_or_var tactic
-syn match   coqTacNotationKwd contained "at level"
+syn keyword rocqTacNotationKwd contained ident simple_intropattern hyp reference constr integer int_or_var tactic
+syn match   rocqTacNotationKwd contained "at level"
 
 " Declarations 
-syn region coqDecl       contains=coqIdent,coqDeclTerm,coqDeclBinder matchgroup=coqVernacCmd start="\<\%(Axiom\|Conjecture\|Hypothes[ie]s\|Parameters\?\|Variables\?\)\>" matchgroup=coqVernacCmd end="\.\_s" keepend
-syn region coqDeclBinder contained contains=coqIdent,coqDeclTerm matchgroup=coqVernacPunctuation start="(" end=")" keepend
-syn region coqDeclTerm   contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end=")"
-syn region coqDeclTerm   contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end="\.\_s"
+syn region rocqDecl       contains=rocqIdent,rocqDeclTerm,rocqDeclBinder matchgroup=rocqVernacCmd start="\<\%(Axiom\|Conjecture\|Hypothes[ie]s\|Parameters\?\|Variables\?\)\>" matchgroup=rocqVernacCmd end="\.\_s" keepend
+syn region rocqDeclBinder contained contains=rocqIdent,rocqDeclTerm matchgroup=rocqVernacPunctuation start="(" end=")" keepend
+syn region rocqDeclTerm   contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end=")"
+syn region rocqDeclTerm   contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end="\.\_s"
 
 " Theorems
-syn region coqThm       contains=coqThmName matchgroup=coqVernacCmd start="\<\%(Program\_s\+\)\?\%(Theorem\|Proposition\|Lemma\|Example\|Corollary\)\>" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" keepend
-syn region coqThmName   contained contains=coqThmTerm,coqThmBinder matchgroup=coqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s"
-syn region coqThmTerm   contained contains=@coqTerm,coqProofBody matchgroup=coqVernacCmd start=":" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>"
-syn region coqThmBinder contained matchgroup=coqVernacPunctuation start="(" end=")" keepend
+syn region rocqThm       contains=rocqThmName matchgroup=rocqVernacCmd start="\<\%(Program\_s\+\)\?\%(Theorem\|Proposition\|Lemma\|Example\|Corollary\)\>" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" keepend
+syn region rocqThmName   contained contains=rocqThmTerm,rocqThmBinder matchgroup=rocqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s"
+syn region rocqThmTerm   contained contains=@rocqTerm,rocqProofBody matchgroup=rocqVernacCmd start=":" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>"
+syn region rocqThmBinder contained matchgroup=rocqVernacPunctuation start="(" end=")" keepend
 
-syn region coqGoal      contains=coqGoalTerm start="\<Goal\>" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>" keepend
-syn region coqGoalTerm  contained contains=@coqTerm,coqProofBody matchgroup=coqVernacCmd start="Goal" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>" keepend
+syn region rocqGoal      contains=rocqGoalTerm start="\<Goal\>" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>" keepend
+syn region rocqGoalTerm  contained contains=@rocqTerm,rocqProofBody matchgroup=rocqVernacCmd start="Goal" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>" keepend
 
 " Ltac
-syn region coqLtacDecl     contains=coqLtacProfile start="\<Ltac\>" end="\.\_s" keepend
-syn region coqLtacProfile  contained contains=coqLtacIdent,coqVernacPunctuation,coqLtacContents start="Ltac" end="\.\_s"
-syn region coqLtacIdent    contained matchgroup=coqVernacCmd start="Ltac" matchgroup=coqIdent end="[_[:alpha:]][_'[:alnum:]]*"
-syn region coqLtacContents contained contains=coqTactic,coqTacticKwd,coqLtac,coqProofPunctuation matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqLtacDecl     contains=rocqLtacProfile start="\<Ltac\>" end="\.\_s" keepend
+syn region rocqLtacProfile  contained contains=rocqLtacIdent,rocqVernacPunctuation,rocqLtacContents start="Ltac" end="\.\_s"
+syn region rocqLtacIdent    contained matchgroup=rocqVernacCmd start="Ltac" matchgroup=rocqIdent end="[_[:alpha:]][_'[:alnum:]]*"
+syn region rocqLtacContents contained contains=rocqTactic,rocqTacticKwd,rocqLtac,rocqProofPunctuation matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
 
-syn keyword coqLtac contained do info progress repeat try
-syn keyword coqLtac contained abstract constr context end external eval fail first fresh fun goal
-syn keyword coqLtac contained idtac in let ltac lazymatch match of rec reverse solve type with return
-syn match   coqLtac contained "|-\|=>\|||\|\[\|\]\|\<_\>\||"
+syn keyword rocqLtac contained do info progress repeat try
+syn keyword rocqLtac contained abstract constr context end external eval fail first fresh fun goal
+syn keyword rocqLtac contained idtac in let ltac lazymatch match of rec reverse solve type with return
+syn match   rocqLtac contained "|-\|=>\|||\|\[\|\]\|\<_\>\||"
 
 " Proofs
-syn region coqProofBody  contained contains=coqProofPunctuation,coqTactic,coqTacticKwd,coqProofComment,coqProofKwd,coqProofEnder,coqProofDelim,coqLtac matchgroup=coqVernacPunctuation start="\.\s" start="\.$" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" end="\<Save\>.*\.\_s" keepend
-syn region coqProofDelim contained matchgroup=coqProofDelim start="\<Proof\>" matchgroup=coqProofDot end="\.\_s"
-syn region coqProofEnder contained matchgroup=coqProofDelim start="\<\%(Qed\|Defined\|Admitted\)\>" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqProofEnder contained matchgroup=coqError start="\<Abort\>" matchgroup=coqVernacPunctuation end="\.\_s"
-syn region coqProofEnder contained contains=coqIdent matchgroup=coqProofDelim start="\<Save\>" matchgroup=coqVernacPunctuation end="\.\_s"
+syn region rocqProofBody  contained contains=rocqProofPunctuation,rocqTactic,rocqTacticKwd,rocqProofComment,rocqProofKwd,rocqProofEnder,rocqProofDelim,rocqLtac matchgroup=rocqVernacPunctuation start="\.\s" start="\.$" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" end="\<Save\>.*\.\_s" keepend
+syn region rocqProofDelim contained matchgroup=rocqProofDelim start="\<Proof\>" matchgroup=rocqProofDot end="\.\_s"
+syn region rocqProofEnder contained matchgroup=rocqProofDelim start="\<\%(Qed\|Defined\|Admitted\)\>" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqProofEnder contained matchgroup=rocqError start="\<Abort\>" matchgroup=rocqVernacPunctuation end="\.\_s"
+syn region rocqProofEnder contained contains=rocqIdent matchgroup=rocqProofDelim start="\<Save\>" matchgroup=rocqVernacPunctuation end="\.\_s"
 
-syn keyword coqTactic    contained absurd apply assert assumption auto autorewrite firstorder specialize
-syn keyword coqTactic    contained case[_eq] change clear[body] cofix cbv lazy compare compute congruence constructor contradiction cut[rewrite]
-syn keyword coqTactic    contained decide decompose dependant destruct discriminate double
-syn keyword coqTactic    contained eapply eassumption eauto econstructor elim[type] equality evar exact eexact exists exfalso
-syn keyword coqTactic    contained field fix f_equal fold fourier functional generalize hnf
-syn keyword coqTactic    contained idtac induction injection instantiate intro[s] intuition inversion[_clear]
-syn keyword coqTactic    contained lapply left move now lia pattern pose proof quote
-syn keyword coqTactic    contained red refine reflexivity remember rename replace revert rewrite right ring
-syn keyword coqTactic    contained set simpl[e] simplify_eq split subst stepl stepr symmetry
-syn keyword coqTactic    contained tauto transitivity trivial unfold vm_compute
-syn keyword coqTacticKwd contained as at by in using with into after until eqn
+syn keyword rocqTactic    contained absurd apply assert assumption auto autorewrite firstorder specialize
+syn keyword rocqTactic    contained case[_eq] change clear[body] cofix cbv lazy compare compute congruence constructor contradiction cut[rewrite]
+syn keyword rocqTactic    contained decide decompose dependant destruct discriminate double
+syn keyword rocqTactic    contained eapply eassumption eauto econstructor elim[type] equality evar exact eexact exists exfalso
+syn keyword rocqTactic    contained field fix f_equal fold fourier functional generalize hnf
+syn keyword rocqTactic    contained idtac induction injection instantiate intro[s] intuition inversion[_clear]
+syn keyword rocqTactic    contained lapply left move now lia pattern pose proof quote
+syn keyword rocqTactic    contained red refine reflexivity remember rename replace revert rewrite right ring
+syn keyword rocqTactic    contained set simpl[e] simplify_eq split subst stepl stepr symmetry
+syn keyword rocqTactic    contained tauto transitivity trivial unfold vm_compute
+syn keyword rocqTacticKwd contained as at by in using with into after until eqn
 
   " The following is just to help other plugins to detect via syntax groups that we are inside a proof
-syn keyword coqProofKwd         contained else end exists exists2 forall fun if in match let struct then where with
-syn match   coqProofKwd         contained "|\|/\\\|\\/\|<->\|\~\|->\|=>\|{\|}\|&\|+\|="
-syn match   coqProofPunctuation contained "(\|)\|:=\|:>\|:\|\.\|;\|,\|||\|\[\|\]\|@\|?"
-syn region  coqProofComment     contained contains=coqProofComment,coqTodo start="(\*" end="\*)" extend keepend
+syn keyword rocqProofKwd         contained else end exists exists2 forall fun if in match let struct then where with
+syn match   rocqProofKwd         contained "|\|/\\\|\\/\|<->\|\~\|->\|=>\|{\|}\|&\|+\|="
+syn match   rocqProofPunctuation contained "(\|)\|:=\|:>\|:\|\.\|;\|,\|||\|\[\|\]\|@\|?"
+syn region  rocqProofComment     contained contains=rocqProofComment,rocqTodo start="(\*" end="\*)" extend keepend
 
 " Definitions
-syn region coqDef          contains=coqDefName matchgroup=coqVernacCmd start="\<\%(Program\_s\+\)\?\%(Definition\|Let\)\>" matchgroup=coqVernacPunctuation end=":="me=e-2 end="\.$"me=e-1 end="\.\s"me=e-2 nextgroup=coqDefContents1,coqProofBody keepend skipnl skipwhite skipempty
-syn region coqDefName       contained contains=coqDefBinder,coqDefType,coqDefContents1 matchgroup=coqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\.\_s" end=":="
-syn region coqDefBinder     contained contains=coqDefBinderType matchgroup=coqVernacPunctuation start="(" end=")" keepend
-syn region coqDefBinderType contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end=")"
-syn region coqDefType       contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" matchgroup=NONE end="\.\_s" end=":="
-syn region coqDefContents1  contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":=" matchgroup=coqVernacPunctuation end="\.\_s"
+syn region rocqDef          contains=rocqDefName matchgroup=rocqVernacCmd start="\<\%(Program\_s\+\)\?\%(Definition\|Let\)\>" matchgroup=rocqVernacPunctuation end=":="me=e-2 end="\.$"me=e-1 end="\.\s"me=e-2 nextgroup=rocqDefContents1,rocqProofBody keepend skipnl skipwhite skipempty
+syn region rocqDefName       contained contains=rocqDefBinder,rocqDefType,rocqDefContents1 matchgroup=rocqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\.\_s" end=":="
+syn region rocqDefBinder     contained contains=rocqDefBinderType matchgroup=rocqVernacPunctuation start="(" end=")" keepend
+syn region rocqDefBinderType contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end=")"
+syn region rocqDefType       contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" matchgroup=NONE end="\.\_s" end=":="
+syn region rocqDefContents1  contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":=" matchgroup=rocqVernacPunctuation end="\.\_s"
 
 " Fixpoints
-syn region coqFix     contains=coqFixBody start="\<\%(Program\_s\+\)\?\%(\%(\%(Co\)\?Fixpoint\)\|Fixpoint\|Function\)\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqFixBody       contained contains=coqFixName matchgroup=coqVernacCmd start="\%(\%(\%(Co\)\?Fixpoint\)\|Function\)" start="\<with\>" matchgroup=NONE end="\.\_s"
-syn region coqFixName       contained contains=coqFixBinder,coqFixAnnot,coqFixTerm,coqFixContent matchgroup=coqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\.\_s"
-syn region coqFixBinder     contained contains=coqFixBinderType matchgroup=coqVernacPunctuation start="(" end=")" keepend
-syn region coqFixBinderType contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end=")" keepend
-syn region coqFixAnnot      contained contains=@coqTerm matchgroup=coqVernacPunctuation start="{\_s*struct" end="}" keepend
-syn region coqFixTerm       contained contains=@coqTerm,coqFixContent matchgroup=coqVernacPunctuation start=":" end="\.\_s"
-syn region coqFixContent    contained contains=coqFixBody,@coqTerm,coqKwdMatch,coqFixNot matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqFixNot        contained contains=coqNotationString,coqFixNotTerm matchgroup=coqVernacCmd start="\<where\>" end="\.\_s"
-syn region coqFixNotTerm    contained contains=@coqTerm,coqFixBody,coqFixNotScope matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqFixNotScope   contained contains=coqFixBody matchgroup=coqVernacPunctuation start=":" end="\.\_s"
+syn region rocqFix     contains=rocqFixBody start="\<\%(Program\_s\+\)\?\%(\%(\%(Co\)\?Fixpoint\)\|Fixpoint\|Function\)\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqFixBody       contained contains=rocqFixName matchgroup=rocqVernacCmd start="\%(\%(\%(Co\)\?Fixpoint\)\|Function\)" start="\<with\>" matchgroup=NONE end="\.\_s"
+syn region rocqFixName       contained contains=rocqFixBinder,rocqFixAnnot,rocqFixTerm,rocqFixContent matchgroup=rocqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\.\_s"
+syn region rocqFixBinder     contained contains=rocqFixBinderType matchgroup=rocqVernacPunctuation start="(" end=")" keepend
+syn region rocqFixBinderType contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end=")" keepend
+syn region rocqFixAnnot      contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start="{\_s*struct" end="}" keepend
+syn region rocqFixTerm       contained contains=@rocqTerm,rocqFixContent matchgroup=rocqVernacPunctuation start=":" end="\.\_s"
+syn region rocqFixContent    contained contains=rocqFixBody,@rocqTerm,rocqKwdMatch,rocqFixNot matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqFixNot        contained contains=rocqNotationString,rocqFixNotTerm matchgroup=rocqVernacCmd start="\<where\>" end="\.\_s"
+syn region rocqFixNotTerm    contained contains=@rocqTerm,rocqFixBody,rocqFixNotScope matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqFixNotScope   contained contains=rocqFixBody matchgroup=rocqVernacPunctuation start=":" end="\.\_s"
 
 "Inductives
-syn region coqInd            contains=coqIndBody start="\<\%(Co\)\?Inductive\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqIndBody     contained contains=coqIdent,coqIndTerm,coqIndBinder matchgroup=coqVernacCmd start="\%(Co\)\?Inductive" start="\<with\>" matchgroup=NONE end="\.\_s"
-syn region coqIndBinder      contained contains=coqIndBinderTerm matchgroup=coqVernacPunctuation start="("  end=")" keepend
-syn region coqIndBinderTerm  contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end=")"
-syn region coqIndTerm        contained contains=@coqTerm,coqIndContent matchgroup=coqVernacPunctuation start=":" matchgroup=NONE end="\.\_s"
-syn region coqIndContent     contained contains=coqIndConstructor start=":=" end="\.\_s"
-syn region coqIndConstructor contained contains=coqConstructor,coqIndBinder,coqIndConsTerm,coqIndNot,coqIndBody,coqIndPunctuation matchgroup=coqVernacPunctuation start=":=\%(\_s*|\)\?" matchgroup=coqVernacPunctuation start="|" matchgroup=NONE end="\.\_s"
-syn region coqIndConsTerm    contained contains=coqIndBody,@coqTerm,coqIndConstructor,coqIndNot matchgroup=coqConstructor start=":" matchgroup=NONE end="\.\_s"
-syn region coqIndNot         contained contains=coqNotationString,coqIndNotTerm matchgroup=coqVernacCmd start="\<where\>" end="\.\_s"
-syn region coqIndNotTerm     contained contains=@coqTerm,coqIndNotScope,coqIndBody matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqIndNotScope    contained contains=coqIndBody matchgroup=coqVernacPunctuation start=":" end="\.\_s"
-syn match  coqIndPunctuation contained "|"
-syn match  coqConstructor    contained "[_[:alpha:]][_'[:alnum:]]*"
+syn region rocqInd            contains=rocqIndBody start="\<\%(Co\)\?Inductive\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqIndBody     contained contains=rocqIdent,rocqIndTerm,rocqIndBinder matchgroup=rocqVernacCmd start="\%(Co\)\?Inductive" start="\<with\>" matchgroup=NONE end="\.\_s"
+syn region rocqIndBinder      contained contains=rocqIndBinderTerm matchgroup=rocqVernacPunctuation start="("  end=")" keepend
+syn region rocqIndBinderTerm  contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end=")"
+syn region rocqIndTerm        contained contains=@rocqTerm,rocqIndContent matchgroup=rocqVernacPunctuation start=":" matchgroup=NONE end="\.\_s"
+syn region rocqIndContent     contained contains=rocqIndConstructor start=":=" end="\.\_s"
+syn region rocqIndConstructor contained contains=rocqConstructor,rocqIndBinder,rocqIndConsTerm,rocqIndNot,rocqIndBody,rocqIndPunctuation matchgroup=rocqVernacPunctuation start=":=\%(\_s*|\)\?" matchgroup=rocqVernacPunctuation start="|" matchgroup=NONE end="\.\_s"
+syn region rocqIndConsTerm    contained contains=rocqIndBody,@rocqTerm,rocqIndConstructor,rocqIndNot matchgroup=rocqConstructor start=":" matchgroup=NONE end="\.\_s"
+syn region rocqIndNot         contained contains=rocqNotationString,rocqIndNotTerm matchgroup=rocqVernacCmd start="\<where\>" end="\.\_s"
+syn region rocqIndNotTerm     contained contains=@rocqTerm,rocqIndNotScope,rocqIndBody matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqIndNotScope    contained contains=rocqIndBody matchgroup=rocqVernacPunctuation start=":" end="\.\_s"
+syn match  rocqIndPunctuation contained "|"
+syn match  rocqConstructor    contained "[_[:alpha:]][_'[:alnum:]]*"
 
 " Records
-syn region coqRec        contains=coqRecProfile start="\<Record\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqRecProfile contained contains=coqIdent,coqRecTerm,coqRecBinder matchgroup=coqVernacCmd start="Record" matchgroup=NONE end="\.\_s"
-syn region coqRecBinder  contained contains=@coqTerm matchgroup=coqTermPunctuation start="("  end=")"
-syn region coqRecTerm    contained contains=@coqTerm,coqRecContent matchgroup=coqVernacPunctuation start=":"  end="\.\_s"
-syn region coqRecContent contained contains=coqConstructor,coqRecStart matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqRecStart   contained contains=coqRecField,@coqTerm start="{" matchgroup=coqVernacPunctuation end="}" keepend
-syn region coqRecField   contained contains=coqField matchgroup=coqVernacPunctuation start="{" end=":"
-syn region coqRecField   contained contains=coqField matchgroup=coqVernacPunctuation start=";" end=":"
-syn match coqField       contained "[_[:alpha:]][_'[:alnum:]]*"
+syn region rocqRec        contains=rocqRecProfile start="\<Record\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqRecProfile contained contains=rocqIdent,rocqRecTerm,rocqRecBinder matchgroup=rocqVernacCmd start="Record" matchgroup=NONE end="\.\_s"
+syn region rocqRecBinder  contained contains=@rocqTerm matchgroup=rocqTermPunctuation start="("  end=")"
+syn region rocqRecTerm    contained contains=@rocqTerm,rocqRecContent matchgroup=rocqVernacPunctuation start=":"  end="\.\_s"
+syn region rocqRecContent contained contains=rocqConstructor,rocqRecStart matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqRecStart   contained contains=rocqRecField,@rocqTerm start="{" matchgroup=rocqVernacPunctuation end="}" keepend
+syn region rocqRecField   contained contains=rocqField matchgroup=rocqVernacPunctuation start="{" end=":"
+syn region rocqRecField   contained contains=rocqField matchgroup=rocqVernacPunctuation start=";" end=":"
+syn match rocqField       contained "[_[:alpha:]][_'[:alnum:]]*"
 
 " Classes
-syn region coqCla        contains=coqClaProfile start="\<Class\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqClaProfile contained contains=coqIdent,coqClaTerm,coqClaBinder,coqClaContent matchgroup=coqVernacCmd start="Class" matchgroup=NONE end="\.\_s"
-syn region coqClaBinder  contained contains=coqClaBinderType matchgroup=coqVernacPunctuation start="("  end=")" keepend
-syn region coqClaBinderType contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end=")"
-syn region coqClaTerm    contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":\ze[^=]"  end="\.\_s" end=":="
-syn region coqClaContent contained contains=coqConstructor,coqClaStart matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqClaStart   contained contains=coqClaField,@coqTerm matchgroup=coqTermPunctuation start="{" matchgroup=coqTermPunctuation end="}" keepend
-syn region coqClaField   contained contains=coqField matchgroup=coqTermPunctuation start="{" end=":"
-syn region coqClaField   contained contains=coqField matchgroup=coqTermPunctuation start=";" end=":"
+syn region rocqCla        contains=rocqClaProfile start="\<Class\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqClaProfile contained contains=rocqIdent,rocqClaTerm,rocqClaBinder,rocqClaContent matchgroup=rocqVernacCmd start="Class" matchgroup=NONE end="\.\_s"
+syn region rocqClaBinder  contained contains=rocqClaBinderType matchgroup=rocqVernacPunctuation start="("  end=")" keepend
+syn region rocqClaBinderType contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end=")"
+syn region rocqClaTerm    contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":\ze[^=]"  end="\.\_s" end=":="
+syn region rocqClaContent contained contains=rocqConstructor,rocqClaStart matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqClaStart   contained contains=rocqClaField,@rocqTerm matchgroup=rocqTermPunctuation start="{" matchgroup=rocqTermPunctuation end="}" keepend
+syn region rocqClaField   contained contains=rocqField matchgroup=rocqTermPunctuation start="{" end=":"
+syn region rocqClaField   contained contains=rocqField matchgroup=rocqTermPunctuation start=";" end=":"
 
 " Instances
-syn region coqInst        contains=coqIdent,coqInstTerm,coqInstBinder,coqInstContent matchgroup=coqVernacCmd start="\<\%(Global\|Local\)\_s\+Instance\>" start="\<Instance\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
-syn region coqInstProfile contained contains=coqIdent,coqInstTerm,coqInstBinder matchgroup=coqVernacCmd start="Instance" matchgroup=NONE end="\.\_s"
-syn region coqInstBinder  contained contains=@coqTerm matchgroup=coqVernacPunctuation start="("  end=")"
-syn region coqInstTerm    contained contains=@coqTerm,coqInstContent matchgroup=coqVernacPunctuation start=":"  end="\.\_s"
-syn region coqInstContent contained contains=coqConstructor,coqInstStart matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
-syn region coqInstStart   contained contains=coqInstField,@coqTerm matchgroup=coqTermPunctuation start="{" matchgroup=coqTermPunctuation end="}" keepend
-syn region coqInstField   contained contains=coqField matchgroup=coqTermPunctuation start="{" end=":="
-syn region coqInstField   contained contains=coqField matchgroup=coqTermPunctuation start=";" end=":="
+syn region rocqInst        contains=rocqIdent,rocqInstTerm,rocqInstBinder,rocqInstContent matchgroup=rocqVernacCmd start="\<\%(Global\|Local\)\_s\+Instance\>" start="\<Instance\>" matchgroup=rocqVernacPunctuation end="\.\_s" keepend
+syn region rocqInstProfile contained contains=rocqIdent,rocqInstTerm,rocqInstBinder matchgroup=rocqVernacCmd start="Instance" matchgroup=NONE end="\.\_s"
+syn region rocqInstBinder  contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start="("  end=")"
+syn region rocqInstTerm    contained contains=@rocqTerm,rocqInstContent matchgroup=rocqVernacPunctuation start=":"  end="\.\_s"
+syn region rocqInstContent contained contains=rocqConstructor,rocqInstStart matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqInstStart   contained contains=rocqInstField,@rocqTerm matchgroup=rocqTermPunctuation start="{" matchgroup=rocqTermPunctuation end="}" keepend
+syn region rocqInstField   contained contains=rocqField matchgroup=rocqTermPunctuation start="{" end=":="
+syn region rocqInstField   contained contains=rocqField matchgroup=rocqTermPunctuation start=";" end=":="
 
 " Various (High priority)
-syn region  coqComment           containedin=ALL contains=coqComment,coqTodo start="(\*" end="\*)" extend keepend
-syn keyword coqTodo              contained TODO FIXME XXX NOTE
-syn region  coqString            start=+"+ skip=+""+ end=+"+ extend
+syn region  rocqComment           containedin=ALL contains=rocqComment,rocqTodo start="(\*" end="\*)" extend keepend
+syn keyword rocqTodo              contained TODO FIXME XXX NOTE
+syn region  rocqString            start=+"+ skip=+""+ end=+"+ extend
 
 " Synchronization
 syn sync minlines=50
@@ -342,75 +342,75 @@ syn sync maxlines=500
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
 " For version 5.8 and later: only when an item doesn't have highlighting yet
-if version >= 508 || !exists("did_coq_syntax_inits")
+if version >= 508 || !exists("did_rocq_syntax_inits")
  if version < 508
-  let did_coq_syntax_inits = 1
+  let did_rocq_syntax_inits = 1
   command -nargs=+ HiLink hi link <args>
  else
   command -nargs=+ HiLink hi def link <args>
  endif
 
  " PROOFS
- HiLink coqTactic                    Keyword
- HiLink coqLtac coqTactic
- HiLink coqProofKwd coqTactic
- HiLink coqProofPunctuation coqTactic
- HiLink coqTacticKwd coqTactic
- HiLink coqTacNotationKwd coqTactic
- HiLink coqEvalFlag coqTactic
+ HiLink rocqTactic                    Keyword
+ HiLink rocqLtac rocqTactic
+ HiLink rocqProofKwd rocqTactic
+ HiLink rocqProofPunctuation rocqTactic
+ HiLink rocqTacticKwd rocqTactic
+ HiLink rocqTacNotationKwd rocqTactic
+ HiLink rocqEvalFlag rocqTactic
  " Exception
- HiLink coqProofDot coqVernacular
+ HiLink rocqProofDot rocqVernacular
 
  " PROOF DELIMITERS ("Proof", "Qed", "Defined", "Save")
- HiLink coqProofDelim                Underlined
+ HiLink rocqProofDelim                Underlined
 
  " TERMS AND TYPES
- HiLink coqTerm                      Type
- HiLink coqKwd             coqTerm
- HiLink coqTermPunctuation coqTerm
+ HiLink rocqTerm                      Type
+ HiLink rocqKwd             rocqTerm
+ HiLink rocqTermPunctuation rocqTerm
 
  " VERNACULAR COMMANDS
- HiLink coqVernacular                PreProc
- HiLink coqVernacCmd         coqVernacular
- HiLink coqVernacPunctuation coqVernacular
- HiLink coqSchemeKwd         coqVernacular
- HiLink coqSchemePunctuation coqVernacular
- HiLink coqIndPunctuation    coqVernacular
- HiLink coqHint              coqVernacular
- HiLink coqFeedback          coqVernacular
- HiLink coqTopLevel          coqVernacular
- HiLink coqCoercionKwd       coqVernacular
- HiLink coqCoercionClass     coqIdent
+ HiLink rocqVernacular                PreProc
+ HiLink rocqVernacCmd         rocqVernacular
+ HiLink rocqVernacPunctuation rocqVernacular
+ HiLink rocqSchemeKwd         rocqVernacular
+ HiLink rocqSchemePunctuation rocqVernacular
+ HiLink rocqIndPunctuation    rocqVernacular
+ HiLink rocqHint              rocqVernacular
+ HiLink rocqFeedback          rocqVernacular
+ HiLink rocqTopLevel          rocqVernacular
+ HiLink rocqCoercionKwd       rocqVernacular
+ HiLink rocqCoercionClass     rocqIdent
 
  " DEFINED OBJECTS
- HiLink coqIdent                     Identifier
- HiLink coqDeclareArg                coqRequire
- HiLink coqModuleName                Identifier
- HiLink coqModulePath                coqRequire
- HiLink coqNotationString coqIdent
+ HiLink rocqIdent                     Identifier
+ HiLink rocqDeclareArg                rocqRequire
+ HiLink rocqModuleName                Identifier
+ HiLink rocqModulePath                rocqRequire
+ HiLink rocqNotationString rocqIdent
 
  " CONSTRUCTORS AND FIELDS
- HiLink coqConstructor               Keyword
- HiLink coqField coqConstructor
+ HiLink rocqConstructor               Keyword
+ HiLink rocqField rocqConstructor
 
  " NOTATION SPECIFIC ("at level", "format", etc)
- HiLink coqNotationKwd               Special
+ HiLink rocqNotationKwd               Special
 
  " USUAL VIM HIGHLIGHTINGS
    " Comments
-   HiLink coqComment                   Comment
-   HiLink coqProofComment coqComment
+   HiLink rocqComment                   Comment
+   HiLink rocqProofComment rocqComment
 
    " Todo
-   HiLink coqTodo                      Todo
+   HiLink rocqTodo                      Todo
 
    " Errors
-   HiLink coqError                     Error
+   HiLink rocqError                     Error
 
    " Strings
-   HiLink coqString                    String
+   HiLink rocqString                    String
 
  delcommand HiLink
 endif
 
-let b:current_syntax = "coq"
+let b:current_syntax = "rocq"
