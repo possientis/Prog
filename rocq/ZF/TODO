@@ -1,1 +1,2 @@
 subst preserve typing
+Introduce list notations for Terms, remove Coercion

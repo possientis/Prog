@@ -25,10 +25,10 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     CheckT E G (Var n) ty
 | CheckHoleT : forall (G:Ctx) (ty:Ty),
     CheckT E G (HoleT ty) ty
-| CheckIdentT : forall (G:Ctx) (name:Name) (args:list Term)
+| CheckIdentT : forall (G:Ctx) (name:Name) (args:Terms)
     (tys:list Ty) (ty:Ty),
     sigT E name = Some (tys,ty)              ->
-    CheckTs E G args tys                     ->
+    CheckTs E G (toList args) tys            ->
     CheckT E G (IdentT name args) ty
 | CheckElem : forall (G:Ctx) (x y:Term),
     CheckT E G x TySet                       ->
@@ -109,18 +109,17 @@ with CheckP (E:Env) : Ctx -> Proof -> Term -> Prop :=
 | CheckAxiomP : forall (G:Ctx) (t:Term),
     CheckT E G t TyProp                      ->
     CheckP E G (AxiomP t) t
-| CheckIdentP : forall (G:Ctx) (name:Name) (args:list Term)
+| CheckIdentP : forall (G:Ctx) (name:Name) (args:Terms)
     (tys:list Ty) (t:Term),
     sigP E name = Some (tys,t)               ->
-    CheckTs E G args tys                     ->
+    CheckTs E G (toList args) tys            ->
     CheckP E G (IdentP name args) (applyT t args)
 .
 
 (* A well-sorted term list has the same length as its sort list.                *)
-Proposition CheckTsLength :
-  forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty),
-    CheckTs E G ts tys                       ->
-    List.length ts = List.length tys.
+Proposition CheckTsLength : forall (E:Env) (G:Ctx) (ts:list Term) (tys:list Ty),
+  CheckTs E G ts tys                         ->
+  List.length ts = List.length tys.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E G ts tys H1.
@@ -222,8 +221,8 @@ Qed.
 
 (* A selected checked argument has the sort found in the reversed signature.    *)
 Proposition CheckArgT :
-  forall (E:Env) (G:Ctx) (args:list Term) (tys:list Ty) (n:nat) (ty:Ty),
-    CheckTs E G args tys                     ->
+  forall (E:Env) (G:Ctx) (args:Terms) (tys:list Ty) (n:nat) (ty:Ty),
+    CheckTs E G (toList args) tys            ->
     typeOf (rev tys) n = Some ty             ->
     CheckT E G (argT args n) ty.
 Proof.
@@ -232,18 +231,26 @@ Proof.
   unfold argT.
   (* If the reversed argument lookup succeeds, reversal and context lookup match
      it with the corresponding sort.                                            *)
-  destruct (nth_error (rev args) n) as [t|] eqn:H3.
-  - apply (CheckTsTypeOf E G (rev args) (rev tys) n); try assumption.
-    apply CheckTsRev. assumption.
+  destruct (nthT (revT args) n) as [t|] eqn:H3.
+  - unfold nthT in H3.
+    apply (CheckTsTypeOf E G (toList (revT args)) (rev tys) n); try assumption.
+    assert (toList (revT args) = rev (toList args)) as H4. {
+      unfold revT. apply ToListFromList.
+    }
+    rewrite H4. apply CheckTsRev. assumption.
     (* If the reversed argument lookup failed, the matching reversed sort lookup
        would fail too, contradicting the successful context lookup.             *)
-  -  assert (List.length (rev args) = List.length (rev tys)) as H4. {
-      rewrite length_rev, length_rev. apply CheckTsLength with E G. assumption.
+  -  unfold nthT in H3.
+    assert (toList (revT args) = rev (toList args)) as H4. {
+      unfold revT. apply ToListFromList.
     }
-    assert (nth_error (rev tys) n = None) as H5. {
-      apply nth_error_None. rewrite <- H4. apply nth_error_None. assumption.
+    assert (List.length (toList (revT args)) = List.length (rev tys)) as H5. {
+      rewrite H4, length_rev, length_rev. apply CheckTsLength with E G. assumption.
+    }
+    assert (nth_error (rev tys) n = None) as H6. {
+      apply nth_error_None. rewrite <- H5. apply nth_error_None. assumption.
     }
     rewrite TypeOfNthError in H2.
-    rewrite H2 in H5. discriminate.
+    rewrite H2 in H6. discriminate.
 Qed.
 

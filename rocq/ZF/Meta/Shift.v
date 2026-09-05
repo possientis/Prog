@@ -10,7 +10,7 @@ Fixpoint fromT (i j:nat) (t:Term) : Term :=
   | Top              => Top
   | Var n            => if n <? i then Var n else Var (n + j)
   | HoleT ty         => HoleT ty
-  | IdentT name args => IdentT name (map (fromT i j) args)
+  | IdentT name args => IdentT name (fromTs i j args)
   | Elem x y         => Elem  (fromT i j x) (fromT i j y)
   | Leq x y          => Leq   (fromT i j x) (fromT i j y)
   | Geq x y          => Geq   (fromT i j x) (fromT i j y)
@@ -33,7 +33,12 @@ with fromP (i j:nat) (p:Proof) : Proof :=
   match p with
   | HoleP t        => HoleP (fromT i j t)
   | AxiomP t       => AxiomP (fromT i j t)
-  | IdentP name ts => IdentP name (map (fromT i j) ts)
+  | IdentP name ts => IdentP name (fromTs i j ts)
+  end
+with fromTs (i j:nat) (ts:Terms) : Terms :=
+  match ts with
+  | NilT       => NilT
+  | ConsT t ts => ConsT (fromT i j t) (fromTs i j ts)
   end.
 
 (* De Bruijn lifting raises every free variable in a term by n.                 *)

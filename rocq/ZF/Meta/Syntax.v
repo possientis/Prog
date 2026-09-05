@@ -14,7 +14,7 @@ Inductive Term : Type :=
 | Var     : nat    -> Term
 | HoleT   : Ty     -> Term
 (* A named term declaration applied to all its ordinary arguments.              *)
-| IdentT  : Name   -> list Term -> Term
+| IdentT  : Name   -> Terms -> Term
 (* Set-theoretic atomic propositions and comparison forms.                      *)
 | Elem    : Term   -> Term      -> Term
 | Leq     : Term   -> Term      -> Term
@@ -44,5 +44,43 @@ with Proof : Type :=
 (* An axiomatic proof reference for a proposition.                              *)
 | AxiomP : Term    -> Proof
 (* A named proof declaration applied to all its ordinary arguments.             *)
-| IdentP : Name    -> list Term -> Proof
+| IdentP : Name    -> Terms -> Proof
+with Terms : Type :=
+(* The empty list of ordinary term arguments.                                   *)
+| NilT   : Terms
+(* A non-empty list of ordinary term arguments.                                 *)
+| ConsT  : Term    -> Terms -> Terms
 .
+
+Fixpoint fromList (ts:list Term) : Terms :=
+  match ts with
+  | []      => NilT
+  | t :: ts => ConsT t (fromList ts)
+  end.
+
+Fixpoint toList (ts:Terms) : list Term :=
+  match ts with
+  | NilT       => []
+  | ConsT t ts => t :: toList ts
+  end.
+
+#[warnings="-uniform-inheritance"]
+Coercion fromList : list >-> Terms.
+
+Definition lengthT (ts:Terms) : nat := List.length (toList ts).
+
+Definition nthT (ts:Terms) (n:nat) : option Term := nth_error (toList ts) n.
+
+Definition appT (ts us:Terms) : Terms := fromList (toList ts ++ toList us).
+
+Definition revT (ts:Terms) : Terms := fromList (rev (toList ts)).
+
+(* Converting an ordinary list to term arguments and back changes nothing.      *)
+Proposition ToListFromList : forall (ts:list Term),
+    toList (fromList ts) = ts.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts.
+  induction ts as [|t ts IH]. 1: reflexivity.
+  simpl. rewrite IH. reflexivity.
+Qed.

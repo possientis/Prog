@@ -10,7 +10,7 @@ Fixpoint fromT (i:nat) (r:nat -> Term) (t:Term) : Term :=
   | Top              => Top
   | Var n            => if n <? i then Var n else shiftT i (r (n - i))
   | HoleT ty         => HoleT ty
-  | IdentT name args => IdentT name (map (fromT i r) args)
+  | IdentT name args => IdentT name (fromTs i r args)
   | Elem x y         => Elem  (fromT i r x) (fromT i r y)
   | Leq x y          => Leq   (fromT i r x) (fromT i r y)
   | Geq x y          => Geq   (fromT i r x) (fromT i r y)
@@ -33,7 +33,12 @@ with fromP (i:nat) (r:nat -> Term) (p:Proof) : Proof :=
   match p with
   | HoleP t        => HoleP (fromT i r t)
   | AxiomP t       => AxiomP (fromT i r t)
-  | IdentP name ts => IdentP name (map (fromT i r) ts)
+  | IdentP name ts => IdentP name (fromTs i r ts)
+  end
+with fromTs (i:nat) (r:nat -> Term) (ts:Terms) : Terms :=
+  match ts with
+  | NilT       => NilT
+  | ConsT t ts => ConsT (fromT i r t) (fromTs i r ts)
   end.
 
 Definition substT (r:nat -> Term) (t:Term)  : Term := fromT 0 r t.
