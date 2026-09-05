@@ -71,9 +71,17 @@ Definition lengthT (ts:Terms) : nat := List.length (toList ts).
 
 Definition nthT (ts:Terms) (n:nat) : option Term := nth_error (toList ts) n.
 
-Definition appT (ts us:Terms) : Terms := fromList (toList ts ++ toList us).
+Fixpoint appT (ts us:Terms) : Terms :=
+  match ts with
+  | NilT       => us
+  | ConsT t ts => ConsT t (appT ts us)
+  end.
 
-Definition revT (ts:Terms) : Terms := fromList (rev (toList ts)).
+Fixpoint revT (ts:Terms) : Terms :=
+  match ts with
+  | NilT       => NilT
+  | ConsT t ts => appT (revT ts) (ConsT t NilT)
+  end.
 
 (* Converting an ordinary list to term arguments and back changes nothing.      *)
 Proposition ToListFromList : forall (ts:list Term),
@@ -83,4 +91,24 @@ Proof.
   intros ts.
   induction ts as [|t ts IH]. 1: reflexivity.
   simpl. rewrite IH. reflexivity.
+Qed.
+
+(* Converting appended term arguments gives the appended ordinary lists.        *)
+Proposition ToListAppT : forall (ts us:Terms),
+    toList (appT ts us) = List.app (toList ts) (toList us).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts us.
+  induction ts as [|t ts IH]. 1: reflexivity.
+  simpl. rewrite IH. reflexivity.
+Qed.
+
+(* Converting reversed term arguments gives the reversed ordinary list.         *)
+Proposition ToListRevT : forall (ts:Terms),
+    toList (revT ts) = rev (toList ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts.
+  induction ts as [|t ts IH]. 1: reflexivity.
+  simpl. rewrite ToListAppT, IH. reflexivity.
 Qed.

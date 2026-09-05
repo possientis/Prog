@@ -34,8 +34,8 @@ Proof.
   unfold argT.
   (* Past the length of the reversed argument list, lookup must fail.           *)
   assert (nthT (revT args) n = None) as H2. {
-    unfold nthT, revT, lengthT.
-    rewrite ToListFromList.
+    unfold nthT, lengthT.
+    rewrite ToListRevT.
     apply nth_error_None. rewrite length_rev. assumption.
   }
   rewrite H2. reflexivity.
