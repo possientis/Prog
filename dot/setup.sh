@@ -4,7 +4,7 @@ DIR=$(pwd)
 
 cd ${HOME}/Prog/dot
 sudo cp agda.vim /usr/share/vim/vim91/syntax
-sudo cp coq.vim /usr/share/vim/vim91/syntax
+sudo cp rocq.vim /usr/share/vim/vim91/syntax
 sudo cp haskell.vim /usr/share/vim/vim91/syntax
 sudo cp idris.vim /usr/share/vim/vim91/syntax
 sudo cp lean.vim /usr/share/vim/vim91/syntax

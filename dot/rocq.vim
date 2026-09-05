@@ -41,7 +41,7 @@ endif
 " Coq is case sensitive.
 syn case match
 
-syn cluster coqVernac contains=coqRequire,coqCheck,coqEval,coqNotation,coqTacNotation,coqDecl,coqThm,coqLtacDecl,coqDef,coqFix,coqInd,coqRec,coqShow,coqModule,coqDeclare,coqCoercion
+syn cluster coqVernac contains=coqRequire,coqCheck,coqEval,coqNotation,coqTacNotation,coqDecl,coqThm,coqLtacDecl,coqDef,coqFix,coqInd,coqRec,coqShow,coqModule,coqDeclare,coqCoercion,coqScheme
 
 " Various
 syn match   coqError             "\S\+"
@@ -52,7 +52,7 @@ syn region  coqCoercion          contains=coqIdent,coqCoercionClass,coqCoercionK
 syn keyword coqCoercionClass     contained Funclass
 syn match   coqCoercionKwd       contained ">->"
 "...
-syn keyword coqVernacCmd         Functional Scheme Back Combined
+syn keyword coqVernacCmd         Functional Back
 syn keyword coqFeedback          Show About Print
 
 " Terms
@@ -73,6 +73,12 @@ syn region coqRequire matchgroup=coqVernacCmd start="\<Export\>" matchgroup=coqV
 syn region coqCheck   contains=@coqTerm matchgroup=coqVernacCmd start="\<Check\>" matchgroup=coqVernacPunctuation end="\.\_s"
 syn region coqOpaque  matchgroup=coqVernacCmd start="\<\%(Opaque\|Transparent\)\>" matchgroup=coqVernacPunctuation end="\.\_s"
 syn region coqShow       matchgroup=coqVernacCmd start="\<Show\_s\+\%(\%(Implicits\|Script\|Tree\|Proof\|Conjectures\|Intros\?\|Existentials\)\>\)\?" end="\.\_s"
+
+" Schemes
+syn region coqScheme contains=coqIdent,coqSchemeKwd,coqSchemePunctuation matchgroup=coqVernacCmd start="\<Scheme\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
+syn region coqScheme contains=coqIdent,coqSchemeKwd,coqSchemePunctuation matchgroup=coqVernacCmd start="\<Combined\_s\+Scheme\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
+syn keyword coqSchemeKwd contained Induction Minimality Elimination Sort Prop Set Type for with from
+syn match   coqSchemePunctuation contained ":=\|\.\|,"
 
 " Declare
 syn region coqDeclare contains=coqDeclareScope,coqVernacPunctuation matchgroup=coqVernacCmd start="\<Declare\>" matchgroup=coqVernacPunctuation end="\.\_s" keepend
@@ -284,11 +290,12 @@ syn region coqIndBinder      contained contains=coqIndBinderTerm matchgroup=coqV
 syn region coqIndBinderTerm  contained contains=@coqTerm matchgroup=coqVernacPunctuation start=":" end=")"
 syn region coqIndTerm        contained contains=@coqTerm,coqIndContent matchgroup=coqVernacPunctuation start=":" matchgroup=NONE end="\.\_s"
 syn region coqIndContent     contained contains=coqIndConstructor start=":=" end="\.\_s"
-syn region coqIndConstructor contained contains=coqConstructor,coqIndBinder,coqIndConsTerm,coqIndNot,coqIndBody matchgroup=coqVernacPunctuation start=":=\%(\_s*|\)\?" start="|" matchgroup=NONE end="\.\_s"
+syn region coqIndConstructor contained contains=coqConstructor,coqIndBinder,coqIndConsTerm,coqIndNot,coqIndBody,coqIndPunctuation matchgroup=coqVernacPunctuation start=":=\%(\_s*|\)\?" matchgroup=coqVernacPunctuation start="|" matchgroup=NONE end="\.\_s"
 syn region coqIndConsTerm    contained contains=coqIndBody,@coqTerm,coqIndConstructor,coqIndNot matchgroup=coqConstructor start=":" matchgroup=NONE end="\.\_s"
 syn region coqIndNot         contained contains=coqNotationString,coqIndNotTerm matchgroup=coqVernacCmd start="\<where\>" end="\.\_s"
 syn region coqIndNotTerm     contained contains=@coqTerm,coqIndNotScope,coqIndBody matchgroup=coqVernacPunctuation start=":=" end="\.\_s"
 syn region coqIndNotScope    contained contains=coqIndBody matchgroup=coqVernacPunctuation start=":" end="\.\_s"
+syn match  coqIndPunctuation contained "|"
 syn match  coqConstructor    contained "[_[:alpha:]][_'[:alnum:]]*"
 
 " Records
@@ -366,6 +373,9 @@ if version >= 508 || !exists("did_coq_syntax_inits")
  HiLink coqVernacular                PreProc
  HiLink coqVernacCmd         coqVernacular
  HiLink coqVernacPunctuation coqVernacular
+ HiLink coqSchemeKwd         coqVernacular
+ HiLink coqSchemePunctuation coqVernacular
+ HiLink coqIndPunctuation    coqVernacular
  HiLink coqHint              coqVernacular
  HiLink coqFeedback          coqVernacular
  HiLink coqTopLevel          coqVernacular
