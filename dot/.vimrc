@@ -27,8 +27,8 @@ set t_Co=256
 set nocp                  " no vi compatibility mode
 
 " will conflict with verilog, beware !!
-au BufRead,BufNewFile *.v set filetype=coq  
-au! Syntax coq source /usr/share/vim/vim91/syntax/rocq.vim
+au BufRead,BufNewFile *.v set filetype=rocq  
+au! Syntax rocq source /usr/share/vim/vim91/syntax/rocq.vim
 
 au BufRead,BufNewFile *.agda set filetype=agda
 au! Syntax agda source /usr/share/vim/vim91/syntax/agda.vim
@@ -41,18 +41,18 @@ au! Syntax lean source /usr/share/vim/vim91/syntax/lean.vim
 
 autocmd BufWritePre *.v %s/\s\+$//e
 
-augroup coq_folding
+augroup rocq_folding
   autocmd!
-  autocmd FileType coq setlocal foldmethod=expr
-  autocmd FileType coq setlocal foldexpr=CoqFold(v:lnum)
-  autocmd FileType coq setlocal foldtext=CoqFoldText()
-  autocmd FileType coq setlocal fillchars+=fold:\ 
-  autocmd FileType coq highlight Folded term=NONE cterm=NONE gui=NONE
-  autocmd FileType coq highlight link Folded Normal
-  autocmd FileType coq setlocal foldminlines=0
+  autocmd FileType rocq setlocal foldmethod=expr
+  autocmd FileType rocq setlocal foldexpr=RocqFold(v:lnum)
+  autocmd FileType rocq setlocal foldtext=RocqFoldText()
+  autocmd FileType rocq setlocal fillchars+=fold:\ 
+  autocmd FileType rocq highlight Folded term=NONE cterm=NONE gui=NONE
+  autocmd FileType rocq highlight link Folded Normal
+  autocmd FileType rocq setlocal foldminlines=0
 augroup END
 
-function! CoqFold(lnum)
+function! RocqFold(lnum)
   let line = getline(a:lnum)
   let prev = a:lnum > 1 ? getline(a:lnum - 1) : ''
 
@@ -71,6 +71,6 @@ function! CoqFold(lnum)
   endif
 endfunction
 
-function! CoqFoldText()
+function! RocqFoldText()
   return '+'
 endfunction
