@@ -25,4 +25,20 @@ Proof.
   intros args n t H1. unfold argT. rewrite H1. reflexivity.
 Qed.
 
+(* Argument lookup past the supplied arguments returns a remaining variable.    *)
+Proposition ArgTVar :
+  forall (args:list Term) (n:nat),
+    length args <= n                          ->
+    argT args n = Var (n - length args).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros args n H1.
+  unfold argT.
+  (* Past the length of the reversed argument list, lookup must fail.           *)
+  assert (nth_error (rev args) n = None) as H2. {
+    apply nth_error_None. rewrite length_rev. assumption.
+  }
+  rewrite H2. reflexivity.
+Qed.
+
 
