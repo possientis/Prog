@@ -64,8 +64,7 @@ Fixpoint toList (ts:Terms) : list Term :=
   | ConsT t ts => t :: toList ts
   end.
 
-#[warnings="-uniform-inheritance"]
-Coercion fromList : list >-> Terms.
+Definition args (ts:list Term) : Terms := fromList ts.
 
 Definition lengthT (ts:Terms) : nat := List.length (toList ts).
 

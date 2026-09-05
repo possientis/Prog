@@ -35,7 +35,7 @@ Definition equiv : DeclT :=
 (* forall P, equiv P P.                                                         *)
 Definition Refl : DeclP :=
   let concl :=
-    IdentT (Name.local "equiv") [Var 0; Var 0]
+    IdentT (Name.local "equiv") (args [Var 0; Var 0])
   in
     {| paraP  := [TyClass]
     ;  conclP := concl
@@ -46,12 +46,12 @@ Definition Refl : DeclP :=
 Definition EquivCompat : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 3; Var 1])
+      (IdentT (Name.local "equiv") (args [Var 3; Var 1]))
       (Imp
-        (IdentT (Name.local "equiv") [Var 2; Var 0])
+        (IdentT (Name.local "equiv") (args [Var 2; Var 0]))
         (Imp
-          (IdentT (Name.local "equiv") [Var 3; Var 2])
-          (IdentT (Name.local "equiv") [Var 1; Var 0])))
+          (IdentT (Name.local "equiv") (args [Var 3; Var 2]))
+          (IdentT (Name.local "equiv") (args [Var 1; Var 0]))))
   in
     {| paraP  := [TyClass; TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -62,10 +62,10 @@ Definition EquivCompat : DeclP :=
 Definition EquivCompatL : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 2; Var 0])
+      (IdentT (Name.local "equiv") (args [Var 2; Var 0]))
       (Imp
-        (IdentT (Name.local "equiv") [Var 2; Var 1])
-        (IdentT (Name.local "equiv") [Var 0; Var 1]))
+        (IdentT (Name.local "equiv") (args [Var 2; Var 1]))
+        (IdentT (Name.local "equiv") (args [Var 0; Var 1])))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -76,10 +76,10 @@ Definition EquivCompatL : DeclP :=
 Definition EquivCompatR : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 1; Var 0])
+      (IdentT (Name.local "equiv") (args [Var 1; Var 0]))
       (Imp
-        (IdentT (Name.local "equiv") [Var 2; Var 1])
-        (IdentT (Name.local "equiv") [Var 2; Var 0]))
+        (IdentT (Name.local "equiv") (args [Var 2; Var 1]))
+        (IdentT (Name.local "equiv") (args [Var 2; Var 0])))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -90,8 +90,8 @@ Definition EquivCompatR : DeclP :=
 Definition Sym : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 1; Var 0])
-      (IdentT (Name.local "equiv") [Var 0; Var 1])
+      (IdentT (Name.local "equiv") (args [Var 1; Var 0]))
+      (IdentT (Name.local "equiv") (args [Var 0; Var 1]))
   in
     {| paraP  := [TyClass; TyClass]
     ;  conclP := concl
@@ -102,10 +102,10 @@ Definition Sym : DeclP :=
 Definition Tran : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 2; Var 1])
+      (IdentT (Name.local "equiv") (args [Var 2; Var 1]))
       (Imp
-        (IdentT (Name.local "equiv") [Var 1; Var 0])
-        (IdentT (Name.local "equiv") [Var 2; Var 0]))
+        (IdentT (Name.local "equiv") (args [Var 1; Var 0]))
+        (IdentT (Name.local "equiv") (args [Var 2; Var 0])))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -116,8 +116,8 @@ Definition Tran : DeclP :=
 Definition NotSym : DeclP :=
   let concl :=
     Imp
-      (Not (IdentT (Name.local "equiv") [Var 1; Var 0]))
-      (Not (IdentT (Name.local "equiv") [Var 0; Var 1]))
+      (Not (IdentT (Name.local "equiv") (args [Var 1; Var 0])))
+      (Not (IdentT (Name.local "equiv") (args [Var 0; Var 1])))
   in
     {| paraP  := [TyClass; TyClass]
     ;  conclP := concl
@@ -132,8 +132,8 @@ Definition EqualToClass : DeclP :=
           (Iff
             (Equal (Var 1) (Var 0))
             (IdentT (Name.local "equiv")
-              [IdentT (Name.local "toClass") [Var 1];
-               IdentT (Name.local "toClass") [Var 0]])))
+              (args [IdentT (Name.local "toClass") (args [Var 1]);
+               IdentT (Name.local "toClass") (args [Var 0])]))))
   in
     {| paraP  := []
     ;  conclP := concl
@@ -149,8 +149,8 @@ Definition NotEqualToClass : DeclP :=
             (NotEq (Var 1) (Var 0))
             (Not
               (IdentT (Name.local "equiv")
-                [IdentT (Name.local "toClass") [Var 1];
-                 IdentT (Name.local "toClass") [Var 0]]))))
+                (args [IdentT (Name.local "toClass") (args [Var 1]);
+                 IdentT (Name.local "toClass") (args [Var 0])])))))
   in
     {| paraP  := []
     ;  conclP := concl
@@ -161,12 +161,12 @@ Definition NotEqualToClass : DeclP :=
 Definition NotCompat : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 3; Var 2])
+      (IdentT (Name.local "equiv") (args [Var 3; Var 2]))
       (Imp
-        (IdentT (Name.local "equiv") [Var 1; Var 0])
+        (IdentT (Name.local "equiv") (args [Var 1; Var 0]))
         (Imp
-          (Not (IdentT (Name.local "equiv") [Var 3; Var 1]))
-          (Not (IdentT (Name.local "equiv") [Var 2; Var 0]))))
+          (Not (IdentT (Name.local "equiv") (args [Var 3; Var 1])))
+          (Not (IdentT (Name.local "equiv") (args [Var 2; Var 0])))))
   in
     {| paraP  := [TyClass; TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -177,10 +177,10 @@ Definition NotCompat : DeclP :=
 Definition NotCompatL : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 2; Var 1])
+      (IdentT (Name.local "equiv") (args [Var 2; Var 1]))
       (Imp
-        (Not (IdentT (Name.local "equiv") [Var 2; Var 0]))
-        (Not (IdentT (Name.local "equiv") [Var 1; Var 0])))
+        (Not (IdentT (Name.local "equiv") (args [Var 2; Var 0])))
+        (Not (IdentT (Name.local "equiv") (args [Var 1; Var 0]))))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl
@@ -191,10 +191,10 @@ Definition NotCompatL : DeclP :=
 Definition NotCompatR : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "equiv") [Var 2; Var 1])
+      (IdentT (Name.local "equiv") (args [Var 2; Var 1]))
       (Imp
-        (Not (IdentT (Name.local "equiv") [Var 0; Var 2]))
-        (Not (IdentT (Name.local "equiv") [Var 0; Var 1])))
+        (Not (IdentT (Name.local "equiv") (args [Var 0; Var 2])))
+        (Not (IdentT (Name.local "equiv") (args [Var 0; Var 1]))))
   in
     {| paraP  := [TyClass; TyClass; TyClass]
     ;  conclP := concl

@@ -18,13 +18,13 @@ Definition Infinity : DeclP :=
   let concl :=
       Ex
         (And
-          (Elem (IdentT (Name.local "empty") []) (Var 0))
+          (Elem (IdentT (Name.local "empty") (args [])) (Var 0))
           (All
             (Imp
               (Elem (Var 0) (Var 1))
               (Elem
                 (IdentT (Name.local "union2")
-                  [Var 0; IdentT (Name.local "single") [Var 0]])
+                  (args [Var 0; IdentT (Name.local "single") (args [Var 0])]))
                 (Var 1)))))
   in
     {| paraP  := []

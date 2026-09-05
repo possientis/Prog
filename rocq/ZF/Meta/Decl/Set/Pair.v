@@ -34,7 +34,7 @@ Definition Exists : DeclP :=
   let concl :=
     (Ex
       (App
-        (IdentT (Name.local "IsPairOf") [Var 2; Var 1])
+        (IdentT (Name.local "IsPairOf") (args [Var 2; Var 1]))
         (Var 0)))
   in
     {| paraP := [TySet; TySet]
@@ -49,11 +49,11 @@ Definition Unique : DeclP :=
       (All
         (Imp
           (App
-            (IdentT (Name.local "IsPairOf") [Var 3; Var 2])
+            (IdentT (Name.local "IsPairOf") (args [Var 3; Var 2]))
              (Var 1))
           (Imp
             (App
-              (IdentT (Name.local "IsPairOf") [Var 3; Var 2])
+              (IdentT (Name.local "IsPairOf") (args [Var 3; Var 2]))
               (Var 0))
             (Equal (Var 1) (Var 0))))))
   in
@@ -68,9 +68,9 @@ Definition pair : DeclT :=
   ;  resT  := TySet
   ;  bodyT :=
       Def
-        (IdentT (Name.local "IsPairOf") [Var 1; Var 0])
-        (IdentP (Name.local "Exists") [Var 1; Var 0])
-        (IdentP (Name.local "Unique") [Var 1; Var 0])
+        (IdentT (Name.local "IsPairOf") (args [Var 1; Var 0]))
+        (IdentP (Name.local "Exists") (args [Var 1; Var 0]))
+        (IdentP (Name.local "Unique") (args [Var 1; Var 0]))
   |}.
 
 
@@ -81,7 +81,7 @@ Definition Charac : DeclP :=
       (All
         (All
           (Iff
-            (Elem (Var 0) (IdentT (Name.local "pair") [Var 2; Var 1]))
+            (Elem (Var 0) (IdentT (Name.local "pair") (args [Var 2; Var 1])))
             (Or
               (Equal (Var 0) (Var 2))
               (Equal (Var 0) (Var 1))))))
@@ -96,7 +96,7 @@ Definition IsInL : DeclP :=
   let concl :=
     All
       (All
-        (Elem (Var 1) (IdentT (Name.local "pair") [Var 1; Var 0])))
+        (Elem (Var 1) (IdentT (Name.local "pair") (args [Var 1; Var 0]))))
   in
     {| paraP := []
     ; conclP := concl
@@ -108,7 +108,7 @@ Definition IsInR : DeclP :=
   let concl :=
     All
       (All
-        (Elem (Var 0) (IdentT (Name.local "pair") [Var 1; Var 0])))
+        (Elem (Var 0) (IdentT (Name.local "pair") (args [Var 1; Var 0]))))
   in
     {| paraP := []
     ; conclP := concl
@@ -125,9 +125,9 @@ Definition ToClassIncl : DeclP :=
             (App (Var 2) (Var 1))
             (App (Var 2) (Var 0)))
           (IdentT (Name.local "Incl")
-            [IdentT (Name.local "toClass")
-              [IdentT (Name.local "pair") [Var 1; Var 0]];
-             Var 2])))
+            (args [IdentT (Name.local "toClass")
+              (args [IdentT (Name.local "pair") (args [Var 1; Var 0])]);
+             Var 2]))))
   in
     {| paraP := [TyClass]
     ; conclP := concl

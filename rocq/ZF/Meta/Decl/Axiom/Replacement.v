@@ -17,7 +17,7 @@ Require Import ZF.Meta.Decl.Set.OrdPair.
 Definition Replacement : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "Functional") [Var 0])
+      (IdentT (Name.local "Functional") (args [Var 0]))
       (All
         (Ex
           (All
@@ -28,7 +28,7 @@ Definition Replacement : DeclP :=
                   (Elem (Var 0) (Var 3))
                   (App
                     (Var 4)
-                    (IdentT (Name.local "ordPair") [Var 0; Var 1]))))))))
+                    (IdentT (Name.local "ordPair") (args [Var 0; Var 1])))))))))
   in
     {| paraP  := [TyClass]
     ;  conclP := concl

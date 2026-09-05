@@ -17,13 +17,13 @@ Definition Foundation : DeclP :=
   let concl :=
       All
         (Imp
-          (NotEq (Var 0) (IdentT (Name.local "empty") []))
+          (NotEq (Var 0) (IdentT (Name.local "empty") (args [])))
           (Ex
             (And
               (Elem (Var 0) (Var 1))
               (Equal
-                (IdentT (Name.local "inter2") [Var 0; Var 1])
-                (IdentT (Name.local "empty") [])))))
+                (IdentT (Name.local "inter2") (args [Var 0; Var 1]))
+                (IdentT (Name.local "empty") (args []))))))
   in
     {| paraP  := []
     ;  conclP := concl

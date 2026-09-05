@@ -23,14 +23,14 @@ Definition Choice : DeclT :=
       All
         (Ex
           (And
-            (IdentT (Name.local "FunctionOn") [Var 0; Var 1])
+            (IdentT (Name.local "FunctionOn") (args [Var 0; Var 1]))
             (All
               (Imp
                 (Elem (Var 0) (Var 2))
                 (Imp
-                  (NotEq (Var 0) (IdentT (Name.local "empty") []))
+                  (NotEq (Var 0) (IdentT (Name.local "empty") (args [])))
                   (Elem
-                    (IdentT Eval.evalName [Var 1; Var 0])
+                    (IdentT Eval.evalName (args [Var 1; Var 0]))
                     (Var 0)))))))
   |}.
 

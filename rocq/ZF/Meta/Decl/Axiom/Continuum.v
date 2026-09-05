@@ -27,11 +27,11 @@ Definition CH : DeclT :=
   ;  bodyT :=
       Equal
         (IdentT (Name.local "card")
-          [IdentT (Name.local "power")
-            [IdentT (Name.local "omega") []]])
+          (args [IdentT (Name.local "power")
+            (args [IdentT (Name.local "omega") (args [])])]))
         (IdentT EvalOfClass.evalName
-          [IdentT (Name.local "Aleph") [];
-           IdentT (Name.local "one") []])
+          (args [IdentT (Name.local "Aleph") (args []);
+           IdentT (Name.local "one") (args [])]))
   |}.
 
 (* forall a, Ordinal a -> card (power (eval Aleph a)) = eval Aleph (succ a)     *)
@@ -41,23 +41,23 @@ Definition GCH : DeclT :=
   ;  bodyT :=
       All
         (Imp
-          (IdentT (Name.local "Ordinal") [Var 0])
+          (IdentT (Name.local "Ordinal") (args [Var 0]))
           (Equal
             (IdentT (Name.local "card")
-              [IdentT (Name.local "power")
-                [IdentT EvalOfClass.evalName
-                  [IdentT (Name.local "Aleph") []; Var 0]]])
+              (args [IdentT (Name.local "power")
+                (args [IdentT EvalOfClass.evalName
+                  (args [IdentT (Name.local "Aleph") (args []); Var 0])])]))
             (IdentT EvalOfClass.evalName
-              [IdentT (Name.local "Aleph") [];
-               IdentT (Name.local "succ") [Var 0]])))
+              (args [IdentT (Name.local "Aleph") (args []);
+               IdentT (Name.local "succ") (args [Var 0])]))))
   |}.
 
 (* GCH -> CH.                                                                   *)
 Definition WhenGCH : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "GCH") [])
-      (IdentT (Name.local "CH") [])
+      (IdentT (Name.local "GCH") (args []))
+      (IdentT (Name.local "CH") (args []))
   in
     {| paraP  := []
     ;  conclP := concl
