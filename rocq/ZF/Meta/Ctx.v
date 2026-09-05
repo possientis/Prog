@@ -59,6 +59,26 @@ Proof.
     + apply IH. assumption.
 Qed.
 
+(* A lookup past a front context is a lookup in the older tail context.         *)
+Proposition TypeOfAppSplitR :
+  forall (D G:Ctx) (n:nat) (ty:Ty),
+    length D <= n                             ->
+    typeOf (D ++ G) n = Some ty               ->
+    typeOf G (n - length D) = Some ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros D G n ty H1 H2.
+  generalize dependent n.
+  induction D as [|ty' D IH]; intros n H1 H2.
+  - (* With no front context, the lookup is already in the tail context.        *)
+    rewrite Nat.sub_0_r. assumption.
+  - (* Successor indices past a non-empty front context descend through it.     *)
+    destruct n as [|n].
+    + inversion H1.
+    + apply IH. 2: assumption.
+      apply le_S_n. assumption.
+Qed.
+
 (* A successful lookup is within the length of its context.                     *)
 Proposition TypeOfLtLength :
   forall (G:Ctx) (n:nat) (ty:Ty),
