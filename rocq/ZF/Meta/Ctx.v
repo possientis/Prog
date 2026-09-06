@@ -59,6 +59,27 @@ Proof.
   induction G as [|ty' G IH]; assumption.
 Qed.
 
+(* A lookup before the end of a front context is a lookup in that context.      *)
+Proposition TypeOfAppSplitL :
+  forall (G D:Ctx) (n:nat) (ty:Ty),
+    n < length G                              ->
+    typeOf (G ++ D) n = Some ty               ->
+    typeOf G n = Some ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G D n ty H1 H2.
+  generalize dependent n.
+  induction G as [|ty' G IH]; intros n H1 H2.
+  - (* No lookup can lie before the end of the empty context.                   *)
+    inversion H1.
+  - (* At the head, the combined lookup is exactly the front lookup.            *)
+    destruct n as [|n].
+    + rewrite <- H2. reflexivity.
+    + (* Past the head, both lookups descend to the remaining front context.    *)
+      apply IH. 2: assumption.
+      apply le_S_n. assumption.
+Qed.
+
 (* A lookup past a front context is a lookup in the older tail context.         *)
 Proposition TypeOfAppSplitR :
   forall (G D:Ctx) (n:nat) (ty:Ty),
