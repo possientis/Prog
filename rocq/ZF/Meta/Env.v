@@ -2,8 +2,8 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Name.
-Require Import ZF.Meta.Proof.Decl.
-Require Import ZF.Meta.Term.Decl.
+Require Import ZF.Meta.DeclP.
+Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Ty.
 Require Import ZF.Meta.Syntax.
 

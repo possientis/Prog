@@ -2,8 +2,8 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Proof.CheckDecl.
-Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.CheckDeclT.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -12,7 +12,7 @@ Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Axiom.Continuum.
 
-Proposition CH : CheckDeclT (Continuum.env) CH.
+Proposition CH : CheckT (Continuum.env) CH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckEqual.
@@ -34,7 +34,7 @@ Proof.
       * apply CheckTsNil.
 Qed.
 
-Proposition GCH : CheckDeclT (Continuum.env) GCH.
+Proposition GCH : CheckT (Continuum.env) GCH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckImp.
@@ -68,7 +68,7 @@ Proof.
         -- apply CheckTsNil.
 Qed.
 
-Proposition WhenGCH : CheckDeclP (Continuum.env) WhenGCH.
+Proposition WhenGCH : CheckP (Continuum.env) WhenGCH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   split.

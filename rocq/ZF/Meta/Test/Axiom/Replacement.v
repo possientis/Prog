@@ -3,8 +3,8 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Proof.CheckDecl.
-Require Import ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -12,10 +12,10 @@ Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Axiom.Replacement.
 
-Proposition Replacement : CheckDeclP (Replacement.env) Replacement.
+Proposition Replacement : CheckP (Replacement.env) Replacement.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT Replacement.env (ctxP Replacement)
+  assert (Check.CheckT Replacement.env (ctxP Replacement)
     (conclP Replacement) TyProp) as H1. {
     apply CheckImp.
     - apply CheckIdentT with [TyClass]. 1: reflexivity.

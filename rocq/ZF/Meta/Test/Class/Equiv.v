@@ -2,10 +2,10 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Proof.CheckDecl.
-Require Import ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.CheckDeclT.
 Require Import ZF.Meta.Ty.
 
 Require Import ZF.Meta.Decl.Class.Equiv.
@@ -16,14 +16,14 @@ Open Scope string_scope.
 (* Declaration typing.                                                          *)
 
 (* The declaration body for toClass maps a set to its membership class.         *)
-Proposition toClass : CheckDeclT (Equiv.env) toClass.
+Proposition toClass : CheckT (Equiv.env) toClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckLam, CheckElem; apply CheckVar; reflexivity.
 Qed.
 
 (* The declaration body for equivalence compares two classes pointwise.         *)
-Proposition equiv : CheckDeclT (Equiv.env) equiv.
+Proposition equiv : CheckT (Equiv.env) equiv.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckAll, CheckIff.
@@ -38,10 +38,10 @@ Qed.
 (* Proposition typing.                                                          *)
 
 (* The reflexivity proposition is well sorted using equivalence.                *)
-Proposition Refl : CheckDeclP (Equiv.env) Refl.
+Proposition Refl : CheckP (Equiv.env) Refl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP Refl) (conclP Refl) TyProp) as H1. {
+  assert (Check.CheckT (Equiv.env) (ctxP Refl) (conclP Refl) TyProp) as H1. {
     apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.
     + apply CheckVar. reflexivity.
@@ -52,10 +52,10 @@ Proof.
 Qed.
 
 (* Equivalence compatibility is a well-sorted proposition.                      *)
-Proposition EquivCompat : CheckDeclP (Equiv.env) EquivCompat.
+Proposition EquivCompat : CheckP (Equiv.env) EquivCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP EquivCompat)
+  assert (Check.CheckT (Equiv.env) (ctxP EquivCompat)
     (conclP EquivCompat) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -88,10 +88,10 @@ Proof.
 Qed.
 
 (* Left compatibility of equivalence is a well-sorted proposition.              *)
-Proposition EquivCompatL : CheckDeclP (Equiv.env) EquivCompatL.
+Proposition EquivCompatL : CheckP (Equiv.env) EquivCompatL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP EquivCompatL)
+  assert (Check.CheckT (Equiv.env) (ctxP EquivCompatL)
     (conclP EquivCompatL) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -117,10 +117,10 @@ Proof.
 Qed.
 
 (* Right compatibility of equivalence is a well-sorted proposition.             *)
-Proposition EquivCompatR : CheckDeclP (Equiv.env) EquivCompatR.
+Proposition EquivCompatR : CheckP (Equiv.env) EquivCompatR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP EquivCompatR)
+  assert (Check.CheckT (Equiv.env) (ctxP EquivCompatR)
     (conclP EquivCompatR) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -146,10 +146,10 @@ Proof.
 Qed.
 
 (* Symmetry of equivalence is a well-sorted proposition.                        *)
-Proposition Sym : CheckDeclP (Equiv.env) Sym.
+Proposition Sym : CheckP (Equiv.env) Sym.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP Sym) (conclP Sym) TyProp) as H1. {
+  assert (Check.CheckT (Equiv.env) (ctxP Sym) (conclP Sym) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
@@ -167,10 +167,10 @@ Proof.
 Qed.
 
 (* Transitivity of equivalence is a well-sorted proposition.                    *)
-Proposition Tran : CheckDeclP (Equiv.env) Tran.
+Proposition Tran : CheckP (Equiv.env) Tran.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP Tran) (conclP Tran) TyProp) as H1. {
+  assert (Check.CheckT (Equiv.env) (ctxP Tran) (conclP Tran) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
@@ -195,10 +195,10 @@ Proof.
 Qed.
 
 (* Symmetry of non-equivalence is a well-sorted proposition.                    *)
-Proposition NotSym : CheckDeclP (Equiv.env) NotSym.
+Proposition NotSym : CheckP (Equiv.env) NotSym.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP NotSym) (conclP NotSym) TyProp) as H1. {
+  assert (Check.CheckT (Equiv.env) (ctxP NotSym) (conclP NotSym) TyProp) as H1. {
     apply CheckImp.
     + apply CheckNot.
       apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -218,10 +218,10 @@ Proof.
 Qed.
 
 (* Equality of sets and equivalence of their classes is well sorted.            *)
-Proposition EqualToClass : CheckDeclP (Equiv.env) EqualToClass.
+Proposition EqualToClass : CheckP (Equiv.env) EqualToClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP EqualToClass)
+  assert (Check.CheckT (Equiv.env) (ctxP EqualToClass)
     (conclP EqualToClass) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckIff.
     + apply CheckEqual; apply CheckVar; reflexivity.
@@ -241,10 +241,10 @@ Proof.
 Qed.
 
 (* Inequality of sets and non-equivalence of their classes is well sorted.      *)
-Proposition NotEqualToClass : CheckDeclP (Equiv.env) NotEqualToClass.
+Proposition NotEqualToClass : CheckP (Equiv.env) NotEqualToClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP NotEqualToClass)
+  assert (Check.CheckT (Equiv.env) (ctxP NotEqualToClass)
     (conclP NotEqualToClass) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckIff.
     + apply CheckNotEq; apply CheckVar; reflexivity.
@@ -265,10 +265,10 @@ Proof.
 Qed.
 
 (* Non-equivalence is compatible with equivalence.                              *)
-Proposition NotCompat : CheckDeclP (Equiv.env) NotCompat.
+Proposition NotCompat : CheckP (Equiv.env) NotCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp)
+  assert (Check.CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp)
     as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -303,10 +303,10 @@ Proof.
 Qed.
 
 (* Non-equivalence is left-compatible with equivalence.                         *)
-Proposition NotCompatL : CheckDeclP (Equiv.env) NotCompatL.
+Proposition NotCompatL : CheckP (Equiv.env) NotCompatL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP NotCompatL)
+  assert (Check.CheckT (Equiv.env) (ctxP NotCompatL)
     (conclP NotCompatL) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -334,10 +334,10 @@ Proof.
 Qed.
 
 (* Non-equivalence is right-compatible with equivalence.                        *)
-Proposition NotCompatR : CheckDeclP (Equiv.env) NotCompatR.
+Proposition NotCompatR : CheckP (Equiv.env) NotCompatR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Equiv.env) (ctxP NotCompatR)
+  assert (Check.CheckT (Equiv.env) (ctxP NotCompatR)
   (conclP NotCompatR) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.

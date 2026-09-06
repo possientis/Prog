@@ -2,7 +2,7 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.CheckDeclT.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -11,7 +11,7 @@ Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Axiom.Choice.
 
-Proposition Choice : CheckDeclT (Choice.env) Choice.
+Proposition Choice : CheckT (Choice.env) Choice.
 Proof.
   apply CheckAll, CheckEx, CheckAnd.
   - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.

@@ -2,10 +2,10 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Proof.CheckDecl.
-Require Import ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.CheckDecl.
+Require Import ZF.Meta.CheckDeclT.
 Require Import ZF.Meta.Ty.
 
 Require Import ZF.Meta.Decl.Set.Pair.
@@ -16,7 +16,7 @@ Open Scope string_scope.
 (* Declaration typing.                                                          *)
 
 (* The declaration body for IsPairOf recognizes the two selected sets.          *)
-Proposition IsPairOf : CheckDeclT (Pair.env) Pair.IsPairOf.
+Proposition IsPairOf : CheckT (Pair.env) Pair.IsPairOf.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckLam, CheckAll, CheckIff.
@@ -25,10 +25,10 @@ Proof.
 Qed.
 
 (* The existence proof declaration is well sorted.                              *)
-Proposition Exists : CheckDeclP (Pair.env) Pair.Exists.
+Proposition Exists : CheckP (Pair.env) Pair.Exists.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Pair.env) (ctxP Pair.Exists)
+  assert (Check.CheckT (Pair.env) (ctxP Pair.Exists)
     (conclP Pair.Exists) TyProp) as H1. {
     apply CheckEx, CheckApp.
     - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
@@ -42,10 +42,10 @@ Proof.
 Qed.
 
 (* The uniqueness proof declaration is well sorted.                             *)
-Proposition Unique : CheckDeclP (Pair.env) Pair.Unique.
+Proposition Unique : CheckP (Pair.env) Pair.Unique.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Pair.env) (ctxP Pair.Unique)
+  assert (Check.CheckT (Pair.env) (ctxP Pair.Unique)
     (conclP Pair.Unique) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckImp.
     - apply CheckApp.
@@ -70,7 +70,7 @@ Proof.
 Qed.
 
 (* The declaration body for pair denotes a set backed by proof references.      *)
-Proposition pair : CheckDeclT (Pair.env) Pair.pair.
+Proposition pair : CheckT (Pair.env) Pair.pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply CheckDef.
@@ -99,10 +99,10 @@ Proof.
 Qed.
 
 (* The characterization proposition is well sorted.                             *)
-Proposition Charac : CheckDeclP (Pair.env) Pair.Charac.
+Proposition Charac : CheckP (Pair.env) Pair.Charac.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Pair.env) (ctxP Pair.Charac)
+  assert (Check.CheckT (Pair.env) (ctxP Pair.Charac)
     (conclP Pair.Charac) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckAll, CheckIff.
     - apply CheckElem.
@@ -118,10 +118,10 @@ Proof.
 Qed.
 
 (* The left membership proposition is well sorted.                              *)
-Proposition IsInL : CheckDeclP (Pair.env) Pair.IsInL.
+Proposition IsInL : CheckP (Pair.env) Pair.IsInL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Pair.env) (ctxP Pair.IsInL)
+  assert (Check.CheckT (Pair.env) (ctxP Pair.IsInL)
     (conclP Pair.IsInL) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckElem.
     - apply CheckVar. reflexivity.
@@ -135,10 +135,10 @@ Proof.
 Qed.
 
 (* The right membership proposition is well sorted.                             *)
-Proposition IsInR : CheckDeclP (Pair.env) Pair.IsInR.
+Proposition IsInR : CheckP (Pair.env) Pair.IsInR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Pair.env) (ctxP Pair.IsInR)
+  assert (Check.CheckT (Pair.env) (ctxP Pair.IsInR)
     (conclP Pair.IsInR) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckElem.
     - apply CheckVar. reflexivity.
@@ -152,10 +152,10 @@ Proof.
 Qed.
 
 (* The class-inclusion proposition is well sorted.                              *)
-Proposition ToClassIncl : CheckDeclP (Pair.env) Pair.ToClassIncl.
+Proposition ToClassIncl : CheckP (Pair.env) Pair.ToClassIncl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT (Pair.env) (ctxP Pair.ToClassIncl)
+  assert (Check.CheckT (Pair.env) (ctxP Pair.ToClassIncl)
     (conclP Pair.ToClassIncl) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckIff.
     - apply CheckAnd.

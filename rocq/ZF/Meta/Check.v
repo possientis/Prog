@@ -6,9 +6,9 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
-Require Import ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.Term.Decl.
+Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.TypeOf.
 Require Import ZF.Meta.Ty.
 Require Import ZF.Meta.Unique.

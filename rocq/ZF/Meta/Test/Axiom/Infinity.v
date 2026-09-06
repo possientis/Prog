@@ -3,8 +3,8 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Proof.CheckDecl.
-Require Import ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -12,10 +12,10 @@ Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Axiom.Infinity.
 
-Proposition Infinity : CheckDeclP (Infinity.env) Infinity.
+Proposition Infinity : CheckP (Infinity.env) Infinity.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT Infinity.env [] (conclP Infinity) TyProp) as H1. {
+  assert (Check.CheckT Infinity.env [] (conclP Infinity) TyProp) as H1. {
     apply CheckEx, CheckAnd.
     - apply CheckElem.
       + apply CheckIdentT with []. 1: reflexivity.

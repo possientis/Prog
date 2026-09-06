@@ -3,8 +3,8 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.
-Require Import ZF.Meta.Proof.CheckDecl.
-Require Import ZF.Meta.Proof.Decl.
+Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
@@ -12,10 +12,10 @@ Open Scope string_scope.
 
 Require Import ZF.Meta.Decl.Axiom.Foundation.
 
-Proposition Foundation : CheckDeclP (Foundation.env) Foundation.
+Proposition Foundation : CheckP (Foundation.env) Foundation.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (CheckT Foundation.env [] (conclP Foundation) TyProp) as H1. {
+  assert (Check.CheckT Foundation.env [] (conclP Foundation) TyProp) as H1. {
     apply CheckAll, CheckImp.
     - apply CheckNotEq.
       + apply CheckVar. reflexivity.
