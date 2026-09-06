@@ -206,22 +206,6 @@ Proof.
     + apply IH with n; assumption.
 Qed.
 
-(* Matching entries in well-sorted arguments have matching context sorts.       *)
-Proposition CheckTsTypeOf :
-  forall (E:Env) (G:Ctx) (ts:Terms) (D:Ctx) (n:nat) (t:Term) (ty:Ty),
-    CheckTs E G ts D                         ->
-    nthT ts n = Some t                       ->
-    typeOf D n = Some ty                     ->
-    CheckT E G t ty.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros E G ts D n t ty H1 H2 H3.
-  (* The type context lookup is the same as the matching list lookup.           *)
-  rewrite TypeOf.NthError in H3.
-  (* The structural list theorem then gives the sort of the selected term.      *)
-  apply (CheckTsNth E G ts D n); assumption.
-Qed.
-
 (* A selected checked argument has the sort found in the reversed signature.    *)
 Proposition CheckArgT :
   forall (E:Env) (G:Ctx) (args:Terms) (tys:list Ty) (n:nat) (ty:Ty),
@@ -236,7 +220,8 @@ Proof.
      it with the corresponding sort.                                            *)
   destruct (nthT (revT args) n) as [t|] eqn:H3.
   - unfold nthT in H3.
-    apply (CheckTsTypeOf E G (revT args) (rev tys) n); try assumption.
+    rewrite TypeOf.NthError in H2.
+    apply (CheckTsNth E G (revT args) (rev tys) n); try assumption.
     apply CheckTsRev. assumption.
     (* If the reversed argument lookup failed, the matching reversed sort lookup
        would fail too, contradicting the successful context lookup.             *)
