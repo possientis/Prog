@@ -206,33 +206,32 @@ Proof.
     + apply IH with n; assumption.
 Qed.
 
-(* A selected checked argument has the sort found in the reversed signature.    *)
-Proposition CheckArgT :
-  forall (E:Env) (G:Ctx) (args:Terms) (tys:list Ty) (n:nat) (ty:Ty),
-    CheckTs E G args tys                     ->
-    typeOf (rev tys) n = Some ty             ->
-    CheckT E G (argT args n) ty.
+(* A selected checked term has the sort found in the unreversed sort list.      *)
+Proposition CheckTsArgT :
+  forall (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty) (n:nat) (ty:Ty),
+    CheckTs E G ts (rev tys)                 ->
+    nth_error tys n = Some ty                ->
+    CheckT E G (argT ts n) ty.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros E G args tys n ty H1 H2.
+  intros E G ts tys n ty H1 H2.
+  assert (CheckTs E G (revT ts) tys) as H3. {
+    (* Reversing the checked terms also reverses the reversed sort list.        *)
+    assert (rev (rev tys) = tys) as H3. { apply rev_involutive. }
+    rewrite <- H3. apply CheckTsRev. assumption.
+  }
   unfold argT.
-  (* If the reversed argument lookup succeeds, reversal and context lookup match
-     it with the corresponding sort.                                            *)
-  destruct (nthT (revT args) n) as [t|] eqn:H3.
-  - unfold nthT in H3.
-    rewrite TypeOf.NthError in H2.
-    apply (CheckTsNth E G (revT args) (rev tys) n); try assumption.
-    apply CheckTsRev. assumption.
-    (* If the reversed argument lookup failed, the matching reversed sort lookup
-       would fail too, contradicting the successful context lookup.             *)
-  -  unfold nthT in H3.
-    assert (lengthT (revT args) = List.length (rev tys)) as H5. {
-      apply CheckTsLength with E G. apply CheckTsRev. assumption.
+  (* If the reversed term lookup succeeds, it matches the unreversed sort list. *)
+  destruct (nthT (revT ts) n) as [t|] eqn:H4.
+  - apply (CheckTsNth E G (revT ts) tys n); assumption.
+    (* If the term lookup failed, the matching sort lookup would fail too.      *)
+  - unfold nthT in H4.
+    assert (lengthT (revT ts) = List.length tys) as H5. {
+      apply CheckTsLength with E G. assumption.
     }
-    assert (nth_error (rev tys) n = None) as H6. {
+    assert (nth_error tys n = None) as H6. {
       apply nth_error_None. rewrite <- H5. apply nth_error_None. assumption.
     }
-    rewrite TypeOf.NthError in H2.
     rewrite H2 in H6. discriminate.
 Qed.
 
