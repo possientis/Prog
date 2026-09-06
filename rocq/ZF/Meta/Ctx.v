@@ -32,17 +32,6 @@ Proof.
     apply IH.
 Qed.
 
-(* A lookup remains valid after adding newer variables in front.                *)
-Proposition TypeOfAppR :
-  forall (G D:Ctx) (n:nat) (ty:Ty),
-    typeOf D n = Some ty                      ->
-    typeOf (G ++ D) (length G + n) = Some ty.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  intros G D n ty H1.
-  induction G as [|ty' G IH]; assumption.
-Qed.
-
 (* A lookup in the front context is unchanged by adding older variables.        *)
 Proposition TypeOfAppL :
   forall (G D:Ctx) (n:nat) (ty:Ty),
@@ -59,17 +48,28 @@ Proof.
     + apply IH. assumption.
 Qed.
 
-(* A lookup past a front context is a lookup in the older tail context.         *)
-Proposition TypeOfAppSplitR :
-  forall (D G:Ctx) (n:nat) (ty:Ty),
-    length D <= n                             ->
-    typeOf (D ++ G) n = Some ty               ->
-    typeOf G (n - length D) = Some ty.
+(* A lookup remains valid after adding newer variables in front.                *)
+Proposition TypeOfAppR :
+  forall (G D:Ctx) (n:nat) (ty:Ty),
+    typeOf D n = Some ty                      ->
+    typeOf (G ++ D) (length G + n) = Some ty.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros D G n ty H1 H2.
+  intros G D n ty H1.
+  induction G as [|ty' G IH]; assumption.
+Qed.
+
+(* A lookup past a front context is a lookup in the older tail context.         *)
+Proposition TypeOfAppSplitR :
+  forall (G D:Ctx) (n:nat) (ty:Ty),
+    length G <= n                             ->
+    typeOf (G ++ D) n = Some ty               ->
+    typeOf D (n - length G) = Some ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G D n ty H1 H2.
   generalize dependent n.
-  induction D as [|ty' D IH]; intros n H1 H2.
+  induction G as [|ty' G IH]; intros n H1 H2.
   - (* With no front context, the lookup is already in the tail context.        *)
     rewrite Nat.sub_0_r. assumption.
   - (* Successor indices past a non-empty front context descend through it.     *)
