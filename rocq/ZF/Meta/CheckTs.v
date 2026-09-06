@@ -51,8 +51,7 @@ Proposition App :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E G ts us tys uys H1.
-  generalize dependent uys.
-  generalize dependent us.
+  revert us uys.
   (* The proof follows the checked prefix; the empty prefix adds nothing.       *)
   induction H1 as [G|G t ts ty tys H1 H2 IH]; intros us uys H3. 1: assumption.
   (* Matching heads remain matching heads after appending the same suffixes.    *)
@@ -88,9 +87,7 @@ Proposition Nth :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E G ts tys n t ty H1.
-  generalize dependent ty.
-  generalize dependent t.
-  generalize dependent n.
+  revert n t ty.
   induction H1 as [G|G t' ts ty' tys H1 H2 IH]; intros n t ty H3 H4.
   - destruct n as [|n]; discriminate.
   - destruct n as [|n].

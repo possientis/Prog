@@ -20,7 +20,7 @@ Proposition NthError :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros G n.
-  generalize dependent n.
+  revert n.
   induction G as [|ty G IH]; intros n.
   - (* In the empty context, every lookup fails on both sides.                  *)
     destruct n as [|n]; reflexivity.
@@ -37,7 +37,7 @@ Proposition AppL :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros G D n ty H1.
-  generalize dependent n.
+  revert n H1.
   induction G as [|ty' G IH]; intros n H1.
   - discriminate.
   - destruct n as [|n].
@@ -65,7 +65,7 @@ Proposition AppSplitL :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros G D n ty H1 H2.
-  generalize dependent n.
+  revert n H1 H2.
   induction G as [|ty' G IH]; intros n H1 H2.
   - (* No lookup can lie before the end of the empty context.                   *)
     inversion H1.
@@ -86,7 +86,7 @@ Proposition AppSplitR :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros G D n ty H1 H2.
-  generalize dependent n.
+  revert n H1 H2.
   induction G as [|ty' G IH]; intros n H1 H2.
   - (* With no front context, the lookup is already in the tail context.        *)
     rewrite Nat.sub_0_r. assumption.
@@ -105,7 +105,7 @@ Proposition LtLength :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros G n ty H1.
-  generalize dependent n.
+  revert n H1.
   induction G as [|ty' G IH]; intros n H1.
   - discriminate.
   - destruct n as [|n].
