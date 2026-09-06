@@ -97,6 +97,40 @@ Proof.
       apply le_S_n. assumption.
 Qed.
 
+(* A left lookup is preserved when a middle context is inserted.                *)
+Proposition ThreeL :
+  forall (G M D:Ctx) (n:nat) (ty:Ty),
+    n < length G                              ->
+    typeOf (G ++ D) n = Some ty               ->
+    typeOf (G ++ M ++ D) n = Some ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G M D n ty H1 H2.
+  (* Lookup already in the left context, so inserting the middle has no effect. *)
+  assert (typeOf G n = Some ty) as H3. {apply (AppSplitL G D); assumption. }
+  apply (AppL G (M ++ D)); assumption.
+Qed.
+
+(* A right lookup is shifted when a middle context is inserted.                 *)
+Proposition ThreeR :
+  forall (G M D:Ctx) (n:nat) (ty:Ty),
+    length G <= n                             ->
+    typeOf (G ++ D) n = Some ty               ->
+    typeOf (G ++ M ++ D) (n + length M) = Some ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros G M D n ty H1 H2.
+  revert n H1 H2.
+  induction G as [|ty' G IH]; intros n H1 H2.
+  - (* The shifted lookup is just a right lookup past the middle context.       *)
+    rewrite Nat.add_comm. apply (AppR M D). assumption.
+  - (* Past a non-empty left context, both lookups descend together.            *)
+    destruct n as [|n].
+    + inversion H1.
+    + apply IH. 2: assumption.
+      apply le_S_n. assumption.
+Qed.
+
 (* A successful lookup is within the length of its context.                     *)
 Proposition LtLength :
   forall (G:Ctx) (n:nat) (ty:Ty),
