@@ -9,6 +9,7 @@ Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Proof.Decl.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Term.Decl.
+Require Import ZF.Meta.TypeOf.
 Require Import ZF.Meta.Ty.
 Require Import ZF.Meta.Unique.
 
@@ -216,7 +217,7 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E G ts D n t ty H1 H2 H3.
   (* The type context lookup is the same as the matching list lookup.           *)
-  rewrite TypeOfNthError in H3.
+  rewrite TypeOf.NthError in H3.
   (* The structural list theorem then gives the sort of the selected term.      *)
   apply (CheckTsNth E G ts D n); assumption.
 Qed.
@@ -246,7 +247,7 @@ Proof.
     assert (nth_error (rev tys) n = None) as H6. {
       apply nth_error_None. rewrite <- H5. apply nth_error_None. assumption.
     }
-    rewrite TypeOfNthError in H2.
+    rewrite TypeOf.NthError in H2.
     rewrite H2 in H6. discriminate.
 Qed.
 
