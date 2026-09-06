@@ -92,3 +92,130 @@ Proposition ShiftZeroT : forall (t:Term),
 Proof.
   intros t. apply WhenZero.
 Qed.
+
+
+(* A later lifting commutes with an earlier lifting at a lower cutoff.          *)
+Proposition Comm :
+  (forall (t:Term) (i j k l:nat), i <= k ->
+    fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t))          /\
+  (forall (p:Proof) (i j k l:nat), i <= k ->
+    fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p))          /\
+  (forall (ts:Terms) (i j k l:nat), i <= k ->
+    fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Induction.
+  - intros i j k l H1. reflexivity.
+  - intros i j k l H1. reflexivity.
+  - intros n i j k l H1. simpl.
+    (* A variable below the first cutoff is below both later cutoffs.           *)
+    destruct (n <? i) eqn:H2.
+    + apply Nat.ltb_lt in H2.
+      assert (n < k) as H3. {
+        apply Nat.lt_le_trans with (m := i); assumption. }
+      assert ((n <? k) = true) as H4. { apply Nat.ltb_lt. assumption. }
+      assert (n < k + j) as H5. {
+        apply Nat.lt_le_trans with (m := k).
+        1: assumption.
+        apply Nat.le_add_r. }
+      assert ((n <? k + j) = true) as H6. { apply Nat.ltb_lt. assumption. }
+      assert ((n <? i) = true) as H7. { apply Nat.ltb_lt. assumption. }
+      simpl. rewrite H6. simpl. rewrite H4. simpl. rewrite H7. reflexivity.
+    + apply Nat.ltb_ge in H2.
+      (* A remaining variable is either between the cutoffs or after both.      *)
+      destruct (n <? k) eqn:H3.
+      * apply Nat.ltb_lt in H3.
+        assert (n + j < k + j) as H4. {
+          apply Nat.add_lt_mono_r. assumption. }
+        assert ((n + j <? k + j) = true) as H5. {
+          apply Nat.ltb_lt. assumption. }
+        assert ((n <? i) = false) as H6. { apply Nat.ltb_ge. assumption. }
+        simpl. rewrite H5. simpl. rewrite H6. reflexivity.
+      * apply Nat.ltb_ge in H3.
+        assert (k + j <= n + j) as H4. {
+          apply Nat.add_le_mono_r. assumption. }
+        assert ((n + j <? k + j) = false) as H5. {
+          apply Nat.ltb_ge. assumption. }
+        assert (i <= n + l) as H6. {
+          apply Nat.le_trans with (m := k).
+          1: assumption.
+          apply Nat.le_trans with (m := n).
+          1: assumption.
+          apply Nat.le_add_r. }
+        assert ((n + l <? i) = false) as H7. { apply Nat.ltb_ge. assumption. }
+        simpl. rewrite H5. simpl. rewrite H7.
+        assert (n + j + l = n + l + j) as H8. {
+          rewrite <- Nat.add_assoc.
+          rewrite (Nat.add_comm j l).
+          rewrite Nat.add_assoc. reflexivity. }
+        rewrite H8. reflexivity.
+  - intros ty i j k l H1. reflexivity.
+  - intros name args IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros x y IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros p q IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros p q IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros p q IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros p q IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros p IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros p IH i j k l H1. simpl.
+    (* Under a binder both cutoffs advance by one, preserving their order.      *)
+    assert (S (k + j) = S k + j) as H2. { reflexivity. }
+    rewrite H2. rewrite IH. 2: apply le_n_S; assumption. reflexivity.
+  - intros p IH i j k l H1. simpl.
+    assert (S (k + j) = S k + j) as H2. { reflexivity. }
+    rewrite H2. rewrite IH. 2: apply le_n_S; assumption. reflexivity.
+  - intros p IH i j k l H1. simpl.
+    assert (S (k + j) = S k + j) as H2. { reflexivity. }
+    rewrite H2. rewrite IH. 2: apply le_n_S; assumption. reflexivity.
+  - intros A x IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros A p q IH1 IH2 IH3 i j k l H1. simpl.
+    rewrite IH1, IH2, IH3; try assumption. reflexivity.
+  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros name ts IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros i j k l H1. reflexivity.
+  - intros t ts IH1 IH2 i j k l H1. simpl.
+    rewrite IH1, IH2; try assumption. reflexivity.
+Qed.
+
+(* A later lifting commutes with an earlier lifting in terms.                   *)
+Proposition CommT : forall (t:Term) (i j k l:nat), i <= k ->
+  fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Comm.
+Qed.
+
+(* A later lifting commutes with an earlier lifting in proofs.                  *)
+Proposition CommP : forall (p:Proof) (i j k l:nat), i <= k ->
+  fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Comm.
+Qed.
+
+(* A later lifting commutes with an earlier lifting in term arguments.          *)
+Proposition CommTs : forall (ts:Terms) (i j k l:nat), i <= k ->
+  fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Comm.
+Qed.
