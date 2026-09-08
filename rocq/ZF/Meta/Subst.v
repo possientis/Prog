@@ -4,6 +4,7 @@ Require Import Coq.Lists.List.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Syntax.
 
+(* Substitution at level i leaves lower bound variables and replaces the rest.  *)
 Fixpoint fromT (i:nat) (r:nat -> Term) (t:Term) : Term :=
   match t with
   | Bot              => Bot
@@ -44,3 +45,20 @@ with fromTs (i:nat) (r:nat -> Term) (ts:Terms) : Terms :=
 Definition substT (r:nat -> Term) (t:Term)  : Term := fromT 0 r t.
 
 Definition substP (r:nat -> Term) (p:Proof) : Proof := fromP 0 r p.
+
+(* Substitution through term arguments preserves successful lookup.             *)
+Proposition NthT : forall (ts:Terms) (i:nat) (r:nat -> Term) (n:nat) (t:Term),
+  nthT ts n = Some t -> nthT (fromTs i r ts) n = Some (fromT i r t).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts i r n t H1.
+  revert n t H1.
+  (* Lookup in the empty argument list cannot succeed.                          *)
+  induction ts as [|u ts IH]; intros n t H1.
+  - destruct n as [|n]; discriminate.
+  - destruct n as [|n].
+    + (* The first lookup returns the substituted first argument.               *)
+      inversion H1. subst. reflexivity.
+    + (* Later lookups are preserved by the induction hypothesis.               *)
+      apply IH. assumption.
+Qed.
