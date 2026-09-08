@@ -55,3 +55,17 @@ Proof.
   }
   rewrite H2. reflexivity.
 Qed.
+
+(* Substituted argument lookup past the supplied arguments returns a variable.  *)
+Proposition ArgTFromTsVar : forall (ts:Terms) (i:nat) (r:nat -> Term) (n:nat),
+  lengthT ts <= n                         ->
+  argT (fromTs i r ts) n = Var (n - lengthT ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts i r n H1.
+  assert (lengthT (fromTs i r ts) = lengthT ts) as H2. { apply LengthT. }
+  (* The substituted arguments have the same length, so lookup remains past it. *)
+  assert (argT (fromTs i r ts) n = Var (n - lengthT (fromTs i r ts))) as H3. {
+    apply ArgTVar. rewrite H2. assumption. }
+  rewrite H3, H2. reflexivity.
+Qed.
