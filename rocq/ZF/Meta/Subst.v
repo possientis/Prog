@@ -46,6 +46,18 @@ Definition substT (r:nat -> Term) (t:Term)  : Term := fromT 0 r t.
 
 Definition substP (r:nat -> Term) (p:Proof) : Proof := fromP 0 r p.
 
+(* Substitution through appended term arguments acts on each side.              *)
+Proposition AppT : forall (ts us:Terms) (i:nat) (r:nat -> Term),
+  fromTs i r (appT ts us) = appT (fromTs i r ts) (fromTs i r us).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts us i r.
+  (* The empty left side leaves only the substituted right side.                *)
+  induction ts as [|t ts IH]. 1: reflexivity.
+  (* A non-empty left side keeps its substituted head and recurses on the tail. *)
+  simpl. rewrite IH. reflexivity.
+Qed.
+
 (* Substitution through term arguments preserves successful lookup.             *)
 Proposition NthT : forall (ts:Terms) (i:nat) (r:nat -> Term) (n:nat) (t:Term),
   nthT ts n = Some t -> nthT (fromTs i r ts) n = Some (fromT i r t).
