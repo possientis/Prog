@@ -24,6 +24,21 @@ Proof.
   intros ts n t H1. unfold argT. rewrite H1. reflexivity.
 Qed.
 
+(* Substitution preserves argument lookup when the lookup selects an argument.  *)
+Proposition ArgTFromTsNth : forall (ts:Terms) (i:nat) (r:nat -> Term)
+  (n:nat) (t:Term),
+  nthT (revT ts) n = Some t               ->
+  argT (fromTs i r ts) n = fromT i r t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts i r n t H1.
+  unfold argT.
+  (* The reversed substituted list has the substituted selected argument.       *)
+  assert (nthT (revT (fromTs i r ts)) n = Some (fromT i r t)) as H2. {
+    rewrite <- RevT. apply NthT. assumption. }
+  rewrite H2. reflexivity.
+Qed.
+
 (* Argument lookup past the supplied arguments returns a remaining variable.    *)
 Proposition ArgTVar : forall (ts:Terms) (n:nat),
   lengthT ts <= n                         ->
