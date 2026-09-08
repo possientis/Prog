@@ -219,3 +219,83 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Comm.
 Qed.
+
+(* Lifting above an earlier lifting combines with the earlier lifting.          *)
+Proposition Add :
+  (forall (t:Term) (i j k l:nat),
+    fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t)          /\
+  (forall (p:Proof) (i j k l:nat),
+    fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p)          /\
+  (forall (ts:Terms) (i j k l:nat),
+    fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Induction.
+  - intros i j k l. reflexivity.
+  - intros i j k l. reflexivity.
+  - intros n i j k l. simpl.
+    (* Variables below the earlier cutoff remain below the later cutoff.        *)
+    destruct (n <? i) eqn:H1.
+    + apply Nat.ltb_lt in H1.
+      assert ((n <? i + j) = true) as H2. {
+        apply Nat.ltb_lt.
+        apply Nat.lt_le_trans with (m := i).
+        1: assumption.
+        apply Nat.le_add_r. }
+      simpl. rewrite H2. reflexivity.
+    + apply Nat.ltb_ge in H1.
+      assert ((n + (j + l) <? i + j) = false) as H2. {
+        apply Nat.ltb_ge.
+        apply Nat.add_le_mono; try assumption.
+        apply Nat.le_add_r. }
+      simpl. rewrite H2.
+      assert (n + (j + l) + k = n + (j + k + l)) as H4. {
+        rewrite <- Nat.add_assoc.
+        assert (j + l + k = j + k + l) as H4. {
+          rewrite <- Nat.add_assoc.
+          rewrite (Nat.add_comm l k).
+          rewrite Nat.add_assoc. reflexivity. }
+        rewrite H4. reflexivity. }
+      rewrite H4. reflexivity.
+  - intros ty i j k l. reflexivity.
+  - intros name args IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros p IH i j k l. simpl.
+    assert (S (i + j) = S i + j) as H1. { reflexivity. }
+    rewrite H1. rewrite IH. reflexivity.
+  - intros p IH i j k l. simpl.
+    assert (S (i + j) = S i + j) as H1. { reflexivity. }
+    rewrite H1. rewrite IH. reflexivity.
+  - intros p IH i j k l. simpl.
+    assert (S (i + j) = S i + j) as H1. { reflexivity. }
+    rewrite H1. rewrite IH. reflexivity.
+  - intros A x IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A p q IH1 IH2 IH3 i j k l. simpl.
+    rewrite IH1, IH2, IH3. reflexivity.
+  - intros t IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros t IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros name ts IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros i j k l. reflexivity.
+  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+Qed.
+
+(* Lifting above an already full-lifted term gives another full lifting.        *)
+Proposition FromShiftT : forall (t:Term) (i j k:nat),
+  fromT i j (shiftT (i + k) t) = shiftT (i + j + k) t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros t i j k. unfold shiftT.
+  assert (0 + i = i) as H1. { reflexivity. }
+  rewrite <- H1. apply Add.
+Qed.

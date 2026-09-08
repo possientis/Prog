@@ -1,5 +1,9 @@
+Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
+Require Import Lia.
 
+Require Import ZF.Meta.Induction.
+Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Subst.
 Require Import ZF.Meta.Syntax.
 
@@ -68,4 +72,220 @@ Proof.
   assert (argT (fromTs i r ts) n = Var (n - lengthT (fromTs i r ts))) as H3. {
     apply ArgTVar. rewrite H2. assumption. }
   rewrite H3, H2. reflexivity.
+Qed.
+
+(* Applying arguments below a lifting lowers the lifting by their length.       *)
+Proposition Shift :
+  (forall (t:Term) (ts:Terms) (i k:nat),
+    fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
+    Shift.fromT k i t)                                                    /\
+  (forall (p:Proof) (ts:Terms) (i k:nat),
+    fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
+    Shift.fromP k i p)                                                    /\
+  (forall (us:Terms) (ts:Terms) (i k:nat),
+    fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
+    Shift.fromTs k i us).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Induction.
+  - intros ts i k. reflexivity.
+  - intros ts i k. reflexivity.
+  - intros n ts i k. simpl.
+    (* A variable below the cutoff is untouched by both lifting and arguments.  *)
+    destruct (n <? k) eqn:H1.
+    + simpl. rewrite H1. reflexivity.
+    + assert (k <= n) as H2. { apply Nat.ltb_ge. assumption. }
+      assert ((n + (i + lengthT ts) <? k) = false) as H3. {
+        apply Nat.ltb_ge.
+        apply Nat.le_trans with (m := n). 1: assumption.
+        apply Nat.le_add_r. }
+      simpl. rewrite H3.
+      assert (lengthT ts <= n + (i + lengthT ts) - k) as H4. {
+        rewrite Nat.add_sub_swap. 2: assumption.
+        apply Nat.le_trans with (m := i + lengthT ts).
+        1: apply Nat.le_add_l. apply Nat.le_add_l. }
+      rewrite ArgTVar. 2: assumption.
+      simpl.
+      assert (n + (i + lengthT ts) - k - lengthT ts + k = n + i) as H5. {
+        assert (n + (i + lengthT ts) - k = n - k + (i + lengthT ts)) as H5. {
+          apply Nat.add_sub_swap. assumption. }
+        rewrite H5.
+        assert (n - k + (i + lengthT ts) - lengthT ts = n - k + i) as H6. {
+          rewrite <- Nat.add_sub_assoc. 2: apply Nat.le_add_l.
+          rewrite Nat.add_sub. reflexivity. }
+        rewrite H6. rewrite Nat.add_comm.
+        rewrite Nat.add_assoc. rewrite Nat.add_comm with (n := k) (m := n - k).
+        rewrite Nat.sub_add. 2: assumption.
+        reflexivity. }
+      unfold shiftT. simpl. rewrite H5. reflexivity.
+  - intros ty ts i k. reflexivity.
+  - intros name args IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros p IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros p IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros p IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros A x IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A p q IH1 IH2 IH3 ts i k. simpl.
+    rewrite IH1, IH2, IH3. reflexivity.
+  - intros t IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros t IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros name us IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros ts i k. reflexivity.
+  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
+Qed.
+
+(* Substitution through application acts on the body and the arguments.         *)
+Proposition From :
+  (forall (t:Term) (ts:Terms) (i k:nat) (r:nat -> Term),
+    fromT (k + i) r (fromT k (argT ts) t) =
+    fromT k (argT (fromTs i r ts))
+      (fromT (k + i + lengthT ts) r t))                                  /\
+  (forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
+    fromP (k + i) r (fromP k (argT ts) p) =
+    fromP k (argT (fromTs i r ts))
+      (fromP (k + i + lengthT ts) r p))                                  /\
+  (forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
+    fromTs (k + i) r (fromTs k (argT ts) us) =
+    fromTs k (argT (fromTs i r ts))
+      (fromTs (k + i + lengthT ts) r us)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Induction.
+  - intros ts i k r. reflexivity.
+  - intros ts i k r. reflexivity.
+  - intros n ts i k r. simpl.
+    (* Variables before the argument cutoff are not affected by either side.    *)
+    destruct (n <? k) eqn:H1.
+    + assert ((n <? k + i + lengthT ts) = true) as H2. {
+        apply Nat.ltb_lt. apply Nat.ltb_lt in H1. lia. }
+      assert ((n <? k + i) = true) as H3. {
+        apply Nat.ltb_lt. apply Nat.ltb_lt in H1. lia. }
+      simpl. rewrite H3. rewrite H2. simpl. rewrite H1. reflexivity.
+    + assert (k <= n) as H2. { apply Nat.ltb_ge. assumption. }
+      (* Variables in the argument block are supplied by substituted arguments. *)
+      destruct (Nat.lt_ge_cases (n - k) (lengthT ts)) as [H3|H3].
+      * destruct (nthT (revT ts) (n - k)) as [t|] eqn:H4.
+        -- assert ((n <? k + i + lengthT ts) = true) as H5. {
+             apply Nat.ltb_lt. lia. }
+           rewrite (ArgTNth ts (n - k) t). 2: assumption.
+           unfold shiftT. rewrite ShiftFromT.
+           rewrite H5. simpl. rewrite H1.
+           rewrite (ArgTFromTsNth ts i r (n - k) t). 2: assumption.
+           reflexivity.
+        -- assert (nthT (revT ts) (n - k) = None) as H5. { assumption. }
+           unfold nthT in H5. apply nth_error_None in H5.
+           unfold lengthT in H3. rewrite ToListRevT in H5.
+           rewrite length_rev in H5. apply Nat.nle_gt in H3. contradiction.
+      * assert (argT ts (n - k) = Var (n - k - lengthT ts)) as H4. {
+          apply ArgTVar. assumption. }
+        rewrite H4. unfold shiftT. simpl.
+        destruct (n <? k + i + lengthT ts) eqn:H5.
+        -- assert ((n - k - lengthT ts + k <? k + i) = true) as H6. {
+             apply Nat.ltb_lt. apply Nat.ltb_lt in H5. lia. }
+           rewrite H6. simpl. rewrite H1.
+           rewrite ArgTFromTsVar. 2: assumption.
+           unfold shiftT. simpl. reflexivity.
+        -- assert ((n - k - lengthT ts + k <? k + i) = false) as H6. {
+             apply Nat.ltb_ge. apply Nat.ltb_ge in H5. lia. }
+           rewrite H6. simpl.
+           assert (n - k - lengthT ts + k - (k + i) =
+             n - (k + i + lengthT ts)) as H7. { lia. }
+           rewrite H7.
+           rewrite <- (LengthT ts i r).
+           assert (Shift.fromT 0 (k + i + lengthT (fromTs i r ts))
+             (r (n - (k + i + lengthT (fromTs i r ts)))) =
+             Shift.fromT k (i + lengthT (fromTs i r ts))
+               (shiftT k (r (n - (k + i + lengthT (fromTs i r ts)))))) as H8. {
+             unfold shiftT at 1.
+             assert (Shift.fromT 0 k
+               (r (n - (k + i + lengthT (fromTs i r ts)))) =
+               shiftT (k + 0)
+                 (r (n - (k + i + lengthT (fromTs i r ts))))) as H8. {
+               unfold shiftT. rewrite Nat.add_0_r. reflexivity. }
+             rewrite H8.
+             rewrite (Shift.FromShiftT
+               (r (n - (k + i + lengthT (fromTs i r ts)))) k
+               (i + lengthT (fromTs i r ts)) 0).
+             unfold shiftT.
+             assert (k + (i + lengthT (fromTs i r ts)) + 0 =
+               k + i + lengthT (fromTs i r ts)) as H9. { lia. }
+             rewrite H9. reflexivity. }
+           rewrite H8.
+           rewrite (proj1 Shift
+             (shiftT k (r (n - (k + i + lengthT (fromTs i r ts)))))
+             (fromTs i r ts) i k).
+           unfold shiftT at 2.
+           assert (Shift.fromT 0 k
+             (r (n - (k + i + lengthT (fromTs i r ts)))) =
+             shiftT (k + 0)
+               (r (n - (k + i + lengthT (fromTs i r ts))))) as H9. {
+             unfold shiftT. rewrite Nat.add_0_r. reflexivity. }
+           rewrite H9.
+           rewrite (Shift.FromShiftT
+             (r (n - (k + i + lengthT (fromTs i r ts)))) k i 0).
+           assert (k + i + 0 = k + i) as H10. { lia. }
+           unfold shiftT at 1. rewrite H10.
+           reflexivity.
+  - intros ty ts i k r. reflexivity.
+  - intros name args IH ts i k r. simpl. rewrite IH. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p IH ts i k r. simpl. rewrite IH. reflexivity.
+  - intros p IH ts i k r. simpl.
+    assert (S (k + i) = S k + i) as H1. { reflexivity. }
+    rewrite H1.
+    assert (S (k + i + lengthT ts) = S k + i + lengthT ts) as H2. {
+      reflexivity. }
+    rewrite H2. rewrite IH. reflexivity.
+  - intros p IH ts i k r. simpl.
+    assert (S (k + i) = S k + i) as H1. { reflexivity. }
+    rewrite H1.
+    assert (S (k + i + lengthT ts) = S k + i + lengthT ts) as H2. {
+      reflexivity. }
+    rewrite H2. rewrite IH. reflexivity.
+  - intros p IH ts i k r. simpl.
+    assert (S (k + i) = S k + i) as H1. { reflexivity. }
+    rewrite H1.
+    assert (S (k + i + lengthT ts) = S k + i + lengthT ts) as H2. {
+      reflexivity. }
+    rewrite H2. rewrite IH. reflexivity.
+  - intros A x IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A p q IH1 IH2 IH3 ts i k r. simpl.
+    rewrite IH1, IH2, IH3. reflexivity.
+  - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
+  - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
+  - intros name us IH ts i k r. simpl. rewrite IH. reflexivity.
+  - intros ts i k r. reflexivity.
+  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
+Qed.
+
+(* Substitution through an applied term substitutes body and arguments.         *)
+Proposition FromT : forall (t:Term) (ts:Terms) (i:nat) (r:nat -> Term),
+  fromT i r (applyT t ts) =
+  applyT (fromT (i + lengthT ts) r t) (fromTs i r ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros t ts i r. unfold applyT, substT.
+  assert (i = 0 + i) as H1. { reflexivity. }
+  rewrite H1. apply From.
 Qed.
