@@ -46,6 +46,18 @@ Definition substT (r:nat -> Term) (t:Term)  : Term := fromT 0 r t.
 
 Definition substP (r:nat -> Term) (p:Proof) : Proof := fromP 0 r p.
 
+(* Substitution through term arguments preserves their length.                  *)
+Proposition LengthT : forall (ts:Terms) (i:nat) (r:nat -> Term),
+  lengthT (fromTs i r ts) = lengthT ts.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts i r.
+  (* The empty argument list has the same length after substitution.            *)
+  induction ts as [|t ts IH]. 1: reflexivity.
+  (* A non-empty list keeps one head and substitutes through the tail.          *)
+  unfold lengthT. unfold lengthT in IH. simpl. rewrite IH. reflexivity.
+Qed.
+
 (* Substitution through appended term arguments acts on each side.              *)
 Proposition AppT : forall (ts us:Terms) (i:nat) (r:nat -> Term),
   fromTs i r (appT ts us) = appT (fromTs i r ts) (fromTs i r us).
