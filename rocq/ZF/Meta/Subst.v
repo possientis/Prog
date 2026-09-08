@@ -58,6 +58,18 @@ Proof.
   simpl. rewrite IH. reflexivity.
 Qed.
 
+(* Substitution through reversed term arguments reverses substituted arguments. *)
+Proposition RevT : forall (ts:Terms) (i:nat) (r:nat -> Term),
+  fromTs i r (revT ts) = revT (fromTs i r ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros ts i r.
+  (* The empty argument list is unchanged by both substitution and reversal.    *)
+  induction ts as [|t ts IH]. 1: reflexivity.
+  (* Reversal and substitution commute by the append compatibility.             *)
+  simpl. rewrite AppT. rewrite IH. reflexivity.
+Qed.
+
 (* Substitution through term arguments preserves successful lookup.             *)
 Proposition NthT : forall (ts:Terms) (i:nat) (r:nat -> Term) (n:nat) (t:Term),
   nthT ts n = Some t -> nthT (fromTs i r ts) n = Some (fromT i r t).
