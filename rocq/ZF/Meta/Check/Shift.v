@@ -33,19 +33,29 @@ Qed.
 
 (* Lifting above a checked object leaves it unchanged.                          *)
 Proposition Above : forall (E:Env),
-  (forall (G:Ctx) (t:Term) (ty:Ty),
-    CheckT E G t ty -> forall (i j:nat), length G <= i ->
+  (forall (G:Ctx) (t:Term) (ty:Ty) (i j:nat),
+    CheckT E G t ty -> length G <= i ->
     Shift.fromT i j t = t)                                               /\
-  (forall (G:Ctx) (ts:Terms) (tys:list Ty),
-    CheckTs E G ts tys -> forall (i j:nat), length G <= i ->
+  (forall (G:Ctx) (ts:Terms) (tys:list Ty) (i j:nat),
+    CheckTs E G ts tys -> length G <= i ->
     Shift.fromTs i j ts = ts)                                            /\
-  (forall (G:Ctx) (p:Proof) (t:Term),
-    CheckP E G p t -> forall (i j:nat), length G <= i ->
+  (forall (G:Ctx) (p:Proof) (t:Term) (i j:nat),
+    CheckP E G p t -> length G <= i ->
     Shift.fromP i j p = p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E.
-  apply Induction.
+  assert (
+    (forall (G:Ctx) (t:Term) (ty:Ty),
+      CheckT E G t ty -> forall (i j:nat), length G <= i ->
+      Shift.fromT i j t = t)                                             /\
+    (forall (G:Ctx) (ts:Terms) (tys:list Ty),
+      CheckTs E G ts tys -> forall (i j:nat), length G <= i ->
+      Shift.fromTs i j ts = ts)                                          /\
+    (forall (G:Ctx) p (t:Term),
+      CheckP E G p t -> forall (i j:nat), length G <= i ->
+      Shift.fromP i j p = p)) as H1. {
+    apply Induction.
   - intros G i j H1. reflexivity.
   - intros G i j H1. reflexivity.
   - intros G n ty H1 i j H2. simpl.
@@ -97,4 +107,40 @@ Proof.
   - intros G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
   - intros G name args tys t H1 H2 H3 i j H4. simpl.
     rewrite H3. reflexivity. assumption.
+  }
+  destruct H1 as [H1 [H2 H3]].
+  split.
+  - intros G t ty i j H4 H5. apply (H1 G t ty); assumption.
+  - split.
+    + intros G ts tys i j H4 H5. apply (H2 G ts tys); assumption.
+    + intros G p t i j H4 H5. apply (H3 G p t); assumption.
 Qed.
+
+(* Lifting above a checked term leaves it unchanged.                            *)
+Proposition AboveT : forall (E:Env) (G:Ctx) (t:Term) (ty:Ty) (i j:nat),
+  CheckT E G t ty -> length G <= i ->
+  Shift.fromT i j t = t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Above.
+Qed.
+
+(* Lifting above checked term arguments leaves them unchanged.                  *)
+Proposition AboveTs : forall (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty)
+  (i j:nat),
+  CheckTs E G ts tys -> length G <= i ->
+  Shift.fromTs i j ts = ts.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Above.
+Qed.
+
+(* Lifting above a checked proof leaves it unchanged.                           *)
+Proposition AboveP : forall (E:Env) (G:Ctx) (p:Proof) (t:Term) (i j:nat),
+  CheckP E G p t -> length G <= i ->
+  Shift.fromP i j p = p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Above.
+Qed.
+
