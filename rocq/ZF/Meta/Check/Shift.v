@@ -1,14 +1,19 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
+Require Import ZF.Meta.Apply.
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.Induction.
+Require Import ZF.Meta.Check.Ts.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
+Require Import ZF.Meta.Exists.
+Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.TypeOf.
 Require Import ZF.Meta.Ty.
+Require Import ZF.Meta.Unique.
 
 Import ListNotations.
 
@@ -142,5 +147,146 @@ Proposition AboveP : forall (E:Env) (G:Ctx) (p:Proof) (t:Term) (i j:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Above.
+Qed.
+
+(* Weakening preserves checked objects across an inserted context.              *)
+Proposition From : forall (E:Env),
+  (forall (name:Name) (tys:list Ty) (t:Term),
+    sigP E name = Some (tys,t) -> CheckT E (rev tys) t TyProp)            ->
+  (forall (G M D:Ctx) (t:Term) (ty:Ty),
+    CheckT E (G ++ D) t ty ->
+    CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty)      /\
+  (forall (G M D:Ctx) (ts:Terms) (tys:list Ty),
+    CheckTs E (G ++ D) ts tys ->
+    CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)  /\
+  (forall (G M D:Ctx) (p:Proof) (t:Term),
+    CheckP E (G ++ D) p t ->
+    CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
+      (Shift.fromT (length G) (length M) t)).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E H1.
+  assert (
+    (forall (C:Ctx) (t:Term) (ty:Ty), CheckT E C t ty ->
+      forall (G M D:Ctx), C = G ++ D ->
+      CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty)    /\
+    (forall (C:Ctx) (ts:Terms) (tys:list Ty), CheckTs E C ts tys ->
+      forall (G M D:Ctx), C = G ++ D ->
+      CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)/\
+    (forall (C:Ctx) p (t:Term), CheckP E C p t ->
+      forall (G M D:Ctx), C = G ++ D ->
+      CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
+        (Shift.fromT (length G) (length M) t))) as H2. {
+    apply Induction.
+    - intros C G M D H2. subst. apply CheckBot.
+    - intros C G M D H2. subst. apply CheckTop.
+    - intros C n ty H2 G M D H3. subst. apply VarT. assumption.
+    - intros C ty G M D H2. subst. apply CheckHoleT.
+    - intros C name args tys ty H2 H3 H4 G M D H5. subst. simpl.
+      apply CheckIdentT with (tys := tys). 1: assumption. apply H4. reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckElem; [apply H3|apply H5]; reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckLeq; [apply H3|apply H5]; reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckGeq; [apply H3|apply H5]; reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckLt; [apply H3|apply H5]; reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckGt; [apply H3|apply H5]; reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckEqual; [apply H3|apply H5]; reflexivity.
+    - intros C x y H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckNotEq; [apply H3|apply H5]; reflexivity.
+    - intros C p q H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckImp; [apply H3|apply H5]; reflexivity.
+    - intros C p q H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckIff; [apply H3|apply H5]; reflexivity.
+    - intros C p q H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckAnd; [apply H3|apply H5]; reflexivity.
+    - intros C p q H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckOr; [apply H3|apply H5]; reflexivity.
+    - intros C p H2 H3 G M D H4. subst. simpl.
+      apply CheckNot. apply H3. reflexivity.
+    - intros C p H2 H3 G M D H4. subst. simpl.
+      apply CheckAll. apply (H3 (TySet :: G) M D). reflexivity.
+    - intros C p H2 H3 G M D H4. subst. simpl.
+      apply CheckEx. apply (H3 (TySet :: G) M D). reflexivity.
+    - intros C p H2 H3 G M D H4. subst. simpl.
+      apply CheckLam. apply (H3 (TySet :: G) M D). reflexivity.
+    - intros C A x H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckApp; [apply H3|apply H5]; reflexivity.
+    - intros C A p q H2 H3 H4 H5 H6 H7 G M D H8. subst. simpl.
+      apply CheckDef.
+      + apply H3. reflexivity.
+      + assert (CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
+          (Shift.fromT (length G) (length M) (Exists A))) as H8. {
+          apply H5. reflexivity. }
+        rewrite Exists.FromT in H8. assumption.
+      + assert (CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) q)
+          (Shift.fromT (length G) (length M) (Unique A))) as H8. {
+          apply H7. reflexivity. }
+        rewrite Unique.FromT in H8. assumption.
+    - intros C G M D H2. subst. simpl. apply CheckTsNil.
+    - intros C t ts ty tys H2 H3 H4 H5 G M D H6. subst. simpl.
+      apply CheckTsCons; [apply H3|apply H5]; reflexivity.
+    - intros C t H2 H3 G M D H4. subst. simpl.
+      apply CheckHoleP. apply H3. reflexivity.
+    - intros C t H2 H3 G M D H4. subst. simpl.
+      apply CheckAxiomP. apply H3. reflexivity.
+    - intros C name args tys t H2 H3 H4 G M D H5. subst. simpl.
+      rewrite Apply.CommShiftT.
+      assert (Shift.fromT (length G + lengthT args) (length M) t = t) as H5. {
+        apply (AboveT E (rev tys) t TyProp).
+        - apply (H1 name). assumption.
+        - rewrite length_rev.
+          assert (lengthT args = length tys) as H5. { apply (Length E (G ++ D)); assumption. }
+          rewrite <- H5. rewrite Nat.add_comm. apply Nat.le_add_r. }
+      rewrite H5.
+      apply CheckIdentP with (tys := tys). 1: assumption. apply H4. reflexivity.
+  }
+  destruct H2 as [H2 [H3 H4]].
+  split.
+  - intros G M D t ty H5. apply (H2 (G ++ D) t ty); try assumption. reflexivity.
+  - split.
+    + intros G M D ts tys H5. apply (H3 (G ++ D) ts tys); try assumption. reflexivity.
+    + intros G M D p t H5. apply (H4 (G ++ D) p t); try assumption. reflexivity.
+Qed.
+
+(* Weakening preserves checked terms across an inserted context.                *)
+Proposition FromT : forall (E:Env),
+  (forall (name:Name) (tys:list Ty) (t:Term),
+    sigP E name = Some (tys,t) -> CheckT E (rev tys) t TyProp)            ->
+  forall (G M D:Ctx) (t:Term) (ty:Ty),
+    CheckT E (G ++ D) t ty ->
+    CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply From.
+Qed.
+
+(* Weakening preserves checked term arguments across an inserted context.       *)
+Proposition FromTs : forall (E:Env),
+  (forall (name:Name) (tys:list Ty) (t:Term),
+    sigP E name = Some (tys,t) -> CheckT E (rev tys) t TyProp)            ->
+  forall (G M D:Ctx) (ts:Terms) (tys:list Ty),
+    CheckTs E (G ++ D) ts tys ->
+    CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply From.
+Qed.
+
+(* Weakening preserves checked proofs across an inserted context.               *)
+Proposition FromP : forall (E:Env),
+  (forall (name:Name) (tys:list Ty) (t:Term),
+    sigP E name = Some (tys,t) -> CheckT E (rev tys) t TyProp)            ->
+  forall (G M D:Ctx) (p:Proof) (t:Term),
+    CheckP E (G ++ D) p t ->
+    CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
+      (Shift.fromT (length G) (length M) t).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply From.
 Qed.
 
