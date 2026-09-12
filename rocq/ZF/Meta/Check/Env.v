@@ -2,8 +2,10 @@ Require Import Coq.Lists.List.
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Name.
+Require Import ZF.Meta.Check.Shift.
 Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.DeclP.
+Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Check.DeclT.
 Require Import ZF.Meta.DeclT.
@@ -49,4 +51,20 @@ Proof.
   unfold ZF.Meta.Check.DeclP.CheckP in H4.
   destruct H4 as [H4 H5].
   apply H4.
+Qed.
+
+(* Proof signature conclusions are unchanged by lifting above their parameters. *)
+Proposition SigPAbove : forall (E:Env) (name:Name) (tys:list Ty) (t:Term)
+  (i j:nat),
+  Check E                       ->
+  sigP E name = Some (tys,t)    ->
+  length tys <= i               ->
+  Shift.fromT i j t = t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E name tys t i j H1 H2 H3.
+  assert (Core.CheckT E (rev tys) t TyProp) as H4. {
+    apply (SigP E name); assumption. }
+  apply (Shift.AboveT E (rev tys) t TyProp); try assumption.
+  rewrite length_rev. assumption.
 Qed.
