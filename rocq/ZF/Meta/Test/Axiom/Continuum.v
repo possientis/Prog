@@ -1,9 +1,9 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Check.
-Require Import ZF.Meta.CheckDeclP.
-Require Import ZF.Meta.CheckDeclT.
+Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.DeclP.
+Require Import ZF.Meta.Check.DeclT.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 

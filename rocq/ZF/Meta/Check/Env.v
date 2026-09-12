@@ -1,11 +1,11 @@
 Require Import Coq.Lists.List.
-Require Import ZF.Meta.Check.
+Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Name.
-Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.CheckDeclT.
+Require Import ZF.Meta.Check.DeclT.
 Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Ty.
 
@@ -36,7 +36,7 @@ Qed.
 
 (* A proof signature has a checked proposition in its parameter context.        *)
 Proposition SigP : forall (E:Env) (name:Name) (tys:list Ty) (t:Term), Check E ->
-  sigP E name = Some (tys,t) -> Check.CheckT E (rev tys) t TyProp.
+  sigP E name = Some (tys,t) -> Core.CheckT E (rev tys) t TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E name tys t H1 H2.
@@ -46,7 +46,7 @@ Proof.
   inversion H2. subst.
   assert (CheckP E {| paraP := tys; conclP := t; bodyP := p |}) as H4. {
     apply (DeclP E name); assumption. }
-  unfold CheckDeclP.CheckP in H4.
+  unfold ZF.Meta.Check.DeclP.CheckP in H4.
   destruct H4 as [H4 H5].
   apply H4.
 Qed.

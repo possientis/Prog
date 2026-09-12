@@ -1,11 +1,11 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Check.
-Require Import ZF.Meta.CheckDeclP.
+Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.CheckDeclT.
+Require Import ZF.Meta.Check.DeclT.
 Require Import ZF.Meta.Ty.
 
 Require Import ZF.Meta.Decl.Class.Equiv.
@@ -41,7 +41,7 @@ Qed.
 Proposition Refl : CheckP (Equiv.env) Refl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP Refl) (conclP Refl) TyProp) as H1. {
+  assert (Core.CheckT (Equiv.env) (ctxP Refl) (conclP Refl) TyProp) as H1. {
     apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
     apply CheckTsCons.
     + apply CheckVar. reflexivity.
@@ -55,7 +55,7 @@ Qed.
 Proposition EquivCompat : CheckP (Equiv.env) EquivCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP EquivCompat)
+  assert (Core.CheckT (Equiv.env) (ctxP EquivCompat)
     (conclP EquivCompat) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -91,7 +91,7 @@ Qed.
 Proposition EquivCompatL : CheckP (Equiv.env) EquivCompatL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP EquivCompatL)
+  assert (Core.CheckT (Equiv.env) (ctxP EquivCompatL)
     (conclP EquivCompatL) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -120,7 +120,7 @@ Qed.
 Proposition EquivCompatR : CheckP (Equiv.env) EquivCompatR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP EquivCompatR)
+  assert (Core.CheckT (Equiv.env) (ctxP EquivCompatR)
     (conclP EquivCompatR) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -149,7 +149,7 @@ Qed.
 Proposition Sym : CheckP (Equiv.env) Sym.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP Sym) (conclP Sym) TyProp) as H1. {
+  assert (Core.CheckT (Equiv.env) (ctxP Sym) (conclP Sym) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
@@ -170,7 +170,7 @@ Qed.
 Proposition Tran : CheckP (Equiv.env) Tran.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP Tran) (conclP Tran) TyProp) as H1. {
+  assert (Core.CheckT (Equiv.env) (ctxP Tran) (conclP Tran) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
       apply CheckTsCons.
@@ -198,7 +198,7 @@ Qed.
 Proposition NotSym : CheckP (Equiv.env) NotSym.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP NotSym) (conclP NotSym) TyProp) as H1. {
+  assert (Core.CheckT (Equiv.env) (ctxP NotSym) (conclP NotSym) TyProp) as H1. {
     apply CheckImp.
     + apply CheckNot.
       apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -221,7 +221,7 @@ Qed.
 Proposition EqualToClass : CheckP (Equiv.env) EqualToClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP EqualToClass)
+  assert (Core.CheckT (Equiv.env) (ctxP EqualToClass)
     (conclP EqualToClass) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckIff.
     + apply CheckEqual; apply CheckVar; reflexivity.
@@ -244,7 +244,7 @@ Qed.
 Proposition NotEqualToClass : CheckP (Equiv.env) NotEqualToClass.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP NotEqualToClass)
+  assert (Core.CheckT (Equiv.env) (ctxP NotEqualToClass)
     (conclP NotEqualToClass) TyProp) as H1. {
     apply CheckAll, CheckAll, CheckIff.
     + apply CheckNotEq; apply CheckVar; reflexivity.
@@ -268,7 +268,7 @@ Qed.
 Proposition NotCompat : CheckP (Equiv.env) NotCompat.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp)
+  assert (Core.CheckT (Equiv.env) (ctxP NotCompat) (conclP NotCompat) TyProp)
     as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -306,7 +306,7 @@ Qed.
 Proposition NotCompatL : CheckP (Equiv.env) NotCompatL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP NotCompatL)
+  assert (Core.CheckT (Equiv.env) (ctxP NotCompatL)
     (conclP NotCompatL) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
@@ -337,7 +337,7 @@ Qed.
 Proposition NotCompatR : CheckP (Equiv.env) NotCompatR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Check.CheckT (Equiv.env) (ctxP NotCompatR)
+  assert (Core.CheckT (Equiv.env) (ctxP NotCompatR)
   (conclP NotCompatR) TyProp) as H1. {
     apply CheckImp.
     + apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
