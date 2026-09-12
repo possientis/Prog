@@ -5,6 +5,7 @@ Require Import ZF.Meta.Apply.
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.Env.
 Require Import ZF.Meta.Check.Shift.
+Require Import ZF.Meta.Check.Subst.
 Require Import ZF.Meta.Check.Ts.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
@@ -80,7 +81,7 @@ Proof.
         reflexivity. }
       assert (CheckT E (G ++ D)
         (Shift.fromT 0 (length G) (applyT (Var (n - length G)) ts)) ty) as H10. {
-        apply (FromT E) with (G := []) (M := G) (D := D).
+        apply (ZF.Meta.Check.Shift.FromT E) with (G := []) (M := G) (D := D).
         1: intros name tys t H11; apply (SigP E name); assumption.
         assumption. }
       simpl in H10. rewrite H9 in H10. assumption.
@@ -100,4 +101,18 @@ Proof.
         length G + (n - length G - length M)) as H12. {
         rewrite Nat.add_comm. reflexivity. }
       rewrite H12. apply (TypeOf.AppR G D). assumption.
+Qed.
+
+(* Applying checked arguments to a checked term preserves its sort.             *)
+Proposition ApplyT :
+  forall (E:Env) (G D:Ctx) (t:Term) (ty:Ty) (ts:Terms),
+    Check E                                                             ->
+    CheckT E (D ++ G) t ty                                              ->
+    CheckTs E G ts (rev D)                                              ->
+    CheckT E G (applyT t ts) ty.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E G D t ty ts H1 H2 H3.
+  unfold applyT, substT.
+  apply (Subst.FromT E) with (G := []) (M := D) (D := G); assumption.
 Qed.
