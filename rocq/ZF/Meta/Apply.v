@@ -1,6 +1,5 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
-Require Import Lia.
 
 Require Import ZF.Meta.Induction.
 Require Import ZF.Meta.Shift.
@@ -168,16 +167,27 @@ Proof.
     (* Variables before the argument cutoff are not affected by either side.    *)
     destruct (n <? k) eqn:H1.
     + assert ((n <? k + i + lengthT ts) = true) as H2. {
-        apply Nat.ltb_lt. apply Nat.ltb_lt in H1. lia. }
+        apply Nat.ltb_lt. apply Nat.ltb_lt in H1.
+        apply Nat.lt_le_trans with (m := k). 1: assumption.
+        apply Nat.le_trans with (m := k + i).
+        1: apply Nat.le_add_r. apply Nat.le_add_r. }
       assert ((n <? k + i) = true) as H3. {
-        apply Nat.ltb_lt. apply Nat.ltb_lt in H1. lia. }
+        apply Nat.ltb_lt. apply Nat.ltb_lt in H1.
+        apply Nat.lt_le_trans with (m := k).
+        1: assumption. apply Nat.le_add_r. }
       simpl. rewrite H3. rewrite H2. simpl. rewrite H1. reflexivity.
     + assert (k <= n) as H2. { apply Nat.ltb_ge. assumption. }
       (* Variables in the argument block are supplied by substituted arguments. *)
       destruct (Nat.lt_ge_cases (n - k) (lengthT ts)) as [H3|H3].
       * destruct (nthT (revT ts) (n - k)) as [t|] eqn:H4.
         -- assert ((n <? k + i + lengthT ts) = true) as H5. {
-             apply Nat.ltb_lt. lia. }
+             apply Nat.ltb_lt.
+             rewrite <- (Nat.sub_add k n). 2: assumption.
+             apply Nat.lt_le_trans with (m := lengthT ts + k).
+             1: apply Nat.add_lt_mono_r; assumption.
+             rewrite Nat.add_comm. rewrite <- Nat.add_assoc.
+             apply Nat.add_le_mono.
+             1: reflexivity. apply Nat.le_add_l. }
            rewrite (ArgTNth ts (n - k) t). 2: assumption.
            unfold shiftT. rewrite ShiftFromT.
            rewrite H5. simpl. rewrite H1.
@@ -192,15 +202,60 @@ Proof.
         rewrite H4. unfold shiftT. simpl.
         destruct (n <? k + i + lengthT ts) eqn:H5.
         -- assert ((n - k - lengthT ts + k <? k + i) = true) as H6. {
-             apply Nat.ltb_lt. apply Nat.ltb_lt in H5. lia. }
+             apply Nat.ltb_lt.
+             assert (n - k < i + lengthT ts) as H6. {
+               apply (proj2 (Nat.add_lt_mono_l (n - k)
+                 (i + lengthT ts) k)).
+               assert (n < k + i + lengthT ts) as H6. {
+                 apply Nat.ltb_lt. assumption. }
+               rewrite <- (Nat.sub_add k n) in H6. 2: assumption.
+               rewrite Nat.add_comm with (n := n - k) (m := k) in H6.
+               rewrite <- Nat.add_assoc in H6. assumption. }
+             assert (n - k - lengthT ts < i) as H7. {
+               apply (proj2 (Nat.add_lt_mono_r (n - k - lengthT ts)
+                 i (lengthT ts))).
+               rewrite Nat.sub_add. 2: assumption. assumption. }
+             rewrite Nat.add_comm.
+             apply (proj1 (Nat.add_lt_mono_l (n - k - lengthT ts) i k)).
+             assumption. }
            rewrite H6. simpl. rewrite H1.
            rewrite ArgTFromTsVar. 2: assumption.
            unfold shiftT. simpl. reflexivity.
         -- assert ((n - k - lengthT ts + k <? k + i) = false) as H6. {
-             apply Nat.ltb_ge. apply Nat.ltb_ge in H5. lia. }
+             apply Nat.ltb_ge.
+             assert (i + lengthT ts <= n - k) as H6. {
+               assert (k + i + lengthT ts <= n) as H6. {
+                 apply Nat.ltb_ge. assumption. }
+               apply Nat.le_trans with (m := (k + i + lengthT ts) - k).
+               2: apply Nat.sub_le_mono_r; assumption.
+               assert (k + i + lengthT ts - k = i + lengthT ts) as H7. {
+                 assert (k + i + lengthT ts = i + lengthT ts + k) as H7. {
+                   rewrite <- Nat.add_assoc.
+                   rewrite Nat.add_comm with (n := k) (m := i + lengthT ts).
+                   reflexivity. }
+                 rewrite H7. rewrite Nat.add_sub. reflexivity. }
+               rewrite H7. reflexivity. }
+             assert (i <= n - k - lengthT ts) as H7. {
+               apply (proj2 (Nat.add_le_mono_r i
+                 (n - k - lengthT ts) (lengthT ts))).
+               rewrite Nat.sub_add.
+               2: apply Nat.le_trans with (m := i + lengthT ts);
+                  [apply Nat.le_add_l|assumption]. assumption. }
+             assert (n - k - lengthT ts + k =
+               k + (n - k - lengthT ts)) as H8. {
+               rewrite Nat.add_comm. reflexivity. }
+             rewrite H8. apply Nat.add_le_mono.
+             1: reflexivity. assumption. }
            rewrite H6. simpl.
            assert (n - k - lengthT ts + k - (k + i) =
-             n - (k + i + lengthT ts)) as H7. { lia. }
+             n - (k + i + lengthT ts)) as H7. {
+             rewrite Nat.sub_add_distr. rewrite Nat.add_sub.
+             assert (k + i + lengthT ts = k + lengthT ts + i) as H7. {
+               rewrite <- Nat.add_assoc.
+               rewrite Nat.add_comm with (n := i) (m := lengthT ts).
+               rewrite Nat.add_assoc. reflexivity. }
+             rewrite H7. rewrite Nat.sub_add_distr.
+             rewrite Nat.sub_add_distr. reflexivity. }
            rewrite H7.
            rewrite <- (LengthT ts i r).
            assert (Shift.fromT 0 (k + i + lengthT (fromTs i r ts))
@@ -219,7 +274,8 @@ Proof.
                (i + lengthT (fromTs i r ts)) 0).
              unfold shiftT.
              assert (k + (i + lengthT (fromTs i r ts)) + 0 =
-               k + i + lengthT (fromTs i r ts)) as H9. { lia. }
+               k + i + lengthT (fromTs i r ts)) as H9. {
+               rewrite Nat.add_0_r. rewrite Nat.add_assoc. reflexivity. }
              rewrite H9. reflexivity. }
            rewrite H8.
            rewrite (proj1 Shift
@@ -234,7 +290,8 @@ Proof.
            rewrite H9.
            rewrite (Shift.FromShiftT
              (r (n - (k + i + lengthT (fromTs i r ts)))) k i 0).
-           assert (k + i + 0 = k + i) as H10. { lia. }
+           assert (k + i + 0 = k + i) as H10. {
+             rewrite Nat.add_0_r. reflexivity. }
            unfold shiftT at 1. rewrite H10.
            reflexivity.
   - intros ty ts i k r. reflexivity.
