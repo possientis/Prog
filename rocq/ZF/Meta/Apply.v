@@ -144,6 +144,15 @@ Proof.
   - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
+(* Applying arguments below a term lifting lowers it by their length.           *)
+Proposition ShiftT : forall (t:Term) (ts:Terms) (i k:nat),
+  fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
+  Shift.fromT k i t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Shift.
+Qed.
+
 (* Substitution through application acts on the body and the arguments.         *)
 Proposition From :
   (forall (t:Term) (ts:Terms) (i k:nat) (r:nat -> Term),
@@ -278,7 +287,7 @@ Proof.
                rewrite Nat.add_0_r. rewrite Nat.add_assoc. reflexivity. }
              rewrite H9. reflexivity. }
            rewrite H8.
-           rewrite (proj1 Shift
+           rewrite (ShiftT
              (shiftT k (r (n - (k + i + lengthT (fromTs i r ts)))))
              (fromTs i r ts) i k).
            unfold shiftT at 2.
@@ -345,4 +354,70 @@ Proof.
   intros t ts i r. unfold applyT, substT.
   assert (i = 0 + i) as H1. { reflexivity. }
   rewrite H1. apply From.
+Qed.
+
+(* Lifting agrees with substitution by lifted variables.                        *)
+Proposition ShiftAsSubst :
+  (forall (t:Term) (i j:nat),
+    Shift.fromT i j t = fromT i (fun n => Var (n + j)) t)                 /\
+  (forall (p:Proof) (i j:nat),
+    Shift.fromP i j p = fromP i (fun n => Var (n + j)) p)                 /\
+  (forall (ts:Terms) (i j:nat),
+    Shift.fromTs i j ts = fromTs i (fun n => Var (n + j)) ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Induction.
+  - intros i j. reflexivity.
+  - intros i j. reflexivity.
+  - intros n i j. simpl.
+    (* Below the cutoff both operations keep the variable fixed.                *)
+    destruct (n <? i) eqn:H1. 1: reflexivity.
+    assert (i <= n) as H2. { apply Nat.ltb_ge. assumption. }
+    unfold shiftT. simpl.
+    assert (n - i + j + i = n + j) as H3. {
+      rewrite <- Nat.add_assoc.
+      rewrite (Nat.add_comm j i).
+      rewrite Nat.add_assoc.
+      rewrite Nat.sub_add. 2: assumption.
+      reflexivity. }
+    rewrite H3. reflexivity.
+  - intros ty i j. reflexivity.
+  - intros name args IH i j. simpl. rewrite IH. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros x y IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p q IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros p IH i j. simpl. rewrite IH. reflexivity.
+  - intros p IH i j. simpl. rewrite IH. reflexivity.
+  - intros p IH i j. simpl. rewrite IH. reflexivity.
+  - intros p IH i j. simpl. rewrite IH. reflexivity.
+  - intros A x IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A p q IH1 IH2 IH3 i j. simpl.
+    rewrite IH1, IH2, IH3. reflexivity.
+  - intros t IH i j. simpl. rewrite IH. reflexivity.
+  - intros t IH i j. simpl. rewrite IH. reflexivity.
+  - intros name ts IH i j. simpl. rewrite IH. reflexivity.
+  - intros i j. reflexivity.
+  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
+Qed.
+
+(* Lifting through application lifts the body and the arguments.                *)
+Proposition CommShiftT : forall (t:Term) (ts:Terms) (i j:nat),
+  Shift.fromT i j (applyT t ts) =
+  applyT (Shift.fromT (i + lengthT ts) j t) (Shift.fromTs i j ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros t ts i j.
+  rewrite (proj1 ShiftAsSubst (applyT t ts) i j).
+  rewrite FromT.
+  rewrite <- (proj1 ShiftAsSubst t (i + lengthT ts) j).
+  rewrite <- (proj2 (proj2 ShiftAsSubst) ts i j).
+  reflexivity.
 Qed.
