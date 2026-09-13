@@ -101,7 +101,7 @@ Proof.
 Qed.
 
 (* Substitution above a lifting commutes with the lifting.                      *)
-Proposition ShiftFrom :
+Proposition SubstShift :
   (forall (t:Term) (i j k:nat) (r:nat -> Term),
     Subst.fromT (i + j + k) r (Shift.fromT i j t) =
     Shift.fromT i j (Subst.fromT (i + k) r t))                             /\
@@ -198,13 +198,40 @@ Proof.
   - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
+(* Substitution above a lifting commutes with the lifting in terms.             *)
+Proposition SubstShiftT : forall (t:Term) (i j k:nat) (r:nat -> Term),
+  Subst.fromT (i + j + k) r (Shift.fromT i j t) =
+  Shift.fromT i j (Subst.fromT (i + k) r t).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply SubstShift.
+Qed.
+
+(* Substitution above a lifting commutes with the lifting in proofs.            *)
+Proposition SubstShiftP : forall (p:Proof) (i j k:nat) (r:nat -> Term),
+  Subst.fromP (i + j + k) r (Shift.fromP i j p) =
+  Shift.fromP i j (Subst.fromP (i + k) r p).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply SubstShift.
+Qed.
+
+(* Substitution above a lifting commutes with lifting term arguments.           *)
+Proposition SubstShiftTs : forall (ts:Terms) (i j k:nat) (r:nat -> Term),
+  Subst.fromTs (i + j + k) r (Shift.fromTs i j ts) =
+  Shift.fromTs i j (Subst.fromTs (i + k) r ts).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply SubstShift.
+Qed.
+
 (* Substitution above a full lifting commutes with the full lifting.            *)
-Proposition ShiftFromT : forall (t:Term) (i j:nat) (r:nat -> Term),
+Proposition SubstShiftFullT : forall (t:Term) (i j:nat) (r:nat -> Term),
   Subst.fromT (i + j) r (shiftT i t) = shiftT i (Subst.fromT j r t).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros t i j r. unfold shiftT.
   assert (0 + i + j = i + j) as H1. { reflexivity. }
   assert (0 + j = j) as H2. { reflexivity. }
-  rewrite <- H1. rewrite <- H2. apply ShiftFrom.
+  rewrite <- H1. rewrite <- H2. apply SubstShiftT.
 Qed.

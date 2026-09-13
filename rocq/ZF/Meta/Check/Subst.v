@@ -291,12 +291,12 @@ Proof.
           (fromT (length G) (argT ts) (Exists A))) as H9. {
           apply H5 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
           reflexivity. }
-        rewrite Exists.CommSubstT in H9. assumption.
+        rewrite Exists.SubstT in H9. assumption.
       + assert (CheckP E (G ++ D) (fromP (length G) (argT ts) q)
           (fromT (length G) (argT ts) (Unique A))) as H9. {
           apply H7 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
           reflexivity. }
-        rewrite Unique.CommSubstT in H9. assumption.
+        rewrite Unique.SubstT in H9. assumption.
     - intros E C H1 G M D ts H2 H3. subst. apply CheckTsNil.
     - intros E C t us ty tys H2 H3 H4 H5 H6 G M D ts H7 H8.
       subst. apply CheckTsCons.

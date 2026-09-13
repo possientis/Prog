@@ -14,7 +14,7 @@ Definition Unique (A:Term) : Term :=
           (Equal (Var 1) (Var 0))))).
 
 (* Lifting commutes with unique class membership.                               *)
-Proposition CommShiftT : forall (A:Term) (i j:nat),
+Proposition ShiftT : forall (A:Term) (i j:nat),
   Shift.fromT i j (Unique A) = Unique (Shift.fromT i j A).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -25,11 +25,11 @@ Proof.
 Qed.
 
 (* Substitution commutes with unique class membership.                          *)
-Proposition CommSubstT : forall (A:Term) (i:nat) (r:nat -> Term),
+Proposition SubstT : forall (A:Term) (i:nat) (r:nat -> Term),
   Subst.fromT i r (Unique A) = Unique (Subst.fromT i r A).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros A i r. unfold Unique, shiftT. simpl.
   assert (S (S i) = 0 + 2 + i) as H1. { reflexivity. }
-  rewrite H1. rewrite (proj1 ShiftFrom). reflexivity.
+  rewrite H1. rewrite SubstShiftT. reflexivity.
 Qed.

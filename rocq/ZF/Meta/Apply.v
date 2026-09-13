@@ -198,7 +198,7 @@ Proof.
              apply Nat.add_le_mono.
              1: reflexivity. apply Nat.le_add_l. }
            rewrite (ArgTNth ts (n - k) t). 2: assumption.
-           unfold shiftT. rewrite ShiftFromT.
+           unfold shiftT. rewrite SubstShiftFullT.
            rewrite H5. simpl. rewrite H1.
            rewrite (ArgTFromTsNth ts i r (n - k) t). 2: assumption.
            reflexivity.
@@ -356,11 +356,11 @@ Qed.
 (* Lifting agrees with substitution by lifted variables.                        *)
 Proposition ShiftAsSubst :
   (forall (t:Term) (i j:nat),
-    Shift.fromT i j t = fromT i (fun n => Var (n + j)) t)                 /\
+    Shift.fromT i j t = Subst.fromT i (fun n => Var (n + j)) t)                 /\
   (forall (p:Proof) (i j:nat),
-    Shift.fromP i j p = fromP i (fun n => Var (n + j)) p)                 /\
+    Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p)                 /\
   (forall (ts:Terms) (i j:nat),
-    Shift.fromTs i j ts = fromTs i (fun n => Var (n + j)) ts).
+    Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
