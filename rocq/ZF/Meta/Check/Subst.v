@@ -117,24 +117,26 @@ Qed.
 
 
 (* Substitution by checked arguments preserves checked objects.                 *)
-Proposition From : forall (E:Env), Check E ->
-  (forall (G M D:Ctx) (t:Term) (ty:Ty) (ts:Terms),
+Proposition From :
+  (forall (E:Env) (G M D:Ctx) (t:Term) (ty:Ty) (ts:Terms),
+    Check E                                                     ->
     CheckT E (G ++ M ++ D) t ty                                 ->
     CheckTs E D ts (rev M)                                      ->
     CheckT E (G ++ D) (fromT (length G) (argT ts) t) ty)              /\
-  (forall (G M D:Ctx) (us:Terms) (tys:list Ty) (ts:Terms),
+  (forall (E:Env) (G M D:Ctx) (us:Terms) (tys:list Ty) (ts:Terms),
+    Check E                                                     ->
     CheckTs E (G ++ M ++ D) us tys                              ->
     CheckTs E D ts (rev M)                                      ->
     CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys)          /\
-  (forall (G M D:Ctx) (p:Proof) (t:Term) (ts:Terms),
+  (forall (E:Env) (G M D:Ctx) (p:Proof) (t:Term) (ts:Terms),
+    Check E                                                     ->
     CheckP E (G ++ M ++ D) p t                                  ->
     CheckTs E D ts (rev M)                                      ->
     CheckP E (G ++ D) (fromP (length G) (argT ts) p)
       (fromT (length G) (argT ts) t)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros E H1.
-  assert (
+  assert (forall (E:Env), Check E ->
     (forall (C:Ctx) (t:Term) (ty:Ty), CheckT E C t ty ->
       forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
       CheckTs E D ts (rev M) ->
@@ -148,6 +150,7 @@ Proof.
       CheckTs E D ts (rev M) ->
       CheckP E (G ++ D) (fromP (length G) (argT ts) p)
         (fromT (length G) (argT ts) t))) as H2. {
+    intros E H1.
     apply Induction.
     - intros C G M D ts H2 H3. subst. apply CheckBot.
     - intros C G M D ts H2 H3. subst. apply CheckTop.
@@ -297,22 +300,24 @@ Proof.
       rewrite H5.
       apply CheckIdentP with (tys := tys).
       1: assumption. apply (H4 G M D ts); try assumption. reflexivity. }
-  destruct H2 as [H2 [H3 H4]].
   split.
-  - intros G M D t ty ts H5 H6.
-    apply (H2 (G ++ M ++ D) t ty H5 G M D ts); try assumption. reflexivity.
+  - intros E G M D t ty ts H3 H4 H5.
+    apply (proj1 (H2 E H3) (G ++ M ++ D) t ty H4 G M D ts); try assumption.
+    reflexivity.
   - split.
-    + intros G M D us tys ts H5 H6.
-      apply (H3 (G ++ M ++ D) us tys H5 G M D ts); try assumption.
+    + intros E G M D us tys ts H3 H4 H5.
+      apply (proj1 (proj2 (H2 E H3)) (G ++ M ++ D) us tys H4 G M D ts);
+        try assumption.
       reflexivity.
-    + intros G M D p t ts H5 H6.
-      apply (H4 (G ++ M ++ D) p t H5 G M D ts); try assumption.
+    + intros E G M D p t ts H3 H4 H5.
+      apply (proj2 (proj2 (H2 E H3)) (G ++ M ++ D) p t H4 G M D ts);
+        try assumption.
       reflexivity.
 Qed.
 
 (* Substitution by checked arguments preserves checked terms.                   *)
-Proposition FromT : forall (E:Env), Check E ->
-  forall (G M D:Ctx) (t:Term) (ty:Ty) (ts:Terms),
+Proposition FromT : forall (E:Env) (G M D:Ctx) (t:Term) (ty:Ty) (ts:Terms),
+    Check E                                                     ->
     CheckT E (G ++ M ++ D) t ty                                 ->
     CheckTs E D ts (rev M)                                      ->
     CheckT E (G ++ D) (fromT (length G) (argT ts) t) ty.
@@ -322,8 +327,9 @@ Proof.
 Qed.
 
 (* Substitution by checked arguments preserves checked term arguments.          *)
-Proposition FromTs : forall (E:Env), Check E ->
-  forall (G M D:Ctx) (us:Terms) (tys:list Ty) (ts:Terms),
+Proposition FromTs : forall (E:Env) (G M D:Ctx) (us:Terms) (tys:list Ty)
+    (ts:Terms),
+    Check E                                                     ->
     CheckTs E (G ++ M ++ D) us tys                              ->
     CheckTs E D ts (rev M)                                      ->
     CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys.
@@ -333,8 +339,8 @@ Proof.
 Qed.
 
 (* Substitution by checked arguments preserves checked proofs.                  *)
-Proposition FromP : forall (E:Env), Check E ->
-  forall (G M D:Ctx) (p:Proof) (t:Term) (ts:Terms),
+Proposition FromP : forall (E:Env) (G M D:Ctx) (p:Proof) (t:Term) (ts:Terms),
+    Check E                                                     ->
     CheckP E (G ++ M ++ D) p t                                  ->
     CheckTs E D ts (rev M)                                      ->
     CheckP E (G ++ D) (fromP (length G) (argT ts) p)
