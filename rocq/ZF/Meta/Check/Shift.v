@@ -49,59 +49,73 @@ Proposition Above : forall (E:Env),
     Shift.fromP i j p = p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros E.
+  assert (
+    (forall (E:Env) (G:Ctx) (t:Term) (ty:Ty),
+      CheckT E G t ty -> forall (i j:nat), length G <= i ->
+      Shift.fromT i j t = t)                                            /\
+    (forall (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty),
+      CheckTs E G ts tys -> forall (i j:nat), length G <= i ->
+      Shift.fromTs i j ts = ts)                                         /\
+    (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
+      CheckP E G p t -> forall (i j:nat), length G <= i ->
+      Shift.fromP i j p = p)) as H. {
   apply Induction.
-  - intros G i j H1. reflexivity.
-  - intros G i j H1. reflexivity.
-  - intros G n ty H1 i j H2. simpl.
+  - intros E G i j H1. reflexivity.
+  - intros E G i j H1. reflexivity.
+  - intros E G n ty H1 i j H2. simpl.
     (* A checked variable is below the length of its context.                   *)
     assert (n < length G) as H3. { apply (TypeOf.LtLength G n ty). assumption. }
     assert (n < i) as H4. { apply Nat.lt_le_trans with (m := length G); assumption. }
     assert ((n <? i) = true) as H5. { apply Nat.ltb_lt. assumption. }
     rewrite H5. reflexivity.
-  - intros G ty i j H1. reflexivity.
-  - intros G name args tys ty H1 H2 H3 i j H4. simpl.
+  - intros E G ty i j H1. reflexivity.
+  - intros E G name args tys ty H1 H2 H3 i j H4. simpl.
     rewrite H3. reflexivity. assumption.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G x y H1 H2 H3 H4 i j H5. simpl.
+  - intros E G x y H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G p q H1 H2 H3 H4 i j H5. simpl.
+  - intros E G p q H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G p q H1 H2 H3 H4 i j H5. simpl.
+  - intros E G p q H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G p q H1 H2 H3 H4 i j H5. simpl.
+  - intros E G p q H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G p q H1 H2 H3 H4 i j H5. simpl.
+  - intros E G p q H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G p H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
-  - intros G p H1 H2 i j H3. simpl.
+  - intros E G p H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
+  - intros E G p H1 H2 i j H3. simpl.
     rewrite H2. reflexivity. apply le_n_S. assumption.
-  - intros G p H1 H2 i j H3. simpl.
+  - intros E G p H1 H2 i j H3. simpl.
     rewrite H2. reflexivity. apply le_n_S. assumption.
-  - intros G p H1 H2 i j H3. simpl.
+  - intros E G p H1 H2 i j H3. simpl.
     rewrite H2. reflexivity. apply le_n_S. assumption.
-  - intros G A x H1 H2 H3 H4 i j H5. simpl.
+  - intros E G A x H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G A p q H1 H2 H3 H4 H5 H6 i j H7. simpl.
+  - intros E G A p q H1 H2 H3 H4 H5 H6 i j H7. simpl.
     rewrite H2, H4, H6; try assumption. reflexivity.
-  - intros G i j H1. reflexivity.
-  - intros G t ts ty tys H1 H2 H3 H4 i j H5. simpl.
+  - intros E G i j H1. reflexivity.
+  - intros E G t ts ty tys H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
-  - intros G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
-  - intros G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
-  - intros G name args tys t H1 H2 H3 i j H4. simpl.
-    rewrite H3; try assumption. reflexivity.
+  - intros E G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
+  - intros E G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
+  - intros E G name args tys t H1 H2 H3 i j H4. simpl.
+    rewrite H3; try assumption. reflexivity. }
+  split.
+  - intros E0. apply H.
+  - split.
+    + intros E0. apply H.
+    + intros E0. apply H.
 Qed.
 
 (* Lifting above a checked term leaves it unchanged.                            *)
@@ -159,7 +173,7 @@ Proof.
       forall (G M D:Ctx), C = G ++ D ->
       CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
         (Shift.fromT (length G) (length M) t))) as H2. {
-    apply Induction.
+    apply Induction_.
     - intros C G M D H2. subst. apply CheckBot.
     - intros C G M D H2. subst. apply CheckTop.
     - intros C n ty H2 G M D H3. subst. apply VarT. assumption.
