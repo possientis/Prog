@@ -14,7 +14,7 @@ Definition Unique (A:Term) : Term :=
 
 (* Lifting commutes with unique class membership.                               *)
 Proposition FromT : forall (A:Term) (i j:nat),
-  fromT i j (Unique A) = Unique (fromT i j A).
+  Shift.fromT i j (Unique A) = Unique (Shift.fromT i j A).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros A i j. unfold Unique, shiftT. simpl.

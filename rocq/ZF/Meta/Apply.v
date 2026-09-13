@@ -76,13 +76,13 @@ Qed.
 (* Applying arguments below a lifting lowers the lifting by their length.       *)
 Proposition Shift :
   (forall (t:Term) (ts:Terms) (i k:nat),
-    fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
+    Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
     Shift.fromT k i t)                                                    /\
   (forall (p:Proof) (ts:Terms) (i k:nat),
-    fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
+    Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
     Shift.fromP k i p)                                                    /\
   (forall (us:Terms) (ts:Terms) (i k:nat),
-    fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
+    Subst.fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
     Shift.fromTs k i us).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
@@ -146,7 +146,7 @@ Qed.
 
 (* Applying arguments below a term lifting lowers it by their length.           *)
 Proposition ShiftT : forall (t:Term) (ts:Terms) (i k:nat),
-  fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
+  Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
   Shift.fromT k i t.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)

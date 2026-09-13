@@ -7,7 +7,7 @@ Definition Exists (A:Term) : Term := Ex (App (shiftT 1 A) (Var 0)).
 
 (* Lifting commutes with existential class membership.                          *)
 Proposition FromT : forall (A:Term) (i j:nat),
-  fromT i j (Exists A) = Exists (fromT i j A).
+  Shift.fromT i j (Exists A) = Exists (Shift.fromT i j A).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros A i j. unfold Exists, shiftT. simpl.
