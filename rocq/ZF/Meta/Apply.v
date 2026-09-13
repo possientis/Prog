@@ -405,6 +405,30 @@ Proof.
   - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
+(* Lifting terms agrees with substitution by lifted variables.                  *)
+Proposition ShiftAsSubstT : forall (t:Term) (i j:nat),
+  Shift.fromT i j t = Subst.fromT i (fun n => Var (n + j)) t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply ShiftAsSubst.
+Qed.
+
+(* Lifting proofs agrees with substitution by lifted variables.                 *)
+Proposition ShiftAsSubstP : forall (p:Proof) (i j:nat),
+  Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply ShiftAsSubst.
+Qed.
+
+(* Lifting term arguments agrees with substitution by lifted variables.         *)
+Proposition ShiftAsSubstTs : forall (ts:Terms) (i j:nat),
+  Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply ShiftAsSubst.
+Qed.
+
 (* Lifting through application lifts the body and the arguments.                *)
 Proposition CommShiftT : forall (t:Term) (ts:Terms) (i j:nat),
   Shift.fromT i j (applyT t ts) =
@@ -412,9 +436,9 @@ Proposition CommShiftT : forall (t:Term) (ts:Terms) (i j:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros t ts i j.
-  rewrite (proj1 ShiftAsSubst (applyT t ts) i j).
+  rewrite (ShiftAsSubstT (applyT t ts) i j).
   rewrite FromT.
-  rewrite <- (proj1 ShiftAsSubst t (i + lengthT ts) j).
-  rewrite <- (proj2 (proj2 ShiftAsSubst) ts i j).
+  rewrite <- (ShiftAsSubstT t (i + lengthT ts) j).
+  rewrite <- (ShiftAsSubstTs ts i j).
   reflexivity.
 Qed.
