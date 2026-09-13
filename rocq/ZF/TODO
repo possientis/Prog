@@ -1,3 +1,4 @@
 Local: syntax highlighting
 Proof in assert: syntax highlighting
 Induction principle order inconsistent Induction vs Check/Induction
+dont use (proj1 ShiftFrom) etc

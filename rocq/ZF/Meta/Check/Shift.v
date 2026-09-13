@@ -246,8 +246,8 @@ Proof.
     - intros E C A p q H2 H3 H4 H5 H6 H7 H8 G M D H9. subst.
       apply CheckDef.
       + apply H3. assumption. reflexivity.
-      + rewrite <- Exists.FromT. apply H5. assumption. reflexivity.
-      + rewrite <- Unique.FromT. apply H7. assumption. reflexivity.
+      + rewrite <- Exists.CommShiftT. apply H5. assumption. reflexivity.
+      + rewrite <- Unique.CommShiftT. apply H7. assumption. reflexivity.
     - intros E C H2 G M D H3. subst. apply CheckTsNil.
     - intros E C t ts ty tys H2 H3 H4 H5 H6 G M D H7. subst.
       apply CheckTsCons; [apply H3|apply H5]; try assumption; reflexivity.

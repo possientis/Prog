@@ -103,14 +103,14 @@ Qed.
 (* Substitution above a lifting commutes with the lifting.                      *)
 Proposition ShiftFrom :
   (forall (t:Term) (i j k:nat) (r:nat -> Term),
-    fromT (i + j + k) r (Shift.fromT i j t) =
-    Shift.fromT i j (fromT (i + k) r t))                                   /\
+    Subst.fromT (i + j + k) r (Shift.fromT i j t) =
+    Shift.fromT i j (Subst.fromT (i + k) r t))                             /\
   (forall (p:Proof) (i j k:nat) (r:nat -> Term),
-    fromP (i + j + k) r (Shift.fromP i j p) =
-    Shift.fromP i j (fromP (i + k) r p))                                   /\
+    Subst.fromP (i + j + k) r (Shift.fromP i j p) =
+    Shift.fromP i j (Subst.fromP (i + k) r p))                             /\
   (forall (ts:Terms) (i j k:nat) (r:nat -> Term),
-    fromTs (i + j + k) r (Shift.fromTs i j ts) =
-    Shift.fromTs i j (fromTs (i + k) r ts)).
+    Subst.fromTs (i + j + k) r (Shift.fromTs i j ts) =
+    Shift.fromTs i j (Subst.fromTs (i + k) r ts)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -200,7 +200,7 @@ Qed.
 
 (* Substitution above a full lifting commutes with the full lifting.            *)
 Proposition ShiftFromT : forall (t:Term) (i j:nat) (r:nat -> Term),
-  fromT (i + j) r (shiftT i t) = shiftT i (fromT j r t).
+  Subst.fromT (i + j) r (shiftT i t) = shiftT i (Subst.fromT j r t).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros t i j r. unfold shiftT.
