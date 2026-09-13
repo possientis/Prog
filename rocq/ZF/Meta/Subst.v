@@ -105,12 +105,12 @@ Proposition SubstShift :
   (forall (t:Term) (i j k:nat) (r:nat -> Term),
     Subst.fromT (i + j + k) r (Shift.fromT i j t) =
     Shift.fromT i j (Subst.fromT (i + k) r t))                             /\
-  (forall (p:Proof) (i j k:nat) (r:nat -> Term),
-    Subst.fromP (i + j + k) r (Shift.fromP i j p) =
-    Shift.fromP i j (Subst.fromP (i + k) r p))                             /\
   (forall (ts:Terms) (i j k:nat) (r:nat -> Term),
     Subst.fromTs (i + j + k) r (Shift.fromTs i j ts) =
-    Shift.fromTs i j (Subst.fromTs (i + k) r ts)).
+    Shift.fromTs i j (Subst.fromTs (i + k) r ts))                           /\
+  (forall (p:Proof) (i j k:nat) (r:nat -> Term),
+    Subst.fromP (i + j + k) r (Shift.fromP i j p) =
+    Shift.fromP i j (Subst.fromP (i + k) r p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -191,11 +191,11 @@ Proof.
   - intros A x IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 i j k r. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros i j k r. reflexivity.
+  - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i j k r. simpl. rewrite IH. reflexivity.
   - intros t IH i j k r. simpl. rewrite IH. reflexivity.
   - intros name ts IH i j k r. simpl. rewrite IH. reflexivity.
-  - intros i j k r. reflexivity.
-  - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Substitution above a lifting commutes with the lifting in terms.             *)

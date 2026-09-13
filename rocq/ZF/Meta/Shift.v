@@ -52,8 +52,8 @@ Definition shiftP (n:nat) (p:Proof) : Proof := fromP 0 n p.
 
 Proposition WhenZero :
   (forall (t:Term)   (i:nat), fromT   i 0 t  = t)     /\
-  (forall (p:Proof)  (i:nat), fromP   i 0 p  = p)     /\
-  (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts).
+  (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts)    /\
+  (forall (p:Proof)  (i:nat), fromP   i 0 p  = p).
 Proof.
   apply Induction.
   - intros i. reflexivity.
@@ -79,11 +79,11 @@ Proof.
   - intros p IH i. simpl. rewrite IH. reflexivity.
   - intros A x IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 i. simpl. rewrite IH1, IH2, IH3. reflexivity.
+  - intros i. reflexivity.
+  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i. simpl. rewrite IH. reflexivity.
   - intros t IH i. simpl. rewrite IH. reflexivity.
   - intros name args IH i. simpl. rewrite IH. reflexivity.
-  - intros i. reflexivity.
-  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Lifting terms by zero leaves them unchanged.                                 *)
@@ -120,10 +120,10 @@ Qed.
 Proposition Comm :
   (forall (t:Term) (i j k l:nat), i <= k ->
     fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t))          /\
-  (forall (p:Proof) (i j k l:nat), i <= k ->
-    fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p))          /\
   (forall (ts:Terms) (i j k l:nat), i <= k ->
-    fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts)).
+    fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts))    /\
+  (forall (p:Proof) (i j k l:nat), i <= k ->
+    fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -210,12 +210,12 @@ Proof.
     rewrite IH1, IH2; try assumption. reflexivity.
   - intros A p q IH1 IH2 IH3 i j k l H1. simpl.
     rewrite IH1, IH2, IH3; try assumption. reflexivity.
-  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
-  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
-  - intros name ts IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
   - intros i j k l H1. reflexivity.
   - intros t ts IH1 IH2 i j k l H1. simpl.
     rewrite IH1, IH2; try assumption. reflexivity.
+  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros name ts IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
 Qed.
 
 (* A later lifting commutes with an earlier lifting in terms.                   *)
@@ -246,10 +246,10 @@ Qed.
 Proposition Add :
   (forall (t:Term) (i j k l:nat),
     fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t)          /\
-  (forall (p:Proof) (i j k l:nat),
-    fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p)          /\
   (forall (ts:Terms) (i j k l:nat),
-    fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts).
+    fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts)    /\
+  (forall (p:Proof) (i j k l:nat),
+    fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -305,11 +305,11 @@ Proof.
   - intros A x IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 i j k l. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros i j k l. reflexivity.
+  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i j k l. simpl. rewrite IH. reflexivity.
   - intros t IH i j k l. simpl. rewrite IH. reflexivity.
   - intros name ts IH i j k l. simpl. rewrite IH. reflexivity.
-  - intros i j k l. reflexivity.
-  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Lifting above an earlier lifting combines in terms.                          *)

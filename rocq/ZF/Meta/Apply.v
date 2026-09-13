@@ -78,12 +78,12 @@ Proposition Shift :
   (forall (t:Term) (ts:Terms) (i k:nat),
     Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
     Shift.fromT k i t)                                                    /\
-  (forall (p:Proof) (ts:Terms) (i k:nat),
-    Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
-    Shift.fromP k i p)                                                    /\
   (forall (us:Terms) (ts:Terms) (i k:nat),
     Subst.fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
-    Shift.fromTs k i us).
+    Shift.fromTs k i us)                                                  /\
+  (forall (p:Proof) (ts:Terms) (i k:nat),
+    Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
+    Shift.fromP k i p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -137,11 +137,11 @@ Proof.
   - intros A x IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 ts i k. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros ts i k. reflexivity.
+  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH ts i k. simpl. rewrite IH. reflexivity.
   - intros t IH ts i k. simpl. rewrite IH. reflexivity.
   - intros name us IH ts i k. simpl. rewrite IH. reflexivity.
-  - intros ts i k. reflexivity.
-  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Applying arguments below a term lifting lowers it by their length.           *)
@@ -177,14 +177,14 @@ Proposition From :
     fromT (k + i) r (fromT k (argT ts) t) =
     fromT k (argT (fromTs i r ts))
       (fromT (k + i + lengthT ts) r t))                                  /\
-  (forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
-    fromP (k + i) r (fromP k (argT ts) p) =
-    fromP k (argT (fromTs i r ts))
-      (fromP (k + i + lengthT ts) r p))                                  /\
   (forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
     fromTs (k + i) r (fromTs k (argT ts) us) =
     fromTs k (argT (fromTs i r ts))
-      (fromTs (k + i + lengthT ts) r us)).
+      (fromTs (k + i + lengthT ts) r us))                                 /\
+  (forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
+    fromP (k + i) r (fromP k (argT ts) p) =
+    fromP k (argT (fromTs i r ts))
+      (fromP (k + i + lengthT ts) r p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -353,11 +353,11 @@ Proof.
   - intros A x IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 ts i k r. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros ts i k r. reflexivity.
+  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
   - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
   - intros name us IH ts i k r. simpl. rewrite IH. reflexivity.
-  - intros ts i k r. reflexivity.
-  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Substitution through an applied term substitutes body and arguments.         *)
@@ -395,10 +395,10 @@ Qed.
 Proposition ShiftAsSubst :
   (forall (t:Term) (i j:nat),
     Shift.fromT i j t = Subst.fromT i (fun n => Var (n + j)) t)                 /\
-  (forall (p:Proof) (i j:nat),
-    Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p)                 /\
   (forall (ts:Terms) (i j:nat),
-    Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts).
+    Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts)             /\
+  (forall (p:Proof) (i j:nat),
+    Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Induction.
@@ -436,11 +436,11 @@ Proof.
   - intros A x IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 i j. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros i j. reflexivity.
+  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i j. simpl. rewrite IH. reflexivity.
   - intros t IH i j. simpl. rewrite IH. reflexivity.
   - intros name ts IH i j. simpl. rewrite IH. reflexivity.
-  - intros i j. reflexivity.
-  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Lifting terms agrees with substitution by lifted variables.                  *)
