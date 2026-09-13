@@ -204,8 +204,8 @@ Proof.
     - intros G name args tys t G1 G2 G3.
       apply (H27 E G name args tys t); assumption. }
   split.
-  - intros E G t ty H29. apply (proj1 (H28 E)); assumption.
+  - intros E G t ty H29. apply (H28 E); assumption.
   - split.
-    + intros E G ts tys H29. apply (proj1 (proj2 (H28 E))); assumption.
-    + intros E G p t H29. apply (proj2 (proj2 (H28 E))); assumption.
+    + intros E G ts tys H29. apply (H28 E); assumption.
+    + intros E G p t H29. apply (H28 E); assumption.
 Qed.

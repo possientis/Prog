@@ -213,19 +213,17 @@ Proof.
         -- assert ((n - k - lengthT ts + k <? k + i) = true) as H6. {
              apply Nat.ltb_lt.
              assert (n - k < i + lengthT ts) as H6. {
-               apply (proj2 (Nat.add_lt_mono_l (n - k)
-                 (i + lengthT ts) k)).
+               apply (Nat.add_lt_mono_l (n - k) (i + lengthT ts) k).
                assert (n < k + i + lengthT ts) as H6. {
                  apply Nat.ltb_lt. assumption. }
                rewrite <- (Nat.sub_add k n) in H6. 2: assumption.
                rewrite Nat.add_comm with (n := n - k) (m := k) in H6.
                rewrite <- Nat.add_assoc in H6. assumption. }
              assert (n - k - lengthT ts < i) as H7. {
-               apply (proj2 (Nat.add_lt_mono_r (n - k - lengthT ts)
-                 i (lengthT ts))).
+               apply (Nat.add_lt_mono_r (n - k - lengthT ts) i (lengthT ts)).
                rewrite Nat.sub_add. 2: assumption. assumption. }
              rewrite Nat.add_comm.
-             apply (proj1 (Nat.add_lt_mono_l (n - k - lengthT ts) i k)).
+             apply (Nat.add_lt_mono_l (n - k - lengthT ts) i k).
              assumption. }
            rewrite H6. simpl. rewrite H1.
            rewrite ArgTFromTsVar. 2: assumption.
@@ -245,8 +243,7 @@ Proof.
                  rewrite H7. rewrite Nat.add_sub. reflexivity. }
                rewrite H7. reflexivity. }
              assert (i <= n - k - lengthT ts) as H7. {
-               apply (proj2 (Nat.add_le_mono_r i
-                 (n - k - lengthT ts) (lengthT ts))).
+               apply (Nat.add_le_mono_r i (n - k - lengthT ts) (lengthT ts)).
                rewrite Nat.sub_add.
                2: apply Nat.le_trans with (m := i + lengthT ts);
                   [apply Nat.le_add_l|assumption]. assumption. }
