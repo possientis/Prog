@@ -153,6 +153,24 @@ Proof.
   apply Shift.
 Qed.
 
+(* Applying arguments below a proof lifting lowers it by their length.          *)
+Proposition ShiftP : forall (p:Proof) (ts:Terms) (i k:nat),
+  Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
+  Shift.fromP k i p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Shift.
+Qed.
+
+(* Applying arguments below term argument lifting lowers it by their length.    *)
+Proposition ShiftTs : forall (us:Terms) (ts:Terms) (i k:nat),
+  Subst.fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
+  Shift.fromTs k i us.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Shift.
+Qed.
+
 (* Substitution through application acts on the body and the arguments.         *)
 Proposition From :
   (forall (t:Term) (ts:Terms) (i k:nat) (r:nat -> Term),
@@ -351,6 +369,26 @@ Proof.
   intros t ts i r. unfold applyT, substT.
   assert (i = 0 + i) as H1. { reflexivity. }
   rewrite H1. apply From.
+Qed.
+
+(* Substitution through an applied proof substitutes body and arguments.        *)
+Proposition FromP : forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
+  fromP (k + i) r (fromP k (argT ts) p) =
+  fromP k (argT (fromTs i r ts))
+    (fromP (k + i + lengthT ts) r p).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply From.
+Qed.
+
+(* Substitution through applied term arguments substitutes all arguments.       *)
+Proposition FromTs : forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
+  fromTs (k + i) r (fromTs k (argT ts) us) =
+  fromTs k (argT (fromTs i r ts))
+    (fromTs (k + i + lengthT ts) r us).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply From.
 Qed.
 
 (* Lifting agrees with substitution by lifted variables.                        *)

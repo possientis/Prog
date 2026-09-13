@@ -86,11 +86,33 @@ Proof.
   - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
+(* Lifting terms by zero leaves them unchanged.                                 *)
+Proposition WhenZeroT : forall (t:Term) (i:nat), fromT i 0 t = t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply WhenZero.
+Qed.
+
+(* Lifting proofs by zero leaves them unchanged.                                *)
+Proposition WhenZeroP : forall (p:Proof) (i:nat), fromP i 0 p = p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply WhenZero.
+Qed.
+
+(* Lifting term arguments by zero leaves them unchanged.                        *)
+Proposition WhenZeroTs : forall (ts:Terms) (i:nat), fromTs i 0 ts = ts.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply WhenZero.
+Qed.
+
 (* Lifting a term by zero leaves it unchanged.                                  *)
 Proposition ShiftZeroT : forall (t:Term),
     shiftT 0 t = t.
 Proof.
-  intros t. apply WhenZero.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros t. apply WhenZeroT.
 Qed.
 
 
@@ -290,6 +312,30 @@ Proof.
   - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
+(* Lifting above an earlier lifting combines in terms.                          *)
+Proposition AddT : forall (t:Term) (i j k l:nat),
+  fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Add.
+Qed.
+
+(* Lifting above an earlier lifting combines in proofs.                         *)
+Proposition AddP : forall (p:Proof) (i j k l:nat),
+  fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Add.
+Qed.
+
+(* Lifting above an earlier lifting combines in term arguments.                 *)
+Proposition AddTs : forall (ts:Terms) (i j k l:nat),
+  fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  apply Add.
+Qed.
+
 (* Lifting above an already full-lifted term gives another full lifting.        *)
 Proposition FromShiftT : forall (t:Term) (i j k:nat),
   fromT i j (shiftT (i + k) t) = shiftT (i + j + k) t.
@@ -297,5 +343,5 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros t i j k. unfold shiftT.
   assert (0 + i = i) as H1. { reflexivity. }
-  rewrite <- H1. apply Add.
+  rewrite <- H1. apply AddT.
 Qed.
