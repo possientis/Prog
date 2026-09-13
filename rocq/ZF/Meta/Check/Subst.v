@@ -192,8 +192,7 @@ Proof.
           assert (CheckT E (G ++ D)
             (Shift.fromT 0 (length G) (applyT (Var (n - length G)) ts)) ty) as H11. {
             apply (ZF.Meta.Check.Shift.FromT E) with (G := []) (M := G) (D := D).
-            1: intros name tys u H12; apply (SigP E name); assumption.
-            assumption. }
+            assumption. assumption. }
           simpl in H11. rewrite H10 in H11. assumption.
         * assert (typeOf (M ++ D) (n - length G) = Some ty) as H8. {
             apply (TypeOf.AppSplitR G (M ++ D)); assumption. }

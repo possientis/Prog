@@ -3,6 +3,7 @@ Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Apply.
 Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.Env.
 Require Import ZF.Meta.Check.Induction.
 Require Import ZF.Meta.Check.Ts.
 Require Import ZF.Meta.Ctx.
@@ -152,21 +153,34 @@ Proof.
   apply Above.
 Qed.
 
+(* Proof signature conclusions are unchanged by lifting above their parameters. *)
+Proposition SigPAbove : forall (E:Env) (name:Name) (tys:list Ty) (t:Term)
+  (i j:nat),
+  Check E                       ->
+  sigP E name = Some (tys,t)    ->
+  length tys <= i               ->
+  Shift.fromT i j t = t.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros E name tys t i j H1 H2 H3.
+  assert (CheckT E (rev tys) t TyProp) as H4. {
+    apply (SigP E name); assumption. }
+  apply (AboveT E (rev tys) t TyProp); try assumption.
+  rewrite length_rev. assumption.
+Qed.
+
 (* Weakening preserves checked objects across an inserted context.              *)
 Proposition From :
   (forall (E:Env) (G M D:Ctx) (t:Term) (ty:Ty),
-    (forall (name:Name) (tys:list Ty) (u:Term),
-      sigP E name = Some (tys,u) -> CheckT E (rev tys) u TyProp)          ->
+    Check E                                                               ->
     CheckT E (G ++ D) t ty                                                ->
     CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty)      /\
   (forall (E:Env) (G M D:Ctx) (ts:Terms) (tys:list Ty),
-    (forall (name:Name) (us:list Ty) (t:Term),
-      sigP E name = Some (us,t) -> CheckT E (rev us) t TyProp)            ->
+    Check E                                                               ->
     CheckTs E (G ++ D) ts tys                                             ->
     CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)  /\
   (forall (E:Env) (G M D:Ctx) (p:Proof) (t:Term),
-    (forall (name:Name) (tys:list Ty) (u:Term),
-      sigP E name = Some (tys,u) -> CheckT E (rev tys) u TyProp)          ->
+    Check E                                                               ->
     CheckP E (G ++ D) p t                                                 ->
     CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
       (Shift.fromT (length G) (length M) t)).
@@ -174,18 +188,15 @@ Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (
     (forall (E:Env) (C:Ctx) (t:Term) (ty:Ty), CheckT E C t ty             ->
-      (forall (name:Name) (tys:list Ty) (u:Term),
-        sigP E name = Some (tys,u) -> CheckT E (rev tys) u TyProp)        ->
+      Check E                                                             ->
       forall (G M D:Ctx), C = G ++ D                                      ->
       CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty)    /\
     (forall (E:Env) (C:Ctx) (ts:Terms) (tys:list Ty), CheckTs E C ts tys  ->
-      (forall (name:Name) (us:list Ty) (t:Term),
-        sigP E name = Some (us,t) -> CheckT E (rev us) t TyProp)          ->
+      Check E                                                             ->
       forall (G M D:Ctx), C = G ++ D                                      ->
       CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)/\
     (forall (E:Env) (C:Ctx) p (t:Term), CheckP E C p t                    ->
-      (forall (name:Name) (tys:list Ty) (u:Term),
-        sigP E name = Some (tys,u) -> CheckT E (rev tys) u TyProp)        ->
+      Check E                                                             ->
       forall (G M D:Ctx), C = G ++ D                                      ->
       CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
         (Shift.fromT (length G) (length M) t))) as H2. {
@@ -248,7 +259,7 @@ Proof.
       rewrite Apply.CommShiftT.
       assert (Shift.fromT (length G + lengthT args) (length M) t = t) as H6. {
         apply (AboveT E (rev tys) t TyProp).
-        - apply (H5 name). assumption.
+        - apply (SigP E name); assumption.
         - rewrite length_rev.
           assert (lengthT args = length tys) as H6. {
             apply (Length E (G ++ D)); assumption. }
@@ -270,8 +281,7 @@ Qed.
 (* Weakening preserves checked terms across an inserted context.                *)
 Proposition FromT : forall (E:Env),
   forall (G M D:Ctx) (t:Term) (ty:Ty),
-    (forall (name:Name) (tys:list Ty) (u:Term),
-      sigP E name = Some (tys,u) -> CheckT E (rev tys) u TyProp)          ->
+    Check E                                                               ->
     CheckT E (G ++ D) t ty                                                ->
     CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty.
 Proof.
@@ -282,8 +292,7 @@ Qed.
 (* Weakening preserves checked term arguments across an inserted context.       *)
 Proposition FromTs : forall (E:Env),
   forall (G M D:Ctx) (ts:Terms) (tys:list Ty),
-    (forall (name:Name) (us:list Ty) (t:Term),
-      sigP E name = Some (us,t) -> CheckT E (rev us) t TyProp)            ->
+    Check E                                                               ->
     CheckTs E (G ++ D) ts tys                                             ->
     CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys.
 Proof.
@@ -294,8 +303,7 @@ Qed.
 (* Weakening preserves checked proofs across an inserted context.               *)
 Proposition FromP : forall (E:Env),
   forall (G M D:Ctx) (p:Proof) (t:Term),
-    (forall (name:Name) (tys:list Ty) (u:Term),
-      sigP E name = Some (tys,u) -> CheckT E (rev tys) u TyProp)          ->
+    Check E                                                               ->
     CheckP E (G ++ D) p t                                                 ->
     CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
       (Shift.fromT (length G) (length M) t).

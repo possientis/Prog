@@ -3,4 +3,3 @@ Proof in assert: syntax highlighting
 use Local for Induction_
 Meta.Check.Subst: fix statements 
 remove illicit use of Induction_
-Check.Shift import Check.Env
