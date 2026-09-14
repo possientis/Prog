@@ -1,2 +1,1 @@
-compare imports of Set.Single and Set.Pair
-local vs global name, eval ?
+qualified vs unqualified imports

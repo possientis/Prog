@@ -98,11 +98,9 @@ Definition IsNotPair : DeclP :=
 (* Environment.                                                                 *)
 
 Definition imports : Env := Env.unions
-  [ Env.fromListT
-      [ (Name.local "pair"   , Pair.pair)
-      ; (Name.local "toClass", Equiv.toClass)
-      ; (Name.local "Incl"   , Incl.Incl)
-      ]
+  [ Equiv.exports
+  ; Incl.exports
+  ; Pair.exports
   ].
 
 Definition exports : Env := Env.unions
