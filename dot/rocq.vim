@@ -240,7 +240,7 @@ syn match   rocqLtac contained "|-\|=>\|||\|\[\|\]\|\<_\>\||"
 
 " Proofs
 syn region rocqProofBody  contained contains=rocqProofPunctuation,rocqTactic,rocqTacticKwd,rocqProofComment,rocqProofKwd,rocqProofEnder,rocqProofDelim,rocqLtac matchgroup=rocqVernacPunctuation start="\.\s" start="\.$" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" end="\<Save\>.*\.\_s" keepend
-syn region rocqProofDelim contained matchgroup=rocqProofDelim start="\<Proof\>" matchgroup=rocqProofDot end="\.\_s"
+syn region rocqProofDelim contained matchgroup=rocqProofDelim start="\<Proof\>\ze\_s*\%(\.\|using\>\)" matchgroup=rocqProofDot end="\.\_s"
 syn region rocqProofEnder contained matchgroup=rocqProofDelim start="\<\%(Qed\|Defined\|Admitted\)\>" matchgroup=rocqVernacPunctuation end="\.\_s"
 syn region rocqProofEnder contained matchgroup=rocqError start="\<Abort\>" matchgroup=rocqVernacPunctuation end="\.\_s"
 syn region rocqProofEnder contained contains=rocqIdent matchgroup=rocqProofDelim start="\<Save\>" matchgroup=rocqVernacPunctuation end="\.\_s"
