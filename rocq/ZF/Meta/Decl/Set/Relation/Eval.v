@@ -1,11 +1,11 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
+Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Syntax.
-Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.
