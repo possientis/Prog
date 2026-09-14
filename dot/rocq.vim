@@ -219,7 +219,7 @@ syn region rocqDeclTerm   contained contains=@rocqTerm matchgroup=rocqVernacPunc
 syn region rocqDeclTerm   contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end="\.\_s"
 
 " Theorems
-syn region rocqThm       contains=rocqThmName matchgroup=rocqVernacCmd start="\<\%(Program\_s\+\)\?\%(Theorem\|Proposition\|Lemma\|Example\|Corollary\)\>" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" keepend
+syn region rocqThm       contains=rocqThmName matchgroup=rocqVernacCmd start="\<\%(Local\_s\+\)\?\%(Program\_s\+\)\?\%(Theorem\|Proposition\|Lemma\|Example\|Corollary\)\>" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" keepend
 syn region rocqThmName   contained contains=rocqThmTerm,rocqThmBinder matchgroup=rocqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s"
 syn region rocqThmTerm   contained contains=@rocqTerm,rocqProofBody matchgroup=rocqVernacCmd start=":" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\>"
 syn region rocqThmBinder contained matchgroup=rocqVernacPunctuation start="(" end=")" keepend
@@ -264,7 +264,7 @@ syn match   rocqProofPunctuation contained "(\|)\|:=\|:>\|:\|\.\|;\|,\|||\|\[\|\
 syn region  rocqProofComment     contained contains=rocqProofComment,rocqTodo start="(\*" end="\*)" extend keepend
 
 " Definitions
-syn region rocqDef          contains=rocqDefName matchgroup=rocqVernacCmd start="\<\%(Program\_s\+\)\?\%(Definition\|Let\)\>" matchgroup=rocqVernacPunctuation end=":="me=e-2 end="\.$"me=e-1 end="\.\s"me=e-2 nextgroup=rocqDefContents1,rocqProofBody keepend skipnl skipwhite skipempty
+syn region rocqDef          contains=rocqDefName matchgroup=rocqVernacCmd start="\<\%(Local\_s\+\)\?\%(Program\_s\+\)\?\%(Definition\|Let\)\>" matchgroup=rocqVernacPunctuation end=":="me=e-2 end="\.$"me=e-1 end="\.\s"me=e-2 nextgroup=rocqDefContents1,rocqProofBody keepend skipnl skipwhite skipempty
 syn region rocqDefName       contained contains=rocqDefBinder,rocqDefType,rocqDefContents1 matchgroup=rocqIdent start="[_[:alpha:]][_'[:alnum:]]*" matchgroup=NONE end="\.\_s" end=":="
 syn region rocqDefBinder     contained contains=rocqDefBinderType matchgroup=rocqVernacPunctuation start="(" end=")" keepend
 syn region rocqDefBinderType contained contains=@rocqTerm matchgroup=rocqVernacPunctuation start=":" end=")"
