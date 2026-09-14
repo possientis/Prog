@@ -183,7 +183,7 @@ Proof.
       forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D                        ->
       CheckTs E D ts (rev M)                                                ->
       CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys)              /\
-    (forall (E:Env) (C:Ctx) p (t:Term), CheckP E C p t                      ->
+    (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t              ->
       Check E                                                               ->
       forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D                        ->
       CheckTs E D ts (rev M)                                                ->

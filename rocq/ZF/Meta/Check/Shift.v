@@ -195,7 +195,7 @@ Proof.
       Check E                                                             ->
       forall (G M D:Ctx), C = G ++ D                                      ->
       CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)/\
-    (forall (E:Env) (C:Ctx) p (t:Term), CheckP E C p t                    ->
+    (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t            ->
       Check E                                                             ->
       forall (G M D:Ctx), C = G ++ D                                      ->
       CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
