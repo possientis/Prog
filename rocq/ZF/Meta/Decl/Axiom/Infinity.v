@@ -33,9 +33,9 @@ Definition Infinity : DeclP :=
     |}.
 
 Definition imports : Env := Env.unions
-  [ Empty.exports
-  ; Single.exports
-  ; Union2.exports
+  [ Env.unqualify Empty.exports
+  ; Env.unqualify Single.exports
+  ; Env.unqualify Union2.exports
   ].
 
 Definition exports : Env := Env.fromListP

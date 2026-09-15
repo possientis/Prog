@@ -36,8 +36,8 @@ Definition Replacement : DeclP :=
     |}.
 
 Definition imports : Env := Env.unions
-  [ Functional.exports
-  ; OrdPair.exports
+  [ Env.unqualify Functional.exports
+  ; Env.unqualify OrdPair.exports
   ].
 
 Definition exports : Env := Env.fromListP

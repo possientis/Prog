@@ -98,9 +98,9 @@ Definition IsNotPair : DeclP :=
 (* Environment.                                                                 *)
 
 Definition imports : Env := Env.unions
-  [ Equiv.exports
-  ; Incl.exports
-  ; Pair.exports
+  [ Env.unqualify Equiv.exports
+  ; Env.unqualify Incl.exports
+  ; Env.unqualify Pair.exports
   ].
 
 Definition exports : Env := Env.unions

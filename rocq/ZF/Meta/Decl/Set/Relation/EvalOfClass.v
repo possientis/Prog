@@ -17,13 +17,10 @@ Definition eval : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition evalName : Name :=
-  Name.name ["Set"; "Relation"; "EvalOfClass"] "eval".
-
 Definition imports : Env := Env.empty.
 
 Definition exports : Env := Env.fromListT
-  [ (evalName, eval)
+  [ (Name.local "eval", eval)
   ].
 
 Definition env : Env := Env.union imports exports.

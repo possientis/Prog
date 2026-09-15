@@ -137,8 +137,8 @@ Definition ToClassIncl : DeclP :=
 (* Environment.                                                                 *)
 
 Definition imports : Env := Env.unions
-  [ Equiv.exports
-  ; Incl.exports
+  [ Env.unqualify Equiv.exports
+  ; Env.unqualify Incl.exports
   ].
 
 Definition exports : Env := Env.unions

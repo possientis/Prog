@@ -29,14 +29,14 @@ Definition Choice : DeclT :=
                 (Imp
                   (NotEq (Var 0) (IdentT (Name.local "empty") (args [])))
                   (Elem
-                    (IdentT Eval.evalName (args [Var 1; Var 0]))
+                    (IdentT (Name.qualified "Eval" "eval") (args [Var 1; Var 0]))
                     (Var 0)))))))
   |}.
 
 Definition imports : Env := Env.unions
-  [ FunctionOn.exports
-  ; Empty.exports
-  ; Eval.exports
+  [ Env.unqualify FunctionOn.exports
+  ; Env.unqualify Empty.exports
+  ; Env.qualifyAs "Eval" Eval.exports
   ].
 
 Definition exports : Env := Env.fromListT

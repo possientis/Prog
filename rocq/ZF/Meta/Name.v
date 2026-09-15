@@ -5,28 +5,28 @@ Require Import Coq.Strings.String.
 Import ListNotations.
 Open Scope string_scope.
 
-Definition ModuleName : Type := list string.
+Local Definition Qualifier : Type := option string.
 
-Definition LocalName : Type := string.
+Local Definition LocalName : Type := string.
 
 Record Name : Type := mkName
-  { moduleName : ModuleName
-  ; localName  : LocalName
+  { qualifier : Qualifier
+  ; localName : LocalName
   }.
 
-Definition name (ms:ModuleName) (s:LocalName) : Name :=
-  mkName ms s.
-
 Definition local (s:LocalName) : Name :=
-  name [] s.
+  mkName None s.
 
-Fixpoint moduleNameEqb (ms ns:ModuleName) : bool :=
-  match ms, ns with
-  | []      , []       => true
-  | m :: ms , n :: ns  => String.eqb m n && moduleNameEqb ms ns
-  | _       , _        => false
+Definition qualified (q:string) (s:LocalName) : Name :=
+  mkName (Some q) s.
+
+Local Definition qualifierEqb (q r:Qualifier) : bool :=
+  match q, r with
+  | None   , None    => true
+  | Some q , Some r  => String.eqb q r
+  | _      , _       => false
   end.
 
 Definition eqb (x y:Name) : bool :=
-  moduleNameEqb (moduleName x) (moduleName y) &&
+  qualifierEqb (qualifier x) (qualifier y) &&
     String.eqb (localName x) (localName y).

@@ -29,7 +29,7 @@ Definition CH : DeclT :=
         (IdentT (Name.local "card")
           (args [IdentT (Name.local "power")
             (args [IdentT (Name.local "omega") (args [])])]))
-        (IdentT EvalOfClass.evalName
+        (IdentT (Name.qualified "EvalOfClass" "eval")
           (args [IdentT (Name.local "Aleph") (args []);
            IdentT (Name.local "one") (args [])]))
   |}.
@@ -45,9 +45,9 @@ Definition GCH : DeclT :=
           (Equal
             (IdentT (Name.local "card")
               (args [IdentT (Name.local "power")
-                (args [IdentT EvalOfClass.evalName
+                (args [IdentT (Name.qualified "EvalOfClass" "eval")
                   (args [IdentT (Name.local "Aleph") (args []); Var 0])])]))
-            (IdentT EvalOfClass.evalName
+            (IdentT (Name.qualified "EvalOfClass" "eval")
               (args [IdentT (Name.local "Aleph") (args []);
                IdentT (Name.local "succ") (args [Var 0])]))))
   |}.
@@ -65,14 +65,14 @@ Definition WhenGCH : DeclP :=
     |}.
 
 Definition imports : Env := Env.unions
-  [ Aleph.exports
-  ; Number.exports
-  ; Natural.exports
-  ; Omega.exports
-  ; Ordinal.exports
-  ; Succ.exports
-  ; Power.exports
-  ; EvalOfClass.exports
+  [ Env.unqualify Aleph.exports
+  ; Env.unqualify Number.exports
+  ; Env.unqualify Natural.exports
+  ; Env.unqualify Omega.exports
+  ; Env.unqualify Ordinal.exports
+  ; Env.unqualify Succ.exports
+  ; Env.unqualify Power.exports
+  ; Env.qualifyAs "EvalOfClass" EvalOfClass.exports
   ].
 
 Definition exports : Env := Env.unions

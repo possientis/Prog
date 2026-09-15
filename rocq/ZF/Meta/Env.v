@@ -56,6 +56,36 @@ Definition union (e1 e2:Env) : Env :=
        | None   => proofs e2 name
        end |}.
 
+(* An imported environment exposes its declarations without qualification.      *)
+Definition unqualify (e:Env) : Env :=
+  {| terms := fun name =>
+       match Name.qualifier name with
+       | None   => terms e (Name.local (Name.localName name))
+       | Some _ => None
+       end
+   ; proofs := fun name =>
+       match Name.qualifier name with
+       | None   => proofs e (Name.local (Name.localName name))
+       | Some _ => None
+       end |}.
+
+(* An imported environment exposes its declarations under one qualifier.        *)
+Definition qualifyAs (q:string) (e:Env) : Env :=
+  {| terms := fun name =>
+       match Name.qualifier name with
+       | Some r =>
+           if String.eqb r q then terms e (Name.local (Name.localName name))
+           else None
+       | None   => None
+       end
+   ; proofs := fun name =>
+       match Name.qualifier name with
+       | Some r =>
+           if String.eqb r q then proofs e (Name.local (Name.localName name))
+           else None
+       | None   => None
+       end |}.
+
 (* The union of a list of environments prefers earlier environments.            *)
 Fixpoint unions (es:list Env) : Env :=
   match es with

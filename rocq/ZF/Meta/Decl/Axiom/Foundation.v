@@ -31,8 +31,8 @@ Definition Foundation : DeclP :=
     |}.
 
 Definition imports : Env := Env.unions
-  [ Empty.exports
-  ; Inter2.exports
+  [ Env.unqualify Empty.exports
+  ; Env.unqualify Inter2.exports
   ].
 
 Definition exports : Env := Env.fromListP

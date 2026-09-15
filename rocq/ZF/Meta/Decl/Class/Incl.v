@@ -125,7 +125,7 @@ Definition Tran : DeclP :=
 
 (* Environment.                                                                 *)
 
-Definition imports : Env := Equiv.exports.
+Definition imports : Env := Env.unqualify Equiv.exports.
 
 Definition exports : Env := Env.unions
   [ Env.fromListT

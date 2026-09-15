@@ -3,7 +3,6 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Env.
-Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
@@ -21,16 +20,13 @@ Definition eval : DeclT :=
   ;  bodyT := HoleT TySet
   |}.
 
-Definition evalName : Name :=
-  Name.name ["Set"; "Relation"; "Eval"] "eval".
-
 Definition imports : Env := Env.unions
-  [ Empty.exports
-  ; FunctionOn.exports
+  [ Env.unqualify Empty.exports
+  ; Env.unqualify FunctionOn.exports
   ].
 
 Definition exports : Env := Env.fromListT
-  [ (evalName, eval)
+  [ (Name.local "eval", eval)
   ].
 
 Definition env : Env := Env.union imports exports.
