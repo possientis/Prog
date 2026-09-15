@@ -46,7 +46,5 @@ Proof.
   inversion H2. subst.
   assert (CheckP E {| paraP := tys; conclP := t; bodyP := p |}) as H4. {
     apply (DeclP E name); assumption. }
-  unfold ZF.Meta.Check.DeclP.CheckP in H4.
-  destruct H4 as [H4 H5].
-  apply H4.
+  destruct H4 as [H4 H5]. apply H4.
 Qed.
