@@ -50,10 +50,10 @@ Proof.
 Qed.
 
 (* a lies in the class of sets defined by A iff it is equal to the set of A.    *)
-Proposition IsSetOfFrom : forall (A:Class) (a:U) (p:Small A),
+Proposition IsSetOfFrom : forall (A:Class) (p:Small A) (a:U),
   IsSetOf A a <-> a = fromClass A p.
 Proof.
-  intros A a p. split; intros H1.
+  intros A p a. split; intros H1.
   - apply Define.IsUnique. assumption.
   - rewrite H1. apply IsIn.
 Qed.
