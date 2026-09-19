@@ -1,6 +1,10 @@
 Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.DeclP.
+Require Import ZF.Meta.Check.DeclT.
+Require Import ZF.Meta.DeclP.
+Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -41,6 +45,10 @@ Ltac check :=
   | |- Core.CheckP _ _ (IdentP _ _) _ => eapply CheckIdentP; [reflexivity|check]
   end.
 
-Ltac check_term := check.
-Ltac check_terms := check.
-Ltac check_proof := check.
+Ltac checkT :=
+  cbv [DeclT.CheckT args fromList ctxT paraT resT bodyT];
+  check.
+
+Ltac checkP :=
+  cbv [DeclP.CheckP args fromList ctxP conclP paraP bodyP];
+  split; check.
