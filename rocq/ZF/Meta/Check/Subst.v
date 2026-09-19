@@ -12,6 +12,7 @@ Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Shift.
+Require Import ZF.Meta.Small.
 Require Import ZF.Meta.Subst.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.TypeOf.
@@ -98,6 +99,8 @@ Proof.
       rewrite H2, H4; try assumption. reflexivity.
     - intros E G A p q H1 H2 H3 H4 H5 H6 i r H7 H8. simpl.
       rewrite H2, H4, H6; try assumption. reflexivity.
+    - intros E G A p H1 H2 H3 H4 i r H5 H6. simpl.
+      rewrite H2, H4; try assumption. reflexivity.
     - intros E G i r H1 H2. reflexivity.
     - intros E G t ts ty tys H1 H2 H3 H4 i r H5 H6. simpl.
       rewrite H2, H4; try assumption. reflexivity.
@@ -297,6 +300,14 @@ Proof.
           apply H7 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
           reflexivity. }
         rewrite Unique.SubstT in H9. assumption.
+    - intros E C A p H2 H3 H4 H5 H6 G M D ts H7 H8. subst.
+      apply CheckFromC.
+      + apply H3 with M; try assumption. reflexivity.
+      + assert (CheckP E (G ++ D) (fromP (length G) (argT ts) p)
+          (fromT (length G) (argT ts) (Small A))) as H7. {
+          apply H5 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
+          reflexivity. }
+        rewrite Small.SubstT in H7. assumption.
     - intros E C H1 G M D ts H2 H3. subst. apply CheckTsNil.
     - intros E C t us ty tys H2 H3 H4 H5 H6 G M D ts H7 H8.
       subst. apply CheckTsCons.

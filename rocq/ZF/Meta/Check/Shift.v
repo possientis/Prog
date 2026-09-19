@@ -11,6 +11,7 @@ Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Shift.
+Require Import ZF.Meta.Small.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.TypeOf.
 Require Import ZF.Meta.Ty.
@@ -108,6 +109,8 @@ Proof.
     rewrite H2, H4; try assumption. reflexivity.
   - intros E G A p q H1 H2 H3 H4 H5 H6 i j H7. simpl.
     rewrite H2, H4, H6; try assumption. reflexivity.
+  - intros E G A p H1 H2 H3 H4 i j H5. simpl.
+    rewrite H2, H4; try assumption. reflexivity.
   - intros E G i j H1. reflexivity.
   - intros E G t ts ty tys H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity.
@@ -248,6 +251,10 @@ Proof.
       + apply H3. assumption. reflexivity.
       + rewrite <- Exists.ShiftT. apply H5. assumption. reflexivity.
       + rewrite <- Unique.ShiftT. apply H7. assumption. reflexivity.
+    - intros E C A p H2 H3 H4 H5 H6 G M D H7. subst.
+      apply CheckFromC.
+      + apply H3. assumption. reflexivity.
+      + rewrite <- Small.ShiftT. apply H5. assumption. reflexivity.
     - intros E C H2 G M D H3. subst. apply CheckTsNil.
     - intros E C t ts ty tys H2 H3 H4 H5 H6 G M D H7. subst.
       apply CheckTsCons; [apply H3|apply H5]; try assumption; reflexivity.

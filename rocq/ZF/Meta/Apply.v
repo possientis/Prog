@@ -137,6 +137,7 @@ Proof.
   - intros A x IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 ts i k. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros A p IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
   - intros ts i k. reflexivity.
   - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH ts i k. simpl. rewrite IH. reflexivity.
@@ -353,6 +354,7 @@ Proof.
   - intros A x IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 ts i k r. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros A p IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros ts i k r. reflexivity.
   - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
@@ -436,6 +438,7 @@ Proof.
   - intros A x IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 i j. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros A p IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
   - intros i j. reflexivity.
   - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i j. simpl. rewrite IH. reflexivity.

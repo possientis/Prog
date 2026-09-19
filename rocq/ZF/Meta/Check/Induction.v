@@ -6,6 +6,7 @@ Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
+Require Import ZF.Meta.Small.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.TypeOf.
 Require Import ZF.Meta.Ty.
@@ -135,6 +136,12 @@ Proposition Induction :
       CheckP E G q (Unique A)                                                 ->
       R E G q (Unique A)                                                      ->
       P E G (Def A p q) TySet)                                                ->
+    (forall (E:Env) (G:Ctx) (A:Term) (p:Proof),
+      CheckT E G A TyClass                                                    ->
+      P E G A TyClass                                                         ->
+      CheckP E G p (Small A)                                                  ->
+      R E G p (Small A)                                                       ->
+      P E G (FromC A p) TySet)                                                ->
     (forall (E:Env) (G:Ctx),
       Q E G NilT [])                                                          ->
     (forall (E:Env) (G:Ctx) (t:Term) (ts:Terms) (ty:Ty) (tys:list Ty),
@@ -165,14 +172,14 @@ Proposition Induction :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros P Q R H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
-  intros H15 H16 H17 H18 H19 H20 H21 H22 H23 H24 H25 H26 H27.
+  intros H15 H16 H17 H18 H19 H20 H21 H22 H23 H24 H25 H26 H27 H28.
   assert (forall (E:Env),
     (forall (G:Ctx) (t:Term) (ty:Ty),
       CheckT E G t ty -> P E G t ty)            /\
     (forall (G:Ctx) (ts:Terms) (tys:list Ty),
       CheckTs E G ts tys -> Q E G ts tys)       /\
     (forall (G:Ctx) (p:Proof) (t:Term),
-      CheckP E G p t -> R E G p t)) as H28. {
+      CheckP E G p t -> R E G p t)) as H29. {
     intros E. apply Induction_.
     - intros G. apply H1.
     - intros G. apply H2.
@@ -197,15 +204,16 @@ Proof.
     - intros G p G1 G2. apply H20; assumption.
     - intros G A x G1 G2 G3 G4. apply H21; assumption.
     - intros G A p q G1 G2 G3 G4 G5 G6. apply H22; assumption.
-    - intros G. apply H23.
-    - intros G t ts ty tys G1 G2 G3 G4. apply H24; assumption.
-    - intros G t G1 G2. apply H25; assumption.
+    - intros G A p G1 G2 G3 G4. apply H23; assumption.
+    - intros G. apply H24.
+    - intros G t ts ty tys G1 G2 G3 G4. apply H25; assumption.
     - intros G t G1 G2. apply H26; assumption.
+    - intros G t G1 G2. apply H27; assumption.
     - intros G name args tys t G1 G2 G3.
-      apply (H27 E G name args tys t); assumption. }
+      apply (H28 E G name args tys t); assumption. }
   split.
-  - intros E G t ty H29. apply (H28 E); assumption.
+  - intros E G t ty H30. apply (H29 E); assumption.
   - split.
-    + intros E G ts tys H29. apply (H28 E); assumption.
-    + intros E G p t H29. apply (H28 E); assumption.
+    + intros E G ts tys H30. apply (H29 E); assumption.
+    + intros E G p t H30. apply (H29 E); assumption.
 Qed.

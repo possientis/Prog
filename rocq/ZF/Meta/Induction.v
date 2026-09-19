@@ -85,6 +85,10 @@ Proposition Induction :
       R p                                     ->
       R q                                     ->
       P (Def A p q))                          ->
+    (forall (A:Term) (p:Proof),
+      P A                                     ->
+      R p                                     ->
+      P (FromC A p))                          ->
     Q NilT                                    ->
     (forall (t:Term) (ts:Terms),
       P t                                     ->
@@ -105,7 +109,7 @@ Proposition Induction :
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros P Q R H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
-  intros H15 H16 H17 H18 H19 H20 H21 H22 H23 H24 H25 H26 H27.
+  intros H15 H16 H17 H18 H19 H20 H21 H22 H23 H24 H25 H26 H27 H28.
   apply Induction_; try assumption.
   - intros x G1 y G2. apply H6;  assumption.
   - intros x G1 y G2. apply H7;  assumption.
@@ -120,5 +124,6 @@ Proof.
   - intros x G1 y G2. apply H16; assumption.
   - intros A G1 x G2. apply H21; assumption.
   - intros A G1 p G2 q G3. apply H22; assumption.
-  - intros t G1 ts G2. apply H24; assumption.
+  - intros A G1 p G2. apply H23; assumption.
+  - intros t G1 ts G2. apply H25; assumption.
 Qed.

@@ -7,6 +7,7 @@ Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.DeclP.
+Require Import ZF.Meta.Small.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.TypeOf.
@@ -96,6 +97,10 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     CheckP E G p (Exists A)                  ->
     CheckP E G q (Unique A)                  ->
     CheckT E G (Def A p q) TySet
+| CheckFromC : forall (G:Ctx) (A:Term) (p:Proof),
+    CheckT E G A TyClass                     ->
+    CheckP E G p (Small A)                   ->
+    CheckT E G (FromC A p) TySet
 with CheckTs (E:Env) : Ctx -> Terms -> list Ty -> Prop :=
 | CheckTsNil : forall (G:Ctx),
     CheckTs E G NilT []

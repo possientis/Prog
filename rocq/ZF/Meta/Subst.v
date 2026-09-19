@@ -30,6 +30,7 @@ Fixpoint fromT (i:nat) (r:nat -> Term) (t:Term) : Term :=
   | Lam p            => Lam   (fromT (S i) r p)
   | App A x          => App   (fromT i r A) (fromT i r x)
   | Def A p q        => Def   (fromT i r A) (fromP i r p) (fromP i r q)
+  | FromC A p        => FromC (fromT i r A) (fromP i r p)
   end
 with fromP (i:nat) (r:nat -> Term) (p:Proof) : Proof :=
   match p with
@@ -191,6 +192,7 @@ Proof.
   - intros A x IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros A p q IH1 IH2 IH3 i j k r. simpl.
     rewrite IH1, IH2, IH3. reflexivity.
+  - intros A p IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros i j k r. reflexivity.
   - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i j k r. simpl. rewrite IH. reflexivity.

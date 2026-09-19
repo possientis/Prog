@@ -38,6 +38,8 @@ Inductive Term : Type :=
 | App     : Term   -> Term      -> Term
 (* A definition term packages a class with existence and uniqueness proofs.     *)
 | Def     : Term   -> Proof     -> Proof     -> Term
+(* A small class term packages a class with a smallness proof.                  *)
+| FromC   : Term   -> Proof     -> Term
 with Proof : Type :=
 (* An incomplete proof reference for a proposition.                             *)
 | HoleP  : Term    -> Proof
