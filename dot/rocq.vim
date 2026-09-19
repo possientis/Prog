@@ -233,7 +233,7 @@ syn region rocqLtacProfile  contained contains=rocqLtacIdent,rocqVernacPunctuati
 syn region rocqLtacIdent    contained matchgroup=rocqVernacCmd start="Ltac" matchgroup=rocqIdent end="[_[:alpha:]][_'[:alnum:]]*"
 syn region rocqLtacContents contained contains=rocqTactic,rocqTacticKwd,rocqLtac,rocqProofPunctuation matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
 
-syn keyword rocqLtac contained do info progress repeat try
+syn keyword rocqLtac contained do info progress repeat try tryif then else
 syn keyword rocqLtac contained abstract constr context end external eval fail first fresh fun goal
 syn keyword rocqLtac contained idtac in let ltac lazymatch match of rec reverse solve type with return
 syn match   rocqLtac contained "|-\|=>\|||\|\[\|\]\|\<_\>\||"
@@ -246,7 +246,7 @@ syn region rocqProofEnder contained matchgroup=rocqError start="\<Abort\>" match
 syn region rocqProofEnder contained contains=rocqIdent matchgroup=rocqProofDelim start="\<Save\>" matchgroup=rocqVernacPunctuation end="\.\_s"
 
 syn keyword rocqTactic    contained absurd apply assert assumption auto autorewrite firstorder specialize
-syn keyword rocqTactic    contained case[_eq] change clear[body] cofix cbv lazy compare compute congruence constructor contradiction cut[rewrite]
+syn keyword rocqTactic    contained case[_eq] cbn change clear[body] cofix cbv lazy compare compute congruence constructor contradiction cut[rewrite]
 syn keyword rocqTactic    contained decide decompose dependant destruct discriminate double
 syn keyword rocqTactic    contained eapply eassumption eauto econstructor elim[type] equality evar exact eexact exists exfalso
 syn keyword rocqTactic    contained field fix f_equal fold fourier functional generalize hnf
