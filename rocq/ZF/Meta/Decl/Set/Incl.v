@@ -24,7 +24,7 @@ Definition Incl : DeclT :=
           (Elem (Var 0) (Var 1)))
   |}.
 
-(* forall a b, Incl a b -> CIN.Incl (toClass a) (toClass b).              *)
+(* forall a b, Incl a b -> CIN.Incl (toClass a) (toClass b).                    *)
 Definition ToClass : DeclP :=
   let concl :=
     Imp
@@ -38,7 +38,7 @@ Definition ToClass : DeclP :=
     ;  bodyP  := HoleP concl
     |}.
 
-(* forall a b, CIN.Incl (toClass a) (toClass b) -> Incl a b.              *)
+(* forall a b, CIN.Incl (toClass a) (toClass b) -> Incl a b.                    *)
 Definition FromClass : DeclP :=
   let concl :=
     Imp

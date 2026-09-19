@@ -31,6 +31,7 @@ Ltac check :=
           let tys' := constr:(tys) in
           let ty'  := constr:(ty) in
           eapply (CheckIdentT _ _ name _ tys' ty'); [reflexivity|check]
+      | None => fail 100 "unknown term declaration" name
       end
   | |- Core.CheckT _ _ (Elem _ _)  TyProp   => apply CheckElem; check
   | |- Core.CheckT _ _ (Leq _ _)   TyProp   => apply CheckLeq; check
@@ -74,7 +75,10 @@ Ltac check :=
              cbn);
         check
       ]
-  | |- Core.CheckT _ _ _ _                  => cbv [Exists Unique Small shiftT] ; check
+  | |- Core.CheckT _ _ _ _                  =>
+      tryif progress (cbv [Exists Unique Small shiftT])
+      then check
+      else fail 1 "unsupported term-checking goal"
   | |- Core.CheckTs _ _ NilT []             => apply CheckTsNil
   | |- Core.CheckTs _ _ (ConsT _ _) (_ :: _)=> apply CheckTsCons; check
   | |- Core.CheckTs _ _ NilT _              => cbn; apply CheckTsNil
@@ -97,6 +101,7 @@ Ltac check :=
             let t' := constr:(t) in
             change (Core.CheckP E G (IdentP name args) (applyT t' args));
             eapply (CheckIdentP _ _ name args tys' t'); [reflexivity|check]
+        | None => fail 100 "unknown proof declaration" name
         end
       end.
 
