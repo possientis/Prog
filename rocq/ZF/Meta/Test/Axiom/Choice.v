@@ -3,6 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.DeclT.
+Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -13,26 +14,6 @@ Require Import ZF.Meta.Decl.Axiom.Choice.
 
 Proposition Choice : CheckT (Choice.env) Choice.
 Proof.
-  apply CheckAll, CheckEx, CheckAnd.
-  - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsCons.
-      * apply CheckVar. reflexivity.
-      * apply CheckTsNil.
-  - apply CheckAll, CheckImp.
-    + apply CheckElem; apply CheckVar; reflexivity.
-    + apply CheckImp.
-      * apply CheckNotEq.
-        -- apply CheckVar. reflexivity.
-        -- apply CheckIdentT with []. 1: reflexivity.
-           apply CheckTsNil.
-      * apply CheckElem.
-        -- apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-           apply CheckTsCons.
-           ++ apply CheckVar. reflexivity.
-           ++ apply CheckTsCons.
-              ** apply CheckVar. reflexivity.
-              ** apply CheckTsNil.
-        -- apply CheckVar. reflexivity.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  unfold Choice. checkT.
 Qed.

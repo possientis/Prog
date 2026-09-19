@@ -4,6 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.Check.DeclT.
+Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
@@ -19,165 +20,54 @@ Open Scope string_scope.
 Proposition IsPairOf : CheckT (Pair.env) Pair.IsPairOf.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckLam, CheckAll, CheckIff.
-  - apply CheckElem; apply CheckVar; reflexivity.
-  - apply CheckOr; apply CheckEqual; apply CheckVar; reflexivity.
+  unfold Pair.IsPairOf. checkT.
 Qed.
 
 (* The existence proof declaration is well sorted.                              *)
 Proposition Exists : CheckP (Pair.env) Pair.Exists.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT (Pair.env) (ctxP Pair.Exists)
-    (conclP Pair.Exists) TyProp) as H1. {
-    apply CheckEx, CheckApp.
-    - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-      apply CheckTsCons.
-      + apply CheckVar. reflexivity.
-      + apply CheckTsCons.
-        * apply CheckVar. reflexivity.
-        * apply CheckTsNil.
-    - apply CheckVar. reflexivity. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Pair.Exists. checkP.
 Qed.
 
 (* The uniqueness proof declaration is well sorted.                             *)
 Proposition Unique : CheckP (Pair.env) Pair.Unique.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT (Pair.env) (ctxP Pair.Unique)
-    (conclP Pair.Unique) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckImp.
-    - apply CheckApp.
-      + apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-        apply CheckTsCons.
-        * apply CheckVar. reflexivity.
-        * apply CheckTsCons.
-          -- apply CheckVar. reflexivity.
-          -- apply CheckTsNil.
-      + apply CheckVar. reflexivity.
-    - apply CheckImp.
-      + apply CheckApp.
-        * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-          apply CheckTsCons.
-          -- apply CheckVar. reflexivity.
-          -- apply CheckTsCons.
-             ++ apply CheckVar. reflexivity.
-             ++ apply CheckTsNil.
-        * apply CheckVar. reflexivity.
-      + apply CheckEqual; apply CheckVar; reflexivity. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Pair.Unique. checkP.
 Qed.
 
 (* The declaration body for pair denotes a set backed by proof references.      *)
 Proposition pair : CheckT (Pair.env) Pair.pair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckDef.
-  - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsCons.
-      * apply CheckVar. reflexivity.
-      * apply CheckTsNil.
-  - apply CheckIdentP with
-      (tys := [TySet;TySet]) (t := conclP Decl.Set.Pair.Exists).
-    1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsCons.
-      * apply CheckVar. reflexivity.
-      * apply CheckTsNil.
-  - apply CheckIdentP with
-      (tys := [TySet;TySet]) (t := conclP Decl.Set.Pair.Unique).
-    1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsCons.
-      * apply CheckVar. reflexivity.
-      * apply CheckTsNil.
+  unfold Pair.pair. checkT.
 Qed.
 
 (* The characterization proposition is well sorted.                             *)
 Proposition Charac : CheckP (Pair.env) Pair.Charac.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT (Pair.env) (ctxP Pair.Charac)
-    (conclP Pair.Charac) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckAll, CheckIff.
-    - apply CheckElem.
-      + apply CheckVar. reflexivity.
-      + apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-        apply CheckTsCons.
-        * apply CheckVar. reflexivity.
-        * apply CheckTsCons.
-          -- apply CheckVar. reflexivity.
-          -- apply CheckTsNil.
-    - apply CheckOr; apply CheckEqual; apply CheckVar; reflexivity. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Pair.Charac. checkP.
 Qed.
 
 (* The left membership proposition is well sorted.                              *)
 Proposition IsInL : CheckP (Pair.env) Pair.IsInL.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT (Pair.env) (ctxP Pair.IsInL)
-    (conclP Pair.IsInL) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckElem.
-    - apply CheckVar. reflexivity.
-    - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-      apply CheckTsCons.
-      + apply CheckVar. reflexivity.
-      + apply CheckTsCons.
-        * apply CheckVar. reflexivity.
-        * apply CheckTsNil. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Pair.IsInL. checkP.
 Qed.
 
 (* The right membership proposition is well sorted.                             *)
 Proposition IsInR : CheckP (Pair.env) Pair.IsInR.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT (Pair.env) (ctxP Pair.IsInR)
-    (conclP Pair.IsInR) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckElem.
-    - apply CheckVar. reflexivity.
-    - apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-      apply CheckTsCons.
-      + apply CheckVar. reflexivity.
-      + apply CheckTsCons.
-        * apply CheckVar. reflexivity.
-        * apply CheckTsNil. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Pair.IsInR. checkP.
 Qed.
 
 (* The class-inclusion proposition is well sorted.                              *)
 Proposition ToClassIncl : CheckP (Pair.env) Pair.ToClassIncl.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT (Pair.env) (ctxP Pair.ToClassIncl)
-    (conclP Pair.ToClassIncl) TyProp) as H1. {
-    apply CheckAll, CheckAll, CheckIff.
-    - apply CheckAnd.
-      + apply CheckApp.
-        * apply CheckVar. reflexivity.
-        * apply CheckVar. reflexivity.
-      + apply CheckApp.
-        * apply CheckVar. reflexivity.
-        * apply CheckVar. reflexivity.
-    - apply CheckIdentT with [TyClass;TyClass]. 1: reflexivity.
-      apply CheckTsCons.
-      + apply CheckIdentT with [TySet]. 1: reflexivity.
-        apply CheckTsCons.
-        * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-          apply CheckTsCons.
-          -- apply CheckVar. reflexivity.
-          -- apply CheckTsCons.
-             ++ apply CheckVar. reflexivity.
-             ++ apply CheckTsNil.
-        * apply CheckTsNil.
-      + apply CheckTsCons.
-        * apply CheckVar. reflexivity.
-        * apply CheckTsNil. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Pair.ToClassIncl. checkP.
 Qed.

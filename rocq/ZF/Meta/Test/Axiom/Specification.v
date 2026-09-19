@@ -3,6 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.DeclP.
+Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
@@ -15,14 +16,5 @@ Require Import ZF.Meta.Decl.Axiom.Specification.
 Proposition Specification : CheckP (Specification.env) Specification.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT Specification.env (ctxP Specification)
-    (conclP Specification) TyProp) as H1. {
-    apply CheckAll, CheckEx, CheckAll, CheckIff.
-    - apply CheckElem; apply CheckVar; reflexivity.
-    - apply CheckAnd.
-      + apply CheckElem; apply CheckVar; reflexivity.
-      + apply CheckApp.
-        * apply CheckVar. reflexivity.
-        * apply CheckVar. reflexivity. }
-  split. 1: assumption. apply CheckHoleP. assumption.
+  unfold Specification. checkP.
 Qed.

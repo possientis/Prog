@@ -4,6 +4,7 @@ Require Import Coq.Strings.String.
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.Check.DeclT.
+Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
 
@@ -15,72 +16,17 @@ Require Import ZF.Meta.Decl.Axiom.Continuum.
 Proposition CH : CheckT (Continuum.env) CH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckEqual.
-  - apply CheckIdentT with [TySet]. 1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckIdentT with [TySet]. 1: reflexivity.
-      apply CheckTsCons.
-      * apply CheckIdentT with []. 1: reflexivity.
-        apply CheckTsNil.
-      * apply CheckTsNil.
-    + apply CheckTsNil.
-  - apply CheckIdentT with [TyClass;TySet]. 1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckIdentT with []. 1: reflexivity.
-      apply CheckTsNil.
-    + apply CheckTsCons.
-      * apply CheckIdentT with []. 1: reflexivity.
-        apply CheckTsNil.
-      * apply CheckTsNil.
+  unfold CH. checkT.
 Qed.
 
 Proposition GCH : CheckT (Continuum.env) GCH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply CheckAll, CheckImp.
-  - apply CheckIdentT with [TySet]. 1: reflexivity.
-    apply CheckTsCons.
-    + apply CheckVar. reflexivity.
-    + apply CheckTsNil.
-  - apply CheckEqual.
-    + apply CheckIdentT with [TySet]. 1: reflexivity.
-      apply CheckTsCons.
-      * apply CheckIdentT with [TySet]. 1: reflexivity.
-        apply CheckTsCons.
-        -- apply CheckIdentT with [TyClass;TySet]. 1: reflexivity.
-           apply CheckTsCons.
-           ++ apply CheckIdentT with []. 1: reflexivity.
-              apply CheckTsNil.
-           ++ apply CheckTsCons.
-              ** apply CheckVar. reflexivity.
-              ** apply CheckTsNil.
-        -- apply CheckTsNil.
-      * apply CheckTsNil.
-    + apply CheckIdentT with [TyClass;TySet]. 1: reflexivity.
-      apply CheckTsCons.
-      * apply CheckIdentT with []. 1: reflexivity.
-        apply CheckTsNil.
-      * apply CheckTsCons.
-        -- apply CheckIdentT with [TySet]. 1: reflexivity.
-           apply CheckTsCons.
-           ++ apply CheckVar. reflexivity.
-           ++ apply CheckTsNil.
-        -- apply CheckTsNil.
+  unfold GCH. checkT.
 Qed.
 
 Proposition WhenGCH : CheckP (Continuum.env) WhenGCH.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  split.
-  - apply CheckImp.
-    + apply CheckIdentT with []. 1: reflexivity.
-      apply CheckTsNil.
-    + apply CheckIdentT with []. 1: reflexivity.
-      apply CheckTsNil.
-  - apply CheckHoleP.
-    apply CheckImp.
-    + apply CheckIdentT with []. 1: reflexivity.
-      apply CheckTsNil.
-    + apply CheckIdentT with []. 1: reflexivity.
-      apply CheckTsNil.
+  unfold WhenGCH. checkP.
 Qed.

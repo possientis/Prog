@@ -3,6 +3,7 @@ Require Import Coq.Strings.String.
 
 Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.DeclP.
+Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Syntax.
 Require Import ZF.Meta.Ty.
@@ -15,22 +16,5 @@ Require Import ZF.Meta.Decl.Axiom.Foundation.
 Proposition Foundation : CheckP (Foundation.env) Foundation.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (Core.CheckT Foundation.env [] (conclP Foundation) TyProp) as H1. {
-    apply CheckAll, CheckImp.
-    - apply CheckNotEq.
-      + apply CheckVar. reflexivity.
-      + apply CheckIdentT with []. 1: reflexivity.
-        apply CheckTsNil.
-    - apply CheckEx, CheckAnd.
-      + apply CheckElem; apply CheckVar; reflexivity.
-      + apply CheckEqual.
-        * apply CheckIdentT with [TySet;TySet]. 1: reflexivity.
-          apply CheckTsCons.
-          -- apply CheckVar. reflexivity.
-          -- apply CheckTsCons.
-             ++ apply CheckVar. reflexivity.
-             ++ apply CheckTsNil.
-        * apply CheckIdentT with []. 1: reflexivity.
-          apply CheckTsNil. }
-  split. 1: assumption. apply CheckAxiomP. assumption.
+  unfold Foundation. checkP.
 Qed.
