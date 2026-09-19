@@ -231,7 +231,7 @@ syn region rocqGoalTerm  contained contains=@rocqTerm,rocqProofBody matchgroup=r
 syn region rocqLtacDecl     contains=rocqLtacProfile start="\<Ltac\>" end="\.\_s" keepend
 syn region rocqLtacProfile  contained contains=rocqLtacIdent,rocqVernacPunctuation,rocqLtacContents start="Ltac" end="\.\_s"
 syn region rocqLtacIdent    contained matchgroup=rocqVernacCmd start="Ltac" matchgroup=rocqIdent end="[_[:alpha:]][_'[:alnum:]]*"
-syn region rocqLtacContents contained contains=rocqTactic,rocqTacticKwd,rocqLtac,rocqProofPunctuation matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
+syn region rocqLtacContents contained contains=rocqTactic,rocqTacticKwd,rocqLtac,rocqProofPunctuation,rocqString matchgroup=rocqVernacPunctuation start=":=" end="\.\_s"
 
 syn keyword rocqLtac contained do info progress repeat try tryif then else
 syn keyword rocqLtac contained abstract constr context end external eval fail first fresh fun goal
@@ -239,7 +239,7 @@ syn keyword rocqLtac contained idtac in let ltac lazymatch match of rec reverse 
 syn match   rocqLtac contained "|-\|=>\|||\|\[\|\]\|\<_\>\||"
 
 " Proofs
-syn region rocqProofBody  contained contains=rocqProofPunctuation,rocqTactic,rocqTacticKwd,rocqProofComment,rocqProofKwd,rocqProofEnder,rocqProofDelim,rocqLtac matchgroup=rocqVernacPunctuation start="\.\s" start="\.$" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" end="\<Save\>.*\.\_s" keepend
+syn region rocqProofBody  contained contains=rocqProofPunctuation,rocqTactic,rocqTacticKwd,rocqProofComment,rocqProofKwd,rocqProofEnder,rocqProofDelim,rocqLtac,rocqString matchgroup=rocqVernacPunctuation start="\.\s" start="\.$" matchgroup=NONE end="\<\%(Qed\|Defined\|Admitted\|Abort\)\.\_s" end="\<Save\>.*\.\_s" keepend
 syn region rocqProofDelim contained matchgroup=rocqProofDelim start="\<Proof\>\ze\_s*\%(\.\|using\>\)" matchgroup=rocqProofDot end="\.\_s"
 syn region rocqProofEnder contained matchgroup=rocqProofDelim start="\<\%(Qed\|Defined\|Admitted\)\>" matchgroup=rocqVernacPunctuation end="\.\_s"
 syn region rocqProofEnder contained matchgroup=rocqError start="\<Abort\>" matchgroup=rocqVernacPunctuation end="\.\_s"
