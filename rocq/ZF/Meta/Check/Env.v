@@ -1,5 +1,5 @@
 Require Import Coq.Lists.List.
-Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.CoreT.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Check.DeclP.
@@ -37,7 +37,7 @@ Qed.
 
 (* A proof signature has a checked proposition in its parameter context.        *)
 Proposition SigP : forall (E:Env) (name:Name) (tys:list Ty) (t:Term), Check E ->
-  sigP E name = Some (tys,t) -> Core.CheckT E (rev tys) t TyProp.
+  sigP E name = Some (tys,t) -> CoreT.CheckT E (rev tys) t TyProp.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   intros E name tys t H1 H2.

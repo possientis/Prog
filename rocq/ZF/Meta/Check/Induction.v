@@ -16,10 +16,9 @@ Require Import ZF.Meta.Unique.
 Import ListNotations.
 
 Scheme CheckTInd_  := Induction for CheckT  Sort Prop
-  with CheckTsInd_ := Induction for CheckTs Sort Prop
-  with CheckPInd_  := Induction for CheckP  Sort Prop.
+  with CheckTsInd_ := Induction for CheckTs Sort Prop.
 
-Combined Scheme Induction_ from CheckTInd_, CheckTsInd_, CheckPInd_.
+Combined Scheme InductionT_ from CheckTInd_, CheckTsInd_.
 
 (* Checked terms, proofs, and argument lists have a joint induction principle.  *)
 Proposition Induction :
@@ -172,10 +171,8 @@ Proof.
     (forall (G:Ctx) (t:Term) (ty:Ty),
       CheckT E G t ty -> P E G t ty)            /\
     (forall (G:Ctx) (ts:Terms) (tys:list Ty),
-      CheckTs E G ts tys -> Q E G ts tys)       /\
-    (forall (G:Ctx) (p:Proof) (t:Term),
-      CheckP E G p t -> R E G p t)) as H29. {
-    intros E. apply Induction_.
+      CheckTs E G ts tys -> Q E G ts tys)) as H29. {
+    intros E. apply InductionT_.
     - intros G. apply H1.
     - intros G. apply H2.
     - intros G n ty G1. apply H3. assumption.
@@ -201,14 +198,14 @@ Proof.
     - intros G A G1 G2. apply H22; assumption.
     - intros G A G1 G2. apply H23; assumption.
     - intros G. apply H24.
-    - intros G t ts ty tys G1 G2 G3 G4. apply H25; assumption.
-    - intros G t G1 G2. apply H26; assumption.
-    - intros G t G1 G2. apply H27; assumption.
-    - intros G name args tys t G1 G2 G3.
-      apply (H28 E G name args tys t); assumption. }
+    - intros G t ts ty tys G1 G2 G3 G4. apply H25; assumption. }
   split.
   - intros E G t ty H30. apply (H29 E); assumption.
   - split.
     + intros E G ts tys H30. apply (H29 E); assumption.
-    + intros E G p t H30. apply (H29 E); assumption.
+    + intros E G p t H30. destruct H30 as [G t G1|G t G1|G name args tys t G1 G2].
+      * apply H26. 1: assumption. apply (H29 E); assumption.
+      * apply H27. 1: assumption. apply (H29 E); assumption.
+      * apply (H28 E G name args tys t). 1: assumption. 1: assumption.
+        apply (H29 E); assumption.
 Qed.
