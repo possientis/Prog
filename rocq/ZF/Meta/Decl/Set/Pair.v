@@ -66,11 +66,7 @@ Definition Unique : DeclP :=
 Definition pair : DeclT :=
   {| paraT := [TySet; TySet]
   ;  resT  := TySet
-  ;  bodyT :=
-      Def
-        (IdentT (Name.local "IsPairOf") (args [Var 1; Var 0]))
-        (IdentP (Name.local "Exists") (args [Var 1; Var 0]))
-        (IdentP (Name.local "Unique") (args [Var 1; Var 0]))
+  ;  bodyT := Def (IdentT (Name.local "IsPairOf") (args [Var 1; Var 0]))
   |}.
 
 

@@ -80,15 +80,12 @@ Proposition Induction :
       P A                                     ->
       P x                                     ->
       P (App A x))                            ->
-    (forall (A:Term) (p q:Proof),
+    (forall (A:Term),
       P A                                     ->
-      R p                                     ->
-      R q                                     ->
-      P (Def A p q))                          ->
-    (forall (A:Term) (p:Proof),
+      P (Def A))                              ->
+    (forall (A:Term),
       P A                                     ->
-      R p                                     ->
-      P (FromC A p))                          ->
+      P (FromC A))                            ->
     Q NilT                                    ->
     (forall (t:Term) (ts:Terms),
       P t                                     ->
@@ -123,7 +120,5 @@ Proof.
   - intros x G1 y G2. apply H15; assumption.
   - intros x G1 y G2. apply H16; assumption.
   - intros A G1 x G2. apply H21; assumption.
-  - intros A G1 p G2 q G3. apply H22; assumption.
-  - intros A G1 p G2. apply H23; assumption.
   - intros t G1 ts G2. apply H25; assumption.
 Qed.

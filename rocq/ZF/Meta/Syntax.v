@@ -36,10 +36,10 @@ Inductive Term : Type :=
 | Lam     : Term   -> Term
 (* Class application forms a proposition.                                       *)
 | App     : Term   -> Term      -> Term
-(* A definition term packages a class with existence and uniqueness proofs.     *)
-| Def     : Term   -> Proof     -> Proof     -> Term
-(* A small class term packages a class with a smallness proof.                  *)
-| FromC   : Term   -> Proof     -> Term
+(* A definition term names the unique set satisfying a class, or zero.          *)
+| Def     : Term   -> Term
+(* A small class term names the set represented by a class, or zero.            *)
+| FromC   : Term   -> Term
 with Proof : Type :=
 (* An incomplete proof reference for a proposition.                             *)
 | HoleP  : Term    -> Proof

@@ -49,32 +49,8 @@ Ltac check :=
   | |- Core.CheckT _ _ (Ex _)      TyProp   => apply CheckEx; check
   | |- Core.CheckT _ _ (Lam _)     TyClass  => apply CheckLam; check
   | |- Core.CheckT _ _ (App _ _)   TyProp   => apply CheckApp; check
-  | |- Core.CheckT _ _ (Def _ _ _) TySet    =>
-      apply CheckDef;
-      [ check
-      | try
-          progress
-            (cbv [Exists Unique Small applyT argT substT Subst.fromT Subst.fromTs
-                 Shift.shiftT Shift.fromT nthT revT appT lengthT toList];
-             cbn);
-        check
-      | try
-          progress
-            (cbv [Exists Unique Small applyT argT substT Subst.fromT Subst.fromTs
-                 Shift.shiftT Shift.fromT nthT revT appT lengthT toList];
-             cbn);
-        check
-      ]
-  | |- Core.CheckT _ _ (FromC _ _) TySet =>
-      apply CheckFromC;
-      [ check
-      | try
-          progress
-            (cbv [Exists Unique Small applyT argT substT Subst.fromT Subst.fromTs
-                 Shift.shiftT Shift.fromT nthT revT appT lengthT toList];
-             cbn);
-        check
-      ]
+  | |- Core.CheckT _ _ (Def _) TySet      => apply CheckDef; check
+  | |- Core.CheckT _ _ (FromC _) TySet    => apply CheckFromC; check
   | |- Core.CheckT _ _ _ _                  =>
       tryif progress (cbv [Exists Unique Small shiftT])
       then check

@@ -30,8 +30,8 @@ Fixpoint fromT (i j:nat) (t:Term) : Term :=
   | Ex p             => Ex    (fromT (S i) j p)
   | Lam p            => Lam   (fromT (S i) j p)
   | App A x          => App   (fromT i j A) (fromT i j x)
-  | Def A p q        => Def   (fromT i j A) (fromP i j p) (fromP i j q)
-  | FromC A p        => FromC (fromT i j A) (fromP i j p)
+  | Def A            => Def   (fromT i j A)
+  | FromC A          => FromC (fromT i j A)
   end
 with fromP (i j:nat) (p:Proof) : Proof :=
   match p with
@@ -79,8 +79,8 @@ Proof.
   - intros p IH i. simpl. rewrite IH. reflexivity.
   - intros p IH i. simpl. rewrite IH. reflexivity.
   - intros A x IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
-  - intros A p q IH1 IH2 IH3 i. simpl. rewrite IH1, IH2, IH3. reflexivity.
-  - intros A p IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A IH i. simpl. rewrite IH. reflexivity.
+  - intros A IH i. simpl. rewrite IH. reflexivity.
   - intros i. reflexivity.
   - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i. simpl. rewrite IH. reflexivity.
@@ -210,10 +210,8 @@ Proof.
     rewrite H2. rewrite IH. 2: apply le_n_S; assumption. reflexivity.
   - intros A x IH1 IH2 i j k l H1. simpl.
     rewrite IH1, IH2; try assumption. reflexivity.
-  - intros A p q IH1 IH2 IH3 i j k l H1. simpl.
-    rewrite IH1, IH2, IH3; try assumption. reflexivity.
-  - intros A p IH1 IH2 i j k l H1. simpl.
-    rewrite IH1, IH2; try assumption. reflexivity.
+  - intros A IH i j k l H1. simpl. rewrite IH; try assumption. reflexivity.
+  - intros A IH i j k l H1. simpl. rewrite IH; try assumption. reflexivity.
   - intros i j k l H1. reflexivity.
   - intros t ts IH1 IH2 i j k l H1. simpl.
     rewrite IH1, IH2; try assumption. reflexivity.
@@ -307,9 +305,8 @@ Proof.
     assert (S (i + j) = S i + j) as H1. { reflexivity. }
     rewrite H1. rewrite IH. reflexivity.
   - intros A x IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
-  - intros A p q IH1 IH2 IH3 i j k l. simpl.
-    rewrite IH1, IH2, IH3. reflexivity.
-  - intros A p IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
+  - intros A IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros A IH i j k l. simpl. rewrite IH. reflexivity.
   - intros i j k l. reflexivity.
   - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
   - intros t IH i j k l. simpl. rewrite IH. reflexivity.

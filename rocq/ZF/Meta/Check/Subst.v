@@ -97,10 +97,8 @@ Proof.
       rewrite H2. reflexivity. assumption. apply le_n_S. assumption.
     - intros E G A x H1 H2 H3 H4 i r H5 H6. simpl.
       rewrite H2, H4; try assumption. reflexivity.
-    - intros E G A p q H1 H2 H3 H4 H5 H6 i r H7 H8. simpl.
-      rewrite H2, H4, H6; try assumption. reflexivity.
-    - intros E G A p H1 H2 H3 H4 i r H5 H6. simpl.
-      rewrite H2, H4; try assumption. reflexivity.
+    - intros E G A H1 H2 i r H3 H4. simpl. rewrite H2; try assumption. reflexivity.
+    - intros E G A H1 H2 i r H3 H4. simpl. rewrite H2; try assumption. reflexivity.
     - intros E G i r H1 H2. reflexivity.
     - intros E G t ts ty tys H1 H2 H3 H4 i r H5 H6. simpl.
       rewrite H2, H4; try assumption. reflexivity.
@@ -287,27 +285,10 @@ Proof.
     - intros E C A x H2 H3 H4 H5 H6 G M D ts H7 H8. subst. apply CheckApp.
       + apply H3 with M; try assumption. reflexivity.
       + apply H5 with M; try assumption. reflexivity.
-    - intros E C A p q H2 H3 H4 H5 H6 H7 H8 G M D ts H9 H10.
-      subst. apply CheckDef.
-      + apply H3 with M; try assumption. reflexivity.
-      + assert (CheckP E (G ++ D) (fromP (length G) (argT ts) p)
-          (fromT (length G) (argT ts) (Exists A))) as H9. {
-          apply H5 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
-          reflexivity. }
-        rewrite Exists.SubstT in H9. assumption.
-      + assert (CheckP E (G ++ D) (fromP (length G) (argT ts) q)
-          (fromT (length G) (argT ts) (Unique A))) as H9. {
-          apply H7 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
-          reflexivity. }
-        rewrite Unique.SubstT in H9. assumption.
-    - intros E C A p H2 H3 H4 H5 H6 G M D ts H7 H8. subst.
-      apply CheckFromC.
-      + apply H3 with M; try assumption. reflexivity.
-      + assert (CheckP E (G ++ D) (fromP (length G) (argT ts) p)
-          (fromT (length G) (argT ts) (Small A))) as H7. {
-          apply H5 with (G := G) (M := M) (D := D) (ts := ts); try assumption.
-          reflexivity. }
-        rewrite Small.SubstT in H7. assumption.
+    - intros E C A H2 H3 H4 G M D ts H5 H6. subst.
+      apply CheckDef. apply H3 with M; try assumption. reflexivity.
+    - intros E C A H2 H3 H4 G M D ts H5 H6. subst.
+      apply CheckFromC. apply H3 with M; try assumption. reflexivity.
     - intros E C H1 G M D ts H2 H3. subst. apply CheckTsNil.
     - intros E C t us ty tys H2 H3 H4 H5 H6 G M D ts H7 H8.
       subst. apply CheckTsCons.

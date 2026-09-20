@@ -128,20 +128,14 @@ Proposition Induction :
       CheckT E G x TySet                                                      ->
       P E G x TySet                                                           ->
       P E G (App A x) TyProp)                                                 ->
-    (forall (E:Env) (G:Ctx) (A:Term) (p q:Proof),
+    (forall (E:Env) (G:Ctx) (A:Term),
       CheckT E G A TyClass                                                    ->
       P E G A TyClass                                                         ->
-      CheckP E G p (Exists A)                                                 ->
-      R E G p (Exists A)                                                      ->
-      CheckP E G q (Unique A)                                                 ->
-      R E G q (Unique A)                                                      ->
-      P E G (Def A p q) TySet)                                                ->
-    (forall (E:Env) (G:Ctx) (A:Term) (p:Proof),
+      P E G (Def A) TySet)                                                    ->
+    (forall (E:Env) (G:Ctx) (A:Term),
       CheckT E G A TyClass                                                    ->
       P E G A TyClass                                                         ->
-      CheckP E G p (Small A)                                                  ->
-      R E G p (Small A)                                                       ->
-      P E G (FromC A p) TySet)                                                ->
+      P E G (FromC A) TySet)                                                  ->
     (forall (E:Env) (G:Ctx),
       Q E G NilT [])                                                          ->
     (forall (E:Env) (G:Ctx) (t:Term) (ts:Terms) (ty:Ty) (tys:list Ty),
@@ -203,8 +197,8 @@ Proof.
     - intros G p G1 G2. apply H19; assumption.
     - intros G p G1 G2. apply H20; assumption.
     - intros G A x G1 G2 G3 G4. apply H21; assumption.
-    - intros G A p q G1 G2 G3 G4 G5 G6. apply H22; assumption.
-    - intros G A p G1 G2 G3 G4. apply H23; assumption.
+    - intros G A G1 G2. apply H22; assumption.
+    - intros G A G1 G2. apply H23; assumption.
     - intros G. apply H24.
     - intros G t ts ty tys G1 G2 G3 G4. apply H25; assumption.
     - intros G t G1 G2. apply H26; assumption.

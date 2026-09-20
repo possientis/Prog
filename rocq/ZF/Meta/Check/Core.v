@@ -92,15 +92,12 @@ Inductive CheckT (E:Env) : Ctx -> Term -> Ty -> Prop :=
     CheckT E G A TyClass                     ->
     CheckT E G x TySet                       ->
     CheckT E G (App A x) TyProp
-| CheckDef : forall (G:Ctx) (A:Term) (p q:Proof),
+| CheckDef : forall (G:Ctx) (A:Term),
     CheckT E G A TyClass                     ->
-    CheckP E G p (Exists A)                  ->
-    CheckP E G q (Unique A)                  ->
-    CheckT E G (Def A p q) TySet
-| CheckFromC : forall (G:Ctx) (A:Term) (p:Proof),
+    CheckT E G (Def A) TySet
+| CheckFromC : forall (G:Ctx) (A:Term),
     CheckT E G A TyClass                     ->
-    CheckP E G p (Small A)                   ->
-    CheckT E G (FromC A p) TySet
+    CheckT E G (FromC A) TySet
 with CheckTs (E:Env) : Ctx -> Terms -> list Ty -> Prop :=
 | CheckTsNil : forall (G:Ctx),
     CheckTs E G NilT []
