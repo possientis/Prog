@@ -53,14 +53,10 @@ Definition shiftT (n:nat) (t:Term) : Term := fromT 0 n t.
 (* De Bruijn lifting raises every free variable in a proof by n.                *)
 Definition shiftP (n:nat) (p:Proof) : Proof := fromP 0 n p.
 
-Proposition WhenZero :
+Local Proposition WhenZero :
   (forall (t:Term)   (i:nat), fromT   i 0 t  = t)     /\
-  (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts)    /\
-  (forall (p:Proof)  (i:nat), fromP   i 0 p  = p).
+  (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts).
 Proof.
-  assert (
-    (forall (t:Term)   (i:nat), fromT   i 0 t  = t)  /\
-    (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts)) as H. {
   apply InductionT.Induction.
   - intros i. reflexivity.
   - intros i. reflexivity.
@@ -87,25 +83,11 @@ Proof.
   - intros A IH i. simpl. rewrite IH. reflexivity.
   - intros A IH i. simpl. rewrite IH. reflexivity.
   - intros i. reflexivity.
-  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p i. destruct p as [t|t|name args]; unfold fromP; apply f_equal.
-  - apply H1.
-  - apply H1.
-  - apply H2.
+  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Lifting terms by zero leaves them unchanged.                                 *)
 Proposition WhenZeroT : forall (t:Term) (i:nat), fromT i 0 t = t.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply WhenZero.
-Qed.
-
-(* Lifting proofs by zero leaves them unchanged.                                *)
-Proposition WhenZeroP : forall (p:Proof) (i:nat), fromP i 0 p = p.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply WhenZero.
@@ -118,6 +100,16 @@ Proof.
   apply WhenZero.
 Qed.
 
+(* Lifting proofs by zero leaves them unchanged.                                *)
+Proposition WhenZeroP : forall (p:Proof) (i:nat), fromP i 0 p = p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p i. destruct p as [t|t|name args]; unfold fromP.
+  - rewrite WhenZeroT. reflexivity.
+  - rewrite WhenZeroT. reflexivity.
+  - rewrite WhenZeroTs. reflexivity.
+Qed.
+
 (* Lifting a term by zero leaves it unchanged.                                  *)
 Proposition ShiftZeroT : forall (t:Term),
     shiftT 0 t = t.
@@ -128,20 +120,13 @@ Qed.
 
 
 (* A later lifting commutes with an earlier lifting at a lower cutoff.          *)
-Proposition Comm :
+Local Proposition Comm :
   (forall (t:Term) (i j k l:nat), i <= k ->
     fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t))          /\
   (forall (ts:Terms) (i j k l:nat), i <= k ->
-    fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts))    /\
-  (forall (p:Proof) (i j k l:nat), i <= k ->
-    fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p)).
+    fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (
-    (forall (t:Term) (i j k l:nat), i <= k ->
-      fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t)) /\
-    (forall (ts:Terms) (i j k l:nat), i <= k ->
-      fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts))) as H. {
   apply InductionT.Induction.
   - intros i j k l H1. reflexivity.
   - intros i j k l H1. reflexivity.
@@ -228,27 +213,12 @@ Proof.
   - intros A IH i j k l H1. simpl. rewrite IH; try assumption. reflexivity.
   - intros i j k l H1. reflexivity.
   - intros t ts IH1 IH2 i j k l H1. simpl.
-    rewrite IH1, IH2; try assumption. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p i j k l H3. destruct p as [t|t|name args]; unfold fromP; apply f_equal.
-  - apply H1. assumption.
-  - apply H1. assumption.
-  - apply H2. assumption.
+    rewrite IH1, IH2; try assumption. reflexivity.
 Qed.
 
 (* A later lifting commutes with an earlier lifting in terms.                   *)
 Proposition CommT : forall (t:Term) (i j k l:nat), i <= k ->
   fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t).
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Comm.
-Qed.
-
-(* A later lifting commutes with an earlier lifting in proofs.                  *)
-Proposition CommP : forall (p:Proof) (i j k l:nat), i <= k ->
-  fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Comm.
@@ -262,21 +232,25 @@ Proof.
   apply Comm.
 Qed.
 
+(* A later lifting commutes with an earlier lifting in proofs.                  *)
+Proposition CommP : forall (p:Proof) (i j k l:nat), i <= k ->
+  fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p i j k l H1. destruct p as [t|t|name args]; unfold fromP.
+  - rewrite CommT; try assumption. reflexivity.
+  - rewrite CommT; try assumption. reflexivity.
+  - rewrite CommTs; try assumption. reflexivity.
+Qed.
+
 (* Lifting above an earlier lifting combines with the earlier lifting.          *)
-Proposition Add :
+Local Proposition Add :
   (forall (t:Term) (i j k l:nat),
     fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t)          /\
   (forall (ts:Terms) (i j k l:nat),
-    fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts)    /\
-  (forall (p:Proof) (i j k l:nat),
-    fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p).
+    fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (
-    (forall (t:Term) (i j k l:nat),
-      fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t) /\
-    (forall (ts:Terms) (i j k l:nat),
-      fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts)) as H. {
   apply InductionT.Induction.
   - intros i j k l. reflexivity.
   - intros i j k l. reflexivity.
@@ -331,27 +305,12 @@ Proof.
   - intros A IH i j k l. simpl. rewrite IH. reflexivity.
   - intros A IH i j k l. simpl. rewrite IH. reflexivity.
   - intros i j k l. reflexivity.
-  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p i j k l. destruct p as [t|t|name args]; unfold fromP; apply f_equal.
-  - apply H1.
-  - apply H1.
-  - apply H2.
+  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Lifting above an earlier lifting combines in terms.                          *)
 Proposition AddT : forall (t:Term) (i j k l:nat),
   fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Add.
-Qed.
-
-(* Lifting above an earlier lifting combines in proofs.                         *)
-Proposition AddP : forall (p:Proof) (i j k l:nat),
-  fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Add.
@@ -363,6 +322,17 @@ Proposition AddTs : forall (ts:Terms) (i j k l:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Add.
+Qed.
+
+(* Lifting above an earlier lifting combines in proofs.                         *)
+Proposition AddP : forall (p:Proof) (i j k l:nat),
+  fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p i j k l. destruct p as [t|t|name args]; unfold fromP.
+  - rewrite AddT. reflexivity.
+  - rewrite AddT. reflexivity.
+  - rewrite AddTs. reflexivity.
 Qed.
 
 (* Lifting above an already full-lifted term gives another full lifting.        *)

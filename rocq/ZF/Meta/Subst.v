@@ -104,25 +104,15 @@ Proof.
 Qed.
 
 (* Substitution above a lifting commutes with the lifting.                      *)
-Proposition SubstShift :
+Local Proposition SubstShift :
   (forall (t:Term) (i j k:nat) (r:nat -> Term),
     Subst.fromT (i + j + k) r (Shift.fromT i j t) =
     Shift.fromT i j (Subst.fromT (i + k) r t))                             /\
   (forall (ts:Terms) (i j k:nat) (r:nat -> Term),
     Subst.fromTs (i + j + k) r (Shift.fromTs i j ts) =
-    Shift.fromTs i j (Subst.fromTs (i + k) r ts))                           /\
-  (forall (p:Proof) (i j k:nat) (r:nat -> Term),
-    Subst.fromP (i + j + k) r (Shift.fromP i j p) =
-    Shift.fromP i j (Subst.fromP (i + k) r p)).
+    Shift.fromTs i j (Subst.fromTs (i + k) r ts)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (
-    (forall (t:Term) (i j k:nat) (r:nat -> Term),
-      Subst.fromT (i + j + k) r (Shift.fromT i j t) =
-      Shift.fromT i j (Subst.fromT (i + k) r t)) /\
-    (forall (ts:Terms) (i j k:nat) (r:nat -> Term),
-      Subst.fromTs (i + j + k) r (Shift.fromTs i j ts) =
-      Shift.fromTs i j (Subst.fromTs (i + k) r ts))) as H. {
   apply InductionT.Induction.
   - intros i j k r. reflexivity.
   - intros i j k r. reflexivity.
@@ -202,30 +192,13 @@ Proof.
   - intros A IH i j k r. simpl. rewrite IH. reflexivity.
   - intros A IH i j k r. simpl. rewrite IH. reflexivity.
   - intros i j k r. reflexivity.
-  - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p i j k r. destruct p as [t|t|name args]; unfold Subst.fromP, Shift.fromP;
-  apply f_equal.
-  - apply H1.
-  - apply H1.
-  - apply H2.
+  - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Substitution above a lifting commutes with the lifting in terms.             *)
 Proposition SubstShiftT : forall (t:Term) (i j k:nat) (r:nat -> Term),
   Subst.fromT (i + j + k) r (Shift.fromT i j t) =
   Shift.fromT i j (Subst.fromT (i + k) r t).
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply SubstShift.
-Qed.
-
-(* Substitution above a lifting commutes with the lifting in proofs.            *)
-Proposition SubstShiftP : forall (p:Proof) (i j k:nat) (r:nat -> Term),
-  Subst.fromP (i + j + k) r (Shift.fromP i j p) =
-  Shift.fromP i j (Subst.fromP (i + k) r p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply SubstShift.
@@ -238,6 +211,18 @@ Proposition SubstShiftTs : forall (ts:Terms) (i j k:nat) (r:nat -> Term),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply SubstShift.
+Qed.
+
+(* Substitution above a lifting commutes with the lifting in proofs.            *)
+Proposition SubstShiftP : forall (p:Proof) (i j k:nat) (r:nat -> Term),
+  Subst.fromP (i + j + k) r (Shift.fromP i j p) =
+  Shift.fromP i j (Subst.fromP (i + k) r p).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p i j k r. destruct p as [t|t|name args]; unfold Subst.fromP, Shift.fromP.
+  - rewrite SubstShiftT. reflexivity.
+  - rewrite SubstShiftT. reflexivity.
+  - rewrite SubstShiftTs. reflexivity.
 Qed.
 
 (* Substitution above a full lifting commutes with the full lifting.            *)
