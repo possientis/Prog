@@ -26,7 +26,7 @@ Definition FunctionalAt : DeclT :=
             (Imp
               (App (Var 3)
                 (IdentT (Name.local "ordPair") (args [Var 2; Var 0])))
-              (Syntax.Equal (Var 1) (Var 0)))))
+              (SyntaxT.Equal (Var 1) (Var 0)))))
   |}.
 
 (* forall F G a, equiv F G -> FunctionalAt F a -> FunctionalAt G a.             *)

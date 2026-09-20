@@ -29,7 +29,7 @@ Definition Functional : DeclT :=
               (Imp
                 (App (Var 3)
                   (IdentT (Name.local "ordPair") (args [Var 2; Var 0])))
-                (Syntax.Equal (Var 1) (Var 0))))))
+                (SyntaxT.Equal (Var 1) (Var 0))))))
   |}.
 
 (* forall F G, equiv F G -> Functional F -> Functional G.                       *)

@@ -27,7 +27,7 @@ Definition Unique : DeclT :=
             (App (Var 2) (Var 1))
             (Imp
               (App (Var 2) (Var 0))
-              (Syntax.Equal (Var 1) (Var 0)))))
+              (Equal (Var 1) (Var 0)))))
   |}.
 
 (* Environment.                                                                 *)

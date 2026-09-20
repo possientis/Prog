@@ -33,16 +33,17 @@ Fixpoint fromT (i j:nat) (t:Term) : Term :=
   | Def A            => Def   (fromT i j A)
   | FromC A          => FromC (fromT i j A)
   end
-with fromP (i j:nat) (p:Proof) : Proof :=
-  match p with
-  | HoleP t        => HoleP (fromT i j t)
-  | AxiomP t       => AxiomP (fromT i j t)
-  | IdentP name ts => IdentP name (fromTs i j ts)
-  end
 with fromTs (i j:nat) (ts:Terms) : Terms :=
   match ts with
   | NilT       => NilT
   | ConsT t ts => ConsT (fromT i j t) (fromTs i j ts)
+  end.
+
+Definition fromP (i j:nat) (p:Proof) : Proof :=
+  match p with
+  | HoleP t        => HoleP (fromT i j t)
+  | AxiomP t       => AxiomP (fromT i j t)
+  | IdentP name ts => IdentP name (fromTs i j ts)
   end.
 
 (* De Bruijn lifting raises every free variable in a term by n.                 *)
@@ -83,9 +84,9 @@ Proof.
   - intros A IH i. simpl. rewrite IH. reflexivity.
   - intros i. reflexivity.
   - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH i. simpl. rewrite IH. reflexivity.
-  - intros t IH i. simpl. rewrite IH. reflexivity.
-  - intros name args IH i. simpl. rewrite IH. reflexivity.
+  - intros t IH i. unfold fromP. apply f_equal. apply IH.
+  - intros t IH i. unfold fromP. apply f_equal. apply IH.
+  - intros name args IH i. unfold fromP. apply f_equal. apply IH.
 Qed.
 
 (* Lifting terms by zero leaves them unchanged.                                 *)
@@ -215,9 +216,9 @@ Proof.
   - intros i j k l H1. reflexivity.
   - intros t ts IH1 IH2 i j k l H1. simpl.
     rewrite IH1, IH2; try assumption. reflexivity.
-  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
-  - intros t IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
-  - intros name ts IH i j k l H1. simpl. rewrite IH. reflexivity. assumption.
+  - intros t IH i j k l H1. unfold fromP. apply f_equal. apply IH. assumption.
+  - intros t IH i j k l H1. unfold fromP. apply f_equal. apply IH. assumption.
+  - intros name ts IH i j k l H1. unfold fromP. apply f_equal. apply IH. assumption.
 Qed.
 
 (* A later lifting commutes with an earlier lifting in terms.                   *)
@@ -309,9 +310,9 @@ Proof.
   - intros A IH i j k l. simpl. rewrite IH. reflexivity.
   - intros i j k l. reflexivity.
   - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH i j k l. simpl. rewrite IH. reflexivity.
-  - intros t IH i j k l. simpl. rewrite IH. reflexivity.
-  - intros name ts IH i j k l. simpl. rewrite IH. reflexivity.
+  - intros t IH i j k l. unfold fromP. apply f_equal. apply IH.
+  - intros t IH i j k l. unfold fromP. apply f_equal. apply IH.
+  - intros name ts IH i j k l. unfold fromP. apply f_equal. apply IH.
 Qed.
 
 (* Lifting above an earlier lifting combines in terms.                          *)

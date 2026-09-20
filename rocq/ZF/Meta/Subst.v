@@ -32,16 +32,17 @@ Fixpoint fromT (i:nat) (r:nat -> Term) (t:Term) : Term :=
   | Def A            => Def   (fromT i r A)
   | FromC A          => FromC (fromT i r A)
   end
-with fromP (i:nat) (r:nat -> Term) (p:Proof) : Proof :=
-  match p with
-  | HoleP t        => HoleP (fromT i r t)
-  | AxiomP t       => AxiomP (fromT i r t)
-  | IdentP name ts => IdentP name (fromTs i r ts)
-  end
 with fromTs (i:nat) (r:nat -> Term) (ts:Terms) : Terms :=
   match ts with
   | NilT       => NilT
   | ConsT t ts => ConsT (fromT i r t) (fromTs i r ts)
+  end.
+
+Definition fromP (i:nat) (r:nat -> Term) (p:Proof) : Proof :=
+  match p with
+  | HoleP t        => HoleP (fromT i r t)
+  | AxiomP t       => AxiomP (fromT i r t)
+  | IdentP name ts => IdentP name (fromTs i r ts)
   end.
 
 Definition substT (r:nat -> Term) (t:Term)  : Term := fromT 0 r t.

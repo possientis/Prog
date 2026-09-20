@@ -1,12 +1,15 @@
-Require ZF.Meta.InductionP.
-Require ZF.Meta.InductionT.
 Require Import ZF.Meta.Name.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
 Require Import ZF.Meta.Ty.
 
-(* Terms, argument lists, and proofs have a joint induction principle.          *)
+Scheme TermInd_  := Induction for Term  Sort Prop
+  with TermsInd_ := Induction for Terms Sort Prop.
+
+Combined Scheme Induction_ from TermInd_, TermsInd_.
+
+(* Terms and argument lists have a joint induction principle.                   *)
 Proposition Induction :
-  forall (P:Term -> Prop) (Q:Terms -> Prop) (R:Proof -> Prop),
+  forall (P:Term -> Prop) (Q:Terms -> Prop),
     P Bot                                     ->
     P Top                                     ->
     (forall (n:nat),
@@ -87,26 +90,24 @@ Proposition Induction :
       P t                                     ->
       Q ts                                    ->
       Q (ConsT t ts))                         ->
-    (forall (t:Term),
-      P t                                     ->
-      R (HoleP t))                            ->
-    (forall (t:Term),
-      P t                                     ->
-      R (AxiomP t))                           ->
-    (forall (name:Name) (args:Terms),
-      Q args                                  ->
-      R (IdentP name args))                   ->
     (forall (t:Term), P t)                    /\
-    (forall (ts:Terms), Q ts)                 /\
-    (forall (p:Proof), R p).
+    (forall (ts:Terms), Q ts).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  intros P Q R H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
-  intros H15 H16 H17 H18 H19 H20 H21 H22 H23 H24 H25 H26 H27 H28.
-  assert ((forall (t:Term), P t) /\ (forall (ts:Terms), Q ts)) as H29. {
-    apply InductionT.Induction; assumption. }
-  destruct H29 as [H29 H30].
-  split. 1: assumption.
-  split. 1: assumption.
-  apply (InductionP.Induction P Q R); assumption.
+  intros P Q H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14.
+  intros H15 H16 H17 H18 H19 H20 H21 H22 H23 H24 H25.
+  apply Induction_; try assumption.
+  - intros x G1 y G2. apply H6;  assumption.
+  - intros x G1 y G2. apply H7;  assumption.
+  - intros x G1 y G2. apply H8;  assumption.
+  - intros x G1 y G2. apply H9;  assumption.
+  - intros x G1 y G2. apply H10; assumption.
+  - intros x G1 y G2. apply H11; assumption.
+  - intros x G1 y G2. apply H12; assumption.
+  - intros x G1 y G2. apply H13; assumption.
+  - intros x G1 y G2. apply H14; assumption.
+  - intros x G1 y G2. apply H15; assumption.
+  - intros x G1 y G2. apply H16; assumption.
+  - intros A G1 x G2. apply H21; assumption.
+  - intros t G1 ts G2. apply H25; assumption.
 Qed.
