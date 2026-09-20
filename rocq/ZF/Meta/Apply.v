@@ -75,25 +75,15 @@ Proof.
 Qed.
 
 (* Applying arguments below a lifting lowers the lifting by their length.       *)
-Proposition Shift :
+Local Proposition Shift :
   (forall (t:Term) (ts:Terms) (i k:nat),
     Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
     Shift.fromT k i t)                                                    /\
   (forall (us:Terms) (ts:Terms) (i k:nat),
     Subst.fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
-    Shift.fromTs k i us)                                                  /\
-  (forall (p:Proof) (ts:Terms) (i k:nat),
-    Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
-    Shift.fromP k i p).
+    Shift.fromTs k i us).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (
-    (forall (t:Term) (ts:Terms) (i k:nat),
-      Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
-      Shift.fromT k i t) /\
-    (forall (us:Terms) (ts:Terms) (i k:nat),
-      Subst.fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
-      Shift.fromTs k i us)) as H. {
   apply InductionT.Induction.
   - intros ts i k. reflexivity.
   - intros ts i k. reflexivity.
@@ -146,30 +136,13 @@ Proof.
   - intros A IH ts i k. simpl. rewrite IH. reflexivity.
   - intros A IH ts i k. simpl. rewrite IH. reflexivity.
   - intros ts i k. reflexivity.
-  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p ts i k. destruct p as [t|t|name us]; unfold Subst.fromP, Shift.fromP;
-  apply f_equal.
-  - apply H1.
-  - apply H1.
-  - apply H2.
+  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Applying arguments below a term lifting lowers it by their length.           *)
 Proposition ShiftT : forall (t:Term) (ts:Terms) (i k:nat),
   Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
   Shift.fromT k i t.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Shift.
-Qed.
-
-(* Applying arguments below a proof lifting lowers it by their length.          *)
-Proposition ShiftP : forall (p:Proof) (ts:Terms) (i k:nat),
-  Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
-  Shift.fromP k i p.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Shift.
@@ -182,6 +155,19 @@ Proposition ShiftTs : forall (us:Terms) (ts:Terms) (i k:nat),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply Shift.
+Qed.
+
+(* Applying arguments below a proof lifting lowers it by their length.          *)
+Proposition ShiftP : forall (p:Proof) (ts:Terms) (i k:nat),
+  Subst.fromP k (argT ts) (Shift.fromP k (i + lengthT ts) p) =
+  Shift.fromP k i p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p ts i k.
+  destruct p as [t|t|name us]; unfold Subst.fromP, Shift.fromP.
+  - rewrite ShiftT. reflexivity.
+  - rewrite ShiftT. reflexivity.
+  - rewrite ShiftTs. reflexivity.
 Qed.
 
 (* Substitution through application acts on the body and the arguments.         *)
