@@ -397,20 +397,13 @@ Proof.
 Qed.
 
 (* Lifting agrees with substitution by lifted variables.                        *)
-Proposition ShiftAsSubst :
+Local Proposition ShiftAsSubst :
   (forall (t:Term) (i j:nat),
     Shift.fromT i j t = Subst.fromT i (fun n => Var (n + j)) t)                 /\
   (forall (ts:Terms) (i j:nat),
-    Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts)             /\
-  (forall (p:Proof) (i j:nat),
-    Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p).
+    Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (
-    (forall (t:Term) (i j:nat),
-      Shift.fromT i j t = Subst.fromT i (fun n => Var (n + j)) t) /\
-    (forall (ts:Terms) (i j:nat),
-      Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts)) as H. {
   apply InductionT.Induction.
   - intros i j. reflexivity.
   - intros i j. reflexivity.
@@ -447,15 +440,7 @@ Proof.
   - intros A IH i j. simpl. rewrite IH. reflexivity.
   - intros A IH i j. simpl. rewrite IH. reflexivity.
   - intros i j. reflexivity.
-  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p i j. destruct p as [t|t|name ts]; unfold Shift.fromP, Subst.fromP;
-  apply f_equal.
-  - apply H1.
-  - apply H1.
-  - apply H2.
+  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Lifting terms agrees with substitution by lifted variables.                  *)
@@ -467,19 +452,24 @@ Proof.
 Qed.
 
 (* Lifting proofs agrees with substitution by lifted variables.                 *)
-Proposition ShiftAsSubstP : forall (p:Proof) (i j:nat),
-  Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p.
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply ShiftAsSubst.
-Qed.
-
 (* Lifting term arguments agrees with substitution by lifted variables.         *)
 Proposition ShiftAsSubstTs : forall (ts:Terms) (i j:nat),
   Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply ShiftAsSubst.
+Qed.
+
+(* Lifting proofs agrees with substitution by lifted variables.                 *)
+Proposition ShiftAsSubstP : forall (p:Proof) (i j:nat),
+  Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p.
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p i j.
+  destruct p as [t|t|name ts]; unfold Shift.fromP, Subst.fromP.
+  - rewrite ShiftAsSubstT. reflexivity.
+  - rewrite ShiftAsSubstT. reflexivity.
+  - rewrite ShiftAsSubstTs. reflexivity.
 Qed.
 
 (* Lifting through application lifts the body and the arguments.                *)
