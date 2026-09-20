@@ -171,7 +171,7 @@ Proof.
 Qed.
 
 (* Substitution through application acts on the body and the arguments.         *)
-Proposition From :
+Local Proposition From :
   (forall (t:Term) (ts:Terms) (i k:nat) (r:nat -> Term),
     fromT (k + i) r (fromT k (argT ts) t) =
     fromT k (argT (fromTs i r ts))
@@ -179,22 +179,9 @@ Proposition From :
   (forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
     fromTs (k + i) r (fromTs k (argT ts) us) =
     fromTs k (argT (fromTs i r ts))
-      (fromTs (k + i + lengthT ts) r us))                                 /\
-  (forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
-    fromP (k + i) r (fromP k (argT ts) p) =
-    fromP k (argT (fromTs i r ts))
-      (fromP (k + i + lengthT ts) r p)).
+      (fromTs (k + i + lengthT ts) r us)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  assert (
-    (forall (t:Term) (ts:Terms) (i k:nat) (r:nat -> Term),
-      fromT (k + i) r (fromT k (argT ts) t) =
-      fromT k (argT (fromTs i r ts))
-        (fromT (k + i + lengthT ts) r t)) /\
-    (forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
-      fromTs (k + i) r (fromTs k (argT ts) us) =
-      fromTs k (argT (fromTs i r ts))
-        (fromTs (k + i + lengthT ts) r us))) as H. {
   apply InductionT.Induction.
   - intros ts i k r. reflexivity.
   - intros ts i k r. reflexivity.
@@ -362,14 +349,7 @@ Proof.
   - intros A IH ts i k r. simpl. rewrite IH. reflexivity.
   - intros A IH ts i k r. simpl. rewrite IH. reflexivity.
   - intros ts i k r. reflexivity.
-  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity. }
-  destruct H as [H1 H2].
-  split. 1: assumption.
-  split. 1: assumption.
-  intros p ts i k r. destruct p as [t|t|name us]; unfold fromP; apply f_equal.
-  - apply H1.
-  - apply H1.
-  - apply H2.
+  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
 Qed.
 
 (* Substitution through an applied term substitutes body and arguments.         *)
@@ -383,16 +363,6 @@ Proof.
   rewrite H1. apply From.
 Qed.
 
-(* Substitution through an applied proof substitutes body and arguments.        *)
-Proposition FromP : forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
-  fromP (k + i) r (fromP k (argT ts) p) =
-  fromP k (argT (fromTs i r ts))
-    (fromP (k + i + lengthT ts) r p).
-Proof.
-  (* Proof by Hermes + gpt 5.5                                                  *)
-  apply From.
-Qed.
-
 (* Substitution through applied term arguments substitutes all arguments.       *)
 Proposition FromTs : forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
   fromTs (k + i) r (fromTs k (argT ts) us) =
@@ -401,6 +371,29 @@ Proposition FromTs : forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   apply From.
+Qed.
+
+(* Substitution through an applied proof substitutes body and arguments.        *)
+Proposition FromP : forall (p:Proof) (ts:Terms) (i k:nat) (r:nat -> Term),
+  fromP (k + i) r (fromP k (argT ts) p) =
+  fromP k (argT (fromTs i r ts))
+    (fromP (k + i + lengthT ts) r p).
+Proof.
+  (* Proof by Hermes + gpt 5.5                                                  *)
+  intros p ts i k r.
+  destruct p as [t|t|name us]; unfold fromP.
+  - assert (fromT (k + i) r (fromT k (argT ts) t) =
+      fromT k (argT (fromTs i r ts))
+        (fromT (k + i + lengthT ts) r t)) as H1. { apply From. }
+    rewrite H1. reflexivity.
+  - assert (fromT (k + i) r (fromT k (argT ts) t) =
+      fromT k (argT (fromTs i r ts))
+        (fromT (k + i + lengthT ts) r t)) as H1. { apply From. }
+    rewrite H1. reflexivity.
+  - assert (fromTs (k + i) r (fromTs k (argT ts) us) =
+      fromTs k (argT (fromTs i r ts))
+        (fromTs (k + i + lengthT ts) r us)) as H1. { apply From. }
+    rewrite H1. reflexivity.
 Qed.
 
 (* Lifting agrees with substitution by lifted variables.                        *)
