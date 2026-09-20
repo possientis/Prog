@@ -7,7 +7,8 @@ Require Import ZF.Meta.Check.Subst.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Subst.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.

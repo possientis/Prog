@@ -3,7 +3,8 @@ Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Induction.
 Require Import ZF.Meta.Shift.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 
 (* Substitution at level i leaves lower bound variables and replaces the rest.  *)
 Fixpoint fromT (i:nat) (r:nat -> Term) (t:Term) : Term :=

@@ -3,7 +3,8 @@ Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Induction.
 Require Import ZF.Meta.Name.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.Ty.
 
 (* De Bruijn lifting raises free variables by j at or above a level i.          *)

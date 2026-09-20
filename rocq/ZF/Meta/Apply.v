@@ -4,7 +4,8 @@ Require Import Coq.Lists.List.
 Require Import ZF.Meta.Induction.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Subst.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 
 Import ListNotations.
 

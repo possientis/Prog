@@ -2,7 +2,8 @@ Require Import Coq.Arith.PeanoNat.
 
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Subst.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 
 Definition Exists (A:Term) : Term := Ex (App (shiftT 1 A) (Var 0)).
 

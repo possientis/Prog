@@ -7,7 +7,8 @@ Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Small.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.TypeOf.
 Require Import ZF.Meta.Ty.
 Require Import ZF.Meta.Unique.

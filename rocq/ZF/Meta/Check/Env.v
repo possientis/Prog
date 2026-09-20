@@ -4,7 +4,8 @@ Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.DeclP.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.Check.DeclT.
 Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Ty.

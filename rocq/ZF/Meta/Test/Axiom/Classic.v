@@ -5,7 +5,8 @@ Require Import ZF.Meta.Check.Core.
 Require Import ZF.Meta.Check.DeclP.
 Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.DeclP.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.Ty.
 
 Import ListNotations.

@@ -5,7 +5,8 @@ Require Import ZF.Meta.Name.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.DeclT.
 Require Import ZF.Meta.Ty.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 
 Import ListNotations.
 Open Scope string_scope.

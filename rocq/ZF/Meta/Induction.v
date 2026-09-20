@@ -1,7 +1,8 @@
 Require ZF.Meta.InductionP.
 Require ZF.Meta.InductionT.
 Require Import ZF.Meta.Name.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.Ty.
 
 (* Terms, argument lists, and proofs have a joint induction principle.          *)

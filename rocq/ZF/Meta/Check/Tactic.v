@@ -11,7 +11,8 @@ Require Import ZF.Meta.Exists.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Small.
 Require Import ZF.Meta.Subst.
-Require Import ZF.Meta.Syntax.
+Require Import ZF.Meta.SyntaxT.
+Require Import ZF.Meta.SyntaxP.
 Require Import ZF.Meta.Ty.
 Require Import ZF.Meta.Unique.
 
