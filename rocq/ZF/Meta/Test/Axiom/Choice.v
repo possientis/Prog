@@ -1,7 +1,7 @@
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 
-Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.CoreT.
 Require Import ZF.Meta.Check.DeclT.
 Require Import ZF.Meta.Check.Tactic.
 Require Import ZF.Meta.SyntaxT.

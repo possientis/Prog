@@ -1,7 +1,8 @@
 Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Apply.
-Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.CoreT.
+Require Import ZF.Meta.Check.CoreP.
 Require Import ZF.Meta.Check.InductionT.
 Require Import ZF.Meta.Check.InductionP.
 Require Import ZF.Meta.Ctx.

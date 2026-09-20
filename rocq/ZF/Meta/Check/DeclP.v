@@ -1,4 +1,5 @@
-Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.CoreT.
+Require Import ZF.Meta.Check.CoreP.
 Require Import ZF.Meta.DeclP.
 Require Import ZF.Meta.Env.
 Require Import ZF.Meta.Ty.

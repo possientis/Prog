@@ -2,7 +2,8 @@ Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
 Require Import ZF.Meta.Apply.
-Require Import ZF.Meta.Check.Core.
+Require Import ZF.Meta.Check.CoreT.
+Require Import ZF.Meta.Check.CoreP.
 Require Import ZF.Meta.Check.Env.
 Require Import ZF.Meta.Check.Induction.
 Require Import ZF.Meta.Check.Ts.
