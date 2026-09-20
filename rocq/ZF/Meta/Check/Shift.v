@@ -5,7 +5,8 @@ Require Import ZF.Meta.Apply.
 Require Import ZF.Meta.Check.CoreT.
 Require Import ZF.Meta.Check.CoreP.
 Require Import ZF.Meta.Check.Env.
-Require Import ZF.Meta.Check.Induction.
+Require Import ZF.Meta.Check.InductionT.
+Require Import ZF.Meta.Check.InductionP.
 Require Import ZF.Meta.Check.Ts.
 Require Import ZF.Meta.Ctx.
 Require Import ZF.Meta.Env.
@@ -62,11 +63,8 @@ Proof.
       Shift.fromT i j t = t)                                            /\
     (forall (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty),
       CheckTs E G ts tys -> forall (i j:nat), length G <= i ->
-      Shift.fromTs i j ts = ts)                                         /\
-    (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
-      CheckP E G p t -> forall (i j:nat), length G <= i ->
-      Shift.fromP i j p = p)) as H. {
-  apply Induction.
+      Shift.fromTs i j ts = ts)) as H. {
+  apply InductionT.Induction.
   - intros E G i j H1. reflexivity.
   - intros E G i j H1. reflexivity.
   - intros E G n ty H1 i j H2. simpl.
@@ -113,12 +111,29 @@ Proof.
   - intros E G A H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
   - intros E G i j H1. reflexivity.
   - intros E G t ts ty tys H1 H2 H3 H4 i j H5. simpl.
-    rewrite H2, H4; try assumption. reflexivity.
-  - intros E G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
-  - intros E G t H1 H2 i j H3. simpl. rewrite H2; try assumption. reflexivity.
-  - intros E G name args tys t H1 H2 H3 i j H4. simpl.
-    rewrite H3; try assumption. reflexivity. }
-  destruct H as [H [H0 H00]].
+    rewrite H2, H4; try assumption. reflexivity. }
+  destruct H as [H H0].
+  assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
+    CheckP E G p t -> forall (i j:nat), length G <= i ->
+    Shift.fromP i j p = p) as H00. {
+    remember (fun (E:Env) (G:Ctx) (t:Term) (ty:Ty) =>
+      forall (i j:nat), length G <= i -> Shift.fromT i j t = t) as P eqn:HP.
+    remember (fun (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty) =>
+      forall (i j:nat), length G <= i -> Shift.fromTs i j ts = ts) as Q eqn:HQ.
+    remember (fun (E:Env) (G:Ctx) (p:Proof) (t:Term) =>
+      forall (i j:nat), length G <= i -> Shift.fromP i j p = p) as R eqn:HR.
+    assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
+      CheckP E G p t -> R E G p t) as K1. {
+      apply (InductionP.Induction P Q R).
+      - rewrite HP. apply H.
+      - rewrite HQ. apply H0.
+      - rewrite HP. rewrite HR. intros E G t H1 H2 i j H3.
+        simpl. rewrite H2; try assumption. reflexivity.
+      - rewrite HP. rewrite HR. intros E G t H1 H2 i j H3.
+        simpl. rewrite H2; try assumption. reflexivity.
+      - rewrite HQ. rewrite HR. intros E G name args tys t H1 H2 H3 i j H4.
+        simpl. rewrite H3; try assumption. reflexivity. }
+    rewrite HR in K1. apply K1. }
   split.
   - intros E G t ty i j H1 H2. apply (H E G t ty); assumption.
   - split.
@@ -197,79 +212,98 @@ Proof.
     (forall (E:Env) (C:Ctx) (ts:Terms) (tys:list Ty), CheckTs E C ts tys  ->
       Check E                                                             ->
       forall (G M D:Ctx), C = G ++ D                                      ->
-      CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)/\
-    (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t            ->
-      Check E                                                             ->
-      forall (G M D:Ctx), C = G ++ D                                      ->
-      CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
-        (Shift.fromT (length G) (length M) t))) as H2. {
-    apply Induction.
-    - intros E C H2 G M D H3. subst. apply CheckBot.
-    - intros E C H2 G M D H3. subst. apply CheckTop.
-    - intros E C n ty H2 H3 G M D H4. subst. apply VarT. assumption.
-    - intros E C ty H2 G M D H3. subst. apply CheckHoleT.
-    - intros E C name args tys ty H2 H3 H4 H5 G M D H6. subst.
+      CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys))
+    as H2. {
+    apply InductionT.Induction.
+    - intros E C H1 G M D H2. subst. apply CheckBot.
+    - intros E C H1 G M D H2. subst. apply CheckTop.
+    - intros E C n ty H1 H2 G M D H3. subst. apply VarT. assumption.
+    - intros E C ty H1 G M D H2. subst. apply CheckHoleT.
+    - intros E C name args tys ty H1 H2 H3 H4 G M D H5. subst.
       apply CheckIdentT with (tys := tys). 1: assumption.
-      apply H4. assumption. reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckElem; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckLeq; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckGeq; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckLt; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckGt; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckEqual; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C x y H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckNotEq; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C p q H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckImp; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C p q H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckIff; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C p q H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckAnd; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C p q H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckOr; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C p H2 H3 H4 G M D H5. subst.
-      apply CheckNot. apply H3. assumption. reflexivity.
-    - intros E C p H2 H3 H4 G M D H5. subst.
+      apply H3. assumption. reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckElem; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckLeq; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckGeq; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckLt; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckGt; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckEqual; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C x y H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckNotEq; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C p q H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckImp; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C p q H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckIff; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C p q H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckAnd; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C p q H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckOr; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C p H1 H2 H3 G M D H4. subst.
+      apply CheckNot. apply H2. assumption. reflexivity.
+    - intros E C p H1 H2 H3 G M D H4. subst.
       apply CheckAll.
-      apply H3 with (G := TySet :: G) (M := M) (D := D). assumption. reflexivity.
-    - intros E C p H2 H3 H4 G M D H5. subst.
+      apply H2 with (G := TySet :: G) (M := M) (D := D). assumption. reflexivity.
+    - intros E C p H1 H2 H3 G M D H4. subst.
       apply CheckEx.
-      apply H3 with (G := TySet :: G) (M := M) (D := D). assumption. reflexivity.
-    - intros E C p H2 H3 H4 G M D H5. subst.
+      apply H2 with (G := TySet :: G) (M := M) (D := D). assumption. reflexivity.
+    - intros E C p H1 H2 H3 G M D H4. subst.
       apply CheckLam.
-      apply H3 with (G := TySet :: G) (M := M) (D := D). assumption. reflexivity.
-    - intros E C A x H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckApp; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C A H2 H3 H4 G M D H5. subst.
-      apply CheckDef. apply H3. assumption. reflexivity.
-    - intros E C A H2 H3 H4 G M D H5. subst.
-      apply CheckFromC. apply H3. assumption. reflexivity.
-    - intros E C H2 G M D H3. subst. apply CheckTsNil.
-    - intros E C t ts ty tys H2 H3 H4 H5 H6 G M D H7. subst.
-      apply CheckTsCons; [apply H3|apply H5]; try assumption; reflexivity.
-    - intros E C t H2 H3 H4 G M D H5. subst.
-      apply CheckHoleP. apply H3. assumption. reflexivity.
-    - intros E C t H2 H3 H4 G M D H5. subst.
-      apply CheckAxiomP. apply H3. assumption. reflexivity.
-    - intros E C name args tys t H2 H3 H4 H5 G M D H6. subst.
+      apply H2 with (G := TySet :: G) (M := M) (D := D). assumption. reflexivity.
+    - intros E C A x H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckApp; [apply H2|apply H4]; try assumption; reflexivity.
+    - intros E C A H1 H2 H3 G M D H4. subst.
+      apply CheckDef. apply H2. assumption. reflexivity.
+    - intros E C A H1 H2 H3 G M D H4. subst.
+      apply CheckFromC. apply H2. assumption. reflexivity.
+    - intros E C H1 G M D H2. subst. apply CheckTsNil.
+    - intros E C t ts ty tys H1 H2 H3 H4 H5 G M D H6. subst.
+      apply CheckTsCons; [apply H2|apply H4]; try assumption; reflexivity. }
+  destruct H2 as [H2 H3].
+  assert (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t     ->
+    Check E                                                               ->
+    forall (G M D:Ctx), C = G ++ D                                        ->
+    CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
+      (Shift.fromT (length G) (length M) t)) as H4. {
+    remember (fun (E:Env) (C:Ctx) (t:Term) (ty:Ty) =>
+      Check E -> forall (G M D:Ctx), C = G ++ D ->
+      CheckT E (G ++ M ++ D) (Shift.fromT (length G) (length M) t) ty)
+      as P eqn:HP.
+    remember (fun (E:Env) (C:Ctx) (ts:Terms) (tys:list Ty) =>
+      Check E -> forall (G M D:Ctx), C = G ++ D ->
+      CheckTs E (G ++ M ++ D) (Shift.fromTs (length G) (length M) ts) tys)
+      as Q eqn:HQ.
+    remember (fun (E:Env) (C:Ctx) (p:Proof) (t:Term) =>
+      Check E -> forall (G M D:Ctx), C = G ++ D ->
+      CheckP E (G ++ M ++ D) (Shift.fromP (length G) (length M) p)
+        (Shift.fromT (length G) (length M) t)) as R eqn:HR.
+    assert (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t ->
+      R E C p t) as K1. {
+      apply (InductionP.Induction P Q R).
+      - rewrite HP. apply H2.
+      - rewrite HQ. apply H3.
+      - rewrite HP. rewrite HR. intros E C t H5 H6 H7 G M D H8. subst.
+      apply CheckHoleP. apply H6. assumption. reflexivity.
+    - rewrite HP. rewrite HR. intros E C t H5 H6 H7 G M D H8. subst.
+      apply CheckAxiomP. apply H6. assumption. reflexivity.
+    - rewrite HQ. rewrite HR. intros E C name args tys t H5 H6 H7 H8 G M D H9. subst.
       rewrite Apply.CommShiftT.
-      assert (Shift.fromT (length G + lengthT args) (length M) t = t) as H6. {
+      assert (Shift.fromT (length G + lengthT args) (length M) t = t) as H9. {
         apply (AboveT E (rev tys) t TyProp).
         - apply (SigP E name); assumption.
         - rewrite length_rev.
-          assert (lengthT args = length tys) as H6. {
+          assert (lengthT args = length tys) as H9. {
             apply (Length E (G ++ D)); assumption. }
-          rewrite <- H6. rewrite Nat.add_comm. apply Nat.le_add_r. }
-      rewrite H6.
+          rewrite <- H9. rewrite Nat.add_comm. apply Nat.le_add_r. }
+      rewrite H9.
       apply CheckIdentP with (tys := tys). 1: assumption.
-      apply H4. assumption. reflexivity. }
-  destruct H2 as [H2 [H3 H4]].
+      apply H7. assumption. reflexivity. }
+    rewrite HR in K1. apply K1. }
   split.
   - intros E G M D t ty H1 H5.
     apply (H2 E (G ++ D) t ty); try assumption. reflexivity.

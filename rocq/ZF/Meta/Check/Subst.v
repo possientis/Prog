@@ -5,7 +5,8 @@ Require Import ZF.Meta.Apply.
 Require Import ZF.Meta.Check.CoreT.
 Require Import ZF.Meta.Check.CoreP.
 Require Import ZF.Meta.Check.Env.
-Require Import ZF.Meta.Check.Induction.
+Require Import ZF.Meta.Check.InductionT.
+Require Import ZF.Meta.Check.InductionP.
 Require Import ZF.Meta.Check.Shift.
 Require Import ZF.Meta.Check.Ts.
 Require Import ZF.Meta.Ctx.
@@ -50,12 +51,8 @@ Proof.
     (forall (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty),
       CheckTs E G ts tys                                                    ->
       forall (i:nat) (r:nat -> Term),
-      Check E -> length G <= i -> fromTs i r ts = ts)                       /\
-    (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
-      CheckP E G p t                                                        ->
-      forall (i:nat) (r:nat -> Term),
-      Check E -> length G <= i -> fromP i r p = p)) as H. {
-    apply Induction.
+      Check E -> length G <= i -> fromTs i r ts = ts)) as H. {
+    apply InductionT.Induction.
     - intros E G i r H1 H2. reflexivity.
     - intros E G i r H1 H2. reflexivity.
     - intros E G n ty H1 i r H2 H3. simpl.
@@ -103,12 +100,33 @@ Proof.
     - intros E G A H1 H2 i r H3 H4. simpl. rewrite H2; try assumption. reflexivity.
     - intros E G i r H1 H2. reflexivity.
     - intros E G t ts ty tys H1 H2 H3 H4 i r H5 H6. simpl.
-      rewrite H2, H4; try assumption. reflexivity.
-    - intros E G t H1 H2 i r H3 H4. simpl. rewrite H2; try assumption. reflexivity.
-    - intros E G t H1 H2 i r H3 H4. simpl. rewrite H2; try assumption. reflexivity.
-    - intros E G name args tys t H1 H2 H3 i r H4 H5. simpl.
-      rewrite H3; try assumption. reflexivity. }
-  destruct H as [H1 [H2 H3]]. split.
+      rewrite H2, H4; try assumption. reflexivity. }
+  destruct H as [H1 H2].
+  assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
+    CheckP E G p t -> forall (i:nat) (r:nat -> Term),
+    Check E -> length G <= i -> fromP i r p = p) as H3. {
+    remember (fun (E:Env) (G:Ctx) (t:Term) (ty:Ty) =>
+      forall (i:nat) (r:nat -> Term),
+      Check E -> length G <= i -> fromT i r t = t) as P eqn:HP.
+    remember (fun (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty) =>
+      forall (i:nat) (r:nat -> Term),
+      Check E -> length G <= i -> fromTs i r ts = ts) as Q eqn:HQ.
+    remember (fun (E:Env) (G:Ctx) (p:Proof) (t:Term) =>
+      forall (i:nat) (r:nat -> Term),
+      Check E -> length G <= i -> fromP i r p = p) as R eqn:HR.
+    assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
+      CheckP E G p t -> R E G p t) as K1. {
+      apply (InductionP.Induction P Q R).
+      - rewrite HP. apply H1.
+      - rewrite HQ. apply H2.
+      - rewrite HP. rewrite HR. intros E G t H4 H5 i r H6 H7.
+        simpl. rewrite H5; try assumption. reflexivity.
+      - rewrite HP. rewrite HR. intros E G t H4 H5 i r H6 H7.
+        simpl. rewrite H5; try assumption. reflexivity.
+      - rewrite HQ. rewrite HR. intros E G name args tys t H4 H5 H6 i r H7 H8.
+        simpl. rewrite H6; try assumption. reflexivity. }
+    rewrite HR in K1. apply K1. }
+  split.
   - intros E G t ty i r H4 H5 H6.
     apply H1 with (E := E) (G := G) (ty := ty); assumption.
   - split.
@@ -185,14 +203,8 @@ Proof.
       Check E                                                               ->
       forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D                        ->
       CheckTs E D ts (rev M)                                                ->
-      CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys)              /\
-    (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t              ->
-      Check E                                                               ->
-      forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D                        ->
-      CheckTs E D ts (rev M)                                                ->
-      CheckP E (G ++ D) (fromP (length G) (argT ts) p)
-        (fromT (length G) (argT ts) t))) as H2. {
-    apply Induction.
+      CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys)) as H2. {
+    apply InductionT.Induction.
     - intros E C H1 G M D ts H2 H3. subst. apply CheckBot.
     - intros E C H1 G M D ts H2 H3. subst. apply CheckTop.
     - intros E C n ty H1 H2 G M D ts H3 H4. subst. simpl.
@@ -295,34 +307,62 @@ Proof.
     - intros E C t us ty tys H2 H3 H4 H5 H6 G M D ts H7 H8.
       subst. apply CheckTsCons.
       + apply H3 with M; try assumption. reflexivity.
-      + apply H5 with M; try assumption. reflexivity.
-    - intros E C t H2 H3 H4 G M D ts H5 H6. subst. apply CheckHoleP.
-      apply H3 with M; try assumption. reflexivity.
-    - intros E C t H2 H3 H4 G M D ts H5 H6. subst. apply CheckAxiomP.
-      apply H3 with M; try assumption. reflexivity.
-    - intros E C name args tys t H2 H3 H4 H5 G M D ts H6 H7. subst.
+      + apply H5 with M; try assumption. reflexivity. }
+  destruct H2 as [H1 H2].
+  assert (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t        ->
+    Check E                                                                 ->
+    forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D                          ->
+    CheckTs E D ts (rev M)                                                  ->
+    CheckP E (G ++ D) (fromP (length G) (argT ts) p)
+      (fromT (length G) (argT ts) t)) as H3. {
+    remember (fun (E:Env) (C:Ctx) (t:Term) (ty:Ty) =>
+      Check E -> forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
+      CheckTs E D ts (rev M) ->
+      CheckT E (G ++ D) (fromT (length G) (argT ts) t) ty) as P eqn:HP.
+    remember (fun (E:Env) (C:Ctx) (us:Terms) (tys:list Ty) =>
+      Check E -> forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
+      CheckTs E D ts (rev M) ->
+      CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys) as Q eqn:HQ.
+    remember (fun (E:Env) (C:Ctx) (p:Proof) (t:Term) =>
+      Check E -> forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
+      CheckTs E D ts (rev M) ->
+      CheckP E (G ++ D) (fromP (length G) (argT ts) p)
+        (fromT (length G) (argT ts) t)) as R eqn:HR.
+    assert (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t ->
+      R E C p t) as K1. {
+      apply (InductionP.Induction P Q R).
+      - rewrite HP. apply H1.
+      - rewrite HQ. apply H2.
+      - rewrite HP. rewrite HR. intros E C t H4 H5 H6 G M D ts H7 H8.
+        subst. apply CheckHoleP.
+      apply H5 with M; try assumption. reflexivity.
+    - rewrite HP. rewrite HR. intros E C t H4 H5 H6 G M D ts H7 H8.
+      subst. apply CheckAxiomP.
+      apply H5 with M; try assumption. reflexivity.
+    - rewrite HQ. rewrite HR. intros E C name args tys t H4 H5 H6 H7 G M D ts H8 H9. subst.
       rewrite Apply.FromT.
-      assert (fromT (length G + lengthT args) (argT ts) t = t) as H6. {
+      assert (fromT (length G + lengthT args) (argT ts) t = t) as H8. {
         apply (AboveT E (rev tys) t TyProp (length G + lengthT args) (argT ts)).
         - assumption.
         - apply (SigP E name); assumption.
         - rewrite length_rev.
-          assert (lengthT args = length tys) as H6. {
+          assert (lengthT args = length tys) as H8. {
             apply (Length E (G ++ M ++ D)); assumption. }
-          rewrite <- H6. rewrite Nat.add_comm. apply Nat.le_add_r. }
-      rewrite H6. apply CheckIdentP with (tys := tys). 1: assumption.
-      apply H4 with (G := G) (M := M) (D := D) (ts := ts);
+          rewrite <- H8. rewrite Nat.add_comm. apply Nat.le_add_r. }
+      rewrite H8. apply CheckIdentP with (tys := tys). 1: assumption.
+      apply H6 with (G := G) (M := M) (D := D) (ts := ts);
       try assumption. reflexivity. }
+    rewrite HR in K1. apply K1. }
   split.
-  - intros E G M D t ty ts H3 H4 H5.
-    apply H2 with (C := G ++ M ++ D) (G := G) (M := M);
+  - intros E G M D t ty ts H4 H5 H6.
+    apply H1 with (C := G ++ M ++ D) (G := G) (M := M);
     try assumption. reflexivity.
   - split.
-    + intros E G M D us tys ts H3 H4 H5.
+    + intros E G M D us tys ts H4 H5 H6.
       apply H2 with (C := G ++ M ++ D) (G := G) (M := M);
       try assumption. reflexivity.
-    + intros E G M D p t ts H3 H4 H5.
-      apply H2 with (C := G ++ M ++ D) (G := G) (M := M);
+    + intros E G M D p t ts H4 H5 H6.
+      apply H3 with (C := G ++ M ++ D) (G := G) (M := M);
       try assumption. reflexivity.
 Qed.
 
