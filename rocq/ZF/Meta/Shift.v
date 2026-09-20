@@ -1,7 +1,7 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
-Require Import ZF.Meta.InductionP.
+Require Import ZF.Meta.InductionT.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.SyntaxT.
 Require Import ZF.Meta.SyntaxP.
@@ -58,7 +58,10 @@ Proposition WhenZero :
   (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts)    /\
   (forall (p:Proof)  (i:nat), fromP   i 0 p  = p).
 Proof.
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term)   (i:nat), fromT   i 0 t  = t)  /\
+    (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts)) as H. {
+  apply InductionT.Induction.
   - intros i. reflexivity.
   - intros i. reflexivity.
   - intros n i. simpl.
@@ -84,10 +87,14 @@ Proof.
   - intros A IH i. simpl. rewrite IH. reflexivity.
   - intros A IH i. simpl. rewrite IH. reflexivity.
   - intros i. reflexivity.
-  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH i. unfold fromP. apply f_equal. apply IH.
-  - intros t IH i. unfold fromP. apply f_equal. apply IH.
-  - intros name args IH i. unfold fromP. apply f_equal. apply IH.
+  - intros t ts IH1 IH2 i. simpl. rewrite IH1, IH2. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p i. destruct p as [t|t|name args]; unfold fromP; apply f_equal.
+  - apply H1.
+  - apply H1.
+  - apply H2.
 Qed.
 
 (* Lifting terms by zero leaves them unchanged.                                 *)
@@ -130,7 +137,12 @@ Proposition Comm :
     fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term) (i j k l:nat), i <= k ->
+      fromT (k + j) l (fromT i j t) = fromT i j (fromT k l t)) /\
+    (forall (ts:Terms) (i j k l:nat), i <= k ->
+      fromTs (k + j) l (fromTs i j ts) = fromTs i j (fromTs k l ts))) as H. {
+  apply InductionT.Induction.
   - intros i j k l H1. reflexivity.
   - intros i j k l H1. reflexivity.
   - intros n i j k l H1. simpl.
@@ -216,10 +228,14 @@ Proof.
   - intros A IH i j k l H1. simpl. rewrite IH; try assumption. reflexivity.
   - intros i j k l H1. reflexivity.
   - intros t ts IH1 IH2 i j k l H1. simpl.
-    rewrite IH1, IH2; try assumption. reflexivity.
-  - intros t IH i j k l H1. unfold fromP. apply f_equal. apply IH. assumption.
-  - intros t IH i j k l H1. unfold fromP. apply f_equal. apply IH. assumption.
-  - intros name ts IH i j k l H1. unfold fromP. apply f_equal. apply IH. assumption.
+    rewrite IH1, IH2; try assumption. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p i j k l H3. destruct p as [t|t|name args]; unfold fromP; apply f_equal.
+  - apply H1. assumption.
+  - apply H1. assumption.
+  - apply H2. assumption.
 Qed.
 
 (* A later lifting commutes with an earlier lifting in terms.                   *)
@@ -256,7 +272,12 @@ Proposition Add :
     fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term) (i j k l:nat),
+      fromT (i + j) k (fromT i (j + l) t) = fromT i (j + k + l) t) /\
+    (forall (ts:Terms) (i j k l:nat),
+      fromTs (i + j) k (fromTs i (j + l) ts) = fromTs i (j + k + l) ts)) as H. {
+  apply InductionT.Induction.
   - intros i j k l. reflexivity.
   - intros i j k l. reflexivity.
   - intros n i j k l. simpl.
@@ -310,10 +331,14 @@ Proof.
   - intros A IH i j k l. simpl. rewrite IH. reflexivity.
   - intros A IH i j k l. simpl. rewrite IH. reflexivity.
   - intros i j k l. reflexivity.
-  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH i j k l. unfold fromP. apply f_equal. apply IH.
-  - intros t IH i j k l. unfold fromP. apply f_equal. apply IH.
-  - intros name ts IH i j k l. unfold fromP. apply f_equal. apply IH.
+  - intros t ts IH1 IH2 i j k l. simpl. rewrite IH1, IH2. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p i j k l. destruct p as [t|t|name args]; unfold fromP; apply f_equal.
+  - apply H1.
+  - apply H1.
+  - apply H2.
 Qed.
 
 (* Lifting above an earlier lifting combines in terms.                          *)

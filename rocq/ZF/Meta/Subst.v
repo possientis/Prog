@@ -1,7 +1,7 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
-Require Import ZF.Meta.InductionP.
+Require Import ZF.Meta.InductionT.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.SyntaxT.
 Require Import ZF.Meta.SyntaxP.
@@ -116,7 +116,14 @@ Proposition SubstShift :
     Shift.fromP i j (Subst.fromP (i + k) r p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term) (i j k:nat) (r:nat -> Term),
+      Subst.fromT (i + j + k) r (Shift.fromT i j t) =
+      Shift.fromT i j (Subst.fromT (i + k) r t)) /\
+    (forall (ts:Terms) (i j k:nat) (r:nat -> Term),
+      Subst.fromTs (i + j + k) r (Shift.fromTs i j ts) =
+      Shift.fromTs i j (Subst.fromTs (i + k) r ts))) as H. {
+  apply InductionT.Induction.
   - intros i j k r. reflexivity.
   - intros i j k r. reflexivity.
   - intros n i j k r. simpl.
@@ -195,10 +202,15 @@ Proof.
   - intros A IH i j k r. simpl. rewrite IH. reflexivity.
   - intros A IH i j k r. simpl. rewrite IH. reflexivity.
   - intros i j k r. reflexivity.
-  - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH i j k r. simpl. rewrite IH. reflexivity.
-  - intros t IH i j k r. simpl. rewrite IH. reflexivity.
-  - intros name ts IH i j k r. simpl. rewrite IH. reflexivity.
+  - intros t ts IH1 IH2 i j k r. simpl. rewrite IH1, IH2. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p i j k r. destruct p as [t|t|name args]; unfold Subst.fromP, Shift.fromP;
+  apply f_equal.
+  - apply H1.
+  - apply H1.
+  - apply H2.
 Qed.
 
 (* Substitution above a lifting commutes with the lifting in terms.             *)

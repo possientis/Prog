@@ -1,7 +1,7 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
-Require Import ZF.Meta.InductionP.
+Require Import ZF.Meta.InductionT.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Subst.
 Require Import ZF.Meta.SyntaxT.
@@ -87,7 +87,14 @@ Proposition Shift :
     Shift.fromP k i p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term) (ts:Terms) (i k:nat),
+      Subst.fromT k (argT ts) (Shift.fromT k (i + lengthT ts) t) =
+      Shift.fromT k i t) /\
+    (forall (us:Terms) (ts:Terms) (i k:nat),
+      Subst.fromTs k (argT ts) (Shift.fromTs k (i + lengthT ts) us) =
+      Shift.fromTs k i us)) as H. {
+  apply InductionT.Induction.
   - intros ts i k. reflexivity.
   - intros ts i k. reflexivity.
   - intros n ts i k. simpl.
@@ -139,10 +146,15 @@ Proof.
   - intros A IH ts i k. simpl. rewrite IH. reflexivity.
   - intros A IH ts i k. simpl. rewrite IH. reflexivity.
   - intros ts i k. reflexivity.
-  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH ts i k. simpl. rewrite IH. reflexivity.
-  - intros t IH ts i k. simpl. rewrite IH. reflexivity.
-  - intros name us IH ts i k. simpl. rewrite IH. reflexivity.
+  - intros t us IH1 IH2 ts i k. simpl. rewrite IH1, IH2. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p ts i k. destruct p as [t|t|name us]; unfold Subst.fromP, Shift.fromP;
+  apply f_equal.
+  - apply H1.
+  - apply H1.
+  - apply H2.
 Qed.
 
 (* Applying arguments below a term lifting lowers it by their length.           *)
@@ -188,7 +200,16 @@ Proposition From :
       (fromP (k + i + lengthT ts) r p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term) (ts:Terms) (i k:nat) (r:nat -> Term),
+      fromT (k + i) r (fromT k (argT ts) t) =
+      fromT k (argT (fromTs i r ts))
+        (fromT (k + i + lengthT ts) r t)) /\
+    (forall (us:Terms) (ts:Terms) (i k:nat) (r:nat -> Term),
+      fromTs (k + i) r (fromTs k (argT ts) us) =
+      fromTs k (argT (fromTs i r ts))
+        (fromTs (k + i + lengthT ts) r us))) as H. {
+  apply InductionT.Induction.
   - intros ts i k r. reflexivity.
   - intros ts i k r. reflexivity.
   - intros n ts i k r. simpl.
@@ -355,10 +376,14 @@ Proof.
   - intros A IH ts i k r. simpl. rewrite IH. reflexivity.
   - intros A IH ts i k r. simpl. rewrite IH. reflexivity.
   - intros ts i k r. reflexivity.
-  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
-  - intros t IH ts i k r. simpl. rewrite IH. reflexivity.
-  - intros name us IH ts i k r. simpl. rewrite IH. reflexivity.
+  - intros t us IH1 IH2 ts i k r. simpl. rewrite IH1, IH2. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p ts i k r. destruct p as [t|t|name us]; unfold fromP; apply f_equal.
+  - apply H1.
+  - apply H1.
+  - apply H2.
 Qed.
 
 (* Substitution through an applied term substitutes body and arguments.         *)
@@ -402,7 +427,12 @@ Proposition ShiftAsSubst :
     Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply InductionP.Joint.
+  assert (
+    (forall (t:Term) (i j:nat),
+      Shift.fromT i j t = Subst.fromT i (fun n => Var (n + j)) t) /\
+    (forall (ts:Terms) (i j:nat),
+      Shift.fromTs i j ts = Subst.fromTs i (fun n => Var (n + j)) ts)) as H. {
+  apply InductionT.Induction.
   - intros i j. reflexivity.
   - intros i j. reflexivity.
   - intros n i j. simpl.
@@ -438,10 +468,15 @@ Proof.
   - intros A IH i j. simpl. rewrite IH. reflexivity.
   - intros A IH i j. simpl. rewrite IH. reflexivity.
   - intros i j. reflexivity.
-  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity.
-  - intros t IH i j. simpl. rewrite IH. reflexivity.
-  - intros t IH i j. simpl. rewrite IH. reflexivity.
-  - intros name ts IH i j. simpl. rewrite IH. reflexivity.
+  - intros t ts IH1 IH2 i j. simpl. rewrite IH1, IH2. reflexivity. }
+  destruct H as [H1 H2].
+  split. 1: assumption.
+  split. 1: assumption.
+  intros p i j. destruct p as [t|t|name ts]; unfold Shift.fromP, Subst.fromP;
+  apply f_equal.
+  - apply H1.
+  - apply H1.
+  - apply H2.
 Qed.
 
 (* Lifting terms agrees with substitution by lifted variables.                  *)
