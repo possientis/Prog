@@ -1,7 +1,7 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
-Require Import ZF.Meta.Induction.
+Require Import ZF.Meta.InductionP.
 Require Import ZF.Meta.Name.
 Require Import ZF.Meta.SyntaxT.
 Require Import ZF.Meta.SyntaxP.
@@ -58,7 +58,7 @@ Proposition WhenZero :
   (forall (ts:Terms) (i:nat), fromTs  i 0 ts = ts)    /\
   (forall (p:Proof)  (i:nat), fromP   i 0 p  = p).
 Proof.
-  apply Induction.
+  apply InductionP.Joint.
   - intros i. reflexivity.
   - intros i. reflexivity.
   - intros n i. simpl.
@@ -130,7 +130,7 @@ Proposition Comm :
     fromP (k + j) l (fromP i j p) = fromP i j (fromP k l p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Induction.
+  apply InductionP.Joint.
   - intros i j k l H1. reflexivity.
   - intros i j k l H1. reflexivity.
   - intros n i j k l H1. simpl.
@@ -256,7 +256,7 @@ Proposition Add :
     fromP (i + j) k (fromP i (j + l) p) = fromP i (j + k + l) p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Induction.
+  apply InductionP.Joint.
   - intros i j k l. reflexivity.
   - intros i j k l. reflexivity.
   - intros n i j k l. simpl.

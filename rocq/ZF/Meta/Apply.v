@@ -1,7 +1,7 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
-Require Import ZF.Meta.Induction.
+Require Import ZF.Meta.InductionP.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.Subst.
 Require Import ZF.Meta.SyntaxT.
@@ -87,7 +87,7 @@ Proposition Shift :
     Shift.fromP k i p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Induction.
+  apply InductionP.Joint.
   - intros ts i k. reflexivity.
   - intros ts i k. reflexivity.
   - intros n ts i k. simpl.
@@ -188,7 +188,7 @@ Proposition From :
       (fromP (k + i + lengthT ts) r p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Induction.
+  apply InductionP.Joint.
   - intros ts i k r. reflexivity.
   - intros ts i k r. reflexivity.
   - intros n ts i k r. simpl.
@@ -402,7 +402,7 @@ Proposition ShiftAsSubst :
     Shift.fromP i j p = Subst.fromP i (fun n => Var (n + j)) p).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Induction.
+  apply InductionP.Joint.
   - intros i j. reflexivity.
   - intros i j. reflexivity.
   - intros n i j. simpl.

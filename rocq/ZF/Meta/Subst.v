@@ -1,7 +1,7 @@
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.Lists.List.
 
-Require Import ZF.Meta.Induction.
+Require Import ZF.Meta.InductionP.
 Require Import ZF.Meta.Shift.
 Require Import ZF.Meta.SyntaxT.
 Require Import ZF.Meta.SyntaxP.
@@ -116,7 +116,7 @@ Proposition SubstShift :
     Shift.fromP i j (Subst.fromP (i + k) r p)).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Induction.
+  apply InductionP.Joint.
   - intros i j k r. reflexivity.
   - intros i j k r. reflexivity.
   - intros n i j k r. simpl.
