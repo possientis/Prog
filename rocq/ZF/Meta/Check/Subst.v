@@ -6,7 +6,6 @@ Require Import ZF.Meta.Check.CoreT.
 Require Import ZF.Meta.Check.CoreP.
 Require Import ZF.Meta.Check.Env.
 Require Import ZF.Meta.Check.InductionT.
-Require Import ZF.Meta.Check.InductionP.
 Require Import ZF.Meta.Check.Shift.
 Require Import ZF.Meta.Check.Ts.
 Require Import ZF.Meta.Ctx.
@@ -24,8 +23,8 @@ Require Import ZF.Meta.Unique.
 
 Import ListNotations.
 
-(* Substitution above a checked object leaves it unchanged.                     *)
-Proposition Above :
+(* Substitution above a checked term or argument list leaves it unchanged.      *)
+Local Proposition Above :
   (forall (E:Env) (G:Ctx) (t:Term) (ty:Ty) (i:nat) (r:nat -> Term),
     Check E                                                                 ->
     CheckT E G t ty                                                         ->
@@ -35,12 +34,7 @@ Proposition Above :
     Check E                                                                 ->
     CheckTs E G ts tys                                                      ->
     length G <= i                                                           ->
-    fromTs i r ts = ts)                                                     /\
-  (forall (E:Env) (G:Ctx) (p:Proof) (t:Term) (i:nat) (r:nat -> Term),
-    Check E                                                                 ->
-    CheckP E G p t                                                          ->
-    length G <= i                                                           ->
-    fromP i r p = p).
+    fromTs i r ts = ts).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (
@@ -102,38 +96,11 @@ Proof.
     - intros E G t ts ty tys H1 H2 H3 H4 i r H5 H6. simpl.
       rewrite H2, H4; try assumption. reflexivity. }
   destruct H as [H1 H2].
-  assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
-    CheckP E G p t -> forall (i:nat) (r:nat -> Term),
-    Check E -> length G <= i -> fromP i r p = p) as H3. {
-    remember (fun (E:Env) (G:Ctx) (t:Term) (ty:Ty) =>
-      forall (i:nat) (r:nat -> Term),
-      Check E -> length G <= i -> fromT i r t = t) as P eqn:HP.
-    remember (fun (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty) =>
-      forall (i:nat) (r:nat -> Term),
-      Check E -> length G <= i -> fromTs i r ts = ts) as Q eqn:HQ.
-    remember (fun (E:Env) (G:Ctx) (p:Proof) (t:Term) =>
-      forall (i:nat) (r:nat -> Term),
-      Check E -> length G <= i -> fromP i r p = p) as R eqn:HR.
-    assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
-      CheckP E G p t -> R E G p t) as K1. {
-      apply (InductionP.Induction P Q R).
-      - rewrite HP. apply H1.
-      - rewrite HQ. apply H2.
-      - rewrite HP. rewrite HR. intros E G t H4 H5 i r H6 H7.
-        simpl. rewrite H5; try assumption. reflexivity.
-      - rewrite HP. rewrite HR. intros E G t H4 H5 i r H6 H7.
-        simpl. rewrite H5; try assumption. reflexivity.
-      - rewrite HQ. rewrite HR. intros E G name args tys t H4 H5 H6 i r H7 H8.
-        simpl. rewrite H6; try assumption. reflexivity. }
-    rewrite HR in K1. apply K1. }
   split.
   - intros E G t ty i r H4 H5 H6.
     apply H1 with (E := E) (G := G) (ty := ty); assumption.
-  - split.
-    + intros E G ts tys i r H4 H5 H6.
-      apply H2 with (E := E) (G := G) (tys := tys); assumption.
-    + intros E G p t i r H4 H5 H6.
-      apply H3 with (E := E) (G := G) (t := t); assumption.
+  - intros E G ts tys i r H4 H5 H6.
+    apply H2 with (E := E) (G := G) (tys := tys); assumption.
 Qed.
 
 (* Substitution above a checked term leaves it unchanged.                       *)
@@ -169,12 +136,16 @@ Proposition AboveP :
     fromP i r p = p.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Above.
+  intros E G p t i r H1 H2 H3.
+  inversion H2; subst.
+  - simpl. rewrite (AboveT E G t TyProp i r); try assumption. reflexivity.
+  - simpl. rewrite (AboveT E G t TyProp i r); try assumption. reflexivity.
+  - simpl. rewrite (AboveTs E G args tys i r); try assumption. reflexivity.
 Qed.
 
 
-(* Substitution by checked arguments preserves checked objects.                 *)
-Proposition From :
+(* Substitution by checked arguments preserves checked terms and arguments.     *)
+Local Proposition From :
   (forall (E:Env) (G M D:Ctx) (t:Term) (ty:Ty) (ts:Terms),
     Check E                                                                 ->
     CheckT E (G ++ M ++ D) t ty                                             ->
@@ -184,13 +155,7 @@ Proposition From :
     Check E                                                                 ->
     CheckTs E (G ++ M ++ D) us tys                                          ->
     CheckTs E D ts (rev M)                                                  ->
-    CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys)                /\
-  (forall (E:Env) (G M D:Ctx) (p:Proof) (t:Term) (ts:Terms),
-    Check E                                                                 ->
-    CheckP E (G ++ M ++ D) p t                                              ->
-    CheckTs E D ts (rev M)                                                  ->
-    CheckP E (G ++ D) (fromP (length G) (argT ts) p)
-      (fromT (length G) (argT ts) t)).
+    CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (
@@ -309,61 +274,13 @@ Proof.
       + apply H3 with M; try assumption. reflexivity.
       + apply H5 with M; try assumption. reflexivity. }
   destruct H2 as [H1 H2].
-  assert (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t        ->
-    Check E                                                                 ->
-    forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D                          ->
-    CheckTs E D ts (rev M)                                                  ->
-    CheckP E (G ++ D) (fromP (length G) (argT ts) p)
-      (fromT (length G) (argT ts) t)) as H3. {
-    remember (fun (E:Env) (C:Ctx) (t:Term) (ty:Ty) =>
-      Check E -> forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
-      CheckTs E D ts (rev M) ->
-      CheckT E (G ++ D) (fromT (length G) (argT ts) t) ty) as P eqn:HP.
-    remember (fun (E:Env) (C:Ctx) (us:Terms) (tys:list Ty) =>
-      Check E -> forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
-      CheckTs E D ts (rev M) ->
-      CheckTs E (G ++ D) (fromTs (length G) (argT ts) us) tys) as Q eqn:HQ.
-    remember (fun (E:Env) (C:Ctx) (p:Proof) (t:Term) =>
-      Check E -> forall (G M D:Ctx) (ts:Terms), C = G ++ M ++ D ->
-      CheckTs E D ts (rev M) ->
-      CheckP E (G ++ D) (fromP (length G) (argT ts) p)
-        (fromT (length G) (argT ts) t)) as R eqn:HR.
-    assert (forall (E:Env) (C:Ctx) (p:Proof) (t:Term), CheckP E C p t ->
-      R E C p t) as K1. {
-      apply (InductionP.Induction P Q R).
-      - rewrite HP. apply H1.
-      - rewrite HQ. apply H2.
-      - rewrite HP. rewrite HR. intros E C t H4 H5 H6 G M D ts H7 H8.
-        subst. apply CheckHoleP.
-      apply H5 with M; try assumption. reflexivity.
-    - rewrite HP. rewrite HR. intros E C t H4 H5 H6 G M D ts H7 H8.
-      subst. apply CheckAxiomP.
-      apply H5 with M; try assumption. reflexivity.
-    - rewrite HQ. rewrite HR. intros E C name args tys t H4 H5 H6 H7 G M D ts H8 H9. subst.
-      rewrite Apply.FromT.
-      assert (fromT (length G + lengthT args) (argT ts) t = t) as H8. {
-        apply (AboveT E (rev tys) t TyProp (length G + lengthT args) (argT ts)).
-        - assumption.
-        - apply (SigP E name); assumption.
-        - rewrite length_rev.
-          assert (lengthT args = length tys) as H8. {
-            apply (Length E (G ++ M ++ D)); assumption. }
-          rewrite <- H8. rewrite Nat.add_comm. apply Nat.le_add_r. }
-      rewrite H8. apply CheckIdentP with (tys := tys). 1: assumption.
-      apply H6 with (G := G) (M := M) (D := D) (ts := ts);
-      try assumption. reflexivity. }
-    rewrite HR in K1. apply K1. }
   split.
   - intros E G M D t ty ts H4 H5 H6.
     apply H1 with (C := G ++ M ++ D) (G := G) (M := M);
     try assumption. reflexivity.
-  - split.
-    + intros E G M D us tys ts H4 H5 H6.
-      apply H2 with (C := G ++ M ++ D) (G := G) (M := M);
-      try assumption. reflexivity.
-    + intros E G M D p t ts H4 H5 H6.
-      apply H3 with (C := G ++ M ++ D) (G := G) (M := M);
-      try assumption. reflexivity.
+  - intros E G M D us tys ts H4 H5 H6.
+    apply H2 with (C := G ++ M ++ D) (G := G) (M := M);
+    try assumption. reflexivity.
 Qed.
 
 (* Substitution by checked arguments preserves checked terms.                   *)
@@ -400,6 +317,21 @@ Proposition FromP :
       (fromT (length G) (argT ts) t).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply From.
+  intros E G M D p t ts H1 H2 H3.
+  inversion H2 as [C u H4|C u H4|C name args tys u H4 H5]; subst.
+  - simpl. apply CheckHoleP. apply FromT with (M := M); assumption.
+  - simpl. apply CheckAxiomP. apply FromT with (M := M); assumption.
+  - simpl. rewrite Apply.FromT.
+    assert (forall v, sigP E name = Some (tys,v) ->
+      fromT (length G + lengthT args) (argT ts) v = v) as H6. {
+      intros v H6. apply (AboveT E (rev tys) v TyProp).
+      - assumption.
+      - apply (SigP E name); assumption.
+      - rewrite length_rev.
+        assert (lengthT args = length tys) as H7. {
+          apply (Length E (G ++ M ++ D)); assumption. }
+        rewrite <- H7. rewrite Nat.add_comm. apply Nat.le_add_r. }
+    rewrite (H6 _ H4). apply CheckIdentP with (tys := tys). 1: assumption.
+    apply (FromTs E G M D args tys ts); assumption.
 Qed.
 
