@@ -41,8 +41,8 @@ Proof.
     apply (TypeOf.ThreeR G M D); assumption.
 Qed.
 
-(* Lifting above a checked object leaves it unchanged.                          *)
-Proposition Above :
+(* Lifting above a checked term or argument list leaves it unchanged.           *)
+Local Proposition Above :
   (forall (E:Env) (G:Ctx) (t:Term) (ty:Ty) (i j:nat),
     CheckT E G t ty                                                       ->
     length G <= i                                                         ->
@@ -50,11 +50,7 @@ Proposition Above :
   (forall (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty) (i j:nat),
     CheckTs E G ts tys                                                    ->
     length G <= i                                                         ->
-    Shift.fromTs i j ts = ts)                                             /\
-  (forall (E:Env) (G:Ctx) (p:Proof) (t:Term) (i j:nat),
-    CheckP E G p t                                                        ->
-    length G <= i                                                         ->
-    Shift.fromP i j p = p).
+    Shift.fromTs i j ts = ts).
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
   assert (
@@ -70,7 +66,8 @@ Proof.
   - intros E G n ty H1 i j H2. simpl.
     (* A checked variable is below the length of its context.                   *)
     assert (n < length G) as H3. { apply (TypeOf.LtLength G n ty). assumption. }
-    assert (n < i) as H4. { apply Nat.lt_le_trans with (m := length G); assumption. }
+    assert (n < i) as H4. {
+      apply Nat.lt_le_trans with (m := length G); assumption. }
     assert ((n <? i) = true) as H5. { apply Nat.ltb_lt. assumption. }
     rewrite H5. reflexivity.
   - intros E G ty i j H1. reflexivity.
@@ -112,33 +109,10 @@ Proof.
   - intros E G i j H1. reflexivity.
   - intros E G t ts ty tys H1 H2 H3 H4 i j H5. simpl.
     rewrite H2, H4; try assumption. reflexivity. }
-  destruct H as [H H0].
-  assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
-    CheckP E G p t -> forall (i j:nat), length G <= i ->
-    Shift.fromP i j p = p) as H00. {
-    remember (fun (E:Env) (G:Ctx) (t:Term) (ty:Ty) =>
-      forall (i j:nat), length G <= i -> Shift.fromT i j t = t) as P eqn:HP.
-    remember (fun (E:Env) (G:Ctx) (ts:Terms) (tys:list Ty) =>
-      forall (i j:nat), length G <= i -> Shift.fromTs i j ts = ts) as Q eqn:HQ.
-    remember (fun (E:Env) (G:Ctx) (p:Proof) (t:Term) =>
-      forall (i j:nat), length G <= i -> Shift.fromP i j p = p) as R eqn:HR.
-    assert (forall (E:Env) (G:Ctx) (p:Proof) (t:Term),
-      CheckP E G p t -> R E G p t) as K1. {
-      apply (InductionP.Induction P Q R).
-      - rewrite HP. apply H.
-      - rewrite HQ. apply H0.
-      - rewrite HP. rewrite HR. intros E G t H1 H2 i j H3.
-        simpl. rewrite H2; try assumption. reflexivity.
-      - rewrite HP. rewrite HR. intros E G t H1 H2 i j H3.
-        simpl. rewrite H2; try assumption. reflexivity.
-      - rewrite HQ. rewrite HR. intros E G name args tys t H1 H2 H3 i j H4.
-        simpl. rewrite H3; try assumption. reflexivity. }
-    rewrite HR in K1. apply K1. }
+  destruct H as [H1 H2].
   split.
-  - intros E G t ty i j H1 H2. apply (H E G t ty); assumption.
-  - split.
-    + intros E G ts tys i j H1 H2. apply (H0 E G ts tys); assumption.
-    + intros E G p t i j H1 H2. apply (H00 E G p t); assumption.
+  - intros E G t ty i j H3 H4. apply (H1 E G t ty); assumption.
+  - intros E G ts tys i j H3 H4. apply (H2 E G ts tys); assumption.
 Qed.
 
 (* Lifting above a checked term leaves it unchanged.                            *)
@@ -168,7 +142,11 @@ Proposition AboveP : forall (E:Env) (G:Ctx) (p:Proof) (t:Term) (i j:nat),
   Shift.fromP i j p = p.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  apply Above.
+  intros E G p t i j H1 H2.
+  destruct H1 as [G t H1|G t H1|G name args tys t H1 H3].
+  - simpl. rewrite (AboveT E G t TyProp i j); try assumption. reflexivity.
+  - simpl. rewrite (AboveT E G t TyProp i j); try assumption. reflexivity.
+  - simpl. rewrite (AboveTs E G args tys i j); try assumption. reflexivity.
 Qed.
 
 (* Proof signature conclusions are unchanged by lifting above their parameters. *)
