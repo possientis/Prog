@@ -13,15 +13,13 @@ Open Scope string_scope.
 (* forall a b, (forall x, x :< a <-> x :< b) -> a = b                           *)
 Definition Extensionality : DeclP :=
   let concl :=
-      All
+      Imp
         (All
-          (Imp
-            (All
-              (Iff (Elem (Var 0) (Var 2))
-                   (Elem (Var 0) (Var 1))))
-            (Equal (Var 1) (Var 0))))
+          (Iff (Elem (Var 0) (Var 2))
+               (Elem (Var 0) (Var 1))))
+        (Equal (Var 1) (Var 0))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := AxiomP concl
     |}.

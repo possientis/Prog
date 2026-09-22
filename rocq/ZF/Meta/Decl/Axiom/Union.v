@@ -13,17 +13,16 @@ Open Scope string_scope.
 (* forall a, exists b, forall x, x :< b <-> exists y, x :< y /\ y :< a          *)
 Definition Union : DeclP :=
   let concl :=
-      All
-        (Ex
-          (All
-            (Iff
-              (Elem (Var 0) (Var 1))
-              (Ex
-                (And
-                  (Elem (Var 1) (Var 0))
-                  (Elem (Var 0) (Var 3)))))))
+      Ex
+        (All
+          (Iff
+            (Elem (Var 0) (Var 1))
+            (Ex
+              (And
+                (Elem (Var 1) (Var 0))
+                (Elem (Var 0) (Var 3))))))
   in
-    {| paraP  := []
+    {| paraP  := [TySet]
     ;  conclP := concl
     ;  bodyP  := AxiomP concl
     |}.

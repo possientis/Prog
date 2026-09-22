@@ -28,18 +28,16 @@ Definition ordPair : DeclT :=
 Definition Charac : DeclP :=
   let concl :=
     All
-      (All
-        (All
-          (Iff
-            (Elem (Var 0)
-              (IdentT (Name.local "ordPair") (args [Var 2; Var 1])))
-            (Or
-              (Equal (Var 0)
-                (IdentT (Name.local "single") (args [Var 2])))
-              (Equal (Var 0)
-                (IdentT (Name.local "pair") (args [Var 2; Var 1])))))))
+      (Iff
+        (Elem (Var 0)
+          (IdentT (Name.local "ordPair") (args [Var 2; Var 1])))
+        (Or
+          (Equal (Var 0)
+            (IdentT (Name.local "single") (args [Var 2])))
+          (Equal (Var 0)
+            (IdentT (Name.local "pair") (args [Var 2; Var 1])))))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -47,18 +45,15 @@ Definition Charac : DeclP :=
 (* forall a b c, single a = pair b c -> a = b /\ a = c.                         *)
 Definition ABC : DeclP :=
   let concl :=
-    All
-      (All
-        (All
-          (Imp
-            (Equal
-              (IdentT (Name.local "single") (args [Var 2]))
-              (IdentT (Name.local "pair") (args [Var 1; Var 0])))
-            (And
-              (Equal (Var 2) (Var 1))
-              (Equal (Var 2) (Var 0))))))
+    Imp
+      (Equal
+        (IdentT (Name.local "single") (args [Var 2]))
+        (IdentT (Name.local "pair") (args [Var 1; Var 0])))
+      (And
+        (Equal (Var 2) (Var 1))
+        (Equal (Var 2) (Var 0)))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -66,19 +61,15 @@ Definition ABC : DeclP :=
 (* forall a b c d, ordPair a b = ordPair c d -> a = c /\ b = d.                 *)
 Definition Equal : DeclP :=
   let concl :=
-    All
-      (All
-        (All
-          (All
-            (Imp
-              (Equal
-                (IdentT (Name.local "ordPair") (args [Var 3; Var 2]))
-                (IdentT (Name.local "ordPair") (args [Var 1; Var 0])))
-              (And
-                (Equal (Var 3) (Var 1))
-                (Equal (Var 2) (Var 0)))))))
+    Imp
+      (Equal
+        (IdentT (Name.local "ordPair") (args [Var 3; Var 2]))
+        (IdentT (Name.local "ordPair") (args [Var 1; Var 0])))
+      (And
+        (Equal (Var 3) (Var 1))
+        (Equal (Var 2) (Var 0)))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet; TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.

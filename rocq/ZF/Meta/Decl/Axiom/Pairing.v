@@ -13,17 +13,15 @@ Open Scope string_scope.
 (* forall a b, exists c, forall x, x :< c <-> x = a \/ x = b                    *)
 Definition Pairing : DeclP :=
   let concl :=
-      All
+      Ex
         (All
-          (Ex
-            (All
-              (Iff
-                (Elem (Var 0) (Var 1))
-                (Or
-                  (Equal (Var 0) (Var 3))
-                  (Equal (Var 0) (Var 2)))))))
+          (Iff
+            (Elem (Var 0) (Var 1))
+            (Or
+              (Equal (Var 0) (Var 3))
+              (Equal (Var 0) (Var 2)))))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := AxiomP concl
     |}.

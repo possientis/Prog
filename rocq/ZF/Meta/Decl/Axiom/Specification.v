@@ -13,16 +13,15 @@ Open Scope string_scope.
 (* forall P, forall a, exists b, forall x, x :< b <-> x :< a /\ P x             *)
 Definition Specification : DeclP :=
   let concl :=
-    All
-      (Ex
-        (All
-          (Iff
-            (Elem (Var 0) (Var 1))
-            (And
-              (Elem (Var 0) (Var 2))
-              (App (Var 3) (Var 0))))))
+    Ex
+      (All
+        (Iff
+          (Elem (Var 0) (Var 1))
+          (And
+            (Elem (Var 0) (Var 2))
+            (App (Var 3) (Var 0)))))
   in
-    {| paraP  := [TyClass]
+    {| paraP  := [TyClass; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.

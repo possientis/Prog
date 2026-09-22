@@ -75,15 +75,13 @@ Definition pair : DeclT :=
 Definition Charac : DeclP :=
   let concl :=
     All
-      (All
-        (All
-          (Iff
-            (Elem (Var 0) (IdentT (Name.local "pair") (args [Var 2; Var 1])))
-            (Or
-              (Equal (Var 0) (Var 2))
-              (Equal (Var 0) (Var 1))))))
+      (Iff
+        (Elem (Var 0) (IdentT (Name.local "pair") (args [Var 2; Var 1])))
+        (Or
+          (Equal (Var 0) (Var 2))
+          (Equal (Var 0) (Var 1))))
   in
-    {| paraP := []
+    {| paraP := [TySet; TySet]
     ; conclP := concl
     ; bodyP  := HoleP concl
     |}.
@@ -91,11 +89,9 @@ Definition Charac : DeclP :=
 (* forall a b, a :< pair a b.                                                   *)
 Definition IsInL : DeclP :=
   let concl :=
-    All
-      (All
-        (Elem (Var 1) (IdentT (Name.local "pair") (args [Var 1; Var 0]))))
+    Elem (Var 1) (IdentT (Name.local "pair") (args [Var 1; Var 0]))
   in
-    {| paraP := []
+    {| paraP := [TySet; TySet]
     ; conclP := concl
     ; bodyP  := HoleP concl
     |}.
@@ -103,11 +99,9 @@ Definition IsInL : DeclP :=
 (* forall a b, b :< pair a b.                                                   *)
 Definition IsInR : DeclP :=
   let concl :=
-    All
-      (All
-        (Elem (Var 0) (IdentT (Name.local "pair") (args [Var 1; Var 0]))))
+    Elem (Var 0) (IdentT (Name.local "pair") (args [Var 1; Var 0]))
   in
-    {| paraP := []
+    {| paraP := [TySet; TySet]
     ; conclP := concl
     ; bodyP  := HoleP concl
     |}.
@@ -115,18 +109,16 @@ Definition IsInR : DeclP :=
 (* forall A a b, A a /\ A b <-> Incl (toClass (pair a b)) A.                    *)
 Definition ToClassIncl : DeclP :=
   let concl :=
-    All
-      (All
-        (Iff
-          (And
-            (App (Var 2) (Var 1))
-            (App (Var 2) (Var 0)))
-          (IdentT (Name.local "Incl")
-            (args [IdentT (Name.local "toClass")
-              (args [IdentT (Name.local "pair") (args [Var 1; Var 0])]);
-             Var 2]))))
+    Iff
+      (And
+        (App (Var 2) (Var 1))
+        (App (Var 2) (Var 0)))
+      (IdentT (Name.local "Incl")
+        (args [IdentT (Name.local "toClass")
+          (args [IdentT (Name.local "pair") (args [Var 1; Var 0])]);
+         Var 2]))
   in
-    {| paraP := [TyClass]
+    {| paraP := [TyClass; TySet; TySet]
     ; conclP := concl
     ; bodyP  := HoleP concl
     |}.

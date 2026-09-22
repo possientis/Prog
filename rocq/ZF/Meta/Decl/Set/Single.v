@@ -26,12 +26,11 @@ Definition single : DeclT :=
 Definition Charac : DeclP :=
   let concl :=
     All
-      (All
-        (Iff
-          (Elem (Var 0) (IdentT (Name.local "single") (args [Var 1])))
-          (Equal (Var 0) (Var 1))))
+      (Iff
+        (Elem (Var 0) (IdentT (Name.local "single") (args [Var 1])))
+        (Equal (Var 0) (Var 1)))
   in
-    {| paraP := []
+    {| paraP := [TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -39,10 +38,9 @@ Definition Charac : DeclP :=
 (* forall a, a :< single a.                                                     *)
 Definition IsIn : DeclP :=
   let concl :=
-    All
-      (Elem (Var 0) (IdentT (Name.local "single") (args [Var 0])))
+    Elem (Var 0) (IdentT (Name.local "single") (args [Var 0]))
   in
-    {| paraP := []
+    {| paraP := [TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -50,15 +48,13 @@ Definition IsIn : DeclP :=
 (* forall a b, single a = single b -> a = b.                                    *)
 Definition WhenEqual : DeclP :=
   let concl :=
-    All
-      (All
-        (Imp
-          (Equal
-            (IdentT (Name.local "single") (args [Var 1]))
-            (IdentT (Name.local "single") (args [Var 0])))
-          (Equal (Var 1) (Var 0))))
+    Imp
+      (Equal
+        (IdentT (Name.local "single") (args [Var 1]))
+        (IdentT (Name.local "single") (args [Var 0])))
+      (Equal (Var 1) (Var 0))
   in
-    {| paraP := []
+    {| paraP := [TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -66,15 +62,14 @@ Definition WhenEqual : DeclP :=
 (* forall A a, A a <-> Incl (toClass (single a)) A.                             *)
 Definition ToClassIncl : DeclP :=
   let concl :=
-    All
-      (Iff
-        (App (Var 1) (Var 0))
-        (IdentT (Name.local "Incl")
-          (args [IdentT (Name.local "toClass")
-            (args [IdentT (Name.local "single") (args [Var 0])]);
-           Var 1])))
+    Iff
+      (App (Var 1) (Var 0))
+      (IdentT (Name.local "Incl")
+        (args [IdentT (Name.local "toClass")
+          (args [IdentT (Name.local "single") (args [Var 0])]);
+         Var 1]))
   in
-    {| paraP := [TyClass]
+    {| paraP := [TyClass; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -82,16 +77,13 @@ Definition ToClassIncl : DeclP :=
 (* forall a b c, b <> c -> single a <> pair b c.                                *)
 Definition IsNotPair : DeclP :=
   let concl :=
-    All
-      (All
-        (All
-          (Imp
-            (NotEq (Var 1) (Var 0))
-            (NotEq
-              (IdentT (Name.local "single") (args [Var 2]))
-              (IdentT (Name.local "pair") (args [Var 1; Var 0]))))))
+    Imp
+      (NotEq (Var 1) (Var 0))
+      (NotEq
+        (IdentT (Name.local "single") (args [Var 2]))
+        (IdentT (Name.local "pair") (args [Var 1; Var 0])))
   in
-    {| paraP := []
+    {| paraP := [TySet; TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.

@@ -13,14 +13,13 @@ Open Scope string_scope.
 (* forall a, exists b, forall x, x :< b <-> x <= a                              *)
 Definition Power : DeclP :=
   let concl :=
-      All
-        (Ex
-          (All
-            (Iff
-              (Elem (Var 0) (Var 1))
-              (Leq (Var 0) (Var 2)))))
+      Ex
+        (All
+          (Iff
+            (Elem (Var 0) (Var 1))
+            (Leq (Var 0) (Var 2))))
   in
-    {| paraP  := []
+    {| paraP  := [TySet]
     ;  conclP := concl
     ;  bodyP  := AxiomP concl
     |}.

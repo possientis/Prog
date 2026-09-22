@@ -18,20 +18,19 @@ Require Import ZF.Meta.Decl.Set.OrdPair.
 Definition Replacement : DeclP :=
   let concl :=
     Imp
-      (IdentT (Name.local "Functional") (args [Var 0]))
-      (All
-        (Ex
-          (All
-            (Iff
-              (Elem (Var 0) (Var 1))
-              (Ex
-                (And
-                  (Elem (Var 0) (Var 3))
-                  (App
-                    (Var 4)
-                    (IdentT (Name.local "ordPair") (args [Var 0; Var 1])))))))))
+      (IdentT (Name.local "Functional") (args [Var 1]))
+      (Ex
+        (All
+          (Iff
+            (Elem (Var 0) (Var 1))
+            (Ex
+              (And
+                (Elem (Var 0) (Var 3))
+                (App
+                  (Var 4)
+                  (IdentT (Name.local "ordPair") (args [Var 0; Var 1]))))))))
   in
-    {| paraP  := [TyClass]
+    {| paraP  := [TyClass; TySet]
     ;  conclP := concl
     ;  bodyP  := AxiomP concl
     |}.

@@ -128,15 +128,13 @@ Definition NotSym : DeclP :=
 (* forall a b, a = b <-> equiv (toClass a) (toClass b).                         *)
 Definition EqualToClass : DeclP :=
   let concl :=
-      All
-        (All
-          (Iff
-            (Equal (Var 1) (Var 0))
-            (IdentT (Name.local "equiv")
-              (args [IdentT (Name.local "toClass") (args [Var 1]);
-               IdentT (Name.local "toClass") (args [Var 0])]))))
+      Iff
+        (Equal (Var 1) (Var 0))
+        (IdentT (Name.local "equiv")
+          (args [IdentT (Name.local "toClass") (args [Var 1]);
+           IdentT (Name.local "toClass") (args [Var 0])]))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
@@ -144,16 +142,14 @@ Definition EqualToClass : DeclP :=
 (* forall a b, a <> b <-> ~ equiv (toClass a) (toClass b).                      *)
 Definition NotEqualToClass : DeclP :=
   let concl :=
-      All
-        (All
-          (Iff
-            (NotEq (Var 1) (Var 0))
-            (Not
-              (IdentT (Name.local "equiv")
-                (args [IdentT (Name.local "toClass") (args [Var 1]);
-                 IdentT (Name.local "toClass") (args [Var 0])])))))
+      Iff
+        (NotEq (Var 1) (Var 0))
+        (Not
+          (IdentT (Name.local "equiv")
+            (args [IdentT (Name.local "toClass") (args [Var 1]);
+             IdentT (Name.local "toClass") (args [Var 0])])))
   in
-    {| paraP  := []
+    {| paraP  := [TySet; TySet]
     ;  conclP := concl
     ;  bodyP  := HoleP concl
     |}.
