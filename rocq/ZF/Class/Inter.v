@@ -1,7 +1,7 @@
 Require Import ZF.Axiom.Classic.
 Require Import ZF.Class.Bounded.
-Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Empty.
+Require Import ZF.Class.Equiv.
 Require Import ZF.Class.Incl.
 Require Import ZF.Class.Small.
 Require Import ZF.Set.Core.
