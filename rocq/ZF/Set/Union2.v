@@ -116,7 +116,7 @@ Proof.
 Qed.
 
 (* An unordered pair {a,b} equals the union of the singletons {a} and {b}.      *)
-Proposition PairAsUnion2 : forall (a b:U),
+Proposition AsPair : forall (a b:U),
   :{a,b}: = :{a}: :\/: :{b}:.
 Proof.
   intros a b. apply Incl.Double. split; intros x H1.

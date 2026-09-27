@@ -155,7 +155,7 @@ Qed.
 (* The set 2 equals the pair containing 0 and 1.                                *)
 Proposition TwoExtension : :2: = :{ :0:, :1: }:.
 Proof.
-  rewrite PairAsUnion2, <- OneExtension. reflexivity.
+  rewrite Union2.AsPair, <- OneExtension. reflexivity.
 Qed.
 
 (* The set 3 equals the triple containing 0, 1 and 2.                           *)

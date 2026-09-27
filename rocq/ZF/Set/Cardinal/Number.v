@@ -566,7 +566,7 @@ Proof.
     destruct H1 as [b [c [H1 H2]]].
     assert (:2: :< :N) as H3. { apply Omega.HasSucc, Omega.HasOne. }
     assert (card :2: = :2:) as H4. { apply WhenNat. assumption. }
-    assert (:{b,c}: = :{b}: :\/: :{c}:) as H5. { apply PairAsUnion2. }
+    assert (:{b,c}: = :{b}: :\/: :{c}:) as H5. { apply Union2.AsPair. }
     assert (:{b}: :\/: :{c}: :~: :2:) as H6. {
       destruct (Equip.AddElem :{b}: c) as [H6|H6].
       + exfalso. apply H2.

@@ -99,10 +99,10 @@ Proof.
 Qed.
 
 (* The unordered-pair-as-union characterization is well sorted.                 *)
-Proposition PairAsUnion2 : CheckP (Union2.env) Union2.PairAsUnion2.
+Proposition AsPair : CheckP (Union2.env) Union2.AsPair.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  unfold Union2.PairAsUnion2. checkP.
+  unfold Union2.AsPair. checkP.
 Qed.
 
 (* The left identity property of binary set union is well sorted.               *)

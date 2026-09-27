@@ -180,7 +180,7 @@ Definition IsInclR : DeclP :=
     |}.
 
 (* forall a b, pair a b = union2 (single a) (single b).                         *)
-Definition PairAsUnion2 : DeclP :=
+Definition AsPair : DeclP :=
   let concl :=
     SyntaxT.Equal
       (IdentT (Name.local "pair") (args [Var 1; Var 0]))
@@ -283,7 +283,7 @@ Definition exports : Env := Env.unions
       ; (Name.local "WhenEqualL"   , WhenEqualL)
       ; (Name.local "IsInclL"      , IsInclL)
       ; (Name.local "IsInclR"      , IsInclR)
-      ; (Name.local "PairAsUnion2" , PairAsUnion2)
+      ; (Name.local "AsPair"       , AsPair)
       ; (Name.local "IdentityL"    , IdentityL)
       ; (Name.local "IdentityR"    , IdentityR)
       ; (Name.local "IsIncl"       , IsIncl)
