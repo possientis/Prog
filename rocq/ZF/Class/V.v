@@ -80,13 +80,13 @@ Proof.
 Qed.
 
 (* V^2 is a proper class.                                                       *)
-Proposition V2IsProper : Proper (V :x: V).
+Proposition IsProperSquare : Proper (V :x: V).
 Proof.
   apply SquareIsProper, IsProper.
 Qed.
 
 (* The product of two classes is a subclass of V^2.                             *)
-Proposition ProdInclV2 : forall (P Q:Class),
+Proposition IsInclProdSquare : forall (P Q:Class),
   P :x: Q :<=: V :x: V.
 Proof.
   intros P Q x H1. destruct H1 as [y [z [H1 [H2 H3]]]].

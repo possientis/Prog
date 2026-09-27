@@ -57,17 +57,17 @@ Proof.
 Qed.
 
 (* Properness of V squared is well sorted.                                      *)
-Proposition V2IsProper : CheckP (V.env) V.V2IsProper.
+Proposition IsProperSquare : CheckP (V.env) V.IsProperSquare.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  unfold V.V2IsProper. checkP.
+  unfold V.IsProperSquare. checkP.
 Qed.
 
 (* Inclusion of class products in V squared is well sorted.                     *)
-Proposition ProdInclV2 : CheckP (V.env) V.ProdInclV2.
+Proposition IsInclProdSquare : CheckP (V.env) V.IsInclProdSquare.
 Proof.
   (* Proof by Hermes + gpt 5.5                                                  *)
-  unfold V.ProdInclV2. checkP.
+  unfold V.IsInclProdSquare. checkP.
 Qed.
 
 (* Strict inclusion of V squared in V is well sorted.                           *)

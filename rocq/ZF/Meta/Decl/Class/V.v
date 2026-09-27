@@ -82,7 +82,7 @@ Definition IsProper : DeclP :=
     |}.
 
 (* Proper (prod V V).                                                           *)
-Definition V2IsProper : DeclP :=
+Definition IsProperSquare : DeclP :=
   let concl :=
     IdentT (Name.local "Proper")
       (args
@@ -99,7 +99,7 @@ Definition V2IsProper : DeclP :=
     |}.
 
 (* forall P Q, Incl (prod P Q) (prod V V).                                      *)
-Definition ProdInclV2 : DeclP :=
+Definition IsInclProdSquare : DeclP :=
   let concl :=
     IdentT (Name.local "Incl")
       (args
@@ -154,13 +154,13 @@ Definition exports : Env := Env.unions
       [ (Name.local "V", V)
       ]
   ; Env.fromListP
-      [ (Name.local "IsIncl"     , IsIncl)
-      ; (Name.local "Inter2VL"   , Inter2VL)
-      ; (Name.local "Inter2VR"   , Inter2VR)
-      ; (Name.local "IsProper"   , IsProper)
-      ; (Name.local "V2IsProper" , V2IsProper)
-      ; (Name.local "ProdInclV2" , ProdInclV2)
-      ; (Name.local "IsLess"     , IsLess)
+      [ (Name.local "IsIncl"          , IsIncl)
+      ; (Name.local "Inter2VL"        , Inter2VL)
+      ; (Name.local "Inter2VR"        , Inter2VR)
+      ; (Name.local "IsProper"        , IsProper)
+      ; (Name.local "IsProperSquare"  , IsProperSquare)
+      ; (Name.local "IsInclProdSquare", IsInclProdSquare)
+      ; (Name.local "IsLess"          , IsLess)
       ]
   ].
 
