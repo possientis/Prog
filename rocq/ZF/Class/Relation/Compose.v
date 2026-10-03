@@ -20,8 +20,6 @@ Require Import ZF.Notation.Dot.
 Export ZF.Notation.Dot.
 
 
-Module CIN := ZF.Class.Incl.
-
 (* Composition of two classes.                                                  *)
 Definition compose (G F:Class) : Class := fun u =>
   exists x y z, u = :(x,z): /\ F :(x,y): /\ G :(y,z):.
@@ -139,7 +137,7 @@ Qed.
 Proposition DomainIsSame : forall (F G:Class),
   range F :<=: domain G -> domain (G :.: F) :~: domain F.
 Proof.
-  intros F G H1. apply CIN.Double. split.
+  intros F G H1. apply Double. split.
   - apply DomainIsSmaller.
   - intros x H2. destruct H2 as [y H2].
     assert (domain G y) as H3. { apply H1. exists x. assumption. }
@@ -164,7 +162,7 @@ Qed.
 Proposition RangeIsSame : forall (F G:Class),
   domain G :<=: range F -> range (G :.: F) :~: range G.
 Proof.
-  intros F G H1. apply CIN.Double. split.
+  intros F G H1. apply Double. split.
   - apply RangeIsSmaller.
   - intros z H2. destruct H2 as [y H2].
     assert (range F y) as H3. { apply H1. exists z. assumption. }
@@ -264,7 +262,7 @@ Proof.
 Qed.
 
 (* The composition of G with F is included in the image of F x G under Cmp.     *)
-Lemma ImageUnderCmp : forall (F G:Class),
+Local Proposition ImageUnderCmp : forall (F G:Class),
   (G :.: F) :<=: Cmp :[F :x: G]:.
 Proof.
   intros F G u H1. destruct H1 as [x [y [z [H1 [H2 H3]]]]].
